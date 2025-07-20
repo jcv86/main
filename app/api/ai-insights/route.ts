@@ -4,229 +4,130 @@ import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { userId, type, data } = body
+    const { type, data, model = "gpt-4" } = await request.json()
 
-    if (type === "personality_complete_analysis") {
-      const isSpanish = userId === "spanishUser"
+    let prompt = ""
+    let systemPrompt =
+      "You are an expert career development coach and psychologist. Provide detailed, actionable insights based on the assessment data provided."
 
-      const prompt = isSpanish
-        ? `Eres un psicólogo profesional especializado en análisis de personalidad. Analiza el siguiente perfil de personalidad y proporciona un análisis completo y profesional en español.
+    switch (type) {
+      case "personality_analysis":
+        systemPrompt =
+          "You are an expert psychologist specializing in personality assessment and career development. Analyze the Big Five personality results and provide comprehensive insights."
+        prompt = `
+Analyze the following personality assessment results and provide detailed insights:
 
-Datos del perfil:
-- Apertura: ${data.openness}%
-- Responsabilidad: ${data.conscientiousness}%
-- Extraversión: ${data.extraversion}%
-- Amabilidad: ${data.agreeableness}%
-- Neuroticismo: ${data.neuroticism}%
-- Tipo Primario: ${data.primaryType}
-- Tipo Secundario: ${data.secondaryType}
-- Puntuación General: ${data.overallScore}%
+Test Type: ${data.test_type}
+Personality Traits:
+- Openness: ${data.traits.openness}%
+- Conscientiousness: ${data.traits.conscientiousness}%
+- Extraversion: ${data.traits.extraversion}%
+- Agreeableness: ${data.traits.agreeableness}%
+- Neuroticism: ${data.traits.neuroticism}%
 
-Proporciona un análisis detallado de 800-1000 palabras que incluya:
+Summary: ${data.summary}
+Strengths: ${data.strengths.join(", ")}
+Challenges: ${data.challenges.join(", ")}
+Career Recommendations: ${data.career_recommendations.join(", ")}
 
-**RESUMEN DE PERSONALIDAD**
-Una descripción general del perfil único de esta persona.
+Please provide:
+1. Deep psychological insights about this personality profile
+2. Specific career path recommendations with reasoning
+3. Leadership style analysis
+4. Potential blind spots and how to address them
+5. Strategies for personal and professional growth
+6. Team dynamics and collaboration insights
 
-**FORTALEZAS Y TALENTOS**
-Identifica las principales fortalezas basadas en las puntuaciones altas.
+Write in Spanish and be comprehensive but concise (300-400 words).
+        `
+        break
 
-**DESAFÍOS POTENCIALES**
-Áreas que podrían presentar dificultades y estrategias para manejarlas.
+      case "technical_skills_analysis":
+        systemPrompt =
+          "You are a senior technical recruiter and software engineering mentor. Analyze technical skills assessments and provide career guidance."
+        prompt = `
+Analyze the following technical skills assessment results:
 
-**IMPLICACIONES PROFESIONALES**
-Ambientes de trabajo ideales, roles que se adaptan bien, y estilos de liderazgo.
+Overall Score: ${data.overall_score}%
+Career Level: ${data.career_level}
 
-**ESTILO DE COMUNICACIÓN**
-Cómo esta persona prefiere interactuar y comunicarse.
+Skill Categories:
+${Object.entries(data.skill_categories)
+  .map(
+    ([category, categoryData]: [string, any]) =>
+      `${category}: ${categoryData.score}%\n${categoryData.skills.map((skill: any) => `  - ${skill.name}: ${skill.level}%`).join("\n")}`,
+  )
+  .join("\n\n")}
 
-**MANEJO DEL ESTRÉS**
-Cómo maneja la presión y estrategias de afrontamiento.
+Strengths: ${data.strengths.join(", ")}
+Improvement Areas: ${data.improvement_areas.join(", ")}
 
-**OPORTUNIDADES DE CRECIMIENTO**
-Áreas específicas para el desarrollo personal y profesional.
+Please provide:
+1. Technical career trajectory analysis
+2. Market demand insights for these skills
+3. Specific learning path recommendations
+4. Salary expectations and growth potential
+5. Industry-specific opportunities
+6. Technology trends alignment
+7. Portfolio project suggestions
 
-**DINÁMICAS RELACIONALES**
-Cómo se relaciona con otros en entornos profesionales.
+Write in Spanish and be detailed but practical (350-450 words).
+        `
+        break
 
-**ESTILO DE TOMA DE DECISIONES**
-Enfoque para resolver problemas y tomar decisiones.
+      case "soft_skills_analysis":
+        systemPrompt =
+          "You are an executive coach and organizational psychologist specializing in leadership development and soft skills assessment."
+        prompt = `
+Analyze the following soft skills assessment results:
 
-**RECOMENDACIONES ACCIONABLES**
-3-5 pasos específicos para el crecimiento personal y profesional.
+Overall Score: ${data.overall_score}%
+Leadership Potential: ${data.leadership_potential}
+Team Fit: ${data.team_fit}
 
-Mantén un tono profesional, empático y constructivo. Enfócate en el crecimiento y el potencial.`
-        : `You are a professional psychologist specializing in personality analysis. Analyze the following personality profile and provide a comprehensive, professional analysis in English.
+Skill Categories:
+${Object.entries(data.skill_categories)
+  .map(
+    ([category, categoryData]: [string, any]) =>
+      `${category}: ${categoryData.score}%\n${categoryData.skills.map((skill: any) => `  - ${skill.name}: ${skill.level}% - ${skill.feedback}`).join("\n")}`,
+  )
+  .join("\n\n")}
 
-Profile data:
-- Openness: ${data.openness}%
-- Conscientiousness: ${data.conscientiousness}%
-- Extraversion: ${data.extraversion}%
-- Agreeableness: ${data.agreeableness}%
-- Neuroticism: ${data.neuroticism}%
-- Primary Type: ${data.primaryType}
-- Secondary Type: ${data.secondaryType}
-- Overall Score: ${data.overallScore}%
+Strengths: ${data.strengths.join(", ")}
+Improvement Areas: ${data.improvement_areas.join(", ")}
 
-Provide a detailed 800-1000 word analysis that includes:
+Please provide:
+1. Leadership readiness assessment
+2. Team role optimization insights
+3. Communication style analysis
+4. Emotional intelligence development plan
+5. Career advancement strategies
+6. Networking and relationship building advice
+7. Executive presence development tips
 
-**PERSONALITY OVERVIEW**
-A comprehensive description of this person's unique profile.
+Write in Spanish and focus on actionable insights (350-450 words).
+        `
+        break
 
-**STRENGTHS AND TALENTS**
-Identify key strengths based on high scores.
-
-**POTENTIAL CHALLENGES**
-Areas that might present difficulties and strategies to manage them.
-
-**CAREER IMPLICATIONS**
-Ideal work environments, well-suited roles, and leadership styles.
-
-**COMMUNICATION STYLE**
-How this person prefers to interact and communicate.
-
-**STRESS MANAGEMENT**
-How they handle pressure and coping strategies.
-
-**GROWTH OPPORTUNITIES**
-Specific areas for personal and professional development.
-
-**RELATIONSHIP DYNAMICS**
-How they relate to others in professional settings.
-
-**DECISION-MAKING STYLE**
-Approach to problem-solving and decision-making.
-
-**ACTIONABLE RECOMMENDATIONS**
-3-5 specific steps for personal and professional growth.
-
-Maintain a professional, empathetic, and constructive tone. Focus on growth and potential.`
-
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        prompt,
-        maxTokens: 1500,
-        temperature: 0.7,
-      })
-
-      return NextResponse.json({ insights: text })
+      default:
+        prompt = `Analyze the following assessment data and provide professional insights: ${JSON.stringify(data)}`
     }
 
-    if (type === "skills_analysis") {
-      const isSpanish = userId === "spanishUser"
-
-      const prompt = isSpanish
-        ? `Analiza los siguientes resultados de evaluación de habilidades y proporciona insights profesionales en español:
-
-Datos de habilidades: ${JSON.stringify(data)}
-
-Proporciona un análisis de 400-500 palabras que incluya:
-- Fortalezas técnicas identificadas
-- Áreas de mejora recomendadas
-- Sugerencias de desarrollo profesional
-- Próximos pasos accionables
-
-Mantén un tono profesional y constructivo.`
-        : `Analyze the following skills assessment results and provide professional insights in English:
-
-Skills data: ${JSON.stringify(data)}
-
-Provide a 400-500 word analysis including:
-- Identified technical strengths
-- Recommended improvement areas
-- Professional development suggestions
-- Actionable next steps
-
-Maintain a professional and constructive tone.`
-
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        prompt,
-        maxTokens: 800,
-        temperature: 0.7,
-      })
-
-      return NextResponse.json({ insights: text })
-    }
-
-    if (type === "career_analysis") {
-      const isSpanish = userId === "spanishUser"
-
-      const prompt = isSpanish
-        ? `Analiza la siguiente información de carrera y proporciona recomendaciones profesionales en español:
-
-Datos de carrera:
-- Nivel actual: ${data.currentLevel}
-- Siguientes pasos: ${data.nextSteps.join(", ")}
-- Rango salarial: ${data.salaryRange}
-- Línea de crecimiento: ${data.growthTimeline}
-
-Proporciona un análisis de 200-300 palabras que incluya:
-- Recomendaciones de roles futuros
-- Estrategias para alcanzar los siguientes niveles
-- Consideraciones sobre el mercado laboral
-
-Mantén un tono profesional y orientado al crecimiento.`
-        : `Analyze the following career information and provide professional recommendations in English:
-
-Career data:
-- Current Level: ${data.currentLevel}
-- Next Steps: ${data.nextSteps.join(", ")}
-- Salary Range: ${data.salaryRange}
-- Growth Timeline: ${data.growthTimeline}
-
-Provide an analysis of 200-300 words including:
-- Recommendations for future roles
-- Strategies to reach the next levels
-- Considerations about the job market
-
-Maintain a professional and growth-oriented tone.`
-
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        prompt,
-        maxTokens: 600,
-        temperature: 0.7,
-      })
-
-      return NextResponse.json({ insights: text })
-    }
-
-    // Mock AI insights response
-    const insights = {
-      personality: {
-        summary:
-          "Based on your DISC evaluation, you exhibit a natural leadership profile with a tendency towards collaboration.",
-        strengths: ["Leadership", "Communication", "Problem-solving"],
-        areas_for_improvement: ["Time management", "Delegation", "Patience"],
-        recommendations: [
-          "Consider team management roles",
-          "Develop coaching skills",
-          "Practice mindfulness techniques",
-        ],
-      },
-      skills: {
-        technical_score: 85,
-        soft_skills_score: 78,
-        overall_rating: "Advanced",
-        top_skills: ["JavaScript", "React", "Node.js", "Communication", "Teamwork"],
-        skill_gaps: ["Python", "Machine Learning", "Technical Leadership"],
-        market_demand: "High demand in the Chilean market",
-      },
-      career: {
-        current_level: "Senior Developer",
-        next_steps: ["Tech Lead", "Engineering Manager", "Senior Architect"],
-        salary_range: "CLP 3,500,000 - 5,500,000",
-        growth_timeline: "6-12 months with focused development",
-      },
-    }
+    const { text } = await generateText({
+      model: openai(model), // Use the specified model (defaults to gpt-4)
+      system: systemPrompt,
+      prompt: prompt,
+      temperature: 0.7,
+      maxTokens: 600,
+    })
 
     return NextResponse.json({
-      success: true,
-      insights: insights[type as keyof typeof insights] || insights,
+      insights: text,
+      model_used: model,
+      timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error("AI Insights API Error:", error)
-    return NextResponse.json({ success: false, error: "Error generating insights" }, { status: 500 })
+    console.error("Error generating AI insights:", error)
+    return NextResponse.json({ error: "Failed to generate AI insights" }, { status: 500 })
   }
 }

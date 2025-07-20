@@ -1,67 +1,46 @@
 "use client"
 
-import React from "react"
-
 import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  ArrowLeft,
   Code,
   Database,
   Globe,
   Smartphone,
   Cloud,
   Shield,
-  Bot,
-  Trophy,
-  Target,
-  TrendingUp,
-  BookOpen,
   Download,
   Share2,
-  RefreshCw,
+  Printer,
+  Brain,
+  TrendingUp,
+  Target,
   CheckCircle,
   AlertCircle,
-  Brain,
-  Zap,
-  Award,
 } from "lucide-react"
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
 import { useToast } from "@/hooks/use-toast"
 
-interface TestResults {
-  answers: { [key: number]: number | string }
-  results: {
-    totalScore: number
-    maxScore: number
-    percentage: number
-    categoryScores: { [key: string]: { score: number; max: number; questions: number } }
+interface TechnicalSkillsResult {
+  overall_score: number
+  skill_categories: {
+    [key: string]: {
+      score: number
+      skills: {
+        name: string
+        level: number
+        experience: string
+      }[]
+    }
   }
-  questions: any[]
-  categories: string[]
-  timeSpent: number
-  completedAt: string
+  strengths: string[]
+  improvement_areas: string[]
+  recommendations: string[]
+  career_level: string
+  next_steps: string[]
 }
 
 interface AIAnalysis {
@@ -69,34 +48,225 @@ interface AIAnalysis {
   loading: boolean
 }
 
-const categoryIcons = {
-  "Frontend Development": Globe,
-  "Backend Development": Code,
-  "Database Management": Database,
-  "DevOps & Cloud": Cloud,
-  "Mobile Development": Smartphone,
-  Cybersecurity: Shield,
+// Custom Radar Chart Component for Technical Skills
+const TechnicalSkillsRadarChart = ({ data }: { data: any[] }) => {
+  const size = 350
+  const center = size / 2
+  const maxRadius = 120
+  const levels = 5
+
+  const angleStep = (2 * Math.PI) / data.length
+
+  const getPointPosition = (index: number, value: number) => {
+    const angle = angleStep * index - Math.PI / 2
+    const radius = (value / 100) * maxRadius
+    return {
+      x: center + radius * Math.cos(angle),
+      y: center + radius * Math.sin(angle),
+    }
+  }
+
+  const getLabelPosition = (index: number) => {
+    const angle = angleStep * index - Math.PI / 2
+    const radius = maxRadius + 30
+    return {
+      x: center + radius * Math.cos(angle),
+      y: center + radius * Math.sin(angle),
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <svg width={size} height={size} className="border rounded-lg bg-white">
+        {/* Grid circles */}
+        {Array.from({ length: levels }, (_, i) => (
+          <circle
+            key={i}
+            cx={center}
+            cy={center}
+            r={(maxRadius / levels) * (i + 1)}
+            fill="none"
+            stroke="#e5e7eb"
+            strokeWidth="1"
+          />
+        ))}
+
+        {/* Grid lines */}
+        {data.map((_, index) => {
+          const pos = getPointPosition(index, 100)
+          return <line key={index} x1={center} y1={center} x2={pos.x} y2={pos.y} stroke="#e5e7eb" strokeWidth="1" />
+        })}
+
+        {/* Data polygon */}
+        <polygon
+          points={data
+            .map((item, index) => {
+              const pos = getPointPosition(index, item.score)
+              return `${pos.x},${pos.y}`
+            })
+            .join(" ")}
+          fill="#3B82F6"
+          fillOpacity="0.3"
+          stroke="#3B82F6"
+          strokeWidth="2"
+        />
+
+        {/* Data points */}
+        {data.map((item, index) => {
+          const pos = getPointPosition(index, item.score)
+          return <circle key={index} cx={pos.x} cy={pos.y} r="5" fill="#3B82F6" stroke="white" strokeWidth="2" />
+        })}
+
+        {/* Labels */}
+        {data.map((item, index) => {
+          const pos = getLabelPosition(index)
+          return (
+            <text
+              key={index}
+              x={pos.x}
+              y={pos.y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="text-xs font-medium fill-gray-700"
+            >
+              {item.name}
+            </text>
+          )
+        })}
+
+        {/* Center label */}
+        <text
+          x={center}
+          y={center}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="text-sm font-bold fill-gray-900"
+        >
+          Technical Skills
+        </text>
+      </svg>
+
+      {/* Legend */}
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+        {data.map((item, index) => (
+          <div key={item.name} className="p-2 bg-gray-50 rounded-lg">
+            <div className="font-medium text-gray-900">{item.name}</div>
+            <div className="text-2xl font-bold text-blue-600">{item.score}%</div>
+            <div className="text-sm text-gray-600">{getSkillLevel(item.score).level}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
-const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"]
+const getSkillLevel = (score: number) => {
+  if (score >= 80) return { level: "Experto", color: "text-green-600", bgColor: "bg-green-100" }
+  if (score >= 60) return { level: "Avanzado", color: "text-blue-600", bgColor: "bg-blue-100" }
+  if (score >= 40) return { level: "Intermedio", color: "text-yellow-600", bgColor: "bg-yellow-100" }
+  return { level: "Principiante", color: "text-red-600", bgColor: "bg-red-100" }
+}
+
+const getCategoryIcon = (category: string) => {
+  const icons = {
+    "Frontend Development": Globe,
+    "Backend Development": Database,
+    "Mobile Development": Smartphone,
+    "DevOps & Cloud": Cloud,
+    "Data Science": Brain,
+    Cybersecurity: Shield,
+    "Programming Languages": Code,
+  }
+  return icons[category as keyof typeof icons] || Code
+}
 
 export default function TechnicalSkillsResultsPage() {
-  const [results, setResults] = useState<TestResults | null>(null)
+  const [results, setResults] = useState<TechnicalSkillsResult | null>(null)
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis>({ analysis: "", loading: false })
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
 
   useEffect(() => {
-    const savedResults = localStorage.getItem("technicalSkillsResults")
-    if (savedResults) {
-      const parsedResults = JSON.parse(savedResults)
-      setResults(parsedResults)
-      generateAIAnalysis(parsedResults)
+    // Mock data - in real app, fetch from API
+    const mockResults: TechnicalSkillsResult = {
+      overall_score: 72,
+      skill_categories: {
+        "Frontend Development": {
+          score: 85,
+          skills: [
+            { name: "React", level: 90, experience: "3+ años" },
+            { name: "JavaScript", level: 88, experience: "4+ años" },
+            { name: "CSS/SCSS", level: 82, experience: "3+ años" },
+            { name: "TypeScript", level: 78, experience: "2+ años" },
+          ],
+        },
+        "Backend Development": {
+          score: 68,
+          skills: [
+            { name: "Node.js", level: 75, experience: "2+ años" },
+            { name: "Python", level: 70, experience: "2+ años" },
+            { name: "SQL", level: 65, experience: "1+ años" },
+            { name: "API Design", level: 62, experience: "1+ años" },
+          ],
+        },
+        "DevOps & Cloud": {
+          score: 55,
+          skills: [
+            { name: "Docker", level: 60, experience: "1+ años" },
+            { name: "AWS", level: 55, experience: "< 1 año" },
+            { name: "CI/CD", level: 50, experience: "< 1 año" },
+            { name: "Kubernetes", level: 45, experience: "< 1 año" },
+          ],
+        },
+        "Mobile Development": {
+          score: 45,
+          skills: [
+            { name: "React Native", level: 50, experience: "< 1 año" },
+            { name: "Flutter", level: 40, experience: "< 1 año" },
+            { name: "iOS Development", level: 35, experience: "< 1 año" },
+            { name: "Android Development", level: 55, experience: "1+ años" },
+          ],
+        },
+      },
+      strengths: [
+        "Sólida experiencia en desarrollo Frontend",
+        "Dominio avanzado de React y JavaScript",
+        "Buenas prácticas de desarrollo web",
+        "Capacidad de aprendizaje rápido",
+        "Conocimiento de tecnologías modernas",
+      ],
+      improvement_areas: [
+        "Fortalecer conocimientos en DevOps y Cloud",
+        "Ampliar experiencia en desarrollo Backend",
+        "Desarrollar habilidades en desarrollo móvil",
+        "Mejorar conocimientos en bases de datos",
+        "Aprender más sobre arquitectura de sistemas",
+      ],
+      recommendations: [
+        "Enfocarse en proyectos full-stack",
+        "Obtener certificaciones en AWS o Azure",
+        "Practicar con proyectos de desarrollo móvil",
+        "Contribuir a proyectos open source",
+        "Tomar cursos especializados en áreas débiles",
+      ],
+      career_level: "Desarrollador Semi-Senior",
+      next_steps: [
+        "Completar un proyecto full-stack personal",
+        "Obtener certificación AWS Cloud Practitioner",
+        "Desarrollar una aplicación móvil completa",
+        "Participar en hackathons o competencias",
+        "Buscar mentoría en áreas de mejora",
+      ],
     }
-    setLoading(false)
+
+    setTimeout(() => {
+      setResults(mockResults)
+      generateAIAnalysis(mockResults)
+      setLoading(false)
+    }, 1000)
   }, [])
 
-  const generateAIAnalysis = async (testResults: TestResults) => {
+  const generateAIAnalysis = async (skillsResults: TechnicalSkillsResult) => {
     setAiAnalysis({ analysis: "", loading: true })
 
     try {
@@ -104,16 +274,9 @@ export default function TechnicalSkillsResultsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "technical_complete_analysis",
-          data: {
-            totalScore: testResults.results.totalScore,
-            maxScore: testResults.results.maxScore,
-            percentage: testResults.results.percentage,
-            categoryScores: testResults.results.categoryScores,
-            categories: testResults.categories,
-            timeSpent: testResults.timeSpent,
-            questionsAnswered: testResults.questions.length,
-          },
+          type: "technical_skills_analysis",
+          model: "gpt-4", // Explicitly use GPT-4
+          data: skillsResults,
         }),
       })
 
@@ -128,95 +291,40 @@ export default function TechnicalSkillsResultsPage() {
     }
   }
 
-  const getSkillLevel = (percentage: number) => {
-    if (percentage >= 90) return { level: "Expert", color: "text-purple-600", bgColor: "bg-purple-100" }
-    if (percentage >= 80) return { level: "Advanced", color: "text-blue-600", bgColor: "bg-blue-100" }
-    if (percentage >= 70) return { level: "Proficient", color: "text-green-600", bgColor: "bg-green-100" }
-    if (percentage >= 60) return { level: "Intermediate", color: "text-yellow-600", bgColor: "bg-yellow-100" }
-    if (percentage >= 50) return { level: "Beginner", color: "text-orange-600", bgColor: "bg-orange-100" }
-    return { level: "Novice", color: "text-red-600", bgColor: "bg-red-100" }
-  }
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes}m ${remainingSeconds}s`
-  }
-
-  const getRadarData = () => {
-    if (!results) return []
-
-    return Object.entries(results.results.categoryScores).map(([category, scores]) => ({
-      category: category.replace(" Development", "").replace(" Management", ""),
-      score: Math.round((scores.score / scores.max) * 100),
-      fullName: category,
-    }))
-  }
-
-  const getBarData = () => {
-    if (!results) return []
-
-    return Object.entries(results.results.categoryScores).map(([category, scores], index) => ({
-      category: category.replace(" Development", "").replace(" Management", ""),
-      score: Math.round((scores.score / scores.max) * 100),
-      fullName: category,
-      fill: COLORS[index % COLORS.length],
-    }))
-  }
-
-  const getPieData = () => {
-    if (!results) return []
-
-    return Object.entries(results.results.categoryScores).map(([category, scores], index) => ({
-      name: category.replace(" Development", "").replace(" Management", ""),
-      value: Math.round((scores.score / scores.max) * 100),
-      fullName: category,
-      fill: COLORS[index % COLORS.length],
-    }))
-  }
-
-  const getStrengths = () => {
-    if (!results) return []
-
-    return Object.entries(results.results.categoryScores)
-      .filter(([_, scores]) => (scores.score / scores.max) * 100 >= 80)
-      .map(([category, scores]) => ({
-        category,
-        percentage: Math.round((scores.score / scores.max) * 100),
-      }))
-  }
-
-  const getDevelopmentAreas = () => {
-    if (!results) return []
-
-    return Object.entries(results.results.categoryScores)
-      .filter(([_, scores]) => (scores.score / scores.max) * 100 < 70)
-      .map(([category, scores]) => ({
-        category,
-        percentage: Math.round((scores.score / scores.max) * 100),
-      }))
-  }
-
   const downloadResults = () => {
     if (!results) return
 
     const resultsText = `
-Technical Skills Assessment Results
-Generated on: ${new Date(results.completedAt).toLocaleDateString()}
+TECHNICAL SKILLS ASSESSMENT RESULTS
+===================================
 
-Overall Score: ${results.results.percentage}%
-Time Spent: ${formatTime(results.timeSpent)}
-Categories Assessed: ${results.categories.join(", ")}
+Overall Score: ${results.overall_score}%
+Career Level: ${results.career_level}
+Generated on: ${new Date().toLocaleDateString()}
 
-Category Breakdown:
-${Object.entries(results.results.categoryScores)
+SKILL CATEGORIES:
+${Object.entries(results.skill_categories)
   .map(
-    ([category, scores]) =>
-      `${category}: ${Math.round((scores.score / scores.max) * 100)}% (${scores.score}/${scores.max} points)`,
+    ([category, data]) => `
+${category}: ${data.score}%
+${data.skills.map((skill) => `  - ${skill.name}: ${skill.level}% (${skill.experience})`).join("\n")}
+`,
   )
   .join("\n")}
 
-AI Analysis:
+STRENGTHS:
+${results.strengths.map((strength) => `- ${strength}`).join("\n")}
+
+IMPROVEMENT AREAS:
+${results.improvement_areas.map((area) => `- ${area}`).join("\n")}
+
+RECOMMENDATIONS:
+${results.recommendations.map((rec) => `- ${rec}`).join("\n")}
+
+NEXT STEPS:
+${results.next_steps.map((step) => `- ${step}`).join("\n")}
+
+AI ANALYSIS (GPT-4):
 ${aiAnalysis.analysis}
     `
 
@@ -236,15 +344,25 @@ ${aiAnalysis.analysis}
     })
   }
 
+  const printResults = () => {
+    window.print()
+  }
+
   const shareResults = async () => {
     if (!results) return
 
-    const shareText = `I just completed a comprehensive technical skills assessment! 🚀
+    const topCategories = Object.entries(results.skill_categories)
+      .sort(([, a], [, b]) => b.score - a.score)
+      .slice(0, 2)
+      .map(([category]) => category)
 
-Overall Score: ${results.results.percentage}%
-Categories: ${results.categories.join(", ")}
+    const shareText = `I just completed a comprehensive technical skills assessment! 💻
 
-Ready to level up your tech skills? Take the assessment: ${window.location.origin}/technical-skills-test`
+Overall Score: ${results.overall_score}%
+Top Areas: ${topCategories.join(", ")}
+Level: ${results.career_level}
+
+Assess your technical skills: ${window.location.origin}/technical-skills-test`
 
     if (navigator.share) {
       try {
@@ -266,12 +384,10 @@ Ready to level up your tech skills? Take the assessment: ${window.location.origi
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Code className="w-8 h-8 text-blue-600 animate-pulse" />
-          </div>
-          <p className="text-gray-600">Loading your results...</p>
+      <div className="container mx-auto p-6 max-w-4xl">
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Analizando tus habilidades técnicas...</p>
         </div>
       </div>
     )
@@ -279,505 +395,286 @@ Ready to level up your tech skills? Take the assessment: ${window.location.origi
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">No Results Found</h2>
-          <p className="text-gray-600 mb-4">Please take the technical skills assessment first.</p>
-          <Link href="/technical-skills-test">
-            <Button>
-              <Code className="w-4 h-4 mr-2" />
-              Take Assessment
-            </Button>
-          </Link>
+      <div className="container mx-auto p-6 max-w-4xl">
+        <div className="text-center py-12">
+          <p>No se encontraron resultados. Por favor, completa la evaluación técnica primero.</p>
+          <Button className="mt-4">Realizar Evaluación</Button>
         </div>
       </div>
     )
   }
 
-  const skillLevel = getSkillLevel(results.results.percentage)
-  const radarData = getRadarData()
-  const barData = getBarData()
-  const pieData = getPieData()
-  const strengths = getStrengths()
-  const developmentAreas = getDevelopmentAreas()
+  const radarData = Object.entries(results.skill_categories).map(([category, data]) => ({
+    name: category.replace(" Development", "").replace(" & ", "/"),
+    score: data.score,
+  }))
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Header */}
-        <div className="mb-6">
-          <Link href="/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
-          </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Technical Skills Assessment Results</h1>
-              <p className="text-gray-600">
-                Completed on {new Date(results.completedAt).toLocaleDateString()} • Time spent:{" "}
-                {formatTime(results.timeSpent)}
-              </p>
-            </div>
-            <div className="flex space-x-3">
-              <Button variant="outline" onClick={shareResults}>
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" onClick={downloadResults}>
-                <Download className="w-4 h-4 mr-2" />
-                Download
-              </Button>
-              <Link href="/technical-skills-test">
-                <Button>
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Retake Test
-                </Button>
-              </Link>
-            </div>
+    <div className="container mx-auto p-6 max-w-6xl print:bg-white">
+      {/* Header */}
+      <div className="mb-8 print:mb-6">
+        <div className="flex justify-between items-start mb-4 print:block">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 print:text-2xl">Evaluación de Habilidades Técnicas</h1>
+            <p className="text-muted-foreground print:text-sm">Análisis completo de competencias tecnológicas</p>
+          </div>
+          <div className="flex gap-2 print:hidden">
+            <Button variant="outline" size="sm" onClick={shareResults}>
+              <Share2 className="w-4 h-4 mr-2" />
+              Compartir
+            </Button>
+            <Button variant="outline" size="sm" onClick={downloadResults}>
+              <Download className="w-4 h-4 mr-2" />
+              Descargar PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={printResults}>
+              <Printer className="w-4 h-4 mr-2" />
+              Imprimir
+            </Button>
           </div>
         </div>
 
-        {/* Overall Score Card */}
-        <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-blue-900">Your Technical Proficiency Score</CardTitle>
-            <CardDescription className="text-blue-700">
-              Based on {results.questions.length} questions across {results.categories.length} technical categories
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <div className="mb-6">
-              <div className="text-6xl font-bold text-blue-600 mb-2">{results.results.percentage}%</div>
-              <div className={`inline-flex items-center px-4 py-2 rounded-full ${skillLevel.bgColor}`}>
-                <Trophy className={`w-5 h-5 mr-2 ${skillLevel.color}`} />
-                <span className={`font-semibold ${skillLevel.color}`}>{skillLevel.level}</span>
-              </div>
-            </div>
-            <Progress value={results.results.percentage} className="h-3 mb-4" />
-            <div className="text-sm text-gray-600">
-              {results.results.totalScore} out of {results.results.maxScore} points earned
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Tabs */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="radar">Radar Analysis</TabsTrigger>
-            <TabsTrigger value="detailed">Detailed Scores</TabsTrigger>
-            <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
-            <TabsTrigger value="development">Development Plan</TabsTrigger>
-          </TabsList>
-
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Bar Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <BarChart className="w-5 h-5 text-blue-600" />
-                    <span>Category Performance</span>
-                  </CardTitle>
-                  <CardDescription>Your scores across different technical domains</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={barData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="category" angle={-45} textAnchor="end" height={80} fontSize={12} />
-                      <YAxis domain={[0, 100]} />
-                      <Tooltip formatter={(value, name, props) => [`${value}%`, props.payload.fullName]} />
-                      <Bar dataKey="score" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Pie Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Target className="w-5 h-5 text-green-600" />
-                    <span>Skill Distribution</span>
-                  </CardTitle>
-                  <CardDescription>Relative performance across categories</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        label={({ name, value }) => `${name}: ${value}%`}
-                        labelLine={false}
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.fill} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value, name, props) => [`${value}%`, props.payload.fullName]} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Strengths and Development Areas */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 text-green-600">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>Technical Strengths</span>
-                  </CardTitle>
-                  <CardDescription>Areas where you excel (80%+ scores)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {strengths.length > 0 ? (
-                    <div className="space-y-3">
-                      {strengths.map(({ category, percentage }) => {
-                        const Icon = categoryIcons[category as keyof typeof categoryIcons]
-                        return (
-                          <div key={category} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                            <div className="flex items-center space-x-3">
-                              <Icon className="w-5 h-5 text-green-600" />
-                              <span className="font-medium text-green-900">{category}</span>
-                            </div>
-                            <Badge className="bg-green-100 text-green-800">{percentage}%</Badge>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 text-center py-4">
-                      Focus on improving your scores to identify technical strengths.
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 text-orange-600">
-                    <TrendingUp className="w-5 h-5" />
-                    <span>Development Opportunities</span>
-                  </CardTitle>
-                  <CardDescription>Areas for improvement (&lt;70% scores)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {developmentAreas.length > 0 ? (
-                    <div className="space-y-3">
-                      {developmentAreas.map(({ category, percentage }) => {
-                        const Icon = categoryIcons[category as keyof typeof categoryIcons]
-                        return (
-                          <div key={category} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                            <div className="flex items-center space-x-3">
-                              <Icon className="w-5 h-5 text-orange-600" />
-                              <span className="font-medium text-orange-900">{category}</span>
-                            </div>
-                            <Badge className="bg-orange-100 text-orange-800">{percentage}%</Badge>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 text-center py-4">
-                      Excellent! All your technical areas are performing well.
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Radar Tab */}
-          <TabsContent value="radar" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Target className="w-5 h-5 text-purple-600" />
-                  <span>Technical Skills Radar</span>
-                </CardTitle>
-                <CardDescription>
-                  Comprehensive view of your technical competencies across all assessed domains
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="category" />
-                      <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} />
-                      <Radar
-                        name="Technical Skills"
-                        dataKey="score"
-                        stroke="#3B82F6"
-                        fill="#3B82F6"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                      <Tooltip formatter={(value, name, props) => [`${value}%`, props.payload.fullName]} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {radarData.map((item, index) => (
-                    <div key={item.category} className="text-center p-3 bg-gray-50 rounded-lg">
-                      <div className="font-medium text-gray-900">{item.fullName}</div>
-                      <div className="text-2xl font-bold text-blue-600">{item.score}%</div>
-                      <div className="text-sm text-gray-600">{getSkillLevel(item.score).level}</div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Detailed Scores Tab */}
-          <TabsContent value="detailed" className="space-y-6">
-            <div className="grid gap-6">
-              {Object.entries(results.results.categoryScores).map(([category, scores]) => {
-                const Icon = categoryIcons[category as keyof typeof categoryIcons]
-                const percentage = Math.round((scores.score / scores.max) * 100)
-                const level = getSkillLevel(percentage)
-
-                return (
-                  <Card key={category}>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <Icon className="w-6 h-6 text-blue-600" />
-                          <div>
-                            <CardTitle>{category}</CardTitle>
-                            <CardDescription>{scores.questions} questions assessed</CardDescription>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-gray-900">{percentage}%</div>
-                          <Badge className={`${level.bgColor} ${level.color} border-0`}>{level.level}</Badge>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600">Score</span>
-                          <span className="font-medium">
-                            {scores.score} / {scores.max} points
-                          </span>
-                        </div>
-                        <Progress value={percentage} className="h-3" />
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t">
-                          <div className="text-center">
-                            <div className="text-lg font-semibold text-gray-900">{scores.questions}</div>
-                            <div className="text-sm text-gray-600">Questions</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-lg font-semibold text-gray-900">{scores.score}</div>
-                            <div className="text-sm text-gray-600">Points Earned</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-lg font-semibold text-gray-900">{percentage}%</div>
-                            <div className="text-sm text-gray-600">Accuracy</div>
-                          </div>
-                          <div className="text-center">
-                            <div className={`text-lg font-semibold ${level.color}`}>{level.level}</div>
-                            <div className="text-sm text-gray-600">Skill Level</div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </TabsContent>
-
-          {/* AI Insights Tab */}
-          <TabsContent value="ai-insights" className="space-y-6">
-            <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-purple-900">
-                  <Bot className="w-6 h-6" />
-                  <span>AI-Powered Technical Analysis</span>
-                </CardTitle>
-                <CardDescription className="text-purple-700">
-                  Comprehensive analysis of your technical skills performance powered by ChatGPT-4
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {aiAnalysis.loading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="flex items-center space-x-3 text-purple-700">
-                      <div className="w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                      <span>Generating comprehensive technical analysis...</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="prose prose-purple max-w-none">
-                    <div className="whitespace-pre-wrap text-purple-900 leading-relaxed">{aiAnalysis.analysis}</div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Development Plan Tab */}
-          <TabsContent value="development" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <BookOpen className="w-5 h-5 text-green-600" />
-                  <span>30-Day Technical Development Plan</span>
-                </CardTitle>
-                <CardDescription>
-                  Structured plan to improve your technical skills based on assessment results
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* Week 1-2: Immediate Focus */}
-                  <div className="border-l-4 border-red-500 pl-4">
-                    <h3 className="font-semibold text-red-900 mb-2">Week 1-2: Immediate Focus Areas</h3>
-                    <div className="space-y-2">
-                      {developmentAreas.slice(0, 2).map(({ category }) => (
-                        <div key={category} className="p-3 bg-red-50 rounded-lg">
-                          <div className="flex items-center space-x-2 mb-2">
-                            {React.createElement(categoryIcons[category as keyof typeof categoryIcons], {
-                              className: "w-4 h-4 text-red-600",
-                            })}
-                            <span className="font-medium text-red-900">{category}</span>
-                          </div>
-                          <ul className="text-sm text-red-800 space-y-1">
-                            <li>• Review fundamental concepts and best practices</li>
-                            <li>• Complete hands-on tutorials and exercises</li>
-                            <li>• Practice with real-world scenarios</li>
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Week 3-4: Strength Building */}
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h3 className="font-semibold text-green-900 mb-2">Week 3-4: Leverage Your Strengths</h3>
-                    <div className="space-y-2">
-                      {strengths.slice(0, 2).map(({ category }) => (
-                        <div key={category} className="p-3 bg-green-50 rounded-lg">
-                          <div className="flex items-center space-x-2 mb-2">
-                            {React.createElement(categoryIcons[category as keyof typeof categoryIcons], {
-                              className: "w-4 h-4 text-green-600",
-                            })}
-                            <span className="font-medium text-green-900">{category}</span>
-                          </div>
-                          <ul className="text-sm text-green-800 space-y-1">
-                            <li>• Explore advanced topics and techniques</li>
-                            <li>• Share knowledge through mentoring or teaching</li>
-                            <li>• Lead projects that showcase your expertise</li>
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Success Tips */}
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-blue-900 mb-3 flex items-center">
-                      <Zap className="w-5 h-5 mr-2" />
-                      Success Tips for Technical Growth
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-medium text-blue-800 mb-2">Learning Strategies:</h4>
-                        <ul className="text-sm text-blue-700 space-y-1">
-                          <li>• Set aside 30-60 minutes daily for focused learning</li>
-                          <li>• Build projects to apply new concepts</li>
-                          <li>• Join technical communities and forums</li>
-                          <li>• Follow industry leaders and best practices</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-blue-800 mb-2">Practice Methods:</h4>
-                        <ul className="text-sm text-blue-700 space-y-1">
-                          <li>• Code challenges and algorithmic problems</li>
-                          <li>• Open source contributions</li>
-                          <li>• Personal projects and portfolios</li>
-                          <li>• Peer code reviews and collaboration</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Next Steps */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Award className="w-5 h-5 text-purple-600" />
-                  <span>Recommended Next Steps</span>
-                </CardTitle>
-                <CardDescription>Continue your technical development journey</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <Link href="/interview-simulator">
-                    <div className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                          <Brain className="w-5 h-5 text-purple-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium">Practice Technical Interviews</h3>
-                          <p className="text-sm text-gray-600">Test your skills in interview scenarios</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link href="/skills-assessment">
-                    <div className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                          <Target className="w-5 h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium">Update Skills Profile</h3>
-                          <p className="text-sm text-gray-600">Add technical skills to your profile</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-
-                  <Link href="/career-coach">
-                    <div className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Bot className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium">Get Career Coaching</h3>
-                          <p className="text-sm text-gray-600">Personalized advice for tech career growth</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <div className="flex gap-4 items-center">
+          <Badge variant="secondary" className="text-lg px-4 py-2 print:bg-white print:text-black print:border">
+            Puntuación General: {results.overall_score}%
+          </Badge>
+          <Badge variant="outline" className="text-lg px-4 py-2">
+            {results.career_level}
+          </Badge>
+        </div>
       </div>
+
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5 print:hidden">
+          <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="radar">Radar</TabsTrigger>
+          <TabsTrigger value="categories">Categorías</TabsTrigger>
+          <TabsTrigger value="development">Desarrollo</TabsTrigger>
+          <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6 print:block">
+          {/* Overall Score Card */}
+          <Card className="print:break-inside-avoid">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Code className="w-5 h-5 print:text-black" />
+                Resumen de Habilidades Técnicas
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-blue-600 print:text-black">{results.overall_score}%</div>
+                  <div className="text-sm text-muted-foreground print:text-black">Puntuación General</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600 print:text-black">{results.career_level}</div>
+                  <div className="text-sm text-muted-foreground print:text-black">Nivel Profesional</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600 print:text-black">
+                    {Object.keys(results.skill_categories).length}
+                  </div>
+                  <div className="text-sm text-muted-foreground print:text-black">Áreas Evaluadas</div>
+                </div>
+              </div>
+
+              <Progress value={results.overall_score} className="h-4 mb-4 print:hidden" />
+
+              <p className="text-muted-foreground print:text-black">
+                Tu perfil técnico muestra fortalezas en desarrollo frontend con oportunidades de crecimiento en áreas
+                como DevOps y desarrollo móvil. El análisis detallado te ayudará a planificar tu desarrollo profesional.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Quick Categories Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Object.entries(results.skill_categories).map(([category, data]) => {
+              const skillLevel = getSkillLevel(data.score)
+              const Icon = getCategoryIcon(category)
+              return (
+                <Card key={category} className="text-center print:break-inside-avoid">
+                  <CardContent className="pt-6">
+                    <div
+                      className={`w-12 h-12 ${skillLevel.bgColor} rounded-full flex items-center justify-center mx-auto mb-3 print:bg-white print:border`}
+                    >
+                      <Icon className={`w-6 h-6 ${skillLevel.color} print:text-black`} />
+                    </div>
+                    <h3 className="font-semibold mb-1 text-sm">{category}</h3>
+                    <div className="text-2xl font-bold mb-2">{data.score}%</div>
+                    <div className={`text-sm ${skillLevel.color} print:text-black`}>{skillLevel.level}</div>
+                    <Progress value={data.score} className="h-2 mt-2 print:hidden" />
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="radar" className="space-y-6 print:block">
+          <Card className="print:break-inside-avoid">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-blue-600 print:text-black" />
+                Análisis Radar de Habilidades Técnicas
+              </CardTitle>
+              <CardDescription>Vista integral de tus competencias técnicas por categoría</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TechnicalSkillsRadarChart data={radarData} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="categories" className="space-y-6 print:block">
+          <div className="space-y-6">
+            {Object.entries(results.skill_categories).map(([category, data]) => {
+              const skillLevel = getSkillLevel(data.score)
+              const Icon = getCategoryIcon(category)
+              return (
+                <Card key={category} className="print:break-inside-avoid">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Icon className={`w-5 h-5 ${skillLevel.color} print:text-black`} />
+                      {category}
+                    </CardTitle>
+                    <div className="flex items-center gap-4">
+                      <Badge
+                        className={`${skillLevel.bgColor} ${skillLevel.color} print:bg-white print:text-black print:border`}
+                      >
+                        {data.score}% - {skillLevel.level}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <Progress value={data.score} className="h-3 mb-4 print:hidden" />
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {data.skills.map((skill, index) => {
+                        const skillLevelInfo = getSkillLevel(skill.level)
+                        return (
+                          <div key={index} className="p-3 bg-muted/50 rounded-lg print:bg-white print:border">
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="font-medium">{skill.name}</span>
+                              <span className={`text-sm ${skillLevelInfo.color} print:text-black`}>{skill.level}%</span>
+                            </div>
+                            <div className="text-sm text-muted-foreground print:text-black mb-2">
+                              Experiencia: {skill.experience}
+                            </div>
+                            <Progress value={skill.level} className="h-2 print:hidden" />
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="development" className="space-y-6 print:block">
+          <div className="grid md:grid-cols-2 gap-6 print:grid-cols-1">
+            <Card className="print:break-inside-avoid">
+              <CardHeader>
+                <CardTitle className="text-green-600 print:text-black flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5" />
+                  Fortalezas Técnicas
+                </CardTitle>
+                <CardDescription>Habilidades que dominas y puedes aprovechar</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {results.strengths.map((strength, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0 print:text-black" />
+                      <span>{strength}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="print:break-inside-avoid">
+              <CardHeader>
+                <CardTitle className="text-orange-600 print:text-black flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5" />
+                  Áreas de Mejora
+                </CardTitle>
+                <CardDescription>Habilidades que puedes desarrollar</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {results.improvement_areas.map((area, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <TrendingUp className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0 print:text-black" />
+                      <span>{area}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="print:break-inside-avoid">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-blue-600 print:text-black" />
+                Plan de Desarrollo de 30 Días
+              </CardTitle>
+              <CardDescription>Pasos concretos para mejorar tus habilidades técnicas</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="p-4 bg-blue-50 rounded-lg print:bg-white print:border">
+                  <h4 className="font-semibold mb-2">Recomendaciones Generales:</h4>
+                  <ul className="text-sm space-y-1">
+                    {results.recommendations.map((rec, index) => (
+                      <li key={index}>• {rec}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg print:bg-white print:border">
+                  <h4 className="font-semibold mb-2">Próximos Pasos:</h4>
+                  <ul className="text-sm space-y-1">
+                    {results.next_steps.map((step, index) => (
+                      <li key={index}>• {step}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ai-insights" className="space-y-6 print:block">
+          <Card className="print:break-inside-avoid">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-blue-600 print:text-black" />
+                Análisis AI con GPT-4
+              </CardTitle>
+              <CardDescription>
+                Insights personalizados sobre tu perfil técnico generados por inteligencia artificial
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {aiAnalysis.loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <span className="ml-2">Generando análisis con GPT-4...</span>
+                </div>
+              ) : (
+                <div className="prose max-w-none">
+                  <p className="whitespace-pre-wrap">{aiAnalysis.analysis}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

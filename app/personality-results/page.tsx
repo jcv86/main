@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Brain, Heart, Zap, Shield, Eye, TrendingUp, Users, Target, Download, Share2 } from "lucide-react"
+import { Brain, Heart, Zap, Shield, Eye, TrendingUp, Users, Target, Download, Share2, Printer } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface PersonalityResult {
   test_type: string
@@ -25,9 +26,134 @@ interface PersonalityResult {
   communication_style: string
 }
 
+interface AIAnalysis {
+  analysis: string
+  loading: boolean
+}
+
+// Custom Radar Chart Component for Personality
+const PersonalityRadarChart = ({ data }: { data: any[] }) => {
+  const size = 300
+  const center = size / 2
+  const maxRadius = 100
+  const levels = 5
+
+  const angleStep = (2 * Math.PI) / data.length
+
+  const getPointPosition = (index: number, value: number) => {
+    const angle = angleStep * index - Math.PI / 2
+    const radius = (value / 100) * maxRadius
+    return {
+      x: center + radius * Math.cos(angle),
+      y: center + radius * Math.sin(angle),
+    }
+  }
+
+  const getLabelPosition = (index: number) => {
+    const angle = angleStep * index - Math.PI / 2
+    const radius = maxRadius + 25
+    return {
+      x: center + radius * Math.cos(angle),
+      y: center + radius * Math.sin(angle),
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <svg width={size} height={size} className="border rounded-lg bg-white">
+        {/* Grid circles */}
+        {Array.from({ length: levels }, (_, i) => (
+          <circle
+            key={i}
+            cx={center}
+            cy={center}
+            r={(maxRadius / levels) * (i + 1)}
+            fill="none"
+            stroke="#e5e7eb"
+            strokeWidth="1"
+          />
+        ))}
+
+        {/* Grid lines */}
+        {data.map((_, index) => {
+          const pos = getPointPosition(index, 100)
+          return <line key={index} x1={center} y1={center} x2={pos.x} y2={pos.y} stroke="#e5e7eb" strokeWidth="1" />
+        })}
+
+        {/* Data polygon */}
+        <polygon
+          points={data
+            .map((item, index) => {
+              const pos = getPointPosition(index, item.score)
+              return `${pos.x},${pos.y}`
+            })
+            .join(" ")}
+          fill="#8B5CF6"
+          fillOpacity="0.3"
+          stroke="#8B5CF6"
+          strokeWidth="2"
+        />
+
+        {/* Data points */}
+        {data.map((item, index) => {
+          const pos = getPointPosition(index, item.score)
+          return <circle key={index} cx={pos.x} cy={pos.y} r="4" fill="#8B5CF6" stroke="white" strokeWidth="2" />
+        })}
+
+        {/* Labels */}
+        {data.map((item, index) => {
+          const pos = getLabelPosition(index)
+          return (
+            <text
+              key={index}
+              x={pos.x}
+              y={pos.y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="text-xs font-medium fill-gray-700"
+            >
+              {item.name}
+            </text>
+          )
+        })}
+
+        {/* Center label */}
+        <text
+          x={center}
+          y={center}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="text-sm font-bold fill-gray-900"
+        >
+          Personality
+        </text>
+      </svg>
+
+      {/* Legend */}
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+        {data.map((item, index) => (
+          <div key={item.name} className="p-2 bg-gray-50 rounded-lg">
+            <div className="font-medium text-gray-900">{item.name}</div>
+            <div className="text-2xl font-bold text-purple-600">{item.score}%</div>
+            <div className="text-sm text-gray-600">{getScoreLevel(item.score).level}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const getScoreLevel = (score: number) => {
+  if (score >= 70) return { level: "Alto", color: "text-green-600" }
+  if (score >= 40) return { level: "Medio", color: "text-yellow-600" }
+  return { level: "Bajo", color: "text-red-600" }
+}
+
 export default function PersonalityResultsPage() {
   const [results, setResults] = useState<PersonalityResult | null>(null)
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis>({ analysis: "", loading: false })
   const [loading, setLoading] = useState(true)
+  const { toast } = useToast()
 
   useEffect(() => {
     // Mock data - in real app, fetch from API
@@ -69,9 +195,35 @@ export default function PersonalityResultsPage() {
 
     setTimeout(() => {
       setResults(mockResults)
+      generateAIAnalysis(mockResults)
       setLoading(false)
     }, 1000)
   }, [])
+
+  const generateAIAnalysis = async (personalityResults: PersonalityResult) => {
+    setAiAnalysis({ analysis: "", loading: true })
+
+    try {
+      const response = await fetch("/api/ai-insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "personality_analysis",
+          model: "gpt-4",
+          data: personalityResults,
+        }),
+      })
+
+      const data = await response.json()
+      setAiAnalysis({ analysis: data.insights, loading: false })
+    } catch (error) {
+      console.error("Error generating AI analysis:", error)
+      setAiAnalysis({
+        analysis: "Unable to generate AI analysis at this time. Please try again later.",
+        loading: false,
+      })
+    }
+  }
 
   const getTraitInfo = (trait: string) => {
     const traits = {
@@ -114,10 +266,97 @@ export default function PersonalityResultsPage() {
     return traits[trait as keyof typeof traits]
   }
 
-  const getScoreLevel = (score: number) => {
-    if (score >= 70) return { level: "Alto", color: "text-green-600" }
-    if (score >= 40) return { level: "Medio", color: "text-yellow-600" }
-    return { level: "Bajo", color: "text-red-600" }
+  const downloadResults = () => {
+    if (!results) return
+
+    const resultsText = `
+PERSONALITY ASSESSMENT RESULTS
+==============================
+
+Test Type: ${results.test_type}
+Generated on: ${new Date().toLocaleDateString()}
+
+PERSONALITY TRAITS:
+${Object.entries(results.traits)
+  .map(([trait, score]) => {
+    const traitInfo = getTraitInfo(trait)
+    return `${traitInfo.name}: ${score}%`
+  })
+  .join("\n")}
+
+SUMMARY:
+${results.summary}
+
+STRENGTHS:
+${results.strengths.map((strength) => `- ${strength}`).join("\n")}
+
+CHALLENGES:
+${results.challenges.map((challenge) => `- ${challenge}`).join("\n")}
+
+CAREER RECOMMENDATIONS:
+${results.career_recommendations.map((rec) => `- ${rec}`).join("\n")}
+
+WORK STYLE:
+${results.work_style}
+
+COMMUNICATION STYLE:
+${results.communication_style}
+
+AI ANALYSIS (GPT-4):
+${aiAnalysis.analysis}
+    `
+
+    const blob = new Blob([resultsText], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `personality-results-${new Date().toISOString().split("T")[0]}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    toast({
+      title: "Results Downloaded",
+      description: "Your personality assessment results have been downloaded.",
+    })
+  }
+
+  const printResults = () => {
+    window.print()
+  }
+
+  const shareResults = async () => {
+    if (!results) return
+
+    const topTraits = Object.entries(results.traits)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 2)
+      .map(([trait]) => getTraitInfo(trait).name)
+
+    const shareText = `I just completed a comprehensive personality assessment! 🧠
+
+Top Traits: ${topTraits.join(", ")}
+Test: ${results.test_type}
+
+Discover your personality profile: ${window.location.origin}/personality-test`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Personality Assessment Results",
+          text: shareText,
+        })
+      } catch (error) {
+        console.log("Error sharing:", error)
+      }
+    } else {
+      navigator.clipboard.writeText(shareText)
+      toast({
+        title: "Results Copied",
+        description: "Results have been copied to your clipboard.",
+      })
+    }
   }
 
   if (loading) {
@@ -142,46 +381,56 @@ export default function PersonalityResultsPage() {
     )
   }
 
+  const radarData = Object.entries(results.traits).map(([trait, score]) => ({
+    name: getTraitInfo(trait).name,
+    score: score,
+  }))
+
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <div className="container mx-auto p-6 max-w-6xl print:bg-white">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex justify-between items-start mb-4">
+      <div className="mb-8 print:mb-6">
+        <div className="flex justify-between items-start mb-4 print:block">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Análisis de Personalidad</h1>
-            <p className="text-muted-foreground">Resultados basados en el modelo de los Cinco Grandes</p>
+            <h1 className="text-3xl font-bold mb-2 print:text-2xl">Análisis de Personalidad</h1>
+            <p className="text-muted-foreground print:text-sm">Resultados basados en el modelo de los Cinco Grandes</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+          <div className="flex gap-2 print:hidden">
+            <Button variant="outline" size="sm" onClick={shareResults}>
               <Share2 className="w-4 h-4 mr-2" />
               Compartir
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={downloadResults}>
               <Download className="w-4 h-4 mr-2" />
               Descargar PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={printResults}>
+              <Printer className="w-4 h-4 mr-2" />
+              Imprimir
             </Button>
           </div>
         </div>
 
-        <Badge variant="secondary" className="text-lg px-4 py-2">
+        <Badge variant="secondary" className="text-lg px-4 py-2 print:bg-white print:text-black print:border">
           Evaluación: {results.test_type}
         </Badge>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5 print:hidden">
           <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="radar">Radar</TabsTrigger>
           <TabsTrigger value="traits">Rasgos</TabsTrigger>
           <TabsTrigger value="strengths">Fortalezas</TabsTrigger>
-          <TabsTrigger value="career">Carrera</TabsTrigger>
+          <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-6 print:block">
           {/* Summary Card */}
-          <Card>
+          <Card className="print:break-inside-avoid">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5" />
+                <Brain className="w-5 h-5 print:text-black" />
                 Tu Perfil de Personalidad
               </CardTitle>
             </CardHeader>
@@ -191,11 +440,11 @@ export default function PersonalityResultsPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold mb-3">Estilo de Trabajo</h3>
-                  <p className="text-muted-foreground">{results.work_style}</p>
+                  <p className="text-muted-foreground print:text-black">{results.work_style}</p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-3">Estilo de Comunicación</h3>
-                  <p className="text-muted-foreground">{results.communication_style}</p>
+                  <p className="text-muted-foreground print:text-black">{results.communication_style}</p>
                 </div>
               </div>
             </CardContent>
@@ -208,17 +457,17 @@ export default function PersonalityResultsPage() {
               const scoreLevel = getScoreLevel(score)
               const Icon = traitInfo.icon
               return (
-                <Card key={trait} className="text-center">
+                <Card key={trait} className="text-center print:break-inside-avoid">
                   <CardContent className="pt-6">
                     <div
-                      className={`w-12 h-12 ${traitInfo.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}
+                      className={`w-12 h-12 ${traitInfo.bgColor} rounded-full flex items-center justify-center mx-auto mb-3 print:bg-white print:border`}
                     >
-                      <Icon className={`w-6 h-6 ${traitInfo.color}`} />
+                      <Icon className={`w-6 h-6 ${traitInfo.color} print:text-black`} />
                     </div>
                     <h3 className="font-semibold mb-1">{traitInfo.name}</h3>
                     <div className="text-2xl font-bold mb-2">{score}%</div>
-                    <div className={`text-sm ${scoreLevel.color}`}>{scoreLevel.level}</div>
-                    <Progress value={score} className="h-2 mt-2" />
+                    <div className={`text-sm ${scoreLevel.color} print:text-black`}>{scoreLevel.level}</div>
+                    <Progress value={score} className="h-2 mt-2 print:hidden" />
                   </CardContent>
                 </Card>
               )
@@ -226,40 +475,59 @@ export default function PersonalityResultsPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="traits" className="space-y-6">
+        <TabsContent value="radar" className="space-y-6 print:block">
+          <Card className="print:break-inside-avoid">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-purple-600 print:text-black" />
+                Análisis Radar de Personalidad
+              </CardTitle>
+              <CardDescription>
+                Vista integral de tus rasgos de personalidad según el modelo de los Cinco Grandes
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PersonalityRadarChart data={radarData} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="traits" className="space-y-6 print:block">
           <div className="space-y-6">
             {Object.entries(results.traits).map(([trait, score]) => {
               const traitInfo = getTraitInfo(trait)
               const scoreLevel = getScoreLevel(score)
               const Icon = traitInfo.icon
               return (
-                <Card key={trait}>
+                <Card key={trait} className="print:break-inside-avoid">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
                       <div
-                        className={`w-12 h-12 ${traitInfo.bgColor} rounded-full flex items-center justify-center flex-shrink-0`}
+                        className={`w-12 h-12 ${traitInfo.bgColor} rounded-full flex items-center justify-center flex-shrink-0 print:bg-white print:border`}
                       >
-                        <Icon className={`w-6 h-6 ${traitInfo.color}`} />
+                        <Icon className={`w-6 h-6 ${traitInfo.color} print:text-black`} />
                       </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-center mb-2">
                           <h3 className="text-xl font-semibold">{traitInfo.name}</h3>
                           <div className="text-right">
                             <div className="text-2xl font-bold">{score}%</div>
-                            <div className={`text-sm ${scoreLevel.color}`}>{scoreLevel.level}</div>
+                            <div className={`text-sm ${scoreLevel.color} print:text-black`}>{scoreLevel.level}</div>
                           </div>
                         </div>
-                        <p className="text-muted-foreground mb-4">{traitInfo.description}</p>
-                        <Progress value={score} className="h-3" />
+                        <p className="text-muted-foreground mb-4 print:text-black">{traitInfo.description}</p>
+                        <Progress value={score} className="h-3 print:hidden" />
 
-                        <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                        <div className="mt-4 p-4 bg-muted/50 rounded-lg print:bg-white print:border">
                           <h4 className="font-medium mb-2">Interpretación:</h4>
                           <p className="text-sm">
-                            {score >= 70 && `Tu puntuación alta en ${traitInfo.name.toLowerCase()} indica que...`}
+                            {score >= 70 &&
+                              `Tu puntuación alta en ${traitInfo.name.toLowerCase()} indica que tienes una fuerte tendencia hacia este rasgo, lo que se manifiesta en tu comportamiento diario y decisiones profesionales.`}
                             {score >= 40 &&
                               score < 70 &&
-                              `Tu puntuación moderada en ${traitInfo.name.toLowerCase()} sugiere que...`}
-                            {score < 40 && `Tu puntuación baja en ${traitInfo.name.toLowerCase()} muestra que...`}
+                              `Tu puntuación moderada en ${traitInfo.name.toLowerCase()} sugiere un equilibrio en este aspecto, adaptándote según las situaciones.`}
+                            {score < 40 &&
+                              `Tu puntuación baja en ${traitInfo.name.toLowerCase()} muestra que este rasgo es menos dominante en tu personalidad, lo que puede ser una ventaja en ciertos contextos.`}
                           </p>
                         </div>
                       </div>
@@ -271,18 +539,18 @@ export default function PersonalityResultsPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="strengths" className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card>
+        <TabsContent value="strengths" className="space-y-6 print:block">
+          <div className="grid md:grid-cols-2 gap-6 print:grid-cols-1">
+            <Card className="print:break-inside-avoid">
               <CardHeader>
-                <CardTitle className="text-green-600">Fortalezas Principales</CardTitle>
+                <CardTitle className="text-green-600 print:text-black">Fortalezas Principales</CardTitle>
                 <CardDescription>Aspectos que te destacan y puedes potenciar</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   {results.strengths.map((strength, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <Shield className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <Shield className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0 print:text-black" />
                       <span>{strength}</span>
                     </li>
                   ))}
@@ -290,16 +558,16 @@ export default function PersonalityResultsPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="print:break-inside-avoid">
               <CardHeader>
-                <CardTitle className="text-orange-600">Áreas de Desarrollo</CardTitle>
+                <CardTitle className="text-orange-600 print:text-black">Áreas de Desarrollo</CardTitle>
                 <CardDescription>Aspectos en los que puedes trabajar para crecer</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   {results.challenges.map((challenge, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <TrendingUp className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                      <TrendingUp className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0 print:text-black" />
                       <span>{challenge}</span>
                     </li>
                   ))}
@@ -308,48 +576,19 @@ export default function PersonalityResultsPage() {
             </Card>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Plan de Desarrollo Personal</CardTitle>
-              <CardDescription>Recomendaciones específicas basadas en tu perfil</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Desarrollo a Corto Plazo (1-3 meses):</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Identifica situaciones donde puedas aplicar tus fortalezas principales</li>
-                    <li>• Practica técnicas de mindfulness para mejorar la autoconciencia</li>
-                    <li>• Busca feedback regular de colegas y supervisores</li>
-                  </ul>
-                </div>
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Desarrollo a Largo Plazo (6-12 meses):</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Toma cursos o talleres relacionados con tus áreas de desarrollo</li>
-                    <li>• Busca un mentor que complemente tu perfil de personalidad</li>
-                    <li>• Participa en proyectos que desafíen tus zonas de confort</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="career" className="space-y-6">
-          <Card>
+          <Card className="print:break-inside-avoid">
             <CardHeader>
               <CardTitle>Recomendaciones de Carrera</CardTitle>
               <CardDescription>Roles y ambientes de trabajo que se alinean con tu personalidad</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-6 print:grid-cols-1">
                 <div>
                   <h3 className="font-semibold mb-4">Tipos de Roles Ideales:</h3>
                   <ul className="space-y-2">
                     {results.career_recommendations.map((recommendation, index) => (
                       <li key={index} className="flex items-start gap-2">
-                        <Target className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0" />
+                        <Target className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0 print:text-black" />
                         <span className="text-sm">{recommendation}</span>
                       </li>
                     ))}
@@ -360,19 +599,19 @@ export default function PersonalityResultsPage() {
                   <h3 className="font-semibold mb-4">Ambientes de Trabajo Preferidos:</h3>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start gap-2">
-                      <Users className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                      <Users className="w-4 h-4 text-green-500 mt-1 flex-shrink-0 print:text-black" />
                       <span>Equipos colaborativos y dinámicos</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Brain className="w-4 h-4 text-purple-500 mt-1 flex-shrink-0" />
+                      <Brain className="w-4 h-4 text-purple-500 mt-1 flex-shrink-0 print:text-black" />
                       <span>Proyectos que requieren creatividad</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <TrendingUp className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0" />
+                      <TrendingUp className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0 print:text-black" />
                       <span>Oportunidades de crecimiento y aprendizaje</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Target className="w-4 h-4 text-red-500 mt-1 flex-shrink-0" />
+                      <Target className="w-4 h-4 text-red-500 mt-1 flex-shrink-0 print:text-black" />
                       <span>Objetivos claros y medibles</span>
                     </li>
                   </ul>
@@ -380,27 +619,28 @@ export default function PersonalityResultsPage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
 
-          <Card>
+        <TabsContent value="ai-insights" className="space-y-6 print:block">
+          <Card className="print:break-inside-avoid">
             <CardHeader>
-              <CardTitle>Compatibilidad con Equipos</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-blue-600 print:text-black" />
+                Análisis AI con GPT-4
+              </CardTitle>
+              <CardDescription>Insights personalizados generados por inteligencia artificial</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-green-800">Trabajas mejor con:</h4>
-                  <p className="text-sm text-green-700">
-                    Personas organizadas y orientadas a objetivos, equipos que valoran la innovación y la colaboración
-                    abierta.
-                  </p>
+              {aiAnalysis.loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <span className="ml-2">Generando análisis con GPT-4...</span>
                 </div>
-                <div className="p-4 bg-yellow-50 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-yellow-800">Puede requerir adaptación:</h4>
-                  <p className="text-sm text-yellow-700">
-                    Ambientes muy rígidos o con poca autonomía, equipos que evitan el cambio o la experimentación.
-                  </p>
+              ) : (
+                <div className="prose max-w-none">
+                  <p className="whitespace-pre-wrap">{aiAnalysis.analysis}</p>
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

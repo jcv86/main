@@ -49,7 +49,6 @@ import {
   Lightbulb,
   ChevronDownIcon,
 } from "lucide-react"
-import { useLanguage } from "@/contexts/language-context"
 
 // Big Five personality traits
 const BIG_FIVE_TRAITS = {
@@ -723,165 +722,6 @@ const PERSONALITY_QUESTIONS: Question[] = [
       "Reflexiona sobre tu capacidad de funcionar efectivamente bajo presión",
     ],
   },
-  {
-    id: 26,
-    type: "ranking",
-    trait: "openness",
-    question: "Ordena estas actividades de tiempo libre según tu preferencia (1 = más preferida)",
-    instruction: "Arrastra para reordenar o usa las flechas",
-    items: [
-      "Leer libros o artículos sobre temas nuevos",
-      "Crear arte, música o escribir",
-      "Explorar lugares nuevos o viajar",
-      "Aprender nuevas habilidades o hobbies",
-      "Ver documentales o contenido educativo",
-      "Experimentar con recetas o proyectos DIY",
-    ],
-    reverse: false,
-    explanation:
-      "Esta pregunta evalúa tus preferencias de ocio y cómo estas reflejan tu apertura a nuevas experiencias.",
-    examples: [
-      "Leer: novelas de géneros nuevos, artículos científicos, filosofía",
-      "Crear: pintura, música, escritura creativa, manualidades",
-      "Explorar: viajes a culturas diferentes, lugares desconocidos",
-      "Aprender: cursos online, talleres, nuevas habilidades técnicas",
-      "Ver: documentales de ciencia, historia, culturas, naturaleza",
-      "Experimentar: cocina internacional, proyectos de bricolaje, inventos",
-    ],
-    alternativeFormulations: [
-      "Prioriza estas actividades según qué tan atractivas te resultan",
-      "Ordena estas opciones de ocio por tu nivel de interés",
-      "Clasifica estas actividades desde la más hasta la menos preferida",
-    ],
-    tips: [
-      "Ordena según tu preferencia real, no lo que crees que es 'correcto'",
-      "Piensa en qué actividades te generan más entusiasmo",
-      "Considera qué harías si tuvieras tiempo ilimitado",
-    ],
-  },
-  {
-    id: 27,
-    type: "slider",
-    trait: "conscientiousness",
-    question: "¿Qué tan organizado eres en una escala del 0 al 100?",
-    instruction: "Desliza para seleccionar tu nivel",
-    min: 0,
-    max: 100,
-    step: 5,
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu autopercepción sobre tu nivel de organización personal.",
-    examples: [
-      "0-25: Muy desorganizado, caótico, sin sistemas",
-      "26-50: Algo desorganizado, organización básica ocasional",
-      "51-75: Moderadamente organizado, algunos sistemas establecidos",
-      "76-100: Muy organizado, sistemas detallados y consistentes",
-    ],
-    alternativeFormulations: [
-      "En una escala de 0 a 100, ¿cuál es tu nivel de organización personal?",
-      "¿Qué puntuación te darías en términos de orden y estructura?",
-      "Del 0 al 100, ¿qué tan sistemático/a y ordenado/a eres?",
-    ],
-    tips: [
-      "Considera tanto tu organización física como mental",
-      "Piensa en cómo otros evaluarían tu nivel de organización",
-      "Reflexiona sobre la consistencia de tu organización",
-    ],
-  },
-  {
-    id: 28,
-    type: "checkbox",
-    trait: "extraversion",
-    question: "¿Cuáles de estas situaciones sociales disfrutas? (Selecciona todas las que apliquen)",
-    instruction: "Puedes seleccionar múltiples opciones",
-    options: [
-      "Fiestas grandes con muchas personas",
-      "Reuniones pequeñas con amigos cercanos",
-      "Eventos de networking profesional",
-      "Actividades grupales al aire libre",
-      "Presentaciones públicas o hablar en público",
-      "Colaborar en proyectos de equipo",
-    ],
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu preferencia por diferentes tipos de interacciones sociales.",
-    examples: [
-      "Fiestas: celebraciones, discotecas, eventos masivos",
-      "Reuniones pequeñas: cenas íntimas, conversaciones profundas",
-      "Networking: conferencias, eventos profesionales, conocer colegas",
-      "Actividades grupales: deportes, excursiones, actividades al aire libre",
-      "Presentaciones: hablar en público, liderar reuniones, dar charlas",
-      "Colaboración: trabajar en equipo, proyectos grupales, brainstorming",
-    ],
-    alternativeFormulations: [
-      "¿Qué tipos de interacciones sociales encuentras más gratificantes?",
-      "Selecciona las situaciones sociales que más disfrutas",
-      "¿En cuáles de estos contextos sociales te sientes más cómodo/a?",
-    ],
-    tips: [
-      "Selecciona solo las que hayas implementado realmente",
-      "Considera tanto conocimiento teórico como práctica",
-      "Piensa en medidas de seguridad que hayas aplicado en proyectos",
-      "No marques conceptos que solo hayas leído sobre ellos",
-    ],
-  },
-  {
-    id: 29,
-    type: "binary",
-    trait: "agreeableness",
-    question: "¿Prefieres evitar conflictos o enfrentarlos directamente?",
-    instruction: "Elige la opción que mejor te represente",
-    options: ["Evitar conflictos", "Enfrentar conflictos directamente"],
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu estilo natural de manejo de conflictos y tu preferencia por la armonía.",
-    examples: [
-      "Evitar: buscar la paz, mediar, encontrar compromisos, mantener armonía",
-      "Enfrentar: abordar problemas directamente, confrontar cuando es necesario, resolver rápidamente",
-    ],
-    alternativeFormulations: [
-      "¿Tiendes a evitar las confrontaciones o a abordarlas de frente?",
-      "¿Prefieres mantener la paz o resolver conflictos directamente?",
-      "¿Tu instinto es evitar tensiones o enfrentarlas abiertamente?",
-    ],
-    tips: [
-      "Piensa en tu reacción instintiva ante conflictos",
-      "Considera qué te resulta más natural y cómodo",
-      "Reflexiona sobre tu comportamiento típico en desacuerdos",
-    ],
-  },
-  {
-    id: 30,
-    type: "ranking",
-    trait: "neuroticism",
-    question: "Ordena estas reacciones ante el estrés según qué tan frecuentemente las experimentas",
-    instruction: "1 = más frecuente, 6 = menos frecuente",
-    items: [
-      "Me siento abrumado/a y ansioso/a",
-      "Busco apoyo en amigos o familia",
-      "Me enfoco en encontrar soluciones prácticas",
-      "Necesito tiempo a solas para procesar",
-      "Me irrito fácilmente con otros",
-      "Mantengo la calma y sigo adelante",
-    ],
-    reverse: true,
-    explanation: "Esta pregunta evalúa tus patrones típicos de respuesta al estrés y tu estabilidad emocional.",
-    examples: [
-      "Abrumado: sentir ansiedad, pánico, sensación de no poder manejar la situación",
-      "Buscar apoyo: llamar amigos, hablar con familia, buscar consuelo",
-      "Soluciones: enfocarse en resolver, hacer planes, tomar acción",
-      "Tiempo solo: necesitar espacio, reflexionar, procesar internamente",
-      "Irritación: molestarse con otros, impaciencia, frustración dirigida",
-      "Calma: mantener compostura, seguir funcionando normalmente",
-    ],
-    alternativeFormulations: [
-      "Clasifica estas respuestas al estrés por qué tan típicas son en ti",
-      "Ordena estas reacciones desde la más hasta la menos frecuente en tu caso",
-      "Prioriza estas respuestas según qué tan seguido las experimentas",
-    ],
-    tips: [
-      "Sé honesto/a sobre tus reacciones reales, no las ideales",
-      "Piensa en situaciones estresantes recientes",
-      "Considera tus patrones de comportamiento bajo presión",
-    ],
-  },
 ]
 
 // Enhanced Speech Recognition Hook with better Spanish support
@@ -1194,7 +1034,6 @@ const RankingComponent: React.FC<RankingComponentProps> = ({ items, value, onCha
 }
 
 export default function PersonalityTestPage() {
-  const { t, language } = useLanguage()
   const router = useRouter()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, any>>({})
@@ -1926,6 +1765,17 @@ export default function PersonalityTestPage() {
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-2">Evaluación de Personalidad</h1>
             <p className="text-muted-foreground mb-6">Descubre tus rasgos de personalidad con el modelo Big Five</p>
+
+            {/* Progress Bar */}
+            <div className="max-w-md mx-auto mb-6">
+              <div className="flex justify-between text-sm text-muted-foreground mb-2">
+                <span>
+                  Pregunta {currentQuestion + 1} de {PERSONALITY_QUESTIONS.length}
+                </span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <Progress value={progress} className="w-full" />
+            </div>
           </div>
 
           {/* Question Card */}
