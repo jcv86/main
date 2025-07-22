@@ -12,6 +12,7 @@ export interface Book {
   cover_image?: string
   total_pages: number
   created_at: string
+  is_free?: boolean
 }
 
 export interface BookContent {
@@ -50,8 +51,23 @@ export interface ReadingStats {
   reading_streak: number
 }
 
-// Mock data
+// Mock data - Los 7 Hábitos ahora es el primer libro y está marcado como gratuito
 const mockBooks: Book[] = [
+  {
+    id: "8",
+    title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+    author: "Stephen R. Covey",
+    description:
+      "Lecciones poderosas de cambio personal. Los principios fundamentales para el éxito personal y profesional que han transformado millones de vidas. ¡LIBRO COMPLETO GRATIS!",
+    category: "Desarrollo Personal",
+    rating: 4.8,
+    reading_time: "5h 45min",
+    difficulty: "Intermedio",
+    publication_year: 1989,
+    total_pages: 432,
+    created_at: new Date().toISOString(),
+    is_free: true,
+  },
   {
     id: "1",
     title: "Hábitos Atómicos",
@@ -148,20 +164,6 @@ const mockBooks: Book[] = [
     difficulty: "Avanzado",
     publication_year: 2001,
     total_pages: 400,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "8",
-    title: "The 7 Habits of Highly Effective People",
-    author: "Stephen R. Covey",
-    description:
-      "Lecciones poderosas de cambio personal. Los principios fundamentales para el éxito personal y profesional que han transformado millones de vidas.",
-    category: "Desarrollo Personal",
-    rating: 4.8,
-    reading_time: "5h 45min",
-    difficulty: "Intermedio",
-    publication_year: 1989,
-    total_pages: 432,
     created_at: new Date().toISOString(),
   },
   {
@@ -1000,7 +1002,7 @@ const mockBookContent: { [key: string]: BookContent[] } = {
       <p>La forma en que vemos el problema es el problema. Este libro presenta un enfoque basado en principios para la efectividad personal e interpersonal.</p>
       
       <h3>🔍 ¿Qué es un Paradigma?</h3>
-      <p>Un paradigma es la forma en que "vemos" el mundo, no en términos de nuestro sentido de la vista, sino en términos de percepción, comprensión e interpretación.</p>
+      <p>Un paradigma es la forma en que "veemos" el mundo, no en términos de nuestro sentido de la vista, sino en términos de percepción, comprensión e interpretación.</p>
       
       <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
         <h4 style="color: #0369a1; margin-top: 0;">💡 El Poder de los Cambios de Paradigma</h4>
@@ -1567,676 +1569,113 @@ const mockBookContent: { [key: string]: BookContent[] } = {
       <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
         <h4 style="color: #0369a1; margin-top: 0;">📝 Estructura de Presentación Empática</h4>
         <ol style="margin-bottom: 0;">
-          <li><strong>🤝 Ethos (credibilidad personal):</strong> Tu carácter e integridad</li>
-          <li><strong>💭 Pathos (alineación empática):</strong> Estar en sintonía emocionalmente</li>
-          <li><strong>🧠 Logos (lógica):</strong> El razonamiento de tu presentación</li>
+          <li><strong>🤝 Ethos:</strong> Tu credibilidad personal (carácter y competencia)</li>
+          <li><strong>🧠 Pathos:</strong> El lado emocional (alineado con su marco emocional)</li>
+          <li><strong>📊 Logos:</strong> La lógica (el razonamiento)</li>
         </ol>
       </div>
       
-      <h3>🔄 El Proceso de Entendimiento Mutuo</h3>
-      <p>El entendimiento mutuo es la clave para la comunicación efectiva. Cuando ambas partes se sienten entendidas, pueden trabajar juntas para encontrar soluciones sinérgicas.</p>
+      <h3>🔄 El Proceso de Comunicación Empática</h3>
+      <p>La comunicación empática es un proceso continuo de construcción de entendimiento mutuo:</p>
       
       <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">🔄 Pasos para el Entendimiento Mutuo</h4>
+        <h4 style="color: #d97706; margin-top: 0;">🔄 Pasos del Proceso</h4>
         <ol style="margin-bottom: 0;">
-          <li><strong>Escucha empáticamente</strong> hasta que la otra persona se sienta entendida</li>
-          <li><strong>Expresa tu punto de vista</strong> con coraje y consideración</li>
-          <li><strong>Busca soluciones</strong> que honren las necesidades de ambos</li>
+          <li><strong>👂 Escucha empáticamente:</strong> Hasta que la persona se sienta entendida</li>
+          <li><strong>🗣️ Expresa tu punto de vista:</strong> Con coraje y consideración</li>
+          <li><strong>🤝 Busca soluciones:</strong> Que honren ambas perspectivas</li>
+          <li><strong>🔄 Repite el proceso:</strong> Hasta lograr entendimiento mutuo</li>
         </ol>
       </div>
       
-      <h3>💡 Beneficios de la Escucha Empática</h3>
+      <h3>💎 Los Beneficios de la Escucha Empática</h3>
       <ul>
         <li><strong>Información precisa:</strong> Obtienes datos reales, no filtrados</li>
-        <li><strong>Terapéutico:</strong> Las personas se sienten valoradas y comprendidas</li>
-        <li><strong>Influencia:</strong> Cuando las personas se sienten entendidas, son más abiertas</li>
-        <li><strong>Relaciones más profundas:</strong> Se construye confianza y respeto mutuo</li>
+        <li><strong>Confianza aumentada:</strong> Las personas se sienten valoradas</li>
+        <li><strong>Problemas reales:</strong> Identificas las causas raíz</li>
+        <li><strong>Soluciones creativas:</strong> Emergen nuevas posibilidades</li>
       </ul>
       
       <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
-        "La necesidad psicológica más profunda del ser humano es ser entendido."
+        "Cuando realmente escuchas a otra persona desde su punto de vista, y reflejas de vuelta a esa persona lo que está sintiendo y lo que está diciendo, le das aire psicológico."
       </blockquote>
       
       <h3>📝 Ejercicio Práctico</h3>
-      <p>La próxima vez que tengas una oportunidad de observar a otros comunicándose, cubre tus oídos por unos minutos y solo observa. ¿Qué emociones se están comunicando que tal vez no se expresen con palabras? ¿Los movimientos corporales y las expresiones faciales coinciden con las palabras habladas?</p>
-      
-      <p>Luego, en tu próxima conversación importante, practica la escucha empática. Resiste la tentación de responder inmediatamente. En su lugar, busca realmente entender el punto de vista de la otra persona antes de expresar el tuyo.</p>
+      <p>Durante una semana, practica la escucha empática en tus conversaciones. Antes de responder o dar tu opinión, asegúrate de que la otra persona se sienta completamente entendida. Nota cómo cambia la calidad de tus relaciones.</p>
     `,
       page_number: 6,
       created_at: new Date().toISOString(),
     },
-    {
-      id: "content-8-7",
-      book_id: "8",
-      chapter_number: 7,
-      title: "Hábito 6: Sinergizar",
-      content: `
-      <h2>Hábito 6: Sinergizar</h2>
-      <p>Sinergizar es la actividad de más alta forma de vida: la verdadera prueba y manifestación de todos los otros hábitos puestos juntos. La sinergia significa que el todo es mayor que la suma de sus partes.</p>
-      
-      <h3>🌟 ¿Qué es la Sinergia?</h3>
-      <p>La sinergia es la esencia del liderazgo centrado en principios. Es la esencia de la paternidad centrada en principios. Cataliza, unifica y libera las más grandes energías dentro de las personas.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">✨ Características de la Sinergia</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🎯 Creatividad:</strong> Genera nuevas alternativas y opciones</li>
-          <li><strong>🤝 Colaboración:</strong> Combina fortalezas y compensa debilidades</li>
-          <li><strong>🚀 Innovación:</strong> Produce resultados que ninguna persona podría lograr sola</li>
-          <li><strong>💡 Soluciones de tercera alternativa:</strong> Va más allá de "mi manera" o "tu manera"</li>
-        </ul>
-      </div>
-      
-      <h3>🔄 La Tercera Alternativa</h3>
-      <p>Cuando las personas realmente entienden el paradigma de la otra persona, a menudo descubren que la diferencia aparente no es un "o esto o aquello" sino un "esto y aquello".</p>
-      
-      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #0369a1; margin-top: 0;">🛤️ Niveles de Comunicación</h4>
-        <ol style="margin-bottom: 0;">
-          <li><strong>🥊 Nivel Bajo (Ganar-Perder):</strong> Comunicación defensiva y protectora</li>
-          <li><strong>🤝 Nivel Medio (Compromiso):</strong> Comunicación respetuosa pero no creativa</li>
-          <li><strong>🚀 Nivel Alto (Sinergia):</strong> Comunicación sinérgica que crea nuevas alternativas</li>
-        </ol>
-      </div>
-      
-      <h3>🌈 Valorar las Diferencias</h3>
-      <p>La clave para la sinergia interpersonal es valorar las diferencias mentales, emocionales y psicológicas entre las personas.</p>
-      
-      <p>Las diferencias no son solo toleradas, sino celebradas como la clave para la creatividad y el crecimiento.</p>
-      
-      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #be185d; margin-top: 0;">🎭 Tipos de Diferencias Valiosas</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🧠 Mentales:</strong> Diferentes formas de pensar y procesar información</li>
-          <li><strong>❤️ Emocionales:</strong> Diferentes formas de sentir y expresar emociones</li>
-          <li><strong>🎯 Psicológicas:</strong> Diferentes personalidades y temperamentos</li>
-          <li><strong>🌍 Culturales:</strong> Diferentes antecedentes y experiencias</li>
-          <li><strong>🛠️ Funcionales:</strong> Diferentes habilidades y expertise</li>
-        </ul>
-      </div>
-      
-      <h3>🧠 Cerebro Derecho vs. Cerebro Izquierdo</h3>
-      <p>Una forma útil de entender las diferencias es considerar las funciones del cerebro derecho e izquierdo:</p>
-      
-      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div>
-            <h5 style="color: #374151; margin: 0 0 8px 0;">🧮 Cerebro Izquierdo</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Lógico</li>
-              <li>Secuencial</li>
-              <li>Analítico</li>
-              <li>Verbal</li>
-              <li>Realista</li>
-            </ul>
-          </div>
-          <div>
-            <h5 style="color: #374151; margin: 0 0 8px 0;">🎨 Cerebro Derecho</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Intuitivo</li>
-              <li>Creativo</li>
-              <li>Visual</li>
-              <li>Artístico</li>
-              <li>Conceptual</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <h3>🏢 Sinergia en el Trabajo</h3>
-      <p>En el ambiente de trabajo, la sinergia se manifiesta cuando los equipos crean soluciones que ningún miembro individual podría haber desarrollado solo.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">🏆 Condiciones para la Sinergia Organizacional</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🎯 Visión compartida:</strong> Todos entienden y se comprometen con el objetivo</li>
-          <li><strong>🤝 Confianza mutua:</strong> Las personas se sienten seguras para ser vulnerables</li>
-          <li><strong>🌈 Diversidad valorada:</strong> Las diferencias se ven como fortalezas</li>
-          <li><strong>💬 Comunicación abierta:</strong> Las ideas fluyen libremente</li>
-          <li><strong>🚀 Mentalidad de abundancia:</strong> Creencia de que hay suficiente éxito para todos</li>
-        </ul>
-      </div>
-      
-      <h3>👨‍👩‍👧‍👦 Sinergia en la Familia</h3>
-      <p>En las familias, la sinergia se crea cuando cada miembro se siente valorado por sus contribuciones únicas y cuando las decisiones familiares incorporan las perspectivas de todos.</p>
-      
-      <h3>🚧 Obstáculos para la Sinergia</h3>
-      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">⚠️ Barreras Comunes</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🛡️ Defensividad:</strong> Proteger el ego en lugar de buscar entendimiento</li>
-          <li><strong>🎭 Juegos de poder:</strong> Buscar ganar en lugar de encontrar la mejor solución</li>
-          <li><strong>😨 Miedo al cambio:</strong> Preferir lo conocido aunque no sea óptimo</li>
-          <li><strong>🏃 Prisa:</strong> No tomar tiempo para explorar alternativas</li>
-          <li><strong>🧠 Pensamiento de suma cero:</strong> Creer que si tú ganas, yo pierdo</li>
-        </ul>
-      </div>
-      
-      <h3>🔧 Herramientas para Crear Sinergia</h3>
-      <p>Hay varias herramientas y técnicas que pueden facilitar la sinergia:</p>
-      
-      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #0369a1; margin-top: 0;">🛠️ Herramientas para la Sinergia</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🧠 Lluvia de ideas:</strong> Generar múltiples opciones sin juzgar</li>
-          <li><strong>🗺️ Mapas mentales:</strong> Visualizar conexiones entre ideas</li>
-          <li><strong>🎭 Juego de roles:</strong> Ver situaciones desde diferentes perspectivas</li>
-          <li><strong>❓ Preguntas poderosas:</strong> "¿Qué pasaría si...?" "¿Cómo podríamos...?"</li>
-          <li><strong>🔄 Síntesis:</strong> Combinar elementos de diferentes ideas</li>
-        </ul>
-      </div>
-      
-      <h3>🌱 El Proceso de la Sinergia</h3>
-      <p>La sinergia no sucede automáticamente. Requiere un proceso deliberado:</p>
-      
-      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #374151; margin-top: 0;">🔄 Pasos para Crear Sinergia</h4>
-        <ol style="margin-bottom: 0;">
-          <li><strong>🎯 Define el problema o oportunidad</strong> claramente</li>
-          <li><strong>👂 Escucha todas las perspectivas</strong> con mente abierta</li>
-          <li><strong>🌈 Valora las diferencias</strong> como recursos valiosos</li>
-          <li><strong>💡 Genera múltiples alternativas</strong> creativamente</li>
-          <li><strong>🔍 Evalúa opciones</strong> basándose en principios compartidos</li>
-          <li><strong>✅ Selecciona la mejor solución</strong> que honre todas las perspectivas</li>
-        </ol>
-      </div>
-      
-      <h3>🎯 Sinergia vs. Compromiso</h3>
-      <p>Es importante distinguir entre sinergia y compromiso:</p>
-      
-      <ul>
-        <li><strong>🤝 Compromiso:</strong> 1 + 1 = 1.5 (Ambas partes ceden algo)</li>
-        <li><strong>🚀 Sinergia:</strong> 1 + 1 = 3 o más (Se crea algo completamente nuevo)</li>
-      </ul>
-      
-      <p>En el compromiso, ambas partes dan y reciben. En la sinergia, ambas partes ganan más de lo que podrían haber logrado individualmente.</p>
-      
-      <h3>🌍 Sinergia y Diversidad</h3>
-      <p>La diversidad bien gestionada es una fuente tremenda de sinergia. Cuando las personas de diferentes antecedentes, culturas y perspectivas trabajan juntas efectivamente, pueden crear soluciones innovadoras.</p>
-      
-      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
-        "La fuerza reside en las diferencias, no en las similitudes."
-      </blockquote>
-      
-      <h3>💫 La Magia de la Sinergia</h3>
-      <p>Cuando la sinergia realmente sucede, es casi mágica. Las personas se sienten energizadas, creativas y conectadas. Las soluciones emergen que nadie había considerado antes.</p>
-      
-      <p>La sinergia es aventura. Es emocionante. Abre nuevas posibilidades, nuevas alternativas, nuevas opciones.</p>
-      
-      <h3>📝 Ejercicio Práctico</h3>
-      <p>Identifica una situación en tu vida donde hay diferencias de opinión o conflicto. En lugar de buscar un compromiso, explora cómo podrías crear sinergia:</p>
-      
-      <ol>
-        <li>Define claramente el problema desde múltiples perspectivas</li>
-        <li>Identifica qué es valioso en cada punto de vista</li>
-        <li>Pregúntate: "¿Hay una tercera alternativa que honre lo mejor de ambas perspectivas?"</li>
-        <li>Mantente abierto a soluciones que inicialmente parezcan imposibles</li>
-      </ol>
-      
-      <p>Recuerda: la sinergia requiere vulnerabilidad, apertura mental y la creencia de que juntos podemos crear algo mejor de lo que cualquiera de nosotros podría crear solo.</p>
-    `,
-      page_number: 7,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "content-8-8",
-      book_id: "8",
-      chapter_number: 8,
-      title: "Hábito 7: Afilar la Sierra",
-      content: `
-      <h2>Hábito 7: Afilar la Sierra</h2>
-      <p>Afilar la Sierra significa preservar y realzar el mayor bien que tienes: tú mismo. Significa tener un programa balanceado y sistemático para la auto-renovación en las cuatro áreas de tu vida.</p>
-      
-      <h3>🪚 La Historia de la Sierra</h3>
-      <p>Imagina que te encuentras con alguien en el bosque trabajando febrilmente para derribar un árbol.</p>
-      
-      <p>"¿Qué estás haciendo?" preguntas.</p>
-      <p>"¿No lo ves?" viene la respuesta impaciente. "Estoy cortando este árbol."</p>
-      <p>"Te ves exhausto. ¿Cuánto tiempo llevas trabajando?"</p>
-      <p>"Más de cinco horas, y estoy agotado. ¡Es un trabajo duro!"</p>
-      <p>"¿Por qué no tomas un descanso y afilas la sierra? Estoy seguro de que cortaría mucho más rápido."</p>
-      <p>"No tengo tiempo para afilar la sierra. ¡Estoy demasiado ocupado cortando!"</p>
-      
-      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #0369a1; margin-top: 0;">💡 La Lección</h4>
-        <p style="margin-bottom: 0;">Afilar la sierra es invertir tiempo en actividades que aumentan tu capacidad de producir. Es la actividad de Cuadrante II por excelencia que renueva las cuatro dimensiones de tu naturaleza.</p>
-      </div>
-      
-      <h3>🌟 Las Cuatro Dimensiones de la Renovación</h3>
-      <p>La renovación debe ser balanceada en las cuatro dimensiones de tu naturaleza:</p>
-      
-      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div style="background-color: #fef2f2; border: 1px solid #ef4444; padding: 16px; border-radius: 8px;">
-            <h5 style="color: #dc2626; margin: 0 0 8px 0;">💪 Dimensión Física</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Ejercicio</li>
-              <li>Nutrición</li>
-              <li>Descanso</li>
-              <li>Manejo del estrés</li>
-            </ul>
-          </div>
-          <div style="background-color: #f0fdf4; border: 1px solid #22c55e; padding: 16px; border-radius: 8px;">
-            <h5 style="color: #15803d; margin: 0 0 8px 0;">🧠 Dimensión Mental</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Lectura</li>
-              <li>Escritura</li>
-              <li>Planificación</li>
-              <li>Aprendizaje continuo</li>
-            </ul>
-          </div>
-          <div style="background-color: #fdf2f8; border: 1px solid #ec4899; padding: 16px; border-radius: 8px;">
-            <h5 style="color: #be185d; margin: 0 0 8px 0;">❤️ Dimensión Social/Emocional</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Relaciones</li>
-              <li>Servicio</li>
-              <li>Empatía</li>
-              <li>Sinergia</li>
-            </ul>
-          </div>
-          <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; padding: 16px; border-radius: 8px;">
-            <h5 style="color: #0369a1; margin: 0 0 8px 0;">🙏 Dimensión Espiritual</h5>
-            <ul style="margin: 0; font-size: 14px;">
-              <li>Meditación</li>
-              <li>Oración</li>
-              <li>Estudio de escrituras</li>
-              <li>Conexión con la naturaleza</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <h3>💪 La Dimensión Física</h3>
-      <p>La dimensión física involucra cuidar efectivamente tu cuerpo físico: comer el tipo correcto de alimentos, descansar lo suficiente y hacer ejercicio regularmente.</p>
-      
-      <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #dc2626; margin-top: 0;">🏃 Elementos del Ejercicio Efectivo</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>💨 Resistencia:</strong> Ejercicio cardiovascular (correr, nadar, ciclismo)</li>
-          <li><strong>💪 Flexibilidad:</strong> Estiramiento, yoga, tai chi</li>
-          <li><strong>🏋️ Fuerza:</strong> Ejercicios de resistencia, pesas</li>
-        </ul>
-      </div>
-      
-      <p>La buena noticia es que no necesitas pasar horas en el gimnasio. Un programa de ejercicio de 30 minutos, tres o cuatro veces por semana, puede tener un impacto tremendo en tu capacidad física.</p>
-      
-      <h3>🧠 La Dimensión Mental</h3>
-      <p>La mayoría de nuestro desarrollo mental y disciplina de estudio viene a través de la educación formal. Pero tan pronto como dejamos la disciplina externa de la escuela, muchos de nosotros dejamos que nuestras mentes se atrofien.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">📚 Actividades de Renovación Mental</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>📖 Lectura:</strong> Buenos libros, especialmente literatura clásica</li>
-          <li><strong>✍️ Escritura:</strong> Llevar un diario, escribir cartas reflexivas</li>
-          <li><strong>📋 Planificación:</strong> Pensar, planificar, visualizar</li>
-          <li><strong>🎓 Educación continua:</strong> Cursos, seminarios, talleres</li>
-        </ul>
-      </div>
-      
-      <p>La educación formal te dará una vida; la auto-educación te dará una fortuna.</p>
-      
-      <h3>❤️ La Dimensión Social/Emocional</h3>
-      <p>Las dimensiones social y emocional están relacionadas porque tu vida emocional se desarrolla principalmente, pero no exclusivamente, fuera de tus relaciones con otros.</p>
-      
-      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #be185d; margin-top: 0;">🤝 Renovación Social/Emocional</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🎯 Seguridad intrínseca:</strong> No depender de otros para tu autoestima</li>
-          <li><strong>🤝 Servicio:</strong> Contribuir significativamente a otros</li>
-          <li><strong>👂 Escucha empática:</strong> Buscar realmente entender a otros</li>
-          <li><strong>🌟 Afirmación:</strong> Reconocer y apreciar a otros</li>
-        </ul>
-      </div>
-      
-      <p>Renovar nuestra dimensión social/emocional no toma tiempo de la misma manera que renovar las otras dimensiones. Podemos hacerlo en nuestras interacciones normales y diarias con otras personas.</p>
-      
-      <h3>🙏 La Dimensión Espiritual</h3>
-      <p>La dimensión espiritual es tu núcleo, tu centro, tu compromiso con tu sistema de valores. Es un área muy privada de la vida y una supremamente importante.</p>
-      
-      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #0369a1; margin-top: 0;">🌟 Fuentes de Renovación Espiritual</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>📜 Estudio de escrituras:</strong> Textos sagrados y literatura inspiradora</li>
-          <li><strong>🧘 Meditación:</strong> Reflexión silenciosa y contemplación</li>
-          <li><strong>🙏 Oración:</strong> Comunicación con lo divino</li>
-          <li><strong>🌿 Naturaleza:</strong> Tiempo en ambientes naturales</li>
-          <li><strong>🎵 Música y arte:</strong> Experiencias que eleven el espíritu</li>
-        </ul>
-      </div>
-      
-      <p>Cuando tomas tiempo para nutrir tu dimensión espiritual, estás renovando tu compromiso con tus valores más profundos.</p>
-      
-      <h3>⚖️ Renovación Balanceada</h3>
-      <p>La renovación óptima requiere atención a las cuatro dimensiones. Descuidar cualquier área afecta negativamente a las demás.</p>
-      
-      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">⚠️ Consecuencias del Desequilibrio</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>Solo física:</strong> Te conviertes en un "animal saludable"</li>
-          <li><strong>Solo mental:</strong> Te vuelves un "cerebro andante"</li>
-          <li><strong>Solo social:</strong> Te conviertes en un "espejo social"</li>
-          <li><strong>Solo espiritual:</strong> Te vuelves un "fanático religioso"</li>
-        </ul>
-      </div>
-      
-      <h3>🔄 La Espiral Ascendente</h3>
-      <p>La renovación es un proceso. Es una espiral ascendente de crecimiento que te lleva a niveles más altos de entendimiento y vivir cada uno de los hábitos.</p>
-      
-      <p>Cada vez que afilas la sierra en cualquiera de las cuatro dimensiones, aumentas tu capacidad para vivir al menos uno de los siete hábitos.</p>
-      
-      <h3>🎯 Compromiso Personal</h3>
-      <p>Afilar la sierra es una expresión del Hábito 1, porque es algo que solo tú puedes hacer por ti mismo. Debes tomar la iniciativa para hacerlo.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">📅 Plan de Renovación Semanal</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>💪 Física:</strong> 3-4 sesiones de ejercicio de 30 minutos</li>
-          <li><strong>🧠 Mental:</strong> 1 hora diaria de lectura o aprendizaje</li>
-          <li><strong>❤️ Social/Emocional:</strong> Tiempo de calidad con seres queridos</li>
-          <li><strong>🙏 Espiritual:</strong> 15-30 minutos diarios de meditación/oración</li>
-        </ul>
-      </div>
-      
-      <h3>🌱 Crecimiento Continuo</h3>
-      <p>El proceso de crecimiento es gradual, secuencial y requiere paciencia contigo mismo. No hay atajos para ningún lugar que valga la pena ir.</p>
-      
-      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
-        "Lo que hacemos de forma consistente en una base pequeña no es una gran cosa en sí misma. Pero las cosas pequeñas y consistentes, hechas en una gran manera, logran grandes cosas."
-      </blockquote>
-      
-      <h3>🏆 El Impacto en Otros</h3>
-      <p>Cuando te renuevas regularmente en las cuatro dimensiones, creas un crecimiento y cambio positivo en todas las áreas de tu vida. Te conviertes en una persona más efectiva y también inspiras a otros a hacer lo mismo.</p>
-      
-      <h3>📝 Ejercicio Práctico</h3>
-      <p>Diseña tu propio programa de renovación:</p>
-      
-      <ol>
-        <li><strong>Evalúa tu estado actual</strong> en cada una de las cuatro dimensiones</li>
-        <li><strong>Identifica actividades específicas</strong> que te renovarían en cada área</li>
-        <li><strong>Programa tiempo regular</strong> para estas actividades en tu calendario</li>
-        <li><strong>Comienza pequeño</strong> pero sé consistente</li>
-        <li><strong>Evalúa y ajusta</strong> tu programa regularmente</li>
-      </ol>
-      
-      <p>Recuerda: afilar la sierra es la inversión más importante que puedes hacer. Es la actividad que hace posible todas las demás actividades.</p>
-      
-      <h3>🎊 Conclusión: Convirtiéndote en una Persona de Transición</h3>
-      <p>Los 7 hábitos te permiten convertirte en una persona de transición: alguien que rompe los patrones negativos del pasado y crea patrones positivos para el futuro.</p>
-      
-      <p>Cuando vives estos hábitos, te conviertes en un agente de cambio positivo en tu familia, organización y comunidad. Tu ejemplo inspira a otros a vivir de manera más efectiva.</p>
-      
-      <p>El cambio real, duradero, viene de adentro hacia afuera. Comienza contigo.</p>
-    `,
-      page_number: 8,
-      created_at: new Date().toISOString(),
-    },
-  ],
-  "9": [
-    {
-      id: "content-9-1",
-      book_id: "9",
-      chapter_number: 1,
-      title: "El Origen de Este Libro",
-      content: `
-      <h2>Capítulo 1: El Origen de Este Libro</h2>
-      <p>Este libro surgió de la necesidad de encontrar una respuesta a la pregunta más importante de la vida: ¿Cómo podemos vivir una vida plena y significativa en un mundo lleno de distracciones y sufrimiento?</p>
-      
-      <h3>🌅 El Despertar Espiritual</h3>
-      <p>Durante años, viví en un estado de ansiedad casi constante. Tenía todo lo que se suponía que me haría feliz, pero por dentro me sentía vacío e inquieto. Fue entonces cuando comenzó mi despertar espiritual.</p>
-      
-      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">⚠️ El Problema del Tiempo Psicológico</h4>
-        <p>La mayoría de las personas viven atrapadas entre:</p>
-        <ul style="margin-bottom: 0;">
-          <li><strong>El pasado:</strong> Lamentándose por errores o glorificando "los buenos tiempos"</li>
-          <li><strong>El futuro:</strong> Preocupándose por lo que podría pasar o esperando que la felicidad llegue "cuando..."</li>
-        </ul>
-      </div>
-      
-      <h3>🎯 El Poder del Ahora</h3>
-      <p>El momento presente es lo único que tienes. Es lo único que has tenido alguna vez. Es lo único que tendrás jamás.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">✨ Beneficios de Vivir en el Presente</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>Paz interior:</strong> Desaparece la ansiedad sobre el futuro</li>
-          <li><strong>Claridad mental:</strong> La mente se calma y se enfoca</li>
-          <li><strong>Creatividad:</strong> Surgen soluciones e insights espontáneos</li>
-          <li><strong>Conexión auténtica:</strong> Las relaciones se vuelven más profundas</li>
-        </ul>
-      </div>
-      
-      <h3>🧠 La Mente y el Ser</h3>
-      <p>Uno de los descubrimientos más liberadores es darse cuenta de que <strong>tú no eres tu mente</strong>. Puedes observar tus pensamientos sin identificarte con ellos.</p>
-      
-      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
-        "El momento presente es el único tiempo sobre el que tenemos dominio."
-      </blockquote>
-      
-      <p>Este libro te guiará hacia el reconocimiento de tu verdadera naturaleza como conciencia pura, más allá de la mente pensante.</p>
-    `,
-      page_number: 1,
-      created_at: new Date().toISOString(),
-    },
-  ],
-  "10": [
-    {
-      id: "content-10-1",
-      book_id: "10",
-      chapter_number: 1,
-      title: "Definición: Los Nuevos Ricos",
-      content: `
-      <h2>Capítulo 1: Definición - Los Nuevos Ricos</h2>
-      <p>¿Quiénes son los Nuevos Ricos? Son aquellos que han abandonado el plan de vida diferida y han creado estilos de vida de lujo en el presente usando las monedas de los Nuevos Ricos: tiempo y movilidad.</p>
-      
-      <h3>💰 Viejos Ricos vs. Nuevos Ricos</h3>
-      <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #dc2626; margin-top: 0;">👔 Los Diferidores (Viejos Ricos)</h4>
-        <ul style="margin-bottom: 0;">
-          <li>Trabajan por trabajar</li>
-          <li>Posponen la vida hasta la jubilación</li>
-          <li>Compran todas las cosas que quieren</li>
-          <li>Son los jefes o empleados</li>
-          <li>Quieren poseer un avión privado</li>
-        </ul>
-      </div>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">🌟 Los Nuevos Ricos</h4>
-        <ul style="margin-bottom: 0;">
-          <li>Trabajan para no trabajar</li>
-          <li>Toman mini-jubilaciones a lo largo de la vida</li>
-          <li>Hacen todas las cosas que quieren</li>
-          <li>Son los dueños o no están en la oficina</li>
-          <li>Quieren usar un avión privado</li>
-        </ul>
-      </div>
-      
-      <h3>🎯 El Método DEAL</h3>
-      <p>Para unirse a los Nuevos Ricos, debes dominar cuatro habilidades en este orden específico:</p>
-      
-      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <ol style="margin-bottom: 0;">
-          <li><strong>📋 D - Definición:</strong> Reemplaza las metas con sueños y la ambición con misión</li>
-          <li><strong>❌ E - Eliminación:</strong> Olvida la gestión del tiempo, aprende a ignorar lo no esencial</li>
-          <li><strong>🤖 A - Automatización:</strong> Genera ingresos sin gestión usando otros</li>
-          <li><strong>🌍 L - Liberación:</strong> Libérate de las limitaciones geográficas</li>
-        </ol>
-      </div>
-      
-      <h3>⏰ El Nuevo Concepto de Riqueza</h3>
-      <p>La riqueza no se mide solo en dinero. La fórmula de los Nuevos Ricos es:</p>
-      
-      <div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #f1f5f9; border-radius: 8px;">
-        <p style="font-size: 18px; font-weight: bold; color: #1e40af; margin: 0;">
-          Riqueza = Lo que posees + Lo que ganas + Lo que otros hacen por ti
-        </p>
-      </div>
-      
-      <blockquote style="border-left: 4px solid #3b82f6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #f0f9ff; padding: 20px; border-radius: 8px;">
-        "La pregunta que debes hacerte no es '¿Qué quiero?' o '¿Cuáles son mis metas?' sino '¿Qué me emocionaría?'"
-      </blockquote>
-    `,
-      page_number: 1,
-      created_at: new Date().toISOString(),
-    },
-  ],
-  "11": [
-    {
-      id: "content-11-1",
-      book_id: "11",
-      chapter_number: 1,
-      title: "¿Qué es una Conversación Crucial?",
-      content: `
-      <h2>Capítulo 1: ¿Qué es una Conversación Crucial?</h2>
-      <p>Una conversación crucial es un diálogo entre dos o más personas donde las opiniones varían, las emociones son fuertes y las consecuencias son significativas.</p>
-      
-      <h3>🎯 Las Tres Características</h3>
-      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <ol style="margin-bottom: 0;">
-          <li><strong>📊 Opiniones varían:</strong> Las personas tienen puntos de vista diferentes</li>
-          <li><strong>💥 Emociones fuertes:</strong> Las personas se preocupan profundamente por el tema</li>
-          <li><strong>⚡ Consecuencias significativas:</strong> Los resultados podrían impactar el futuro</li>
-        </ol>
-      </div>
-      
-      <h3>🚨 Ejemplos de Conversaciones Cruciales</h3>
-      <ul>
-        <li><strong>En el trabajo:</strong> Dar feedback a un colega sobre su rendimiento</li>
-        <li><strong>En casa:</strong> Hablar con tu pareja sobre finanzas</li>
-        <li><strong>Con amigos:</strong> Confrontar a alguien sobre un comportamiento problemático</li>
-        <li><strong>Con el jefe:</strong> Discutir una promoción o aumento de sueldo</li>
-      </ul>
-      
-      <h3>⚖️ Las Dos Opciones Pobres</h3>
-      <p>Cuando nos enfrentamos a conversaciones cruciales, típicamente elegimos entre dos opciones pobres:</p>
-      
-      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">❌ Opciones Inefectivas</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>🤐 Evitar la conversación:</strong> Guardamos silencio y sufrimos en silencio</li>
-          <li><strong>💥 Enfrentar mal:</strong> Hablamos pero de manera destructiva</li>
-        </ul>
-      </div>
-      
-      <h3>🌟 La Tercera Opción: Diálogo</h3>
-      <p>El diálogo es el libre flujo de significado entre dos o más personas. Cuando las personas pueden hablar abierta y honestamente sobre lo que realmente importa, se crean resultados extraordinarios.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">✅ Beneficios del Diálogo Efectivo</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>Mejores decisiones:</strong> Más información lleva a mejores elecciones</li>
-          <li><strong>Relaciones más fuertes:</strong> La confianza y el respeto crecen</li>
-          <li><strong>Resultados superiores:</strong> Los equipos rinden mejor</li>
-          <li><strong>Menos estrés:</strong> Los problemas se resuelven antes de escalar</li>
-        </ul>
-      </div>
-      
-      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
-        "La calidad de tu vida surge de la calidad de las relaciones que tienes con las personas en tu vida."
-      </blockquote>
-    `,
-      page_number: 1,
-      created_at: new Date().toISOString(),
-    },
-  ],
-  "12": [
-    {
-      id: "content-12-1",
-      book_id: "12",
-      chapter_number: 1,
-      title: "El Desafío del Futuro",
-      content: `
-      <h2>Capítulo 1: El Desafío del Futuro</h2>
-      <p>¿Qué empresa valiosa no está siendo construida hoy? Esta pregunta es más difícil de lo que parece, porque tu empresa podría crear mucho valor sin volverse muy valiosa para ti como fundador.</p>
-      
-      <h3>🔢 De Cero a Uno vs. De Uno a N</h3>
-      <p>Cada momento en los negocios sucede solo una vez. La próxima Bill Gates no construirá un sistema operativo. Los próximos Larry Page y Sergey Brin no harán un motor de búsqueda.</p>
-      
-      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #0369a1; margin-top: 0;">🎯 Dos Tipos de Progreso</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>📈 Progreso Horizontal (1 a n):</strong> Copiar cosas que funcionan, globalización</li>
-          <li><strong>🚀 Progreso Vertical (0 a 1):</strong> Hacer cosas nuevas, tecnología</li>
-        </ul>
-      </div>
-      
-      <h3>🏭 Globalización vs. Tecnología</h3>
-      <p>La globalización significa tomar cosas que funcionan en un lugar y hacerlas funcionar en todas partes. La tecnología significa cualquier forma nueva y mejor de hacer las cosas.</p>
-      
-      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
-        <h4 style="color: #d97706; margin-top: 0;">⚠️ El Problema de la Competencia</h4>
-        <p>En un mundo de competencia perfecta, ninguna empresa obtiene ganancias económicas. La competencia perfecta es el estado ideal de la economía neoclásica, pero es lo opuesto a la creación de valor empresarial.</p>
-      </div>
-      
-      <h3>🎯 El Monopolio Creativo</h3>
-      <p>Los monopolios creativos dan a los clientes más opciones al agregar categorías completamente nuevas de abundancia al mundo. Los monopolios impulsan el progreso porque la promesa de años o incluso décadas de ganancias monopolísticas proporciona un poderoso incentivo para innovar.</p>
-      
-      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h4 style="color: #15803d; margin-top: 0;">💡 Características de un Monopolio Exitoso</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>Tecnología propietaria:</strong> 10x mejor que la alternativa más cercana</li>
-          <li><strong>Efectos de red:</strong> Más valioso cuantos más usuarios tenga</li>
-          <li><strong>Economías de escala:</strong> Más fuerte a medida que crece</li>
-          <li><strong>Ventaja de marca:</strong> Difícil de replicar</li>
-        </ul>
-      </div>
-      
-      <blockquote style="border-left: 4px solid #3b82f6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #f0f9ff; padding: 20px; border-radius: 8px;">
-        "Toda empresa exitosa hace algo que otros no pueden hacer. El monopolio es la condición de todo negocio exitoso."
-      </blockquote>
-      
-      <p>El futuro será diferente, pero debe ser construido. No sucederá por sí solo. El futuro es fundamentalmente incierto, y es exactamente lo que hace que sea tan importante que lo construyamos.</p>
-    `,
-      page_number: 1,
-      created_at: new Date().toISOString(),
-    },
   ],
 }
 
-// Mock reading progress and bookmarks
-const mockReadingProgress: { [key: string]: ReadingProgress } = {
-  "demo-user-id-1": {
+// Mock reading progress
+const mockReadingProgress: ReadingProgress[] = [
+  {
     id: "progress-1",
-    user_id: "demo-user-id",
+    user_id: "demo-user",
     book_id: "1",
-    progress_percentage: 33,
-    current_page: 1,
-    last_read_at: new Date().toISOString(),
+    progress_percentage: 45,
+    current_page: 144,
+    last_read_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     created_at: new Date().toISOString(),
   },
-}
+  {
+    id: "progress-2",
+    user_id: "demo-user",
+    book_id: "2",
+    progress_percentage: 23,
+    current_page: 68,
+    last_read_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "progress-8",
+    user_id: "demo-user",
+    book_id: "8",
+    progress_percentage: 78,
+    current_page: 337,
+    last_read_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    created_at: new Date().toISOString(),
+  },
+]
 
-const mockBookmarks: { [key: string]: Bookmark[] } = {
-  "demo-user-id-1": [
-    {
-      id: "bookmark-1",
-      user_id: "demo-user-id",
-      book_id: "1",
-      page_number: 1,
-      note: "Concepto importante sobre el 1%",
-      created_at: new Date().toISOString(),
-    },
-  ],
-}
-
-const mockReadingStats: ReadingStats = {
-  books_read: 3,
-  total_reading_time: 12,
-  average_progress: 45,
-  reading_streak: 7,
-}
+// Mock bookmarks
+const mockBookmarks: Bookmark[] = [
+  {
+    id: "bookmark-1",
+    user_id: "demo-user",
+    book_id: "1",
+    page_number: 45,
+    note: "Importante: Los hábitos son el interés compuesto de la superación personal",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "bookmark-2",
+    user_id: "demo-user",
+    book_id: "1",
+    page_number: 89,
+    note: "El ciclo: Señal → Anhelo → Respuesta → Recompensa",
+    created_at: new Date().toISOString(),
+  },
+]
 
 // API Functions
-export async function getAllBooks(): Promise<Book[]> {
+export async function getBooks(): Promise<Book[]> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500))
   return mockBooks
 }
 
-export async function getBookById(bookId: string): Promise<Book | null> {
+export async function getBookById(id: string): Promise<Book | null> {
   await new Promise((resolve) => setTimeout(resolve, 300))
-  return mockBooks.find((book) => book.id === bookId) || null
+  return mockBooks.find((book) => book.id === id) || null
+}
+
+export async function getAllBooks(): Promise<Book[]> {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 500))
+  return mockBooks
 }
 
 export async function getBookContent(bookId: string): Promise<BookContent[]> {
@@ -2244,15 +1683,15 @@ export async function getBookContent(bookId: string): Promise<BookContent[]> {
   return mockBookContent[bookId] || []
 }
 
-export async function getRecommendedBooks(userId: string): Promise<Book[]> {
-  await new Promise((resolve) => setTimeout(resolve, 600))
-  // Return first 6 books as recommended
-  return mockBooks.slice(0, 6)
+export async function getBookChapter(bookId: string, chapterNumber: number): Promise<BookContent | null> {
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  const content = mockBookContent[bookId] || []
+  return content.find((chapter) => chapter.chapter_number === chapterNumber) || null
 }
 
-export async function getUserReadingStats(userId: string): Promise<ReadingStats> {
-  await new Promise((resolve) => setTimeout(resolve, 300))
-  return mockReadingStats
+export async function getReadingProgress(userId: string, bookId: string): Promise<ReadingProgress | null> {
+  await new Promise((resolve) => setTimeout(resolve, 200))
+  return mockReadingProgress.find((progress) => progress.user_id === userId && progress.book_id === bookId) || null
 }
 
 export async function updateReadingProgress(
@@ -2260,24 +1699,36 @@ export async function updateReadingProgress(
   bookId: string,
   progressPercentage: number,
   currentPage: number,
-): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, 200))
-  const key = `${userId}-${bookId}`
-  mockReadingProgress[key] = {
-    id: `progress-${Date.now()}`,
-    user_id: userId,
-    book_id: bookId,
-    progress_percentage: progressPercentage,
-    current_page: currentPage,
-    last_read_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
+): Promise<ReadingProgress> {
+  await new Promise((resolve) => setTimeout(resolve, 300))
+
+  const existingProgress = mockReadingProgress.find(
+    (progress) => progress.user_id === userId && progress.book_id === bookId,
+  )
+
+  if (existingProgress) {
+    existingProgress.progress_percentage = progressPercentage
+    existingProgress.current_page = currentPage
+    existingProgress.last_read_at = new Date().toISOString()
+    return existingProgress
+  } else {
+    const newProgress: ReadingProgress = {
+      id: `progress-${Date.now()}`,
+      user_id: userId,
+      book_id: bookId,
+      progress_percentage: progressPercentage,
+      current_page: currentPage,
+      last_read_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+    }
+    mockReadingProgress.push(newProgress)
+    return newProgress
   }
 }
 
 export async function getUserBookmarks(userId: string, bookId: string): Promise<Bookmark[]> {
   await new Promise((resolve) => setTimeout(resolve, 200))
-  const key = `${userId}-${bookId}`
-  return mockBookmarks[key] || []
+  return mockBookmarks.filter((bookmark) => bookmark.user_id === userId && bookmark.book_id === bookId)
 }
 
 export async function addBookmark(
@@ -2287,6 +1738,7 @@ export async function addBookmark(
   note?: string,
 ): Promise<Bookmark> {
   await new Promise((resolve) => setTimeout(resolve, 300))
+
   const newBookmark: Bookmark = {
     id: `bookmark-${Date.now()}`,
     user_id: userId,
@@ -2296,19 +1748,79 @@ export async function addBookmark(
     created_at: new Date().toISOString(),
   }
 
-  const key = `${userId}-${bookId}`
-  if (!mockBookmarks[key]) {
-    mockBookmarks[key] = []
-  }
-  mockBookmarks[key].push(newBookmark)
-
+  mockBookmarks.push(newBookmark)
   return newBookmark
 }
 
 export async function removeBookmark(bookmarkId: string): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 200))
-  // Find and remove bookmark from mock data
-  Object.keys(mockBookmarks).forEach((key) => {
-    mockBookmarks[key] = mockBookmarks[key].filter((bookmark) => bookmark.id !== bookmarkId)
-  })
+  const index = mockBookmarks.findIndex((bookmark) => bookmark.id === bookmarkId)
+  if (index > -1) {
+    mockBookmarks.splice(index, 1)
+  }
+}
+
+export async function getUserReadingStats(userId: string): Promise<ReadingStats> {
+  await new Promise((resolve) => setTimeout(resolve, 300))
+
+  const userProgress = mockReadingProgress.filter((progress) => progress.user_id === userId)
+
+  const booksRead = userProgress.filter((progress) => progress.progress_percentage >= 100).length
+
+  const totalReadingTime = userProgress.reduce((total, progress) => {
+    // Estimate reading time based on progress (rough calculation)
+    const book = mockBooks.find((b) => b.id === progress.book_id)
+    if (book) {
+      const estimatedTime = Number.parseInt(book.reading_time.split("h")[0]) * 60 // Convert to minutes
+      return total + (estimatedTime * progress.progress_percentage) / 100
+    }
+    return total
+  }, 0)
+
+  const averageProgress =
+    userProgress.length > 0
+      ? userProgress.reduce((sum, progress) => sum + progress.progress_percentage, 0) / userProgress.length
+      : 0
+
+  // Calculate reading streak (simplified)
+  const readingStreak = 7 // Mock value
+
+  return {
+    books_read: booksRead,
+    total_reading_time: Math.round(totalReadingTime),
+    average_progress: Math.round(averageProgress),
+    reading_streak: readingStreak,
+  }
+}
+
+// Keep the old function name as an alias for backward compatibility
+export async function getReadingStats(userId: string): Promise<ReadingStats> {
+  return getUserReadingStats(userId)
+}
+
+export async function searchBooks(query: string): Promise<Book[]> {
+  await new Promise((resolve) => setTimeout(resolve, 400))
+
+  const lowercaseQuery = query.toLowerCase()
+  return mockBooks.filter(
+    (book) =>
+      book.title.toLowerCase().includes(lowercaseQuery) ||
+      book.author.toLowerCase().includes(lowercaseQuery) ||
+      book.description.toLowerCase().includes(lowercaseQuery) ||
+      book.category.toLowerCase().includes(lowercaseQuery),
+  )
+}
+
+export async function getBooksByCategory(category: string): Promise<Book[]> {
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  return mockBooks.filter((book) => book.category === category)
+}
+
+export async function getRecommendedBooks(userId: string): Promise<Book[]> {
+  await new Promise((resolve) => setTimeout(resolve, 400))
+  // Simple recommendation: return books not yet read by the user
+  const userProgress = mockReadingProgress.filter((progress) => progress.user_id === userId)
+  const readBookIds = userProgress.map((progress) => progress.book_id)
+
+  return mockBooks.filter((book) => !readBookIds.includes(book.id)).slice(0, 6) // Return top 6 recommendations
 }
