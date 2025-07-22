@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { User } from "@/auth"
 import { supabase } from "@/lib/supabase"
+import { mockUser } from "@/auth"
 
 interface AuthContextType {
   user: User | null
@@ -18,14 +19,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-// Mock user for demo purposes when Supabase is not available
-const mockUser = {
-  id: "demo-user-123",
-  email: "estudiante@udd.cl",
-  name: "Estudiante Demo UDD",
-  avatar: "/placeholder-user.jpg",
-} as User
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -220,6 +213,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.warn("Sign out error:", error)
     } finally {
       setUser(null)
+      console.log("Usuario desconectado")
     }
   }
 

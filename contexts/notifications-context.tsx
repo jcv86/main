@@ -24,7 +24,6 @@ interface Notification {
   message: string
   type: "info" | "success" | "warning" | "error"
   timestamp: Date
-  read?: boolean
 }
 
 interface NotificationsContextType {
@@ -121,7 +120,6 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
       ...notification,
       id: Math.random().toString(36).substr(2, 9),
       timestamp: new Date(),
-      read: false,
     }
     setNotifications((prev) => [newNotification, ...prev].slice(0, 50)) // Keep only last 50
   }

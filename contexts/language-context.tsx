@@ -8,22 +8,22 @@ type Language = "es" | "en"
 
 interface LanguageContextType {
   language: Language
-  setLanguage: (language: Language) => void
+  setLanguage: (lang: Language) => void
   t: (key: string) => string
 }
 
 const translations = {
   es: {
-    "dashboard.title": "Panel Principal",
-    "dashboard.welcome": "Bienvenido de vuelta",
-    "profile.title": "Mi Perfil",
-    "settings.title": "Configuración",
+    dashboard: "Panel Principal",
+    profile: "Mi Perfil",
+    settings: "Configuración",
+    logout: "Cerrar Sesión",
   },
   en: {
-    "dashboard.title": "Dashboard",
-    "dashboard.welcome": "Welcome back",
-    "profile.title": "My Profile",
-    "settings.title": "Settings",
+    dashboard: "Dashboard",
+    profile: "My Profile",
+    settings: "Settings",
+    logout: "Sign Out",
   },
 }
 

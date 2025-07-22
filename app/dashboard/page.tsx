@@ -6,17 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  Brain,
-  Target,
-  MessageSquare,
-  FileText,
-  Search,
-  GraduationCap,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-} from "lucide-react"
+import { Brain, Target, MessageSquare, FileText, GraduationCap, Clock, CheckCircle } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -24,188 +14,152 @@ export default function DashboardPage() {
   const { user } = useAuth()
 
   const progressData = [
-    {
-      title: "Test de Personalidad",
-      description: "Completa tu perfil DISC",
-      progress: 100,
-      icon: Brain,
-      href: "/personality-test",
-      status: "completed",
-    },
-    {
-      title: "Evaluación de Habilidades",
-      description: "Evalúa tus competencias técnicas",
-      progress: 75,
-      icon: Target,
-      href: "/skills-assessment",
-      status: "in-progress",
-    },
-    {
-      title: "Constructor de CV",
-      description: "Crea tu currículum profesional",
-      progress: 50,
-      icon: FileText,
-      href: "/cv-builder",
-      status: "in-progress",
-    },
-    {
-      title: "Coach Profesional",
-      description: "Recibe orientación personalizada",
-      progress: 25,
-      icon: MessageSquare,
-      href: "/career-coach",
-      status: "pending",
-    },
+    { label: "Test de Personalidad", value: 100, color: "bg-green-500" },
+    { label: "Evaluación Técnica", value: 75, color: "bg-blue-500" },
+    { label: "Habilidades Blandas", value: 60, color: "bg-yellow-500" },
+    { label: "Perfil Completo", value: 85, color: "bg-purple-500" },
   ]
 
   const quickActions = [
     {
-      title: "Explorar Carreras UDD",
-      description: "Descubre programas académicos que se ajusten a tu perfil",
-      icon: GraduationCap,
-      href: "/udd-careers",
+      title: "Continuar Test de Personalidad",
+      description: "Completa tu evaluación DISC",
+      icon: Brain,
+      href: "/personality-test",
       color: "bg-blue-500",
     },
     {
-      title: "Buscar Empleos",
-      description: "Encuentra oportunidades laborales en Chile",
-      icon: Search,
-      href: "/job-search",
+      title: "Evaluación de Habilidades",
+      description: "Evalúa tus competencias técnicas",
+      icon: Target,
+      href: "/skills-assessment",
       color: "bg-green-500",
     },
     {
-      title: "Simulador de Entrevistas",
-      description: "Practica para tus próximas entrevistas",
+      title: "Sesión con Coach",
+      description: "Obtén orientación personalizada",
       icon: MessageSquare,
-      href: "/interview-simulator",
+      href: "/career-coach",
       color: "bg-purple-500",
+    },
+    {
+      title: "Crear CV",
+      description: "Construye tu currículum profesional",
+      icon: FileText,
+      href: "/cv-builder",
+      color: "bg-orange-500",
     },
   ]
 
   const recentActivity = [
     {
-      title: "Test DISC completado",
-      description: "Perfil: Dominante-Influyente",
-      timestamp: "Hace 2 días",
-      type: "success",
+      action: "Test DISC completado",
+      time: "Hace 2 horas",
+      status: "completed",
     },
     {
-      title: "CV actualizado",
-      description: "Plantilla moderna aplicada",
-      timestamp: "Hace 1 semana",
-      type: "info",
+      action: "CV actualizado",
+      time: "Ayer",
+      status: "completed",
     },
     {
-      title: "Nueva recomendación de carrera",
-      description: "Ingeniería en Informática - 95% compatibilidad",
-      timestamp: "Hace 3 días",
-      type: "success",
+      action: "Sesión de coaching programada",
+      time: "Hace 3 días",
+      status: "pending",
     },
   ]
 
   const uddRecommendations = [
     {
-      name: "Ingeniería en Informática",
-      faculty: "Facultad de Ingeniería",
-      compatibility: 95,
-      description: "Basado en tu perfil técnico y personalidad analítica",
+      career: "Ingeniería Civil Industrial",
+      match: 92,
+      reason: "Alta compatibilidad con tu perfil analítico",
     },
     {
-      name: "Psicología",
-      faculty: "Facultad de Psicología",
-      compatibility: 88,
-      description: "Tu perfil empático y habilidades interpersonales",
+      career: "Psicología",
+      match: 88,
+      reason: "Excelente para tus habilidades interpersonales",
     },
     {
-      name: "Administración de Empresas",
-      faculty: "Facultad de Economía y Empresa",
-      compatibility: 82,
-      description: "Liderazgo natural y orientación a resultados",
+      career: "Administración de Empresas",
+      match: 85,
+      reason: "Ideal para tu orientación hacia el liderazgo",
     },
   ]
 
   return (
     <Shell>
       <Header
-        title={`¡Hola, ${user?.name || "Usuario"}!`}
+        title={`¡Bienvenido, ${user?.name}!`}
         description="Aquí tienes un resumen de tu progreso en desarrollo profesional"
       />
 
-      {/* Progress Overview */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-        {progressData.map((item) => (
-          <Card key={item.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{item.title}</CardTitle>
-              <item.icon className="h-4 w-4 text-muted-foreground" />
+        {progressData.map((item, index) => (
+          <Card key={index}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">{item.label}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <Progress value={item.progress} className="h-2" />
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{item.progress}% completado</span>
-                  {item.status === "completed" && <CheckCircle className="h-4 w-4 text-green-500" />}
-                </div>
-                <p className="text-xs text-muted-foreground">{item.description}</p>
-                <Button asChild size="sm" variant="outline" className="w-full bg-transparent">
-                  <Link href={item.href}>{item.status === "completed" ? "Ver resultados" : "Continuar"}</Link>
-                </Button>
-              </div>
+              <div className="text-2xl font-bold">{item.value}%</div>
+              <Progress value={item.value} className="mt-2" />
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* Quick Actions */}
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Acciones Rápidas
-            </CardTitle>
-            <CardDescription>Herramientas para impulsar tu desarrollo profesional</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {quickActions.map((action) => (
-                <Link key={action.title} href={action.href}>
-                  <div className="group cursor-pointer rounded-lg border p-4 hover:bg-accent transition-colors">
-                    <div
-                      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${action.color} text-white mb-3`}
-                    >
-                      <action.icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-semibold group-hover:text-accent-foreground">{action.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{action.description}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Acciones Rápidas</CardTitle>
+              <CardDescription>Continúa con tu desarrollo profesional</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                {quickActions.map((action, index) => {
+                  const Icon = action.icon
+                  return (
+                    <Link key={index} href={action.href}>
+                      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className={`p-2 rounded-lg ${action.color}`}>
+                              <Icon className="h-5 w-5 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-medium text-sm">{action.title}</h3>
+                              <p className="text-xs text-muted-foreground mt-1">{action.description}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              Actividad Reciente
-            </CardTitle>
+            <CardTitle>Actividad Reciente</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div
-                    className={`mt-1 h-2 w-2 rounded-full ${
-                      activity.type === "success" ? "bg-green-500" : "bg-blue-500"
-                    }`}
-                  />
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">{activity.title}</p>
-                    <p className="text-xs text-muted-foreground">{activity.description}</p>
-                    <p className="text-xs text-muted-foreground">{activity.timestamp}</p>
+                <div key={index} className="flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    {activity.status === "completed" ? (
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <Clock className="h-5 w-5 text-yellow-500" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium">{activity.action}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>
               ))}
@@ -214,34 +168,34 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* UDD Career Recommendations */}
-      <Card className="mt-6">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center space-x-2">
             <GraduationCap className="h-5 w-5" />
-            Recomendaciones de Carreras UDD
+            <span>Carreras UDD Recomendadas</span>
           </CardTitle>
           <CardDescription>Basado en tu perfil de personalidad y habilidades</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
-            {uddRecommendations.map((career) => (
-              <div key={career.name} className="rounded-lg border p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold">{career.name}</h3>
-                  <Badge variant="secondary">{career.compatibility}%</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mb-2">{career.faculty}</p>
-                <p className="text-xs text-muted-foreground">{career.description}</p>
-                <Button asChild size="sm" variant="outline" className="w-full mt-3 bg-transparent">
-                  <Link href="/udd-careers">Ver detalles</Link>
-                </Button>
-              </div>
+            {uddRecommendations.map((rec, index) => (
+              <Card key={index} className="border-l-4 border-l-blue-500">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-medium text-sm">{rec.career}</h3>
+                    <Badge variant="secondary">{rec.match}% match</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{rec.reason}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
-          <div className="mt-4 text-center">
+          <div className="mt-4">
             <Button asChild>
-              <Link href="/udd-careers">Explorar todas las carreras UDD</Link>
+              <Link href="/udd-careers">
+                <GraduationCap className="mr-2 h-4 w-4" />
+                Explorar Todas las Carreras UDD
+              </Link>
             </Button>
           </div>
         </CardContent>
