@@ -7,7 +7,6 @@ import {
   ChevronRight,
   BookOpen,
   Bookmark,
-  BookmarkCheck,
   StickyNote,
   Settings,
   ArrowLeft,
@@ -383,7 +382,7 @@ export default function BookReaderPage() {
                 onClick={toggleBookmark}
                 className={isBookmarked ? "text-blue-600" : "text-gray-400"}
               >
-                {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+                <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
               </Button>
 
               <Dialog>

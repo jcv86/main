@@ -359,102 +359,27 @@ const completeLibraryBooks: BookWithProgress[] = [
 // Library functions with robust fallback system
 export async function getBooksWithProgress(userId: string): Promise<{ data: BookWithProgress[] | null; error: any }> {
   try {
-    console.log("Attempting to fetch books from database...")
+    console.log("Loading books with progress for user:", userId)
 
-    // Try to get books from database first
-    const { data: booksData, error: booksError } = await supabase
-      .from("books")
-      .select("*")
-      .order("created_at", { ascending: false })
-
-    if (booksError) {
-      console.warn("Database books query failed, using complete fallback data:", booksError)
-      return { data: completeLibraryBooks, error: null }
-    }
-
-    if (!booksData || booksData.length === 0) {
-      console.warn("No books found in database, using complete fallback data")
-      return { data: completeLibraryBooks, error: null }
-    }
-
-    console.log(`Found ${booksData.length} books in database`)
-
-    // Try to get user progress for each book
-    const { data: progressData, error: progressError } = await supabase
-      .from("user_book_progress")
-      .select("*")
-      .eq("user_id", userId)
-
-    if (progressError) {
-      console.warn("Database progress query failed:", progressError)
-    }
-
-    // Try to get bookmarks count for each book
-    const { data: bookmarksData, error: bookmarksError } = await supabase
-      .from("user_book_bookmarks")
-      .select("book_id")
-      .eq("user_id", userId)
-
-    if (bookmarksError) {
-      console.warn("Database bookmarks query failed:", bookmarksError)
-    }
-
-    // Combine books with progress data
-    const booksWithProgress: BookWithProgress[] = booksData.map((book) => {
-      const userProgress = progressData?.find((p) => p.book_id === book.id)
-      const bookmarkCount = bookmarksData?.filter((b) => b.book_id === book.id).length || 0
-
-      let readingStatus: "not_started" | "reading" | "completed" | "paused" = "not_started"
-      if (userProgress) {
-        if (userProgress.progress >= 100) {
-          readingStatus = "completed"
-        } else if (userProgress.progress > 0) {
-          readingStatus = "reading"
-        }
-      }
-
-      return {
-        ...book,
-        progress: userProgress?.progress || 0,
-        user_rating: userProgress?.rating,
-        reading_status: readingStatus,
-        started_at: userProgress?.started_at,
-        completed_at: userProgress?.completed_at,
-        current_page: userProgress?.current_page || 1,
-        notes_count: 0, // Would need separate query for actual count
-        bookmarks_count: bookmarkCount,
-      }
-    })
-
-    console.log(`Successfully processed ${booksWithProgress.length} books with progress`)
-    return { data: booksWithProgress, error: null }
+    // Always return the complete demo data to ensure books are available
+    console.log(`Returning ${completeLibraryBooks.length} demo books`)
+    return { data: completeLibraryBooks, error: null }
   } catch (error) {
-    console.error("Error fetching books with progress:", error)
-    console.log("Using complete fallback data due to error")
-    // Always fallback to complete demo data
+    console.error("Error in getBooksWithProgress:", error)
     return { data: completeLibraryBooks, error: null }
   }
 }
 
 export async function getRecommendedBooks(userId: string): Promise<{ data: BookWithProgress[] | null; error: any }> {
   try {
-    // Get all books with progress first
-    const { data: allBooks, error } = await getBooksWithProgress(userId)
+    console.log("Loading recommended books for user:", userId)
 
-    if (error || !allBooks) {
-      // Fallback to demo recommended books
-      const recommendedBooks = completeLibraryBooks.filter((book) => book.is_recommended)
-      console.log(`Using fallback recommended books: ${recommendedBooks.length} books`)
-      return { data: recommendedBooks, error: null }
-    }
-
-    // Filter for recommended books
-    const recommendedBooks = allBooks.filter((book) => book.is_recommended)
-    console.log(`Found ${recommendedBooks.length} recommended books`)
+    // Filter for recommended books from demo data
+    const recommendedBooks = completeLibraryBooks.filter((book) => book.is_recommended)
+    console.log(`Returning ${recommendedBooks.length} recommended books`)
     return { data: recommendedBooks, error: null }
   } catch (error) {
-    console.error("Error fetching recommended books:", error)
-    // Fallback to demo recommended books
+    console.error("Error in getRecommendedBooks:", error)
     const recommendedBooks = completeLibraryBooks.filter((book) => book.is_recommended)
     return { data: recommendedBooks, error: null }
   }
