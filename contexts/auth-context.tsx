@@ -1,17 +1,23 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useEffect, useState } from "react"
-import type { User } from "@supabase/supabase-js"
-import { supabase, isDemoMode } from "@/lib/supabase"
+import { createContext, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+
+interface User {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+}
 
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
-  signUp: (email: string, password: string, userData?: any) => Promise<{ error: any }>
-  signOut: () => Promise<void>
-  resetPassword: (email: string) => Promise<{ error: any }>
+  login: (email: string, password: string) => Promise<boolean>
+  register: (name: string, email: string, password: string) => Promise<boolean>
+  logout: () => void
+  isDemo: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -19,171 +25,92 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const isDemo = true // Always use demo mode to avoid Supabase errors
 
   useEffect(() => {
-    let mounted = true
-
-    // Initialize auth state
-    const initializeAuth = async () => {
+    const initAuth = async () => {
       try {
-        if (isDemoMode()) {
-          // In demo mode, no authentication required
-          if (mounted) {
-            setUser(null)
-            setLoading(false)
-          }
-          return
-        }
-
-        // Get initial session
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession()
-
-        if (error) {
-          console.warn("Auth session error:", error.message)
-        }
-
-        if (mounted) {
-          setUser(session?.user ?? null)
-          setLoading(false)
-        }
-
-        // Listen for auth changes
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (event, session) => {
-          if (mounted) {
-            setUser(session?.user ?? null)
-            setLoading(false)
-          }
-        })
-
-        return () => {
-          subscription.unsubscribe()
+        // Demo mode - check localStorage
+        const savedUser = localStorage.getItem("demo_user")
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser)
+          setUser(parsedUser)
         }
       } catch (error) {
-        console.error("Auth initialization error:", error)
-        if (mounted) {
-          setUser(null)
-          setLoading(false)
-        }
+        console.error("Error parsing saved demo user:", error)
+        localStorage.removeItem("demo_user")
       }
+      setLoading(false)
     }
 
-    initializeAuth()
-
-    return () => {
-      mounted = false
-    }
+    initAuth()
   }, [])
 
-  const signIn = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      if (isDemoMode()) {
-        // Demo mode - simulate successful login
-        const demoUser = {
-          id: "demo-user-id",
-          email: email,
-          user_metadata: { name: "Usuario Demo" },
-        } as User
-        setUser(demoUser)
-        return { error: null }
+      setLoading(true)
+
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Create demo user based on input
+      const demoUser: User = {
+        id: "demo-user-" + Date.now(),
+        name: email.split("@")[0] || "Usuario Demo",
+        email: email,
+        avatar: `/placeholder.svg?height=40&width=40&text=${email.charAt(0).toUpperCase()}`,
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+      setUser(demoUser)
+      localStorage.setItem("demo_user", JSON.stringify(demoUser))
+      return true
+    } catch (error) {
+      console.error("Login error:", error)
+      return false
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+    try {
+      setLoading(true)
+
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      const demoUser: User = {
+        id: "demo-user-" + Date.now(),
+        name,
         email,
-        password,
-      })
-
-      if (error) {
-        return { error }
+        avatar: `/placeholder.svg?height=40&width=40&text=${name.charAt(0).toUpperCase()}`,
       }
 
-      return { error: null }
+      setUser(demoUser)
+      localStorage.setItem("demo_user", JSON.stringify(demoUser))
+      return true
     } catch (error) {
-      console.error("Sign in error:", error)
-      return { error }
+      console.error("Registration error:", error)
+      return false
+    } finally {
+      setLoading(false)
     }
   }
 
-  const signUp = async (email: string, password: string, userData?: any) => {
+  const logout = async () => {
     try {
-      if (isDemoMode()) {
-        // Demo mode - simulate successful signup
-        const demoUser = {
-          id: "demo-user-id",
-          email: email,
-          user_metadata: { name: userData?.name || "Usuario Demo" },
-        } as User
-        setUser(demoUser)
-        return { error: null }
-      }
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: userData,
-        },
-      })
-
-      if (error) {
-        return { error }
-      }
-
-      return { error: null }
+      setUser(null)
+      localStorage.removeItem("demo_user")
+      router.push("/")
     } catch (error) {
-      console.error("Sign up error:", error)
-      return { error }
+      console.error("Logout error:", error)
     }
   }
 
-  const signOut = async () => {
-    try {
-      if (isDemoMode()) {
-        setUser(null)
-        return
-      }
-
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error("Sign out error:", error)
-      }
-    } catch (error) {
-      console.error("Sign out error:", error)
-    }
-  }
-
-  const resetPassword = async (email: string) => {
-    try {
-      if (isDemoMode()) {
-        // Demo mode - simulate successful password reset
-        return { error: null }
-      }
-
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      })
-
-      return { error }
-    } catch (error) {
-      console.error("Reset password error:", error)
-      return { error }
-    }
-  }
-
-  const value = {
-    user,
-    loading,
-    signIn,
-    signUp,
-    signOut,
-    resetPassword,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, loading, login, register, logout, isDemo }}>{children}</AuthContext.Provider>
+  )
 }
 
 export function useAuth() {

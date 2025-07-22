@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -10,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff } from "lucide-react"
+import { Loader2, Eye, EyeOff, GraduationCap } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 
 export default function LoginPage() {
@@ -31,6 +30,13 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
+      // Validate input
+      if (!email || !password) {
+        setError("Por favor ingresa email y contraseña")
+        setIsLoading(false)
+        return
+      }
+
       const success = await login(email, password)
 
       if (success) {
@@ -38,11 +44,12 @@ export default function LoginPage() {
       } else {
         setError(
           isDemo
-            ? "Credenciales inválidas. Usa demo@careerdev.com / demo123 o cualquier email/contraseña."
-            : "Credenciales inválidas",
+            ? "En modo demo, puedes usar cualquier email y contraseña. Ejemplo: travis@demo.com / 123456"
+            : "Credenciales inválidas. Verifica tu email y contraseña.",
         )
       }
     } catch (error) {
+      console.error("Login error:", error)
       setError("Error al iniciar sesión. Inténtalo de nuevo.")
     } finally {
       setIsLoading(false)
@@ -50,17 +57,20 @@ export default function LoginPage() {
   }
 
   const handleDemoLogin = async () => {
-    setEmail("demo@careerdev.com")
-    setPassword("demo123")
+    setEmail("travis@demo.com")
+    setPassword("123456")
     setError("")
     setIsLoading(true)
 
     try {
-      const success = await login("demo@careerdev.com", "demo123")
+      const success = await login("travis@demo.com", "123456")
       if (success) {
         router.push(redirectTo)
+      } else {
+        setError("Error al iniciar sesión demo")
       }
     } catch (error) {
+      console.error("Demo login error:", error)
       setError("Error al iniciar sesión demo")
     } finally {
       setIsLoading(false)
@@ -71,12 +81,18 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
+          <div className="flex items-center justify-center mb-4">
+            <GraduationCap className="h-8 w-8 text-blue-600" />
+            <span className="ml-2 text-xl font-bold text-gray-900">CareerDev</span>
+          </div>
           <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
           <CardDescription className="text-center">Ingresa tus credenciales para acceder a tu cuenta</CardDescription>
           {isDemo && (
             <Alert>
               <AlertDescription>
-                <strong>Modo Demo:</strong> Usa demo@careerdev.com / demo123 o cualquier email/contraseña
+                <strong>Modo Demo:</strong> Puedes usar cualquier email y contraseña.
+                <br />
+                Ejemplo: travis@demo.com / 123456
               </AlertDescription>
             </Alert>
           )}
@@ -88,11 +104,12 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="tu@email.com"
+                placeholder="travis@demo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
+                autoComplete="email"
               />
             </div>
             <div className="space-y-2">
@@ -106,6 +123,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={isLoading}
+                  autoComplete="current-password"
                 />
                 <Button
                   type="button"
@@ -142,7 +160,7 @@ export default function LoginPage() {
                 onClick={handleDemoLogin}
                 disabled={isLoading}
               >
-                Acceso Demo Rápido
+                Acceso Demo Rápido (Travis)
               </Button>
             )}
           </form>

@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useAuth } from "@/contexts/auth-context"
+import { useRouter } from "next/navigation"
 import {
   BookOpen,
   TrendingUp,
@@ -15,14 +17,102 @@ import {
   CheckCircle,
   AlertCircle,
   Play,
+  Brain,
+  Code,
+  Heart,
+  TestTube,
 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { getReadingStats, getBooksWithProgress, type BookWithProgress } from "@/lib/supabase-library"
+import { getBooksWithProgress, getReadingStats, type BookWithProgress, type ReadingStats } from "@/lib/supabase-library"
 import Link from "next/link"
 import Image from "next/image"
+
+// Test categories with all available tests
+const testCategories = [
+  {
+    title: "Tests de Personalidad",
+    description: "Descubre tu perfil profesional y personal",
+    icon: Brain,
+    color: "bg-blue-100 text-blue-700",
+    tests: [
+      {
+        name: "Test de Personalidad Completo",
+        href: "/personality-test",
+        description: "Análisis completo de tu personalidad profesional",
+        duration: "15-20 min",
+        completed: true,
+        score: 85,
+      },
+      {
+        name: "Test DISC",
+        href: "/disc-test",
+        description: "Evalúa tu estilo de comportamiento y comunicación",
+        duration: "10-15 min",
+        completed: true,
+        score: 92,
+      },
+    ],
+  },
+  {
+    title: "Habilidades Técnicas",
+    description: "Evalúa tus competencias técnicas específicas",
+    icon: Code,
+    color: "bg-green-100 text-green-700",
+    tests: [
+      {
+        name: "Evaluación de Habilidades Técnicas",
+        href: "/technical-skills-test",
+        description: "Mide tus conocimientos en tecnologías específicas",
+        duration: "20-30 min",
+        completed: false,
+        score: null,
+      },
+      {
+        name: "Evaluación General de Habilidades",
+        href: "/skills-assessment",
+        description: "Evaluación integral de competencias profesionales",
+        duration: "25-35 min",
+        completed: true,
+        score: 78,
+      },
+    ],
+  },
+  {
+    title: "Habilidades Blandas",
+    description: "Desarrolla tus competencias interpersonales",
+    icon: Heart,
+    color: "bg-purple-100 text-purple-700",
+    tests: [
+      {
+        name: "Test de Habilidades Blandas",
+        href: "/soft-skills-test",
+        description: "Evalúa comunicación, liderazgo y trabajo en equipo",
+        duration: "15-20 min",
+        completed: true,
+        score: 88,
+      },
+    ],
+  },
+  {
+    title: "Preparación Profesional",
+    description: "Herramientas para tu desarrollo de carrera",
+    icon: Users,
+    color: "bg-orange-100 text-orange-700",
+    tests: [
+      {
+        name: "Simulador de Entrevistas",
+        href: "/interview-simulator",
+        description: "Practica entrevistas con IA y recibe feedback",
+        duration: "Variable",
+        completed: false,
+        score: null,
+      },
+    ],
+  },
+]
 
 interface DashboardStats {
   skillsAssessmentScore: number
@@ -53,22 +143,38 @@ interface CareerGoal {
 }
 
 export default function DashboardPage() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [recentBooks, setRecentBooks] = useState<BookWithProgress[]>([])
-  const [readingStats, setReadingStats] = useState<any>(null)
+  const [readingStats, setReadingStats] = useState<ReadingStats | null>(null)
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
   const [careerGoals, setCareerGoals] = useState<CareerGoal[]>([])
-  const [loading, setLoading] = useState(true)
+  const [dashboardLoading, setDashboardLoading] = useState(true)
 
-  const userId = "00000000-0000-0000-0000-000000000000" // Demo user ID
+  const userId = "demo-user-id" // Demo user ID
 
   useEffect(() => {
-    loadDashboardData()
+    setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (mounted && !loading && !user) {
+      router.push("/auth/login")
+      return
+    }
+  }, [mounted, user, loading, router])
+
+  useEffect(() => {
+    if (mounted && user) {
+      loadDashboardData()
+    }
+  }, [mounted, user])
 
   const loadDashboardData = async () => {
     try {
-      setLoading(true)
+      setDashboardLoading(true)
 
       // Load library data
       const [booksResult, statsResult] = await Promise.all([getBooksWithProgress(userId), getReadingStats(userId)])
@@ -85,8 +191,8 @@ export default function DashboardPage() {
 
       // Set demo dashboard stats
       setStats({
-        skillsAssessmentScore: 78,
-        completedCourses: 12,
+        skillsAssessmentScore: 85,
+        completedCourses: 4,
         readingProgress: 65,
         careerGoalProgress: 45,
         weeklyReadingTime: 8.5,
@@ -106,8 +212,8 @@ export default function DashboardPage() {
         {
           id: "2",
           type: "assessment",
-          title: "Completaste la evaluación de habilidades blandas",
-          description: "Puntuación: 82/100",
+          title: "Completaste el Test DISC",
+          description: "Puntuación: 92/100 - Perfil Dominante",
           timestamp: "Ayer",
         },
         {
@@ -119,9 +225,9 @@ export default function DashboardPage() {
         },
         {
           id: "4",
-          type: "course",
-          title: "Iniciaste el curso de Liderazgo Digital",
-          description: "Módulo 1: Fundamentos del liderazgo",
+          type: "assessment",
+          title: "Completaste evaluación de habilidades blandas",
+          description: "Puntuación: 88/100 - Excelente comunicación",
           timestamp: "Hace 5 días",
         },
       ])
@@ -159,7 +265,7 @@ export default function DashboardPage() {
     } catch (error) {
       console.error("Error loading dashboard data:", error)
     } finally {
-      setLoading(false)
+      setDashboardLoading(false)
     }
   }
 
@@ -200,92 +306,171 @@ export default function DashboardPage() {
     })
   }
 
-  if (loading) {
+  // Show loading state
+  if (!mounted || loading || dashboardLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 h-96 bg-gray-200 rounded-lg"></div>
-            <div className="h-96 bg-gray-200 rounded-lg"></div>
-          </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Cargando dashboard...</p>
         </div>
       </div>
     )
   }
 
+  // Don't render anything if not authenticated
+  if (!user) {
+    return null
+  }
+
+  const currentDate = new Date().toLocaleDateString("es-CL", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 space-y-8 pt-24">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Panel de Control</h1>
-        <p className="text-gray-600">Bienvenido de vuelta. Aquí tienes un resumen de tu progreso profesional.</p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            ¡Bienvenido de vuelta, {user?.name || user?.email?.split("@")[0]}!
+          </h1>
+          <p className="text-gray-600">Continúa tu desarrollo profesional</p>
+        </div>
+        <div className="flex items-center space-x-2 text-sm text-gray-500">
+          <Calendar className="h-4 w-4" />
+          <span>{currentDate}</span>
+        </div>
       </div>
 
-      {/* Stats Overview */}
+      {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Evaluación de Habilidades</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.skillsAssessmentScore}%</div>
-              <p className="text-xs text-muted-foreground">Puntuación promedio</p>
-              <Progress value={stats.skillsAssessmentScore} className="mt-2 h-2" />
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <Target className="h-8 w-8 text-blue-600" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.skillsAssessmentScore}%</p>
+                  <p className="text-sm text-muted-foreground">Progreso General</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Progreso de Lectura</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.readingProgress}%</div>
-              <p className="text-xs text-muted-foreground">Libros en progreso</p>
-              <Progress value={stats.readingProgress} className="mt-2 h-2" />
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.completedCourses}</p>
+                  <p className="text-sm text-muted-foreground">Tests Completados</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Objetivos de Carrera</CardTitle>
-              <Target className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-purple-600">{stats.careerGoalProgress}%</div>
-              <p className="text-xs text-muted-foreground">Progreso general</p>
-              <Progress value={stats.careerGoalProgress} className="mt-2 h-2" />
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="h-8 w-8 text-purple-600" />
+                <div>
+                  <p className="text-2xl font-bold">{readingStats?.books_in_progress || 3}</p>
+                  <p className="text-sm text-muted-foreground">Libros en Progreso</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tiempo de Lectura</CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-orange-600">{stats.weeklyReadingTime}h</div>
-              <p className="text-xs text-muted-foreground">Esta semana</p>
-              <div className="flex items-center mt-2 text-xs text-green-600">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                +2.3h vs semana anterior
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <TrendingUp className="h-8 w-8 text-orange-600" />
+                <div>
+                  <p className="text-2xl font-bold">{stats.weeklyReadingTime}h</p>
+                  <p className="text-sm text-muted-foreground">Tiempo de Lectura</p>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-8">
+          {/* All Available Tests */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <TestTube className="h-5 w-5" />
+                <span>Evaluaciones Disponibles</span>
+              </CardTitle>
+              <CardDescription>Completa todas las evaluaciones para obtener un perfil completo</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {testCategories.map((category, categoryIndex) => (
+                <div key={categoryIndex} className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg ${category.color}`}>
+                      <category.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">{category.title}</h3>
+                      <p className="text-sm text-gray-600">{category.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-10">
+                    {category.tests.map((test, testIndex) => (
+                      <div key={testIndex} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <h4 className="font-medium text-sm">{test.name}</h4>
+                              {test.completed ? (
+                                <CheckCircle className="h-4 w-4 text-green-600" />
+                              ) : (
+                                <Clock className="h-4 w-4 text-gray-400" />
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-600 mb-2">{test.description}</p>
+                            <div className="flex items-center justify-between text-xs text-gray-500">
+                              <span>Duración: {test.duration}</span>
+                              {test.completed && test.score && (
+                                <Badge variant="secondary" className="text-xs">
+                                  {test.score}/100
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <Link href={test.href}>
+                          <Button size="sm" variant={test.completed ? "outline" : "default"} className="w-full">
+                            {test.completed ? (
+                              <>
+                                <BarChart3 className="h-3 w-3 mr-1" />
+                                Ver Resultados
+                              </>
+                            ) : (
+                              <>
+                                <Play className="h-3 w-3 mr-1" />
+                                Comenzar Test
+                              </>
+                            )}
+                          </Button>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
           {/* Currently Reading */}
           <Card>
             <CardHeader>
@@ -355,50 +540,61 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Career Goals */}
+          {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Objetivos de Carrera
-                </CardTitle>
-                <Link href="/profile">
-                  <Button variant="ghost" size="sm">
-                    Gestionar
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
+              <CardTitle>Acciones Rápidas</CardTitle>
+              <CardDescription>Herramientas principales para tu desarrollo</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {careerGoals.map((goal) => (
-                  <div key={goal.id} className="p-4 border rounded-lg">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-medium text-sm">{goal.title}</h4>
-                          <Badge variant="outline" className={getPriorityColor(goal.priority)}>
-                            {goal.priority === "high" ? "Alta" : goal.priority === "medium" ? "Media" : "Baja"}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-gray-600 mb-2">{goal.description}</p>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          Meta: {formatDate(goal.targetDate)}
-                        </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Link href="/career-coach">
+                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
+                    <div className="flex items-center space-x-3">
+                      <Users className="h-8 w-8 text-blue-600" />
+                      <div className="text-left">
+                        <p className="font-medium">Coach de Carrera IA</p>
+                        <p className="text-sm text-muted-foreground">Recibe consejos personalizados</p>
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-600">Progreso</span>
-                        <span className="font-medium">{goal.progress}%</span>
+                  </Button>
+                </Link>
+
+                <Link href="/job-search">
+                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
+                    <div className="flex items-center space-x-3">
+                      <Briefcase className="h-8 w-8 text-green-600" />
+                      <div className="text-left">
+                        <p className="font-medium">Búsqueda de Empleos</p>
+                        <p className="text-sm text-muted-foreground">Encuentra oportunidades</p>
                       </div>
-                      <Progress value={goal.progress} className="h-2" />
                     </div>
-                  </div>
-                ))}
+                  </Button>
+                </Link>
+
+                <Link href="/cv-builder">
+                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
+                    <div className="flex items-center space-x-3">
+                      <Users className="h-8 w-8 text-purple-600" />
+                      <div className="text-left">
+                        <p className="font-medium">Constructor de CV</p>
+                        <p className="text-sm text-muted-foreground">Crea tu currículum perfecto</p>
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
+
+                <Link href="/library">
+                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
+                    <div className="flex items-center space-x-3">
+                      <BookOpen className="h-8 w-8 text-orange-600" />
+                      <div className="text-left">
+                        <p className="font-medium">Biblioteca Digital</p>
+                        <p className="text-sm text-muted-foreground">Libros de desarrollo profesional</p>
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -406,60 +602,28 @@ export default function DashboardPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Link href="/skills-assessment">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Evaluación de Habilidades
-                </Button>
-              </Link>
-              <Link href="/career-coach">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <Users className="h-4 w-4 mr-2" />
-                  Consultar Coach de Carrera
-                </Button>
-              </Link>
-              <Link href="/cv-builder">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <Briefcase className="h-4 w-4 mr-2" />
-                  Actualizar CV
-                </Button>
-              </Link>
-              <Link href="/job-search">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <Target className="h-4 w-4 mr-2" />
-                  Buscar Empleos
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
           {/* Recent Activity */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Actividad Reciente</CardTitle>
+              <CardTitle className="flex items-center space-x-2">
+                <Clock className="h-5 w-5" />
+                <span>Actividad Reciente</span>
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentActivity.map((activity) => (
-                  <div key={activity.id} className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      {getActivityIcon(activity.type)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 line-clamp-2">{activity.title}</p>
-                      <p className="text-xs text-gray-600 mb-1">{activity.description}</p>
-                      <p className="text-xs text-gray-500">{activity.timestamp}</p>
-                      {activity.progress && <Progress value={activity.progress} className="mt-2 h-1" />}
-                    </div>
+            <CardContent className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    {getActivityIcon(activity.type)}
                   </div>
-                ))}
-              </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 line-clamp-2">{activity.title}</p>
+                    <p className="text-xs text-gray-600 mb-1">{activity.description}</p>
+                    <p className="text-xs text-gray-500">{activity.timestamp}</p>
+                    {activity.progress && <Progress value={activity.progress} className="mt-2 h-1" />}
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
@@ -499,6 +663,54 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           )}
+
+          {/* Career Goals */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Objetivos de Carrera
+                </CardTitle>
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm">
+                    Gestionar
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {careerGoals.slice(0, 2).map((goal) => (
+                  <div key={goal.id} className="p-4 border rounded-lg">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-medium text-sm">{goal.title}</h4>
+                          <Badge variant="outline" className={getPriorityColor(goal.priority)}>
+                            {goal.priority === "high" ? "Alta" : goal.priority === "medium" ? "Media" : "Baja"}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">{goal.description}</p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          Meta: {formatDate(goal.targetDate)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-600">Progreso</span>
+                        <span className="font-medium">{goal.progress}%</span>
+                      </div>
+                      <Progress value={goal.progress} className="h-2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Upcoming Deadlines */}
           <Card>
