@@ -1,284 +1,313 @@
 "use client"
 
-import { useAuth } from "@/contexts/auth-context"
-import { useLanguage } from "@/contexts/language-context"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
 import {
-  BookOpen,
-  BrainCircuit,
+  ArrowRight,
+  Brain,
   FileText,
   MessageSquare,
   Search,
-  TrendingUp,
-  Users,
-  Award,
   Target,
-  Calendar,
+  Users,
+  Zap,
+  TestTube,
+  User,
+  LogIn,
 } from "lucide-react"
-import Link from "next/link"
 
 export default function HomePage() {
   const { user } = useAuth()
-  const { t } = useLanguage()
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Bienvenido</CardTitle>
-            <CardDescription>Inicia sesión para acceder a tu plataforma de desarrollo profesional</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Link href="/auth/login">
-              <Button className="w-full">Iniciar Sesión</Button>
-            </Link>
-            <Link href="/auth/register">
-              <Button variant="outline" className="w-full bg-transparent">
-                Registrarse
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
 
   return (
-    <div className="space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Target className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold text-gray-900">CareerDev</span>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            {process.env.NODE_ENV === "development" && (
+              <Link href="/test-auth">
+                <Button variant="outline" size="sm">
+                  <TestTube className="w-4 h-4 mr-2" />
+                  Test Auth
+                </Button>
+              </Link>
+            )}
+
+            {user ? (
+              <Link href="/dashboard">
+                <Button>
+                  <User className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <div className="flex space-x-2">
+                <Link href="/auth/login">
+                  <Button variant="outline">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Iniciar Sesión
+                  </Button>
+                </Link>
+                <Link href="/auth/register">
+                  <Button>Registrarse</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">¡Hola, {user.name}! 👋</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Bienvenido a tu plataforma integral de desarrollo profesional. Aquí puedes evaluar tus habilidades, recibir
-          coaching personalizado y construir tu carrera ideal.
-        </p>
-      </div>
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center max-w-4xl">
+          <Badge variant="secondary" className="mb-4">
+            🇨🇱 Especializado en el mercado chileno
+          </Badge>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Target className="h-8 w-8 text-blue-600" />
-              <div>
-                <p className="text-2xl font-bold">85%</p>
-                <p className="text-sm text-muted-foreground">Progreso General</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Tu <span className="text-blue-600">desarrollo profesional</span> comienza aquí
+          </h1>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Award className="h-8 w-8 text-green-600" />
-              <div>
-                <p className="text-2xl font-bold">12</p>
-                <p className="text-sm text-muted-foreground">Habilidades Evaluadas</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            Plataforma integral con IA para potenciar tu carrera en Chile. Evaluaciones personalizadas, coaching
+            inteligente y oportunidades reales.
+          </p>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <MessageSquare className="h-8 w-8 text-purple-600" />
-              <div>
-                <p className="text-2xl font-bold">8</p>
-                <p className="text-sm text-muted-foreground">Sesiones de Coaching</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {user ? (
+              <Link href="/dashboard">
+                <Button size="lg" className="text-lg px-8 py-3">
+                  Ir al Dashboard
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/auth/register">
+                  <Button size="lg" className="text-lg px-8 py-3">
+                    Comenzar Gratis
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link href="/auth/login">
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-3 bg-transparent">
+                    Probar Demo
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-orange-600" />
-              <div>
-                <p className="text-2xl font-bold">94%</p>
-                <p className="text-sm text-muted-foreground">Compatibilidad CV</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Todo lo que necesitas para crecer profesionalmente
+            </h2>
+            <p className="text-xl text-gray-600">Herramientas potenciadas por IA para el mercado laboral chileno</p>
+          </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <BrainCircuit className="h-5 w-5" />
-              <span>Evaluación de Habilidades</span>
-            </CardTitle>
-            <CardDescription>Evalúa tus habilidades técnicas y blandas</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Habilidades Técnicas</span>
-                <span>80%</span>
-              </div>
-              <Progress value={80} />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Habilidades Blandas</span>
-                <span>90%</span>
-              </div>
-              <Progress value={90} />
-            </div>
-            <Link href="/skills-assessment">
-              <Button className="w-full">Continuar Evaluación</Button>
-            </Link>
-          </CardContent>
-        </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <Brain className="w-12 h-12 text-blue-600 mb-4" />
+                <CardTitle>Evaluaciones con IA</CardTitle>
+                <CardDescription>
+                  Tests de personalidad, habilidades técnicas y soft skills con análisis inteligente
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <MessageSquare className="h-5 w-5" />
-              <span>Coach de Carrera</span>
-            </CardTitle>
-            <CardDescription>Recibe consejos personalizados para tu carrera</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="secondary">Última sesión: Hace 2 días</Badge>
-              <p className="text-sm text-muted-foreground">
-                "Enfócate en desarrollar habilidades de liderazgo para tu próximo ascenso"
-              </p>
-            </div>
-            <Link href="/career-coach">
-              <Button className="w-full">Iniciar Sesión de Coaching</Button>
-            </Link>
-          </CardContent>
-        </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <FileText className="w-12 h-12 text-green-600 mb-4" />
+                <CardTitle>CV Inteligente</CardTitle>
+                <CardDescription>Generador de CV optimizado para ATS y adaptado al mercado chileno</CardDescription>
+              </CardHeader>
+            </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <FileText className="h-5 w-5" />
-              <span>Constructor de CV</span>
-            </CardTitle>
-            <CardDescription>Crea y optimiza tu currículum vitae</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="outline">CV actualizado hace 1 semana</Badge>
-              <p className="text-sm text-muted-foreground">
-                Tu CV tiene una compatibilidad del 94% con ofertas de trabajo actuales
-              </p>
-            </div>
-            <Link href="/cv-builder">
-              <Button className="w-full">Editar CV</Button>
-            </Link>
-          </CardContent>
-        </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <MessageSquare className="w-12 h-12 text-purple-600 mb-4" />
+                <CardTitle>Coach de Carrera IA</CardTitle>
+                <CardDescription>
+                  Asesoramiento personalizado 24/7 especializado en el mercado laboral chileno
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Search className="h-5 w-5" />
-              <span>Búsqueda de Empleo</span>
-            </CardTitle>
-            <CardDescription>Encuentra oportunidades laborales perfectas para ti</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge>15 nuevas ofertas</Badge>
-              <p className="text-sm text-muted-foreground">Basadas en tu perfil y preferencias</p>
-            </div>
-            <Link href="/job-search">
-              <Button className="w-full">Ver Ofertas</Button>
-            </Link>
-          </CardContent>
-        </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <Search className="w-12 h-12 text-orange-600 mb-4" />
+                <CardTitle>Búsqueda Inteligente</CardTitle>
+                <CardDescription>Encuentra oportunidades que coincidan con tu perfil y aspiraciones</CardDescription>
+              </CardHeader>
+            </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <BookOpen className="h-5 w-5" />
-              <span>Test de Personalidad</span>
-            </CardTitle>
-            <CardDescription>Descubre tu perfil DISC y fortalezas</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="secondary">Tipo: Dominante-Influyente</Badge>
-              <p className="text-sm text-muted-foreground">Líder natural con excelentes habilidades de comunicación</p>
-            </div>
-            <Link href="/disc-test">
-              <Button className="w-full">Ver Resultados</Button>
-            </Link>
-          </CardContent>
-        </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <Users className="w-12 h-12 text-red-600 mb-4" />
+                <CardTitle>Simulador de Entrevistas</CardTitle>
+                <CardDescription>Practica entrevistas con IA y recibe feedback detallado para mejorar</CardDescription>
+              </CardHeader>
+            </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="h-5 w-5" />
-              <span>Carreras UDD</span>
-            </CardTitle>
-            <CardDescription>Explora carreras recomendadas según tu perfil</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge>3 carreras recomendadas</Badge>
-              <p className="text-sm text-muted-foreground">Ingeniería Comercial (95% compatibilidad)</p>
-            </div>
-            <Link href="/udd-careers">
-              <Button className="w-full">Explorar Carreras</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <Zap className="w-12 h-12 text-yellow-600 mb-4" />
+                <CardTitle>Desarrollo Continuo</CardTitle>
+                <CardDescription>Plan personalizado de crecimiento basado en tendencias del mercado</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
 
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Calendar className="h-5 w-5" />
-            <span>Actividad Reciente</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Completaste el test de habilidades técnicas</p>
-                <p className="text-sm text-muted-foreground">Hace 2 horas</p>
-              </div>
-              <Badge>Completado</Badge>
-            </div>
+      {/* Stats Section */}
+      <section className="py-20 px-4 bg-blue-600 text-white">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Resultados que hablan por sí solos</h2>
 
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Sesión de coaching: Desarrollo de liderazgo</p>
-                <p className="text-sm text-muted-foreground">Hace 2 días</p>
-              </div>
-              <Badge variant="secondary">Coaching</Badge>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
+              <div className="text-blue-100">Mejora en entrevistas</div>
             </div>
-
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Actualizaste tu CV con nuevas habilidades</p>
-                <p className="text-sm text-muted-foreground">Hace 1 semana</p>
-              </div>
-              <Badge variant="outline">CV</Badge>
+            <div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">3x</div>
+              <div className="text-blue-100">Más respuestas a CV</div>
+            </div>
+            <div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">2.5M</div>
+              <div className="text-blue-100">Salario promedio CLP</div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">¿Listo para impulsar tu carrera?</h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Únete a miles de profesionales que ya están creciendo con nuestra plataforma
+          </p>
+
+          {!user && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/auth/register">
+                <Button size="lg" className="text-lg px-8 py-3">
+                  Comenzar Ahora - Gratis
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link href="/auth/login">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-3 bg-transparent">
+                  Probar Demo
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Target className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold">CareerDev</span>
+              </div>
+              <p className="text-gray-400">Tu plataforma de desarrollo profesional especializada en Chile</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Producto</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/features" className="hover:text-white">
+                    Características
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/pricing" className="hover:text-white">
+                    Precios
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/demo" className="hover:text-white">
+                    Demo
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Soporte</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/help" className="hover:text-white">
+                    Ayuda
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-white">
+                    Contacto
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/faq" className="hover:text-white">
+                    FAQ
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/privacy" className="hover:text-white">
+                    Privacidad
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-white">
+                    Términos
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/cookies" className="hover:text-white">
+                    Cookies
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 CareerDev. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

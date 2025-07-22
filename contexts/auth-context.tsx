@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface User {
   id: string
@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
+  register: (name: string, email: string, password: string) => Promise<void>
   loading: boolean
 }
 
@@ -21,43 +22,55 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    // Simulate checking for existing session
-    setTimeout(() => {
-      // Mock user for demo
-      setUser({
-        id: "1",
-        name: "Usuario Demo",
-        email: "demo@example.com",
-        avatar: "/placeholder-user.jpg",
-        role: "user",
-      })
-      setLoading(false)
-    }, 1000)
-  }, [])
+  const [loading, setLoading] = useState(false)
 
   const login = async (email: string, password: string) => {
     setLoading(true)
-    // Simulate login API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      // Simulate login API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    setUser({
-      id: "1",
-      name: "Usuario Demo",
-      email: email,
-      avatar: "/placeholder-user.jpg",
-      role: "user",
-    })
-    setLoading(false)
+      // Mock successful login
+      setUser({
+        id: "1",
+        name: "Usuario Demo",
+        email: email,
+        avatar: "/placeholder-user.jpg",
+        role: "user",
+      })
+    } catch (error) {
+      throw new Error("Error al iniciar sesión")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const register = async (name: string, email: string, password: string) => {
+    setLoading(true)
+    try {
+      // Simulate registration API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Mock successful registration
+      setUser({
+        id: "1",
+        name: name,
+        email: email,
+        avatar: "/placeholder-user.jpg",
+        role: "user",
+      })
+    } catch (error) {
+      throw new Error("Error al registrarse")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const logout = () => {
     setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, logout, register, loading }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

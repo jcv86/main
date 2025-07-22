@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
-import Navigation from "@/components/navigation"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -29,10 +28,7 @@ export default function RootLayout({
           <AuthProvider>
             <LanguageProvider>
               <NotificationsProvider>
-                <div className="min-h-screen bg-background">
-                  <Navigation />
-                  <main className="pt-16">{children}</main>
-                </div>
+                <div className="min-h-screen bg-background">{children}</div>
                 <Toaster />
               </NotificationsProvider>
             </LanguageProvider>

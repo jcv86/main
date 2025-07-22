@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface Notification {
   id: string
@@ -17,43 +17,30 @@ interface NotificationsContextType {
   addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
+  removeNotification: (id: string) => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([])
-
-  useEffect(() => {
-    // Initialize with some demo notifications
-    const demoNotifications: Notification[] = [
-      {
-        id: "1",
-        title: "Test de Personalidad Completado",
-        message: "Has completado exitosamente tu evaluación DISC",
-        type: "success",
-        read: false,
-        createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      },
-      {
-        id: "2",
-        title: "Nueva Oportunidad de Trabajo",
-        message: "Se encontró una nueva posición que coincide con tu perfil",
-        type: "info",
-        read: false,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-      },
-      {
-        id: "3",
-        title: "Recordatorio de CV",
-        message: "No olvides actualizar tu CV con tus nuevas habilidades",
-        type: "warning",
-        read: true,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-      },
-    ]
-    setNotifications(demoNotifications)
-  }, [])
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: "1",
+      title: "Bienvenido a CareerDev",
+      message: "Completa tu perfil para obtener recomendaciones personalizadas",
+      type: "info",
+      read: false,
+      createdAt: new Date(),
+    },
+    {
+      id: "2",
+      title: "Nueva evaluación disponible",
+      message: "El test de habilidades técnicas está listo para ti",
+      type: "success",
+      read: false,
+      createdAt: new Date(Date.now() - 86400000), // 1 day ago
+    },
+  ])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
@@ -68,13 +55,15 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
   }
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+  }
+
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
   }
 
   return (
@@ -85,6 +74,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
         addNotification,
         markAsRead,
         markAllAsRead,
+        removeNotification,
       }}
     >
       {children}

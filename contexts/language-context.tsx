@@ -12,32 +12,38 @@ interface LanguageContextType {
 
 const translations = {
   es: {
-    dashboard: "Dashboard",
+    welcome: "Bienvenido",
+    login: "Iniciar Sesión",
+    register: "Registrarse",
+    dashboard: "Panel Principal",
     profile: "Perfil",
+    settings: "Configuración",
+    logout: "Cerrar Sesión",
+    notifications: "Notificaciones",
     "personality-test": "Test de Personalidad",
     "skills-assessment": "Evaluación de Habilidades",
     "cv-builder": "Constructor de CV",
     "job-search": "Búsqueda de Empleo",
     "career-coach": "Coach de Carrera",
+    "udd-careers": "Carreras UDD",
     "interview-simulator": "Simulador de Entrevistas",
-    settings: "Configuración",
-    logout: "Cerrar Sesión",
-    notifications: "Notificaciones",
-    "no-notifications": "No hay notificaciones",
   },
   en: {
+    welcome: "Welcome",
+    login: "Login",
+    register: "Register",
     dashboard: "Dashboard",
     profile: "Profile",
+    settings: "Settings",
+    logout: "Logout",
+    notifications: "Notifications",
     "personality-test": "Personality Test",
     "skills-assessment": "Skills Assessment",
     "cv-builder": "CV Builder",
     "job-search": "Job Search",
     "career-coach": "Career Coach",
+    "udd-careers": "UDD Careers",
     "interview-simulator": "Interview Simulator",
-    settings: "Settings",
-    logout: "Logout",
-    notifications: "Notifications",
-    "no-notifications": "No notifications",
   },
 }
 
@@ -51,7 +57,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   const t = (key: string): string => {
-    return translations[language][key as keyof (typeof translations)["es"]] || key
+    return translations[language][key as keyof typeof translations.es] || key
   }
 
   return <LanguageContext.Provider value={{ language, toggleLanguage, t }}>{children}</LanguageContext.Provider>
