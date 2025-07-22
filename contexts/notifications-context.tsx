@@ -18,22 +18,12 @@ export interface JobAlert {
   createdAt: string
 }
 
-export interface Notification {
+interface Notification {
   id: string
   title: string
   message: string
-  type: "job_match" | "career_advice" | "skill_update" | "interview_invite" | "system"
-  priority: "high" | "medium" | "low"
-  timestamp: string
-  read: boolean
-  actionUrl?: string
-  metadata?: {
-    company?: string
-    position?: string
-    salary?: string
-    location?: string
-    matchScore?: number
-  }
+  type: "info" | "success" | "warning" | "error"
+  timestamp: Date
 }
 
 interface NotificationsContextType {
@@ -47,6 +37,7 @@ interface NotificationsContextType {
   updateJobAlert: (alertId: string, updates: Partial<JobAlert>) => void
   deleteJobAlert: (alertId: string) => void
   clearNotifications: () => void
+  removeNotification: (id: string) => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
@@ -54,63 +45,29 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 // Sample UDD career-specific notifications
 const SAMPLE_NOTIFICATIONS: Omit<Notification, "id" | "timestamp">[] = [
   {
-    type: "job_match",
+    type: "info",
     title: "Nueva oportunidad: Product Manager en Fintual",
     message: "Encontramos una posición que coincide 92% con tu perfil de Ingeniería Comercial UDD",
-    read: false,
-    priority: "high",
-    metadata: {
-      company: "Fintual",
-      location: "Santiago, Las Condes",
-      salary: "$3.500.000 - $5.000.000 CLP",
-      matchScore: 92,
-    },
   },
   {
-    type: "career_advice",
+    type: "success",
     title: "Consejo para estudiantes de Diseño UDD",
     message: "Considera especializarte en UX/UI Design - hay alta demanda en el mercado chileno",
-    read: false,
-    priority: "medium",
-    metadata: {
-      position: "UX/UI Designer",
-    },
   },
   {
-    type: "job_match",
+    type: "info",
     title: "Práctica profesional: Banco de Chile",
     message: "Oportunidad de práctica en transformación digital para estudiantes de Ing. Comercial",
-    read: true,
-    priority: "medium",
-    metadata: {
-      company: "Banco de Chile",
-      location: "Santiago, Centro",
-      salary: "$800.000 - $1.200.000 CLP",
-      matchScore: 85,
-    },
   },
   {
-    type: "skill_update",
+    type: "warning",
     title: "Evaluación de habilidades blandas disponible",
     message: "Completa tu evaluación de liderazgo para mejorar tu perfil profesional",
-    read: true,
-    priority: "low",
-    metadata: {
-      position: "Liderazgo y trabajo en equipo",
-    },
   },
   {
-    type: "job_match",
+    type: "info",
     title: "Comunicador Digital - NotCo",
     message: "El unicornio chileno busca comunicadores para su equipo de marketing",
-    read: false,
-    priority: "high",
-    metadata: {
-      company: "NotCo",
-      location: "Santiago, Las Condes",
-      salary: "$2.000.000 - $3.000.000 CLP",
-      matchScore: 88,
-    },
   },
 ]
 
@@ -161,10 +118,9 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   const addNotification = (notification: Omit<Notification, "id" | "timestamp">) => {
     const newNotification: Notification = {
       ...notification,
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
+      id: Math.random().toString(36).substr(2, 9),
+      timestamp: new Date(),
     }
-
     setNotifications((prev) => [newNotification, ...prev].slice(0, 50)) // Keep only last 50
   }
 
@@ -189,8 +145,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     addNotification({
       title: "✅ Alerta de Empleo Creada",
       message: `Tu alerta "${alert.alertName}" está activa y comenzarás a recibir notificaciones según tu configuración.`,
-      type: "system",
-      priority: "medium",
+      type: "success",
       read: false,
     })
   }
@@ -205,14 +160,17 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     addNotification({
       title: "🗑️ Alerta Eliminada",
       message: "Tu alerta de empleo ha sido eliminada exitosamente.",
-      type: "system",
-      priority: "low",
+      type: "warning",
       read: false,
     })
   }
 
   const clearNotifications = () => {
     setNotifications([])
+  }
+
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
   }
 
   const value = {
@@ -226,6 +184,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     updateJobAlert,
     deleteJobAlert,
     clearNotifications,
+    removeNotification,
   }
 
   return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>

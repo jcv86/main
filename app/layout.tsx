@@ -12,8 +12,9 @@ import { NotificationsProvider } from "@/contexts/notifications-context"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral para el desarrollo profesional y orientación vocacional",
+  title: "CareerLaunch UDD - Plataforma de Desarrollo Profesional",
+  description:
+    "Tu plataforma integral para el desarrollo profesional y orientación vocacional especializada en el mercado chileno",
     generator: 'v0.dev'
 }
 

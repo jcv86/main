@@ -1,15 +1,22 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import type { User } from "@supabase/supabase-js"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 import { supabase } from "@/lib/supabase"
+
+interface User {
+  id: string
+  email: string
+  name: string
+  avatar?: string
+}
 
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
+  signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, metadata?: any) => Promise<{ error: any }>
-  signOut: () => Promise<void>
+  signOut: () => void
   resetPassword: (email: string) => Promise<{ error: any }>
   isOffline: boolean
   getOfflineData: (key: string) => any[]
@@ -23,32 +30,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const mockUser = {
   id: "demo-user-123",
   email: "estudiante@udd.cl",
-  user_metadata: {
-    full_name: "Estudiante Demo UDD",
-    career: "Ingeniería Comercial",
-    campus: "Santiago",
-  },
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  aud: "authenticated",
-  role: "authenticated",
-  app_metadata: {},
-  identities: [],
-  email_confirmed_at: new Date().toISOString(),
-  phone_confirmed_at: null,
-  confirmation_sent_at: null,
-  recovery_sent_at: null,
-  email_change_sent_at: null,
-  new_email: null,
-  invited_at: null,
-  action_link: null,
-  email_change: null,
-  phone_change: null,
-  phone: null,
-  confirmed_at: new Date().toISOString(),
-  email_change_confirm_status: 0,
-  banned_until: null,
-  is_anonymous: false,
+  name: "Estudiante Demo UDD",
+  avatar: "/placeholder-user.jpg",
 } as User
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -72,7 +55,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setIsSupabaseConnected(false)
           } else {
             console.log("Supabase connected successfully")
-            setUser(data.session?.user || mockUser)
+            const supabaseUser = data.session?.user as SupabaseUser
+            const authUser: User = {
+              id: supabaseUser.id,
+              email: supabaseUser.email,
+              name: supabaseUser.user_metadata.full_name || "Demo User",
+              avatar: supabaseUser.user_metadata.avatar || "/placeholder-user.jpg",
+            }
+            setUser(authUser)
             setIsSupabaseConnected(true)
           }
         }
@@ -101,7 +91,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } = supabase.auth.onAuthStateChange(async (event, session) => {
           if (mounted) {
             console.log("Auth state changed:", event, session?.user?.email)
-            setUser(session?.user || null)
+            if (session?.user) {
+              const authUser: User = {
+                id: session.user.id,
+                email: session.user.email,
+                name: session.user.user_metadata.full_name || "Demo User",
+                avatar: session.user.user_metadata.avatar || "/placeholder-user.jpg",
+              }
+              setUser(authUser)
+            } else {
+              setUser(null)
+            }
             setLoading(false)
           }
         })
@@ -145,11 +145,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    setLoading(true)
     if (!isSupabaseConnected) {
       // Demo mode - simulate successful login
       const demoUser = { ...mockUser, email }
       setUser(demoUser)
-      return { error: null }
+      setLoading(false)
+      return
     }
 
     try {
@@ -162,15 +164,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.warn("Sign in failed, using demo mode:", error.message)
         const demoUser = { ...mockUser, email }
         setUser(demoUser)
-        return { error: null }
       }
-
-      return { error }
     } catch (error) {
       console.warn("Sign in error, using demo mode:", error)
       const demoUser = { ...mockUser, email }
       setUser(demoUser)
-      return { error: null }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -203,7 +203,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           user_metadata: { ...mockUser.user_metadata, ...metadata },
         }
         setUser(demoUser)
-        return { error: null }
       }
 
       return { error }
@@ -219,10 +218,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const signOut = async () => {
+  const signOut = () => {
     try {
       if (isSupabaseConnected) {
-        await supabase.auth.signOut()
+        supabase.auth.signOut()
       }
     } catch (error) {
       console.warn("Sign out error:", error)
