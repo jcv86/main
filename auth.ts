@@ -1,15 +1,15 @@
 export interface User {
   id: string
-  email: string
   name: string
+  email: string
   avatar?: string
 }
 
 export const mockUser: User = {
-  id: "demo-user",
-  email: "demo@example.com",
+  id: "1",
   name: "Usuario Demo",
-  avatar: "/placeholder-user.jpg",
+  email: "demo@ejemplo.com",
+  avatar: "/placeholder.svg",
 }
 
 export function getCurrentUser(): User | null {
@@ -17,6 +17,5 @@ export function getCurrentUser(): User | null {
 }
 
 export function signOut(): void {
-  // Mock sign out
-  console.log("Usuario desconectado")
+  console.log("Cerrando sesión...")
 }

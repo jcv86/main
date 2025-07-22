@@ -1,21 +1,18 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useState } from "react"
 
 type Language = "es" | "en"
 
 interface LanguageContextType {
   language: Language
-  setLanguage: (lang: Language) => void
+  setLanguage: (language: Language) => void
   t: (key: string) => string
 }
 
 const translations = {
   es: {
-    "dashboard.title": "Panel Principal",
-    "dashboard.welcome": "Bienvenido de vuelta",
     "nav.dashboard": "Panel Principal",
     "nav.personality": "Test de Personalidad",
     "nav.skills": "Evaluación de Habilidades",
@@ -23,10 +20,11 @@ const translations = {
     "nav.cv": "Constructor de CV",
     "nav.jobs": "Búsqueda de Empleo",
     "nav.careers": "Carreras UDD",
+    profile: "Mi Perfil",
+    settings: "Configuración",
+    logout: "Cerrar Sesión",
   },
   en: {
-    "dashboard.title": "Dashboard",
-    "dashboard.welcome": "Welcome back",
     "nav.dashboard": "Dashboard",
     "nav.personality": "Personality Test",
     "nav.skills": "Skills Assessment",
@@ -34,6 +32,9 @@ const translations = {
     "nav.cv": "CV Builder",
     "nav.jobs": "Job Search",
     "nav.careers": "UDD Careers",
+    profile: "My Profile",
+    settings: "Settings",
+    logout: "Sign Out",
   },
 }
 
@@ -43,7 +44,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
   const t = (key: string): string => {
-    return translations[language][key as keyof (typeof translations)[typeof language]] || key
+    return translations[language][key as keyof typeof translations.es] || key
   }
 
   return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>

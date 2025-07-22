@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useState } from "react"
 
 interface Notification {
@@ -34,7 +33,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   }
 
   const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id))
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
   }
 
   const clearNotifications = () => {
