@@ -36,7 +36,7 @@ import {
   Volume2,
   AlertCircle,
   Loader2,
-  FileSlidersIcon as SliderIcon,
+  Sliders,
   ChevronUp,
   ChevronDown,
   GripVertical,
@@ -1096,7 +1096,7 @@ export default function PersonalityTestPage() {
       case "checkbox":
         return CheckSquare
       case "slider":
-        return SliderIcon
+        return Sliders
       case "binary":
         return ToggleLeft
       default:
@@ -1642,7 +1642,7 @@ export default function PersonalityTestPage() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-4">
               <Badge variant="secondary" className="flex items-center gap-1">
-                <SliderIcon className="w-3 h-3" />
+                <Sliders className="w-3 h-3" />
                 Deslizador
               </Badge>
               <span className="text-sm text-muted-foreground">{question.instruction}</span>

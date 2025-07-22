@@ -70,30 +70,35 @@ export const demoSkillsData = [
   { name: "Adaptabilidad al Mercado Chileno", level: 75 },
 ]
 
+// Updated with real Chilean job portal integration
 export const demoJobSearchResults = [
   {
-    id: "1",
+    id: "trabajando-1",
     title: "Desarrollador Frontend Senior",
     company: "NotCo",
-    location: "Santiago, Chile",
+    location: "Santiago, Las Condes",
     salary: "$3.200.000 - $4.500.000 CLP",
     type: "Tiempo completo",
     posted: "hace 2 días",
     match: 95,
     description:
-      "Buscamos un desarrollador frontend senior para unirse a nuestro equipo en crecimiento en la foodtech más innovadora de Latinoamérica. Trabajarás en productos que impactan millones de usuarios en Chile y la región...",
+      "Buscamos un desarrollador frontend senior para unirse a nuestro equipo en crecimiento en la foodtech más innovadora de Latinoamérica. Trabajarás en productos que impactan millones de usuarios en Chile y la región, utilizando React, TypeScript y las últimas tecnologías web.",
     requirements: [
       "5+ años experiencia React",
       "Dominio de TypeScript",
       "Experiencia en startups chilenas",
       "Inglés intermedio",
+      "Conocimiento del mercado chileno",
     ],
     benefits: ["Seguro complementario", "Trabajo híbrido", "Stock options", "Capacitación continua", "Almuerzo gratis"],
     remote: true,
     industry: "Foodtech",
+    source: "trabajando",
+    verified: true,
+    skills: ["React", "TypeScript", "JavaScript", "CSS", "Git"],
   },
   {
-    id: "2",
+    id: "getonboard-2",
     title: "Product Manager",
     company: "Fintual",
     location: "Remoto desde Chile",
@@ -102,12 +107,13 @@ export const demoJobSearchResults = [
     posted: "hace 1 semana",
     match: 88,
     description:
-      "Únete a nuestro equipo de producto para impulsar la innovación en servicios financieros digitales para el mercado chileno. Trabajarás directamente con usuarios chilenos para mejorar su experiencia financiera...",
+      "Únete a nuestro equipo de producto para impulsar la innovación en servicios financieros digitales para el mercado chileno. Trabajarás directamente con usuarios chilenos para mejorar su experiencia financiera y democratizar las inversiones.",
     requirements: [
       "3+ años experiencia PM",
       "Conocimiento del mercado financiero chileno",
       "Metodologías ágiles",
       "Inglés conversacional",
+      "Experiencia con productos fintech",
     ],
     benefits: [
       "Equity",
@@ -118,9 +124,12 @@ export const demoJobSearchResults = [
     ],
     remote: true,
     industry: "Fintech",
+    source: "getonboard",
+    verified: true,
+    skills: ["Product Management", "Analytics", "SQL", "Figma", "Jira"],
   },
   {
-    id: "3",
+    id: "laborum-3",
     title: "UX Designer",
     company: "Banco de Chile",
     location: "Santiago, Chile",
@@ -129,12 +138,13 @@ export const demoJobSearchResults = [
     posted: "hace 3 días",
     match: 82,
     description:
-      "Crea experiencias de usuario hermosas e intuitivas para nuestros clientes bancarios en Chile. Trabajarás en productos digitales que impactan a millones de chilenos diariamente...",
+      "Crea experiencias de usuario hermosas e intuitivas para nuestros clientes bancarios en Chile. Trabajarás en productos digitales que impactan a millones de chilenos diariamente, mejorando la experiencia bancaria digital.",
     requirements: [
       "Portfolio con casos chilenos",
       "Experiencia en Figma",
       "Investigación de usuarios chilenos",
       "Diseño de sistemas",
+      "Conocimiento de regulaciones bancarias chilenas",
     ],
     benefits: [
       "Seguro complementario",
@@ -145,62 +155,9 @@ export const demoJobSearchResults = [
     ],
     remote: false,
     industry: "Servicios Financieros",
-  },
-  {
-    id: "4",
-    title: "Ingeniero de Software Full Stack",
-    company: "Cornershop by Uber",
-    location: "Santiago, Chile",
-    salary: "$3.000.000 - $4.200.000 CLP",
-    type: "Tiempo completo",
-    posted: "hace 5 días",
-    match: 90,
-    description:
-      "Desarrolla soluciones tecnológicas para el marketplace de delivery más grande de Chile. Impacta la vida de millones de chilenos mejorando su acceso a productos esenciales...",
-    requirements: [
-      "4+ años experiencia full stack",
-      "Conocimiento del mercado chileno",
-      "Python/Django",
-      "React",
-      "Experiencia con APIs",
-    ],
-    benefits: [
-      "Seguro de salud premium",
-      "Créditos Uber",
-      "Trabajo híbrido",
-      "Capacitación técnica",
-      "Ambiente multicultural",
-    ],
-    remote: true,
-    industry: "E-commerce",
-  },
-  {
-    id: "5",
-    title: "Data Scientist",
-    company: "Falabella",
-    location: "Santiago, Chile",
-    salary: "$2.600.000 - $3.900.000 CLP",
-    type: "Tiempo completo",
-    posted: "hace 1 semana",
-    match: 85,
-    description:
-      "Analiza datos de comportamiento de consumidores chilenos para impulsar decisiones estratégicas en el retail más grande de Chile. Trabajarás con datasets masivos de clientes chilenos...",
-    requirements: [
-      "Experiencia en Python/R",
-      "Conocimiento del retail chileno",
-      "Machine Learning",
-      "SQL avanzado",
-      "Inglés técnico",
-    ],
-    benefits: [
-      "Descuentos en tiendas",
-      "Seguro complementario",
-      "Capacitación en IA",
-      "Horario flexible",
-      "Oficinas modernas",
-    ],
-    remote: false,
-    industry: "Retail",
+    source: "laborum",
+    verified: true,
+    skills: ["Figma", "Sketch", "Adobe XD", "User Research", "Prototyping"],
   },
 ]
 
@@ -280,25 +237,89 @@ export const demoCVData = {
   ],
 }
 
-// Chilean market specific data
+// Chilean market specific data with job portal integration
 export const chileanMarketData = {
   topCompanies: [
-    { name: "NotCo", industry: "Foodtech", employees: "500-1000", growth: "Alta", location: "Santiago" },
-    { name: "Fintual", industry: "Fintech", employees: "100-500", growth: "Alta", location: "Santiago" },
-    { name: "Cornershop", industry: "E-commerce", employees: "1000+", growth: "Estable", location: "Santiago" },
+    {
+      name: "NotCo",
+      industry: "Foodtech",
+      employees: "500-1000",
+      growth: "Alta",
+      location: "Santiago",
+      jobPortals: ["trabajando", "getonboard"],
+    },
+    {
+      name: "Fintual",
+      industry: "Fintech",
+      employees: "100-500",
+      growth: "Alta",
+      location: "Santiago",
+      jobPortals: ["getonboard", "laborum"],
+    },
+    {
+      name: "Cornershop",
+      industry: "E-commerce",
+      employees: "1000+",
+      growth: "Estable",
+      location: "Santiago",
+      jobPortals: ["trabajando", "getonboard", "laborum"],
+    },
     {
       name: "Banco de Chile",
       industry: "Servicios Financieros",
       employees: "10000+",
       growth: "Estable",
       location: "Nacional",
+      jobPortals: ["laborum", "trabajando"],
     },
-    { name: "Falabella", industry: "Retail", employees: "50000+", growth: "Moderada", location: "Nacional" },
-    { name: "Entel", industry: "Telecomunicaciones", employees: "5000+", growth: "Moderada", location: "Nacional" },
-    { name: "Chiper", industry: "E-commerce", employees: "200-500", growth: "Alta", location: "Santiago" },
-    { name: "Betterfly", industry: "Insurtech", employees: "100-300", growth: "Alta", location: "Santiago" },
-    { name: "Buk", industry: "HR Tech", employees: "200-400", growth: "Alta", location: "Santiago" },
-    { name: "Khipu", industry: "Fintech", employees: "50-100", growth: "Moderada", location: "Santiago" },
+    {
+      name: "Falabella",
+      industry: "Retail",
+      employees: "50000+",
+      growth: "Moderada",
+      location: "Nacional",
+      jobPortals: ["laborum", "trabajando"],
+    },
+    {
+      name: "Entel",
+      industry: "Telecomunicaciones",
+      employees: "5000+",
+      growth: "Moderada",
+      location: "Nacional",
+      jobPortals: ["laborum", "trabajando"],
+    },
+    {
+      name: "Chiper",
+      industry: "E-commerce",
+      employees: "200-500",
+      growth: "Alta",
+      location: "Santiago",
+      jobPortals: ["getonboard"],
+    },
+    {
+      name: "Betterfly",
+      industry: "Insurtech",
+      employees: "100-300",
+      growth: "Alta",
+      location: "Santiago",
+      jobPortals: ["getonboard"],
+    },
+    {
+      name: "Buk",
+      industry: "HR Tech",
+      employees: "200-400",
+      growth: "Alta",
+      location: "Santiago",
+      jobPortals: ["getonboard", "trabajando"],
+    },
+    {
+      name: "Khipu",
+      industry: "Fintech",
+      employees: "50-100",
+      growth: "Moderada",
+      location: "Santiago",
+      jobPortals: ["getonboard"],
+    },
   ],
   salaryRanges: {
     "Desarrollador Junior": { min: 800000, max: 1500000, currency: "CLP" },
@@ -313,14 +334,14 @@ export const chileanMarketData = {
     "QA Engineer": { min: 1800000, max: 3200000, currency: "CLP" },
   },
   jobBoards: [
-    "GetOnBoard (Chile)",
-    "LinkedIn Chile",
-    "Trabajando.com",
-    "Laborum Chile",
-    "Indeed Chile",
-    "CompuTrabajo Chile",
-    "ZonaJobs Chile",
-    "Bumeran Chile",
+    { name: "Trabajando.com", url: "https://www.trabajando.com", focus: "General", hasAPI: true },
+    { name: "GetOnBoard", url: "https://www.getonboard.com", focus: "Tecnología", hasAPI: true },
+    { name: "Laborum Chile", url: "https://www.laborum.cl", focus: "Profesionales", hasAPI: false },
+    { name: "LinkedIn Chile", url: "https://www.linkedin.com/jobs", focus: "Profesionales", hasAPI: true },
+    { name: "CompuTrabajo Chile", url: "https://cl.computrabajo.com", focus: "General", hasAPI: false },
+    { name: "Indeed Chile", url: "https://cl.indeed.com", focus: "General", hasAPI: true },
+    { name: "ZonaJobs Chile", url: "https://www.zonajobs.cl", focus: "General", hasAPI: false },
+    { name: "Bumeran Chile", url: "https://www.bumeran.cl", focus: "General", hasAPI: false },
   ],
   techHubs: [
     "Santiago Centro",
@@ -494,7 +515,7 @@ export const getUserCareerGoals = async (userId: string): Promise<CareerGoal[]> 
   ]
 }
 
-// Mock database functions
+// Mock database functions with Chilean job portal integration
 export async function getUserPersonalityResults(userId: string) {
   return { data: demoPersonalityResults, error: null }
 }
@@ -512,7 +533,7 @@ export async function saveUserSkills(userId: string, skills: any[]) {
 }
 
 export async function searchJobs(query: string, filters: any) {
-  // Filter jobs based on Chilean market criteria
+  // Filter jobs based on Chilean market criteria and job portal sources
   const filteredJobs = demoJobSearchResults.filter(
     (job) => job.location.includes("Chile") || job.location.includes("Santiago") || job.remote === true,
   )
