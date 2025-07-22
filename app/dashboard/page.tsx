@@ -3,30 +3,32 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
-import {
-  BookOpen,
-  TrendingUp,
-  Target,
-  Clock,
-  ChevronRight,
-  Calendar,
-  Users,
-  Briefcase,
-  GraduationCap,
-  BarChart3,
-  CheckCircle,
-  AlertCircle,
-  Play,
-  Brain,
-  Code,
-  Heart,
-  TestTube,
-} from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { getBooksWithProgress, getReadingStats, type BookWithProgress, type ReadingStats } from "@/lib/supabase-library"
+import {
+  Target,
+  TrendingUp,
+  Award,
+  BookOpen,
+  Calendar,
+  Star,
+  Clock,
+  ChevronRight,
+  Brain,
+  Briefcase,
+  MessageSquare,
+  Code,
+  Heart,
+  Users,
+  GraduationCap,
+  BarChart3,
+  TestTube,
+  Play,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -114,14 +116,39 @@ const testCategories = [
   },
 ]
 
-interface DashboardStats {
-  skillsAssessmentScore: number
-  completedCourses: number
-  readingProgress: number
-  careerGoalProgress: number
-  weeklyReadingTime: number
-  upcomingDeadlines: number
-}
+// Recommended books with real cover images
+const recommendedBooks = [
+  {
+    id: "1",
+    title: "Atomic Habits",
+    author: "James Clear",
+    description: "Perfecto para desarrollar hábitos de productividad",
+    rating: 4.8,
+    progress: 0,
+    coverUrl: "/books/atomic-habits.jpg",
+    reason: "Basado en tu interés por la productividad personal",
+  },
+  {
+    id: "3",
+    title: "Lean In",
+    author: "Sheryl Sandberg",
+    description: "Ideal para tu desarrollo de liderazgo profesional",
+    rating: 4.5,
+    progress: 35,
+    coverUrl: "/books/lean-in.jpg",
+    reason: "Complementa tus evaluaciones de liderazgo",
+  },
+  {
+    id: "5",
+    title: "Emotional Intelligence 2.0",
+    author: "Travis Bradberry",
+    description: "Complementa tus evaluaciones de habilidades blandas",
+    rating: 4.4,
+    progress: 60,
+    coverUrl: "/books/emotional-intelligence.jpg",
+    reason: "Fortalece tus habilidades interpersonales",
+  },
+]
 
 interface RecentActivity {
   id: string
@@ -146,14 +173,8 @@ export default function DashboardPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [recentBooks, setRecentBooks] = useState<BookWithProgress[]>([])
-  const [readingStats, setReadingStats] = useState<ReadingStats | null>(null)
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
   const [careerGoals, setCareerGoals] = useState<CareerGoal[]>([])
-  const [dashboardLoading, setDashboardLoading] = useState(true)
-
-  const userId = "demo-user-id" // Demo user ID
 
   useEffect(() => {
     setMounted(true)
@@ -167,107 +188,94 @@ export default function DashboardPage() {
   }, [mounted, user, loading, router])
 
   useEffect(() => {
-    if (mounted && user) {
-      loadDashboardData()
-    }
-  }, [mounted, user])
+    // Set demo recent activity
+    setRecentActivity([
+      {
+        id: "1",
+        type: "reading",
+        title: "Continuaste leyendo 'Lean In'",
+        description: "Progreso: 35% completado",
+        timestamp: "Hace 2 horas",
+        progress: 35,
+      },
+      {
+        id: "2",
+        type: "assessment",
+        title: "Completaste el Test DISC",
+        description: "Puntuación: 92/100 - Perfil Dominante",
+        timestamp: "Ayer",
+      },
+      {
+        id: "3",
+        type: "goal",
+        title: "Actualizaste tu objetivo de carrera",
+        description: "Líder de Proyecto en Tecnología",
+        timestamp: "Hace 3 días",
+      },
+      {
+        id: "4",
+        type: "assessment",
+        title: "Completaste evaluación de habilidades blandas",
+        description: "Puntuación: 88/100 - Excelente comunicación",
+        timestamp: "Hace 5 días",
+      },
+    ])
 
-  const loadDashboardData = async () => {
-    try {
-      setDashboardLoading(true)
+    // Set demo career goals
+    setCareerGoals([
+      {
+        id: "1",
+        title: "Obtener certificación en Gestión de Proyectos",
+        description: "Completar curso PMP y rendir examen de certificación",
+        targetDate: "2024-06-30",
+        progress: 60,
+        category: "Certificación",
+        priority: "high",
+      },
+      {
+        id: "2",
+        title: "Mejorar habilidades de liderazgo",
+        description: "Leer 5 libros sobre liderazgo y aplicar técnicas en el trabajo",
+        targetDate: "2024-05-15",
+        progress: 40,
+        category: "Desarrollo Personal",
+        priority: "medium",
+      },
+      {
+        id: "3",
+        title: "Expandir red profesional",
+        description: "Conectar con 50 profesionales del sector tecnológico",
+        targetDate: "2024-08-31",
+        progress: 25,
+        category: "Networking",
+        priority: "medium",
+      },
+    ])
+  }, [])
 
-      // Load library data
-      const [booksResult, statsResult] = await Promise.all([getBooksWithProgress(userId), getReadingStats(userId)])
-
-      if (booksResult.data) {
-        // Get books currently being read
-        const currentlyReading = booksResult.data.filter((book) => book.reading_status === "reading")
-        setRecentBooks(currentlyReading.slice(0, 3))
-      }
-
-      if (statsResult.data) {
-        setReadingStats(statsResult.data)
-      }
-
-      // Set demo dashboard stats
-      setStats({
-        skillsAssessmentScore: 85,
-        completedCourses: 4,
-        readingProgress: 65,
-        careerGoalProgress: 45,
-        weeklyReadingTime: 8.5,
-        upcomingDeadlines: 3,
-      })
-
-      // Set demo recent activity
-      setRecentActivity([
-        {
-          id: "1",
-          type: "reading",
-          title: "Continuaste leyendo 'Lean In'",
-          description: "Progreso: 35% completado",
-          timestamp: "Hace 2 horas",
-          progress: 35,
-        },
-        {
-          id: "2",
-          type: "assessment",
-          title: "Completaste el Test DISC",
-          description: "Puntuación: 92/100 - Perfil Dominante",
-          timestamp: "Ayer",
-        },
-        {
-          id: "3",
-          type: "goal",
-          title: "Actualizaste tu objetivo de carrera",
-          description: "Líder de Proyecto en Tecnología",
-          timestamp: "Hace 3 días",
-        },
-        {
-          id: "4",
-          type: "assessment",
-          title: "Completaste evaluación de habilidades blandas",
-          description: "Puntuación: 88/100 - Excelente comunicación",
-          timestamp: "Hace 5 días",
-        },
-      ])
-
-      // Set demo career goals
-      setCareerGoals([
-        {
-          id: "1",
-          title: "Obtener certificación en Gestión de Proyectos",
-          description: "Completar curso PMP y rendir examen de certificación",
-          targetDate: "2024-06-30",
-          progress: 60,
-          category: "Certificación",
-          priority: "high",
-        },
-        {
-          id: "2",
-          title: "Mejorar habilidades de liderazgo",
-          description: "Leer 5 libros sobre liderazgo y aplicar técnicas en el trabajo",
-          targetDate: "2024-05-15",
-          progress: 40,
-          category: "Desarrollo Personal",
-          priority: "medium",
-        },
-        {
-          id: "3",
-          title: "Expandir red profesional",
-          description: "Conectar con 50 profesionales del sector tecnológico",
-          targetDate: "2024-08-31",
-          progress: 25,
-          category: "Networking",
-          priority: "medium",
-        },
-      ])
-    } catch (error) {
-      console.error("Error loading dashboard data:", error)
-    } finally {
-      setDashboardLoading(false)
-    }
+  // Show loading state
+  if (!mounted || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Cargando dashboard...</p>
+        </div>
+      </div>
+    )
   }
+
+  // Don't render anything if not authenticated
+  if (!user) {
+    return null
+  }
+
+  const currentDate = new Date().toLocaleDateString("es-CL", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -306,30 +314,6 @@ export default function DashboardPage() {
     })
   }
 
-  // Show loading state
-  if (!mounted || loading || dashboardLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Cargando dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Don't render anything if not authenticated
-  if (!user) {
-    return null
-  }
-
-  const currentDate = new Date().toLocaleDateString("es-CL", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-
   return (
     <div className="container mx-auto px-4 py-8 space-y-8 pt-24">
       {/* Header */}
@@ -347,57 +331,55 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2">
-                <Target className="h-8 w-8 text-blue-600" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.skillsAssessmentScore}%</p>
-                  <p className="text-sm text-muted-foreground">Progreso General</p>
-                </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2">
+              <Target className="h-8 w-8 text-blue-600" />
+              <div>
+                <p className="text-2xl font-bold">85%</p>
+                <p className="text-sm text-muted-foreground">Progreso General</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-8 w-8 text-green-600" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.completedCourses}</p>
-                  <p className="text-sm text-muted-foreground">Tests Completados</p>
-                </div>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2">
+              <Award className="h-8 w-8 text-green-600" />
+              <div>
+                <p className="text-2xl font-bold">4</p>
+                <p className="text-sm text-muted-foreground">Tests Completados</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="h-8 w-8 text-purple-600" />
-                <div>
-                  <p className="text-2xl font-bold">{readingStats?.books_in_progress || 3}</p>
-                  <p className="text-sm text-muted-foreground">Libros en Progreso</p>
-                </div>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2">
+              <BookOpen className="h-8 w-8 text-purple-600" />
+              <div>
+                <p className="text-2xl font-bold">3</p>
+                <p className="text-sm text-muted-foreground">Libros en Progreso</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2">
-                <TrendingUp className="h-8 w-8 text-orange-600" />
-                <div>
-                  <p className="text-2xl font-bold">{stats.weeklyReadingTime}h</p>
-                  <p className="text-sm text-muted-foreground">Tiempo de Lectura</p>
-                </div>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2">
+              <TrendingUp className="h-8 w-8 text-orange-600" />
+              <div>
+                <p className="text-2xl font-bold">88</p>
+                <p className="text-sm text-muted-foreground">Puntuación Promedio</p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
@@ -471,75 +453,6 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Currently Reading */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Leyendo Actualmente
-                </CardTitle>
-                <Link href="/library">
-                  <Button variant="ghost" size="sm">
-                    Ver todo
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {recentBooks.length > 0 ? (
-                <div className="space-y-4">
-                  {recentBooks.map((book) => (
-                    <div
-                      key={book.id}
-                      className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="relative w-12 h-16 flex-shrink-0">
-                        <Image
-                          src={book.cover_url || "/placeholder.svg"}
-                          alt={book.title}
-                          fill
-                          className="object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm line-clamp-1">{book.title}</h4>
-                        <p className="text-xs text-gray-600 mb-2">{book.author}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-xs text-gray-500">
-                            <span>
-                              Página {book.current_page} de {book.pages}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Progress value={book.progress} className="w-16 h-1" />
-                            <span className="text-xs text-gray-600">{book.progress}%</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Link href={`/library/reader/${book.id}`}>
-                        <Button size="sm" variant="outline">
-                          <Play className="h-3 w-3 mr-1" />
-                          Continuar
-                        </Button>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros en progreso</h3>
-                  <p className="text-gray-600 mb-4">Comienza a leer para ver tu progreso aquí</p>
-                  <Link href="/library">
-                    <Button>Explorar Biblioteca</Button>
-                  </Link>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Quick Actions */}
           <Card>
             <CardHeader>
@@ -551,7 +464,7 @@ export default function DashboardPage() {
                 <Link href="/career-coach">
                   <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
                     <div className="flex items-center space-x-3">
-                      <Users className="h-8 w-8 text-blue-600" />
+                      <MessageSquare className="h-8 w-8 text-blue-600" />
                       <div className="text-left">
                         <p className="font-medium">Coach de Carrera IA</p>
                         <p className="text-sm text-muted-foreground">Recibe consejos personalizados</p>
@@ -598,71 +511,6 @@ export default function DashboardPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Clock className="h-5 w-5" />
-                <span>Actividad Reciente</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    {getActivityIcon(activity.type)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 line-clamp-2">{activity.title}</p>
-                    <p className="text-xs text-gray-600 mb-1">{activity.description}</p>
-                    <p className="text-xs text-gray-500">{activity.timestamp}</p>
-                    {activity.progress && <Progress value={activity.progress} className="mt-2 h-1" />}
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Reading Stats */}
-          {readingStats && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Estadísticas de Lectura</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Libros completados</span>
-                  <span className="font-medium">{readingStats.books_completed}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">En progreso</span>
-                  <span className="font-medium">{readingStats.books_in_progress}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Tiempo total</span>
-                  <span className="font-medium">
-                    {Math.floor(readingStats.total_reading_time / 60)}h {readingStats.total_reading_time % 60}m
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Racha de lectura</span>
-                  <span className="font-medium">{readingStats.reading_streak} días</span>
-                </div>
-                <div className="pt-2 border-t">
-                  <Link href="/library">
-                    <Button variant="outline" size="sm" className="w-full bg-transparent">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Ir a Biblioteca
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Career Goals */}
           <Card>
@@ -682,7 +530,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {careerGoals.slice(0, 2).map((goal) => (
+                {careerGoals.map((goal) => (
                   <div key={goal.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
@@ -709,6 +557,95 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Recommended Books */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="h-5 w-5" />
+                <CardTitle className="text-lg">Libros Recomendados</CardTitle>
+              </div>
+              <Link href="/library">
+                <Button variant="ghost" size="sm" className="text-xs">
+                  Ver todos <ChevronRight className="h-3 w-3 ml-1" />
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardDescription className="px-6 pb-4">Basado en tu perfil y objetivos</CardDescription>
+            <CardContent className="space-y-4">
+              {recommendedBooks.map((book) => (
+                <Link key={book.id} href={`/library/reader/${book.id}`}>
+                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div className="relative w-12 h-16 flex-shrink-0">
+                      <Image
+                        src={book.coverUrl || "/placeholder.svg"}
+                        alt={book.title}
+                        fill
+                        className="object-cover rounded shadow-sm"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.src = `/placeholder.svg?height=64&width=48&text=${encodeURIComponent(book.title)}`
+                        }}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm line-clamp-1">{book.title}</h4>
+                      <p className="text-xs text-gray-600 mb-1">por {book.author}</p>
+                      <p className="text-xs text-gray-500 line-clamp-2 mb-2">{book.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1">
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs font-medium">{book.rating}</span>
+                        </div>
+                        {book.progress > 0 && (
+                          <div className="flex items-center space-x-1">
+                            <div className="w-8 h-1 bg-gray-200 rounded-full overflow-hidden">
+                              <div className="h-full bg-blue-600 rounded-full" style={{ width: `${book.progress}%` }} />
+                            </div>
+                            <span className="text-xs text-gray-500">{book.progress}%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+              <Link href="/library">
+                <Button variant="outline" className="w-full mt-4 bg-transparent" size="sm">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Explorar Biblioteca Completa
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Recent Activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Clock className="h-5 w-5" />
+                <span>Actividad Reciente</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    {getActivityIcon(activity.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 line-clamp-2">{activity.title}</p>
+                    <p className="text-xs text-gray-600 mb-1">{activity.description}</p>
+                    <p className="text-xs text-gray-500">{activity.timestamp}</p>
+                    {activity.progress && <Progress value={activity.progress} className="mt-2 h-1" />}
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
