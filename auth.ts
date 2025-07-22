@@ -1,24 +1,22 @@
-// Mock auth configuration for development
+// Mock auth for development - using Supabase in production
 export interface User {
   id: string
   email: string
-  name: string
+  name?: string
 }
 
-export interface Session {
-  user: User
+export const mockUser: User = {
+  id: "demo-user-123",
+  email: "estudiante@udd.cl",
+  name: "Estudiante Demo UDD",
 }
 
-// Mock session for development
-export const mockSession: Session = {
-  user: {
-    id: "demo-user",
-    email: "demo@example.com",
-    name: "Demo User",
-  },
+export function getUser(): User | null {
+  // In development, return mock user
+  // In production, this would integrate with Supabase
+  return mockUser
 }
 
-export async function getSession(): Promise<Session | null> {
-  // In development, return mock session
-  return mockSession
+export function isAuthenticated(): boolean {
+  return true // Always authenticated in demo mode
 }
