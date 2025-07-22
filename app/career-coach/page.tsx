@@ -1,916 +1,654 @@
 "use client"
 
-import type React from "react"
 import { useState, useEffect, useRef } from "react"
+import { Send, Bot, User, Lightbulb, TrendingUp, Target, BookOpen, Star, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Loader2,
-  Send,
-  Bot,
-  User,
-  Zap,
-  Brain,
-  TrendingUp,
-  MessageSquare,
-  Clock,
-  Target,
-  DollarSign,
-  Sparkles,
-  Database,
-  Cpu,
-  Network,
-  BarChart3,
-  Lightbulb,
-  Rocket,
-  Building2,
-  Code,
-  Gauge,
-  Globe,
-} from "lucide-react"
-import { useLanguage } from "@/contexts/language-context"
+import { toast } from "@/hooks/use-toast"
 
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
   timestamp: Date
-  message_type: "text" | "analysis" | "recommendation" | "insight" | "action_plan"
-  intelligence_level: "basic" | "advanced" | "expert"
-  market_data?: any
-  personalization_score?: number
+  suggestions?: string[]
 }
 
-interface Session {
-  id: string
-  session_title: string
-  session_summary: string
-  last_activity: string
-  total_messages: number
-  intelligence_level: "basic" | "advanced" | "expert"
-  session_category: string
-  user_satisfaction?: number
-  key_topics: string[]
-}
-
-interface MarketInsight {
+interface CareerInsight {
   id: string
   title: string
-  category: "salary" | "companies" | "skills" | "trends"
-  data: any
-  relevance_score: number
-  last_updated: string
+  description: string
+  category: "skills" | "market" | "opportunities" | "development"
+  priority: "high" | "medium" | "low"
+  actionable: boolean
 }
 
-interface UserProfile {
-  experience_level: string
-  current_role: string
-  target_roles: string[]
-  skills: string[]
-  salary_expectations: { min: number; max: number }
-  work_preferences: string[]
-  career_goals: string[]
+interface MarketTrend {
+  skill: string
+  demand: number
+  growth: number
+  salary_range: string
+  description: string
 }
 
 export default function CareerCoachPage() {
-  const { t } = useLanguage()
   const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState("")
+  const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
-  const [sessions, setSessions] = useState<Session[]>([])
-  const [marketInsights, setMarketInsights] = useState<MarketInsight[]>([])
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [isConnected, setIsConnected] = useState(true)
-  const [streamingMessage, setStreamingMessage] = useState("")
-  const [connectionQuality, setConnectionQuality] = useState<"excellent" | "good" | "poor">("excellent")
-  const [aiProcessingStage, setAiProcessingStage] = useState<string>("")
-  const [personalizedInsights, setPersonalizedInsights] = useState<any[]>([])
+  const [insights, setInsights] = useState<CareerInsight[]>([])
+  const [marketTrends, setMarketTrends] = useState<MarketTrend[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // Auto-scroll to bottom
+  useEffect(() => {
+    // Initialize with welcome message and load insights
+    const welcomeMessage: Message = {
+      id: "welcome",
+      role: "assistant",
+      content: `¡Hola! Soy tu Coach de Carrera con IA. Estoy aquí para ayudarte a desarrollar tu carrera profesional en el mercado chileno.
+
+Puedo ayudarte con:
+• Análisis de tu perfil profesional
+• Recomendaciones de desarrollo de habilidades
+• Estrategias de búsqueda de empleo
+• Planificación de carrera a largo plazo
+• Insights del mercado laboral chileno
+
+¿En qué te gustaría que te ayude hoy?`,
+      timestamp: new Date(),
+      suggestions: [
+        "Analiza mi perfil profesional",
+        "¿Qué habilidades debería desarrollar?",
+        "Tendencias del mercado tecnológico en Chile",
+        "Cómo mejorar mi CV",
+        "Estrategias de networking profesional",
+      ],
+    }
+
+    setMessages([welcomeMessage])
+    loadCareerInsights()
+    loadMarketTrends()
+  }, [])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages, streamingMessage])
-
-  // Initialize system on mount
-  useEffect(() => {
-    initializeCoachSystem()
-  }, [])
-
-  const initializeCoachSystem = async () => {
-    try {
-      // Load all data in parallel
-      await Promise.all([loadSessions(), loadMarketInsights(), loadUserProfile(), loadPersonalizedInsights()])
-
-      // Initialize with advanced welcome message
-      setMessages([
-        {
-          id: "welcome-advanced",
-          role: "assistant",
-          content: generateAdvancedWelcomeMessage(),
-          timestamp: new Date(),
-          message_type: "insight",
-          intelligence_level: "expert",
-          personalization_score: 95,
-        },
-      ])
-    } catch (error) {
-      console.error("Error initializing coach system:", error)
-    }
-  }
-
-  const generateAdvancedWelcomeMessage = () => {
-    return `🧠 **Coach de Carrera IA - Sistema Experto Activado**
-
-¡Hola! Soy tu Coach de Carrera con **Inteligencia Artificial Avanzada**, especializado en el mercado tech chileno. Mi sistema está completamente actualizado con datos en tiempo real.
-
-## 🚀 **Capacidades Avanzadas Activas:**
-
-### 💡 **Inteligencia GPT-4:**
-• **Streaming en Tiempo Real**: Respuestas generándose en vivo
-• **Memoria Persistente**: Recuerdo todas nuestras conversaciones
-• **Análisis Contextual**: Entiendo tu situación profesional completa
-• **Insights Proactivos**: Genero recomendaciones automáticas
-
-### 📊 **Datos Mercado Chileno 2024 (Actualizados):**
-• **Frontend Junior**: $1.8M - $2.5M CLP
-• **Backend Senior**: $4M - $6M CLP  
-• **Tech Lead**: $5.5M - $8M CLP
-• **Empresas Contratando Ahora**: NotCo (25 posiciones), Fintual (18), Buk (20)
-
-### 🎯 **Skills Más Demandados:**
-• **AI/ML**: +45% crecimiento en demanda
-• **React/Next.js**: +35% crecimiento
-• **Python**: +42% crecimiento
-• **Cloud (AWS/Azure)**: +38% crecimiento
-
-### 🏢 **Modalidades de Trabajo:**
-• **65% Híbrido** (3 días oficina, 2 remoto)
-• **35% Completamente Remoto**
-• **Salario Premium Remoto**: +15-25% sobre presencial
-
-## 🎯 **¿Cómo puedo ayudarte hoy?**
-
-**Análisis Personalizado:**
-• Evaluación de tu perfil vs mercado actual
-• Estrategia salarial específica para tu nivel
-• Plan de desarrollo de skills demandados
-
-**Inteligencia de Mercado:**
-• Oportunidades ocultas en startups chilenas
-• Timing perfecto para cambios de trabajo
-• Networking estratégico en el ecosistema tech
-
-**Preparación Avanzada:**
-• Simulación de entrevistas con IA
-• Negociación salarial paso a paso
-• Personal branding para LinkedIn
-
-¡Cuéntame tu situación actual y objetivos específicos para generar un análisis personalizado!`
-  }
-
-  const loadSessions = async () => {
-    try {
-      const response = await fetch("/api/career-coach", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "get_sessions", userId: "demo-user" }),
-      })
-      const data = await response.json()
-      setSessions(data.sessions || [])
-    } catch (error) {
-      console.error("Error loading sessions:", error)
-    }
-  }
-
-  const loadMarketInsights = async () => {
-    // Mock advanced market insights
-    const insights: MarketInsight[] = [
+  const loadCareerInsights = () => {
+    const demoInsights: CareerInsight[] = [
       {
         id: "1",
-        title: "NotCo busca 25 desarrolladores",
-        category: "companies",
-        data: { positions: 25, salary_range: "4M-8M", urgency: "alta" },
-        relevance_score: 95,
-        last_updated: new Date().toISOString(),
+        title: "Desarrolla habilidades en Cloud Computing",
+        description:
+          "El mercado chileno muestra alta demanda en AWS, Azure y Google Cloud. Considera obtener certificaciones.",
+        category: "skills",
+        priority: "high",
+        actionable: true,
       },
       {
         id: "2",
-        title: "AI/ML skills +45% demanda",
-        category: "skills",
-        data: { growth: 45, avg_salary_increase: "25%" },
-        relevance_score: 90,
-        last_updated: new Date().toISOString(),
+        title: "Mejora tu presencia en LinkedIn",
+        description: "Tu perfil necesita optimización. Agrega proyectos recientes y obtén recomendaciones.",
+        category: "development",
+        priority: "medium",
+        actionable: true,
       },
       {
         id: "3",
-        title: "Salarios Tech Lead subieron 18%",
-        category: "salary",
-        data: { increase: 18, new_range: "5.5M-8M" },
-        relevance_score: 88,
-        last_updated: new Date().toISOString(),
+        title: "Oportunidades en Fintech",
+        description: "El sector fintech en Chile está creciendo 25% anual. Considera especializarte en este sector.",
+        category: "opportunities",
+        priority: "high",
+        actionable: true,
+      },
+      {
+        id: "4",
+        title: "Tendencia hacia trabajo remoto",
+        description:
+          "45% de las empresas chilenas ofrecen modalidad híbrida. Desarrolla habilidades de trabajo remoto.",
+        category: "market",
+        priority: "medium",
+        actionable: false,
       },
     ]
-    setMarketInsights(insights)
+    setInsights(demoInsights)
   }
 
-  const loadUserProfile = async () => {
-    // Mock user profile
-    const profile: UserProfile = {
-      experience_level: "Senior",
-      current_role: "Desarrollador Full Stack",
-      target_roles: ["Tech Lead", "Engineering Manager", "Senior Developer"],
-      skills: ["React", "Node.js", "Python", "AWS"],
-      salary_expectations: { min: 3500000, max: 5500000 },
-      work_preferences: ["Híbrido", "Startup", "Crecimiento"],
-      career_goals: ["Liderazgo técnico", "Mentoring", "Arquitectura de sistemas"],
-    }
-    setUserProfile(profile)
-  }
-
-  const loadPersonalizedInsights = async () => {
-    const insights = [
+  const loadMarketTrends = () => {
+    const demoTrends: MarketTrend[] = [
       {
-        type: "opportunity",
-        title: "Oportunidad Perfecta Detectada",
-        description: "Fintual busca Tech Lead con tu perfil exacto",
-        action: "Ver detalles",
-        urgency: "alta",
+        skill: "Desarrollo Full Stack",
+        demand: 92,
+        growth: 15,
+        salary_range: "$1.8M - $3.5M CLP",
+        description: "Alta demanda en React, Node.js y bases de datos modernas",
       },
       {
-        type: "skill_gap",
-        title: "Skill Gap Identificado",
-        description: "Kubernetes te daría +30% salario",
-        action: "Plan de aprendizaje",
-        urgency: "media",
+        skill: "Data Science",
+        demand: 88,
+        growth: 22,
+        salary_range: "$2.2M - $4.0M CLP",
+        description: "Python, Machine Learning y análisis de datos muy solicitados",
       },
       {
-        type: "market_trend",
-        title: "Tendencia Favorable",
-        description: "Tu stack está en el top 3 más demandado",
-        action: "Aprovechar momentum",
-        urgency: "baja",
+        skill: "DevOps/Cloud",
+        demand: 85,
+        growth: 28,
+        salary_range: "$2.0M - $3.8M CLP",
+        description: "AWS, Docker, Kubernetes en alta demanda",
+      },
+      {
+        skill: "Ciberseguridad",
+        demand: 78,
+        growth: 35,
+        salary_range: "$2.5M - $4.5M CLP",
+        description: "Sector en crecimiento exponencial en Chile",
+      },
+      {
+        skill: "UX/UI Design",
+        demand: 75,
+        growth: 18,
+        salary_range: "$1.5M - $2.8M CLP",
+        description: "Diseño centrado en usuario muy valorado",
       },
     ]
-    setPersonalizedInsights(insights)
+    setMarketTrends(demoTrends)
   }
 
-  const createNewSession = () => {
-    setCurrentSessionId(null)
-    setMessages([
-      {
-        id: "welcome-new-session",
-        role: "assistant",
-        content: generateNewSessionMessage(),
-        timestamp: new Date(),
-        message_type: "insight",
-        intelligence_level: "expert",
-        personalization_score: 90,
-      },
-    ])
-    setStreamingMessage("")
-  }
-
-  const generateNewSessionMessage = () => {
-    return `🚀 **Nueva Sesión de Coaching Experto Iniciada**
-
-Perfecto, empecemos una nueva conversación con mi **sistema de IA más avanzado** activado.
-
-## 📈 **Análisis de Mercado en Tiempo Real:**
-
-### 🔥 **Oportunidades Calientes (Últimas 24h):**
-• **NotCo**: 25 posiciones abiertas (4M-8M CLP)
-• **Fintual**: 18 roles tech (3.5M-6M CLP)
-• **Buk**: 20 posiciones (3M-5.5M CLP)
-• **Betterfly**: 12 roles senior (4M-7M CLP)
-
-### 💰 **Incrementos Salariales Detectados:**
-• **Frontend Senior**: +22% vs 2023
-• **Backend Senior**: +18% vs 2023  
-• **DevOps**: +25% vs 2023
-• **AI/ML Engineer**: +35% vs 2023
-
-### 🎯 **Skills con Mayor ROI:**
-• **Kubernetes**: +30% premium salarial
-• **React Native**: +25% premium
-• **Machine Learning**: +40% premium
-• **Cloud Architecture**: +28% premium
-
-## 🧠 **Mi Sistema Experto Analizará:**
-✅ Tu situación profesional actual
-✅ Gaps vs mercado objetivo
-✅ Estrategia de crecimiento personalizada
-✅ Timeline optimizado para cambios
-✅ Networking estratégico específico
-
-**¿Cuál es tu situación actual y qué objetivos específicos tienes?**
-
-*Mi IA procesará tu respuesta para generar un análisis completamente personalizado.*`
-  }
-
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input.trim(),
+      content: inputMessage,
       timestamp: new Date(),
-      message_type: "text",
-      intelligence_level: "basic",
     }
 
     setMessages((prev) => [...prev, userMessage])
-    setInput("")
+    setInputMessage("")
     setIsLoading(true)
-    setStreamingMessage("")
-    setAiProcessingStage("Analizando contexto...")
-
-    // Cancel any ongoing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-    }
-
-    abortControllerRef.current = new AbortController()
 
     try {
-      // Simulate AI processing stages
-      const processingStages = [
-        "Analizando contexto...",
-        "Consultando base de datos de mercado...",
-        "Generando insights personalizados...",
-        "Aplicando inteligencia GPT-4...",
-        "Finalizando respuesta experta...",
-      ]
+      // Simulate AI response
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      let stageIndex = 0
-      const stageInterval = setInterval(() => {
-        if (stageIndex < processingStages.length - 1) {
-          stageIndex++
-          setAiProcessingStage(processingStages[stageIndex])
-        }
-      }, 800)
+      const aiResponse = generateAIResponse(inputMessage)
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: aiResponse.content,
+        timestamp: new Date(),
+        suggestions: aiResponse.suggestions,
+      }
 
-      const response = await fetch("/api/career-coach", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userMessage.content,
-          sessionId: currentSessionId,
-          userId: "demo-user",
-          userProfile,
-          marketInsights,
-          context: messages.slice(-5), // Last 5 messages for context
-        }),
-        signal: abortControllerRef.current.signal,
+      setMessages((prev) => [...prev, assistantMessage])
+    } catch (error) {
+      console.error("Error sending message:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el mensaje. Intenta nuevamente.",
+        variant: "destructive",
       })
-
-      clearInterval(stageInterval)
-      setAiProcessingStage("")
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-
-      const reader = response.body?.getReader()
-      if (!reader) {
-        throw new Error("No reader available")
-      }
-
-      let accumulatedResponse = ""
-      let messageType = "text"
-      let intelligenceLevel = "expert"
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = new TextDecoder().decode(value)
-        const lines = chunk.split("\n")
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6)
-            if (data === "[DONE]") {
-              // Add final message with advanced metadata
-              const assistantMessage: Message = {
-                id: (Date.now() + 1).toString(),
-                role: "assistant",
-                content: accumulatedResponse,
-                timestamp: new Date(),
-                message_type: messageType as any,
-                intelligence_level: intelligenceLevel as any,
-                personalization_score: Math.floor(Math.random() * 20) + 80, // 80-100
-                market_data: {
-                  insights_used: marketInsights.length,
-                  personalization_applied: true,
-                  real_time_data: true,
-                },
-              }
-              setMessages((prev) => [...prev, assistantMessage])
-              setStreamingMessage("")
-              break
-            }
-
-            try {
-              const parsed = JSON.parse(data)
-              if (parsed.content) {
-                accumulatedResponse += parsed.content
-                setStreamingMessage(accumulatedResponse)
-              }
-              if (parsed.messageType) messageType = parsed.messageType
-              if (parsed.intelligenceLevel) intelligenceLevel = parsed.intelligenceLevel
-            } catch (e) {
-              // Ignore parsing errors for partial data
-            }
-          }
-        }
-      }
-
-      // Update session and reload data
-      await Promise.all([loadSessions(), loadPersonalizedInsights()])
-    } catch (error: any) {
-      if (error.name !== "AbortError") {
-        console.error("Error sending message:", error)
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: (Date.now() + 1).toString(),
-            role: "assistant",
-            content: generateFallbackExpertResponse(userMessage.content),
-            timestamp: new Date(),
-            message_type: "insight",
-            intelligence_level: "expert",
-            personalization_score: 85,
-          },
-        ])
-      }
     } finally {
       setIsLoading(false)
-      setAiProcessingStage("")
     }
   }
 
-  const generateFallbackExpertResponse = (userMessage: string) => {
-    return `🧠 **Sistema Experto - Respuesta de Emergencia**
+  const generateAIResponse = (userInput: string): { content: string; suggestions?: string[] } => {
+    const input = userInput.toLowerCase()
 
-Detecté una interrupción temporal, pero mi **sistema experto local** sigue funcionando:
+    if (input.includes("perfil") || input.includes("analiza")) {
+      return {
+        content: `Basándome en tu perfil actual, veo que tienes una base sólida en desarrollo de software. Aquí están mis recomendaciones:
 
-## 🎯 **Análisis Inmediato de tu Consulta:**
+**Fortalezas identificadas:**
+• Experiencia en desarrollo web
+• Conocimientos en metodologías ágiles
+• Habilidades de comunicación
 
-Basado en tu mensaje y mi base de datos local del mercado chileno:
+**Áreas de mejora:**
+• Certificaciones técnicas (AWS, Azure)
+• Experiencia en liderazgo de equipos
+• Conocimientos en arquitectura de software
 
-### 💡 **Recomendaciones Inteligentes:**
-• **Mercado Actual**: El sector tech chileno creció 18% este año
-• **Oportunidades**: 1,200+ posiciones tech disponibles
-• **Salarios**: Incremento promedio del 15% vs 2023
+**Próximos pasos recomendados:**
+1. Obtener certificación AWS Solutions Architect
+2. Liderar un proyecto pequeño en tu empresa actual
+3. Contribuir a proyectos open source
 
-### 🚀 **Próximos Pasos Sugeridos:**
-1. **Actualiza tu perfil** en GetOnBoard y LinkedIn
-2. **Revisa startups** como NotCo, Fintual, Buk (están contratando)
-3. **Desarrolla skills** en AI/ML (+45% demanda)
+¿Te gustaría que profundice en alguna de estas áreas?`,
+        suggestions: [
+          "¿Cómo obtener certificación AWS?",
+          "Estrategias de liderazgo técnico",
+          "Proyectos open source recomendados",
+          "Plan de desarrollo a 6 meses",
+        ],
+      }
+    }
 
-### 📊 **Datos Específicos para Ti:**
-• **Tu Stack**: Está en el top 3 más demandado
-• **Rango Salarial**: Probablemente puedes aspirar a +20% más
-• **Modalidad**: 65% de empresas ofrecen híbrido
+    if (input.includes("habilidades") || input.includes("skills")) {
+      return {
+        content: `Para el mercado chileno actual, estas son las habilidades más demandadas en tu área:
 
-**¡Reintenta tu consulta para obtener un análisis completamente personalizado con GPT-4!**
+**Habilidades Técnicas Prioritarias:**
+• **Cloud Computing** (AWS, Azure) - Demanda: 95%
+• **Contenedores** (Docker, Kubernetes) - Demanda: 88%
+• **Microservicios** - Demanda: 82%
+• **CI/CD** (Jenkins, GitLab CI) - Demanda: 79%
 
-*Mi sistema completo se está reconectando...*`
-  }
+**Habilidades Blandas Clave:**
+• Liderazgo técnico
+• Comunicación efectiva
+• Gestión de proyectos
+• Mentoría y coaching
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+**Plan de Desarrollo Sugerido:**
+1. **Mes 1-2:** Curso AWS Fundamentals
+2. **Mes 3-4:** Proyecto práctico con Docker
+3. **Mes 5-6:** Certificación AWS Solutions Architect
+
+¿Quieres que te ayude a crear un plan detallado para alguna de estas habilidades?`,
+        suggestions: [
+          "Plan detallado para AWS",
+          "Recursos para aprender Docker",
+          "Cómo desarrollar liderazgo técnico",
+          "Proyectos prácticos recomendados",
+        ],
+      }
+    }
+
+    if (input.includes("mercado") || input.includes("tendencias")) {
+      return {
+        content: `El mercado tecnológico chileno está experimentando cambios significativos:
+
+**Tendencias Principales 2024:**
+• **Transformación Digital:** 78% de empresas priorizan digitalización
+• **Trabajo Híbrido:** 65% adopta modalidades flexibles
+• **Fintech:** Crecimiento del 35% anual
+• **E-commerce:** Expansión del 28% en plataformas digitales
+
+**Sectores con Mayor Demanda:**
+1. **Banca y Fintech** - Salarios: $2.5M - $4.5M CLP
+2. **Retail Digital** - Salarios: $2.0M - $3.8M CLP
+3. **Healthtech** - Salarios: $2.2M - $4.0M CLP
+4. **Logística Digital** - Salarios: $1.8M - $3.2M CLP
+
+**Oportunidades Emergentes:**
+• Desarrolladores blockchain
+• Especialistas en IA/ML
+• Arquitectos de soluciones cloud
+• Expertos en ciberseguridad
+
+¿Te interesa explorar algún sector específico?`,
+        suggestions: [
+          "Oportunidades en Fintech",
+          "Cómo entrar al sector bancario",
+          "Tendencias en IA y ML",
+          "Salarios por experiencia",
+        ],
+      }
+    }
+
+    if (input.includes("cv") || input.includes("currículum")) {
+      return {
+        content: `Para optimizar tu CV para el mercado chileno, considera estos puntos:
+
+**Estructura Recomendada:**
+1. **Datos de contacto** (incluye LinkedIn)
+2. **Resumen profesional** (3-4 líneas impactantes)
+3. **Experiencia laboral** (logros cuantificados)
+4. **Habilidades técnicas** (organizadas por categorías)
+5. **Educación y certificaciones**
+6. **Proyectos destacados**
+
+**Consejos Específicos para Chile:**
+• Incluye experiencia con empresas chilenas conocidas
+• Menciona conocimiento del mercado local
+• Destaca experiencia en regulaciones locales (si aplica)
+• Usa métricas en pesos chilenos cuando sea relevante
+
+**Palabras Clave Importantes:**
+• Transformación digital
+• Metodologías ágiles
+• Trabajo en equipo
+• Orientación a resultados
+• Innovación
+
+**Errores Comunes a Evitar:**
+• CV muy extenso (máximo 2 páginas)
+• Falta de cuantificación en logros
+• Información desactualizada
+• Formato poco profesional
+
+¿Quieres que revise alguna sección específica de tu CV?`,
+        suggestions: [
+          "Cómo escribir un resumen profesional",
+          "Ejemplos de logros cuantificados",
+          "Formato de CV recomendado",
+          "Palabras clave por industria",
+        ],
+      }
+    }
+
+    if (input.includes("networking") || input.includes("contactos")) {
+      return {
+        content: `El networking es crucial en el mercado chileno. Aquí tienes estrategias efectivas:
+
+**Plataformas Clave en Chile:**
+• **LinkedIn** - Esencial para profesionales
+• **Meetup** - Eventos técnicos y profesionales
+• **Eventbrite** - Conferencias y workshops
+• **Comunidades tech** - DevOps Chile, React Santiago, etc.
+
+**Eventos Recomendados:**
+• **9punto5** - Conferencia tech más grande de Chile
+• **JSConf Chile** - Para desarrolladores JavaScript
+• **AWS User Group Santiago** - Comunidad cloud
+• **Women in Tech Chile** - Red de mujeres en tecnología
+
+**Estrategias de Networking:**
+1. **Participa activamente** en eventos online y presenciales
+2. **Comparte conocimiento** en blogs o charlas
+3. **Conecta con propósito** - no solo pidas, también ofrece
+4. **Mantén contacto** regular con tu red
+
+**Consejos para Chile:**
+• Las relaciones personales son muy valoradas
+• Participa en after-office y eventos sociales
+• Considera el factor cultural en las conversaciones
+• Sé genuino en tus interacciones
+
+¿Te gustaría que te ayude a identificar eventos específicos para tu área?`,
+        suggestions: [
+          "Eventos tech en Santiago",
+          "Cómo optimizar LinkedIn",
+          "Estrategias de follow-up",
+          "Comunidades por especialidad",
+        ],
+      }
+    }
+
+    // Default response
+    return {
+      content: `Entiendo tu consulta. Como tu coach de carrera, puedo ayudarte con diversos aspectos del desarrollo profesional.
+
+Basándome en las tendencias actuales del mercado chileno, te recomiendo enfocarte en:
+
+• **Desarrollo continuo de habilidades** técnicas y blandas
+• **Construcción de una red profesional** sólida
+• **Mantenerte actualizado** con las tendencias del mercado
+• **Planificación estratégica** de tu carrera a largo plazo
+
+¿Hay algún aspecto específico en el que te gustaría que profundice? Puedo ayudarte con análisis de perfil, desarrollo de habilidades, estrategias de búsqueda de empleo, o planificación de carrera.`,
+      suggestions: [
+        "Analiza mi situación actual",
+        "¿Qué habilidades necesito?",
+        "Oportunidades en mi área",
+        "Plan de carrera a 5 años",
+      ],
     }
   }
 
-  const loadSession = async (sessionId: string) => {
-    try {
-      const response = await fetch(`/api/career-coach?sessionId=${sessionId}&userId=demo-user`)
-      const data = await response.json()
-
-      const sessionMessages: Message[] = (data.conversations || []).map((conv: any) => ({
-        id: conv.id.toString(),
-        role: conv.role,
-        content: conv.content,
-        timestamp: new Date(conv.created_at),
-        message_type: conv.message_type || "text",
-        intelligence_level: conv.intelligence_level || "advanced",
-        personalization_score: conv.personalization_score || 80,
-      }))
-
-      setMessages(sessionMessages)
-      setCurrentSessionId(sessionId)
-      setStreamingMessage("")
-    } catch (error) {
-      console.error("Error loading session:", error)
-    }
+  const handleSuggestionClick = (suggestion: string) => {
+    setInputMessage(suggestion)
   }
 
-  const getMessageTypeIcon = (type: string) => {
-    switch (type) {
-      case "analysis":
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "skills":
+        return <TrendingUp className="h-4 w-4" />
+      case "market":
         return <BarChart3 className="h-4 w-4" />
-      case "recommendation":
-        return <Lightbulb className="h-4 w-4" />
-      case "insight":
-        return <Sparkles className="h-4 w-4" />
-      case "action_plan":
+      case "opportunities":
         return <Target className="h-4 w-4" />
+      case "development":
+        return <BookOpen className="h-4 w-4" />
       default:
-        return <MessageSquare className="h-4 w-4" />
+        return <Lightbulb className="h-4 w-4" />
     }
   }
 
-  const getIntelligenceBadge = (level: string) => {
-    switch (level) {
-      case "expert":
-        return (
-          <Badge className="bg-purple-500 text-white">
-            <Brain className="h-3 w-3 mr-1" />
-            Experto
-          </Badge>
-        )
-      case "advanced":
-        return (
-          <Badge className="bg-blue-500 text-white">
-            <Zap className="h-3 w-3 mr-1" />
-            Avanzado
-          </Badge>
-        )
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case "skills":
+        return "bg-blue-100 text-blue-800 border-blue-200"
+      case "market":
+        return "bg-green-100 text-green-800 border-green-200"
+      case "opportunities":
+        return "bg-purple-100 text-purple-800 border-purple-200"
+      case "development":
+        return "bg-orange-100 text-orange-800 border-orange-200"
       default:
-        return <Badge variant="outline">Básico</Badge>
+        return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200"
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
-      <div className="container mx-auto max-w-7xl h-[calc(100vh-2rem)] flex gap-4">
-        {/* Advanced Sidebar */}
-        <Card className="w-80 flex flex-col border-2 border-blue-200 shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-t-lg p-4">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <div className="relative">
-                <Brain className="h-5 w-5" />
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              </div>
-              Coach IA Experto
-            </CardTitle>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-blue-100">Sistema GPT-4</span>
-                <Badge className="bg-green-500 text-green-900 text-xs">
-                  <Cpu className="h-3 w-3 mr-1" />
-                  Activo
-                </Badge>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-blue-100">Conexión</span>
-                <div className="flex items-center gap-1">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      connectionQuality === "excellent"
-                        ? "bg-green-400"
-                        : connectionQuality === "good"
-                          ? "bg-yellow-400"
-                          : "bg-red-400"
-                    }`}
-                  />
-                  <span className="text-xs capitalize">{connectionQuality}</span>
-                </div>
-              </div>
-              <Progress value={95} className="h-1" />
-            </div>
-          </CardHeader>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Coach de Carrera con IA</h1>
+        <p className="text-gray-600">Recibe consejos personalizados para tu desarrollo profesional en Chile</p>
+      </div>
 
-          <CardContent className="flex-1 p-3 overflow-hidden">
-            <Tabs defaultValue="sessions" className="h-full">
-              <TabsList className="grid w-full grid-cols-3 text-xs">
-                <TabsTrigger value="sessions" className="text-xs">
-                  Sesiones
-                </TabsTrigger>
-                <TabsTrigger value="insights" className="text-xs">
-                  Insights
-                </TabsTrigger>
-                <TabsTrigger value="market" className="text-xs">
-                  Mercado
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="sessions" className="mt-3 h-full">
-                <Button
-                  onClick={createNewSession}
-                  className="w-full mb-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-sm"
-                >
-                  <Rocket className="h-4 w-4 mr-2" />
-                  Nueva Sesión Experta
-                </Button>
-
-                <ScrollArea className="h-[calc(100%-4rem)]">
-                  {sessions.map((session) => (
-                    <Card
-                      key={session.id}
-                      className={`mb-2 cursor-pointer transition-all hover:shadow-md ${
-                        currentSessionId === session.id ? "ring-2 ring-purple-500 bg-purple-50" : ""
-                      }`}
-                      onClick={() => loadSession(session.id)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-xs truncate">{session.session_title}</h4>
-                          {getIntelligenceBadge(session.intelligence_level)}
-                        </div>
-                        <p className="text-xs text-gray-600 truncate mb-2">{session.session_summary}</p>
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <MessageSquare className="h-3 w-3" />
-                            {session.total_messages}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {new Date(session.last_activity).toLocaleDateString()}
-                          </span>
-                        </div>
-                        {session.key_topics && (
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {session.key_topics.slice(0, 2).map((topic, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {topic}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </ScrollArea>
-              </TabsContent>
-
-              <TabsContent value="insights" className="mt-3">
-                <ScrollArea className="h-[calc(100%-2rem)]">
-                  {personalizedInsights.map((insight, idx) => (
-                    <Card key={idx} className="mb-2 border-l-4 border-l-orange-400">
-                      <CardContent className="p-3">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Target className="h-4 w-4 text-orange-500" />
-                          <h4 className="font-medium text-xs">{insight.title}</h4>
-                        </div>
-                        <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
-                        <div className="flex items-center justify-between">
-                          <Badge variant={insight.urgency === "alta" ? "destructive" : "secondary"} className="text-xs">
-                            {insight.urgency}
-                          </Badge>
-                          <Button size="sm" variant="outline" className="text-xs h-6 bg-transparent">
-                            {insight.action}
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </ScrollArea>
-              </TabsContent>
-
-              <TabsContent value="market" className="mt-3">
-                <ScrollArea className="h-[calc(100%-2rem)]">
-                  {marketInsights.map((insight) => (
-                    <Card key={insight.id} className="mb-2">
-                      <CardContent className="p-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-xs">{insight.title}</h4>
-                          <Badge className="bg-green-100 text-green-800 text-xs">{insight.relevance_score}%</Badge>
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {insight.category === "companies" && (
-                            <div className="flex items-center gap-1">
-                              <Building2 className="h-3 w-3" />
-                              {insight.data.positions} posiciones
-                            </div>
-                          )}
-                          {insight.category === "skills" && (
-                            <div className="flex items-center gap-1">
-                              <Code className="h-3 w-3" />+{insight.data.growth}% crecimiento
-                            </div>
-                          )}
-                          {insight.category === "salary" && (
-                            <div className="flex items-center gap-1">
-                              <DollarSign className="h-3 w-3" />+{insight.data.increase}% incremento
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </ScrollArea>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-
-        {/* Main Chat Area */}
-        <Card className="flex-1 flex flex-col border-2 border-indigo-200 shadow-2xl min-w-0">
-          <CardHeader className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-4">
-            <CardTitle className="flex items-center justify-between">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Chat Interface */}
+        <div className="lg:col-span-3">
+          <Card className="h-[600px] flex flex-col">
+            <CardHeader className="border-b">
               <div className="flex items-center gap-3">
-                <div className="relative">
-                  <Bot className="h-6 w-6" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                </div>
+                <Avatar>
+                  <AvatarFallback className="bg-blue-100">
+                    <Bot className="h-5 w-5 text-blue-600" />
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <h1 className="text-lg font-bold">Coach de Carrera IA Experto</h1>
-                  <p className="text-sm text-indigo-100">Sistema GPT-4 • Mercado Chile 2024 • Memoria Persistente</p>
+                  <CardTitle className="text-lg">Coach de Carrera IA</CardTitle>
+                  <p className="text-sm text-gray-600">Especializado en el mercado laboral chileno</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Badge className="bg-yellow-500 text-yellow-900 text-xs">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  +18% Mercado
-                </Badge>
-                <Badge className="bg-green-500 text-green-900 text-xs">
-                  <Database className="h-3 w-3 mr-1" />
-                  20+ Insights
-                </Badge>
-                <Badge className="bg-purple-500 text-purple-900 text-xs">
-                  <Network className="h-3 w-3 mr-1" />
-                  GPT-4
-                </Badge>
-              </div>
-            </CardTitle>
-          </CardHeader>
+            </CardHeader>
 
-          <CardContent className="flex-1 flex flex-col p-0 min-h-0">
-            {/* Messages Area */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    {message.role === "assistant" && (
-                      <Avatar className="h-8 w-8 border-2 border-indigo-200 flex-shrink-0">
-                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
-                          <Bot className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
+            <CardContent className="flex-1 p-0">
+              <ScrollArea className="h-full p-4">
+                <div className="space-y-4">
+                  {messages.map((message) => (
                     <div
-                      className={`max-w-[75%] rounded-lg p-3 break-words ${
-                        message.role === "user"
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white ml-auto"
-                          : "bg-white border border-gray-200 shadow-sm"
-                      }`}
+                      key={message.id}
+                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <div className="prose prose-sm max-w-none">
-                        <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
-                      </div>
-                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <span>{message.timestamp.toLocaleTimeString()}</span>
-                          {message.role === "assistant" && (
-                            <>
-                              <Separator orientation="vertical" className="h-3" />
-                              <div className="flex items-center gap-1">
-                                {getMessageTypeIcon(message.message_type)}
-                                <span className="capitalize">{message.message_type}</span>
+                      <div
+                        className={`flex items-start gap-3 max-w-[80%] ${message.role === "user" ? "flex-row-reverse" : ""}`}
+                      >
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className={message.role === "user" ? "bg-gray-100" : "bg-blue-100"}>
+                            {message.role === "user" ? (
+                              <User className="h-4 w-4" />
+                            ) : (
+                              <Bot className="h-4 w-4 text-blue-600" />
+                            )}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div
+                          className={`rounded-lg p-3 ${
+                            message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"
+                          }`}
+                        >
+                          <div className="whitespace-pre-wrap text-sm">{message.content}</div>
+                          {message.suggestions && (
+                            <div className="mt-3 space-y-2">
+                              <p className="text-xs font-medium opacity-75">Sugerencias:</p>
+                              <div className="flex flex-wrap gap-2">
+                                {message.suggestions.map((suggestion, index) => (
+                                  <Button
+                                    key={index}
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-xs h-7 bg-white/10 border-white/20 hover:bg-white/20"
+                                    onClick={() => handleSuggestionClick(suggestion)}
+                                  >
+                                    {suggestion}
+                                  </Button>
+                                ))}
                               </div>
-                            </>
+                            </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          {message.personalization_score && (
-                            <Badge variant="outline" className="text-xs">
-                              <Gauge className="h-3 w-3 mr-1" />
-                              {message.personalization_score}%
-                            </Badge>
-                          )}
-                          {message.role === "assistant" && getIntelligenceBadge(message.intelligence_level)}
+                      </div>
+                    </div>
+                  ))}
+                  {isLoading && (
+                    <div className="flex justify-start">
+                      <div className="flex items-start gap-3">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="bg-blue-100">
+                            <Bot className="h-4 w-4 text-blue-600" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="bg-gray-100 rounded-lg p-3">
+                          <div className="flex items-center gap-2">
+                            <div className="animate-pulse flex space-x-1">
+                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.1s" }}
+                              ></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.2s" }}
+                              ></div>
+                            </div>
+                            <span className="text-xs text-gray-600">Analizando...</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    {message.role === "user" && (
-                      <Avatar className="h-8 w-8 border-2 border-blue-200 flex-shrink-0">
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-500 text-white">
-                          <User className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                  </div>
-                ))}
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+              </ScrollArea>
+            </CardContent>
 
-                {/* Streaming Message */}
-                {streamingMessage && (
-                  <div className="flex gap-3 justify-start">
-                    <Avatar className="h-8 w-8 border-2 border-indigo-200 flex-shrink-0">
-                      <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
-                        <Bot className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="max-w-[75%] rounded-lg p-3 bg-white border border-gray-200 shadow-sm break-words">
-                      <div className="prose prose-sm max-w-none">
-                        <div className="whitespace-pre-wrap text-sm leading-relaxed">{streamingMessage}</div>
-                      </div>
-                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-                        <div className="flex items-center gap-2">
-                          <Loader2 className="h-3 w-3 animate-spin text-indigo-500" />
-                          <span className="text-xs text-indigo-600">Generando respuesta experta...</span>
-                        </div>
-                        <Badge className="bg-purple-500 text-white text-xs">
-                          <Sparkles className="h-3 w-3 mr-1" />
-                          IA Streaming
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* AI Processing Indicator */}
-                {isLoading && !streamingMessage && (
-                  <div className="flex gap-3 justify-start">
-                    <Avatar className="h-8 w-8 border-2 border-indigo-200 flex-shrink-0">
-                      <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
-                        <Bot className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="rounded-lg p-3 bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200">
-                      <div className="flex items-center gap-3">
-                        <Loader2 className="h-4 w-4 animate-spin text-indigo-500" />
-                        <div>
-                          <div className="font-medium text-indigo-700 text-sm">Sistema Experto Procesando</div>
-                          <div className="text-sm text-indigo-600">{aiProcessingStage}</div>
-                        </div>
-                      </div>
-                      <Progress value={Math.random() * 100} className="mt-2 h-1" />
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div ref={messagesEndRef} />
-            </ScrollArea>
-
-            <Separator />
-
-            {/* Advanced Input Area */}
-            <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50">
+            <div className="border-t p-4">
               <div className="flex gap-2">
                 <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Pregúntame sobre tu carrera, salarios, empresas, estrategias, o cualquier tema profesional..."
-                  className="flex-1 border-2 border-indigo-200 focus:border-indigo-400 bg-white text-sm"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder="Escribe tu consulta sobre desarrollo profesional..."
+                  onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
                   disabled={isLoading}
                 />
-                <Button
-                  onClick={sendMessage}
-                  disabled={isLoading || !input.trim()}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 flex-shrink-0"
-                >
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                <Button onClick={handleSendMessage} disabled={isLoading || !inputMessage.trim()}>
+                  <Send className="h-4 w-4" />
                 </Button>
               </div>
-
-              <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-                <div className="flex items-center gap-4">
-                  <span>Enter para enviar • Shift+Enter para nueva línea</span>
-                  <div className="flex items-center gap-1">
-                    <Globe className="h-3 w-3" />
-                    <span>Datos en tiempo real</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span>GPT-4 Conectado</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Database className="h-3 w-3" />
-                    <span>{marketInsights.length} Insights</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Brain className="h-3 w-3" />
-                    <span>Memoria Activa</span>
-                  </div>
-                </div>
-              </div>
             </div>
-          </CardContent>
-        </Card>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Career Insights */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Lightbulb className="h-5 w-5" />
+                Insights Personalizados
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {insights.map((insight) => (
+                <div key={insight.id} className="p-3 border rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {getCategoryIcon(insight.category)}
+                      <h4 className="font-medium text-sm">{insight.title}</h4>
+                    </div>
+                    <Badge variant="outline" className={getPriorityColor(insight.priority)}>
+                      {insight.priority === "high" ? "Alta" : insight.priority === "medium" ? "Media" : "Baja"}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-gray-600 mb-2">{insight.description}</p>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className={getCategoryColor(insight.category)}>
+                      {insight.category === "skills"
+                        ? "Habilidades"
+                        : insight.category === "market"
+                          ? "Mercado"
+                          : insight.category === "opportunities"
+                            ? "Oportunidades"
+                            : "Desarrollo"}
+                    </Badge>
+                    {insight.actionable && (
+                      <Button size="sm" variant="outline" className="h-6 text-xs bg-transparent">
+                        Actuar
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Market Trends */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Tendencias del Mercado
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {marketTrends.map((trend, index) => (
+                <div key={index} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-sm">{trend.skill}</h4>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                      <span className="text-xs">{trend.demand}%</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">Demanda</span>
+                      <span className="font-medium">{trend.demand}%</span>
+                    </div>
+                    <Progress value={trend.demand} className="h-1" />
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-600">Crecimiento</span>
+                    <span className="text-green-600 font-medium">+{trend.growth}%</span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    <span className="font-medium">Salario:</span> {trend.salary_range}
+                  </div>
+                  <p className="text-xs text-gray-600">{trend.description}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

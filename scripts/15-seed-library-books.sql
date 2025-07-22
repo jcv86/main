@@ -1,9 +1,7 @@
--- Clear existing data
-DELETE FROM user_book_bookmarks;
-DELETE FROM user_book_progress;
-DELETE FROM books;
+-- Seed library books with comprehensive data
+-- This script populates the books table with professional development books
 
--- Insert books with proper UUIDs and complete data
+-- Insert books data
 INSERT INTO books (
   id,
   title,
@@ -23,7 +21,7 @@ INSERT INTO books (
   updated_at
 ) VALUES 
 (
-  'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  '550e8400-e29b-41d4-a716-446655440001',
   'Atomic Habits',
   'James Clear',
   'Un método fácil y comprobado para crear buenos hábitos y eliminar los malos. James Clear revela estrategias prácticas que te enseñarán exactamente cómo formar buenos hábitos, romper los malos y dominar los pequeños comportamientos que llevan a resultados notables.',
@@ -32,7 +30,7 @@ INSERT INTO books (
   '4h 30min',
   320,
   2018,
-  '/books/atomic-habits.jpg',
+  '/placeholder.svg?height=400&width=300&text=Atomic%20Habits&bg=f59e0b&color=white',
   ARRAY['Hábitos', 'Productividad', 'Autoayuda', 'Comportamiento'],
   'Intermedio',
   ARRAY['Formación de hábitos', 'Productividad personal', 'Cambio de comportamiento', 'Sistemas vs objetivos'],
@@ -41,7 +39,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'b2c3d4e5-f6g7-8901-bcde-f23456789012',
+  '550e8400-e29b-41d4-a716-446655440002',
   'The 7 Habits of Highly Effective People',
   'Stephen R. Covey',
   'Lecciones poderosas de cambio personal que han inspirado a millones de personas. Covey presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.',
@@ -50,7 +48,7 @@ INSERT INTO books (
   '6h 15min',
   432,
   1989,
-  '/books/7-habits.jpg',
+  '/placeholder.svg?height=400&width=300&text=7%20Habits&bg=1f2937&color=white',
   ARRAY['Liderazgo', 'Efectividad', 'Desarrollo Personal', 'Principios'],
   'Intermedio',
   ARRAY['Liderazgo personal', 'Efectividad', 'Principios de vida', 'Interdependencia'],
@@ -59,7 +57,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'c3d4e5f6-g7h8-9012-cdef-345678901234',
+  '550e8400-e29b-41d4-a716-446655440003',
   'Lean In',
   'Sheryl Sandberg',
   'Las mujeres, el trabajo y la voluntad de liderar en el mundo profesional moderno. Sandberg examina por qué el progreso de las mujeres en el logro de roles de liderazgo se ha estancado.',
@@ -68,7 +66,7 @@ INSERT INTO books (
   '5h 20min',
   368,
   2013,
-  '/books/lean-in.jpg',
+  '/placeholder.svg?height=400&width=300&text=Lean%20In&bg=ec4899&color=white',
   ARRAY['Liderazgo', 'Carrera', 'Género', 'Empoderamiento'],
   'Intermedio',
   ARRAY['Liderazgo femenino', 'Desarrollo profesional', 'Igualdad de género', 'Ambición'],
@@ -77,7 +75,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'd4e5f6g7-h8i9-0123-defg-456789012345',
+  '550e8400-e29b-41d4-a716-446655440004',
   'Deep Work',
   'Cal Newport',
   'Reglas para el éxito enfocado en un mundo distraído. Newport argumenta que la capacidad de concentrarse sin distracción en una tarea cognitivamente demandante es una habilidad cada vez más valiosa.',
@@ -86,7 +84,7 @@ INSERT INTO books (
   '4h 45min',
   304,
   2016,
-  '/books/deep-work.jpg',
+  '/placeholder.svg?height=400&width=300&text=DEEP%20WORK&bg=f59e0b&color=1f2937',
   ARRAY['Concentración', 'Productividad', 'Trabajo', 'Enfoque'],
   'Avanzado',
   ARRAY['Trabajo profundo', 'Concentración', 'Productividad cognitiva', 'Distracción digital'],
@@ -95,7 +93,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'e5f6g7h8-i9j0-1234-efgh-567890123456',
+  '550e8400-e29b-41d4-a716-446655440005',
   'Emotional Intelligence 2.0',
   'Travis Bradberry',
   'Estrategias para aumentar tu EQ y mejorar tus habilidades interpersonales. Bradberry y Greaves proporcionan un programa paso a paso para aumentar tu inteligencia emocional.',
@@ -104,7 +102,7 @@ INSERT INTO books (
   '3h 50min',
   280,
   2009,
-  '/books/emotional-intelligence.jpg',
+  '/placeholder.svg?height=400&width=300&text=Emotional%20Intelligence&bg=3b82f6&color=white',
   ARRAY['Inteligencia Emocional', 'Habilidades Blandas', 'Comunicación', 'Autoconciencia'],
   'Intermedio',
   ARRAY['Inteligencia emocional', 'Autoconciencia', 'Habilidades sociales', 'Autorregulación'],
@@ -113,7 +111,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'f6g7h8i9-j0k1-2345-fghi-678901234567',
+  '550e8400-e29b-41d4-a716-446655440006',
   'The Lean Startup',
   'Eric Ries',
   'Cómo los emprendedores de hoy usan la innovación continua para crear negocios exitosos. Ries presenta un enfoque científico para crear y gestionar startups exitosas.',
@@ -122,7 +120,7 @@ INSERT INTO books (
   '5h 10min',
   336,
   2011,
-  '/books/lean-startup.jpg',
+  '/placeholder.svg?height=400&width=300&text=THE%20LEAN%20STARTUP&bg=0ea5e9&color=white',
   ARRAY['Emprendimiento', 'Startup', 'Innovación', 'Metodología'],
   'Intermedio',
   ARRAY['Metodología lean', 'Validación de productos', 'Innovación', 'MVP'],
@@ -131,7 +129,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'g7h8i9j0-k1l2-3456-ghij-789012345678',
+  '550e8400-e29b-41d4-a716-446655440007',
   'Mindset',
   'Carol S. Dweck',
   'La nueva psicología del éxito y cómo desarrollar una mentalidad de crecimiento. Dweck revela cómo el éxito en la escuela, el trabajo, los deportes, las artes y casi todas las áreas de la actividad humana puede ser dramáticamente influenciado por cómo pensamos sobre nuestros talentos y habilidades.',
@@ -140,7 +138,7 @@ INSERT INTO books (
   '4h 20min',
   276,
   2006,
-  '/books/mindset.jpg',
+  '/placeholder.svg?height=400&width=300&text=MINDSET&bg=10b981&color=white',
   ARRAY['Mentalidad', 'Crecimiento', 'Psicología', 'Motivación'],
   'Intermedio',
   ARRAY['Mentalidad de crecimiento', 'Resiliencia', 'Aprendizaje', 'Motivación intrínseca'],
@@ -149,7 +147,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'h8i9j0k1-l2m3-4567-hijk-890123456789',
+  '550e8400-e29b-41d4-a716-446655440008',
   'The Power of Now',
   'Eckhart Tolle',
   'Una guía hacia la iluminación espiritual y la presencia consciente. Tolle demuestra cómo vivir una vida más sana y feliz al vivir completamente en el presente.',
@@ -158,7 +156,7 @@ INSERT INTO books (
   '3h 45min',
   236,
   1997,
-  '/books/power-of-now.jpg',
+  '/placeholder.svg?height=400&width=300&text=The%20Power%20of%20Now&bg=7c3aed&color=white',
   ARRAY['Mindfulness', 'Espiritualidad', 'Presente', 'Conciencia'],
   'Avanzado',
   ARRAY['Mindfulness', 'Conciencia', 'Presencia', 'Meditación'],
@@ -167,7 +165,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'i9j0k1l2-m3n4-5678-ijkl-901234567890',
+  '550e8400-e29b-41d4-a716-446655440009',
   'Good to Great',
   'Jim Collins',
   'Por qué algunas empresas dan el salto... y otras no. Collins y su equipo de investigación identificaron las características distintivas de las empresas que hicieron la transición de buenas a grandiosas.',
@@ -176,7 +174,7 @@ INSERT INTO books (
   '5h 30min',
   300,
   2001,
-  '/books/good-to-great.jpg',
+  '/placeholder.svg?height=400&width=300&text=Good%20to%20Great&bg=dc2626&color=white',
   ARRAY['Liderazgo', 'Empresa', 'Excelencia', 'Gestión'],
   'Intermedio',
   ARRAY['Liderazgo empresarial', 'Transformación', 'Excelencia', 'Cultura organizacional'],
@@ -185,7 +183,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'j0k1l2m3-n4o5-6789-jklm-012345678901',
+  '550e8400-e29b-41d4-a716-446655440010',
   'The 4-Hour Workweek',
   'Timothy Ferriss',
   'Escapa de la rutina de 9-5, vive en cualquier lugar y únete a los nuevos ricos. Ferriss muestra cómo vivir más y trabajar menos, utilizando los principios de automatización y liberación.',
@@ -194,7 +192,7 @@ INSERT INTO books (
   '4h 50min',
   308,
   2007,
-  '/books/4-hour-workweek.jpg',
+  '/placeholder.svg?height=400&width=300&text=4-Hour%20Workweek&bg=f97316&color=white',
   ARRAY['Productividad', 'Libertad', 'Emprendimiento', 'Automatización'],
   'Intermedio',
   ARRAY['Automatización', 'Outsourcing', 'Libertad financiera', 'Estilo de vida'],
@@ -203,7 +201,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'k1l2m3n4-o5p6-7890-klmn-123456789012',
+  '550e8400-e29b-41d4-a716-446655440011',
   'Crucial Conversations',
   'Kerry Patterson',
   'Herramientas para hablar cuando las apuestas son altas. Los autores enseñan cómo prepararse y manejar conversaciones cruciales con confianza y habilidad.',
@@ -212,7 +210,7 @@ INSERT INTO books (
   '4h 15min',
   284,
   2002,
-  '/books/crucial-conversations.jpg',
+  '/placeholder.svg?height=400&width=300&text=Crucial%20Conversations&bg=059669&color=white',
   ARRAY['Comunicación', 'Conversaciones', 'Habilidades Blandas', 'Conflictos'],
   'Intermedio',
   ARRAY['Comunicación efectiva', 'Resolución de conflictos', 'Diálogo', 'Negociación'],
@@ -221,7 +219,7 @@ INSERT INTO books (
   NOW()
 ),
 (
-  'l2m3n4o5-p6q7-8901-lmno-234567890123',
+  '550e8400-e29b-41d4-a716-446655440012',
   'Zero to One',
   'Peter Thiel',
   'Notas sobre startups, o cómo construir el futuro. Thiel muestra cómo construir empresas que crean cosas nuevas, basándose en su experiencia como cofundador de PayPal y primer inversor en Facebook.',
@@ -230,7 +228,7 @@ INSERT INTO books (
   '3h 30min',
   224,
   2014,
-  '/books/zero-to-one.jpg',
+  '/placeholder.svg?height=400&width=300&text=Zero%20to%20One&bg=1f2937&color=white',
   ARRAY['Emprendimiento', 'Startup', 'Innovación', 'Tecnología'],
   'Avanzado',
   ARRAY['Innovación', 'Monopolios', 'Tecnología', 'Venture Capital'],
@@ -239,12 +237,12 @@ INSERT INTO books (
   NOW()
 );
 
--- Insert sample reading progress for demo user with proper UUIDs
+-- Insert some sample reading progress for the demo user
 INSERT INTO user_book_progress (
   user_id,
   book_id,
-  progress,
   current_page,
+  progress,
   total_pages,
   reading_time_minutes,
   started_at,
@@ -253,31 +251,31 @@ INSERT INTO user_book_progress (
   updated_at
 ) VALUES 
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'c3d4e5f6-g7h8-9012-cdef-345678901234', -- Lean In
-  35,
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440003',
   129,
+  35,
   368,
-  105,
+  180,
   NOW() - INTERVAL '5 days',
-  NOW() - INTERVAL '1 day',
+  NOW() - INTERVAL '2 hours',
   NOW(),
   NOW()
 ),
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'e5f6g7h8-i9j0-1234-efgh-567890123456', -- Emotional Intelligence 2.0
-  60,
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440005',
   168,
+  60,
   280,
-  142,
+  240,
   NOW() - INTERVAL '10 days',
-  NOW() - INTERVAL '2 days',
+  NOW() - INTERVAL '1 day',
   NOW(),
   NOW()
 );
 
--- Insert sample bookmarks for demo user with proper UUIDs
+-- Insert some sample bookmarks/notes for the demo user
 INSERT INTO user_book_bookmarks (
   user_id,
   book_id,
@@ -287,55 +285,97 @@ INSERT INTO user_book_bookmarks (
   created_at
 ) VALUES 
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'c3d4e5f6-g7h8-9012-cdef-345678901234', -- Lean In
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440003',
   45,
   'Capítulo 2: Siéntate a la Mesa',
-  'Punto importante sobre la confianza en las reuniones de trabajo.',
+  'Importante: Las mujeres sistemáticamente subestiman sus propias habilidades. Recordar aplicar esto en mi próxima evaluación.',
   NOW() - INTERVAL '3 days'
 ),
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'c3d4e5f6-g7h8-9012-cdef-345678901234', -- Lean In
-  87,
-  'Capítulo 4: Es una Jungla Ahí Afuera',
-  'Estadísticas interesantes sobre mujeres en posiciones de liderazgo.',
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440003',
+  78,
+  'Capítulo 3: El Éxito y la Simpatía',
+  'El dilema del éxito vs simpatía en mujeres. Estrategias para navegar esta situación en el contexto chileno.',
   NOW() - INTERVAL '2 days'
 ),
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'e5f6g7h8-i9j0-1234-efgh-567890123456', -- Emotional Intelligence 2.0
-  92,
-  'Capítulo 3: Autoconciencia',
-  'Ejercicio práctico para mejorar la autoconciencia emocional.',
-  NOW() - INTERVAL '4 days'
-),
-(
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'e5f6g7h8-i9j0-1234-efgh-567890123456', -- Emotional Intelligence 2.0
-  134,
-  'Capítulo 5: Habilidades Sociales',
-  'Técnicas para leer mejor las emociones de otros.',
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440005',
+  95,
+  'Autoconciencia Emocional',
+  'Ejercicio práctico: Identificar mis triggers emocionales en reuniones de trabajo.',
   NOW() - INTERVAL '1 day'
 ),
 (
-  '00000000-0000-0000-0000-000000000000', -- Demo user ID
-  'a1b2c3d4-e5f6-7890-abcd-ef1234567890', -- Atomic Habits
-  23,
-  'Capítulo 1: El Poder de los Hábitos Atómicos',
-  'La regla del 1% - pequeñas mejoras compuestas.',
-  NOW() - INTERVAL '1 week'
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440005',
+  142,
+  'Habilidades Sociales',
+  'Técnicas de networking aplicables al mercado profesional chileno. Muy útil para eventos de la industria.',
+  NOW() - INTERVAL '6 hours'
+),
+(
+  '00000000-0000-0000-0000-000000000000',
+  '550e8400-e29b-41d4-a716-446655440005',
+  201,
+  'Gestión de Relaciones',
+  'Cómo manejar conflictos en equipos multiculturales. Aplicar en mi equipo actual.',
+  NOW() - INTERVAL '3 hours'
+);
+
+-- Update statistics
+UPDATE books SET 
+  updated_at = NOW()
+WHERE id IN (
+  '550e8400-e29b-41d4-a716-446655440001',
+  '550e8400-e29b-41d4-a716-446655440002',
+  '550e8400-e29b-41d4-a716-446655440003',
+  '550e8400-e29b-41d4-a716-446655440004',
+  '550e8400-e29b-41d4-a716-446655440005',
+  '550e8400-e29b-41d4-a716-446655440006',
+  '550e8400-e29b-41d4-a716-446655440007',
+  '550e8400-e29b-41d4-a716-446655440008',
+  '550e8400-e29b-41d4-a716-446655440009',
+  '550e8400-e29b-41d4-a716-446655440010',
+  '550e8400-e29b-41d4-a716-446655440011',
+  '550e8400-e29b-41d4-a716-446655440012'
 );
 
 -- Verify the data was inserted correctly
 SELECT 
-    COUNT(*) as total_books,
-    COUNT(CASE WHEN is_recommended = true THEN 1 END) as recommended_books,
-    COUNT(DISTINCT category) as categories
-FROM books;
-
--- Show sample of inserted books with their cover URLs
-SELECT id, title, author, category, rating, is_recommended, difficulty, cover_url 
+  title,
+  author,
+  category,
+  rating,
+  is_recommended,
+  array_length(tags, 1) as tag_count,
+  array_length(key_topics, 1) as topic_count
 FROM books 
-ORDER BY rating DESC 
-LIMIT 12;
+ORDER BY created_at DESC;
+
+-- Show reading progress summary
+SELECT 
+  b.title,
+  b.author,
+  ubp.progress,
+  ubp.current_page,
+  ubp.total_pages,
+  ubp.reading_time_minutes
+FROM books b
+JOIN user_book_progress ubp ON b.id = ubp.book_id
+WHERE ubp.user_id = '00000000-0000-0000-0000-000000000000'
+ORDER BY ubp.last_read_at DESC;
+
+-- Show bookmarks summary
+SELECT 
+  b.title,
+  ubb.page_number,
+  ubb.chapter_title,
+  LEFT(ubb.note, 50) || '...' as note_preview,
+  ubb.created_at
+FROM books b
+JOIN user_book_bookmarks ubb ON b.id = ubb.book_id
+WHERE ubb.user_id = '00000000-0000-0000-0000-000000000000'
+ORDER BY ubb.created_at DESC;

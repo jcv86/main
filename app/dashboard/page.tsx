@@ -1,268 +1,404 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useAuth } from "@/contexts/auth-context"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import {
-  Target,
-  TrendingUp,
-  Award,
   BookOpen,
-  Calendar,
-  Star,
+  TrendingUp,
+  Target,
   Clock,
   ChevronRight,
-  Brain,
+  Calendar,
+  Users,
   Briefcase,
-  MessageSquare,
-  Code,
+  GraduationCap,
+  BarChart3,
+  CheckCircle,
+  AlertCircle,
+  Play,
 } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { getReadingStats, getBooksWithProgress, type BookWithProgress } from "@/lib/supabase-library"
 import Link from "next/link"
+import Image from "next/image"
 
-// Recommended books with real cover images
-const recommendedBooks = [
-  {
-    id: "1",
-    title: "Atomic Habits",
-    author: "James Clear",
-    description: "Perfecto para desarrollar hábitos de productividad",
-    rating: 4.8,
-    progress: 0,
-    coverUrl: "/books/atomic-habits-cover.png",
-    reason: "Basado en tu interés por la productividad personal",
-  },
-  {
-    id: "3",
-    title: "Lean In",
-    author: "Sheryl Sandberg",
-    description: "Ideal para tu desarrollo de liderazgo profesional",
-    rating: 4.5,
-    progress: 35,
-    coverUrl: "/placeholder.svg?height=64&width=48&text=Lean+In",
-    reason: "Complementa tus evaluaciones de liderazgo",
-  },
-  {
-    id: "5",
-    title: "Emotional Intelligence 2.0",
-    author: "Travis Bradberry",
-    description: "Complementa tus evaluaciones de habilidades blandas",
-    rating: 4.4,
-    progress: 60,
-    coverUrl: "/placeholder.svg?height=64&width=48&text=EQ+2.0",
-    reason: "Fortalece tus habilidades interpersonales",
-  },
-]
+interface DashboardStats {
+  skillsAssessmentScore: number
+  completedCourses: number
+  readingProgress: number
+  careerGoalProgress: number
+  weeklyReadingTime: number
+  upcomingDeadlines: number
+}
+
+interface RecentActivity {
+  id: string
+  type: "reading" | "assessment" | "course" | "goal"
+  title: string
+  description: string
+  timestamp: string
+  progress?: number
+}
+
+interface CareerGoal {
+  id: string
+  title: string
+  description: string
+  targetDate: string
+  progress: number
+  category: string
+  priority: "high" | "medium" | "low"
+}
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
-  const [mounted, setMounted] = useState(false)
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [recentBooks, setRecentBooks] = useState<BookWithProgress[]>([])
+  const [readingStats, setReadingStats] = useState<any>(null)
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
+  const [careerGoals, setCareerGoals] = useState<CareerGoal[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const userId = "00000000-0000-0000-0000-000000000000" // Demo user ID
 
   useEffect(() => {
-    setMounted(true)
+    loadDashboardData()
   }, [])
 
-  useEffect(() => {
-    if (mounted && !loading && !user) {
-      router.push("/auth/login")
-      return
-    }
-  }, [mounted, user, loading, router])
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true)
 
-  // Show loading state
-  if (!mounted || loading) {
+      // Load library data
+      const [booksResult, statsResult] = await Promise.all([getBooksWithProgress(userId), getReadingStats(userId)])
+
+      if (booksResult.data) {
+        // Get books currently being read
+        const currentlyReading = booksResult.data.filter((book) => book.reading_status === "reading")
+        setRecentBooks(currentlyReading.slice(0, 3))
+      }
+
+      if (statsResult.data) {
+        setReadingStats(statsResult.data)
+      }
+
+      // Set demo dashboard stats
+      setStats({
+        skillsAssessmentScore: 78,
+        completedCourses: 12,
+        readingProgress: 65,
+        careerGoalProgress: 45,
+        weeklyReadingTime: 8.5,
+        upcomingDeadlines: 3,
+      })
+
+      // Set demo recent activity
+      setRecentActivity([
+        {
+          id: "1",
+          type: "reading",
+          title: "Continuaste leyendo 'Lean In'",
+          description: "Progreso: 35% completado",
+          timestamp: "Hace 2 horas",
+          progress: 35,
+        },
+        {
+          id: "2",
+          type: "assessment",
+          title: "Completaste la evaluación de habilidades blandas",
+          description: "Puntuación: 82/100",
+          timestamp: "Ayer",
+        },
+        {
+          id: "3",
+          type: "goal",
+          title: "Actualizaste tu objetivo de carrera",
+          description: "Líder de Proyecto en Tecnología",
+          timestamp: "Hace 3 días",
+        },
+        {
+          id: "4",
+          type: "course",
+          title: "Iniciaste el curso de Liderazgo Digital",
+          description: "Módulo 1: Fundamentos del liderazgo",
+          timestamp: "Hace 5 días",
+        },
+      ])
+
+      // Set demo career goals
+      setCareerGoals([
+        {
+          id: "1",
+          title: "Obtener certificación en Gestión de Proyectos",
+          description: "Completar curso PMP y rendir examen de certificación",
+          targetDate: "2024-06-30",
+          progress: 60,
+          category: "Certificación",
+          priority: "high",
+        },
+        {
+          id: "2",
+          title: "Mejorar habilidades de liderazgo",
+          description: "Leer 5 libros sobre liderazgo y aplicar técnicas en el trabajo",
+          targetDate: "2024-05-15",
+          progress: 40,
+          category: "Desarrollo Personal",
+          priority: "medium",
+        },
+        {
+          id: "3",
+          title: "Expandir red profesional",
+          description: "Conectar con 50 profesionales del sector tecnológico",
+          targetDate: "2024-08-31",
+          progress: 25,
+          category: "Networking",
+          priority: "medium",
+        },
+      ])
+    } catch (error) {
+      console.error("Error loading dashboard data:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case "reading":
+        return <BookOpen className="h-4 w-4" />
+      case "assessment":
+        return <BarChart3 className="h-4 w-4" />
+      case "course":
+        return <GraduationCap className="h-4 w-4" />
+      case "goal":
+        return <Target className="h-4 w-4" />
+      default:
+        return <CheckCircle className="h-4 w-4" />
+    }
+  }
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200"
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("es-CL", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  }
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Cargando dashboard...</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 h-96 bg-gray-200 rounded-lg"></div>
+            <div className="h-96 bg-gray-200 rounded-lg"></div>
+          </div>
         </div>
       </div>
     )
   }
 
-  // Don't render anything if not authenticated
-  if (!user) {
-    return null
-  }
-
-  const currentDate = new Date().toLocaleDateString("es-CL", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8 pt-24">
+    <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">¡Bienvenido de vuelta, {user?.email?.split("@")[0]}!</h1>
-          <p className="text-gray-600">Continúa tu desarrollo profesional</p>
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-500">
-          <Calendar className="h-4 w-4" />
-          <span>{currentDate}</span>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Panel de Control</h1>
+        <p className="text-gray-600">Bienvenido de vuelta. Aquí tienes un resumen de tu progreso profesional.</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Target className="h-8 w-8 text-blue-600" />
-              <div>
-                <p className="text-2xl font-bold">75%</p>
-                <p className="text-sm text-muted-foreground">Progreso General</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Award className="h-8 w-8 text-green-600" />
-              <div>
-                <p className="text-2xl font-bold">12</p>
-                <p className="text-sm text-muted-foreground">Evaluaciones Completadas</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <BookOpen className="h-8 w-8 text-purple-600" />
-              <div>
-                <p className="text-2xl font-bold">3</p>
-                <p className="text-sm text-muted-foreground">Libros en Progreso</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-orange-600" />
-              <div>
-                <p className="text-2xl font-bold">8.5</p>
-                <p className="text-sm text-muted-foreground">Puntuación Promedio</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Progress Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <TrendingUp className="h-5 w-5" />
-                <span>Tu Progreso de Desarrollo</span>
-              </CardTitle>
-              <CardDescription>Resumen de tus actividades de desarrollo profesional</CardDescription>
+      {/* Stats Overview */}
+      {stats && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Evaluación de Habilidades</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Evaluaciones de Personalidad</span>
-                  <span className="text-sm text-muted-foreground">100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Habilidades Técnicas</span>
-                  <span className="text-sm text-muted-foreground">85%</span>
-                </div>
-                <Progress value={85} className="h-2" />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Habilidades Blandas</span>
-                  <span className="text-sm text-muted-foreground">70%</span>
-                </div>
-                <Progress value={70} className="h-2" />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Desarrollo de Carrera</span>
-                  <span className="text-sm text-muted-foreground">60%</span>
-                </div>
-                <Progress value={60} className="h-2" />
-              </div>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-600">{stats.skillsAssessmentScore}%</div>
+              <p className="text-xs text-muted-foreground">Puntuación promedio</p>
+              <Progress value={stats.skillsAssessmentScore} className="mt-2 h-2" />
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Acciones Rápidas</CardTitle>
-              <CardDescription>Continúa tu desarrollo profesional</CardDescription>
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Progreso de Lectura</CardTitle>
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Link href="/personality-test">
-                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
-                    <div className="flex items-center space-x-3">
-                      <Brain className="h-8 w-8 text-blue-600" />
-                      <div className="text-left">
-                        <p className="font-medium">Test de Personalidad</p>
-                        <p className="text-sm text-muted-foreground">Descubre tu perfil profesional</p>
-                      </div>
-                    </div>
-                  </Button>
-                </Link>
+              <div className="text-2xl font-bold text-green-600">{stats.readingProgress}%</div>
+              <p className="text-xs text-muted-foreground">Libros en progreso</p>
+              <Progress value={stats.readingProgress} className="mt-2 h-2" />
+            </CardContent>
+          </Card>
 
-                <Link href="/skills-assessment">
-                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
-                    <div className="flex items-center space-x-3">
-                      <Code className="h-8 w-8 text-green-600" />
-                      <div className="text-left">
-                        <p className="font-medium">Evaluación de Habilidades</p>
-                        <p className="text-sm text-muted-foreground">Mide tus competencias técnicas</p>
-                      </div>
-                    </div>
-                  </Button>
-                </Link>
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Objetivos de Carrera</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-purple-600">{stats.careerGoalProgress}%</div>
+              <p className="text-xs text-muted-foreground">Progreso general</p>
+              <Progress value={stats.careerGoalProgress} className="mt-2 h-2" />
+            </CardContent>
+          </Card>
 
-                <Link href="/job-search">
-                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
-                    <div className="flex items-center space-x-3">
-                      <Briefcase className="h-8 w-8 text-purple-600" />
-                      <div className="text-left">
-                        <p className="font-medium">Búsqueda de Empleos</p>
-                        <p className="text-sm text-muted-foreground">Encuentra oportunidades</p>
-                      </div>
-                    </div>
-                  </Button>
-                </Link>
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Tiempo de Lectura</CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-orange-600">{stats.weeklyReadingTime}h</div>
+              <p className="text-xs text-muted-foreground">Esta semana</p>
+              <div className="flex items-center mt-2 text-xs text-green-600">
+                <TrendingUp className="h-3 w-3 mr-1" />
+                +2.3h vs semana anterior
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
-                <Link href="/career-coach">
-                  <Button variant="outline" className="w-full justify-start h-auto p-4 bg-transparent">
-                    <div className="flex items-center space-x-3">
-                      <MessageSquare className="h-8 w-8 text-orange-600" />
-                      <div className="text-left">
-                        <p className="font-medium">Coach de Carrera</p>
-                        <p className="text-sm text-muted-foreground">Recibe consejos personalizados</p>
-                      </div>
-                    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Currently Reading */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5" />
+                  Leyendo Actualmente
+                </CardTitle>
+                <Link href="/library">
+                  <Button variant="ghost" size="sm">
+                    Ver todo
+                    <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
                 </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {recentBooks.length > 0 ? (
+                <div className="space-y-4">
+                  {recentBooks.map((book) => (
+                    <div
+                      key={book.id}
+                      className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="relative w-12 h-16 flex-shrink-0">
+                        <Image
+                          src={book.cover_url || "/placeholder.svg"}
+                          alt={book.title}
+                          fill
+                          className="object-cover rounded"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-sm line-clamp-1">{book.title}</h4>
+                        <p className="text-xs text-gray-600 mb-2">{book.author}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center text-xs text-gray-500">
+                            <span>
+                              Página {book.current_page} de {book.pages}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Progress value={book.progress} className="w-16 h-1" />
+                            <span className="text-xs text-gray-600">{book.progress}%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <Link href={`/library/reader/${book.id}`}>
+                        <Button size="sm" variant="outline">
+                          <Play className="h-3 w-3 mr-1" />
+                          Continuar
+                        </Button>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros en progreso</h3>
+                  <p className="text-gray-600 mb-4">Comienza a leer para ver tu progreso aquí</p>
+                  <Link href="/library">
+                    <Button>Explorar Biblioteca</Button>
+                  </Link>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Career Goals */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Objetivos de Carrera
+                </CardTitle>
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm">
+                    Gestionar
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {careerGoals.map((goal) => (
+                  <div key={goal.id} className="p-4 border rounded-lg">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-medium text-sm">{goal.title}</h4>
+                          <Badge variant="outline" className={getPriorityColor(goal.priority)}>
+                            {goal.priority === "high" ? "Alta" : goal.priority === "medium" ? "Media" : "Baja"}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">{goal.description}</p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          Meta: {formatDate(goal.targetDate)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-600">Progreso</span>
+                        <span className="font-medium">{goal.progress}%</span>
+                      </div>
+                      <Progress value={goal.progress} className="h-2" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -270,59 +406,34 @@ export default function DashboardPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Recommended Books */}
+          {/* Quick Actions */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="h-5 w-5" />
-                <CardTitle className="text-lg">Libros Recomendados</CardTitle>
-              </div>
-              <Link href="/library">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  Ver todos <ChevronRight className="h-3 w-3 ml-1" />
+            <CardHeader>
+              <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Link href="/skills-assessment">
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Evaluación de Habilidades
                 </Button>
               </Link>
-            </CardHeader>
-            <CardDescription className="px-6 pb-4">Basado en tu perfil y objetivos</CardDescription>
-            <CardContent className="space-y-4">
-              {recommendedBooks.map((book) => (
-                <Link key={book.id} href={`/library/reader/${book.id}`}>
-                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <img
-                      src={book.coverUrl || "/placeholder.svg"}
-                      alt={book.title}
-                      className="w-12 h-16 object-cover rounded shadow-sm"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src = `/placeholder.svg?height=64&width=48&text=${encodeURIComponent(book.title)}`
-                      }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm line-clamp-1">{book.title}</h4>
-                      <p className="text-xs text-gray-600 mb-1">por {book.author}</p>
-                      <p className="text-xs text-gray-500 line-clamp-2 mb-2">{book.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-1">
-                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                          <span className="text-xs font-medium">{book.rating}</span>
-                        </div>
-                        {book.progress > 0 && (
-                          <div className="flex items-center space-x-1">
-                            <div className="w-8 h-1 bg-gray-200 rounded-full overflow-hidden">
-                              <div className="h-full bg-blue-600 rounded-full" style={{ width: `${book.progress}%` }} />
-                            </div>
-                            <span className="text-xs text-gray-500">{book.progress}%</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-              <Link href="/library">
-                <Button variant="outline" className="w-full mt-4 bg-transparent" size="sm">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Explorar Biblioteca Completa
+              <Link href="/career-coach">
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Users className="h-4 w-4 mr-2" />
+                  Consultar Coach de Carrera
+                </Button>
+              </Link>
+              <Link href="/cv-builder">
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Briefcase className="h-4 w-4 mr-2" />
+                  Actualizar CV
+                </Button>
+              </Link>
+              <Link href="/job-search">
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Target className="h-4 w-4 mr-2" />
+                  Buscar Empleos
                 </Button>
               </Link>
             </CardContent>
@@ -331,38 +442,94 @@ export default function DashboardPage() {
           {/* Recent Activity */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Clock className="h-5 w-5" />
-                <span>Actividad Reciente</span>
+              <CardTitle className="text-lg">Actividad Reciente</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentActivity.map((activity) => (
+                  <div key={activity.id} className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      {getActivityIcon(activity.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 line-clamp-2">{activity.title}</p>
+                      <p className="text-xs text-gray-600 mb-1">{activity.description}</p>
+                      <p className="text-xs text-gray-500">{activity.timestamp}</p>
+                      {activity.progress && <Progress value={activity.progress} className="mt-2 h-1" />}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Reading Stats */}
+          {readingStats && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Estadísticas de Lectura</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Libros completados</span>
+                  <span className="font-medium">{readingStats.books_completed}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">En progreso</span>
+                  <span className="font-medium">{readingStats.books_in_progress}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Tiempo total</span>
+                  <span className="font-medium">
+                    {Math.floor(readingStats.total_reading_time / 60)}h {readingStats.total_reading_time % 60}m
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Racha de lectura</span>
+                  <span className="font-medium">{readingStats.reading_streak} días</span>
+                </div>
+                <div className="pt-2 border-t">
+                  <Link href="/library">
+                    <Button variant="outline" size="sm" className="w-full bg-transparent">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Ir a Biblioteca
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Upcoming Deadlines */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertCircle className="h-5 w-5" />
+                Próximas Fechas Límite
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-sm font-medium">Completaste el Test DISC</p>
-                  <p className="text-xs text-muted-foreground">hace 2 horas</p>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                  <div>
+                    <p className="text-sm font-medium text-red-900">Examen PMP</p>
+                    <p className="text-xs text-red-700">Certificación de Gestión de Proyectos</p>
+                  </div>
+                  <Badge variant="destructive">15 días</Badge>
                 </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-sm font-medium">Iniciaste "Lean In"</p>
-                  <p className="text-xs text-muted-foreground">hace 1 día</p>
+                <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div>
+                    <p className="text-sm font-medium text-yellow-900">Entrega de Proyecto</p>
+                    <p className="text-xs text-yellow-700">Sistema de gestión interno</p>
+                  </div>
+                  <Badge variant="secondary">22 días</Badge>
                 </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-sm font-medium">Evaluación de JavaScript</p>
-                  <p className="text-xs text-muted-foreground">hace 3 días</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-sm font-medium">Sesión con Career Coach</p>
-                  <p className="text-xs text-muted-foreground">hace 1 semana</p>
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">Revisión de Desempeño</p>
+                    <p className="text-xs text-blue-700">Evaluación anual</p>
+                  </div>
+                  <Badge variant="outline">45 días</Badge>
                 </div>
               </div>
             </CardContent>

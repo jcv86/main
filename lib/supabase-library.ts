@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
+import { getBookContentForPage } from "./book-content"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -63,10 +64,10 @@ export interface BookNote {
   created_at: string
 }
 
-// Complete demo data with proper UUIDs matching the database
+// Complete demo data with proper UUIDs and better cover URLs
 const completeLibraryBooks: BookWithProgress[] = [
   {
-    id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    id: "550e8400-e29b-41d4-a716-446655440001",
     title: "Atomic Habits",
     author: "James Clear",
     description:
@@ -76,7 +77,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "4h 30min",
     pages: 320,
     published_year: 2018,
-    cover_url: "/books/atomic-habits.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Atomic%20Habits&bg=f59e0b&color=white",
     tags: ["Hábitos", "Productividad", "Autoayuda", "Comportamiento"],
     difficulty: "Intermedio",
     key_topics: ["Formación de hábitos", "Productividad personal", "Cambio de comportamiento", "Sistemas vs objetivos"],
@@ -90,7 +91,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "b2c3d4e5-f6g7-8901-bcde-f23456789012",
+    id: "550e8400-e29b-41d4-a716-446655440002",
     title: "The 7 Habits of Highly Effective People",
     author: "Stephen R. Covey",
     description:
@@ -100,7 +101,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "6h 15min",
     pages: 432,
     published_year: 1989,
-    cover_url: "/books/7-habits.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=7%20Habits&bg=1f2937&color=white",
     tags: ["Liderazgo", "Efectividad", "Desarrollo Personal", "Principios"],
     difficulty: "Intermedio",
     key_topics: ["Liderazgo personal", "Efectividad", "Principios de vida", "Interdependencia"],
@@ -114,7 +115,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "c3d4e5f6-g7h8-9012-cdef-345678901234",
+    id: "550e8400-e29b-41d4-a716-446655440003",
     title: "Lean In",
     author: "Sheryl Sandberg",
     description:
@@ -124,7 +125,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "5h 20min",
     pages: 368,
     published_year: 2013,
-    cover_url: "/books/lean-in.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Lean%20In&bg=ec4899&color=white",
     tags: ["Liderazgo", "Carrera", "Género", "Empoderamiento"],
     difficulty: "Intermedio",
     key_topics: ["Liderazgo femenino", "Desarrollo profesional", "Igualdad de género", "Ambición"],
@@ -138,7 +139,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "d4e5f6g7-h8i9-0123-defg-456789012345",
+    id: "550e8400-e29b-41d4-a716-446655440004",
     title: "Deep Work",
     author: "Cal Newport",
     description:
@@ -148,7 +149,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "4h 45min",
     pages: 304,
     published_year: 2016,
-    cover_url: "/books/deep-work.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=DEEP%20WORK&bg=f59e0b&color=1f2937",
     tags: ["Concentración", "Productividad", "Trabajo", "Enfoque"],
     difficulty: "Avanzado",
     key_topics: ["Trabajo profundo", "Concentración", "Productividad cognitiva", "Distracción digital"],
@@ -162,7 +163,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "e5f6g7h8-i9j0-1234-efgh-567890123456",
+    id: "550e8400-e29b-41d4-a716-446655440005",
     title: "Emotional Intelligence 2.0",
     author: "Travis Bradberry",
     description:
@@ -172,7 +173,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "3h 50min",
     pages: 280,
     published_year: 2009,
-    cover_url: "/books/emotional-intelligence.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Emotional%20Intelligence&bg=3b82f6&color=white",
     tags: ["Inteligencia Emocional", "Habilidades Blandas", "Comunicación", "Autoconciencia"],
     difficulty: "Intermedio",
     key_topics: ["Inteligencia emocional", "Autoconciencia", "Habilidades sociales", "Autorregulación"],
@@ -186,7 +187,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "f6g7h8i9-j0k1-2345-fghi-678901234567",
+    id: "550e8400-e29b-41d4-a716-446655440006",
     title: "The Lean Startup",
     author: "Eric Ries",
     description:
@@ -196,7 +197,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "5h 10min",
     pages: 336,
     published_year: 2011,
-    cover_url: "/books/lean-startup.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=THE%20LEAN%20STARTUP&bg=0ea5e9&color=white",
     tags: ["Emprendimiento", "Startup", "Innovación", "Metodología"],
     difficulty: "Intermedio",
     key_topics: ["Metodología lean", "Validación de productos", "Innovación", "MVP"],
@@ -210,7 +211,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "g7h8i9j0-k1l2-3456-ghij-789012345678",
+    id: "550e8400-e29b-41d4-a716-446655440007",
     title: "Mindset",
     author: "Carol S. Dweck",
     description:
@@ -220,7 +221,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "4h 20min",
     pages: 276,
     published_year: 2006,
-    cover_url: "/books/mindset.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=MINDSET&bg=10b981&color=white",
     tags: ["Mentalidad", "Crecimiento", "Psicología", "Motivación"],
     difficulty: "Intermedio",
     key_topics: ["Mentalidad de crecimiento", "Resiliencia", "Aprendizaje", "Motivación intrínseca"],
@@ -234,7 +235,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "h8i9j0k1-l2m3-4567-hijk-890123456789",
+    id: "550e8400-e29b-41d4-a716-446655440008",
     title: "The Power of Now",
     author: "Eckhart Tolle",
     description:
@@ -244,7 +245,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "3h 45min",
     pages: 236,
     published_year: 1997,
-    cover_url: "/books/power-of-now.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=The%20Power%20of%20Now&bg=7c3aed&color=white",
     tags: ["Mindfulness", "Espiritualidad", "Presente", "Conciencia"],
     difficulty: "Avanzado",
     key_topics: ["Mindfulness", "Conciencia", "Presencia", "Meditación"],
@@ -258,7 +259,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "i9j0k1l2-m3n4-5678-ijkl-901234567890",
+    id: "550e8400-e29b-41d4-a716-446655440009",
     title: "Good to Great",
     author: "Jim Collins",
     description:
@@ -268,7 +269,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "5h 30min",
     pages: 300,
     published_year: 2001,
-    cover_url: "/books/good-to-great.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Good%20to%20Great&bg=dc2626&color=white",
     tags: ["Liderazgo", "Empresa", "Excelencia", "Gestión"],
     difficulty: "Intermedio",
     key_topics: ["Liderazgo empresarial", "Transformación", "Excelencia", "Cultura organizacional"],
@@ -282,7 +283,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "j0k1l2m3-n4o5-6789-jklm-012345678901",
+    id: "550e8400-e29b-41d4-a716-446655440010",
     title: "The 4-Hour Workweek",
     author: "Timothy Ferriss",
     description:
@@ -292,7 +293,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "4h 50min",
     pages: 308,
     published_year: 2007,
-    cover_url: "/books/4-hour-workweek.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=4-Hour%20Workweek&bg=f97316&color=white",
     tags: ["Productividad", "Libertad", "Emprendimiento", "Automatización"],
     difficulty: "Intermedio",
     key_topics: ["Automatización", "Outsourcing", "Libertad financiera", "Estilo de vida"],
@@ -306,7 +307,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "k1l2m3n4-o5p6-7890-klmn-123456789012",
+    id: "550e8400-e29b-41d4-a716-446655440011",
     title: "Crucial Conversations",
     author: "Kerry Patterson",
     description:
@@ -316,7 +317,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "4h 15min",
     pages: 284,
     published_year: 2002,
-    cover_url: "/books/crucial-conversations.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Crucial%20Conversations&bg=059669&color=white",
     tags: ["Comunicación", "Conversaciones", "Habilidades Blandas", "Conflictos"],
     difficulty: "Intermedio",
     key_topics: ["Comunicación efectiva", "Resolución de conflictos", "Diálogo", "Negociación"],
@@ -330,7 +331,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: "l2m3n4o5-p6q7-8901-lmno-234567890123",
+    id: "550e8400-e29b-41d4-a716-446655440012",
     title: "Zero to One",
     author: "Peter Thiel",
     description:
@@ -340,7 +341,7 @@ const completeLibraryBooks: BookWithProgress[] = [
     reading_time: "3h 30min",
     pages: 224,
     published_year: 2014,
-    cover_url: "/books/zero-to-one.jpg",
+    cover_url: "/placeholder.svg?height=400&width=300&text=Zero%20to%20One&bg=1f2937&color=white",
     tags: ["Emprendimiento", "Startup", "Innovación", "Tecnología"],
     difficulty: "Avanzado",
     key_topics: ["Innovación", "Monopolios", "Tecnología", "Venture Capital"],
@@ -645,73 +646,9 @@ export async function deleteBookNote(noteId: string): Promise<{ error: any }> {
 }
 
 export async function getBookContent(bookId: string, page: number): Promise<{ data: string | null; error: any }> {
-  // For demo purposes, return sample content based on book ID
-  const sampleContent = getSampleBookContent(bookId, page)
-  return { data: sampleContent, error: null }
-}
-
-function getSampleBookContent(bookId: string, page: number): string {
-  const contentMap: { [key: string]: string[] } = {
-    "a1b2c3d4-e5f6-7890-abcd-ef1234567890": [
-      // Atomic Habits
-      `<h1>Atomic Habits</h1>
-      <h2>An Easy & Proven Way to Build Good Habits & Break Bad Ones</h2>
-      <p><strong>Por James Clear</strong></p>
-      <p>Los pequeños cambios pueden marcar una gran diferencia. Cuando finalmente decides ponerte en forma, perder peso, dejar de fumar, escribir un libro o aprender una nueva habilidad, es fácil sentirse abrumado por la magnitud del cambio que quieres hacer.</p>
-      <p>Pero aquí está el secreto: no necesitas hacer cambios drásticos para obtener resultados extraordinarios.</p>`,
-
-      `<h2>Introducción</h2>
-      <p>En 2003, el equipo de ciclismo de Gran Bretaña enfrentaba una situación desalentadora. En más de cien años, los ciclistas británicos habían ganado solo una medalla de oro olímpica y nunca habían ganado el Tour de Francia.</p>
-      <p>Todo eso cambió cuando Dave Brailsford se convirtió en el nuevo director de rendimiento del equipo británico de ciclismo en 2003.</p>
-      <p>Brailsford creía en un concepto que él llamaba "la agregación de ganancias marginales". Su filosofía era simple: si puedes mejorar cada área relacionada con el ciclismo en solo un 1%, entonces esas pequeñas ganancias se sumarían para lograr una mejora notable.</p>`,
-
-      `<h2>El Poder de los Hábitos Atómicos</h2>
-      <p>Los hábitos son el interés compuesto de la superación personal. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican a medida que los repites.</p>
-      <p>Parecen hacer poca diferencia en un día determinado y, sin embargo, el impacto que entregan a lo largo de los meses y años puede ser enorme.</p>
-      <p>Solo cuando miramos hacia atrás, dos, cinco o quizás diez años después, el valor de los buenos hábitos y el costo de los malos se vuelve sorprendentemente aparente.</p>`,
-    ],
-    "c3d4e5f6-g7h8-9012-cdef-345678901234": [
-      // Lean In
-      `<h1>Lean In</h1>
-      <h2>Women, Work, and the Will to Lead</h2>
-      <p><strong>Por Sheryl Sandberg</strong></p>
-      <p>Treinta años después de que las mujeres se convirtieran en el 50 por ciento de la fuerza laboral universitaria, los hombres aún ocupan la gran mayoría de los puestos de liderazgo en el gobierno y la industria.</p>
-      <p>Esto significa que las decisiones que más afectan nuestras vidas son tomadas predominantemente por hombres.</p>`,
-
-      `<h2>Capítulo 1: La Revolución Inacabada</h2>
-      <p>Una verdadera igualdad de oportunidades requeriría una revolución masiva en la forma en que criamos a nuestros hijos, estructuramos nuestros trabajos, dirigimos nuestras relaciones y definimos el éxito.</p>
-      <p>Pero también requiere que las mujeres continúen luchando por un asiento en la mesa.</p>
-      <p>Necesitamos más mujeres no solo participando en la economía, sino liderándola.</p>`,
-
-      `<h2>Capítulo 2: Siéntate a la Mesa</h2>
-      <p>Las mujeres sistemáticamente subestiman sus propias habilidades. Si bien los hombres tienden a sobreestimar sus habilidades y rendimiento, y las mujeres tienden a subestimarlas.</p>
-      <p>Múltiples estudios en múltiples industrias muestran que las mujeres a menudo juzgan su propio rendimiento como peor de lo que realmente es, mientras que los hombres juzgan su propio rendimiento como mejor de lo que realmente es.</p>`,
-    ],
-    "d4e5f6g7-h8i9-0123-defg-456789012345": [
-      // Deep Work
-      `<h1>Deep Work</h1>
-      <h2>Rules for Focused Success in a Distracted World</h2>
-      <p><strong>Por Cal Newport</strong></p>
-      <p>El trabajo profundo es la habilidad de concentrarse sin distracción en una tarea cognitivamente demandante. Es una habilidad que te permite dominar rápidamente información complicada y producir mejores resultados en menos tiempo.</p>
-      <p>El trabajo profundo te hará mejor en lo que haces y proporcionará el sentido de satisfacción verdadera que viene de la artesanía.</p>`,
-
-      `<h2>Capítulo 1: El Trabajo Profundo es Valioso</h2>
-      <p>En la nueva economía, tres grupos tendrán una ventaja particular: aquellos que pueden trabajar bien y rápidamente con máquinas inteligentes, aquellos que son los mejores en lo que hacen, y aquellos con acceso a capital.</p>
-      <p>Para unirse a los dos primeros grupos (los únicos relevantes para la mayoría de los trabajadores del conocimiento), debes dominar el arte de aprender rápidamente cosas complicadas.</p>
-      <p>Esta tarea requiere trabajo profundo. Si no cultivas esta habilidad, es probable que te quedes atrás a medida que la tecnología avanza.</p>`,
-    ],
-  }
-
-  const bookContent = contentMap[bookId] || [
-    `<h2>Contenido del Libro - Página ${page}</h2>
-    <p>Este es el contenido de muestra para la página ${page} del libro.</p>
-    <p>En una implementación real, este contenido vendría de una base de datos o sistema de gestión de contenido.</p>
-    <p>El contenido estaría estructurado por capítulos y páginas, permitiendo una navegación fluida a través del libro.</p>
-    <p>Cada página contendría texto formateado, posibles imágenes, y elementos interactivos según el tipo de libro.</p>`,
-  ]
-
-  const chapterIndex = Math.floor((page - 1) / 10) % bookContent.length
-  return bookContent[chapterIndex]
+  // Use the new comprehensive book content system
+  const content = getBookContentForPage(bookId, page)
+  return { data: content, error: null }
 }
 
 // Bookmark functions
@@ -770,18 +707,29 @@ export async function getReadingStats(userId: string): Promise<{ data: any | nul
 // Image validation utility
 export function validateBookCoverUrl(bookId: string): string {
   const coverMap: { [key: string]: string } = {
-    "a1b2c3d4-e5f6-7890-abcd-ef1234567890": "/books/atomic-habits.jpg",
-    "b2c3d4e5-f6g7-8901-bcde-f23456789012": "/books/7-habits.jpg",
-    "c3d4e5f6-g7h8-9012-cdef-345678901234": "/books/lean-in.jpg",
-    "d4e5f6g7-h8i9-0123-defg-456789012345": "/books/deep-work.jpg",
-    "e5f6g7h8-i9j0-1234-efgh-567890123456": "/books/emotional-intelligence.jpg",
-    "f6g7h8i9-j0k1-2345-fghi-678901234567": "/books/lean-startup.jpg",
-    "g7h8i9j0-k1l2-3456-ghij-789012345678": "/books/mindset.jpg",
-    "h8i9j0k1-l2m3-4567-hijk-890123456789": "/books/power-of-now.jpg",
-    "i9j0k1l2-m3n4-5678-ijkl-901234567890": "/books/good-to-great.jpg",
-    "j0k1l2m3-n4o5-6789-jklm-012345678901": "/books/4-hour-workweek.jpg",
-    "k1l2m3n4-o5p6-7890-klmn-123456789012": "/books/crucial-conversations.jpg",
-    "l2m3n4o5-p6q7-8901-lmno-234567890123": "/books/zero-to-one.jpg",
+    "550e8400-e29b-41d4-a716-446655440001":
+      "/placeholder.svg?height=400&width=300&text=Atomic%20Habits&bg=f59e0b&color=white",
+    "550e8400-e29b-41d4-a716-446655440002":
+      "/placeholder.svg?height=400&width=300&text=7%20Habits&bg=1f2937&color=white",
+    "550e8400-e29b-41d4-a716-446655440003":
+      "/placeholder.svg?height=400&width=300&text=Lean%20In&bg=ec4899&color=white",
+    "550e8400-e29b-41d4-a716-446655440004":
+      "/placeholder.svg?height=400&width=300&text=DEEP%20WORK&bg=f59e0b&color=1f2937",
+    "550e8400-e29b-41d4-a716-446655440005":
+      "/placeholder.svg?height=400&width=300&text=Emotional%20Intelligence&bg=3b82f6&color=white",
+    "550e8400-e29b-41d4-a716-446655440006":
+      "/placeholder.svg?height=400&width=300&text=THE%20LEAN%20STARTUP&bg=0ea5e9&color=white",
+    "550e8400-e29b-41d4-a716-446655440007": "/placeholder.svg?height=400&width=300&text=MINDSET&bg=10b981&color=white",
+    "550e8400-e29b-41d4-a716-446655440008":
+      "/placeholder.svg?height=400&width=300&text=The%20Power%20of%20Now&bg=7c3aed&color=white",
+    "550e8400-e29b-41d4-a716-446655440009":
+      "/placeholder.svg?height=400&width=300&text=Good%20to%20Great&bg=dc2626&color=white",
+    "550e8400-e29b-41d4-a716-446655440010":
+      "/placeholder.svg?height=400&width=300&text=4-Hour%20Workweek&bg=f97316&color=white",
+    "550e8400-e29b-41d4-a716-446655440011":
+      "/placeholder.svg?height=400&width=300&text=Crucial%20Conversations&bg=059669&color=white",
+    "550e8400-e29b-41d4-a716-446655440012":
+      "/placeholder.svg?height=400&width=300&text=Zero%20to%20One&bg=1f2937&color=white",
   }
 
   return coverMap[bookId] || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent("Libro")}`
