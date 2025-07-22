@@ -44,114 +44,108 @@ export function Navigation() {
   const { user, signOut } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const NavItems = () => (
+    <>
+      {navigation.map((item) => {
+        const isActive = pathname === item.href
+        return (
+          <Link
+            key={item.name}
+            href={item.href}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              isActive
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            )}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.name}
+          </Link>
+        )
+      })}
+    </>
+  )
+
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/dashboard" className="flex-shrink-0 flex items-center">
-              <GraduationCap className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">Desarrollo Profesional</span>
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <GraduationCap className="h-6 w-6" />
+            <span className="font-bold">Desarrollo Profesional</span>
+          </Link>
+        </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => {
-              const Icon = item.icon
-              const isActive = pathname === item.href
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors",
-                    isActive
-                      ? "border-blue-500 text-gray-900"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                  )}
-                >
-                  <Icon className="h-4 w-4 mr-2" />
-                  {item.name}
-                </Link>
-              )
-            })}
-          </div>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          <NavItems />
+        </nav>
 
-          {/* User Menu */}
-          <div className="flex items-center space-x-4">
+        {/* User Menu */}
+        <div className="flex items-center gap-4">
+          {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={user?.name} />
-                    <AvatarFallback>{user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                    <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user?.name}</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email}</p>
+                    <p className="font-medium">{user.name}</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">
-                    <User className="mr-2 h-4 w-4" />
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
                     Mi Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings">
-                    <Settings className="mr-2 h-4 w-4" />
+                  <Link href="/settings" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
                     Configuración
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
+                <DropdownMenuItem onClick={signOut} className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
                   Cerrar Sesión
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          )}
 
-            {/* Mobile menu button */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col space-y-4 mt-4">
-                  {navigation.map((item) => {
-                    const Icon = item.icon
-                    const isActive = pathname === item.href
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                          isActive
-                            ? "bg-blue-100 text-blue-700"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-                        )}
-                      >
-                        <Icon className="h-5 w-5" />
-                        <span>{item.name}</span>
-                      </Link>
-                    )
-                  })}
+          {/* Mobile Menu */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Abrir menú</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2 pb-4">
+                  <GraduationCap className="h-6 w-6" />
+                  <span className="font-bold">Desarrollo Profesional</span>
                 </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+                <nav className="flex flex-col gap-2">
+                  <NavItems />
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-    </nav>
+    </header>
   )
 }
