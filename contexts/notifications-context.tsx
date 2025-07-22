@@ -1,72 +1,69 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface Notification {
   id: string
   title: string
   message: string
   type: "info" | "success" | "warning" | "error"
+  timestamp: Date
   read: boolean
-  createdAt: Date
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
   unreadCount: number
-  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
+  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
-  removeNotification: (id: string) => void
+  clearNotifications: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
-export function NotificationsProvider({ children }: { children: React.ReactNode }) {
+export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
-      title: "Test de Personalidad Completado",
-      message: "Tu perfil DISC ha sido actualizado",
-      type: "success",
+      title: "Bienvenido a la plataforma",
+      message: "Completa tu perfil para obtener recomendaciones personalizadas",
+      type: "info",
+      timestamp: new Date(),
       read: false,
-      createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
     },
     {
       id: "2",
-      title: "Nueva Oportunidad Laboral",
-      message: "Encontramos 3 empleos que coinciden con tu perfil",
-      type: "info",
+      title: "Nuevo libro disponible",
+      message: "Se ha agregado 'Atomic Habits' a tu biblioteca",
+      type: "success",
+      timestamp: new Date(Date.now() - 3600000),
       read: false,
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     },
   ])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
-  const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
+  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
     const newNotification: Notification = {
       ...notification,
       id: Date.now().toString(),
+      timestamp: new Date(),
       read: false,
-      createdAt: new Date(),
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
   }
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
   }
 
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
+  const clearNotifications = () => {
+    setNotifications([])
   }
 
   return (
@@ -77,7 +74,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         addNotification,
         markAsRead,
         markAllAsRead,
-        removeNotification,
+        clearNotifications,
       }}
     >
       {children}

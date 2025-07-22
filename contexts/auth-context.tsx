@@ -5,15 +5,15 @@ import { createContext, useContext, useState, useEffect } from "react"
 
 interface User {
   id: string
-  email: string
   name: string
+  email: string
   avatar?: string
 }
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
+  login: (email: string, password: string) => Promise<boolean>
+  register: (name: string, email: string, password: string) => Promise<boolean>
   logout: () => void
   loading: boolean
 }
@@ -25,53 +25,87 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem("user")
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    // Check if user is logged in on mount
+    const checkAuth = () => {
+      try {
+        const savedUser = localStorage.getItem("user")
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser)
+          setUser(parsedUser)
+        }
+      } catch (error) {
+        console.error("Error parsing saved user:", error)
+        localStorage.removeItem("user")
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
+
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      checkAuth()
+    } else {
+      setLoading(false)
+    }
   }, [])
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     setLoading(true)
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      const mockUser: User = {
-        id: "1",
-        email,
-        name: email.split("@")[0],
-        avatar: "/placeholder-user.jpg",
+      // Mock authentication - in real app, validate with backend
+      if (email && password) {
+        const mockUser: User = {
+          id: "1",
+          name: "Usuario Demo",
+          email: email,
+          avatar: "/placeholder.svg?height=40&width=40&text=U",
+        }
+
+        setUser(mockUser)
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(mockUser))
+        }
+        return true
       }
 
-      setUser(mockUser)
-      localStorage.setItem("user", JSON.stringify(mockUser))
+      return false
     } catch (error) {
-      throw new Error("Error al iniciar sesión")
+      console.error("Login error:", error)
+      return false
     } finally {
       setLoading(false)
     }
   }
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
     setLoading(true)
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      const mockUser: User = {
-        id: "1",
-        email,
-        name,
-        avatar: "/placeholder-user.jpg",
+      // Mock registration - in real app, create user in backend
+      if (name && email && password) {
+        const mockUser: User = {
+          id: "1",
+          name: name,
+          email: email,
+          avatar: "/placeholder.svg?height=40&width=40&text=" + name.charAt(0).toUpperCase(),
+        }
+
+        setUser(mockUser)
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(mockUser))
+        }
+        return true
       }
 
-      setUser(mockUser)
-      localStorage.setItem("user", JSON.stringify(mockUser))
+      return false
     } catch (error) {
-      throw new Error("Error al registrarse")
+      console.error("Register error:", error)
+      return false
     } finally {
       setLoading(false)
     }
@@ -79,7 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem("user")
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user")
+    }
   }
 
   return <AuthContext.Provider value={{ user, login, register, logout, loading }}>{children}</AuthContext.Provider>

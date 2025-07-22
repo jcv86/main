@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 type Language = "es" | "en"
 
@@ -13,44 +12,42 @@ interface LanguageContextType {
 
 const translations = {
   es: {
-    "nav.dashboard": "Panel",
+    "nav.dashboard": "Dashboard",
     "nav.tests": "Evaluaciones",
-    "nav.coaching": "Coaching",
+    "nav.coach": "Coach",
     "nav.jobs": "Empleos",
+    "nav.library": "Biblioteca",
     "nav.profile": "Perfil",
     "nav.settings": "Configuración",
     "nav.logout": "Cerrar Sesión",
-    "dashboard.title": "Panel de Control",
+    "dashboard.title": "Dashboard",
     "dashboard.welcome": "Bienvenido de vuelta",
-    "dashboard.stats.tests": "Tests Completados",
-    "dashboard.stats.coaching": "Sesiones de Coaching",
-    "dashboard.stats.applications": "Aplicaciones Enviadas",
-    "dashboard.stats.interviews": "Entrevistas Programadas",
+    "library.title": "Biblioteca",
+    "library.description": "Expande tus conocimientos con libros especializados",
   },
   en: {
     "nav.dashboard": "Dashboard",
-    "nav.tests": "Tests",
-    "nav.coaching": "Coaching",
+    "nav.tests": "Assessments",
+    "nav.coach": "Coach",
     "nav.jobs": "Jobs",
+    "nav.library": "Library",
     "nav.profile": "Profile",
     "nav.settings": "Settings",
     "nav.logout": "Logout",
     "dashboard.title": "Dashboard",
     "dashboard.welcome": "Welcome back",
-    "dashboard.stats.tests": "Tests Completed",
-    "dashboard.stats.coaching": "Coaching Sessions",
-    "dashboard.stats.applications": "Applications Sent",
-    "dashboard.stats.interviews": "Interviews Scheduled",
+    "library.title": "Library",
+    "library.description": "Expand your knowledge with specialized books",
   },
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
   const t = (key: string): string => {
-    return translations[language][key as keyof (typeof translations)[typeof language]] || key
+    return translations[language][key as keyof typeof translations.es] || key
   }
 
   return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>

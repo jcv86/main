@@ -47,6 +47,7 @@
     "cmdk": "latest",
     "date-fns": "4.1.0",
     "embla-carousel-react": "latest",
+    "epubjs": "^0.3.93",
     "input-otp": "latest",
     "jspdf": "latest",
     "lucide-react": "^0.454.0",
@@ -69,6 +70,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8",
+    "eslint-config-next": "15.2.4",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
