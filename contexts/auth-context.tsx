@@ -3,7 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { supabase, isDemoMode } from "@/lib/supabase"
+import { supabase, isDemoMode, isSupabaseAvailable } from "@/lib/supabase"
 
 interface User {
   id: string
@@ -47,8 +47,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return
       }
 
-      // Supabase mode
+      // Only try Supabase if we're not in demo mode
       try {
+        // Check if Supabase is actually available first
+        const isAvailable = await isSupabaseAvailable()
+        if (!isAvailable) {
+          console.warn("Supabase not available, falling back to demo mode")
+          setLoading(false)
+          return
+        }
+
         const {
           data: { session },
           error,
@@ -81,8 +89,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initAuth()
 
+    // Only set up auth listener if not in demo mode
     if (!isDemo) {
-      // Listen for auth changes in Supabase mode
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange(async (event, session) => {

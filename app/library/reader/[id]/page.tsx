@@ -2,449 +2,338 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
 import {
+  BookOpen,
+  ArrowLeft,
+  Settings,
+  Star,
+  Clock,
+  User,
+  Calendar,
   ChevronLeft,
   ChevronRight,
-  BookOpen,
-  Bookmark,
-  StickyNote,
-  Settings,
-  ArrowLeft,
-  Clock,
-  Star,
+  Home,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { toast } from "@/hooks/use-toast"
-import {
-  getBookById,
-  getReadingProgress,
-  updateReadingProgress,
-  getBookContent,
-  getBookNotes,
-  saveBookNote,
-  deleteBookNote,
-  type Book,
-  type ReadingProgress,
-  type BookNote,
-} from "@/lib/supabase-library"
-import Image from "next/image"
+import Link from "next/link"
+import { getBookById, getBookContent, updateReadingProgress, getUserBookmarks } from "@/lib/supabase-library"
+import type { Book, BookContent } from "@/lib/supabase-library"
 
 export default function BookReaderPage() {
   const params = useParams()
   const router = useRouter()
   const bookId = params.id as string
-  const userId = "00000000-0000-0000-0000-000000000000" // Demo user ID
 
   const [book, setBook] = useState<Book | null>(null)
-  const [progress, setProgress] = useState<ReadingProgress | null>(null)
-  const [content, setContent] = useState<string>("")
-  const [notes, setNotes] = useState<BookNote[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  const [newNote, setNewNote] = useState("")
+  const [content, setContent] = useState<BookContent[]>([])
+  const [bookmarks, setBookmarks] = useState<any[]>([])
+  const [currentPage, setCurrentPage] = useState(0)
+  const [readingProgress, setReadingProgress] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [showSidebar, setShowSidebar] = useState(true)
+  const [fontSize, setFontSize] = useState(16)
+  const [showSettings, setShowSettings] = useState(false)
+
+  const userId = "demo-user-id" // In a real app, this would come from auth context
 
   useEffect(() => {
-    loadBookData()
-  }, [bookId])
+    const loadBookData = async () => {
+      if (!bookId) return
 
-  useEffect(() => {
-    if (book && currentPage) {
-      loadPageContent()
-      updateProgress()
-    }
-  }, [currentPage, book])
+      try {
+        const [bookData, contentData, bookmarksData] = await Promise.all([
+          getBookById(bookId),
+          getBookContent(bookId),
+          getUserBookmarks(userId, bookId),
+        ])
 
-  const loadBookData = async () => {
-    try {
-      setLoading(true)
-
-      // Load book details
-      const { data: bookData, error: bookError } = await getBookById(bookId)
-      if (bookError || !bookData) {
-        toast({
-          title: "Error",
-          description: "No se pudo cargar el libro",
-          variant: "destructive",
-        })
-        router.push("/library")
-        return
-      }
-      setBook(bookData)
-
-      // Load reading progress
-      const { data: progressData } = await getReadingProgress(userId, bookId)
-      if (progressData) {
-        setProgress(progressData)
-        setCurrentPage(progressData.current_page)
-      }
-
-      // Load notes
-      const { data: notesData } = await getBookNotes(userId, bookId)
-      if (notesData) {
-        setNotes(notesData)
-      }
-    } catch (error) {
-      console.error("Error loading book data:", error)
-      toast({
-        title: "Error",
-        description: "Error al cargar los datos del libro",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const loadPageContent = async () => {
-    if (!book) return
-
-    try {
-      const { data: contentData } = await getBookContent(bookId, currentPage)
-      if (contentData) {
+        setBook(bookData)
         setContent(contentData)
-      }
+        setBookmarks(bookmarksData)
 
-      // Check if current page is bookmarked
-      const pageBookmark = notes.find((note) => note.page_number === currentPage)
-      setIsBookmarked(!!pageBookmark)
-    } catch (error) {
-      console.error("Error loading page content:", error)
-    }
-  }
-
-  const updateProgress = async () => {
-    if (!book || !progress) return
-
-    const newProgress = Math.round((currentPage / book.pages) * 100)
-
-    try {
-      await updateReadingProgress(userId, bookId, {
-        current_page: currentPage,
-        progress: newProgress,
-        last_read_at: new Date().toISOString(),
-        reading_time_minutes: (progress.reading_time_minutes || 0) + 1,
-      })
-
-      setProgress((prev) =>
-        prev
-          ? {
-              ...prev,
-              current_page: currentPage,
-              progress: newProgress,
-              last_read_at: new Date().toISOString(),
-            }
-          : null,
-      )
-    } catch (error) {
-      console.error("Error updating progress:", error)
-    }
-  }
-
-  const goToNextPage = () => {
-    if (book && currentPage < book.pages) {
-      setCurrentPage((prev) => prev + 1)
-    }
-  }
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1)
-    }
-  }
-
-  const toggleBookmark = async () => {
-    try {
-      if (isBookmarked) {
-        // Remove bookmark
-        const bookmark = notes.find((note) => note.page_number === currentPage)
-        if (bookmark) {
-          await deleteBookNote(bookmark.id)
-          setNotes((prev) => prev.filter((note) => note.id !== bookmark.id))
-          setIsBookmarked(false)
-          toast({
-            title: "Marcador eliminado",
-            description: `Marcador removido de la página ${currentPage}`,
-          })
+        // Calculate reading progress
+        if (contentData.length > 0) {
+          const progress = Math.round((currentPage / contentData.length) * 100)
+          setReadingProgress(progress)
         }
-      } else {
-        // Add bookmark
-        const { data: noteData } = await saveBookNote(userId, bookId, currentPage, `Marcador en página ${currentPage}`)
-        if (noteData) {
-          setNotes((prev) => [...prev, noteData])
-          setIsBookmarked(true)
-          toast({
-            title: "Marcador agregado",
-            description: `Página ${currentPage} marcada`,
-          })
-        }
+      } catch (error) {
+        console.error("Error loading book data:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error toggling bookmark:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el marcador",
-        variant: "destructive",
-      })
+    }
+
+    loadBookData()
+  }, [bookId, userId, currentPage])
+
+  useEffect(() => {
+    // Update reading progress when page changes
+    if (content.length > 0) {
+      const progress = Math.round(((currentPage + 1) / content.length) * 100)
+      setReadingProgress(progress)
+
+      // Save progress to database
+      updateReadingProgress(userId, bookId, progress, currentPage + 1)
+    }
+  }, [currentPage, content.length, userId, bookId])
+
+  const handleNextPage = () => {
+    if (currentPage < content.length - 1) {
+      setCurrentPage(currentPage + 1)
     }
   }
 
-  const saveNote = async () => {
-    if (!newNote.trim()) return
-
-    try {
-      const { data: noteData } = await saveBookNote(userId, bookId, currentPage, newNote, `Página ${currentPage}`)
-
-      if (noteData) {
-        setNotes((prev) => [...prev, noteData])
-        setNewNote("")
-        toast({
-          title: "Nota guardada",
-          description: `Nota agregada a la página ${currentPage}`,
-        })
-      }
-    } catch (error) {
-      console.error("Error saving note:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo guardar la nota",
-        variant: "destructive",
-      })
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1)
     }
   }
 
-  const deleteNote = async (noteId: string) => {
-    try {
-      await deleteBookNote(noteId)
-      setNotes((prev) => prev.filter((note) => note.id !== noteId))
-      toast({
-        title: "Nota eliminada",
-        description: "La nota ha sido eliminada",
-      })
-    } catch (error) {
-      console.error("Error deleting note:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar la nota",
-        variant: "destructive",
-      })
-    }
+  const handleBookmark = async () => {
+    // In a real app, this would save to database
+    console.log("Bookmark added for page:", currentPage + 1)
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando libro...</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="space-y-4">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="h-4 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 
-  if (!book || !progress) {
+  if (!book || content.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto text-center">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Libro no encontrado</h3>
-          <p className="text-gray-600 mb-4">No se pudo cargar el libro solicitado.</p>
-          <Button onClick={() => router.push("/library")}>Volver a la biblioteca</Button>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Libro no encontrado</h2>
+          <p className="text-gray-600 mb-6">El libro que buscas no está disponible o ha sido movido.</p>
+          <Link href="/library">
+            <Button>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Volver a la Biblioteca
+            </Button>
+          </Link>
         </div>
       </div>
     )
   }
+
+  const currentContent = content[currentPage]
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      {showSidebar && (
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-6 border-b border-gray-200">
-            <Button variant="ghost" size="sm" onClick={() => router.push("/library")} className="mb-4">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver a biblioteca
-            </Button>
-
-            <div className="flex items-start space-x-4">
-              <div className="relative w-16 h-20 flex-shrink-0">
-                <Image
-                  src={book.cover_url || "/placeholder.svg"}
-                  alt={book.title}
-                  fill
-                  className="object-cover rounded"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">{book.title}</h2>
-                <p className="text-sm text-gray-600 mt-1">{book.author}</p>
-                <div className="flex items-center mt-2">
-                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                  <span className="text-sm text-gray-600 ml-1">{book.rating}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 border-b border-gray-200">
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                  <span>Progreso de lectura</span>
-                  <span>{progress.progress}%</span>
-                </div>
-                <Progress value={progress.progress} className="h-2" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500">Página actual</p>
-                  <p className="font-medium">
-                    {currentPage} de {book.pages}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Tiempo estimado</p>
-                  <p className="font-medium">{book.reading_time}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Clock className="h-4 w-4" />
-                <span>
-                  Tiempo leído: {Math.floor((progress.reading_time_minutes || 0) / 60)}h{" "}
-                  {(progress.reading_time_minutes || 0) % 60}m
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1 p-6">
-            <h3 className="text-sm font-medium text-gray-900 mb-4">Mis Notas y Marcadores</h3>
-            <ScrollArea className="h-64">
-              <div className="space-y-3">
-                {notes.map((note) => (
-                  <Card key={note.id} className="p-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <Bookmark className="h-3 w-3 text-blue-600" />
-                          <span className="text-xs text-gray-500">Página {note.page_number}</span>
-                        </div>
-                        <p className="text-sm text-gray-700 line-clamp-3">{note.content}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => deleteNote(note.id)}
-                        className="h-6 w-6 p-0 text-gray-400 hover:text-red-600"
-                      >
-                        ×
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-                {notes.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-4">
-                    No hay notas aún. Agrega marcadores y notas mientras lees.
-                  </p>
-                )}
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={() => setShowSidebar(!showSidebar)}>
+            <div className="flex items-center gap-4">
+              <Link href="/library">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Biblioteca
+                </Button>
+              </Link>
+              <Separator orientation="vertical" className="h-6" />
+              <div>
+                <h1 className="font-semibold text-lg">{book.title}</h1>
+                <p className="text-sm text-gray-600">por {book.author}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={handleBookmark}>
+                {/* Bookmark Icon */}
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
                 <Settings className="h-4 w-4" />
               </Button>
-              <div className="text-sm text-gray-600">
-                Página {currentPage} de {book.pages}
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+              <span>Progreso de lectura</span>
+              <span>{readingProgress}% completado</span>
+            </div>
+            <Progress value={readingProgress} className="h-2" />
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              <Card className="min-h-[600px]">
+                <CardContent className="p-8">
+                  {/* Settings Panel */}
+                  {showSettings && (
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <h3 className="font-medium mb-3">Configuración de lectura</h3>
+                      <div className="flex items-center gap-4">
+                        <label className="text-sm">Tamaño de fuente:</label>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setFontSize(Math.max(12, fontSize - 2))}>
+                            A-
+                          </Button>
+                          <span className="text-sm w-8 text-center">{fontSize}px</span>
+                          <Button variant="outline" size="sm" onClick={() => setFontSize(Math.min(24, fontSize + 2))}>
+                            A+
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Chapter Title */}
+                  <div className="mb-6">
+                    <Badge variant="outline" className="mb-2">
+                      Capítulo {currentContent.chapter_number}
+                    </Badge>
+                    <h2 className="text-2xl font-bold text-gray-900">{currentContent.title}</h2>
+                  </div>
+
+                  {/* Content */}
+                  <div
+                    className="prose prose-gray max-w-none leading-relaxed"
+                    style={{ fontSize: `${fontSize}px` }}
+                    dangerouslySetInnerHTML={{ __html: currentContent.content }}
+                  />
+
+                  {/* Navigation */}
+                  <div className="flex items-center justify-between mt-12 pt-6 border-t">
+                    <Button variant="outline" onClick={handlePrevPage} disabled={currentPage === 0}>
+                      <ChevronLeft className="h-4 w-4 mr-2" />
+                      Anterior
+                    </Button>
+
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span>
+                        Página {currentPage + 1} de {content.length}
+                      </span>
+                    </div>
+
+                    <Button onClick={handleNextPage} disabled={currentPage === content.length - 1}>
+                      Siguiente
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 space-y-6">
+                {/* Book Info */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">{book.title}</CardTitle>
+                    <CardDescription>por {book.author}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="text-sm">{book.rating} estrellas</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-blue-500" />
+                      <span className="text-sm">{book.reading_time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">{book.difficulty}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-purple-500" />
+                      <span className="text-sm">{book.publication_year}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Table of Contents */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Contenido</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {content.map((chapter, index) => (
+                      <button
+                        key={chapter.id}
+                        onClick={() => setCurrentPage(index)}
+                        className={`w-full text-left p-2 rounded text-sm transition-colors ${
+                          index === currentPage ? "bg-blue-100 text-blue-900 font-medium" : "hover:bg-gray-100"
+                        }`}
+                      >
+                        <div className="font-medium">{chapter.title}</div>
+                        <div className="text-xs text-gray-500">Capítulo {chapter.chapter_number}</div>
+                      </button>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Bookmarks */}
+                {bookmarks.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Marcadores</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      {bookmarks.map((bookmark) => (
+                        <button
+                          key={bookmark.id}
+                          onClick={() => setCurrentPage(bookmark.page_number - 1)}
+                          className="w-full text-left p-2 rounded text-sm hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="font-medium">Página {bookmark.page_number}</div>
+                          {bookmark.note && <div className="text-xs text-gray-500 mt-1">{bookmark.note}</div>}
+                        </button>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Quick Actions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Acciones</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Link href="/library">
+                      <Button variant="outline" size="sm" className="w-full justify-start bg-transparent">
+                        <Home className="h-4 w-4 mr-2" />
+                        Volver a Biblioteca
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-start bg-transparent"
+                      onClick={handleBookmark}
+                    >
+                      {/* Bookmark Icon */}
+                      Agregar Marcador
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             </div>
-
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleBookmark}
-                className={isBookmarked ? "text-blue-600" : "text-gray-400"}
-              >
-                <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
-              </Button>
-
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <StickyNote className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Agregar Nota - Página {currentPage}</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <Textarea
-                      placeholder="Escribe tu nota aquí..."
-                      value={newNote}
-                      onChange={(e) => setNewNote(e.target.value)}
-                      rows={4}
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <Button variant="outline" onClick={() => setNewNote("")}>
-                        Cancelar
-                      </Button>
-                      <Button onClick={saveNote} disabled={!newNote.trim()}>
-                        Guardar Nota
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </div>
-
-        {/* Reading Content */}
-        <div className="flex-1 flex items-center justify-center p-6">
-          <div className="max-w-4xl w-full">
-            <Card className="min-h-[600px]">
-              <CardContent className="p-8">
-                <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Navigation Footer */}
-        <div className="bg-white border-t border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Button variant="outline" onClick={goToPreviousPage} disabled={currentPage <= 1}>
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              Anterior
-            </Button>
-
-            <div className="flex items-center space-x-4">
-              <Progress value={progress.progress} className="w-32 h-2" />
-              <span className="text-sm text-gray-600">{progress.progress}%</span>
-            </div>
-
-            <Button variant="outline" onClick={goToNextPage} disabled={currentPage >= book.pages}>
-              Siguiente
-              <ChevronRight className="h-4 w-4 ml-2" />
-            </Button>
           </div>
         </div>
       </div>

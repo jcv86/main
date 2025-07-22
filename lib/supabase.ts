@@ -91,22 +91,40 @@ const mockChileanData = {
 
 export { mockChileanData }
 
-// Helper function to check if Supabase is available
-export const isSupabaseAvailable = async (): Promise<boolean> => {
-  try {
-    const { data, error } = await supabase.auth.getSession()
-    if (error) {
-      console.warn("Supabase session error:", error.message)
-      return false
-    }
-    return true
-  } catch (error) {
-    console.error("Supabase not available:", error)
-    return false
+// Demo mode helper - more robust detection
+export const isDemoMode = (): boolean => {
+  // Check if we're in a browser environment first
+  if (typeof window === "undefined") {
+    return !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("localhost")
   }
+
+  // In browser, also check if Supabase URL looks like a placeholder
+  return (
+    !supabaseUrl ||
+    !supabaseAnonKey ||
+    supabaseUrl.includes("localhost") ||
+    supabaseUrl.includes("your-project") ||
+    supabaseUrl === "https://your-project.supabase.co"
+  )
 }
 
-// Demo mode helper
-export const isDemoMode = (): boolean => {
-  return !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("localhost")
+// Helper function to check if Supabase is available - with better error handling
+export const isSupabaseAvailable = async (): Promise<boolean> => {
+  if (isDemoMode()) {
+    return false
+  }
+
+  try {
+    // Simple connectivity test
+    const response = await fetch(`${supabaseUrl}/rest/v1/`, {
+      method: "HEAD",
+      headers: {
+        apikey: supabaseAnonKey,
+      },
+    })
+    return response.ok
+  } catch (error) {
+    console.warn("Supabase connectivity test failed:", error)
+    return false
+  }
 }
