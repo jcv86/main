@@ -7,7 +7,7 @@ export interface User {
 
 export const mockUser: User = {
   id: "demo-user",
-  email: "demo@udd.cl",
+  email: "demo@ejemplo.com",
   name: "Usuario Demo",
   avatar: "/placeholder-user.jpg",
 }

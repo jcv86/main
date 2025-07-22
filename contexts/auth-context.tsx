@@ -1,15 +1,8 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import type { User as SupabaseUser } from "@supabase/supabase-js"
+import type { User } from "@/auth"
 import { supabase } from "@/lib/supabase"
-
-interface User {
-  id: string
-  email: string
-  name: string
-  avatar?: string
-}
 
 interface AuthContextType {
   user: User | null
@@ -55,12 +48,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setIsSupabaseConnected(false)
           } else {
             console.log("Supabase connected successfully")
-            const supabaseUser = data.session?.user as SupabaseUser
+            const supabaseUser = data.session?.user
             const authUser: User = {
-              id: supabaseUser.id,
-              email: supabaseUser.email,
-              name: supabaseUser.user_metadata.full_name || "Demo User",
-              avatar: supabaseUser.user_metadata.avatar || "/placeholder-user.jpg",
+              id: supabaseUser?.id || "",
+              email: supabaseUser?.email || "",
+              name: supabaseUser?.user_metadata.full_name || "Demo User",
+              avatar: supabaseUser?.user_metadata.avatar || "/placeholder-user.jpg",
             }
             setUser(authUser)
             setIsSupabaseConnected(true)

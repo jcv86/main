@@ -2,19 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState } from "react"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Menu,
   Home,
   User,
   Brain,
@@ -25,22 +14,88 @@ import {
   GraduationCap,
   Settings,
   LogOut,
+  Menu,
 } from "lucide-react"
-import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useAuth } from "@/contexts/auth-context"
+import { cn } from "@/lib/utils"
 
 const navigationItems = [
-  { name: "Panel Principal", href: "/dashboard", icon: Home },
-  { name: "Test de Personalidad", href: "/personality-test", icon: Brain },
-  { name: "Evaluación de Habilidades", href: "/skills-assessment", icon: Target },
-  { name: "Coach Profesional", href: "/career-coach", icon: MessageSquare },
-  { name: "Constructor de CV", href: "/cv-builder", icon: FileText },
-  { name: "Búsqueda de Empleo", href: "/job-search", icon: Search },
-  { name: "Carreras UDD", href: "/udd-careers", icon: GraduationCap },
+  {
+    title: "Panel Principal",
+    href: "/dashboard",
+    icon: Home,
+  },
+  {
+    title: "Test de Personalidad",
+    href: "/personality-test",
+    icon: Brain,
+  },
+  {
+    title: "Evaluación de Habilidades",
+    href: "/skills-assessment",
+    icon: Target,
+  },
+  {
+    title: "Coach Profesional",
+    href: "/career-coach",
+    icon: MessageSquare,
+  },
+  {
+    title: "Constructor de CV",
+    href: "/cv-builder",
+    icon: FileText,
+  },
+  {
+    title: "Búsqueda de Empleo",
+    href: "/job-search",
+    icon: Search,
+  },
+  {
+    title: "Carreras UDD",
+    href: "/udd-careers",
+    icon: GraduationCap,
+  },
 ]
 
 export function Navigation() {
   const pathname = usePathname()
+  const { user, signOut } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+
+  const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
+    <nav className={cn("space-y-2", mobile && "flex flex-col")}>
+      {navigationItems.map((item) => {
+        const isActive = pathname === item.href
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              isActive
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+              mobile && "w-full",
+            )}
+            onClick={() => mobile && setIsOpen(false)}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.title}
+          </Link>
+        )
+      })}
+    </nav>
+  )
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -48,24 +103,12 @@ export function Navigation() {
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <GraduationCap className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">CareerLaunch UDD</span>
+            <span className="hidden font-bold sm:inline-block">Desarrollo Profesional</span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "transition-colors hover:text-foreground/80",
-                  pathname === item.href ? "text-foreground" : "text-foreground/60",
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+          <NavItems />
         </div>
 
+        {/* Mobile Navigation */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
@@ -77,28 +120,11 @@ export function Navigation() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="pr-0">
-            <Link href="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
+            <div className="flex items-center space-x-2 mb-6">
               <GraduationCap className="h-6 w-6" />
-              <span className="font-bold">CareerLaunch UDD</span>
-            </Link>
-            <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-              <div className="flex flex-col space-y-3">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-foreground/80",
-                      pathname === item.href ? "text-foreground" : "text-foreground/60",
-                    )}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </div>
+              <span className="font-bold">Desarrollo Profesional</span>
             </div>
+            <NavItems mobile />
           </SheetContent>
         </Sheet>
 
@@ -106,47 +132,48 @@ export function Navigation() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <Link href="/" className="flex items-center space-x-2 md:hidden">
               <GraduationCap className="h-6 w-6" />
-              <span className="font-bold">CareerLaunch UDD</span>
+              <span className="font-bold">Desarrollo Profesional</span>
             </Link>
           </div>
-          <nav className="flex items-center">
+
+          {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder-user.jpg" alt="Usuario" />
-                    <AvatarFallback>UD</AvatarFallback>
+                    <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">Usuario Demo</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">demo@udd.cl</p>
+                    <p className="font-medium">{user.name}</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile" className="flex items-center space-x-2">
-                    <User className="h-4 w-4" />
-                    <span>Mi Perfil</span>
+                  <Link href="/profile" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    Mi Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center space-x-2">
-                    <Settings className="h-4 w-4" />
-                    <span>Configuración</span>
+                  <Link href="/settings" className="flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Configuración
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="flex items-center space-x-2">
-                  <LogOut className="h-4 w-4" />
-                  <span>Cerrar Sesión</span>
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Cerrar Sesión
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </nav>
+          )}
         </div>
       </div>
     </header>
