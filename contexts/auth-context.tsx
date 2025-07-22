@@ -2,6 +2,8 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { supabase, isDemoMode } from "@/lib/supabase"
 
 interface User {
   id: string
@@ -12,10 +14,11 @@ interface User {
 
 interface AuthContextType {
   user: User | null
+  loading: boolean
   login: (email: string, password: string) => Promise<boolean>
   register: (name: string, email: string, password: string) => Promise<boolean>
   logout: () => void
-  loading: boolean
+  isDemo: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -23,55 +26,133 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const isDemo = isDemoMode()
 
   useEffect(() => {
-    // Check if user is logged in on mount
-    const checkAuth = () => {
+    const initAuth = async () => {
+      if (isDemo) {
+        // Demo mode - check localStorage
+        try {
+          const savedUser = localStorage.getItem("demo_user")
+          if (savedUser) {
+            const parsedUser = JSON.parse(savedUser)
+            setUser(parsedUser)
+          }
+        } catch (error) {
+          console.error("Error parsing saved demo user:", error)
+          localStorage.removeItem("demo_user")
+        }
+        setLoading(false)
+        return
+      }
+
+      // Supabase mode
       try {
-        const savedUser = localStorage.getItem("user")
-        if (savedUser) {
-          const parsedUser = JSON.parse(savedUser)
-          setUser(parsedUser)
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession()
+
+        if (error) {
+          console.error("Session error:", error.message)
+          setLoading(false)
+          return
+        }
+
+        if (session?.user) {
+          const supabaseUser = session.user
+          const appUser: User = {
+            id: supabaseUser.id,
+            name: supabaseUser.user_metadata?.name || supabaseUser.email?.split("@")[0] || "Usuario",
+            email: supabaseUser.email || "",
+            avatar:
+              supabaseUser.user_metadata?.avatar_url ||
+              `/placeholder.svg?height=40&width=40&text=${(supabaseUser.user_metadata?.name || "U").charAt(0).toUpperCase()}`,
+          }
+          setUser(appUser)
         }
       } catch (error) {
-        console.error("Error parsing saved user:", error)
-        localStorage.removeItem("user")
+        console.error("Auth initialization error:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    // Only run on client side
-    if (typeof window !== "undefined") {
-      checkAuth()
-    } else {
-      setLoading(false)
+    initAuth()
+
+    if (!isDemo) {
+      // Listen for auth changes in Supabase mode
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session?.user) {
+          const supabaseUser = session.user
+          const appUser: User = {
+            id: supabaseUser.id,
+            name: supabaseUser.user_metadata?.name || supabaseUser.email?.split("@")[0] || "Usuario",
+            email: supabaseUser.email || "",
+            avatar:
+              supabaseUser.user_metadata?.avatar_url ||
+              `/placeholder.svg?height=40&width=40&text=${(supabaseUser.user_metadata?.name || "U").charAt(0).toUpperCase()}`,
+          }
+          setUser(appUser)
+        } else {
+          setUser(null)
+        }
+        setLoading(false)
+      })
+
+      return () => subscription.unsubscribe()
     }
-  }, [])
+  }, [isDemo])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    setLoading(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setLoading(true)
 
-      // Mock authentication - in real app, validate with backend
-      if (email && password) {
-        const mockUser: User = {
-          id: "1",
-          name: "Usuario Demo",
+      if (isDemo) {
+        // Demo mode authentication
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        if (email === "demo@careerdev.com" && password === "demo123") {
+          const demoUser: User = {
+            id: "demo-user-1",
+            name: "Usuario Demo",
+            email: "demo@careerdev.com",
+            avatar: "/placeholder.svg?height=40&width=40&text=UD",
+          }
+
+          setUser(demoUser)
+          localStorage.setItem("demo_user", JSON.stringify(demoUser))
+          return true
+        }
+
+        // Allow any email/password in demo mode
+        const demoUser: User = {
+          id: "demo-user-" + Date.now(),
+          name: email.split("@")[0] || "Usuario",
           email: email,
-          avatar: "/placeholder.svg?height=40&width=40&text=U",
+          avatar: `/placeholder.svg?height=40&width=40&text=${email.charAt(0).toUpperCase()}`,
         }
 
-        setUser(mockUser)
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(mockUser))
-        }
+        setUser(demoUser)
+        localStorage.setItem("demo_user", JSON.stringify(demoUser))
         return true
       }
 
-      return false
+      // Supabase authentication
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        console.error("Login error:", error.message)
+        return false
+      }
+
+      return !!data.user
     } catch (error) {
       console.error("Login error:", error)
       return false
@@ -81,44 +162,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
-    setLoading(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setLoading(true)
 
-      // Mock registration - in real app, create user in backend
-      if (name && email && password) {
-        const mockUser: User = {
-          id: "1",
-          name: name,
-          email: email,
-          avatar: "/placeholder.svg?height=40&width=40&text=" + name.charAt(0).toUpperCase(),
+      if (isDemo) {
+        // Demo mode registration
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        const demoUser: User = {
+          id: "demo-user-" + Date.now(),
+          name,
+          email,
+          avatar: `/placeholder.svg?height=40&width=40&text=${name.charAt(0).toUpperCase()}`,
         }
 
-        setUser(mockUser)
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(mockUser))
-        }
+        setUser(demoUser)
+        localStorage.setItem("demo_user", JSON.stringify(demoUser))
         return true
       }
 
-      return false
+      // Supabase registration
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+          },
+        },
+      })
+
+      if (error) {
+        console.error("Registration error:", error.message)
+        return false
+      }
+
+      return !!data.user
     } catch (error) {
-      console.error("Register error:", error)
+      console.error("Registration error:", error)
       return false
     } finally {
       setLoading(false)
     }
   }
 
-  const logout = () => {
-    setUser(null)
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("user")
+  const logout = async () => {
+    try {
+      if (isDemo) {
+        setUser(null)
+        localStorage.removeItem("demo_user")
+      } else {
+        await supabase.auth.signOut()
+        setUser(null)
+      }
+      router.push("/")
+    } catch (error) {
+      console.error("Logout error:", error)
     }
   }
 
-  return <AuthContext.Provider value={{ user, login, register, logout, loading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, loading, login, register, logout, isDemo }}>{children}</AuthContext.Provider>
+  )
 }
 
 export function useAuth() {

@@ -6,37 +6,46 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // If Supabase is not configured, allow all requests (demo mode)
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.log("Running in demo mode - Supabase not configured")
+    return supabaseResponse
+  }
+
   try {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll()
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-            supabaseResponse = NextResponse.next({
-              request,
-            })
-            cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
-          },
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
         },
       },
-    )
+    })
 
     // Try to get user, but don't fail if Supabase is unavailable
     let user = null
     try {
       const {
         data: { user: authUser },
+        error,
       } = await supabase.auth.getUser()
-      user = authUser
+
+      if (error) {
+        console.warn("Auth error in middleware:", error.message)
+      } else {
+        user = authUser
+      }
     } catch (error) {
       console.warn("Supabase auth check failed in middleware:", error)
-      // In demo mode, we'll allow access to protected routes
-      // In a real app, you might want to handle this differently
     }
 
     const { pathname } = request.nextUrl
@@ -54,6 +63,7 @@ export async function middleware(request: NextRequest) {
       "/technical-skills-test",
       "/interview-simulator",
       "/job-search",
+      "/library",
       "/settings",
     ]
 
@@ -64,16 +74,11 @@ export async function middleware(request: NextRequest) {
     const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
     const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
 
-    // If user is not logged in and trying to access protected route
-    // Only redirect if we're sure Supabase is working and user is definitely not authenticated
+    // In demo mode or if user is not authenticated, redirect to login for protected routes
     if (!user && isProtectedRoute) {
-      // Check if we have a demo session in localStorage (client-side check)
-      // For now, we'll allow access in demo mode by not redirecting
-      // In a real app, you might want to be more strict
       const redirectUrl = new URL("/auth/login", request.url)
       redirectUrl.searchParams.set("redirectTo", pathname)
-      // Uncomment the next line if you want to enforce authentication even in demo mode
-      // return NextResponse.redirect(redirectUrl)
+      return NextResponse.redirect(redirectUrl)
     }
 
     // If user is logged in and trying to access auth routes, redirect to dashboard
@@ -84,22 +89,10 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   } catch (error) {
     console.warn("Middleware error, allowing request to proceed:", error)
-    // If there's any error in middleware, just let the request proceed
-    return NextResponse.next({
-      request,
-    })
+    return supabaseResponse
   }
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 }

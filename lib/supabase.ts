@@ -6,6 +6,8 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 // Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error("Missing Supabase environment variables")
+  console.log("SUPABASE_URL:", supabaseUrl ? "✓ Set" : "✗ Missing")
+  console.log("SUPABASE_ANON_KEY:", supabaseAnonKey ? "✓ Set" : "✗ Missing")
 }
 
 export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey, {
@@ -13,6 +15,7 @@ export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
+    flowType: "pkce",
   },
 })
 
@@ -22,6 +25,7 @@ export const createClient = () =>
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true,
+      flowType: "pkce",
     },
   })
 
@@ -91,9 +95,18 @@ export { mockChileanData }
 export const isSupabaseAvailable = async (): Promise<boolean> => {
   try {
     const { data, error } = await supabase.auth.getSession()
-    return !error
+    if (error) {
+      console.warn("Supabase session error:", error.message)
+      return false
+    }
+    return true
   } catch (error) {
     console.error("Supabase not available:", error)
     return false
   }
+}
+
+// Demo mode helper
+export const isDemoMode = (): boolean => {
+  return !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("localhost")
 }

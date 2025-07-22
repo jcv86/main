@@ -70,7 +70,7 @@ export const demoSkillsData = [
   { name: "Adaptabilidad al Mercado Chileno", level: 75 },
 ]
 
-// Updated with real Chilean job portal integration
+// Updated with real Chilean job portal integration - THIS IS THE MISSING EXPORT
 export const demoJobSearchResults = [
   {
     id: "trabajando-1",
@@ -159,6 +159,87 @@ export const demoJobSearchResults = [
     verified: true,
     skills: ["Figma", "Sketch", "Adobe XD", "User Research", "Prototyping"],
   },
+  {
+    id: "trabajando-4",
+    title: "Ingeniero de Software Full Stack",
+    company: "Cornershop by Uber",
+    location: "Santiago, Chile",
+    salary: "$3.000.000 - $4.200.000 CLP",
+    type: "Tiempo completo",
+    posted: "hace 4 días",
+    match: 90,
+    description:
+      "Únete al equipo de ingeniería de Cornershop para construir la plataforma de delivery más grande de Latinoamérica. Trabajarás con tecnologías de vanguardia en un ambiente dinámico y multicultural.",
+    requirements: [
+      "4+ años experiencia full stack",
+      "Python y Django",
+      "React o Vue.js",
+      "Experiencia con APIs REST",
+      "Conocimiento de AWS",
+    ],
+    benefits: [
+      "Seguro de salud premium",
+      "Trabajo híbrido",
+      "Uber credits",
+      "Capacitación técnica",
+      "Bonos por performance",
+    ],
+    remote: true,
+    industry: "E-commerce",
+    source: "trabajando",
+    verified: true,
+    skills: ["Python", "Django", "React", "AWS", "PostgreSQL"],
+  },
+  {
+    id: "getonboard-5",
+    title: "DevOps Engineer",
+    company: "Buk",
+    location: "Santiago, Chile",
+    salary: "$2.800.000 - $4.000.000 CLP",
+    type: "Tiempo completo",
+    posted: "hace 1 día",
+    match: 78,
+    description:
+      "Ayuda a escalar la infraestructura de la plataforma de RRHH más innovadora de Chile. Trabajarás con tecnologías cloud modernas y metodologías DevOps de clase mundial.",
+    requirements: ["3+ años experiencia DevOps", "AWS o GCP", "Docker y Kubernetes", "Terraform", "CI/CD pipelines"],
+    benefits: [
+      "Seguro complementario",
+      "Días de salud mental",
+      "Presupuesto de capacitación",
+      "Stock options",
+      "Oficina pet-friendly",
+    ],
+    remote: true,
+    industry: "HR Tech",
+    source: "getonboard",
+    verified: true,
+    skills: ["AWS", "Docker", "Kubernetes", "Terraform", "Jenkins"],
+  },
+  {
+    id: "laborum-6",
+    title: "Data Scientist",
+    company: "Falabella",
+    location: "Santiago, Chile",
+    salary: "$2.500.000 - $3.500.000 CLP",
+    type: "Tiempo completo",
+    posted: "hace 5 días",
+    match: 75,
+    description:
+      "Únete al equipo de Data Science de Falabella para impulsar decisiones basadas en datos en el retail más grande de Chile. Trabajarás con grandes volúmenes de datos de millones de clientes.",
+    requirements: [
+      "3+ años experiencia Data Science",
+      "Python y R",
+      "Machine Learning",
+      "SQL avanzado",
+      "Experiencia en retail",
+    ],
+    benefits: ["Seguro de salud", "Descuentos en tiendas", "Horario flexible", "Capacitación continua", "Bono anual"],
+    remote: false,
+    industry: "Retail",
+    source: "laborum",
+    verified: true,
+    skills: ["Python", "R", "SQL", "Machine Learning", "Tableau"],
+  },
 ]
 
 export const demoCVData = {
@@ -236,6 +317,214 @@ export const demoCVData = {
     "Inglés Intermedio",
   ],
 }
+
+// Professional development books with real cover images
+export const libraryBooksData = [
+  {
+    id: "1",
+    title: "Atomic Habits",
+    author: "James Clear",
+    description: "Un método fácil y comprobado para crear buenos hábitos y eliminar los malos.",
+    category: "Productividad",
+    rating: 4.8,
+    readingTime: "4h 30min",
+    pages: 320,
+    publishedYear: 2018,
+    coverUrl: "/books/atomic-habits.jpg",
+    tags: ["Hábitos", "Productividad", "Autoayuda"],
+    progress: 0,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Formación de hábitos", "Productividad personal", "Cambio de comportamiento"],
+  },
+  {
+    id: "2",
+    title: "The 7 Habits of Highly Effective People",
+    author: "Stephen R. Covey",
+    description: "Lecciones poderosas de cambio personal que han inspirado a millones de personas.",
+    category: "Liderazgo",
+    rating: 4.6,
+    readingTime: "6h 15min",
+    pages: 432,
+    publishedYear: 1989,
+    coverUrl: "/books/7-habits.jpg",
+    tags: ["Liderazgo", "Efectividad", "Desarrollo Personal"],
+    progress: 0,
+    isRecommended: false,
+    difficulty: "Intermedio",
+    keyTopics: ["Liderazgo personal", "Efectividad", "Principios de vida"],
+  },
+  {
+    id: "3",
+    title: "Lean In",
+    author: "Sheryl Sandberg",
+    description: "Las mujeres, el trabajo y la voluntad de liderar en el mundo profesional moderno.",
+    category: "Liderazgo",
+    rating: 4.5,
+    readingTime: "5h 20min",
+    pages: 368,
+    publishedYear: 2013,
+    coverUrl: "/books/lean-in.jpg",
+    tags: ["Liderazgo", "Carrera", "Género"],
+    progress: 35,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Liderazgo femenino", "Desarrollo profesional", "Igualdad de género"],
+  },
+  {
+    id: "4",
+    title: "Deep Work",
+    author: "Cal Newport",
+    description: "Reglas para el éxito enfocado en un mundo distraído.",
+    category: "Productividad",
+    rating: 4.7,
+    readingTime: "4h 45min",
+    pages: 304,
+    publishedYear: 2016,
+    coverUrl: "/books/deep-work.jpg",
+    tags: ["Concentración", "Productividad", "Trabajo"],
+    progress: 0,
+    isRecommended: false,
+    difficulty: "Avanzado",
+    keyTopics: ["Trabajo profundo", "Concentración", "Productividad cognitiva"],
+  },
+  {
+    id: "5",
+    title: "Emotional Intelligence 2.0",
+    author: "Travis Bradberry",
+    description: "Estrategias para aumentar tu EQ y mejorar tus habilidades interpersonales.",
+    category: "Habilidades Blandas",
+    rating: 4.4,
+    readingTime: "3h 50min",
+    pages: 280,
+    publishedYear: 2009,
+    coverUrl: "/books/emotional-intelligence.jpg",
+    tags: ["Inteligencia Emocional", "Habilidades Blandas", "Comunicación"],
+    progress: 60,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Inteligencia emocional", "Autoconciencia", "Habilidades sociales"],
+  },
+  {
+    id: "6",
+    title: "The Lean Startup",
+    author: "Eric Ries",
+    description: "Cómo los emprendedores de hoy usan la innovación continua para crear negocios exitosos.",
+    category: "Emprendimiento",
+    rating: 4.3,
+    readingTime: "5h 10min",
+    pages: 336,
+    publishedYear: 2011,
+    coverUrl: "/books/lean-startup.jpg",
+    tags: ["Emprendimiento", "Startup", "Innovación"],
+    progress: 0,
+    isRecommended: false,
+    difficulty: "Intermedio",
+    keyTopics: ["Metodología lean", "Validación de productos", "Innovación"],
+  },
+  {
+    id: "7",
+    title: "Mindset",
+    author: "Carol S. Dweck",
+    description: "La nueva psicología del éxito y cómo desarrollar una mentalidad de crecimiento.",
+    category: "Desarrollo Personal",
+    rating: 4.6,
+    readingTime: "4h 20min",
+    pages: 276,
+    publishedYear: 2006,
+    coverUrl: "/books/mindset.jpg",
+    tags: ["Mentalidad", "Crecimiento", "Psicología"],
+    progress: 0,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Mentalidad de crecimiento", "Resiliencia", "Aprendizaje"],
+  },
+  {
+    id: "8",
+    title: "The Power of Now",
+    author: "Eckhart Tolle",
+    description: "Una guía hacia la iluminación espiritual y la presencia consciente.",
+    category: "Desarrollo Personal",
+    rating: 4.4,
+    readingTime: "3h 45min",
+    pages: 236,
+    publishedYear: 1997,
+    coverUrl: "/books/power-of-now.jpg",
+    tags: ["Mindfulness", "Espiritualidad", "Presente"],
+    progress: 0,
+    isRecommended: false,
+    difficulty: "Avanzado",
+    keyTopics: ["Mindfulness", "Conciencia", "Presencia"],
+  },
+  {
+    id: "9",
+    title: "Good to Great",
+    author: "Jim Collins",
+    description: "Por qué algunas empresas dan el salto... y otras no.",
+    category: "Liderazgo",
+    rating: 4.5,
+    readingTime: "5h 30min",
+    pages: 300,
+    publishedYear: 2001,
+    coverUrl: "/books/good-to-great.jpg",
+    tags: ["Liderazgo", "Empresa", "Excelencia"],
+    progress: 0,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Liderazgo empresarial", "Transformación", "Excelencia"],
+  },
+  {
+    id: "10",
+    title: "The 4-Hour Workweek",
+    author: "Timothy Ferriss",
+    description: "Escapa de la rutina de 9-5, vive en cualquier lugar y únete a los nuevos ricos.",
+    category: "Productividad",
+    rating: 4.2,
+    readingTime: "4h 50min",
+    pages: 308,
+    publishedYear: 2007,
+    coverUrl: "/books/4-hour-workweek.jpg",
+    tags: ["Productividad", "Libertad", "Emprendimiento"],
+    progress: 0,
+    isRecommended: false,
+    difficulty: "Intermedio",
+    keyTopics: ["Automatización", "Outsourcing", "Libertad financiera"],
+  },
+  {
+    id: "11",
+    title: "Crucial Conversations",
+    author: "Kerry Patterson",
+    description: "Herramientas para hablar cuando las apuestas son altas.",
+    category: "Habilidades Blandas",
+    rating: 4.7,
+    readingTime: "4h 15min",
+    pages: 284,
+    publishedYear: 2002,
+    coverUrl: "/books/crucial-conversations.jpg",
+    tags: ["Comunicación", "Conversaciones", "Habilidades Blandas"],
+    progress: 0,
+    isRecommended: true,
+    difficulty: "Intermedio",
+    keyTopics: ["Comunicación efectiva", "Resolución de conflictos", "Diálogo"],
+  },
+  {
+    id: "12",
+    title: "Zero to One",
+    author: "Peter Thiel",
+    description: "Notas sobre startups, o cómo construir el futuro.",
+    category: "Emprendimiento",
+    rating: 4.4,
+    readingTime: "3h 30min",
+    pages: 224,
+    publishedYear: 2014,
+    coverUrl: "/books/zero-to-one.jpg",
+    tags: ["Emprendimiento", "Startup", "Innovación"],
+    progress: 0,
+    isRecommended: true,
+    difficulty: "Avanzado",
+    keyTopics: ["Innovación", "Monopolios", "Tecnología"],
+  },
+]
 
 // Chilean market specific data with job portal integration
 export const chileanMarketData = {
@@ -412,6 +701,104 @@ export interface CareerGoal {
   target_date: string
 }
 
+// Database configuration and utilities
+import { createClient } from "@supabase/supabase-js"
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Database types
+export interface DatabaseUser {
+  id: string
+  email: string
+  full_name?: string
+  avatar_url?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface DatabaseProfile {
+  id: string
+  user_id: string
+  first_name?: string
+  last_name?: string
+  phone?: string
+  location?: string
+  bio?: string
+  skills?: string[]
+  experience_level?: string
+  industry?: string
+  job_title?: string
+  linkedin_url?: string
+  github_url?: string
+  portfolio_url?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface DatabaseCV {
+  id: string
+  user_id: string
+  title: string
+  template: string
+  content: any
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface DatabaseAssessment {
+  id: string
+  user_id: string
+  type: string
+  results: any
+  score?: number
+  completed_at: string
+  created_at: string
+}
+
+export interface DatabaseCoachingSession {
+  id: string
+  user_id: string
+  session_type: string
+  messages: any[]
+  status: string
+  created_at: string
+  updated_at: string
+}
+
+// Utility functions
+export const formatDate = (date: string | Date): string => {
+  return new Date(date).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+export const formatDateTime = (date: string | Date): string => {
+  return new Date(date).toLocaleString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
+
+// Database connection test
+export const testDatabaseConnection = async (): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.from("profiles").select("count").limit(1)
+    return !error
+  } catch (error) {
+    console.error("Database connection test failed:", error)
+    return false
+  }
+}
+
 // Demo data functions
 export const getUserStats = async (userId: string): Promise<UserStats> => {
   return {
@@ -546,4 +933,28 @@ export async function getUserCV(userId: string) {
 
 export async function saveUserCV(userId: string, cvData: any) {
   return { data: cvData, error: null }
+}
+
+// Library functions
+export async function getLibraryBooks() {
+  return { data: libraryBooksData, error: null }
+}
+
+export async function getRecommendedBooks(userId: string) {
+  const recommendedBooks = libraryBooksData.filter((book) => book.isRecommended)
+  return { data: recommendedBooks, error: null }
+}
+
+export async function getUserBookProgress(userId: string, bookId: string) {
+  const book = libraryBooksData.find((b) => b.id === bookId)
+  return { data: book?.progress || 0, error: null }
+}
+
+export async function saveUserBookProgress(userId: string, bookId: string, progress: number) {
+  // In a real app, this would update the database
+  const book = libraryBooksData.find((b) => b.id === bookId)
+  if (book) {
+    book.progress = progress
+  }
+  return { data: progress, error: null }
 }
