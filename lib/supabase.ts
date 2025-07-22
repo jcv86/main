@@ -1,36 +1,15 @@
-import { createBrowserClient, createServerClient } from "@supabase/ssr"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-// Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Missing Supabase environment variables")
-  console.log("SUPABASE_URL:", supabaseUrl ? "✓ Set" : "✗ Missing")
-  console.log("SUPABASE_ANON_KEY:", supabaseAnonKey ? "✓ Set" : "✗ Missing")
+// Always run in demo mode to avoid initialization issues
+export function isDemoMode(): boolean {
+  return true
 }
 
-export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-    flowType: "pkce",
-  },
-})
+// Create a mock Supabase client for demo mode
+export const supabase = null
 
-export const createClient = () =>
-  createBrowserClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      flowType: "pkce",
-    },
-  })
+// Demo mode indicator
+export const DEMO_MODE = true
 
-// Export createServerClient for server-side usage
-export { createServerClient }
+console.log("Supabase client initialized: DEMO MODE")
 
 // Mock data for Chilean market (fallback when Supabase is not available)
 const mockChileanData = {
@@ -90,41 +69,3 @@ const mockChileanData = {
 }
 
 export { mockChileanData }
-
-// Demo mode helper - more robust detection
-export const isDemoMode = (): boolean => {
-  // Check if we're in a browser environment first
-  if (typeof window === "undefined") {
-    return !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("localhost")
-  }
-
-  // In browser, also check if Supabase URL looks like a placeholder
-  return (
-    !supabaseUrl ||
-    !supabaseAnonKey ||
-    supabaseUrl.includes("localhost") ||
-    supabaseUrl.includes("your-project") ||
-    supabaseUrl === "https://your-project.supabase.co"
-  )
-}
-
-// Helper function to check if Supabase is available - with better error handling
-export const isSupabaseAvailable = async (): Promise<boolean> => {
-  if (isDemoMode()) {
-    return false
-  }
-
-  try {
-    // Simple connectivity test
-    const response = await fetch(`${supabaseUrl}/rest/v1/`, {
-      method: "HEAD",
-      headers: {
-        apikey: supabaseAnonKey,
-      },
-    })
-    return response.ok
-  } catch (error) {
-    console.warn("Supabase connectivity test failed:", error)
-    return false
-  }
-}

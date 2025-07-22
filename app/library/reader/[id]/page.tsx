@@ -18,9 +18,17 @@ import {
   ChevronLeft,
   ChevronRight,
   Home,
+  Bookmark,
 } from "lucide-react"
 import Link from "next/link"
-import { getBookById, getBookContent, updateReadingProgress, getUserBookmarks } from "@/lib/supabase-library"
+import {
+  getBookById,
+  getBookContent,
+  updateReadingProgress,
+  getUserBookmarks,
+  addBookmark,
+  removeBookmark,
+} from "@/lib/supabase-library"
 import type { Book, BookContent } from "@/lib/supabase-library"
 
 export default function BookReaderPage() {
@@ -36,29 +44,48 @@ export default function BookReaderPage() {
   const [loading, setLoading] = useState(true)
   const [fontSize, setFontSize] = useState(16)
   const [showSettings, setShowSettings] = useState(false)
+  const [isBookmarked, setIsBookmarked] = useState(false)
 
   const userId = "demo-user-id" // In a real app, this would come from auth context
 
   useEffect(() => {
     const loadBookData = async () => {
-      if (!bookId) return
+      if (!bookId) {
+        console.log("No bookId provided")
+        return
+      }
+
+      console.log("Loading book with ID:", bookId)
+      setLoading(true)
 
       try {
+        console.log("Fetching book data...")
         const [bookData, contentData, bookmarksData] = await Promise.all([
           getBookById(bookId),
           getBookContent(bookId),
           getUserBookmarks(userId, bookId),
         ])
 
-        setBook(bookData)
-        setContent(contentData)
-        setBookmarks(bookmarksData)
+        console.log("Book data:", bookData)
+        console.log("Content data:", contentData)
+        console.log("Bookmarks data:", bookmarksData)
 
-        // Calculate reading progress
-        if (contentData.length > 0) {
-          const progress = Math.round((currentPage / contentData.length) * 100)
-          setReadingProgress(progress)
+        if (bookData) {
+          setBook(bookData)
+        } else {
+          console.error("No book data found for ID:", bookId)
         }
+
+        if (contentData && contentData.length > 0) {
+          setContent(contentData)
+          // Calculate reading progress
+          const progress = Math.round(((currentPage + 1) / contentData.length) * 100)
+          setReadingProgress(progress)
+        } else {
+          console.error("No content data found for book ID:", bookId)
+        }
+
+        setBookmarks(bookmarksData || [])
       } catch (error) {
         console.error("Error loading book data:", error)
       } finally {
@@ -80,6 +107,12 @@ export default function BookReaderPage() {
     }
   }, [currentPage, content.length, userId, bookId])
 
+  useEffect(() => {
+    // Check if current page is bookmarked
+    const currentBookmark = bookmarks.find((b) => b.page_number === currentPage + 1)
+    setIsBookmarked(!!currentBookmark)
+  }, [bookmarks, currentPage])
+
   const handleNextPage = () => {
     if (currentPage < content.length - 1) {
       setCurrentPage(currentPage + 1)
@@ -93,8 +126,23 @@ export default function BookReaderPage() {
   }
 
   const handleBookmark = async () => {
-    // In a real app, this would save to database
-    console.log("Bookmark added for page:", currentPage + 1)
+    try {
+      const currentBookmark = bookmarks.find((b) => b.page_number === currentPage + 1)
+
+      if (currentBookmark) {
+        // Remove bookmark
+        await removeBookmark(currentBookmark.id)
+        setBookmarks((prev) => prev.filter((b) => b.id !== currentBookmark.id))
+        setIsBookmarked(false)
+      } else {
+        // Add bookmark
+        const newBookmark = await addBookmark(userId, bookId, currentPage + 1, `Marcador en página ${currentPage + 1}`)
+        setBookmarks((prev) => [...prev, newBookmark])
+        setIsBookmarked(true)
+      }
+    } catch (error) {
+      console.error("Error handling bookmark:", error)
+    }
   }
 
   if (loading) {
@@ -115,13 +163,31 @@ export default function BookReaderPage() {
     )
   }
 
-  if (!book || content.length === 0) {
+  if (!book) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto text-center">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Libro no encontrado</h2>
           <p className="text-gray-600 mb-6">El libro que buscas no está disponible o ha sido movido.</p>
+          <Link href="/library">
+            <Button>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Volver a la Biblioteca
+            </Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (content.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Contenido no disponible</h2>
+          <p className="text-gray-600 mb-6">El contenido de este libro no está disponible en este momento.</p>
           <Link href="/library">
             <Button>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -156,7 +222,7 @@ export default function BookReaderPage() {
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={handleBookmark}>
-                {/* Bookmark Icon */}
+                <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current text-blue-600" : ""}`} />
               </Button>
               <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
                 <Settings className="h-4 w-4" />
@@ -327,8 +393,8 @@ export default function BookReaderPage() {
                       className="w-full justify-start bg-transparent"
                       onClick={handleBookmark}
                     >
-                      {/* Bookmark Icon */}
-                      Agregar Marcador
+                      <Bookmark className={`h-4 w-4 mr-2 ${isBookmarked ? "fill-current text-blue-600" : ""}`} />
+                      {isBookmarked ? "Quitar Marcador" : "Agregar Marcador"}
                     </Button>
                   </CardContent>
                 </Card>

@@ -21,82 +21,132 @@ export const bookContents: { [key: string]: BookContent } = {
     chapters: [
       {
         id: "intro",
-        title: "Introducción",
+        title: "Introducción: El Poder de los Pequeños Cambios",
         pageStart: 1,
         pageEnd: 15,
         content: `
-          <h1>Atomic Habits</h1>
-          <h2>Un Método Fácil y Comprobado para Crear Buenos Hábitos y Eliminar los Malos</h2>
-          <p><strong>Por James Clear</strong></p>
-          
-          <h3>Introducción: Mi Historia</h3>
-          <p>En el segundo año de la escuela secundaria, un bate de béisbol me golpeó en la cara.</p>
-          
-          <p>Mientras esperaba mi turno al bate durante el entrenamiento de béisbol, un compañero de equipo hizo un swing de práctica con dos bates para calentar. El problema era que yo estaba parado detrás de él.</p>
-          
-          <p>Sus bates se deslizaron de sus manos y uno de ellos me golpeó directamente entre los ojos. Perdí el conocimiento instantáneamente.</p>
-          
-          <p>Cuando desperté, estaba en el hospital. Tenía una fractura masiva en el centro de mi cara. Mi nariz estaba aplastada. Al menos media docena de huesos faciales estaban rotos. Mi ojo izquierdo estaba hinchado y cerrado. Tenía una conmoción cerebral severa.</p>
-          
-          <h3>El Poder de los Pequeños Cambios</h3>
-          <p>Los pequeños cambios pueden marcar una gran diferencia. Cuando finalmente decides ponerte en forma, perder peso, dejar de fumar, escribir un libro o aprender una nueva habilidad, es fácil sentirse abrumado por la magnitud del cambio que quieres hacer.</p>
-          
-          <p>Pero aquí está el secreto: no necesitas hacer cambios drásticos para obtener resultados extraordinarios.</p>
-          
-          <p>Los hábitos son el interés compuesto de la superación personal. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican a medida que los repites.</p>
-        `,
+        <h1>Hábitos Atómicos</h1>
+        <h2>Una Guía Práctica para Formar Buenos Hábitos y Romper los Malos</h2>
+        
+        <h3>Introducción: El Poder de los Pequeños Cambios</h3>
+        <p>Los pequeños cambios pueden generar resultados extraordinarios. Esta es la premisa fundamental de los hábitos atómicos: cambios diminutos que, acumulados a lo largo del tiempo, producen transformaciones significativas en nuestras vidas.</p>
+        
+        <p>Imagina que mejoras solo un 1% cada día durante un año. Al final de ese período, habrás mejorado 37 veces. Por el contrario, si empeoras un 1% cada día, al final del año habrás descendido casi a cero.</p>
+        
+        <h3>¿Qué Son los Hábitos Atómicos?</h3>
+        <p>Los hábitos atómicos son pequeñas rutinas o comportamientos que:</p>
+        <ul>
+          <li>Son fáciles de implementar</li>
+          <li>Se realizan de manera consistente</li>
+          <li>Se acumulan para crear cambios significativos</li>
+          <li>Forman parte de un sistema más grande</li>
+        </ul>
+        
+        <p>La clave no está en hacer cambios dramáticos, sino en ser consistente con pequeñas mejoras que se componen a lo largo del tiempo.</p>
+        
+        <h3>El Problema con los Objetivos</h3>
+        <p>Muchas personas se enfocan únicamente en los objetivos, pero los objetivos son solo el resultado que queremos lograr. Los sistemas son los procesos que nos llevan a esos resultados.</p>
+        
+        <p>Si quieres mejores resultados, olvídate de establecer objetivos. Enfócate en tu sistema.</p>
+      `,
       },
       {
         id: "chapter1",
-        title: "Capítulo 1: El Poder Sorprendente de los Hábitos Atómicos",
+        title: "Capítulo 1: Los Fundamentos del Cambio",
         pageStart: 16,
         pageEnd: 35,
         content: `
-          <h2>Capítulo 1: El Poder Sorprendente de los Hábitos Atómicos</h2>
-          
-          <p>En 2003, el equipo de ciclismo de Gran Bretaña enfrentaba una situación desalentadora. En más de cien años, los ciclistas británicos habían ganado solo una medalla de oro olímpica y nunca habían ganado el Tour de Francia.</p>
-          
-          <p>Todo eso cambió cuando Dave Brailsford se convirtió en el nuevo director de rendimiento del equipo británico de ciclismo en 2003.</p>
-          
-          <p>Brailsford creía en un concepto que él llamaba "la agregación de ganancias marginales". Su filosofía era simple: si puedes mejorar cada área relacionada con el ciclismo en solo un 1%, entonces esas pequeñas ganancias se sumarían para lograr una mejora notable.</p>
-          
-          <h3>¿Por qué los Pequeños Cambios Marcan una Gran Diferencia?</h3>
-          <p>Es muy fácil sobreestimar la importancia de un momento definitorio y subestimar el valor de hacer pequeñas mejoras diariamente.</p>
-          
-          <p>Con demasiada frecuencia, nos convencemos de que el cambio masivo requiere una acción masiva. Ya sea perdiendo peso, construyendo un negocio, escribiendo un libro, ganando un campeonato o logrando cualquier otro objetivo, nos presionamos para hacer alguna mejora que capture la atención de todos.</p>
-          
-          <p>Mientras tanto, mejorar en un 1% no es particularmente notable, a veces ni siquiera es perceptible, pero puede ser mucho más significativo, especialmente a largo plazo.</p>
-          
-          <h3>¿Qué es un Hábito Atómico?</h3>
-          <p>Los hábitos atómicos son pequeños hábitos que forman parte de un sistema más grande. Así como los átomos son los bloques de construcción de las moléculas, los hábitos atómicos son los bloques de construcción de resultados notables.</p>
-        `,
+        <h2>Capítulo 1: Los Fundamentos del Cambio</h2>
+        
+        <p>El cambio real ocurre en tres niveles diferentes, como las capas de una cebolla:</p>
+        
+        <h3>Los Tres Niveles del Cambio</h3>
+        <div style="background-color: #f0f9ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 24px 0; border-radius: 8px;">
+          <ol>
+            <li><strong>Cambio de Resultados:</strong> Lo que obtienes (perder peso, ganar dinero)</li>
+            <li><strong>Cambio de Proceso:</strong> Lo que haces (implementar rutinas, desarrollar sistemas)</li>
+            <li><strong>Cambio de Identidad:</strong> En quién te conviertes (tus creencias sobre ti mismo)</li>
+          </ol>
+        </div>
+        
+        <p>La mayoría de las personas comienzan con los resultados que quieren lograr. Pero el cambio duradero comienza con la identidad.</p>
+        
+        <h3>El Cambio Basado en la Identidad</h3>
+        <p>Cada acción que realizas es un voto por el tipo de persona que quieres ser. Ninguna acción individual cambiará tus creencias, pero a medida que los votos se acumulan, también lo hace la evidencia de tu nueva identidad.</p>
+        
+        <p>En lugar de decir "Quiero leer más", di "Soy una persona que lee". En lugar de "Quiero hacer ejercicio", di "Soy una persona activa".</p>
+        
+        <h3>El Proceso de Dos Pasos</h3>
+        <p>Para cambiar tu identidad:</p>
+        <ol>
+          <li>Decide qué tipo de persona quieres ser</li>
+          <li>Demuéstratelo con pequeñas victorias</li>
+        </ol>
+        
+        <p>Tus hábitos moldean tu identidad, y tu identidad moldea tus hábitos. Es un ciclo de retroalimentación continuo.</p>
+        
+        <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+          <h4 style="color: #d97706; margin-top: 0;">💡 Reflexión Personal</h4>
+          <p style="margin-bottom: 0;">¿Qué tipo de persona quieres ser? ¿Qué pequeñas acciones puedes tomar hoy para votar por esa identidad?</p>
+        </div>
+      `,
       },
       {
         id: "chapter2",
-        title: "Capítulo 2: Cómo Tus Hábitos Moldean Tu Identidad (y Viceversa)",
+        title: "Capítulo 2: El Sistema de Cuatro Pasos",
         pageStart: 36,
         pageEnd: 55,
         content: `
-          <h2>Capítulo 2: Cómo Tus Hábitos Moldean Tu Identidad (y Viceversa)</h2>
-          
-          <p>¿Por qué es tan fácil repetir los malos hábitos y tan difícil formar buenos? Pocas cosas pueden tener un impacto más poderoso en tu vida que mejorar tus hábitos diarios. Y sin embargo, es probable que este tiempo el próximo año estarás haciendo las mismas cosas que estás haciendo hoy.</p>
-          
-          <p>¿Por qué es tan difícil el cambio?</p>
-          
-          <h3>Los Tres Niveles de Cambio</h3>
-          <p>Hay tres niveles en los que puede ocurrir el cambio. Puedes imaginar que son como las capas de una cebolla.</p>
-          
-          <p><strong>El primer nivel es cambiar tus resultados.</strong> Este nivel se trata de cambiar lo que obtienes. La mayoría de las metas que te fijas están en este nivel. Quiero perder peso, quiero publicar un libro, quiero ganar un campeonato.</p>
-          
-          <p><strong>El segundo nivel es cambiar tu proceso.</strong> Este nivel se trata de cambiar tus hábitos y sistemas. La mayoría de los hábitos que construyes están en este nivel. Implemento una nueva rutina para ir al gimnasio, ordeno mi escritorio para un mejor flujo de trabajo, desarrollo una práctica de meditación.</p>
-          
-          <p><strong>El tercer y más profundo nivel es cambiar tu identidad.</strong> Este nivel se trata de cambiar tus creencias: tu visión del mundo, tu autoimagen, tus juicios sobre ti mismo y otros. La mayoría de las creencias, suposiciones y sesgos que tienes están en este nivel.</p>
-          
-          <h3>El Proceso de Dos Pasos para Cambiar Tu Identidad</h3>
-          <p>Tu identidad emerge de tus hábitos. No naces con creencias preestablecidas. Cada creencia, incluidas las que tienes sobre ti mismo, se aprende y se condiciona a través de la experiencia.</p>
-          
-          <p>Más precisamente, tus hábitos son cómo encarnas tu identidad. Cuando haces tu cama cada mañana, encarnas la identidad de una persona organizada. Cuando escribes cada día, encarnas la identidad de una persona creativa.</p>
-        `,
+        <h2>Capítulo 2: El Sistema de Cuatro Pasos para Formar Hábitos</h2>
+        
+        <p>Todos los hábitos siguen el mismo patrón básico: un ciclo de cuatro pasos que se repite automáticamente.</p>
+        
+        <h3>El Ciclo del Hábito</h3>
+        <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+          <ol>
+            <li><strong>🔔 Señal:</strong> Un disparador que inicia el comportamiento</li>
+            <li><strong>💭 Deseo:</strong> La motivación detrás del hábito</li>
+            <li><strong>⚡ Respuesta:</strong> El hábito que realizas</li>
+            <li><strong>🎁 Recompensa:</strong> El beneficio que obtienes del hábito</li>
+          </ol>
+        </div>
+        
+        <p>Si cualquiera de estos cuatro pasos falla, el hábito no se formará. Sin señal, el hábito nunca comienza. Sin deseo, no hay motivación para actuar. Sin respuesta, no hay hábito. Sin recompensa, no hay razón para repetirlo.</p>
+        
+        <h3>Las Cuatro Leyes del Cambio de Comportamiento</h3>
+        
+        <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <h4 style="color: #15803d; margin-top: 0;">✅ Para Crear Buenos Hábitos:</h4>
+          <ul style="margin-bottom: 0;">
+            <li><strong>1ª Ley:</strong> Hazlo Obvio (Señal)</li>
+            <li><strong>2ª Ley:</strong> Hazlo Atractivo (Deseo)</li>
+            <li><strong>3ª Ley:</strong> Hazlo Fácil (Respuesta)</li>
+            <li><strong>4ª Ley:</strong> Hazlo Satisfactorio (Recompensa)</li>
+          </ul>
+        </div>
+        
+        <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <h4 style="color: #dc2626; margin-top: 0;">❌ Para Romper Malos Hábitos:</h4>
+          <ul style="margin-bottom: 0;">
+            <li><strong>1ª Ley Invertida:</strong> Hazlo Invisible</li>
+            <li><strong>2ª Ley Invertida:</strong> Hazlo Poco Atractivo</li>
+            <li><strong>3ª Ley Invertida:</strong> Hazlo Difícil</li>
+            <li><strong>4ª Ley Invertida:</strong> Hazlo Insatisfactorio</li>
+          </ul>
+        </div>
+        
+        <h3>Ejemplo Práctico: Hábito de Lectura</h3>
+        <p>Supongamos que quieres desarrollar el hábito de leer más:</p>
+        
+        <ul>
+          <li><strong>Hazlo Obvio:</strong> Coloca un libro en tu mesita de noche</li>
+          <li><strong>Hazlo Atractivo:</strong> Elige libros sobre temas que te apasionen</li>
+          <li><strong>Hazlo Fácil:</strong> Comienza con solo 2 páginas por día</li>
+          <li><strong>Hazlo Satisfactorio:</strong> Marca cada día que lees en un calendario</li>
+        </ul>
+        
+        <p>En los próximos capítulos, exploraremos cada una de estas leyes en detalle y aprenderás técnicas específicas para aplicarlas en tu vida.</p>
+      `,
       },
     ],
   },
