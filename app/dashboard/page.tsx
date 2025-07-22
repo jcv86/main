@@ -6,30 +6,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Brain, Target, MessageSquare, FileText, GraduationCap, TrendingUp, Clock, CheckCircle } from "lucide-react"
 import Link from "next/link"
-import {
-  Brain,
-  Target,
-  FileText,
-  MessageSquare,
-  TrendingUp,
-  CheckCircle,
-  GraduationCap,
-  ArrowRight,
-} from "lucide-react"
 
 export default function DashboardPage() {
   return (
-    <Shell>
-      <div className="space-y-8">
+    <div className="md:pl-64">
+      <Shell>
         <Header title="Panel Principal" description="Bienvenido a tu plataforma de desarrollo profesional" />
 
-        {/* Estadísticas de Progreso */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Progress Overview */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Perfil Completado</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <Brain className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">75%</div>
@@ -40,11 +31,22 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Tests Completados</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+              <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">3/5</div>
-              <p className="text-xs text-muted-foreground">2 tests pendientes</p>
+              <Progress value={60} className="mt-2" />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Sesiones de Coaching</CardTitle>
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12</div>
+              <p className="text-xs text-muted-foreground">+2 esta semana</p>
             </CardContent>
           </Card>
 
@@ -55,159 +57,132 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">2</div>
-              <p className="text-xs text-muted-foreground">Última actualización: hace 2 días</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sesiones de Coaching</CardTitle>
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">8</div>
-              <p className="text-xs text-muted-foreground">+2 esta semana</p>
+              <p className="text-xs text-muted-foreground">Último actualizado hace 3 días</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Acciones Rápidas */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Acciones Rápidas</CardTitle>
-            <CardDescription>Continúa con tu desarrollo profesional</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Button asChild className="h-auto p-4 flex flex-col items-center space-y-2">
-                <Link href="/personality-test">
-                  <Brain className="h-8 w-8" />
-                  <span className="text-sm">Test de Personalidad</span>
-                </Link>
+        {/* Quick Actions */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                Test de Personalidad
+              </CardTitle>
+              <CardDescription>Descubre tu tipo de personalidad y fortalezas</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full">
+                <Link href="/personality-test">Comenzar Test</Link>
               </Button>
+            </CardContent>
+          </Card>
 
-              <Button
-                asChild
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center space-y-2 bg-transparent"
-              >
-                <Link href="/skills-assessment">
-                  <Target className="h-8 w-8" />
-                  <span className="text-sm">Evaluar Habilidades</span>
-                </Link>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-5 w-5" />
+                Evaluación de Habilidades
+              </CardTitle>
+              <CardDescription>Evalúa tus habilidades técnicas y blandas</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full">
+                <Link href="/skills-assessment">Evaluar Habilidades</Link>
               </Button>
+            </CardContent>
+          </Card>
 
-              <Button
-                asChild
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center space-y-2 bg-transparent"
-              >
-                <Link href="/cv-builder">
-                  <FileText className="h-8 w-8" />
-                  <span className="text-sm">Crear CV</span>
-                </Link>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <GraduationCap className="h-5 w-5" />
+                Carreras UDD
+              </CardTitle>
+              <CardDescription>Explora programas académicos recomendados</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full">
+                <Link href="/udd-careers">Explorar Carreras</Link>
               </Button>
+            </CardContent>
+          </Card>
+        </div>
 
-              <Button
-                asChild
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center space-y-2 bg-transparent"
-              >
-                <Link href="/career-coach">
-                  <MessageSquare className="h-8 w-8" />
-                  <span className="text-sm">Coach IA</span>
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Actividad Reciente */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Actividad Reciente</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100">
-                  <Brain className="h-4 w-4 text-blue-600" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">Test de Personalidad DISC completado</p>
-                  <p className="text-sm text-muted-foreground">Hace 2 días</p>
+        {/* Recent Activity */}
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Actividad Reciente
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Test DISC completado</p>
+                  <p className="text-xs text-muted-foreground">Hace 2 días</p>
                 </div>
                 <Badge variant="secondary">Completado</Badge>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-100">
-                  <FileText className="h-4 w-4 text-green-600" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">CV actualizado - Plantilla Moderna</p>
-                  <p className="text-sm text-muted-foreground">Hace 3 días</p>
+              <div className="flex items-center gap-3">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium">CV actualizado</p>
+                  <p className="text-xs text-muted-foreground">Hace 3 días</p>
                 </div>
                 <Badge variant="secondary">Actualizado</Badge>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100">
-                  <MessageSquare className="h-4 w-4 text-purple-600" />
+              <div className="flex items-center gap-3">
+                <MessageSquare className="h-4 w-4 text-blue-500" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Sesión de coaching</p>
+                  <p className="text-xs text-muted-foreground">Hace 1 semana</p>
                 </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">Sesión de coaching sobre entrevistas</p>
-                  <p className="text-sm text-muted-foreground">Hace 1 semana</p>
-                </div>
-                <Badge variant="secondary">Completado</Badge>
+                <Badge variant="outline">Coaching</Badge>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Recomendaciones de Carreras UDD */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <GraduationCap className="h-5 w-5" />
-              <span>Carreras UDD Recomendadas</span>
-            </CardTitle>
-            <CardDescription>Basado en tu perfil de personalidad y habilidades</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <h4 className="font-medium">Ingeniería Comercial</h4>
-                <p className="text-sm text-muted-foreground">
-                  Combina habilidades analíticas con liderazgo empresarial
-                </p>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="outline">95% Empleabilidad</Badge>
-                  <Badge variant="outline">$2.5M CLP</Badge>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Recomendaciones UDD
+              </CardTitle>
+              <CardDescription>Basado en tu perfil de personalidad</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 border rounded-lg">
+                <h4 className="font-medium">Ingeniería Civil Industrial</h4>
+                <p className="text-sm text-muted-foreground">95% compatibilidad</p>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="secondary">Liderazgo</Badge>
+                  <Badge variant="secondary">Análisis</Badge>
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="p-3 border rounded-lg">
                 <h4 className="font-medium">Psicología</h4>
-                <p className="text-sm text-muted-foreground">Perfecta para tu perfil empático y comunicativo</p>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="outline">88% Empleabilidad</Badge>
-                  <Badge variant="outline">$1.8M CLP</Badge>
+                <p className="text-sm text-muted-foreground">88% compatibilidad</p>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="secondary">Empatía</Badge>
+                  <Badge variant="secondary">Comunicación</Badge>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-4">
               <Button asChild variant="outline" className="w-full bg-transparent">
-                <Link href="/udd-careers">
-                  Explorar Todas las Carreras UDD
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                <Link href="/udd-careers">Ver Todas las Recomendaciones</Link>
               </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </Shell>
+            </CardContent>
+          </Card>
+        </div>
+      </Shell>
+    </div>
   )
 }
