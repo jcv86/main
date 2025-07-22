@@ -6,245 +6,154 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  Brain,
-  Target,
-  MessageSquare,
-  FileText,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  GraduationCap,
-} from "lucide-react"
+import { Brain, Target, MessageSquare, FileText, TrendingUp, Clock, CheckCircle, GraduationCap } from "lucide-react"
 import Link from "next/link"
-import { useAuth } from "@/contexts/auth-context"
+import { UDDCareerRecommendations } from "@/components/udd-career-recommendations"
 
 export default function DashboardPage() {
-  const { user } = useAuth()
-
-  const progressData = [
-    { label: "Test de Personalidad", value: 100, color: "bg-green-500" },
-    { label: "Evaluación de Habilidades", value: 75, color: "bg-blue-500" },
-    { label: "Perfil Profesional", value: 60, color: "bg-yellow-500" },
-    { label: "CV Completado", value: 40, color: "bg-purple-500" },
-  ]
-
-  const quickActions = [
-    {
-      title: "Continuar Test de Personalidad",
-      description: "Completa tu evaluación DISC",
-      icon: Brain,
-      href: "/personality-test",
-      color: "bg-blue-50 text-blue-600",
-    },
-    {
-      title: "Evaluación de Habilidades",
-      description: "Evalúa tus competencias técnicas",
-      icon: Target,
-      href: "/skills-assessment",
-      color: "bg-green-50 text-green-600",
-    },
-    {
-      title: "Consultar Coach",
-      description: "Obtén consejos personalizados",
-      icon: MessageSquare,
-      href: "/career-coach",
-      color: "bg-purple-50 text-purple-600",
-    },
-    {
-      title: "Crear CV",
-      description: "Construye tu currículum profesional",
-      icon: FileText,
-      href: "/cv-builder",
-      color: "bg-orange-50 text-orange-600",
-    },
-  ]
-
-  const recentActivity = [
-    {
-      action: "Test DISC completado",
-      time: "Hace 2 horas",
-      status: "success",
-    },
-    {
-      action: "Perfil actualizado",
-      time: "Hace 1 día",
-      status: "info",
-    },
-    {
-      action: "CV descargado",
-      time: "Hace 3 días",
-      status: "success",
-    },
-  ]
-
-  const uddRecommendations = [
-    {
-      career: "Ingeniería Civil Industrial",
-      match: 92,
-      reason: "Alta compatibilidad con tu perfil analítico",
-    },
-    {
-      career: "Psicología",
-      match: 87,
-      reason: "Coincide con tus habilidades interpersonales",
-    },
-    {
-      career: "Administración de Empresas",
-      match: 83,
-      reason: "Alineado con tus intereses de liderazgo",
-    },
-  ]
-
   return (
     <Shell>
-      <Header
-        title={`¡Bienvenido, ${user?.name}!`}
-        description="Aquí tienes un resumen de tu progreso y actividades recientes."
-      />
+      <Header title="Panel Principal" description="Bienvenido a tu plataforma de desarrollo profesional" />
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Progress Cards */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Progreso Total</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Test de Personalidad</CardTitle>
+            <Brain className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">68%</div>
-            <p className="text-xs text-muted-foreground">+12% desde la semana pasada</p>
+            <div className="text-2xl font-bold">85%</div>
+            <Progress value={85} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">Completado</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tests Completados</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Habilidades</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">72%</div>
+            <Progress value={72} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">En progreso</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">CV Completado</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">90%</div>
+            <Progress value={90} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">Casi listo</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Sesiones de Coach</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">de 5 evaluaciones</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tiempo Invertido</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">4.2h</div>
-            <p className="text-xs text-muted-foreground">esta semana</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Recomendaciones</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">5</div>
-            <p className="text-xs text-muted-foreground">carreras sugeridas</p>
+            <p className="text-xs text-muted-foreground mt-2">Sesiones completadas</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 mb-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-6">
+        {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Progreso de Evaluaciones</CardTitle>
-            <CardDescription>Tu avance en las diferentes áreas de evaluación</CardDescription>
+            <CardTitle>Acciones Rápidas</CardTitle>
+            <CardDescription>Continúa con tu desarrollo profesional</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {progressData.map((item, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{item.label}</span>
-                  <span>{item.value}%</span>
-                </div>
-                <Progress value={item.value} className="h-2" />
-              </div>
-            ))}
+          <CardContent className="space-y-3">
+            <Button asChild className="w-full justify-start">
+              <Link href="/personality-test">
+                <Brain className="mr-2 h-4 w-4" />
+                Continuar Test de Personalidad
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full justify-start bg-transparent">
+              <Link href="/skills-assessment">
+                <Target className="mr-2 h-4 w-4" />
+                Evaluar Habilidades
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full justify-start bg-transparent">
+              <Link href="/career-coach">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Hablar con Coach
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
+        {/* Recent Activity */}
         <Card>
           <CardHeader>
             <CardTitle>Actividad Reciente</CardTitle>
             <CardDescription>Tus últimas acciones en la plataforma</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div
-                    className={`w-2 h-2 rounded-full ${activity.status === "success" ? "bg-green-500" : "bg-blue-500"}`}
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium">Test DISC completado</p>
+                <p className="text-xs text-muted-foreground">Hace 2 horas</p>
+              </div>
+              <Badge variant="secondary">Completado</Badge>
             </div>
+            <div className="flex items-center space-x-3">
+              <Clock className="h-4 w-4 text-yellow-500" />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium">CV actualizado</p>
+                <p className="text-xs text-muted-foreground">Ayer</p>
+              </div>
+              <Badge variant="outline">Actualizado</Badge>
+            </div>
+            <div className="flex items-center space-x-3">
+              <TrendingUp className="h-4 w-4 text-blue-500" />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium">Sesión de coaching</p>
+                <p className="text-xs text-muted-foreground">Hace 3 días</p>
+              </div>
+              <Badge variant="secondary">Completado</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* UDD Careers CTA */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <GraduationCap className="h-5 w-5" />
+              Carreras UDD
+            </CardTitle>
+            <CardDescription>Descubre las carreras que mejor se adaptan a tu perfil</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-sm text-muted-foreground">
+              Basado en tu personalidad y habilidades, hemos encontrado carreras UDD perfectas para ti.
+            </div>
+            <Button asChild className="w-full">
+              <Link href="/udd-careers">
+                <GraduationCap className="mr-2 h-4 w-4" />
+                Explorar Carreras UDD
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Acciones Rápidas</CardTitle>
-            <CardDescription>Continúa donde lo dejaste</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-3">
-              {quickActions.map((action, index) => {
-                const Icon = action.icon
-                return (
-                  <Link key={index} href={action.href}>
-                    <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                      <div className={`p-2 rounded-md ${action.color}`}>
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{action.title}</p>
-                        <p className="text-xs text-muted-foreground">{action.description}</p>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <GraduationCap className="h-5 w-5" />
-              <span>Carreras UDD Recomendadas</span>
-            </CardTitle>
-            <CardDescription>Basado en tu perfil y evaluaciones</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {uddRecommendations.map((rec, index) => (
-                <div key={index} className="p-3 border rounded-lg">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-sm">{rec.career}</h4>
-                    <Badge variant="secondary">{rec.match}% match</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">{rec.reason}</p>
-                </div>
-              ))}
-              <Button asChild className="w-full">
-                <Link href="/udd-careers">Ver Todas las Carreras UDD</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      {/* UDD Career Recommendations */}
+      <div className="mt-8">
+        <UDDCareerRecommendations />
       </div>
     </Shell>
   )

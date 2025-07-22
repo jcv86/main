@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useState } from "react"
 
 type Language = "es" | "en"
@@ -18,12 +17,18 @@ const translations = {
     profile: "Mi Perfil",
     settings: "Configuración",
     logout: "Cerrar Sesión",
+    welcome: "Bienvenido",
+    progress: "Progreso",
+    recommendations: "Recomendaciones",
   },
   en: {
     dashboard: "Dashboard",
     profile: "My Profile",
     settings: "Settings",
     logout: "Sign Out",
+    welcome: "Welcome",
+    progress: "Progress",
+    recommendations: "Recommendations",
   },
 }
 
