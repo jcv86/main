@@ -266,55 +266,67 @@ export const uddCareers: UDDCareer[] = [
 ]
 
 export function getCareerRecommendations(
-  personalityResults: Record<string, number>,
-  userSkills: string[],
-  jobInterests: string[],
+  personalityResults: Record<string, number> = {},
+  userSkills: string[] = [],
+  jobInterests: string[] = [],
 ): UDDCareer[] {
+  // Ensure we have valid inputs
+  const validPersonalityResults = personalityResults || {}
+  const validUserSkills = userSkills || []
+  const validJobInterests = jobInterests || []
+
   return uddCareers
     .map((career) => {
       let score = 0
 
       // Personality matching (40% weight)
-      const personalityScore =
-        Object.entries(personalityResults).reduce((acc, [trait, value]) => {
-          const traitKey = trait.toLowerCase() as keyof typeof career.personalityMatch
-          if (career.personalityMatch[traitKey] !== undefined) {
-            return acc + (1 - Math.abs(value - career.personalityMatch[traitKey]))
-          }
-          return acc
-        }, 0) / Object.keys(personalityResults).length
+      const personalityEntries = Object.entries(validPersonalityResults)
+      if (personalityEntries.length > 0) {
+        const personalityScore =
+          personalityEntries.reduce((acc, [trait, value]) => {
+            const traitKey = trait.toLowerCase() as keyof typeof career.personalityMatch
+            if (career.personalityMatch[traitKey] !== undefined) {
+              return acc + (1 - Math.abs(value - career.personalityMatch[traitKey]))
+            }
+            return acc
+          }, 0) / personalityEntries.length
 
-      score += personalityScore * 0.4
+        score += personalityScore * 0.4
+      }
 
       // Skills matching (30% weight)
-      const skillsMatch =
-        userSkills.filter((skill) =>
-          career.skills.some(
-            (careerSkill) =>
-              careerSkill.toLowerCase().includes(skill.toLowerCase()) ||
-              skill.toLowerCase().includes(careerSkill.toLowerCase()),
-          ),
-        ).length / Math.max(userSkills.length, 1)
+      if (validUserSkills.length > 0) {
+        const skillsMatch =
+          validUserSkills.filter((skill) =>
+            career.skills.some(
+              (careerSkill) =>
+                careerSkill.toLowerCase().includes(skill.toLowerCase()) ||
+                skill.toLowerCase().includes(careerSkill.toLowerCase()),
+            ),
+          ).length / validUserSkills.length
 
-      score += skillsMatch * 0.3
+        score += skillsMatch * 0.3
+      }
 
       // Job interests matching (30% weight)
-      const interestsMatch =
-        jobInterests.filter(
-          (interest) =>
-            career.relatedFields.some(
-              (field) =>
-                field.toLowerCase().includes(interest.toLowerCase()) ||
-                interest.toLowerCase().includes(field.toLowerCase()),
-            ) ||
-            career.jobOpportunities.some(
-              (job) =>
-                job.toLowerCase().includes(interest.toLowerCase()) ||
-                interest.toLowerCase().includes(job.toLowerCase()),
-            ),
-        ).length / Math.max(jobInterests.length, 1)
+      if (validJobInterests.length > 0) {
+        const interestsMatch =
+          validJobInterests.filter(
+            (interest) =>
+              career.relatedFields.some(
+                (field) =>
+                  field.toLowerCase().includes(interest.toLowerCase()) ||
+                  interest.toLowerCase().includes(field.toLowerCase()),
+              ) ||
+              career.jobOpportunities.some(
+                (job) =>
+                  job.toLowerCase().includes(interest.toLowerCase()) ||
+                  interest.toLowerCase().includes(job.toLowerCase()),
+              ),
+          ).length / validJobInterests.length
 
-      score += interestsMatch * 0.3
+        score += interestsMatch * 0.3
+      }
 
       return { ...career, matchScore: Math.round(score * 100) }
     })
