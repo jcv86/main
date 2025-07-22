@@ -6,34 +6,38 @@ type Language = "es" | "en"
 
 interface LanguageContextType {
   language: Language
-  setLanguage: (lang: Language) => void
+  toggleLanguage: () => void
   t: (key: string) => string
 }
 
 const translations = {
   es: {
-    dashboard: "Panel Principal",
+    dashboard: "Dashboard",
     profile: "Perfil",
-    settings: "Configuración",
-    logout: "Cerrar Sesión",
-    welcome: "Bienvenido",
-    "career-coach": "Coach de Carrera",
+    "personality-test": "Test de Personalidad",
+    "skills-assessment": "Evaluación de Habilidades",
     "cv-builder": "Constructor de CV",
     "job-search": "Búsqueda de Empleo",
-    "skills-assessment": "Evaluación de Habilidades",
-    "personality-test": "Test de Personalidad",
+    "career-coach": "Coach de Carrera",
+    "interview-simulator": "Simulador de Entrevistas",
+    settings: "Configuración",
+    logout: "Cerrar Sesión",
+    notifications: "Notificaciones",
+    "no-notifications": "No hay notificaciones",
   },
   en: {
     dashboard: "Dashboard",
     profile: "Profile",
-    settings: "Settings",
-    logout: "Logout",
-    welcome: "Welcome",
-    "career-coach": "Career Coach",
+    "personality-test": "Personality Test",
+    "skills-assessment": "Skills Assessment",
     "cv-builder": "CV Builder",
     "job-search": "Job Search",
-    "skills-assessment": "Skills Assessment",
-    "personality-test": "Personality Test",
+    "career-coach": "Career Coach",
+    "interview-simulator": "Interview Simulator",
+    settings: "Settings",
+    logout: "Logout",
+    notifications: "Notifications",
+    "no-notifications": "No notifications",
   },
 }
 
@@ -42,11 +46,15 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === "es" ? "en" : "es"))
+  }
+
   const t = (key: string): string => {
     return translations[language][key as keyof (typeof translations)["es"]] || key
   }
 
-  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
+  return <LanguageContext.Provider value={{ language, toggleLanguage, t }}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {

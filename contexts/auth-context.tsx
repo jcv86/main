@@ -7,39 +7,39 @@ interface User {
   name: string
   email: string
   avatar?: string
+  role: string
 }
 
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
-  isLoading: boolean
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Simulate checking for existing session
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       // Mock user for demo
       setUser({
         id: "1",
         name: "Usuario Demo",
-        email: "demo@carreerpro.com",
+        email: "demo@example.com",
         avatar: "/placeholder-user.jpg",
+        role: "user",
       })
-      setIsLoading(false)
+      setLoading(false)
     }, 1000)
-
-    return () => clearTimeout(timer)
   }, [])
 
   const login = async (email: string, password: string) => {
-    setIsLoading(true)
+    setLoading(true)
     // Simulate login API call
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -48,15 +48,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       name: "Usuario Demo",
       email: email,
       avatar: "/placeholder-user.jpg",
+      role: "user",
     })
-    setIsLoading(false)
+    setLoading(false)
   }
 
   const logout = () => {
     setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

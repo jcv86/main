@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 interface Notification {
   id: string
@@ -13,32 +13,49 @@ interface Notification {
 
 interface NotificationsContextType {
   notifications: Notification[]
+  unreadCount: number
   addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
   markAsRead: (id: string) => void
-  clearAll: () => void
+  markAllAsRead: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: "1",
-      title: "Bienvenido a CareerPro",
-      message: "Completa tu perfil para obtener recomendaciones personalizadas",
-      type: "info",
-      read: false,
-      createdAt: new Date(),
-    },
-    {
-      id: "2",
-      title: "Nueva oportunidad laboral",
-      message: "Encontramos 3 empleos que coinciden con tu perfil",
-      type: "success",
-      read: false,
-      createdAt: new Date(),
-    },
-  ])
+  const [notifications, setNotifications] = useState<Notification[]>([])
+
+  useEffect(() => {
+    // Initialize with some demo notifications
+    const demoNotifications: Notification[] = [
+      {
+        id: "1",
+        title: "Test de Personalidad Completado",
+        message: "Has completado exitosamente tu evaluación DISC",
+        type: "success",
+        read: false,
+        createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+      },
+      {
+        id: "2",
+        title: "Nueva Oportunidad de Trabajo",
+        message: "Se encontró una nueva posición que coincide con tu perfil",
+        type: "info",
+        read: false,
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      },
+      {
+        id: "3",
+        title: "Recordatorio de CV",
+        message: "No olvides actualizar tu CV con tus nuevas habilidades",
+        type: "warning",
+        read: true,
+        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+      },
+    ]
+    setNotifications(demoNotifications)
+  }, [])
+
+  const unreadCount = notifications.filter((n) => !n.read).length
 
   const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
     const newNotification: Notification = {
@@ -56,17 +73,18 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  const clearAll = () => {
-    setNotifications([])
+  const markAllAsRead = () => {
+    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
   }
 
   return (
     <NotificationsContext.Provider
       value={{
         notifications,
+        unreadCount,
         addNotification,
         markAsRead,
-        clearAll,
+        markAllAsRead,
       }}
     >
       {children}
