@@ -1,272 +1,262 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useLanguage } from "@/contexts/language-context"
+import { useNotifications } from "@/contexts/notifications-context"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Brain, FileText, MessageSquare, Search, Target, TrendingUp, Users, Calendar, Award } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Brain, Target, Users, TrendingUp, Calendar, FileText, Bell, LogOut, Menu, X } from "lucide-react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
+  const { user, logout } = useAuth()
+  const { t } = useLanguage()
+  const { notifications, unreadCount } = useNotifications()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!user) {
       router.push("/auth/login")
     }
-  }, [user, loading, router])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-          <p className="mt-4 text-muted-foreground">Cargando...</p>
-        </div>
-      </div>
-    )
-  }
+  }, [user, router])
 
   if (!user) {
     return null
   }
 
+  const stats = [
+    { label: "Tests Completados", value: 3, total: 5, icon: Brain, color: "bg-blue-500" },
+    { label: "Sesiones de Coaching", value: 2, total: 4, icon: Users, color: "bg-green-500" },
+    { label: "Aplicaciones Enviadas", value: 12, total: 20, icon: FileText, color: "bg-purple-500" },
+    { label: "Entrevistas Programadas", value: 3, total: 3, icon: Calendar, color: "bg-orange-500" },
+  ]
+
+  const quickActions = [
+    {
+      title: "Test de Personalidad DISC",
+      description: "Descubre tu perfil de personalidad",
+      href: "/disc-test",
+      icon: Brain,
+    },
+    {
+      title: "Evaluación de Habilidades",
+      description: "Evalúa tus competencias técnicas",
+      href: "/skills-assessment",
+      icon: Target,
+    },
+    {
+      title: "Sesión de Coaching",
+      description: "Programa una sesión personalizada",
+      href: "/career-coach",
+      icon: Users,
+    },
+    {
+      title: "Búsqueda de Empleo",
+      description: "Encuentra oportunidades laborales",
+      href: "/job-search",
+      icon: TrendingUp,
+    },
+  ]
+
+  const recentActivity = [
+    { action: "Completaste el Test DISC", time: "2 horas", badge: "Completado" },
+    { action: "Nueva oportunidad laboral encontrada", time: "1 día", badge: "Nuevo" },
+    { action: "Sesión de coaching programada", time: "2 días", badge: "Programado" },
+    { action: "Perfil actualizado", time: "3 días", badge: "Actualizado" },
+  ]
+
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Welcome Section */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">¡Hola, {user.name}! 👋</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Bienvenido a tu plataforma de desarrollo profesional. Aquí puedes evaluar tus habilidades, recibir coaching
-          personalizado y construir tu carrera ideal.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">CareerDev</h1>
+            </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Target className="h-8 w-8 text-blue-600" />
-              <div>
-                <p className="text-2xl font-bold">85%</p>
-                <p className="text-sm text-muted-foreground">Progreso General</p>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link href="/dashboard">
+                <Button variant="ghost">Panel</Button>
+              </Link>
+              <Link href="/disc-test">
+                <Button variant="ghost">Evaluaciones</Button>
+              </Link>
+              <Link href="/career-coach">
+                <Button variant="ghost">Coaching</Button>
+              </Link>
+              <Link href="/job-search">
+                <Button variant="ghost">Empleos</Button>
+              </Link>
+
+              {/* Notifications */}
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                    {unreadCount}
+                  </Badge>
+                )}
+              </Button>
+
+              {/* User Menu */}
+              <div className="flex items-center space-x-3">
+                <Avatar>
+                  <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                  <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="hidden lg:block">
+                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                  <div className="text-xs text-gray-500">{user.email}</div>
+                </div>
+                <Button variant="ghost" size="icon" onClick={logout}>
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Award className="h-8 w-8 text-green-600" />
-              <div>
-                <p className="text-2xl font-bold">12</p>
-                <p className="text-sm text-muted-foreground">Habilidades Evaluadas</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <MessageSquare className="h-8 w-8 text-purple-600" />
-              <div>
-                <p className="text-2xl font-bold">8</p>
-                <p className="text-sm text-muted-foreground">Sesiones de Coaching</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-orange-600" />
-              <div>
-                <p className="text-2xl font-bold">94%</p>
-                <p className="text-sm text-muted-foreground">Compatibilidad CV</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Brain className="h-5 w-5" />
-              <span>Evaluación de Habilidades</span>
-            </CardTitle>
-            <CardDescription>Evalúa tus habilidades técnicas y blandas</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Habilidades Técnicas</span>
-                <span>80%</span>
-              </div>
-              <Progress value={80} />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Habilidades Blandas</span>
-                <span>90%</span>
-              </div>
-              <Progress value={90} />
-            </div>
-            <Link href="/skills-assessment">
-              <Button className="w-full">Continuar Evaluación</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <MessageSquare className="h-5 w-5" />
-              <span>Coach de Carrera</span>
-            </CardTitle>
-            <CardDescription>Recibe consejos personalizados para tu carrera</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="secondary">Última sesión: Hace 2 días</Badge>
-              <p className="text-sm text-muted-foreground">
-                "Enfócate en desarrollar habilidades de liderazgo para tu próximo ascenso"
-              </p>
-            </div>
-            <Link href="/career-coach">
-              <Button className="w-full">Iniciar Sesión de Coaching</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <FileText className="h-5 w-5" />
-              <span>Constructor de CV</span>
-            </CardTitle>
-            <CardDescription>Crea y optimiza tu currículum vitae</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="outline">CV actualizado hace 1 semana</Badge>
-              <p className="text-sm text-muted-foreground">
-                Tu CV tiene una compatibilidad del 94% con ofertas de trabajo actuales
-              </p>
-            </div>
-            <Link href="/cv-builder">
-              <Button className="w-full">Editar CV</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Search className="h-5 w-5" />
-              <span>Búsqueda de Empleo</span>
-            </CardTitle>
-            <CardDescription>Encuentra oportunidades laborales perfectas para ti</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge>15 nuevas ofertas</Badge>
-              <p className="text-sm text-muted-foreground">Basadas en tu perfil y preferencias</p>
-            </div>
-            <Link href="/job-search">
-              <Button className="w-full">Ver Ofertas</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Brain className="h-5 w-5" />
-              <span>Test de Personalidad</span>
-            </CardTitle>
-            <CardDescription>Descubre tu perfil DISC y fortalezas</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge variant="secondary">Tipo: Dominante-Influyente</Badge>
-              <p className="text-sm text-muted-foreground">Líder natural con excelentes habilidades de comunicación</p>
-            </div>
-            <Link href="/personality-test">
-              <Button className="w-full">Ver Resultados</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="h-5 w-5" />
-              <span>Carreras UDD</span>
-            </CardTitle>
-            <CardDescription>Explora carreras recomendadas según tu perfil</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Badge>3 carreras recomendadas</Badge>
-              <p className="text-sm text-muted-foreground">Ingeniería Comercial (95% compatibilidad)</p>
-            </div>
-            <Link href="/udd-careers">
-              <Button className="w-full">Explorar Carreras</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Calendar className="h-5 w-5" />
-            <span>Actividad Reciente</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Completaste el test de habilidades técnicas</p>
-                <p className="text-sm text-muted-foreground">Hace 2 horas</p>
-              </div>
-              <Badge>Completado</Badge>
-            </div>
-
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Sesión de coaching: Desarrollo de liderazgo</p>
-                <p className="text-sm text-muted-foreground">Hace 2 días</p>
-              </div>
-              <Badge variant="secondary">Coaching</Badge>
-            </div>
-
-            <div className="flex items-center space-x-4 p-4 border rounded-lg">
-              <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="font-medium">Actualizaste tu CV con nuevas habilidades</p>
-                <p className="text-sm text-muted-foreground">Hace 1 semana</p>
-              </div>
-              <Badge variant="outline">CV</Badge>
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="bg-gray-50 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+              <Link href="/dashboard" className="block">
+                <Button variant="ghost" className="w-full justify-start">
+                  Panel
+                </Button>
+              </Link>
+              <Link href="/disc-test" className="block">
+                <Button variant="ghost" className="w-full justify-start">
+                  Evaluaciones
+                </Button>
+              </Link>
+              <Link href="/career-coach" className="block">
+                <Button variant="ghost" className="w-full justify-start">
+                  Coaching
+                </Button>
+              </Link>
+              <Link href="/job-search" className="block">
+                <Button variant="ghost" className="w-full justify-start">
+                  Empleos
+                </Button>
+              </Link>
+              <div className="pt-4 pb-3 border-t border-gray-200">
+                <div className="flex items-center px-3 space-x-3">
+                  <Avatar>
+                    <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                    <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                    <div className="text-xs text-gray-500">{user.email}</div>
+                  </div>
+                </div>
+                <div className="mt-3 px-3">
+                  <Button variant="ghost" onClick={logout} className="w-full justify-start">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Cerrar Sesión
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Panel de Control</h1>
+          <p className="text-gray-600">Bienvenido de vuelta, {user.name}</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stat.value}/{stat.total}
+                    </p>
+                  </div>
+                  <div className={`p-3 rounded-full ${stat.color}`}>
+                    <stat.icon className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Progress value={(stat.value / stat.total) * 100} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Acciones Rápidas</CardTitle>
+              <CardDescription>Continúa con tu desarrollo profesional</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {quickActions.map((action, index) => (
+                <Link key={index} href={action.href}>
+                  <div className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div className="p-2 bg-blue-100 rounded-lg mr-4">
+                      <action.icon className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{action.title}</h3>
+                      <p className="text-sm text-gray-600">{action.description}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Recent Activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Actividad Reciente</CardTitle>
+              <CardDescription>Tus últimas acciones en la plataforma</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div>
+                    <p className="font-medium text-gray-900">{activity.action}</p>
+                    <p className="text-sm text-gray-600">Hace {activity.time}</p>
+                  </div>
+                  <Badge variant="secondary">{activity.badge}</Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }

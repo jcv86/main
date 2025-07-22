@@ -1,6 +1,7 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import type React from "react"
+import { createContext, useContext, useState } from "react"
 
 interface Notification {
   id: string
@@ -22,23 +23,23 @@ interface NotificationsContextType {
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
-export function NotificationsProvider({ children }: { children: ReactNode }) {
+export function NotificationsProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
-      title: "Bienvenido a CareerDev",
-      message: "Completa tu perfil para obtener recomendaciones personalizadas",
-      type: "info",
+      title: "Test de Personalidad Completado",
+      message: "Tu perfil DISC ha sido actualizado",
+      type: "success",
       read: false,
-      createdAt: new Date(),
+      createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
     },
     {
       id: "2",
-      title: "Nueva evaluación disponible",
-      message: "El test de habilidades técnicas está listo para ti",
-      type: "success",
+      title: "Nueva Oportunidad Laboral",
+      message: "Encontramos 3 empleos que coinciden con tu perfil",
+      type: "info",
       read: false,
-      createdAt: new Date(Date.now() - 86400000), // 1 day ago
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     },
   ])
 
@@ -55,15 +56,17 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+    setNotifications((prev) =>
+      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
+    )
   }
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
   }
 
   const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id))
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
   }
 
   return (
