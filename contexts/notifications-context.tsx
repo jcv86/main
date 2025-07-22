@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { createContext, useContext, useState } from "react"
 
 interface Notification {
@@ -9,61 +10,44 @@ interface Notification {
   message: string
   type: "info" | "success" | "warning" | "error"
   timestamp: Date
-  read: boolean
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
-  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
-  markAsRead: (id: string) => void
-  clearAll: () => void
-  unreadCount: number
+  addNotification: (notification: Omit<Notification, "id" | "timestamp">) => void
+  removeNotification: (id: string) => void
+  clearNotifications: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export function NotificationsProvider({ children }: { children: React.ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: "1",
-      title: "Bienvenido",
-      message: "¡Bienvenido a la plataforma de desarrollo profesional!",
-      type: "success",
-      timestamp: new Date(),
-      read: false,
-    },
-  ])
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
-  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
+  const addNotification = (notification: Omit<Notification, "id" | "timestamp">) => {
     const newNotification: Notification = {
       ...notification,
-      id: Date.now().toString(),
+      id: Math.random().toString(36).substr(2, 9),
       timestamp: new Date(),
-      read: false,
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
 
-  const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
   }
 
-  const clearAll = () => {
+  const clearNotifications = () => {
     setNotifications([])
   }
-
-  const unreadCount = notifications.filter((n) => !n.read).length
 
   return (
     <NotificationsContext.Provider
       value={{
         notifications,
         addNotification,
-        markAsRead,
-        clearAll,
-        unreadCount,
+        removeNotification,
+        clearNotifications,
       }}
     >
       {children}
