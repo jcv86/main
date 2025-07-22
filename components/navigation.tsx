@@ -8,14 +8,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, User } from "lucide-react"
 import { useState } from "react"
 
-const navigationItems = [
+const navigation = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Career Coach", href: "/career-coach" },
   { name: "CV Builder", href: "/cv-builder" },
   { name: "Skills Assessment", href: "/skills-assessment" },
   { name: "Job Search", href: "/job-search" },
   { name: "Carreras UDD", href: "/udd-careers" },
-  { name: "Profile", href: "/profile" },
+  { name: "Interview Simulator", href: "/interview-simulator" },
 ]
 
 export function Navigation() {
@@ -30,7 +30,7 @@ export function Navigation() {
             <span className="hidden font-bold sm:inline-block">Career Platform</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navigationItems.map((item) => (
+            {navigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -45,7 +45,7 @@ export function Navigation() {
           </nav>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile navigation */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
@@ -62,7 +62,7 @@ export function Navigation() {
             </Link>
             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
               <div className="flex flex-col space-y-3">
-                {navigationItems.map((item) => (
+                {navigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -82,7 +82,7 @@ export function Navigation() {
 
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            <Link href="/dashboard" className="mr-6 flex items-center space-x-2 md:hidden">
+            <Link href="/dashboard" className="md:hidden">
               <span className="font-bold">Career Platform</span>
             </Link>
           </div>
@@ -98,5 +98,4 @@ export function Navigation() {
   )
 }
 
-// Default export for compatibility
 export default Navigation
