@@ -13,79 +13,50 @@ interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
-  register: (name: string, email: string, password: string) => Promise<void>
-  loading: boolean
+  isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Simulate checking for existing session
-    const checkAuth = async () => {
-      try {
-        // For demo purposes, we'll set a mock user
-        const mockUser = {
-          id: "1",
-          name: "Usuario Demo",
-          email: "demo@ejemplo.com",
-          avatar: "/placeholder-user.jpg",
-        }
-        setUser(mockUser)
-      } catch (error) {
-        console.error("Error checking auth:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
+    const timer = setTimeout(() => {
+      // Mock user for demo
+      setUser({
+        id: "1",
+        name: "Usuario Demo",
+        email: "demo@carreerpro.com",
+        avatar: "/placeholder-user.jpg",
+      })
+      setIsLoading(false)
+    }, 1000)
 
-    checkAuth()
+    return () => clearTimeout(timer)
   }, [])
 
   const login = async (email: string, password: string) => {
-    setLoading(true)
-    try {
-      // Mock login - in real app, this would call your auth API
-      const mockUser = {
-        id: "1",
-        name: "Usuario Demo",
-        email: email,
-        avatar: "/placeholder-user.jpg",
-      }
-      setUser(mockUser)
-    } catch (error) {
-      throw new Error("Error al iniciar sesión")
-    } finally {
-      setLoading(false)
-    }
-  }
+    setIsLoading(true)
+    // Simulate login API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const register = async (name: string, email: string, password: string) => {
-    setLoading(true)
-    try {
-      // Mock registration - in real app, this would call your auth API
-      const mockUser = {
-        id: "1",
-        name: name,
-        email: email,
-        avatar: "/placeholder-user.jpg",
-      }
-      setUser(mockUser)
-    } catch (error) {
-      throw new Error("Error al registrarse")
-    } finally {
-      setLoading(false)
-    }
+    setUser({
+      id: "1",
+      name: "Usuario Demo",
+      email: email,
+      avatar: "/placeholder-user.jpg",
+    })
+    setIsLoading(false)
   }
 
   const logout = () => {
     setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, register, loading }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

@@ -7,40 +7,33 @@ type Language = "es" | "en"
 interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
-  toggleLanguage: () => void
   t: (key: string) => string
 }
 
 const translations = {
   es: {
-    "nav.home": "Inicio",
-    "nav.skills": "Evaluación de Habilidades",
-    "nav.coach": "Coach de Carrera",
-    "nav.cv": "Constructor de CV",
-    "nav.jobs": "Búsqueda de Empleo",
-    "nav.disc": "Test DISC",
-    "nav.careers": "Carreras UDD",
-    "nav.interview": "Simulador de Entrevistas",
-    "auth.login": "Iniciar Sesión",
-    "auth.register": "Registrarse",
-    "auth.logout": "Cerrar Sesión",
-    "profile.title": "Perfil",
-    "settings.title": "Configuración",
+    dashboard: "Panel Principal",
+    profile: "Perfil",
+    settings: "Configuración",
+    logout: "Cerrar Sesión",
+    welcome: "Bienvenido",
+    "career-coach": "Coach de Carrera",
+    "cv-builder": "Constructor de CV",
+    "job-search": "Búsqueda de Empleo",
+    "skills-assessment": "Evaluación de Habilidades",
+    "personality-test": "Test de Personalidad",
   },
   en: {
-    "nav.home": "Home",
-    "nav.skills": "Skills Assessment",
-    "nav.coach": "Career Coach",
-    "nav.cv": "CV Builder",
-    "nav.jobs": "Job Search",
-    "nav.disc": "DISC Test",
-    "nav.careers": "UDD Careers",
-    "nav.interview": "Interview Simulator",
-    "auth.login": "Login",
-    "auth.register": "Register",
-    "auth.logout": "Logout",
-    "profile.title": "Profile",
-    "settings.title": "Settings",
+    dashboard: "Dashboard",
+    profile: "Profile",
+    settings: "Settings",
+    logout: "Logout",
+    welcome: "Welcome",
+    "career-coach": "Career Coach",
+    "cv-builder": "CV Builder",
+    "job-search": "Job Search",
+    "skills-assessment": "Skills Assessment",
+    "personality-test": "Personality Test",
   },
 }
 
@@ -49,17 +42,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
-  const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "es" ? "en" : "es"))
-  }
-
   const t = (key: string): string => {
     return translations[language][key as keyof (typeof translations)["es"]] || key
   }
 
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t }}>{children}</LanguageContext.Provider>
-  )
+  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {

@@ -7,16 +7,15 @@ interface Notification {
   title: string
   message: string
   type: "info" | "success" | "warning" | "error"
-  timestamp: Date
   read: boolean
+  createdAt: Date
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
-  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
+  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
   markAsRead: (id: string) => void
-  markAllAsRead: () => void
-  unreadCount: number
+  clearAll: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
@@ -25,36 +24,28 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
-      title: "Evaluación Completada",
-      message: "Has completado exitosamente tu evaluación de habilidades técnicas",
-      type: "success",
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+      title: "Bienvenido a CareerPro",
+      message: "Completa tu perfil para obtener recomendaciones personalizadas",
+      type: "info",
       read: false,
+      createdAt: new Date(),
     },
     {
       id: "2",
-      title: "Nueva Sesión de Coaching",
-      message: "Tu próxima sesión de coaching está programada para mañana a las 10:00 AM",
-      type: "info",
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+      title: "Nueva oportunidad laboral",
+      message: "Encontramos 3 empleos que coinciden con tu perfil",
+      type: "success",
       read: false,
-    },
-    {
-      id: "3",
-      title: "Ofertas de Trabajo",
-      message: "Se encontraron 5 nuevas ofertas de trabajo que coinciden con tu perfil",
-      type: "info",
-      timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-      read: true,
+      createdAt: new Date(),
     },
   ])
 
-  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
+  const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
     const newNotification: Notification = {
       ...notification,
       id: Date.now().toString(),
-      timestamp: new Date(),
       read: false,
+      createdAt: new Date(),
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
@@ -65,11 +56,9 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+  const clearAll = () => {
+    setNotifications([])
   }
-
-  const unreadCount = notifications.filter((n) => !n.read).length
 
   return (
     <NotificationsContext.Provider
@@ -77,8 +66,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
         notifications,
         addNotification,
         markAsRead,
-        markAllAsRead,
-        unreadCount,
+        clearAll,
       }}
     >
       {children}

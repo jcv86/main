@@ -3,82 +3,93 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useAuth } from "@/contexts/auth-context"
-import { useLanguage } from "@/contexts/language-context"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import {
   Menu,
   Home,
-  BrainCircuit,
-  MessageSquare,
-  FileText,
-  Search,
   User,
+  Brain,
+  FileText,
+  MessageSquare,
+  Search,
   Settings,
   LogOut,
-  BookOpen,
-  Users,
-  Target,
   Bell,
+  GraduationCap,
+  Target,
+  BookOpen,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useAuth } from "@/contexts/auth-context"
+import { useNotifications } from "@/contexts/notifications-context"
 
 const navigationItems = [
-  { href: "/", label: "Inicio", icon: Home },
-  { href: "/skills-assessment", label: "Evaluación de Habilidades", icon: BrainCircuit },
-  { href: "/career-coach", label: "Coach de Carrera", icon: MessageSquare },
-  { href: "/cv-builder", label: "Constructor de CV", icon: FileText },
-  { href: "/job-search", label: "Búsqueda de Empleo", icon: Search },
-  { href: "/disc-test", label: "Test DISC", icon: Target },
-  { href: "/udd-careers", label: "Carreras UDD", icon: Users },
-  { href: "/interview-simulator", label: "Simulador de Entrevistas", icon: BookOpen },
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: Home,
+    description: "Panel principal",
+  },
+  {
+    name: "Perfil",
+    href: "/profile",
+    icon: User,
+    description: "Tu información personal",
+  },
+  {
+    name: "Test de Personalidad",
+    href: "/personality-test",
+    icon: Brain,
+    description: "Descubre tu tipo de personalidad",
+  },
+  {
+    name: "Evaluación de Habilidades",
+    href: "/skills-assessment",
+    icon: Target,
+    description: "Evalúa tus competencias",
+  },
+  {
+    name: "Constructor de CV",
+    href: "/cv-builder",
+    icon: FileText,
+    description: "Crea tu currículum profesional",
+  },
+  {
+    name: "Coach de Carrera",
+    href: "/career-coach",
+    icon: MessageSquare,
+    description: "Asesoría personalizada",
+  },
+  {
+    name: "Búsqueda de Empleo",
+    href: "/job-search",
+    icon: Search,
+    description: "Encuentra oportunidades",
+  },
+  {
+    name: "Carreras UDD",
+    href: "/udd-careers",
+    icon: GraduationCap,
+    description: "Explora carreras universitarias",
+  },
+  {
+    name: "Simulador de Entrevistas",
+    href: "/interview-simulator",
+    icon: BookOpen,
+    description: "Practica tus entrevistas",
+  },
 ]
 
-export function Navigation() {
+export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const { user, logout } = useAuth()
-  const { language, toggleLanguage } = useLanguage()
+  const { notifications } = useNotifications()
 
-  if (!user) {
-    return null
-  }
-
-  const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
-    <div className={cn("space-y-2", mobile ? "px-4" : "")}>
-      {navigationItems.map((item) => {
-        const Icon = item.icon
-        const isActive = pathname === item.href
-
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => mobile && setIsOpen(false)}
-            className={cn(
-              "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-              isActive
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted",
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            <span>{item.label}</span>
-          </Link>
-        )
-      })}
-    </div>
-  )
+  const unreadCount = notifications.filter((n) => !n.read).length
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -86,83 +97,117 @@ export function Navigation() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">CDP</span>
+            <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <GraduationCap className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg hidden sm:inline-block">Desarrollo Profesional</span>
+            <span className="font-bold text-xl">CareerPro</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
-            <NavItems />
+          <div className="hidden md:flex items-center space-x-1">
+            {navigationItems.slice(0, 6).map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link key={item.name} href={item.href}>
+                  <Button variant={isActive ? "default" : "ghost"} size="sm" className="flex items-center gap-2">
+                    <item.icon className="h-4 w-4" />
+                    {item.name}
+                  </Button>
+                </Link>
+              )
+            })}
           </div>
 
-          {/* Right Side */}
+          {/* User Menu */}
           <div className="flex items-center space-x-4">
             {/* Notifications */}
             <Button variant="ghost" size="sm" className="relative">
               <Bell className="h-4 w-4" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">3</Badge>
+              {unreadCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                  {unreadCount}
+                </Badge>
+              )}
             </Button>
 
-            {/* Language Toggle */}
-            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-xs">
-              {language === "es" ? "EN" : "ES"}
-            </Button>
-
-            {/* User Menu */}
+            {/* User Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={user?.name} />
+                    <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user.name}</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
+                    <p className="font-medium">{user?.name}</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email}</p>
                   </div>
                 </div>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile" className="flex items-center">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Perfil</span>
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Configuración</span>
+                  <Link href="/settings" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Configuración
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout} className="text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Cerrar Sesión</span>
+                <DropdownMenuItem onClick={logout} className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Cerrar Sesión
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild className="lg:hidden">
-                <Button variant="ghost" size="sm">
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="md:hidden">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80">
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-sm">CDP</span>
+              <SheetContent side="right" className="w-80">
+                <div className="flex flex-col space-y-4 mt-4">
+                  <div className="flex items-center space-x-2 pb-4 border-b">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={user?.name} />
+                      <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">{user?.name}</p>
+                      <p className="text-sm text-muted-foreground">{user?.email}</p>
+                    </div>
                   </div>
-                  <span className="font-bold text-lg">Desarrollo Profesional</span>
+
+                  {navigationItems.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                          isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "hover:bg-accent hover:text-accent-foreground"
+                        }`}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <div>
+                          <div className="font-medium">{item.name}</div>
+                          <div className="text-sm opacity-70">{item.description}</div>
+                        </div>
+                      </Link>
+                    )
+                  })}
                 </div>
-                <NavItems mobile />
               </SheetContent>
             </Sheet>
           </div>

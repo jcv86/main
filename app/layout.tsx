@@ -7,13 +7,13 @@ import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
-import { Navigation } from "@/components/navigation"
+import Navigation from "@/components/navigation"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral para el desarrollo de carrera profesional",
+  description: "Descubre tu potencial profesional con nuestra plataforma integral de desarrollo de carrera",
     generator: 'v0.dev'
 }
 
