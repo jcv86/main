@@ -1028,6 +1028,28 @@ const mockBookContent: { [key: string]: BookContent[] } = {
       <h3>🎯 Los 7 Hábitos: Un Enfoque Integral</h3>
       <p>Los 7 hábitos representan un enfoque integral, integrado y centrado en principios para resolver problemas personales y profesionales.</p>
       
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #374151; margin-top: 0;">📋 Los 7 Hábitos</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>Ser Proactivo:</strong> Toma responsabilidad de tu vida</li>
+          <li><strong>Comenzar con el Fin en Mente:</strong> Define tu misión y visión</li>
+          <li><strong>Poner Primero lo Primero:</strong> Prioriza lo importante</li>
+          <li><strong>Pensar Ganar-Ganar:</strong> Busca beneficio mutuo</li>
+          <li><strong>Buscar Primero Entender:</strong> Escucha empáticamente</li>
+          <li><strong>Sinergizar:</strong> Colabora creativamente</li>
+          <li><strong>Afilar la Sierra:</strong> Renuévate continuamente</li>
+        </ol>
+      </div>
+      
+      <h3>🔄 El Continuum de la Madurez</h3>
+      <p>Los 7 hábitos siguen un continuum natural que lleva de la dependencia a la independencia y finalmente a la interdependencia:</p>
+      
+      <ul>
+        <li><strong>Dependencia:</strong> "Tú" - Necesitas que otros te cuiden</li>
+        <li><strong>Independencia:</strong> "Yo" - Puedes cuidarte a ti mismo</li>
+        <li><strong>Interdependencia:</strong> "Nosotros" - Podemos lograr más juntos</li>
+      </ul>
+      
       <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
         "Siembra un pensamiento, cosecha una acción; siembra una acción, cosecha un hábito; siembra un hábito, cosecha un carácter; siembra un carácter, cosecha un destino."
       </blockquote>
@@ -1035,6 +1057,917 @@ const mockBookContent: { [key: string]: BookContent[] } = {
       <p>El cambio real viene de adentro hacia afuera. Si quieres cambiar tu situación, primero debes cambiarte a ti mismo.</p>
     `,
       page_number: 1,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-2",
+      book_id: "8",
+      chapter_number: 2,
+      title: "Hábito 1: Ser Proactivo",
+      content: `
+      <h2>Hábito 1: Ser Proactivo</h2>
+      <p>Ser proactivo significa tomar responsabilidad de tu propia vida. Significa que tu comportamiento es una función de tus decisiones, no de tus condiciones.</p>
+      
+      <h3>🎯 Proactividad vs. Reactividad</h3>
+      <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #dc2626; margin-top: 0;">❌ Personas Reactivas</h4>
+        <ul style="margin-bottom: 0;">
+          <li>Se ven afectadas por el clima físico</li>
+          <li>Se ven afectadas por el clima social</li>
+          <li>Culpan a las circunstancias externas</li>
+          <li>Dicen: "No hay nada que pueda hacer"</li>
+          <li>Su lenguaje los absuelve de responsabilidad</li>
+        </ul>
+      </div>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">✅ Personas Proactivas</h4>
+        <ul style="margin-bottom: 0;">
+          <li>Llevan su propio clima con ellas</li>
+          <li>Se enfocan en su Círculo de Influencia</li>
+          <li>Toman responsabilidad de sus respuestas</li>
+          <li>Dicen: "Veamos qué opciones tengo"</li>
+          <li>Su lenguaje reconoce su capacidad de elección</li>
+        </ul>
+      </div>
+      
+      <h3>⭕ Círculo de Preocupación vs. Círculo de Influencia</h3>
+      <p>Las personas proactivas enfocan sus esfuerzos en el <strong>Círculo de Influencia</strong>. Trabajan en las cosas que pueden hacer algo al respecto.</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🎯 Círculo de Influencia</h4>
+        <p>Incluye cosas como:</p>
+        <ul style="margin-bottom: 0;">
+          <li>Tu actitud y comportamiento</li>
+          <li>Tus habilidades y conocimientos</li>
+          <li>Tus relaciones personales</li>
+          <li>Tu salud y bienestar</li>
+          <li>Tus decisiones diarias</li>
+        </ul>
+      </div>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">⚠️ Círculo de Preocupación</h4>
+        <p>Incluye cosas como:</p>
+        <ul style="margin-bottom: 0;">
+          <li>El clima</li>
+          <li>La economía nacional</li>
+          <li>El comportamiento de otros</li>
+          <li>El pasado</li>
+          <li>Eventos mundiales</li>
+        </ul>
+      </div>
+      
+      <h3>💪 El Poder de la Elección</h3>
+      <p>Entre el estímulo y la respuesta, el ser humano tiene la libertad de elegir. En esa elección reside nuestro crecimiento y nuestra felicidad.</p>
+      
+      <p>Viktor Frankl, sobreviviente del holocausto, descubrió que incluso en las condiciones más extremas, los seres humanos tienen la libertad fundamental de elegir su actitud en cualquier conjunto de circunstancias.</p>
+      
+      <h3>🗣️ Lenguaje Proactivo vs. Reactivo</h3>
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #374151; margin-top: 0;">🔄 Transformaciones de Lenguaje</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Reactivo:</strong> "No hay nada que pueda hacer" → <strong>Proactivo:</strong> "Veamos las alternativas"</li>
+          <li><strong>Reactivo:</strong> "Así soy yo" → <strong>Proactivo:</strong> "Puedo elegir un enfoque diferente"</li>
+          <li><strong>Reactivo:</strong> "Me vuelve loco" → <strong>Proactivo:</strong> "Controlo mis emociones"</li>
+          <li><strong>Reactivo:</strong> "No me permiten" → <strong>Proactivo:</strong> "Puedo crear un enfoque efectivo"</li>
+        </ul>
+      </div>
+      
+      <h3>🎯 Compromisos y Promesas</h3>
+      <p>La forma más efectiva de desarrollar la proactividad es hacer y cumplir promesas a nosotros mismos y a otros. Cada vez que cumples un compromiso contigo mismo, aumentas tu integridad personal.</p>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "No es lo que nos sucede, sino nuestra respuesta a lo que nos sucede lo que nos lastima."
+      </blockquote>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>Durante 30 días, trabaja solo en tu Círculo de Influencia. Haz pequeños compromisos y cúmplelos. Sé una luz, no un juez. Sé un modelo, no un crítico.</p>
+    `,
+      page_number: 2,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-3",
+      book_id: "8",
+      chapter_number: 3,
+      title: "Hábito 2: Comenzar con el Fin en Mente",
+      content: `
+      <h2>Hábito 2: Comenzar con el Fin en Mente</h2>
+      <p>Comenzar con el fin en mente significa empezar con una clara comprensión de tu destino. Significa saber a dónde vas para que puedas entender mejor dónde estás ahora.</p>
+      
+      <h3>🎯 El Poder de la Visión</h3>
+      <p>Todas las cosas se crean dos veces. Hay una creación mental (primera) y una creación física (segunda). La creación mental precede a la creación física.</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🏗️ Las Dos Creaciones</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Primera Creación (Mental):</strong> El diseño, la planificación, la visión</li>
+          <li><strong>Segunda Creación (Física):</strong> La construcción, la implementación, la realidad</li>
+        </ul>
+      </div>
+      
+      <p>Si no desarrollas tu propia autoconciencia, empoderarás a otras personas y circunstancias para que den forma a tu vida por defecto.</p>
+      
+      <h3>📜 Desarrollando una Declaración de Misión Personal</h3>
+      <p>Una declaración de misión personal es tu constitución, la expresión sólida de tu visión y valores. Se convierte en el criterio por el cual mides todo lo demás en tu vida.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">✨ Elementos de una Misión Personal</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Carácter:</strong> ¿Qué tipo de persona quieres ser?</li>
+          <li><strong>Contribución:</strong> ¿Qué quieres hacer o lograr?</li>
+          <li><strong>Valores:</strong> ¿Cuáles son tus principios fundamentales?</li>
+          <li><strong>Propósito:</strong> ¿Por qué existes?</li>
+        </ul>
+      </div>
+      
+      <h3>🎭 Roles y Metas</h3>
+      <p>Una forma efectiva de desarrollar tu misión personal es pensar en los diferentes roles que desempeñas en la vida y las metas que quieres lograr en cada rol.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">👥 Ejemplos de Roles</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Personal:</strong> Individuo, crecimiento personal</li>
+          <li><strong>Familiar:</strong> Esposo/a, padre/madre, hijo/a</li>
+          <li><strong>Profesional:</strong> Gerente, colega, mentor</li>
+          <li><strong>Comunitario:</strong> Ciudadano, voluntario, líder</li>
+        </ul>
+      </div>
+      
+      <h3>🧭 El Centro de Tu Vida</h3>
+      <p>Todos tenemos un centro, un núcleo fundamental, un foco desde el cual vemos la vida. Sea lo que sea que esté en el centro de nuestra vida será la fuente de nuestra seguridad, guía, sabiduría y poder.</p>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">⚠️ Centros Alternativos Comunes</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Centrado en el cónyuge:</strong> Tu sentido de valor viene de tu pareja</li>
+          <li><strong>Centrado en la familia:</strong> Tu identidad está en tu familia</li>
+          <li><strong>Centrado en el dinero:</strong> Tu seguridad viene de la riqueza</li>
+          <li><strong>Centrado en el trabajo:</strong> Tu identidad está en tu carrera</li>
+          <li><strong>Centrado en las posesiones:</strong> Tu estatus viene de lo que tienes</li>
+        </ul>
+      </div>
+      
+      <h3>🌟 Centro Basado en Principios</h3>
+      <p>El centro más efectivo y estable es estar centrado en principios universales. Los principios no reaccionan a nada. No se enojan ni se tratan mal. No se divorcian de ti ni huyen en la noche.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">💎 Beneficios del Centro Basado en Principios</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Seguridad:</strong> Viene de saber que los principios no cambian</li>
+          <li><strong>Guía:</strong> Viene de una brújula interna confiable</li>
+          <li><strong>Sabiduría:</strong> Viene de un mapa preciso de la vida</li>
+          <li><strong>Poder:</strong> Viene de una fuente ilimitada</li>
+        </ul>
+      </div>
+      
+      <h3>🏠 Visualización y Afirmación</h3>
+      <p>La visualización y la afirmación son formas poderosas de reprogramar tu mente subconsciente. Cuando visualizas vívidamente tus metas, tu mente subconsciente trabajará para hacerlas realidad.</p>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "La administración es eficiencia en subir la escalera del éxito; el liderazgo determina si la escalera está apoyada en la pared correcta."
+      </blockquote>
+      
+      <h3>📝 Ejercicio: Tu Funeral</h3>
+      <p>Imagina que estás asistiendo a tu propio funeral tres años en el futuro. ¿Qué te gustaría que dijera cada orador sobre tu vida y tu carácter? ¿Qué tipo de esposo, esposa, padre, madre o amigo te gustaría que recordaran?</p>
+      
+      <p>Este ejercicio te conecta con tus valores más profundos y te ayuda a ver tu vida desde una perspectiva más amplia.</p>
+    `,
+      page_number: 3,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-4",
+      book_id: "8",
+      chapter_number: 4,
+      title: "Hábito 3: Poner Primero lo Primero",
+      content: `
+      <h2>Hábito 3: Poner Primero lo Primero</h2>
+      <p>Poner primero lo primero es la disciplina de llevar a cabo. Es la segunda creación física, la realización, la actualización, la aparición natural de los Hábitos 1 y 2.</p>
+      
+      <h3>⚖️ La Matriz de Administración del Tiempo</h3>
+      <p>Todas las actividades se pueden categorizar en una matriz de cuatro cuadrantes basada en dos factores: urgencia e importancia.</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #374151; margin-top: 0;">📊 Los Cuatro Cuadrantes</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div style="background-color: #fef2f2; border: 1px solid #ef4444; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #dc2626; margin: 0 0 8px 0;">🚨 Cuadrante I: Urgente e Importante</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Crisis</li>
+              <li>Problemas urgentes</li>
+              <li>Proyectos con fecha límite</li>
+            </ul>
+          </div>
+          <div style="background-color: #f0fdf4; border: 1px solid #22c55e; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #15803d; margin: 0 0 8px 0;">🎯 Cuadrante II: No Urgente pero Importante</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Prevención</li>
+              <li>Planificación</li>
+              <li>Desarrollo personal</li>
+            </ul>
+          </div>
+          <div style="background-color: #fef3c7; border: 1px solid #f59e0b; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #d97706; margin: 0 0 8px 0;">📞 Cuadrante III: Urgente pero No Importante</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Interrupciones</li>
+              <li>Algunas llamadas</li>
+              <li>Algunos emails</li>
+            </ul>
+          </div>
+          <div style="background-color: #f1f5f9; border: 1px solid #64748b; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #475569; margin: 0 0 8px 0;">📺 Cuadrante IV: No Urgente y No Importante</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Trivialidades</li>
+              <li>Pérdida de tiempo</li>
+              <li>Actividades de escape</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <h3>🎯 El Poder del Cuadrante II</h3>
+      <p>Las personas efectivas permanecen fuera de los Cuadrantes III y IV porque, urgentes o no, no son importantes. También reducen el Cuadrante I invirtiendo más tiempo en el Cuadrante II.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">✨ Actividades del Cuadrante II</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Construcción de relaciones:</strong> Tiempo de calidad con familia y amigos</li>
+          <li><strong>Planificación a largo plazo:</strong> Establecer metas y estrategias</li>
+          <li><strong>Preparación y prevención:</strong> Mantenimiento y mejora continua</li>
+          <li><strong>Desarrollo personal:</strong> Educación, ejercicio, meditación</li>
+          <li><strong>Identificación de oportunidades:</strong> Innovación y mejora</li>
+        </ul>
+      </div>
+      
+      <h3>📅 Organización Semanal</h3>
+      <p>La clave para la administración efectiva del tiempo es organizar tu vida semanalmente, no diariamente. Una semana es lo suficientemente larga para incluir todos tus roles y lo suficientemente corta para mantener la perspectiva.</p>
+      
+      <h3>🎭 Planificación Basada en Roles</h3>
+      <p>En lugar de hacer listas de tareas, organiza tu semana alrededor de tus roles clave y las metas que quieres lograr en cada rol.</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">📋 Proceso de Planificación Semanal</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>Conecta con tu misión:</strong> Revisa tu declaración de misión personal</li>
+          <li><strong>Piensa en tus roles:</strong> Identifica los roles clave para esta semana</li>
+          <li><strong>Selecciona metas:</strong> 1-2 resultados importantes por rol</li>
+          <li><strong>Programa las actividades:</strong> Asigna tiempo específico para cada meta</li>
+          <li><strong>Adapta diariamente:</strong> Mantén la flexibilidad para ajustar</li>
+        </ol>
+      </div>
+      
+      <h3>🚫 El Arte de Decir No</h3>
+      <p>Recuerda que es más fácil decir no cuando tienes un sí más profundo ardiendo en tu interior. Cuando tienes una clara comprensión de tus prioridades, es más fácil decir no a las cosas que no son importantes.</p>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">💡 Formas Efectivas de Decir No</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>No con alternativa:</strong> "No puedo hacer esto, pero puedo hacer aquello"</li>
+          <li><strong>No con explicación:</strong> "No puedo porque tengo otros compromisos"</li>
+          <li><strong>No con sugerencia:</strong> "No puedo, pero María podría ayudarte"</li>
+          <li><strong>No con tiempo:</strong> "No puedo ahora, pero podría en dos semanas"</li>
+        </ul>
+      </div>
+      
+      <h3>⚖️ Delegación Efectiva</h3>
+      <p>La delegación efectiva es quizás la actividad más poderosa de alto apalancamiento que existe. Te permite multiplicar tu efectividad a través de otros.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">🎯 Delegación de Administración vs. Liderazgo</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Delegación de Administración:</strong> "Ve y haz esto, así, y repórtame"</li>
+          <li><strong>Delegación de Liderazgo:</strong> "Aquí está el resultado que necesito, tú decides cómo"</li>
+        </ul>
+      </div>
+      
+      <h3>🏆 La Disciplina Personal</h3>
+      <p>La integridad personal es la base de la efectividad. Incluye hacer y cumplir compromisos contigo mismo y con otros.</p>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "Las cosas que importan más nunca deben estar a merced de las cosas que importan menos."
+      </blockquote>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>Durante una semana, lleva un registro de cómo pasas tu tiempo. Categoriza cada actividad en uno de los cuatro cuadrantes. Al final de la semana, analiza cuánto tiempo pasaste en cada cuadrante y cómo puedes aumentar tu tiempo en el Cuadrante II.</p>
+    `,
+      page_number: 4,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-5",
+      book_id: "8",
+      chapter_number: 5,
+      title: "Hábito 4: Pensar Ganar-Ganar",
+      content: `
+      <h2>Hábito 4: Pensar Ganar-Ganar</h2>
+      <p>Ganar-Ganar es un marco mental y corazón que constantemente busca el beneficio mutuo en todas las interacciones humanas. Ganar-Ganar significa que los acuerdos o soluciones son mutuamente beneficiosos y satisfactorios.</p>
+      
+      <h3>🎯 Las Seis Paradigmas de Interacción Humana</h3>
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <ol style="margin-bottom: 0;">
+          <li><strong>🏆 Ganar-Ganar:</strong> Ambas partes se benefician</li>
+          <li><strong>💪 Ganar-Perder:</strong> Yo gano, tú pierdes (mentalidad autoritaria)</li>
+          <li><strong>😔 Perder-Ganar:</strong> Yo pierdo, tú ganas (mentalidad de víctima)</li>
+          <li><strong>💥 Perder-Perder:</strong> Ambos perdemos (mentalidad vengativa)</li>
+          <li><strong>🎯 Ganar:</strong> Solo me importa que yo gane</li>
+          <li><strong>🚶 Ganar-Ganar o No Hay Trato:</strong> Si no podemos ganar ambos, no hay acuerdo</li>
+        </ol>
+      </div>
+      
+      <h3>🏛️ Los Cinco Pilares de Ganar-Ganar</h3>
+      <p>Para que Ganar-Ganar sea efectivo, debe estar respaldado por cinco dimensiones interdependientes:</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">🏗️ Los Cinco Pilares</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🧠 Carácter:</strong> Integridad, madurez y mentalidad de abundancia</li>
+          <li><strong>🤝 Relaciones:</strong> Confianza mutua y respeto</li>
+          <li><strong>📋 Acuerdos:</strong> Expectativas claras y compromisos mutuos</li>
+          <li><strong>🏢 Sistemas:</strong> Estructuras que apoyan Ganar-Ganar</li>
+          <li><strong>⚖️ Procesos:</strong> Métodos para resolver diferencias</li>
+        </ol>
+      </div>
+      
+      <h3>💎 Carácter: La Base de Ganar-Ganar</h3>
+      <p>El carácter es la base de Ganar-Ganar, y todo lo demás se construye sobre esa base. Hay tres rasgos de carácter esenciales:</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🌟 Tres Rasgos Esenciales</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🎯 Integridad:</strong> Valor de hacer y cumplir compromisos contigo mismo</li>
+          <li><strong>🧘 Madurez:</strong> Balance entre coraje y consideración</li>
+          <li><strong>🌊 Mentalidad de Abundancia:</strong> Creencia de que hay suficiente para todos</li>
+        </ul>
+      </div>
+      
+      <h3>🌊 Mentalidad de Abundancia vs. Escasez</h3>
+      <p>La mayoría de las personas han sido programadas con una mentalidad de escasez. Ven la vida como si solo hubiera un pastel, y si alguien obtiene una rebanada grande, hay menos para todos los demás.</p>
+      
+      <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #dc2626; margin-top: 0;">❌ Mentalidad de Escasez</h4>
+        <ul style="margin-bottom: 0;">
+          <li>Dificultad para compartir reconocimiento y crédito</li>
+          <li>Dificultad para ser genuinamente feliz por el éxito de otros</li>
+          <li>Tendencia a ver las diferencias como deslealtad</li>
+          <li>Necesidad de ser el centro de atención</li>
+        </ul>
+      </div>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">✅ Mentalidad de Abundancia</h4>
+        <ul style="margin-bottom: 0;">
+          <li>Reconoce que hay suficiente para todos</li>
+          <li>Comparte poder, ganancias, reconocimiento</li>
+          <li>Ve las diferencias como fortalezas</li>
+          <li>Busca alternativas creativas</li>
+        </ul>
+      </div>
+      
+      <h3>🤝 Construyendo Relaciones de Confianza</h3>
+      <p>Las relaciones son la base de Ganar-Ganar. Sin confianza, lo mejor que puedes obtener es un compromiso defensivo.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">💰 La Cuenta Bancaria Emocional</h4>
+        <p>Cada relación tiene una "cuenta bancaria emocional". Los depósitos construyen confianza:</p>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Entender a la persona:</strong> Lo que es importante para ellos</li>
+          <li><strong>Atender las pequeñas cosas:</strong> Los detalles importan</li>
+          <li><strong>Cumplir compromisos:</strong> Hacer lo que dices que harás</li>
+          <li><strong>Aclarar expectativas:</strong> Prevenir malentendidos</li>
+          <li><strong>Mostrar integridad personal:</strong> Ser congruente</li>
+          <li><strong>Disculparse sinceramente:</strong> Cuando cometes errores</li>
+        </ul>
+      </div>
+      
+      <h3>📋 Acuerdos Ganar-Ganar</h3>
+      <p>Los acuerdos Ganar-Ganar cubren cinco elementos básicos que dan estructura y dirección a los resultados Ganar-Ganar:</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #374151; margin-top: 0;">📝 Elementos de un Acuerdo</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🎯 Resultados Deseados:</strong> Qué se va a lograr y cuándo</li>
+          <li><strong>📏 Directrices:</strong> Parámetros dentro de los cuales se lograrán los resultados</li>
+          <li><strong>🛠️ Recursos:</strong> Apoyo humano, financiero, técnico u organizacional</li>
+          <li><strong>📊 Rendición de Cuentas:</strong> Estándares de rendimiento y tiempos de evaluación</li>
+          <li><strong>🏆 Consecuencias:</strong> Lo que sucede como resultado de la evaluación</li>
+        </ol>
+      </div>
+      
+      <h3>🏢 Sistemas que Apoyan Ganar-Ganar</h3>
+      <p>Si quieres lograr los fines de Ganar-Ganar, debes usar medios Ganar-Ganar. No puedes decir que quieres Ganar-Ganar y luego usar sistemas que recompensan Ganar-Perder.</p>
+      
+      <h3>⚖️ Procesos de Cuatro Pasos</h3>
+      <p>Cuando surgen problemas, usa este proceso de cuatro pasos:</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <ol style="margin-bottom: 0;">
+          <li><strong>👁️ Ver el problema desde el otro punto de vista:</strong> Busca realmente entender</li>
+          <li><strong>🎯 Identifica los asuntos y preocupaciones clave:</strong> No las posiciones</li>
+          <li><strong>💡 Determina qué resultados constituirían una solución aceptable:</strong> Para ambas partes</li>
+          <li><strong>🛤️ Identifica nuevas opciones para lograr esos resultados:</strong> Sé creativo</li>
+        </ol>
+      </div>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "Ganar-Ganar no es una técnica; es una filosofía total de la interacción humana."
+      </blockquote>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>Piensa en una relación donde te gustaría desarrollar un acuerdo Ganar-Ganar. Trata de ponerte en el lugar de la otra persona y escribe cómo ven la situación. Luego identifica qué resultados constituirían una victoria para ambos.</p>
+    `,
+      page_number: 5,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-6",
+      book_id: "8",
+      chapter_number: 6,
+      title: "Hábito 5: Buscar Primero Entender, Luego Ser Entendido",
+      content: `
+      <h2>Hábito 5: Buscar Primero Entender, Luego Ser Entendido</h2>
+      <p>Si tuviera que resumir en una sola frase el principio más importante que he aprendido en el campo de las relaciones interpersonales, sería este: Busca primero entender, luego ser entendido.</p>
+      
+      <h3>👂 El Problema de la Comunicación</h3>
+      <p>La mayoría de las personas no escuchan con la intención de entender; escuchan con la intención de responder. Están hablando o preparándose para hablar.</p>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">⚠️ Respuestas Autobiográficas Típicas</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🔍 Evaluar:</strong> Estar de acuerdo o en desacuerdo</li>
+          <li><strong>🔎 Sondear:</strong> Hacer preguntas desde tu propio marco de referencia</li>
+          <li><strong>💡 Aconsejar:</strong> Dar consejos basados en tu experiencia</li>
+          <li><strong>🔄 Interpretar:</strong> Explicar los motivos y comportamientos de las personas</li>
+        </ul>
+      </div>
+      
+      <h3>👁️ Escuchar con los Ojos, Oídos y Corazón</h3>
+      <p>La comunicación es mucho más que las palabras que decimos. Los estudios indican que solo el 10% de nuestra comunicación se representa con palabras, el 30% con sonidos, y el 60% con lenguaje corporal.</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">📊 Los Componentes de la Comunicación</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>10% Palabras:</strong> El contenido verbal</li>
+          <li><strong>30% Sonidos:</strong> Tono, inflexión, velocidad</li>
+          <li><strong>60% Lenguaje Corporal:</strong> Gestos, expresiones, postura</li>
+        </ul>
+      </div>
+      
+      <h3>🎯 Los Cinco Niveles de Escuchar</h3>
+      <p>Hay diferentes niveles de escuchar, desde ignorar completamente hasta la escucha empática:</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <ol style="margin-bottom: 0;">
+          <li><strong>🙉 Ignorar:</strong> No escuchar en absoluto</li>
+          <li><strong>👂 Fingir:</strong> "Sí, ajá, correcto"</li>
+          <li><strong>🎧 Escuchar Selectivamente:</strong> Solo partes de la conversación</li>
+          <li><strong>🔍 Escuchar Atentamente:</strong> Prestar atención y enfocar energía</li>
+          <li><strong>❤️ Escuchar Empáticamente:</strong> Escuchar con intención de entender</li>
+        </ol>
+      </div>
+      
+      <h3>❤️ La Escucha Empática</h3>
+      <p>La escucha empática es escuchar con la intención de entender. Significa ponerte en el lugar de la otra persona y ver el mundo a través de su paradigma.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">🎯 Cuatro Etapas de la Escucha Empática</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🔄 Repetir el contenido:</strong> "Lo que escucho que dices es..."</li>
+          <li><strong>🔄 Reformular el contenido:</strong> "Lo que pareces estar diciendo es..."</li>
+          <li><strong>💭 Reflejar sentimientos:</strong> "Sientes que..."</li>
+          <li><strong>🔄 Reformular contenido y reflejar sentimientos:</strong> "Sientes que... porque..."</li>
+        </ol>
+      </div>
+      
+      <h3>🧠 Entender vs. Estar de Acuerdo</h3>
+      <p>Buscar entender requiere consideración; buscar ser entendido requiere coraje. La efectividad reside en el balance de ambos.</p>
+      
+      <p>Es importante entender que entender no significa estar de acuerdo. Puedes entender completamente el punto de vista de alguien y aún así no estar de acuerdo con él.</p>
+      
+      <h3>🎭 Diagnóstico Antes de Prescribir</h3>
+      <p>Es un principio correcto y universal que el diagnóstico debe preceder a la prescripción. Un médico competente no prescribe anteojos sin examinar primero los ojos.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">🏥 Analogía Médica</h4>
+        <p>Imagina ir al médico y que te diga:</p>
+        <p><em>"Toma estos anteojos, me han funcionado muy bien durante 10 años."</em></p>
+        <p>Sin siquiera examinar tus ojos. ¿Confiarías en ese diagnóstico?</p>
+        <p>Sin embargo, eso es exactamente lo que hacemos en la comunicación cuando prescribimos soluciones antes de diagnosticar el problema.</p>
+      </div>
+      
+      <h3>🗣️ Luego Buscar Ser Entendido</h3>
+      <p>Una vez que entiendes profundamente, entonces puedes buscar ser entendido. La secuencia es importante.</p>
+      
+      <p>Cuando realmente entiendes, tu paradigma cambia. Ya no estás pensando en tu respuesta; estás enfocado en recibir la comunicación profunda de otra alma humana.</p>
+      
+      <h3>🎯 Presentación Empática</h3>
+      <p>Al buscar ser entendido, describe tu punto de vista en términos del paradigma de la otra persona:</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">📝 Estructura de Presentación Empática</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🤝 Ethos (credibilidad personal):</strong> Tu carácter e integridad</li>
+          <li><strong>💭 Pathos (alineación empática):</strong> Estar en sintonía emocionalmente</li>
+          <li><strong>🧠 Logos (lógica):</strong> El razonamiento de tu presentación</li>
+        </ol>
+      </div>
+      
+      <h3>🔄 El Proceso de Entendimiento Mutuo</h3>
+      <p>El entendimiento mutuo es la clave para la comunicación efectiva. Cuando ambas partes se sienten entendidas, pueden trabajar juntas para encontrar soluciones sinérgicas.</p>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">🔄 Pasos para el Entendimiento Mutuo</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>Escucha empáticamente</strong> hasta que la otra persona se sienta entendida</li>
+          <li><strong>Expresa tu punto de vista</strong> con coraje y consideración</li>
+          <li><strong>Busca soluciones</strong> que honren las necesidades de ambos</li>
+        </ol>
+      </div>
+      
+      <h3>💡 Beneficios de la Escucha Empática</h3>
+      <ul>
+        <li><strong>Información precisa:</strong> Obtienes datos reales, no filtrados</li>
+        <li><strong>Terapéutico:</strong> Las personas se sienten valoradas y comprendidas</li>
+        <li><strong>Influencia:</strong> Cuando las personas se sienten entendidas, son más abiertas</li>
+        <li><strong>Relaciones más profundas:</strong> Se construye confianza y respeto mutuo</li>
+      </ul>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "La necesidad psicológica más profunda del ser humano es ser entendido."
+      </blockquote>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>La próxima vez que tengas una oportunidad de observar a otros comunicándose, cubre tus oídos por unos minutos y solo observa. ¿Qué emociones se están comunicando que tal vez no se expresen con palabras? ¿Los movimientos corporales y las expresiones faciales coinciden con las palabras habladas?</p>
+      
+      <p>Luego, en tu próxima conversación importante, practica la escucha empática. Resiste la tentación de responder inmediatamente. En su lugar, busca realmente entender el punto de vista de la otra persona antes de expresar el tuyo.</p>
+    `,
+      page_number: 6,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-7",
+      book_id: "8",
+      chapter_number: 7,
+      title: "Hábito 6: Sinergizar",
+      content: `
+      <h2>Hábito 6: Sinergizar</h2>
+      <p>Sinergizar es la actividad de más alta forma de vida: la verdadera prueba y manifestación de todos los otros hábitos puestos juntos. La sinergia significa que el todo es mayor que la suma de sus partes.</p>
+      
+      <h3>🌟 ¿Qué es la Sinergia?</h3>
+      <p>La sinergia es la esencia del liderazgo centrado en principios. Es la esencia de la paternidad centrada en principios. Cataliza, unifica y libera las más grandes energías dentro de las personas.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">✨ Características de la Sinergia</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🎯 Creatividad:</strong> Genera nuevas alternativas y opciones</li>
+          <li><strong>🤝 Colaboración:</strong> Combina fortalezas y compensa debilidades</li>
+          <li><strong>🚀 Innovación:</strong> Produce resultados que ninguna persona podría lograr sola</li>
+          <li><strong>💡 Soluciones de tercera alternativa:</strong> Va más allá de "mi manera" o "tu manera"</li>
+        </ul>
+      </div>
+      
+      <h3>🔄 La Tercera Alternativa</h3>
+      <p>Cuando las personas realmente entienden el paradigma de la otra persona, a menudo descubren que la diferencia aparente no es un "o esto o aquello" sino un "esto y aquello".</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🛤️ Niveles de Comunicación</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🥊 Nivel Bajo (Ganar-Perder):</strong> Comunicación defensiva y protectora</li>
+          <li><strong>🤝 Nivel Medio (Compromiso):</strong> Comunicación respetuosa pero no creativa</li>
+          <li><strong>🚀 Nivel Alto (Sinergia):</strong> Comunicación sinérgica que crea nuevas alternativas</li>
+        </ol>
+      </div>
+      
+      <h3>🌈 Valorar las Diferencias</h3>
+      <p>La clave para la sinergia interpersonal es valorar las diferencias mentales, emocionales y psicológicas entre las personas.</p>
+      
+      <p>Las diferencias no son solo toleradas, sino celebradas como la clave para la creatividad y el crecimiento.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">🎭 Tipos de Diferencias Valiosas</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🧠 Mentales:</strong> Diferentes formas de pensar y procesar información</li>
+          <li><strong>❤️ Emocionales:</strong> Diferentes formas de sentir y expresar emociones</li>
+          <li><strong>🎯 Psicológicas:</strong> Diferentes personalidades y temperamentos</li>
+          <li><strong>🌍 Culturales:</strong> Diferentes antecedentes y experiencias</li>
+          <li><strong>🛠️ Funcionales:</strong> Diferentes habilidades y expertise</li>
+        </ul>
+      </div>
+      
+      <h3>🧠 Cerebro Derecho vs. Cerebro Izquierdo</h3>
+      <p>Una forma útil de entender las diferencias es considerar las funciones del cerebro derecho e izquierdo:</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <h5 style="color: #374151; margin: 0 0 8px 0;">🧮 Cerebro Izquierdo</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Lógico</li>
+              <li>Secuencial</li>
+              <li>Analítico</li>
+              <li>Verbal</li>
+              <li>Realista</li>
+            </ul>
+          </div>
+          <div>
+            <h5 style="color: #374151; margin: 0 0 8px 0;">🎨 Cerebro Derecho</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Intuitivo</li>
+              <li>Creativo</li>
+              <li>Visual</li>
+              <li>Artístico</li>
+              <li>Conceptual</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <h3>🏢 Sinergia en el Trabajo</h3>
+      <p>En el ambiente de trabajo, la sinergia se manifiesta cuando los equipos crean soluciones que ningún miembro individual podría haber desarrollado solo.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">🏆 Condiciones para la Sinergia Organizacional</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🎯 Visión compartida:</strong> Todos entienden y se comprometen con el objetivo</li>
+          <li><strong>🤝 Confianza mutua:</strong> Las personas se sienten seguras para ser vulnerables</li>
+          <li><strong>🌈 Diversidad valorada:</strong> Las diferencias se ven como fortalezas</li>
+          <li><strong>💬 Comunicación abierta:</strong> Las ideas fluyen libremente</li>
+          <li><strong>🚀 Mentalidad de abundancia:</strong> Creencia de que hay suficiente éxito para todos</li>
+        </ul>
+      </div>
+      
+      <h3>👨‍👩‍👧‍👦 Sinergia en la Familia</h3>
+      <p>En las familias, la sinergia se crea cuando cada miembro se siente valorado por sus contribuciones únicas y cuando las decisiones familiares incorporan las perspectivas de todos.</p>
+      
+      <h3>🚧 Obstáculos para la Sinergia</h3>
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">⚠️ Barreras Comunes</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🛡️ Defensividad:</strong> Proteger el ego en lugar de buscar entendimiento</li>
+          <li><strong>🎭 Juegos de poder:</strong> Buscar ganar en lugar de encontrar la mejor solución</li>
+          <li><strong>😨 Miedo al cambio:</strong> Preferir lo conocido aunque no sea óptimo</li>
+          <li><strong>🏃 Prisa:</strong> No tomar tiempo para explorar alternativas</li>
+          <li><strong>🧠 Pensamiento de suma cero:</strong> Creer que si tú ganas, yo pierdo</li>
+        </ul>
+      </div>
+      
+      <h3>🔧 Herramientas para Crear Sinergia</h3>
+      <p>Hay varias herramientas y técnicas que pueden facilitar la sinergia:</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🛠️ Herramientas para la Sinergia</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🧠 Lluvia de ideas:</strong> Generar múltiples opciones sin juzgar</li>
+          <li><strong>🗺️ Mapas mentales:</strong> Visualizar conexiones entre ideas</li>
+          <li><strong>🎭 Juego de roles:</strong> Ver situaciones desde diferentes perspectivas</li>
+          <li><strong>❓ Preguntas poderosas:</strong> "¿Qué pasaría si...?" "¿Cómo podríamos...?"</li>
+          <li><strong>🔄 Síntesis:</strong> Combinar elementos de diferentes ideas</li>
+        </ul>
+      </div>
+      
+      <h3>🌱 El Proceso de la Sinergia</h3>
+      <p>La sinergia no sucede automáticamente. Requiere un proceso deliberado:</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #374151; margin-top: 0;">🔄 Pasos para Crear Sinergia</h4>
+        <ol style="margin-bottom: 0;">
+          <li><strong>🎯 Define el problema o oportunidad</strong> claramente</li>
+          <li><strong>👂 Escucha todas las perspectivas</strong> con mente abierta</li>
+          <li><strong>🌈 Valora las diferencias</strong> como recursos valiosos</li>
+          <li><strong>💡 Genera múltiples alternativas</strong> creativamente</li>
+          <li><strong>🔍 Evalúa opciones</strong> basándose en principios compartidos</li>
+          <li><strong>✅ Selecciona la mejor solución</strong> que honre todas las perspectivas</li>
+        </ol>
+      </div>
+      
+      <h3>🎯 Sinergia vs. Compromiso</h3>
+      <p>Es importante distinguir entre sinergia y compromiso:</p>
+      
+      <ul>
+        <li><strong>🤝 Compromiso:</strong> 1 + 1 = 1.5 (Ambas partes ceden algo)</li>
+        <li><strong>🚀 Sinergia:</strong> 1 + 1 = 3 o más (Se crea algo completamente nuevo)</li>
+      </ul>
+      
+      <p>En el compromiso, ambas partes dan y reciben. En la sinergia, ambas partes ganan más de lo que podrían haber logrado individualmente.</p>
+      
+      <h3>🌍 Sinergia y Diversidad</h3>
+      <p>La diversidad bien gestionada es una fuente tremenda de sinergia. Cuando las personas de diferentes antecedentes, culturas y perspectivas trabajan juntas efectivamente, pueden crear soluciones innovadoras.</p>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "La fuerza reside en las diferencias, no en las similitudes."
+      </blockquote>
+      
+      <h3>💫 La Magia de la Sinergia</h3>
+      <p>Cuando la sinergia realmente sucede, es casi mágica. Las personas se sienten energizadas, creativas y conectadas. Las soluciones emergen que nadie había considerado antes.</p>
+      
+      <p>La sinergia es aventura. Es emocionante. Abre nuevas posibilidades, nuevas alternativas, nuevas opciones.</p>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>Identifica una situación en tu vida donde hay diferencias de opinión o conflicto. En lugar de buscar un compromiso, explora cómo podrías crear sinergia:</p>
+      
+      <ol>
+        <li>Define claramente el problema desde múltiples perspectivas</li>
+        <li>Identifica qué es valioso en cada punto de vista</li>
+        <li>Pregúntate: "¿Hay una tercera alternativa que honre lo mejor de ambas perspectivas?"</li>
+        <li>Mantente abierto a soluciones que inicialmente parezcan imposibles</li>
+      </ol>
+      
+      <p>Recuerda: la sinergia requiere vulnerabilidad, apertura mental y la creencia de que juntos podemos crear algo mejor de lo que cualquiera de nosotros podría crear solo.</p>
+    `,
+      page_number: 7,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "content-8-8",
+      book_id: "8",
+      chapter_number: 8,
+      title: "Hábito 7: Afilar la Sierra",
+      content: `
+      <h2>Hábito 7: Afilar la Sierra</h2>
+      <p>Afilar la Sierra significa preservar y realzar el mayor bien que tienes: tú mismo. Significa tener un programa balanceado y sistemático para la auto-renovación en las cuatro áreas de tu vida.</p>
+      
+      <h3>🪚 La Historia de la Sierra</h3>
+      <p>Imagina que te encuentras con alguien en el bosque trabajando febrilmente para derribar un árbol.</p>
+      
+      <p>"¿Qué estás haciendo?" preguntas.</p>
+      <p>"¿No lo ves?" viene la respuesta impaciente. "Estoy cortando este árbol."</p>
+      <p>"Te ves exhausto. ¿Cuánto tiempo llevas trabajando?"</p>
+      <p>"Más de cinco horas, y estoy agotado. ¡Es un trabajo duro!"</p>
+      <p>"¿Por qué no tomas un descanso y afilas la sierra? Estoy seguro de que cortaría mucho más rápido."</p>
+      <p>"No tengo tiempo para afilar la sierra. ¡Estoy demasiado ocupado cortando!"</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">💡 La Lección</h4>
+        <p style="margin-bottom: 0;">Afilar la sierra es invertir tiempo en actividades que aumentan tu capacidad de producir. Es la actividad de Cuadrante II por excelencia que renueva las cuatro dimensiones de tu naturaleza.</p>
+      </div>
+      
+      <h3>🌟 Las Cuatro Dimensiones de la Renovación</h3>
+      <p>La renovación debe ser balanceada en las cuatro dimensiones de tu naturaleza:</p>
+      
+      <div style="background-color: #f8fafc; border: 1px solid #64748b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div style="background-color: #fef2f2; border: 1px solid #ef4444; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #dc2626; margin: 0 0 8px 0;">💪 Dimensión Física</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Ejercicio</li>
+              <li>Nutrición</li>
+              <li>Descanso</li>
+              <li>Manejo del estrés</li>
+            </ul>
+          </div>
+          <div style="background-color: #f0fdf4; border: 1px solid #22c55e; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #15803d; margin: 0 0 8px 0;">🧠 Dimensión Mental</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Lectura</li>
+              <li>Escritura</li>
+              <li>Planificación</li>
+              <li>Aprendizaje continuo</li>
+            </ul>
+          </div>
+          <div style="background-color: #fdf2f8; border: 1px solid #ec4899; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #be185d; margin: 0 0 8px 0;">❤️ Dimensión Social/Emocional</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Relaciones</li>
+              <li>Servicio</li>
+              <li>Empatía</li>
+              <li>Sinergia</li>
+            </ul>
+          </div>
+          <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; padding: 16px; border-radius: 8px;">
+            <h5 style="color: #0369a1; margin: 0 0 8px 0;">🙏 Dimensión Espiritual</h5>
+            <ul style="margin: 0; font-size: 14px;">
+              <li>Meditación</li>
+              <li>Oración</li>
+              <li>Estudio de escrituras</li>
+              <li>Conexión con la naturaleza</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <h3>💪 La Dimensión Física</h3>
+      <p>La dimensión física involucra cuidar efectivamente tu cuerpo físico: comer el tipo correcto de alimentos, descansar lo suficiente y hacer ejercicio regularmente.</p>
+      
+      <div style="background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #dc2626; margin-top: 0;">🏃 Elementos del Ejercicio Efectivo</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>💨 Resistencia:</strong> Ejercicio cardiovascular (correr, nadar, ciclismo)</li>
+          <li><strong>💪 Flexibilidad:</strong> Estiramiento, yoga, tai chi</li>
+          <li><strong>🏋️ Fuerza:</strong> Ejercicios de resistencia, pesas</li>
+        </ul>
+      </div>
+      
+      <p>La buena noticia es que no necesitas pasar horas en el gimnasio. Un programa de ejercicio de 30 minutos, tres o cuatro veces por semana, puede tener un impacto tremendo en tu capacidad física.</p>
+      
+      <h3>🧠 La Dimensión Mental</h3>
+      <p>La mayoría de nuestro desarrollo mental y disciplina de estudio viene a través de la educación formal. Pero tan pronto como dejamos la disciplina externa de la escuela, muchos de nosotros dejamos que nuestras mentes se atrofien.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">📚 Actividades de Renovación Mental</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>📖 Lectura:</strong> Buenos libros, especialmente literatura clásica</li>
+          <li><strong>✍️ Escritura:</strong> Llevar un diario, escribir cartas reflexivas</li>
+          <li><strong>📋 Planificación:</strong> Pensar, planificar, visualizar</li>
+          <li><strong>🎓 Educación continua:</strong> Cursos, seminarios, talleres</li>
+        </ul>
+      </div>
+      
+      <p>La educación formal te dará una vida; la auto-educación te dará una fortuna.</p>
+      
+      <h3>❤️ La Dimensión Social/Emocional</h3>
+      <p>Las dimensiones social y emocional están relacionadas porque tu vida emocional se desarrolla principalmente, pero no exclusivamente, fuera de tus relaciones con otros.</p>
+      
+      <div style="background-color: #fdf2f8; border: 1px solid #ec4899; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #be185d; margin-top: 0;">🤝 Renovación Social/Emocional</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>🎯 Seguridad intrínseca:</strong> No depender de otros para tu autoestima</li>
+          <li><strong>🤝 Servicio:</strong> Contribuir significativamente a otros</li>
+          <li><strong>👂 Escucha empática:</strong> Buscar realmente entender a otros</li>
+          <li><strong>🌟 Afirmación:</strong> Reconocer y apreciar a otros</li>
+        </ul>
+      </div>
+      
+      <p>Renovar nuestra dimensión social/emocional no toma tiempo de la misma manera que renovar las otras dimensiones. Podemos hacerlo en nuestras interacciones normales y diarias con otras personas.</p>
+      
+      <h3>🙏 La Dimensión Espiritual</h3>
+      <p>La dimensión espiritual es tu núcleo, tu centro, tu compromiso con tu sistema de valores. Es un área muy privada de la vida y una supremamente importante.</p>
+      
+      <div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #0369a1; margin-top: 0;">🌟 Fuentes de Renovación Espiritual</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>📜 Estudio de escrituras:</strong> Textos sagrados y literatura inspiradora</li>
+          <li><strong>🧘 Meditación:</strong> Reflexión silenciosa y contemplación</li>
+          <li><strong>🙏 Oración:</strong> Comunicación con lo divino</li>
+          <li><strong>🌿 Naturaleza:</strong> Tiempo en ambientes naturales</li>
+          <li><strong>🎵 Música y arte:</strong> Experiencias que eleven el espíritu</li>
+        </ul>
+      </div>
+      
+      <p>Cuando tomas tiempo para nutrir tu dimensión espiritual, estás renovando tu compromiso con tus valores más profundos.</p>
+      
+      <h3>⚖️ Renovación Balanceada</h3>
+      <p>La renovación óptima requiere atención a las cuatro dimensiones. Descuidar cualquier área afecta negativamente a las demás.</p>
+      
+      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 24px 0;">
+        <h4 style="color: #d97706; margin-top: 0;">⚠️ Consecuencias del Desequilibrio</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Solo física:</strong> Te conviertes en un "animal saludable"</li>
+          <li><strong>Solo mental:</strong> Te vuelves un "cerebro andante"</li>
+          <li><strong>Solo social:</strong> Te conviertes en un "espejo social"</li>
+          <li><strong>Solo espiritual:</strong> Te vuelves un "fanático religioso"</li>
+        </ul>
+      </div>
+      
+      <h3>🔄 La Espiral Ascendente</h3>
+      <p>La renovación es un proceso. Es una espiral ascendente de crecimiento que te lleva a niveles más altos de entendimiento y vivir cada uno de los hábitos.</p>
+      
+      <p>Cada vez que afilas la sierra en cualquiera de las cuatro dimensiones, aumentas tu capacidad para vivir al menos uno de los siete hábitos.</p>
+      
+      <h3>🎯 Compromiso Personal</h3>
+      <p>Afilar la sierra es una expresión del Hábito 1, porque es algo que solo tú puedes hacer por ti mismo. Debes tomar la iniciativa para hacerlo.</p>
+      
+      <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #15803d; margin-top: 0;">📅 Plan de Renovación Semanal</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>💪 Física:</strong> 3-4 sesiones de ejercicio de 30 minutos</li>
+          <li><strong>🧠 Mental:</strong> 1 hora diaria de lectura o aprendizaje</li>
+          <li><strong>❤️ Social/Emocional:</strong> Tiempo de calidad con seres queridos</li>
+          <li><strong>🙏 Espiritual:</strong> 15-30 minutos diarios de meditación/oración</li>
+        </ul>
+      </div>
+      
+      <h3>🌱 Crecimiento Continuo</h3>
+      <p>El proceso de crecimiento es gradual, secuencial y requiere paciencia contigo mismo. No hay atajos para ningún lugar que valga la pena ir.</p>
+      
+      <blockquote style="border-left: 4px solid #8b5cf6; padding-left: 16px; margin: 24px 0; font-style: italic; color: #4b5563; background-color: #faf5ff; padding: 20px; border-radius: 8px;">
+        "Lo que hacemos de forma consistente en una base pequeña no es una gran cosa en sí misma. Pero las cosas pequeñas y consistentes, hechas en una gran manera, logran grandes cosas."
+      </blockquote>
+      
+      <h3>🏆 El Impacto en Otros</h3>
+      <p>Cuando te renuevas regularmente en las cuatro dimensiones, creas un crecimiento y cambio positivo en todas las áreas de tu vida. Te conviertes en una persona más efectiva y también inspiras a otros a hacer lo mismo.</p>
+      
+      <h3>📝 Ejercicio Práctico</h3>
+      <p>Diseña tu propio programa de renovación:</p>
+      
+      <ol>
+        <li><strong>Evalúa tu estado actual</strong> en cada una de las cuatro dimensiones</li>
+        <li><strong>Identifica actividades específicas</strong> que te renovarían en cada área</li>
+        <li><strong>Programa tiempo regular</strong> para estas actividades en tu calendario</li>
+        <li><strong>Comienza pequeño</strong> pero sé consistente</li>
+        <li><strong>Evalúa y ajusta</strong> tu programa regularmente</li>
+      </ol>
+      
+      <p>Recuerda: afilar la sierra es la inversión más importante que puedes hacer. Es la actividad que hace posible todas las demás actividades.</p>
+      
+      <h3>🎊 Conclusión: Convirtiéndote en una Persona de Transición</h3>
+      <p>Los 7 hábitos te permiten convertirte en una persona de transición: alguien que rompe los patrones negativos del pasado y crea patrones positivos para el futuro.</p>
+      
+      <p>Cuando vives estos hábitos, te conviertes en un agente de cambio positivo en tu familia, organización y comunidad. Tu ejemplo inspira a otros a vivir de manera más efectiva.</p>
+      
+      <p>El cambio real, duradero, viene de adentro hacia afuera. Comienza contigo.</p>
+    `,
+      page_number: 8,
       created_at: new Date().toISOString(),
     },
   ],
