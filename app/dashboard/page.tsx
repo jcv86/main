@@ -21,6 +21,7 @@ import {
   Trophy,
   User,
   Users,
+  School,
 } from "lucide-react"
 import Link from "next/link"
 import { UDDCareerRecommendations } from "@/components/udd-career-recommendations"
@@ -160,11 +161,12 @@ export default function DashboardPage() {
       )}
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Resumen</TabsTrigger>
           <TabsTrigger value="tests">Tests</TabsTrigger>
           <TabsTrigger value="goals">Metas</TabsTrigger>
           <TabsTrigger value="library">Biblioteca</TabsTrigger>
+          <TabsTrigger value="bachilleratos">Bachilleratos</TabsTrigger>
           <TabsTrigger value="udd-careers">Carreras UDD</TabsTrigger>
         </TabsList>
 
@@ -451,6 +453,211 @@ export default function DashboardPage() {
             <Link href="/library">
               <Button variant="outline" size="lg">
                 Ver Toda la Biblioteca
+              </Button>
+            </Link>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bachilleratos" className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <School className="h-5 w-5 text-blue-600" />
+                  Científico-Humanista
+                </CardTitle>
+                <CardDescription>Preparación integral para la universidad</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">75%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">85%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <School className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Briefcase className="h-5 w-5 text-green-600" />
+                  Técnico en Administración
+                </CardTitle>
+                <CardDescription>Gestión empresarial y comercial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">88%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">65%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Briefcase className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-purple-600" />
+                  Técnico en Informática
+                </CardTitle>
+                <CardDescription>Tecnologías de la información</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">92%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">70%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Brain className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-orange-600" />
+                  Bachillerato Artístico
+                </CardTitle>
+                <CardDescription>Artes visuales, música y teatro</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">70%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">80%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Star className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-red-600" />
+                  Técnico en Enfermería
+                </CardTitle>
+                <CardDescription>Cuidados de salud y asistencia sanitaria</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">95%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">60%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Users className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-yellow-600" />
+                  Técnico en Gastronomía
+                </CardTitle>
+                <CardDescription>Artes culinarias y gestión gastronómica</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">85%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">55%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Link href="/bachillerato">
+              <Button size="lg">
+                <School className="h-4 w-4 mr-2" />
+                Ver Todos los Bachilleratos
               </Button>
             </Link>
           </div>

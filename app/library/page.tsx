@@ -1,72 +1,137 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BookOpen, Search, Filter, Star, Clock, User, Calendar, TrendingUp, Award, Target } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Progress } from "@/components/ui/progress"
+import { BookOpen, Search, Filter, Clock, User, Star, TrendingUp, Award, Play, CheckCircle, Gift } from "lucide-react"
 import Link from "next/link"
-import { getLibraryBooks, getRecommendedBooks } from "@/lib/database"
+import { getLibraryBooks } from "@/lib/database"
+import { useEffect } from "react"
+
+interface Book {
+  id: string
+  title: string
+  author: string
+  description: string
+  category: string
+  rating: number
+  readingTime: string
+  pages: number
+  publishedYear: number
+  coverUrl: string
+  tags: string[]
+  progress: number
+  isRecommended: boolean
+  difficulty: string
+  keyTopics: string[]
+  isFree?: boolean
+}
 
 export default function LibraryPage() {
-  const [books, setBooks] = useState<any[]>([])
-  const [recommendedBooks, setRecommendedBooks] = useState<any[]>([])
+  const [books, setBooks] = useState<Book[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all")
+  const [sortBy, setSortBy] = useState<string>("recommended")
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-
-  const userId = "demo-user-id" // In a real app, this would come from auth context
 
   useEffect(() => {
-    const loadLibraryData = async () => {
+    const loadBooks = async () => {
       try {
-        const [allBooksResult, recommendedResult] = await Promise.all([getLibraryBooks(), getRecommendedBooks(userId)])
-
-        setBooks(allBooksResult.data || [])
-        setRecommendedBooks(recommendedResult.data || [])
+        const { data } = await getLibraryBooks()
+        if (data) {
+          // Mark "Los 7 Hábitos" as free
+          const booksWithFree = data.map((book: Book) => ({
+            ...book,
+            isFree: book.title.includes("7 Habits") || book.title.includes("7 Hábitos"),
+          }))
+          setBooks(booksWithFree)
+        }
       } catch (error) {
-        console.error("Error loading library data:", error)
+        console.error("Error loading books:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadLibraryData()
-  }, [userId])
+    loadBooks()
+  }, [])
 
-  const categories = [
-    "all",
-    "Productividad",
-    "Liderazgo",
-    "Habilidades Blandas",
-    "Desarrollo Personal",
-    "Emprendimiento",
-  ]
+  const categories = Array.from(new Set(books.map((book) => book.category)))
+  const difficulties = Array.from(new Set(books.map((book) => book.difficulty)))
 
-  const filteredBooks = books.filter((book) => {
-    const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  const filteredAndSortedBooks = useMemo(() => {
+    let filtered = books
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(
+        (book) =>
+          book.title.toLowerCase().includes(query) ||
+          book.author.toLowerCase().includes(query) ||
+          book.description.toLowerCase().includes(query) ||
+          book.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+          book.keyTopics.some((topic) => topic.toLowerCase().includes(query)),
+      )
+    }
+
+    // Apply category filter
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((book) => book.category === selectedCategory)
+    }
+
+    // Apply difficulty filter
+    if (selectedDifficulty !== "all") {
+      filtered = filtered.filter((book) => book.difficulty === selectedDifficulty)
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "recommended":
+          return b.isRecommended ? 1 : -1
+        case "rating":
+          return b.rating - a.rating
+        case "title":
+          return a.title.localeCompare(b.title)
+        case "author":
+          return a.author.localeCompare(b.author)
+        case "newest":
+          return b.publishedYear - a.publishedYear
+        case "progress":
+          return b.progress - a.progress
+        default:
+          return 0
+      }
+    })
+
+    return filtered
+  }, [books, searchQuery, selectedCategory, selectedDifficulty, sortBy])
+
+  const stats = {
+    totalBooks: books.length,
+    completedBooks: books.filter((book) => book.progress === 100).length,
+    inProgressBooks: books.filter((book) => book.progress > 0 && book.progress < 100).length,
+    averageRating: books.reduce((acc, book) => acc + book.rating, 0) / books.length || 0,
+  }
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto p-6 max-w-7xl">
         <div className="grid gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
               <Card key={i} className="animate-pulse">
                 <CardHeader>
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-20 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
                 </CardContent>
               </Card>
             ))}
@@ -77,204 +142,291 @@ export default function LibraryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-6 max-w-7xl">
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Biblioteca Digital</h1>
-        <p className="text-gray-600">Accede a libros especializados en desarrollo profesional y crecimiento personal</p>
+        <div className="flex items-center gap-3 mb-2">
+          <BookOpen className="w-8 h-8 text-blue-600" />
+          <h1 className="text-3xl font-bold text-gray-900">Biblioteca de Desarrollo Profesional</h1>
+        </div>
+        <p className="text-gray-600">
+          Descubre libros cuidadosamente seleccionados para impulsar tu crecimiento profesional y personal.
+        </p>
       </div>
 
-      {/* Reading Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Libros Disponibles</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{books.length}</div>
-            <p className="text-xs text-muted-foreground">en la biblioteca</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tiempo de Lectura</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">40h</div>
-            <p className="text-xs text-muted-foreground">total acumulado</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Progreso Promedio</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">65%</div>
-            <p className="text-xs text-muted-foreground">en libros activos</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Racha de Lectura</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">7</div>
-            <p className="text-xs text-muted-foreground">días consecutivos</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="recommended" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="recommended">Recomendados para Ti</TabsTrigger>
-          <TabsTrigger value="all">Toda la Biblioteca</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="recommended" className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {recommendedBooks.map((book) => (
-              <Card key={book.id} className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {book.category}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">{book.rating}</span>
-                    </div>
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
-                  <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">{book.description}</p>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm text-gray-600">{book.readingTime}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-green-500" />
-                      <span className="text-sm text-gray-600">{book.difficulty}</span>
-                    </div>
-                  </div>
-                  <Link href={`/library/reader/${book.id}`}>
-                    <Button className="w-full">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Comenzar a Leer
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="all" className="space-y-6">
-          {/* Search and Filter */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Buscar libros por título o autor..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total de Libros</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalBooks}</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-full">
+                <BookOpen className="w-6 h-6 text-blue-600" />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-gray-400" />
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Libros Completados</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.completedBooks}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-full">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">En Progreso</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.inProgressBooks}</p>
+              </div>
+              <div className="p-3 bg-orange-100 rounded-full">
+                <Play className="w-6 h-6 text-orange-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Calificación Promedio</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.averageRating.toFixed(1)}</p>
+              </div>
+              <div className="p-3 bg-yellow-100 rounded-full">
+                <Star className="w-6 h-6 text-yellow-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search and Filters */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="w-5 h-5" />
+            Buscar y Filtrar Libros
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="lg:col-span-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Buscar por título, autor, tema..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Categoría" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas las Categorías</SelectItem>
                 {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category === "all" ? "Todas las categorías" : category}
-                  </option>
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
                 ))}
-              </select>
-            </div>
-          </div>
+              </SelectContent>
+            </Select>
 
-          {/* Books Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredBooks.map((book) => (
-              <Card key={book.id} className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="text-xs">
-                      {book.category}
+            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+              <SelectTrigger>
+                <SelectValue placeholder="Dificultad" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas las Dificultades</SelectItem>
+                {difficulties.map((difficulty) => (
+                  <SelectItem key={difficulty} value={difficulty}>
+                    {difficulty}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger>
+                <SelectValue placeholder="Ordenar por" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recommended">Recomendados</SelectItem>
+                <SelectItem value="rating">Calificación</SelectItem>
+                <SelectItem value="title">Título</SelectItem>
+                <SelectItem value="author">Autor</SelectItem>
+                <SelectItem value="newest">Más Recientes</SelectItem>
+                <SelectItem value="progress">Progreso</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Results */}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-semibold">
+          {filteredAndSortedBooks.length} libro{filteredAndSortedBooks.length !== 1 ? "s" : ""} encontrado
+          {filteredAndSortedBooks.length !== 1 ? "s" : ""}
+        </h2>
+      </div>
+
+      {/* Books Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredAndSortedBooks.map((book) => (
+          <Card key={book.id} className="h-full hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between mb-2">
+                <Badge variant="secondary" className="text-xs">
+                  {book.category}
+                </Badge>
+                <div className="flex items-center gap-2">
+                  {book.isFree && (
+                    <Badge variant="default" className="bg-green-600 text-white text-xs">
+                      <Gift className="w-3 h-3 mr-1" />
+                      GRATIS
                     </Badge>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">{book.rating}</span>
-                    </div>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                    <span className="text-sm font-medium">{book.rating}</span>
                   </div>
-                  <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
-                  <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">{book.description}</p>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm text-gray-600">{book.readingTime}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm text-gray-600">{book.publishedYear}</span>
-                    </div>
+                </div>
+              </div>
+              <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
+              <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-gray-600 mb-4 line-clamp-3">{book.description}</p>
+
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm text-gray-600">{book.readingTime}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-gray-600">{book.difficulty}</span>
+                </div>
+              </div>
+
+              {book.progress > 0 && (
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Progreso</span>
+                    <span>{book.progress}%</span>
                   </div>
-                  <Link href={`/library/reader/${book.id}`}>
-                    <Button variant="outline" className="w-full bg-transparent">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Leer Ahora
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <Progress value={book.progress} className="h-2" />
+                </div>
+              )}
 
-          {filteredBooks.length === 0 && (
-            <div className="text-center py-12">
-              <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron libros</h3>
-              <p className="text-gray-600">Intenta ajustar tus filtros de búsqueda o explora diferentes categorías.</p>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+              <div className="space-y-2 mb-4">
+                <div className="text-sm font-medium">Temas clave:</div>
+                <div className="flex flex-wrap gap-1">
+                  {book.keyTopics.slice(0, 2).map((topic) => (
+                    <Badge key={topic} variant="outline" className="text-xs">
+                      {topic}
+                    </Badge>
+                  ))}
+                  {book.keyTopics.length > 2 && (
+                    <Badge variant="outline" className="text-xs">
+                      +{book.keyTopics.length - 2} más
+                    </Badge>
+                  )}
+                </div>
+              </div>
 
-      {/* Call to Action */}
-      <div className="mt-12">
-        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-0">
-          <CardContent className="p-8 text-center">
-            <Target className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">¿Buscas algo específico?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Nuestro sistema de recomendaciones personalizado puede sugerir libros basados en tus objetivos de carrera
-              y resultados de evaluaciones.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/personality-test">
-                <Button size="lg">Hacer Test de Personalidad</Button>
-              </Link>
-              <Link href="/career-coach">
-                <Button variant="outline" size="lg">
-                  Hablar con Coach IA
-                </Button>
-              </Link>
-            </div>
+              <div className="flex items-center gap-2">
+                <Link href={`/library/reader/${book.id}`} className="flex-1">
+                  <Button className="w-full">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    {book.progress > 0 ? "Continuar Leyendo" : "Comenzar a Leer"}
+                  </Button>
+                </Link>
+                {book.isRecommended && (
+                  <div className="p-2 bg-yellow-100 rounded-full">
+                    <Award className="h-4 w-4 text-yellow-600" />
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {filteredAndSortedBooks.length === 0 && (
+        <Card className="text-center py-12">
+          <CardContent>
+            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No se encontraron libros</h3>
+            <p className="text-gray-600 mb-4">Intenta ajustar tus filtros de búsqueda para encontrar más resultados.</p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSearchQuery("")
+                setSelectedCategory("all")
+                setSelectedDifficulty("all")
+                setSortBy("recommended")
+              }}
+            >
+              Limpiar Filtros
+            </Button>
           </CardContent>
         </Card>
-      </div>
+      )}
+
+      {/* Recommended Reading Path */}
+      <Card className="mt-12">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
+            Ruta de Lectura Recomendada
+          </CardTitle>
+          <CardDescription>Una secuencia sugerida de libros para maximizar tu desarrollo profesional</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+                1
+              </div>
+              <h4 className="font-semibold mb-1">Fundamentos</h4>
+              <p className="text-sm text-gray-600">Comienza con hábitos y mentalidad</p>
+            </div>
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+                2
+              </div>
+              <h4 className="font-semibold mb-1">Habilidades</h4>
+              <p className="text-sm text-gray-600">Desarrolla competencias específicas</p>
+            </div>
+            <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+                3
+              </div>
+              <h4 className="font-semibold mb-1">Liderazgo</h4>
+              <p className="text-sm text-gray-600">Avanza hacia roles de liderazgo</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
