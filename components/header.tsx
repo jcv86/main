@@ -1,18 +1,13 @@
-import type React from "react"
 interface HeaderProps {
   title: string
   description?: string
-  children?: React.ReactNode
 }
 
-export function DashboardHeader({ title, description, children }: HeaderProps) {
+export function Header({ title, description }: HeaderProps) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {description && <p className="text-sm text-muted-foreground">{description}</p>}
-      </div>
-      {children}
+    <div className="space-y-2">
+      <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+      {description && <p className="text-muted-foreground">{description}</p>}
     </div>
   )
 }

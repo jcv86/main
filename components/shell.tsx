@@ -7,7 +7,7 @@ interface ShellProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Shell({ children, className, ...props }: ShellProps) {
   return (
-    <div className={cn("container mx-auto px-4 py-6", className)} {...props}>
+    <div className={cn("container mx-auto px-4 py-8", className)} {...props}>
       {children}
     </div>
   )
