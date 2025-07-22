@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
@@ -13,7 +13,9 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral para el desarrollo profesional y búsqueda de empleo",
+  description:
+    "Descubre tu potencial profesional con tests de personalidad, evaluaciones de habilidades y orientación de carrera personalizada.",
+  keywords: "desarrollo profesional, test personalidad, evaluación habilidades, orientación carrera, UDD",
     generator: 'v0.dev'
 }
 
@@ -23,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>

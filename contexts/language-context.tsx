@@ -14,16 +14,26 @@ interface LanguageContextType {
 
 const translations = {
   es: {
-    dashboard: "Panel Principal",
-    profile: "Mi Perfil",
-    settings: "Configuración",
-    logout: "Cerrar Sesión",
+    "dashboard.title": "Panel Principal",
+    "dashboard.welcome": "Bienvenido de vuelta",
+    "nav.dashboard": "Panel Principal",
+    "nav.personality": "Test de Personalidad",
+    "nav.skills": "Evaluación de Habilidades",
+    "nav.coach": "Coach Profesional",
+    "nav.cv": "Constructor de CV",
+    "nav.jobs": "Búsqueda de Empleo",
+    "nav.careers": "Carreras UDD",
   },
   en: {
-    dashboard: "Dashboard",
-    profile: "My Profile",
-    settings: "Settings",
-    logout: "Sign Out",
+    "dashboard.title": "Dashboard",
+    "dashboard.welcome": "Welcome back",
+    "nav.dashboard": "Dashboard",
+    "nav.personality": "Personality Test",
+    "nav.skills": "Skills Assessment",
+    "nav.coach": "Career Coach",
+    "nav.cv": "CV Builder",
+    "nav.jobs": "Job Search",
+    "nav.careers": "UDD Careers",
   },
 }
 
@@ -33,7 +43,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations.es] || key
+    return translations[language][key as keyof (typeof translations)[typeof language]] || key
   }
 
   return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
