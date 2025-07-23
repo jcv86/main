@@ -183,6 +183,342 @@ const mockChapters: { [key: string]: BookChapter[] } = {
       estimated_reading_minutes: 32,
       created_at: new Date().toISOString(),
     },
+    {
+      id: "ch-1-4",
+      book_id: "1",
+      chapter_number: 4,
+      title: "La Segunda Ley: Hazlo Atractivo",
+      content: `
+    <div class="chapter-content">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 4: La Segunda Ley - Hazlo Atractivo</h1>
+      <p class="text-lg mb-6 text-gray-700">Los hábitos son un bucle de retroalimentación impulsado por la dopamina. Cuando la dopamina aumenta, también lo hace nuestra motivación para actuar.</p>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Papel de la Dopamina</h2>
+      <p class="mb-4 text-gray-700">La dopamina no solo se libera cuando experimentas placer, sino también cuando lo <strong>anticipas</strong>. Es la anticipación de una recompensa, no su cumplimiento, lo que nos pone en acción.</p>
+      
+      <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-purple-900 mb-4">🎯 Estrategias de Agrupación de Tentaciones</h3>
+        <p class="text-purple-800 mb-3">Combina una acción que <em>necesitas</em> hacer con una acción que <em>quieres</em> hacer:</p>
+        <ul class="list-disc list-inside text-purple-800 space-y-2">
+          <li><strong>Ejercicio + Netflix:</strong> Solo puedes ver tu serie favorita mientras haces cardio</li>
+          <li><strong>Llamadas + Caminar:</strong> Solo puedes hacer llamadas personales mientras caminas</li>
+          <li><strong>Manicura + Finanzas:</strong> Solo puedes hacerte la manicura mientras revisas tus finanzas</li>
+        </ul>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">👥 El Poder del Entorno Social</h2>
+      <p class="mb-4 text-gray-700">Imitamos los hábitos de tres grupos en particular:</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 class="font-semibold text-blue-900 mb-2">👨‍👩‍👧‍👦 Los Cercanos</h4>
+          <p class="text-blue-800 text-sm">Familia, amigos y colegas</p>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <h4 class="font-semibold text-green-900 mb-2">👑 Los Poderosos</h4>
+          <p class="text-green-800 text-sm">Personas con estatus y prestigio</p>
+        </div>
+        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+          <h4 class="font-semibold text-orange-900 mb-2">🌍 Los Muchos</h4>
+          <p class="text-orange-800 text-sm">La tribu, la mayoría</p>
+        </div>
+      </div>
+      
+      <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
+        "Únete a una cultura donde tu comportamiento deseado es el comportamiento normal."
+      </blockquote>
+    </div>
+  `,
+      estimated_reading_minutes: 28,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-1-5",
+      book_id: "1",
+      chapter_number: 5,
+      title: "La Tercera Ley: Hazlo Fácil",
+      content: `
+    <div class="chapter-content">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 5: La Tercera Ley - Hazlo Fácil</h1>
+      <p class="text-lg mb-6 text-gray-700">Los hábitos humanos siguen la Ley del Menor Esfuerzo. Naturalmente gravitamos hacia la opción que requiere la menor cantidad de trabajo.</p>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">⚡ La Regla de los Dos Minutos</h2>
+      <p class="mb-4 text-gray-700">Cuando empiezas un nuevo hábito, debería tomar menos de dos minutos hacer.</p>
+      
+      <div class="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-green-900 mb-4">🎯 Ejemplos de la Regla de los 2 Minutos</h3>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-green-800">"Leer antes de dormir"</span>
+            <span class="text-green-600">→</span>
+            <span class="text-green-800 font-medium">"Leer una página"</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-green-800">"Hacer ejercicio 30 minutos"</span>
+            <span class="text-green-600">→</span>
+            <span class="text-green-800 font-medium">"Ponerme los zapatos deportivos"</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-green-800">"Estudiar para la clase"</span>
+            <span class="text-green-600">→</span>
+            <span class="text-green-800 font-medium">"Abrir mis apuntes"</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-green-800">"Meditar 10 minutos"</span>
+            <span class="text-green-600">→</span>
+            <span class="text-green-800 font-medium">"Respirar profundo 3 veces"</span>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏗️ Preparación del Entorno</h2>
+      <p class="mb-4 text-gray-700">Puedes romper un mal hábito, pero es poco probable que lo olvides. Una vez que se forma el surco mental de un hábito, está prácticamente ahí para siempre.</p>
+      
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-red-900 mb-4">🚫 Cómo Romper un Mal Hábito</h3>
+        <ul class="list-disc list-inside text-red-800 space-y-2">
+          <li><strong>Aumenta la fricción:</strong> Haz que sea más difícil hacer el mal hábito</li>
+          <li><strong>Usa un dispositivo de compromiso:</strong> Una elección que controla tus acciones futuras</li>
+          <li><strong>Cambia el entorno:</strong> Elimina las señales que desencadenan el mal hábito</li>
+          <li><strong>Encuentra un compañero de responsabilidad:</strong> Alguien que te mantenga en el camino</li>
+        </ul>
+      </div>
+      
+      <blockquote class="border-l-4 border-green-500 pl-6 py-4 my-6 bg-green-50 rounded-r-lg italic text-lg text-green-900">
+        "La diferencia entre un buen día y un mal día a menudo es unas pocas decisiones productivas y enfocadas."
+      </blockquote>
+    </div>
+  `,
+      estimated_reading_minutes: 26,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-1-6",
+      book_id: "1",
+      chapter_number: 6,
+      title: "La Cuarta Ley: Hazlo Satisfactorio",
+      content: `
+    <div class="chapter-content">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 6: La Cuarta Ley - Hazlo Satisfactorio</h1>
+      <p class="text-lg mb-6 text-gray-700">Estamos más propensos a repetir un comportamiento cuando la experiencia es satisfactoria. El placer enseña a tu cerebro que vale la pena recordar y repetir una acción.</p>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎁 La Importancia de la Recompensa Inmediata</h2>
+      <p class="mb-4 text-gray-700">El cerebro humano evolucionó para priorizar las recompensas inmediatas sobre las recompensas retrasadas. Esta tendencia se llama <strong>descuento temporal</strong>.</p>
+      
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-4">💡 Estrategias de Recompensa Inmediata</h3>
+        <ul class="list-disc list-inside text-blue-800 space-y-2">
+          <li><strong>Cuenta de ahorros para vacaciones:</strong> Transfiere $50 cada vez que no compres comida para llevar</li>
+          <li><strong>Ritual de celebración:</strong> Haz una pequeña celebración después de completar un hábito</li>
+          <li><strong>Seguimiento visual:</strong> Marca un calendario cada día que completes tu hábito</li>
+          <li><strong>Recompensa social:</strong> Comparte tu progreso con amigos o en redes sociales</li>
+        </ul>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📊 El Poder del Seguimiento de Hábitos</h2>
+      <p class="mb-4 text-gray-700">El seguimiento de hábitos es poderoso porque aprovecha múltiples leyes del cambio de comportamiento. Es obvio, atractivo y satisfactorio.</p>
+      
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-yellow-900 mb-4">📈 Beneficios del Seguimiento</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 class="font-medium text-yellow-800 mb-2">✅ Crea conciencia</h4>
+            <p class="text-yellow-700 text-sm">Te ayuda a darte cuenta de lo que realmente estás haciendo</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-yellow-800 mb-2">🎯 Proporciona motivación</h4>
+            <p class="text-yellow-700 text-sm">Es satisfactorio ver tu progreso visual</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-yellow-800 mb-2">📋 Forma el hábito en sí</h4>
+            <p class="text-yellow-700 text-sm">El acto de seguimiento se convierte en su propio hábito</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-yellow-800 mb-2">🔄 Crea un bucle de retroalimentación</h4>
+            <p class="text-yellow-700 text-sm">Te permite ajustar y mejorar continuamente</p>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🚨 Nunca Falles Dos Veces</h2>
+      <p class="mb-4 text-gray-700">La primera falla es un accidente. La segunda falla es el comienzo de un nuevo patrón.</p>
+      
+      <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
+        "No rompas la cadena" es una poderosa regla mental, pero "nunca falles dos veces" es aún mejor.
+      </blockquote>
+    </div>
+  `,
+      estimated_reading_minutes: 30,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-1-7",
+      book_id: "1",
+      chapter_number: 7,
+      title: "Tácticas Avanzadas: Cómo Pasar de Ser Bueno a Ser Genial",
+      content: `
+    <div class="chapter-content">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 7: Tácticas Avanzadas</h1>
+      <p class="text-lg mb-6 text-gray-700">Una vez que has construido los hábitos fundamentales, puedes combinarlos en rutinas más complejas para desbloquear niveles más altos de rendimiento.</p>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎯 La Regla de Goldilocks</h2>
+      <p class="mb-4 text-gray-700">Los humanos experimentan máxima motivación cuando trabajan en tareas que están justo en el borde de sus habilidades actuales. No demasiado difícil. No demasiado fácil. Justo bien.</p>
+      
+      <div class="bg-gradient-to-r from-red-50 to-yellow-50 to-green-50 border border-yellow-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">⚖️ La Zona de Dificultad Óptima</h3>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-4 h-4 bg-red-400 rounded-full"></div>
+            <span class="text-red-700"><strong>Demasiado Difícil:</strong> Ansiedad y frustración</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-4 h-4 bg-green-400 rounded-full"></div>
+            <span class="text-green-700"><strong>Justo Bien:</strong> Flujo y compromiso máximo</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-4 h-4 bg-blue-400 rounded-full"></div>
+            <span class="text-blue-700"><strong>Demasiado Fácil:</strong> Aburrimiento y desinterés</span>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🔄 La Importancia de la Reflexión y Revisión</h2>
+      <p class="mb-4 text-gray-700">La reflexión y revisión es un proceso para permanecer consciente de tu rendimiento a lo largo del tiempo.</p>
+      
+      <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-purple-900 mb-4">📝 Preguntas de Reflexión Anual</h3>
+        <ul class="list-disc list-inside text-purple-800 space-y-2">
+          <li>¿Qué salió bien este año?</li>
+          <li>¿Qué no salió tan bien?</li>
+          <li>¿Qué aprendí?</li>
+          <li>¿Cómo puedo mejorar estos hábitos el próximo año?</li>
+          <li>¿Qué quiero lograr en los próximos 12 meses?</li>
+        </ul>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏆 Cómo Mantener la Motivación a Largo Plazo</h2>
+      <p class="mb-4 text-gray-700">Los profesionales se adhieren al horario; los aficionados dejan que la vida se interponga en el camino.</p>
+      
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">💪 Estrategias para la Consistencia</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">🎭 Cambia la historia que te cuentas</h4>
+            <p class="text-gray-600 text-sm">En lugar de "tengo que", di "llego a"</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">🔄 Abraza el aburrimiento</h4>
+            <p class="text-gray-600 text-sm">La maestría requiere práctica incluso cuando no tienes ganas</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">📊 Enfócate en el proceso</h4>
+            <p class="text-gray-600 text-sm">Los resultados son un indicador rezagado del proceso</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">🎯 Mantén la identidad</h4>
+            <p class="text-gray-600 text-sm">Pregúntate: "¿Qué haría una persona como yo?"</p>
+          </div>
+        </div>
+      </div>
+      
+      <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
+        "El secreto para obtener resultados que duren es nunca dejar de hacer mejoras."
+      </blockquote>
+    </div>
+  `,
+      estimated_reading_minutes: 33,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-1-8",
+      book_id: "1",
+      chapter_number: 8,
+      title: "Conclusión: El Secreto de los Resultados que Duran",
+      content: `
+    <div class="chapter-content">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 8: El Secreto de los Resultados que Duran</h1>
+      <p class="text-lg mb-6 text-gray-700">El cambio verdadero viene de cientos de pequeñas decisiones: hacer dos flexiones al día, despertar cinco minutos antes, o mantener una conversación corta.</p>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🌟 Los Hábitos y la Identidad</h2>
+      <p class="mb-4 text-gray-700">En última instancia, tus hábitos importan porque te ayudan a convertirte en el tipo de persona que deseas ser. Son el canal a través del cual desarrollas tus creencias más profundas sobre ti mismo.</p>
+      
+      <div class="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-4">🔄 El Ciclo de Identidad y Hábitos</h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+            <div>
+              <h4 class="font-medium text-blue-800">Decide el tipo de persona que quieres ser</h4>
+              <p class="text-blue-600 text-sm">¿Qué tipo de persona podría obtener el resultado que quiero?</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+            <div>
+              <h4 class="font-medium text-purple-800">Demuéstratelo con pequeñas victorias</h4>
+              <p class="text-purple-600 text-sm">¿Qué haría esa persona todos los días?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📋 Resumen de las Cuatro Leyes</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-green-900 mb-4">✅ Crear un Buen Hábito</h3>
+          <ul class="space-y-2 text-green-800">
+            <li><strong>1ª Ley:</strong> Hazlo obvio</li>
+            <li><strong>2ª Ley:</strong> Hazlo atractivo</li>
+            <li><strong>3ª Ley:</strong> Hazlo fácil</li>
+            <li><strong>4ª Ley:</strong> Hazlo satisfactorio</li>
+          </ul>
+        </div>
+        
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-red-900 mb-4">❌ Romper un Mal Hábito</h3>
+          <ul class="space-y-2 text-red-800">
+            <li><strong>Inversión de la 1ª:</strong> Hazlo invisible</li>
+            <li><strong>Inversión de la 2ª:</strong> Hazlo poco atractivo</li>
+            <li><strong>Inversión de la 3ª:</strong> Hazlo difícil</li>
+            <li><strong>Inversión de la 4ª:</strong> Hazlo insatisfactorio</li>
+          </ul>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🚀 Tu Plan de Acción</h2>
+      <p class="mb-4 text-gray-700">Ahora que conoces las cuatro leyes, es hora de ponerlas en práctica. Aquí tienes un plan de acción simple:</p>
+      
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
+        <h3 class="text-lg font-semibold text-yellow-900 mb-4">📝 Pasos Siguientes</h3>
+        <ol class="list-decimal list-inside text-yellow-800 space-y-3">
+          <li><strong>Elige un hábito:</strong> Empieza con algo pequeño y específico</li>
+          <li><strong>Aplica las cuatro leyes:</strong> Hazlo obvio, atractivo, fácil y satisfactorio</li>
+          <li><strong>Sigue tu progreso:</strong> Usa un rastreador de hábitos simple</li>
+          <li><strong>Sé paciente:</strong> Los cambios toman tiempo, pero son compuestos</li>
+          <li><strong>Celebra las pequeñas victorias:</strong> Reconoce cada paso hacia adelante</li>
+        </ol>
+      </div>
+      
+      <div class="bg-gray-900 text-white rounded-lg p-8 my-8 text-center">
+        <h3 class="text-2xl font-bold mb-4">🎯 Recuerda</h3>
+        <p class="text-lg mb-4">Los hábitos no restringen la libertad. La crean.</p>
+        <p class="text-gray-300">Sin buenos hábitos, siempre estarás luchando por encontrar tiempo para las cosas que importan.</p>
+      </div>
+      
+      <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-xl text-blue-900 text-center">
+        "Cada acción que tomas es un voto por el tipo de persona que deseas convertirte."
+      </blockquote>
+      
+      <div class="text-center mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">¡Felicitaciones!</h3>
+        <p class="text-gray-700">Has completado "Hábitos Atómicos". Ahora es momento de poner en práctica lo aprendido.</p>
+      </div>
+    </div>
+  `,
+      estimated_reading_minutes: 25,
+      created_at: new Date().toISOString(),
+    },
   ],
   "2": [
     {
