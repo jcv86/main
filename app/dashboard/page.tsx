@@ -112,6 +112,20 @@ export default function DashboardPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
         <p className="text-gray-600">Bienvenido a tu plataforma de desarrollo profesional</p>
+
+        {/* Mirix System Status */}
+        <div className="mt-4">
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Brain className="h-3 w-3 mr-1" />
+            Sistema Mirix Activo
+          </Badge>
+          <Link href="/mirix" className="ml-2">
+            <Button variant="outline" size="sm">
+              <Brain className="h-4 w-4 mr-2" />
+              Acceder a Mirix
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -250,12 +264,11 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Completado
-                  </Badge>
-                  <Link href="/personality-results">
-                    <Button variant="outline" size="sm">
-                      Ver Resultados
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/personality-test">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
                     </Button>
                   </Link>
                 </div>
