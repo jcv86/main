@@ -2,34 +2,23 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { BookOpen, ChevronLeft, ChevronRight, ArrowLeft, Clock, Star, CheckCircle, Trophy, Target } from "lucide-react"
+import { toast } from "sonner"
 import {
-  BookOpen,
-  ArrowLeft,
-  Settings,
-  Star,
-  Clock,
-  User,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Home,
-  Bookmark,
-} from "lucide-react"
-import Link from "next/link"
-import {
-  getBookById,
+  getBook,
   getBookContent,
+  getReadingProgress,
   updateReadingProgress,
-  getUserBookmarks,
-  addBookmark,
-  removeBookmark,
+  completeBook,
+  type Book,
+  type BookContent,
+  type ReadingProgress,
 } from "@/lib/supabase-library"
-import type { Book, BookContent } from "@/lib/supabase-library"
 
 export default function BookReaderPage() {
   const params = useParams()
@@ -37,169 +26,139 @@ export default function BookReaderPage() {
   const bookId = params.id as string
 
   const [book, setBook] = useState<Book | null>(null)
-  const [content, setContent] = useState<BookContent[]>([])
-  const [bookmarks, setBookmarks] = useState<any[]>([])
-  const [currentPage, setCurrentPage] = useState(0)
-  const [readingProgress, setReadingProgress] = useState(0)
+  const [chapters, setChapters] = useState<BookContent[]>([])
+  const [currentChapter, setCurrentChapter] = useState(0)
+  const [progress, setProgress] = useState<ReadingProgress | null>(null)
   const [loading, setLoading] = useState(true)
-  const [fontSize, setFontSize] = useState(16)
-  const [showSettings, setShowSettings] = useState(false)
-  const [isBookmarked, setIsBookmarked] = useState(false)
-
-  const userId = "demo-user-id" // In a real app, this would come from auth context
+  const [completing, setCompleting] = useState(false)
 
   useEffect(() => {
-    const loadBookData = async () => {
-      if (!bookId) {
-        console.log("No bookId provided")
+    if (bookId) {
+      loadBookData()
+    }
+  }, [bookId])
+
+  const loadBookData = async () => {
+    try {
+      setLoading(true)
+      const [bookData, chaptersData, progressData] = await Promise.all([
+        getBook(bookId),
+        getBookContent(bookId),
+        getReadingProgress("demo-user", bookId),
+      ])
+
+      if (!bookData) {
+        toast.error("Libro no encontrado")
+        router.push("/library")
         return
       }
 
-      console.log("Loading book with ID:", bookId)
-      setLoading(true)
+      setBook(bookData)
+      setChapters(chaptersData)
+      setProgress(progressData)
 
-      try {
-        console.log("Fetching book data...")
-        const [bookData, contentData, bookmarksData] = await Promise.all([
-          getBookById(bookId),
-          getBookContent(bookId),
-          getUserBookmarks(userId, bookId),
-        ])
-
-        console.log("Book data:", bookData)
-        console.log("Content data:", contentData)
-        console.log("Bookmarks data:", bookmarksData)
-
-        if (bookData) {
-          setBook(bookData)
-        } else {
-          console.error("No book data found for ID:", bookId)
-        }
-
-        if (contentData && contentData.length > 0) {
-          setContent(contentData)
-          // Calculate reading progress
-          const progress = Math.round(((currentPage + 1) / contentData.length) * 100)
-          setReadingProgress(progress)
-        } else {
-          console.error("No content data found for book ID:", bookId)
-        }
-
-        setBookmarks(bookmarksData || [])
-      } catch (error) {
-        console.error("Error loading book data:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadBookData()
-  }, [bookId, userId, currentPage])
-
-  useEffect(() => {
-    // Update reading progress when page changes
-    if (content.length > 0) {
-      const progress = Math.round(((currentPage + 1) / content.length) * 100)
-      setReadingProgress(progress)
-
-      // Save progress to database
-      updateReadingProgress(userId, bookId, progress, currentPage + 1)
-    }
-  }, [currentPage, content.length, userId, bookId])
-
-  useEffect(() => {
-    // Check if current page is bookmarked
-    const currentBookmark = bookmarks.find((b) => b.page_number === currentPage + 1)
-    setIsBookmarked(!!currentBookmark)
-  }, [bookmarks, currentPage])
-
-  const handleNextPage = () => {
-    if (currentPage < content.length - 1) {
-      setCurrentPage(currentPage + 1)
-    }
-  }
-
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1)
-    }
-  }
-
-  const handleBookmark = async () => {
-    try {
-      const currentBookmark = bookmarks.find((b) => b.page_number === currentPage + 1)
-
-      if (currentBookmark) {
-        // Remove bookmark
-        await removeBookmark(currentBookmark.id)
-        setBookmarks((prev) => prev.filter((b) => b.id !== currentBookmark.id))
-        setIsBookmarked(false)
-      } else {
-        // Add bookmark
-        const newBookmark = await addBookmark(userId, bookId, currentPage + 1, `Marcador en página ${currentPage + 1}`)
-        setBookmarks((prev) => [...prev, newBookmark])
-        setIsBookmarked(true)
+      // Set current chapter based on progress
+      if (progressData && progressData.current_page > 1) {
+        const chapterIndex = Math.min(progressData.current_page - 1, chaptersData.length - 1)
+        setCurrentChapter(chapterIndex)
       }
     } catch (error) {
-      console.error("Error handling bookmark:", error)
+      console.error("Error loading book data:", error)
+      toast.error("Error al cargar el libro")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateProgress = async (chapterIndex: number) => {
+    if (!book) return
+
+    const currentPage = chapterIndex + 1
+    const progressPercentage = Math.round((currentPage / chapters.length) * 100)
+
+    try {
+      const updatedProgress = await updateReadingProgress("demo-user", bookId, currentPage, progressPercentage)
+      setProgress(updatedProgress)
+    } catch (error) {
+      console.error("Error updating progress:", error)
+    }
+  }
+
+  const goToNextChapter = () => {
+    if (currentChapter < chapters.length - 1) {
+      const nextChapter = currentChapter + 1
+      setCurrentChapter(nextChapter)
+      updateProgress(nextChapter)
+    }
+  }
+
+  const goToPreviousChapter = () => {
+    if (currentChapter > 0) {
+      const prevChapter = currentChapter - 1
+      setCurrentChapter(prevChapter)
+      updateProgress(prevChapter)
+    }
+  }
+
+  const handleCompleteBook = async () => {
+    if (!book) return
+
+    try {
+      setCompleting(true)
+      const success = await completeBook("demo-user", bookId)
+
+      if (success) {
+        toast.success("¡Felicitaciones! Has completado el libro", {
+          description: "Has ganado 100 puntos por completar este libro",
+          duration: 5000,
+        })
+
+        // Update progress to 100%
+        const completedProgress = await updateReadingProgress("demo-user", bookId, book.total_pages, 100)
+        setProgress(completedProgress)
+      } else {
+        toast.error("Error al completar el libro")
+      }
+    } catch (error) {
+      console.error("Error completing book:", error)
+      toast.error("Error al completar el libro")
+    } finally {
+      setCompleting(false)
     }
   }
 
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/4 mb-8"></div>
-            <div className="space-y-4">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded"></div>
-              ))}
-            </div>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <BookOpen className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
+            <p className="text-lg text-gray-600">Cargando libro...</p>
           </div>
         </div>
       </div>
     )
   }
 
-  if (!book) {
+  if (!book || chapters.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Libro no encontrado</h2>
-          <p className="text-gray-600 mb-6">El libro que buscas no está disponible o ha sido movido.</p>
-          <Link href="/library">
-            <Button>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver a la Biblioteca
-            </Button>
-          </Link>
+        <div className="text-center py-12">
+          <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Libro no disponible</h3>
+          <p className="text-gray-600 mb-4">No se pudo cargar el contenido del libro</p>
+          <Button onClick={() => router.push("/library")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver a la Biblioteca
+          </Button>
         </div>
       </div>
     )
   }
 
-  if (content.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Contenido no disponible</h2>
-          <p className="text-gray-600 mb-6">El contenido de este libro no está disponible en este momento.</p>
-          <Link href="/library">
-            <Button>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver a la Biblioteca
-            </Button>
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  const currentContent = content[currentPage]
+  const currentChapterData = chapters[currentChapter]
+  const progressPercentage = progress?.progress_percentage || 0
+  const isCompleted = progressPercentage === 100
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -207,200 +166,144 @@ export default function BookReaderPage() {
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/library">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Biblioteca
-                </Button>
-              </Link>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => router.push("/library")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Biblioteca
+              </Button>
               <Separator orientation="vertical" className="h-6" />
               <div>
-                <h1 className="font-semibold text-lg">{book.title}</h1>
+                <h1 className="text-lg font-semibold text-gray-900 truncate max-w-md">{book.title}</h1>
                 <p className="text-sm text-gray-600">por {book.author}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={handleBookmark}>
-                <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current text-blue-600" : ""}`} />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
-                <Settings className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
 
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-              <span>Progreso de lectura</span>
-              <span>{readingProgress}% completado</span>
+            <div className="flex items-center space-x-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">
+                  Capítulo {currentChapter + 1} de {chapters.length}
+                </p>
+                <p className="text-xs text-gray-600">{progressPercentage}% completado</p>
+              </div>
+              <div className="w-32">
+                <Progress value={progressPercentage} className="h-2" />
+              </div>
             </div>
-            <Progress value={readingProgress} className="h-2" />
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-3">
-              <Card className="min-h-[600px]">
-                <CardContent className="p-8">
-                  {/* Settings Panel */}
-                  {showSettings && (
-                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                      <h3 className="font-medium mb-3">Configuración de lectura</h3>
-                      <div className="flex items-center gap-4">
-                        <label className="text-sm">Tamaño de fuente:</label>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setFontSize(Math.max(12, fontSize - 2))}>
-                            A-
-                          </Button>
-                          <span className="text-sm w-8 text-center">{fontSize}px</span>
-                          <Button variant="outline" size="sm" onClick={() => setFontSize(Math.min(24, fontSize + 2))}>
-                            A+
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+          {/* Book Info Card */}
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <CardTitle className="text-2xl mb-2">{book.title}</CardTitle>
+                  <p className="text-lg text-gray-600 mb-4">por {book.author}</p>
 
-                  {/* Chapter Title */}
-                  <div className="mb-6">
-                    <Badge variant="outline" className="mb-2">
-                      Capítulo {currentContent.chapter_number}
-                    </Badge>
-                    <h2 className="text-2xl font-bold text-gray-900">{currentContent.title}</h2>
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-500 mr-1" />
+                      <span className="text-sm font-medium">{book.rating}</span>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Clock className="h-4 w-4 mr-1" />
+                      {book.reading_time}
+                    </div>
+                    <Badge variant="secondary">{book.category}</Badge>
+                    {book.is_free && <Badge className="bg-green-100 text-green-800">GRATIS</Badge>}
                   </div>
 
-                  {/* Content */}
-                  <div
-                    className="prose prose-gray max-w-none leading-relaxed"
-                    style={{ fontSize: `${fontSize}px` }}
-                    dangerouslySetInnerHTML={{ __html: currentContent.content }}
-                  />
+                  <p className="text-gray-700">{book.description}</p>
+                </div>
 
-                  {/* Navigation */}
-                  <div className="flex items-center justify-between mt-12 pt-6 border-t">
-                    <Button variant="outline" onClick={handlePrevPage} disabled={currentPage === 0}>
-                      <ChevronLeft className="h-4 w-4 mr-2" />
-                      Anterior
-                    </Button>
-
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span>
-                        Página {currentPage + 1} de {content.length}
-                      </span>
+                {isCompleted && (
+                  <div className="ml-6 text-center">
+                    <div className="bg-green-100 rounded-full p-4 mb-2">
+                      <Trophy className="h-8 w-8 text-green-600 mx-auto" />
                     </div>
-
-                    <Button onClick={handleNextPage} disabled={currentPage === content.length - 1}>
-                      Siguiente
-                      <ChevronRight className="h-4 w-4 ml-2" />
-                    </Button>
+                    <Badge className="bg-green-100 text-green-800">¡COMPLETADO!</Badge>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24 space-y-6">
-                {/* Book Info */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">{book.title}</CardTitle>
-                    <CardDescription>por {book.author}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="text-sm">{book.rating} estrellas</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm">{book.reading_time}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-green-500" />
-                      <span className="text-sm">{book.difficulty}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm">{book.publication_year}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Table of Contents */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Contenido</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {content.map((chapter, index) => (
-                      <button
-                        key={chapter.id}
-                        onClick={() => setCurrentPage(index)}
-                        className={`w-full text-left p-2 rounded text-sm transition-colors ${
-                          index === currentPage ? "bg-blue-100 text-blue-900 font-medium" : "hover:bg-gray-100"
-                        }`}
-                      >
-                        <div className="font-medium">{chapter.title}</div>
-                        <div className="text-xs text-gray-500">Capítulo {chapter.chapter_number}</div>
-                      </button>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Bookmarks */}
-                {bookmarks.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Marcadores</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      {bookmarks.map((bookmark) => (
-                        <button
-                          key={bookmark.id}
-                          onClick={() => setCurrentPage(bookmark.page_number - 1)}
-                          className="w-full text-left p-2 rounded text-sm hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="font-medium">Página {bookmark.page_number}</div>
-                          {bookmark.note && <div className="text-xs text-gray-500 mt-1">{bookmark.note}</div>}
-                        </button>
-                      ))}
-                    </CardContent>
-                  </Card>
                 )}
-
-                {/* Quick Actions */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Acciones</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <Link href="/library">
-                      <Button variant="outline" size="sm" className="w-full justify-start bg-transparent">
-                        <Home className="h-4 w-4 mr-2" />
-                        Volver a Biblioteca
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full justify-start bg-transparent"
-                      onClick={handleBookmark}
-                    >
-                      <Bookmark className={`h-4 w-4 mr-2 ${isBookmarked ? "fill-current text-blue-600" : ""}`} />
-                      {isBookmarked ? "Quitar Marcador" : "Agregar Marcador"}
-                    </Button>
-                  </CardContent>
-                </Card>
               </div>
+            </CardHeader>
+          </Card>
+
+          {/* Chapter Content */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{currentChapterData.title}</span>
+                <Badge variant="outline">Capítulo {currentChapterData.chapter_number}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: currentChapterData.content }}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between mb-8">
+            <Button variant="outline" onClick={goToPreviousChapter} disabled={currentChapter === 0}>
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Capítulo Anterior
+            </Button>
+
+            <div className="flex items-center space-x-4">
+              {currentChapter === chapters.length - 1 && !isCompleted && (
+                <Button onClick={handleCompleteBook} disabled={completing} className="bg-green-600 hover:bg-green-700">
+                  {completing ? (
+                    <>
+                      <Target className="h-4 w-4 mr-2 animate-spin" />
+                      Completando...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Completar Libro
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
+
+            <Button variant="outline" onClick={goToNextChapter} disabled={currentChapter === chapters.length - 1}>
+              Siguiente Capítulo
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
           </div>
+
+          {/* Chapter Navigation */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Índice de Capítulos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {chapters.map((chapter, index) => (
+                  <Button
+                    key={chapter.id}
+                    variant={index === currentChapter ? "default" : "ghost"}
+                    className="justify-start h-auto p-3"
+                    onClick={() => {
+                      setCurrentChapter(index)
+                      updateProgress(index)
+                    }}
+                  >
+                    <div className="text-left">
+                      <div className="font-medium">Capítulo {chapter.chapter_number}</div>
+                      <div className="text-sm text-gray-600 truncate">{chapter.title}</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
