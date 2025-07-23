@@ -113,6 +113,14 @@ export default function LibraryPage() {
     return filtered
   }, [books, searchQuery, selectedCategory, selectedDifficulty, sortBy])
 
+  // Get only top 3 recommended books for the recommendation section
+  const topRecommendedBooks = useMemo(() => {
+    return books
+      .filter((book) => book.isRecommended)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 3)
+  }, [books])
+
   const stats = {
     totalBooks: books.length,
     completedBooks: books.filter((book) => book.progress === 100).length,
@@ -212,6 +220,86 @@ export default function LibraryPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Top Recommendations Section - Limited to 3 books */}
+      {topRecommendedBooks.length > 0 && (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-yellow-600" />
+              Libros Recomendados para Ti
+            </CardTitle>
+            <CardDescription>
+              Nuestras mejores recomendaciones basadas en tu perfil y objetivos profesionales
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-3">
+              {topRecommendedBooks.map((book) => (
+                <Card key={book.id} className="h-full hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="secondary" className="text-xs">
+                        {book.category}
+                      </Badge>
+                      <div className="flex items-center gap-2">
+                        {book.isFree && (
+                          <Badge variant="default" className="bg-green-600 text-white text-xs">
+                            <Gift className="w-3 h-3 mr-1" />
+                            GRATIS
+                          </Badge>
+                        )}
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium">{book.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
+                    <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{book.description}</p>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-blue-500" />
+                        <span className="text-sm text-gray-600">{book.readingTime}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-green-500" />
+                        <span className="text-sm text-gray-600">{book.difficulty}</span>
+                      </div>
+                    </div>
+
+                    {book.progress > 0 && (
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Progreso</span>
+                          <span>{book.progress}%</span>
+                        </div>
+                        <Progress value={book.progress} className="h-2" />
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                      <Link href={`/library/reader/${book.id}`} className="flex-1">
+                        <Button className="w-full">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          {book.progress > 0 ? "Continuar Leyendo" : "Comenzar a Leer"}
+                        </Button>
+                      </Link>
+                      <div className="p-2 bg-yellow-100 rounded-full">
+                        <Award className="h-4 w-4 text-yellow-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Search and Filters */}
       <Card className="mb-8">
