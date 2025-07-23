@@ -43,19 +43,47 @@ export interface MirixSession {
   created_at: string
 }
 
+// Helper function to handle Supabase errors and retries
+async function withRetry<T>(operation: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  let lastError: any
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await operation()
+    } catch (error: any) {
+      lastError = error
+
+      // Check if it's a rate limiting error
+      if (error.message && error.message.includes("Too Many")) {
+        const delay = baseDelay * Math.pow(2, attempt) // Exponential backoff
+        console.warn(`Rate limited, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`)
+        await new Promise((resolve) => setTimeout(resolve, delay))
+        continue
+      }
+
+      // For other errors, don't retry
+      throw error
+    }
+  }
+
+  throw lastError
+}
+
 export class MirixMemorySystem {
   // Store a new memory
   async storeMemory(
     memory: Omit<MirixMemory, "id" | "created_at" | "updated_at" | "access_count">,
   ): Promise<MirixMemory | null> {
     try {
-      const { data, error } = await supabase.from("mirix_memories").insert([memory]).select().single()
+      return await withRetry(async () => {
+        const { data, error } = await supabase.from("mirix_memories").insert([memory]).select().single()
 
-      if (error) {
-        console.error("Supabase error storing memory:", error)
-        throw error
-      }
-      return data
+        if (error) {
+          console.error("Supabase error storing memory:", error)
+          throw error
+        }
+        return data
+      })
     } catch (error) {
       console.error("Error storing memory:", error)
       return null
@@ -75,49 +103,50 @@ export class MirixMemorySystem {
     },
   ): Promise<MirixMemory[]> {
     try {
-      let query = supabase
-        .from("mirix_memories")
-        .select("*")
-        .eq("user_id", userId)
-        .order("importance", { ascending: false })
-        .order("created_at", { ascending: false })
+      return await withRetry(async () => {
+        let query = supabase
+          .from("mirix_memories")
+          .select("*")
+          .eq("user_id", userId)
+          .order("importance", { ascending: false })
+          .order("created_at", { ascending: false })
 
-      if (filters?.agent_id) {
-        query = query.eq("agent_id", filters.agent_id)
-      }
+        if (filters?.agent_id) {
+          query = query.eq("agent_id", filters.agent_id)
+        }
 
-      if (filters?.memory_type) {
-        query = query.eq("memory_type", filters.memory_type)
-      }
+        if (filters?.memory_type) {
+          query = query.eq("memory_type", filters.memory_type)
+        }
 
-      if (filters?.importance) {
-        query = query.eq("importance", filters.importance)
-      }
+        if (filters?.importance) {
+          query = query.eq("importance", filters.importance)
+        }
 
-      if (filters?.tags && filters.tags.length > 0) {
-        query = query.overlaps("tags", filters.tags)
-      }
+        if (filters?.tags && filters.tags.length > 0) {
+          query = query.overlaps("tags", filters.tags)
+        }
 
-      if (filters?.search) {
-        query = query.textSearch("search_vector", filters.search, {
-          type: "websearch",
-          config: "spanish",
-        })
-      }
+        if (filters?.search) {
+          // Use simple text search instead of full-text search to avoid issues
+          query = query.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`)
+        }
 
-      if (filters?.limit) {
-        query = query.limit(filters.limit)
-      }
+        if (filters?.limit) {
+          query = query.limit(filters.limit)
+        }
 
-      const { data, error } = await query
+        const { data, error } = await query
 
-      if (error) {
-        console.error("Supabase error retrieving memories:", error)
-        throw error
-      }
-      return data || []
+        if (error) {
+          console.error("Supabase error retrieving memories:", error)
+          throw error
+        }
+        return data || []
+      })
     } catch (error) {
       console.error("Error retrieving memories:", error)
+      // Return empty array instead of throwing to prevent UI crashes
       return []
     }
   }
@@ -125,28 +154,36 @@ export class MirixMemorySystem {
   // Get a specific memory and increment access count
   async getMemory(memoryId: string, userId: string): Promise<MirixMemory | null> {
     try {
-      // Increment access count
-      const { error: rpcError } = await supabase.rpc("increment_memory_access", {
-        memory_uuid: memoryId,
-        user_uuid: userId,
+      return await withRetry(async () => {
+        // First get the memory
+        const { data, error } = await supabase
+          .from("mirix_memories")
+          .select("*")
+          .eq("id", memoryId)
+          .eq("user_id", userId)
+          .single()
+
+        if (error) {
+          console.error("Supabase error getting memory:", error)
+          throw error
+        }
+
+        // Then try to increment access count (don't fail if this doesn't work)
+        try {
+          await supabase
+            .from("mirix_memories")
+            .update({
+              access_count: (data.access_count || 0) + 1,
+              last_accessed_at: new Date().toISOString(),
+            })
+            .eq("id", memoryId)
+            .eq("user_id", userId)
+        } catch (updateError) {
+          console.warn("Error incrementing access count:", updateError)
+        }
+
+        return data
       })
-
-      if (rpcError) {
-        console.warn("Error incrementing access count:", rpcError)
-      }
-
-      const { data, error } = await supabase
-        .from("mirix_memories")
-        .select("*")
-        .eq("id", memoryId)
-        .eq("user_id", userId)
-        .single()
-
-      if (error) {
-        console.error("Supabase error getting memory:", error)
-        throw error
-      }
-      return data
     } catch (error) {
       console.error("Error getting memory:", error)
       return null
@@ -156,19 +193,21 @@ export class MirixMemorySystem {
   // Update a memory
   async updateMemory(memoryId: string, userId: string, updates: Partial<MirixMemory>): Promise<MirixMemory | null> {
     try {
-      const { data, error } = await supabase
-        .from("mirix_memories")
-        .update(updates)
-        .eq("id", memoryId)
-        .eq("user_id", userId)
-        .select()
-        .single()
+      return await withRetry(async () => {
+        const { data, error } = await supabase
+          .from("mirix_memories")
+          .update(updates)
+          .eq("id", memoryId)
+          .eq("user_id", userId)
+          .select()
+          .single()
 
-      if (error) {
-        console.error("Supabase error updating memory:", error)
-        throw error
-      }
-      return data
+        if (error) {
+          console.error("Supabase error updating memory:", error)
+          throw error
+        }
+        return data
+      })
     } catch (error) {
       console.error("Error updating memory:", error)
       return null
@@ -178,12 +217,14 @@ export class MirixMemorySystem {
   // Delete a memory
   async deleteMemory(memoryId: string, userId: string): Promise<boolean> {
     try {
-      const { error } = await supabase.from("mirix_memories").delete().eq("id", memoryId).eq("user_id", userId)
+      await withRetry(async () => {
+        const { error } = await supabase.from("mirix_memories").delete().eq("id", memoryId).eq("user_id", userId)
 
-      if (error) {
-        console.error("Supabase error deleting memory:", error)
-        throw error
-      }
+        if (error) {
+          console.error("Supabase error deleting memory:", error)
+          throw error
+        }
+      })
       return true
     } catch (error) {
       console.error("Error deleting memory:", error)
@@ -194,17 +235,26 @@ export class MirixMemorySystem {
   // Get related memories
   async getRelatedMemories(memoryId: string, userId: string, limit = 5): Promise<any[]> {
     try {
-      const { data, error } = await supabase.rpc("get_related_memories", {
-        memory_uuid: memoryId,
-        user_uuid: userId,
-        limit_count: limit,
-      })
+      return await withRetry(async () => {
+        // Get the source memory first
+        const sourceMemory = await this.getMemory(memoryId, userId)
+        if (!sourceMemory) return []
 
-      if (error) {
-        console.error("Supabase error getting related memories:", error)
-        throw error
-      }
-      return data || []
+        // Find related memories based on tags and type
+        const { data, error } = await supabase
+          .from("mirix_memories")
+          .select("*")
+          .eq("user_id", userId)
+          .neq("id", memoryId)
+          .or(`memory_type.eq.${sourceMemory.memory_type},tags.ov.{${sourceMemory.tags.join(",")}}`)
+          .limit(limit)
+
+        if (error) {
+          console.error("Supabase error getting related memories:", error)
+          throw error
+        }
+        return data || []
+      })
     } catch (error) {
       console.error("Error getting related memories:", error)
       return []
@@ -219,24 +269,26 @@ export class MirixMemorySystem {
     strength = 0.5,
   ): Promise<MemoryConnection | null> {
     try {
-      const { data, error } = await supabase
-        .from("mirix_memory_connections")
-        .insert([
-          {
-            source_memory_id: sourceMemoryId,
-            target_memory_id: targetMemoryId,
-            connection_type: connectionType,
-            strength,
-          },
-        ])
-        .select()
-        .single()
+      return await withRetry(async () => {
+        const { data, error } = await supabase
+          .from("mirix_memory_connections")
+          .insert([
+            {
+              source_memory_id: sourceMemoryId,
+              target_memory_id: targetMemoryId,
+              connection_type: connectionType,
+              strength,
+            },
+          ])
+          .select()
+          .single()
 
-      if (error) {
-        console.error("Supabase error creating connection:", error)
-        throw error
-      }
-      return data
+        if (error) {
+          console.error("Supabase error creating connection:", error)
+          throw error
+        }
+        return data
+      })
     } catch (error) {
       console.error("Error creating connection:", error)
       return null
@@ -250,23 +302,25 @@ export class MirixMemorySystem {
     sessionData: Record<string, any> = {},
   ): Promise<MirixSession | null> {
     try {
-      const { data, error } = await supabase
-        .from("mirix_sessions")
-        .insert([
-          {
-            user_id: userId,
-            agent_id: agentId,
-            session_data: sessionData,
-          },
-        ])
-        .select()
-        .single()
+      return await withRetry(async () => {
+        const { data, error } = await supabase
+          .from("mirix_sessions")
+          .insert([
+            {
+              user_id: userId,
+              agent_id: agentId,
+              session_data: sessionData,
+            },
+          ])
+          .select()
+          .single()
 
-      if (error) {
-        console.error("Supabase error starting session:", error)
-        throw error
-      }
-      return data
+        if (error) {
+          console.error("Supabase error starting session:", error)
+          throw error
+        }
+        return data
+      })
     } catch (error) {
       console.error("Error starting session:", error)
       return null
@@ -276,16 +330,18 @@ export class MirixMemorySystem {
   // End a session
   async endSession(sessionId: string, userId: string): Promise<boolean> {
     try {
-      const { error } = await supabase
-        .from("mirix_sessions")
-        .update({ ended_at: new Date().toISOString() })
-        .eq("id", sessionId)
-        .eq("user_id", userId)
+      await withRetry(async () => {
+        const { error } = await supabase
+          .from("mirix_sessions")
+          .update({ ended_at: new Date().toISOString() })
+          .eq("id", sessionId)
+          .eq("user_id", userId)
 
-      if (error) {
-        console.error("Supabase error ending session:", error)
-        throw error
-      }
+        if (error) {
+          console.error("Supabase error ending session:", error)
+          throw error
+        }
+      })
       return true
     } catch (error) {
       console.error("Error ending session:", error)
@@ -296,30 +352,32 @@ export class MirixMemorySystem {
   // Get user sessions
   async getSessions(userId: string, agentId?: string): Promise<MirixSession[]> {
     try {
-      let query = supabase
-        .from("mirix_sessions")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false })
+      return await withRetry(async () => {
+        let query = supabase
+          .from("mirix_sessions")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
 
-      if (agentId) {
-        query = query.eq("agent_id", agentId)
-      }
+        if (agentId) {
+          query = query.eq("agent_id", agentId)
+        }
 
-      const { data, error } = await query
+        const { data, error } = await query
 
-      if (error) {
-        console.error("Supabase error getting sessions:", error)
-        throw error
-      }
-      return data || []
+        if (error) {
+          console.error("Supabase error getting sessions:", error)
+          throw error
+        }
+        return data || []
+      })
     } catch (error) {
       console.error("Error getting sessions:", error)
       return []
     }
   }
 
-  // Get memory statistics
+  // Get memory statistics - improved with client-side calculation
   async getMemoryStats(
     userId: string,
     agentId?: string,
@@ -331,23 +389,9 @@ export class MirixMemorySystem {
     recent_memories: number
   }> {
     try {
-      let query = supabase
-        .from("mirix_memories")
-        .select("memory_type, importance, access_count, created_at")
-        .eq("user_id", userId)
+      // Get all memories for the user and calculate stats client-side
+      const memories = await this.getMemories(userId, { agent_id: agentId, limit: 1000 })
 
-      if (agentId) {
-        query = query.eq("agent_id", agentId)
-      }
-
-      const { data, error } = await query
-
-      if (error) {
-        console.error("Supabase error getting memory stats:", error)
-        throw error
-      }
-
-      const memories = data || []
       const now = new Date()
       const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
@@ -396,13 +440,19 @@ export class MirixMemorySystem {
   // Clean expired memories
   async cleanExpiredMemories(): Promise<number> {
     try {
-      const { data, error } = await supabase.rpc("clean_expired_memories")
+      return await withRetry(async () => {
+        const { data, error } = await supabase
+          .from("mirix_memories")
+          .delete()
+          .lt("expires_at", new Date().toISOString())
+          .select("id")
 
-      if (error) {
-        console.error("Supabase error cleaning expired memories:", error)
-        throw error
-      }
-      return data || 0
+        if (error) {
+          console.error("Supabase error cleaning expired memories:", error)
+          return 0
+        }
+        return data?.length || 0
+      })
     } catch (error) {
       console.error("Error cleaning expired memories:", error)
       return 0
