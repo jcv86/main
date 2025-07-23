@@ -15,52 +15,11 @@ import {
   getBookById,
   getBookChapters,
   updateUserBookProgress,
+  mockBooks,
   type Book,
   type BookChapter,
   type UserBookProgress,
 } from "@/lib/supabase-library"
-
-// Mock data for development
-const mockBooks: Book[] = [
-  {
-    id: "1",
-    title: "Hábitos Atómicos",
-    author: "James Clear",
-    description: "Una guía práctica para formar buenos hábitos y romper los malos.",
-    category: "Productividad",
-    rating: 4.8,
-    reading_time: "4h 30min",
-    pages: 8,
-    published_year: 2018,
-    cover_url: "/placeholder.svg?height=400&width=300&text=Hábitos%20Atómicos&bg=3b82f6&color=white",
-    tags: ["Hábitos", "Productividad", "Autoayuda"],
-    difficulty: "Intermedio",
-    key_topics: ["Formación de hábitos", "Productividad personal", "Cambio de comportamiento"],
-    is_recommended: true,
-    is_free: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    title: "Trabajo Profundo",
-    author: "Cal Newport",
-    description: "Reglas para el éxito enfocado en un mundo distraído.",
-    category: "Productividad",
-    rating: 4.7,
-    reading_time: "4h 45min",
-    pages: 6,
-    published_year: 2016,
-    cover_url: "/placeholder.svg?height=400&width=300&text=Trabajo%20Profundo&bg=1f2937&color=white",
-    tags: ["Concentración", "Productividad", "Trabajo"],
-    difficulty: "Intermedio",
-    key_topics: ["Trabajo profundo", "Concentración", "Productividad cognitiva"],
-    is_recommended: true,
-    is_free: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-]
 
 const mockChapters: { [key: string]: BookChapter[] } = {
   "1": [
@@ -525,21 +484,308 @@ const mockChapters: { [key: string]: BookChapter[] } = {
       id: "ch-2-1",
       book_id: "2",
       chapter_number: 1,
-      title: "Introducción al Trabajo Profundo",
+      title: "Trabajo Profundo: Una Habilidad Valiosa",
       content: `
-        <div class="chapter-content">
-          <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 1: Introducción al Trabajo Profundo</h1>
-          <p class="text-lg mb-6 text-gray-700">El trabajo profundo es la habilidad de enfocarse sin distracción en una tarea cognitivamente demandante.</p>
-          <p class="mb-4 text-gray-700">En nuestra economía actual, esta habilidad se está volviendo cada vez más valiosa y cada vez más rara.</p>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900">🎯 Definición de Trabajo Profundo</h2>
-          <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 my-6">
-            <p class="text-gray-800 font-medium">Trabajo Profundo: Actividades profesionales realizadas en un estado de concentración libre de distracciones que empujan tus capacidades cognitivas a su límite.</p>
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 1: Trabajo Profundo - Una Habilidad Valiosa</h1>
+        <p class="text-lg mb-6 text-gray-700">El trabajo profundo es la habilidad de enfocarse sin distracción en una tarea cognitivamente demandante. Es una habilidad que permite dominar rápidamente información complicada y producir mejores resultados en menos tiempo.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎯 Definiciones Fundamentales</h2>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-blue-900 mb-4">📚 Conceptos Clave</h3>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium text-blue-800 mb-2">Trabajo Profundo</h4>
+              <p class="text-blue-700 text-sm">Actividades profesionales realizadas en un estado de concentración libre de distracciones que empujan tus capacidades cognitivas a su límite.</p>
+            </div>
+            <div>
+              <h4 class="font-medium text-blue-800 mb-2">Trabajo Superficial</h4>
+              <p class="text-blue-700 text-sm">Tareas de estilo logístico, a menudo realizadas mientras se está distraído. Estas tareas no crean mucho valor nuevo y son fáciles de replicar.</p>
+            </div>
+          </div>
+        </div>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">💡 La Hipótesis del Trabajo Profundo</h2>
+        <p class="mb-4 text-gray-700">La capacidad de realizar trabajo profundo se está volviendo cada vez más rara al mismo tiempo que se vuelve cada vez más valiosa en nuestra economía.</p>
+        
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-yellow-900 mb-4">⚡ Por qué el Trabajo Profundo es Valioso</h3>
+          <ul class="list-disc list-inside text-yellow-800 space-y-2">
+            <li><strong>Aprendizaje rápido:</strong> Dominar rápidamente cosas difíciles</li>
+            <li><strong>Producción de élite:</strong> Producir a un nivel de élite, tanto en calidad como en velocidad</li>
+            <li><strong>Ventaja competitiva:</strong> Diferenciarse en un mercado saturado</li>
+            <li><strong>Satisfacción personal:</strong> Encontrar significado y propósito en el trabajo</li>
+          </ul>
+        </div>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🌊 El Gran Reordenamiento</h2>
+        <p class="mb-4 text-gray-700">Nuestra economía se está moviendo rápidamente hacia la automatización y la globalización. En este nuevo panorama, tres grupos tendrán una ventaja particular:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h4 class="font-semibold text-green-900 mb-2">🤖 Los que trabajan bien con máquinas inteligentes</h4>
+            <p class="text-green-800 text-sm">Aquellos que pueden trabajar creativamente con tecnología avanzada</p>
+          </div>
+          <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <h4 class="font-semibold text-purple-900 mb-2">⭐ Los mejores en lo que hacen</h4>
+            <p class="text-purple-800 text-sm">Los superstars en sus campos específicos</p>
+          </div>
+          <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <h4 class="font-semibold text-orange-900 mb-2">💰 Los que tienen acceso al capital</h4>
+            <p class="text-orange-800 text-sm">Aquellos que pueden invertir en las nuevas tecnologías</p>
+          </div>
+        </div>
+        
+        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
+          "Para tener éxito debes producir lo mejor que puedas producir, un objetivo que requiere trabajo profundo."
+        </blockquote>
+      </div>
+    `,
+      estimated_reading_minutes: 31,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-2-2",
+      book_id: "2",
+      chapter_number: 2,
+      title: "El Trabajo Profundo es Raro",
+      content: `
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 2: El Trabajo Profundo es Raro</h1>
+        <p class="text-lg mb-6 text-gray-700">A pesar de la creciente evidencia de que el trabajo profundo es valioso, muchas organizaciones están adoptando prácticas que lo destruyen sistemáticamente.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📧 La Tiranía del Email</h2>
+        <p class="mb-4 text-gray-700">El trabajador promedio revisa el email cada 6 minutos. Esta fragmentación constante de la atención hace que el trabajo profundo sea prácticamente imposible.</p>
+        
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-red-900 mb-4">⚠️ Los Destructores del Trabajo Profundo</h3>
+          <ul class="list-disc list-inside text-red-800 space-y-2">
+            <li><strong>Oficinas abiertas:</strong> Interrupciones constantes y ruido de fondo</li>
+            <li><strong>Mensajería instantánea:</strong> Expectativa de respuesta inmediata</li>
+            <li><strong>Reuniones excesivas:</strong> Fragmentación del tiempo disponible</li>
+            <li><strong>Redes sociales:</strong> Distracción constante y cambio de contexto</li>
+            <li><strong>Multitarea:</strong> Ilusión de productividad que reduce la calidad</li>
+          </ul>
+        </div>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏢 El Principio del Menor Denominador Común</h2>
+        <p class="mb-4 text-gray-700">En ausencia de indicadores claros de lo que significa ser productivo y valioso en el trabajo, muchos trabajadores recurren a un indicador industrial: hacer muchas cosas de manera visible.</p>
+        
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-yellow-900 mb-4">🎭 El Teatro de la Productividad</h3>
+          <p class="text-yellow-800 mb-3">Comportamientos que parecen productivos pero que en realidad no lo son:</p>
+          <ul class="list-disc list-inside text-yellow-800 space-y-2">
+            <li>Responder emails inmediatamente</li>
+            <li>Estar siempre disponible en chat</li>
+            <li>Asistir a todas las reuniones</li>
+            <li>Trabajar largas horas visiblemente</li>
+            <li>Estar constantemente "ocupado"</li>
+          </ul>
+        </div>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Costo del Cambio de Contexto</h2>
+        <p class="mb-4 text-gray-700">Cuando cambias de una tarea A a una tarea B, tu atención no sigue inmediatamente. Un residuo de tu atención permanece atascado pensando en la tarea original.</p>
+        
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-purple-900 mb-4">⏱️ Residuo de Atención</h3>
+          <p class="text-purple-800 mb-3">Sophie Leroy descubrió que cuando cambias de tarea:</p>
+          <ul class="list-disc list-inside text-purple-800 space-y-2">
+            <li>Parte de tu atención permanece en la tarea anterior</li>
+            <li>Este residuo se intensifica si la tarea anterior no estaba completa</li>
+            <li>Puede tomar hasta 23 minutos recuperar la concentración completa</li>
+            <li>El rendimiento en la nueva tarea se ve significativamente reducido</li>
+          </ul>
+        </div>
+        
+        <blockquote class="border-l-4 border-red-500 pl-6 py-4 my-6 bg-red-50 rounded-r-lg italic text-lg text-red-900">
+          "La claridad sobre lo que importa proporciona claridad sobre lo que no importa."
+        </blockquote>
+      </div>
+    `,
+      estimated_reading_minutes: 30,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-2-3",
+      book_id: "2",
+      chapter_number: 3,
+      title: "El Trabajo Profundo es Significativo",
+      content: `
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 3: El Trabajo Profundo es Significativo</h1>
+        <p class="text-lg mb-6 text-gray-700">El trabajo profundo no es solo económicamente valioso, sino que también puede ser una fuente de gran satisfacción personal y significado en nuestras vidas.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧘 La Perspectiva Neurológica</h2>
+        <p class="mb-4 text-gray-700">Los neurocientíficos han descubierto que el estado de concentración profunda activa los mismos circuitos cerebrales asociados con la felicidad y el bienestar.</p>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-blue-900 mb-4">🧠 Beneficios Neurológicos del Trabajo Profundo</h3>
+          <ul class="list-disc list-inside text-blue-800 space-y-2">
+            <li><strong>Liberación de dopamina:</strong> Sensación natural de recompensa y satisfacción</li>
+            <li><strong>Reducción del cortisol:</strong> Menor estrés y ansiedad</li>
+            <li><strong>Fortalecimiento de la mielina:</strong> Mejora de las conexiones neuronales</li>
+            <li><strong>Neuroplasticidad:</strong> Mayor capacidad de aprendizaje y adaptación</li>
+          </ul>
+        </div>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎨 La Perspectiva Psicológica</h2>
+        <p class="mb-4 text-gray-700">Mihaly Csikszentmihalyi descubrió que las personas son más felices cuando están en un estado de "flujo" - completamente absortas en una actividad desafiante.</p>
+        
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-green-900 mb-4">🌊 Características del Estado de Flujo</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 class="font-medium text-green-800 mb-2">🎯 Concentración total</h4>
+              <p class="text-green-700 text-sm">Atención completamente enfocada en la tarea</p>
+            </div>
+            <div>
+              <h4 class="font-medium text-green-800 mb-2">⚖️ Equilibrio desafío-habilidad</h4>
+              <p class="text-green-700 text-sm">La tarea es desafiante pero alcanzable</p>
+            </div>
+            <div>
+              <h4 class="font-medium text-green-800 mb-2">🎭 Pérdida de autoconciencia</h4>
+              <p class="text-green-700 text-sm">Desaparece la preocupación por uno mismo</p>
+            </div>
+            <div>
+              <h4 class="font-medium text-green-800 mb-2">⏰ Distorsión del tiempo</h4>
+              <p class="text-green-700 text-sm">El tiempo pasa sin que te des cuenta</p>
+            </div>
+          </div>
+        </div>
+        
+        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
+          "Una vida profunda es una vida buena, en cualquier sentido que importe."
+        </blockquote>
+      </div>
+    `,
+      estimated_reading_minutes: 28,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-2-4",
+      book_id: "2",
+      chapter_number: 4,
+      title: "Regla #1: Trabaja Profundamente",
+      content: `
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 4: Regla #1 - Trabaja Profundamente</h1>
+        <p class="text-lg mb-6 text-gray-700">Desarrollar una práctica de trabajo profundo requiere más que buenas intenciones. Necesitas estrategias específicas y sistemáticas para transformar el trabajo profundo de una aspiración a una realidad regular en tu vida profesional.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏗️ Filosofías de Trabajo Profundo</h2>
+        <p class="mb-4 text-gray-700">No existe un enfoque único para integrar el trabajo profundo en tu vida. Debes encontrar una filosofía que se ajuste a tus circunstancias específicas.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-900 mb-4">🏔️ Filosofía Monástica</h3>
+            <p class="text-blue-800 mb-3">Eliminar o minimizar radicalmente las obligaciones superficiales.</p>
+            <ul class="list-disc list-inside text-blue-700 text-sm space-y-1">
+              <li>Aislamiento total de distracciones</li>
+              <li>Enfoque en una sola actividad de alto valor</li>
+              <li>Ejemplo: Donald Knuth (no usa email)</li>
+            </ul>
           </div>
           
-          <p class="mb-4 text-gray-700">Estos esfuerzos crean nuevo valor, mejoran tu habilidad, y son difíciles de replicar.</p>
+          <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-green-900 mb-4">🔄 Filosofía Bimodal</h3>
+            <p class="text-green-800 mb-3">Dividir el tiempo entre períodos de trabajo profundo y todo lo demás.</p>
+            <ul class="list-disc list-inside text-green-700 text-sm space-y-1">
+              <li>Bloques de tiempo dedicados exclusivamente</li>
+              <li>Mínimo de un día completo por sesión</li>
+              <li>Ejemplo: Carl Jung (mañanas en torre, tardes con pacientes)</li>
+            </ul>
+          </div>
+          
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-yellow-900 mb-4">⏰ Filosofía Rítmica</h3>
+            <p class="text-yellow-800 mb-3">Establecer un ritmo regular para el trabajo profundo.</p>
+            <ul class="list-disc list-inside text-yellow-700 text-sm space-y-1">
+              <li>Misma hora todos los días</li>
+              <li>Crear una cadena de hábitos</li>
+              <li>Ejemplo: Jerry Seinfeld (escribir chistes diariamente)</li>
+            </ul>
+          </div>
+          
+          <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-purple-900 mb-4">🎯 Filosofía Periodística</h3>
+            <p class="text-purple-800 mb-3">Cambiar al modo de trabajo profundo cuando sea posible.</p>
+            <ul class="list-disc list-inside text-purple-700 text-sm space-y-1">
+              <li>Flexibilidad total en el horario</li>
+              <li>Requiere práctica para cambiar rápidamente</li>
+              <li>Ejemplo: Walter Isaacson (escribir entre reuniones)</li>
+            </ul>
+          </div>
         </div>
-      `,
+        
+        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
+          "El trabajo profundo no es un hábito como revisar el email - es una habilidad que debe ser entrenada."
+        </blockquote>
+      </div>
+    `,
+      estimated_reading_minutes: 32,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-2-5",
+      book_id: "2",
+      chapter_number: 5,
+      title: "Regla #2: Abraza el Aburrimiento",
+      content: `
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 5: Regla #2 - Abraza el Aburrimiento</h1>
+        <p class="text-lg mb-6 text-gray-700">La capacidad de concentrarse intensamente es una habilidad que debe ser entrenada. No puedes esperar poder concentrarte profundamente si pasas el resto de tu tiempo huyendo de la menor insinuación de aburrimiento.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Músculo de la Concentración</h2>
+        <p class="mb-4 text-gray-700">Tu capacidad de concentración es como un músculo: se fortalece con el uso regular y se debilita con la negligencia.</p>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-blue-900 mb-4">💪 Entrenamiento de la Atención</h3>
+          <p class="text-blue-800 mb-3">Así como no puedes esperar correr un maratón sin entrenamiento, no puedes esperar concentrarte profundamente sin práctica:</p>
+          <ul class="list-disc list-inside text-blue-700 space-y-2">
+            <li><strong>Consistencia:</strong> Practica la concentración regularmente</li>
+            <li><strong>Progresión:</strong> Aumenta gradualmente la duración e intensidad</li>
+            <li><strong>Resistencia:</strong> Aprende a resistir las distracciones</li>
+            <li><strong>Recuperación:</strong> Permite períodos de descanso mental</li>
+          </ul>
+        </div>
+        
+        <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
+          "El aburrimiento es el espacio donde nace la creatividad."
+        </blockquote>
+      </div>
+    `,
+      estimated_reading_minutes: 29,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: "ch-2-6",
+      book_id: "2",
+      chapter_number: 6,
+      title: "Regla #3: Abandona las Redes Sociales",
+      content: `
+      <div class="chapter-content">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 6: Regla #3 - Abandona las Redes Sociales</h1>
+        <p class="text-lg mb-6 text-gray-700">Las redes sociales están diseñadas para ser adictivas. Para trabajar profundamente, debes ser más selectivo sobre las herramientas tecnológicas que permites en tu vida profesional y personal.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎣 La Economía de la Atención</h2>
+        <p class="mb-4 text-gray-700">Las empresas de redes sociales están en el negocio de capturar y vender tu atención. Utilizan las técnicas más sofisticadas de la psicología conductual para mantenerte enganchado.</p>
+        
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
+          <h3 class="text-lg font-semibold text-red-900 mb-4">🧠 Técnicas de Manipulación Psicológica</h3>
+          <ul class="list-disc list-inside text-red-800 space-y-2">
+            <li><strong>Refuerzo intermitente:</strong> Recompensas impredecibles que crean adicción</li>
+            <li><strong>FOMO (Fear of Missing Out):</strong> Miedo a perderse algo importante</li>
+            <li><strong>Validación social:</strong> Likes y comentarios como dopamina instantánea</li>
+            <li><strong>Scroll infinito:</strong> Nunca hay un punto natural de parada</li>
+            <li><strong>Notificaciones push:</strong> Interrupciones constantes para traerte de vuelta</li>
+          </ul>
+        </div>
+        
+        <blockquote class="border-l-4 border-red-500 pl-6 py-4 my-6 bg-red-50 rounded-r-lg italic text-lg text-red-900">
+          "Las herramientas son solo herramientas. Depende de ti decidir si te sirven o si tú les sirves a ellas."
+        </blockquote>
+      </div>
+    `,
       estimated_reading_minutes: 25,
       created_at: new Date().toISOString(),
     },
@@ -634,7 +880,7 @@ export default function BookReaderPage() {
         id: "1",
         user_id: "demo-user",
         book_id: bookId,
-        progress_percentage: 25,
+        progress_percentage: Math.round((1 / chaptersData.length) * 100),
         current_chapter: 1,
         total_chapters: chaptersData.length,
         reading_time_minutes: 45,
@@ -750,7 +996,7 @@ export default function BookReaderPage() {
         <div className="text-center">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Libro no encontrado</h3>
-          <p className="text-gray-600 mb-4">El libro que buscas no existe o no está disponible</p>
+          <p class="text-gray-600 mb-4">El libro que buscas no existe o no está disponible</p>
           <Link href="/library">
             <Button>Volver a la biblioteca</Button>
           </Link>
