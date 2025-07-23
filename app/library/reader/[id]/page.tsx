@@ -1,1204 +1,1372 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ChevronLeft, ChevronRight, BookOpen, Clock, Star, Bookmark, Menu, ArrowLeft } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
 import {
-  getBookById,
-  getBookChapters,
-  updateUserBookProgress,
-  mockBooks,
-  type Book,
-  type BookChapter,
-  type UserBookProgress,
-} from "@/lib/supabase-library"
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Bookmark,
+  BookmarkPlus,
+  StickyNote,
+  Plus,
+  Edit,
+  Trash2,
+  Menu,
+  Clock,
+  Target,
+  Moon,
+  Sun,
+  Type,
+  Minus,
+  Calendar,
+  MapPin,
+} from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
-const mockChapters: { [key: string]: BookChapter[] } = {
-  "1": [
-    {
-      id: "ch-1-1",
-      book_id: "1",
-      chapter_number: 1,
-      title: "Los Fundamentos: Por qué los pequeños cambios marcan una gran diferencia",
-      content: `
-        <div class="chapter-content">
-          <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 1: Los Fundamentos</h1>
-          <p class="text-lg mb-6 text-gray-700"><strong>Los hábitos son el interés compuesto de la superación personal.</strong> De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican a medida que los repites.</p>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🚀 El poder de los pequeños cambios</h2>
-          <p class="mb-4 text-gray-700">Si puedes mejorar tan solo un <strong>1% cada día</strong> durante un año, terminarás siendo treinta y siete veces mejor al final del período.</p>
-          
-          <div class="bg-blue-50 border-l-4 border-blue-500 p-6 my-6 rounded-r-lg">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">📊 La matemática del 1%</h3>
-            <ul class="list-disc list-inside text-blue-800 space-y-2">
-              <li><strong>1% mejor cada día:</strong> 1.01^365 = 37.78</li>
-              <li><strong>1% peor cada día:</strong> 0.99^365 = 0.03</li>
-            </ul>
-          </div>
-          
-          <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-gray-50 rounded-r-lg italic text-lg text-gray-800">
-            "El éxito es el producto de hábitos diarios, no de transformaciones de una sola vez."
-          </blockquote>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎯 El Valle de la Desilusión</h2>
-          <p class="mb-4 text-gray-700">Los hábitos a menudo parecen no marcar diferencia hasta que cruzas un umbral crítico y desbloqueas un nuevo nivel de rendimiento.</p>
-          <p class="mb-4 text-gray-700">Esto es una de las razones principales por las que es tan difícil construir hábitos que perduren. Las personas hacen algunos pequeños cambios, no ven resultados tangibles, y deciden parar.</p>
-        </div>
-      `,
-      estimated_reading_minutes: 35,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-2",
-      book_id: "1",
-      chapter_number: 2,
-      title: "Cómo Funcionan Tus Hábitos",
-      content: `
-        <div class="chapter-content">
-          <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 2: Cómo Funcionan Tus Hábitos</h1>
-          <p class="text-lg mb-6 text-gray-700">Un hábito es una rutina o comportamiento que se realiza regularmente y, en muchos casos, automáticamente.</p>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🔄 El Bucle del Hábito</h2>
-          <p class="mb-4 text-gray-700">Todos los hábitos siguen el mismo patrón de cuatro pasos:</p>
-          
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-4">🎯 Los 4 Pasos del Hábito</h3>
-            <ol class="list-decimal list-inside text-blue-800 space-y-2">
-              <li><strong>Señal:</strong> El desencadenante que inicia el comportamiento</li>
-              <li><strong>Anhelo:</strong> La fuerza motivacional detrás de cada hábito</li>
-              <li><strong>Respuesta:</strong> El hábito real que realizas</li>
-              <li><strong>Recompensa:</strong> El beneficio que obtienes del hábito</li>
-            </ol>
-          </div>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🔧 Las Cuatro Leyes del Cambio de Comportamiento</h2>
-          
-          <div class="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
-            <h3 class="text-lg font-semibold text-green-900 mb-4">✅ Cómo Crear un Buen Hábito</h3>
-            <ul class="list-disc list-inside text-green-800 space-y-2">
-              <li><strong>1ª Ley (Señal):</strong> Hazlo obvio</li>
-              <li><strong>2ª Ley (Anhelo):</strong> Hazlo atractivo</li>
-              <li><strong>3ª Ley (Respuesta):</strong> Hazlo fácil</li>
-              <li><strong>4ª Ley (Recompensa):</strong> Hazlo satisfactorio</li>
-            </ul>
-          </div>
-        </div>
-      `,
-      estimated_reading_minutes: 30,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-3",
-      book_id: "1",
-      chapter_number: 3,
-      title: "La Primera Ley: Hazlo Obvio",
-      content: `
-        <div class="chapter-content">
-          <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 3: La Primera Ley - Hazlo Obvio</h1>
-          <p class="text-lg mb-6 text-gray-700">El proceso de cambio de comportamiento siempre comienza con la conciencia. Necesitas ser consciente de tus hábitos antes de poder cambiarlos.</p>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">👁️ El Poder de la Conciencia</h2>
-          <p class="mb-4 text-gray-700">Muchos de nuestros hábitos diarios se realizan de forma automática. Hasta que no hagas lo inconsciente consciente, dirigirá tu vida.</p>
-          
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-4">📝 Ejercicio: El Registro de Hábitos</h3>
-            <p class="text-blue-800 mb-3">Haz una lista de tus hábitos diarios. Para cada hábito, clasifícalo como:</p>
-            <ul class="list-disc list-inside text-blue-800 space-y-2">
-              <li><strong>Positivo (+):</strong> Un buen hábito</li>
-              <li><strong>Negativo (-):</strong> Un mal hábito</li>
-              <li><strong>Neutral (=):</strong> Un hábito neutro</li>
-            </ul>
-          </div>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🔗 Apilamiento de Hábitos</h2>
-          <p class="mb-4 text-gray-700">La fórmula del apilamiento de hábitos es:</p>
-          
-          <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg text-center text-lg font-semibold text-purple-900">
-            "Después de [HÁBITO ACTUAL], yo haré [NUEVO HÁBITO]."
-          </blockquote>
-          
-          <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏠 Diseño del Entorno</h2>
-          <p class="mb-4 text-gray-700">El entorno es la mano invisible que da forma al comportamiento humano.</p>
-          
-          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
-            <h3 class="text-lg font-semibold text-yellow-900 mb-4">💡 Ejemplos de "Hazlo Obvio"</h3>
-            <ul class="list-disc list-inside text-yellow-800 space-y-2">
-              <li><strong>Leer más:</strong> Coloca un libro en tu almohada cada mañana</li>
-              <li><strong>Hacer ejercicio:</strong> Prepara tu ropa de gimnasio la noche anterior</li>
-              <li><strong>Comer saludable:</strong> Coloca frutas en un lugar visible</li>
-              <li><strong>Beber más agua:</strong> Llena una botella de agua y ponla en tu escritorio</li>
-            </ul>
-          </div>
-        </div>
-      `,
-      estimated_reading_minutes: 32,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-4",
-      book_id: "1",
-      chapter_number: 4,
-      title: "La Segunda Ley: Hazlo Atractivo",
-      content: `
-    <div class="chapter-content">
-      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 4: La Segunda Ley - Hazlo Atractivo</h1>
-      <p class="text-lg mb-6 text-gray-700">Los hábitos son un bucle de retroalimentación impulsado por la dopamina. Cuando la dopamina aumenta, también lo hace nuestra motivación para actuar.</p>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Papel de la Dopamina</h2>
-      <p class="mb-4 text-gray-700">La dopamina no solo se libera cuando experimentas placer, sino también cuando lo <strong>anticipas</strong>. Es la anticipación de una recompensa, no su cumplimiento, lo que nos pone en acción.</p>
-      
-      <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-purple-900 mb-4">🎯 Estrategias de Agrupación de Tentaciones</h3>
-        <p class="text-purple-800 mb-3">Combina una acción que <em>necesitas</em> hacer con una acción que <em>quieres</em> hacer:</p>
-        <ul class="list-disc list-inside text-purple-800 space-y-2">
-          <li><strong>Ejercicio + Netflix:</strong> Solo puedes ver tu serie favorita mientras haces cardio</li>
-          <li><strong>Llamadas + Caminar:</strong> Solo puedes hacer llamadas personales mientras caminas</li>
-          <li><strong>Manicura + Finanzas:</strong> Solo puedes hacerte la manicura mientras revisas tus finanzas</li>
-        </ul>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">👥 El Poder del Entorno Social</h2>
-      <p class="mb-4 text-gray-700">Imitamos los hábitos de tres grupos en particular:</p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 class="font-semibold text-blue-900 mb-2">👨‍👩‍👧‍👦 Los Cercanos</h4>
-          <p class="text-blue-800 text-sm">Familia, amigos y colegas</p>
-        </div>
-        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h4 class="font-semibold text-green-900 mb-2">👑 Los Poderosos</h4>
-          <p class="text-green-800 text-sm">Personas con estatus y prestigio</p>
-        </div>
-        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-          <h4 class="font-semibold text-orange-900 mb-2">🌍 Los Muchos</h4>
-          <p class="text-orange-800 text-sm">La tribu, la mayoría</p>
-        </div>
-      </div>
-      
-      <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
-        "Únete a una cultura donde tu comportamiento deseado es el comportamiento normal."
-      </blockquote>
-    </div>
-  `,
-      estimated_reading_minutes: 28,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-5",
-      book_id: "1",
-      chapter_number: 5,
-      title: "La Tercera Ley: Hazlo Fácil",
-      content: `
-    <div class="chapter-content">
-      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 5: La Tercera Ley - Hazlo Fácil</h1>
-      <p class="text-lg mb-6 text-gray-700">Los hábitos humanos siguen la Ley del Menor Esfuerzo. Naturalmente gravitamos hacia la opción que requiere la menor cantidad de trabajo.</p>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">⚡ La Regla de los Dos Minutos</h2>
-      <p class="mb-4 text-gray-700">Cuando empiezas un nuevo hábito, debería tomar menos de dos minutos hacer.</p>
-      
-      <div class="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-green-900 mb-4">🎯 Ejemplos de la Regla de los 2 Minutos</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-green-800">"Leer antes de dormir"</span>
-            <span class="text-green-600">→</span>
-            <span class="text-green-800 font-medium">"Leer una página"</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-green-800">"Hacer ejercicio 30 minutos"</span>
-            <span class="text-green-600">→</span>
-            <span class="text-green-800 font-medium">"Ponerme los zapatos deportivos"</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-green-800">"Estudiar para la clase"</span>
-            <span class="text-green-600">→</span>
-            <span class="text-green-800 font-medium">"Abrir mis apuntes"</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-green-800">"Meditar 10 minutos"</span>
-            <span class="text-green-600">→</span>
-            <span class="text-green-800 font-medium">"Respirar profundo 3 veces"</span>
-          </div>
-        </div>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏗️ Preparación del Entorno</h2>
-      <p class="mb-4 text-gray-700">Puedes romper un mal hábito, pero es poco probable que lo olvides. Una vez que se forma el surco mental de un hábito, está prácticamente ahí para siempre.</p>
-      
-      <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-red-900 mb-4">🚫 Cómo Romper un Mal Hábito</h3>
-        <ul class="list-disc list-inside text-red-800 space-y-2">
-          <li><strong>Aumenta la fricción:</strong> Haz que sea más difícil hacer el mal hábito</li>
-          <li><strong>Usa un dispositivo de compromiso:</strong> Una elección que controla tus acciones futuras</li>
-          <li><strong>Cambia el entorno:</strong> Elimina las señales que desencadenan el mal hábito</li>
-          <li><strong>Encuentra un compañero de responsabilidad:</strong> Alguien que te mantenga en el camino</li>
-        </ul>
-      </div>
-      
-      <blockquote class="border-l-4 border-green-500 pl-6 py-4 my-6 bg-green-50 rounded-r-lg italic text-lg text-green-900">
-        "La diferencia entre un buen día y un mal día a menudo es unas pocas decisiones productivas y enfocadas."
-      </blockquote>
-    </div>
-  `,
-      estimated_reading_minutes: 26,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-6",
-      book_id: "1",
-      chapter_number: 6,
-      title: "La Cuarta Ley: Hazlo Satisfactorio",
-      content: `
-    <div class="chapter-content">
-      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 6: La Cuarta Ley - Hazlo Satisfactorio</h1>
-      <p class="text-lg mb-6 text-gray-700">Estamos más propensos a repetir un comportamiento cuando la experiencia es satisfactoria. El placer enseña a tu cerebro que vale la pena recordar y repetir una acción.</p>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎁 La Importancia de la Recompensa Inmediata</h2>
-      <p class="mb-4 text-gray-700">El cerebro humano evolucionó para priorizar las recompensas inmediatas sobre las recompensas retrasadas. Esta tendencia se llama <strong>descuento temporal</strong>.</p>
-      
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-blue-900 mb-4">💡 Estrategias de Recompensa Inmediata</h3>
-        <ul class="list-disc list-inside text-blue-800 space-y-2">
-          <li><strong>Cuenta de ahorros para vacaciones:</strong> Transfiere $50 cada vez que no compres comida para llevar</li>
-          <li><strong>Ritual de celebración:</strong> Haz una pequeña celebración después de completar un hábito</li>
-          <li><strong>Seguimiento visual:</strong> Marca un calendario cada día que completes tu hábito</li>
-          <li><strong>Recompensa social:</strong> Comparte tu progreso con amigos o en redes sociales</li>
-        </ul>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📊 El Poder del Seguimiento de Hábitos</h2>
-      <p class="mb-4 text-gray-700">El seguimiento de hábitos es poderoso porque aprovecha múltiples leyes del cambio de comportamiento. Es obvio, atractivo y satisfactorio.</p>
-      
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-yellow-900 mb-4">📈 Beneficios del Seguimiento</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <h4 class="font-medium text-yellow-800 mb-2">✅ Crea conciencia</h4>
-            <p class="text-yellow-700 text-sm">Te ayuda a darte cuenta de lo que realmente estás haciendo</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-yellow-800 mb-2">🎯 Proporciona motivación</h4>
-            <p class="text-yellow-700 text-sm">Es satisfactorio ver tu progreso visual</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-yellow-800 mb-2">📋 Forma el hábito en sí</h4>
-            <p class="text-yellow-700 text-sm">El acto de seguimiento se convierte en su propio hábito</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-yellow-800 mb-2">🔄 Crea un bucle de retroalimentación</h4>
-            <p class="text-yellow-700 text-sm">Te permite ajustar y mejorar continuamente</p>
-          </div>
-        </div>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🚨 Nunca Falles Dos Veces</h2>
-      <p class="mb-4 text-gray-700">La primera falla es un accidente. La segunda falla es el comienzo de un nuevo patrón.</p>
-      
-      <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
-        "No rompas la cadena" es una poderosa regla mental, pero "nunca falles dos veces" es aún mejor.
-      </blockquote>
-    </div>
-  `,
-      estimated_reading_minutes: 30,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-7",
-      book_id: "1",
-      chapter_number: 7,
-      title: "Tácticas Avanzadas: Cómo Pasar de Ser Bueno a Ser Genial",
-      content: `
-    <div class="chapter-content">
-      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 7: Tácticas Avanzadas</h1>
-      <p class="text-lg mb-6 text-gray-700">Una vez que has construido los hábitos fundamentales, puedes combinarlos en rutinas más complejas para desbloquear niveles más altos de rendimiento.</p>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎯 La Regla de Goldilocks</h2>
-      <p class="mb-4 text-gray-700">Los humanos experimentan máxima motivación cuando trabajan en tareas que están justo en el borde de sus habilidades actuales. No demasiado difícil. No demasiado fácil. Justo bien.</p>
-      
-      <div class="bg-gradient-to-r from-red-50 to-yellow-50 to-green-50 border border-yellow-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">⚖️ La Zona de Dificultad Óptima</h3>
-        <div class="space-y-3">
-          <div class="flex items-center gap-3">
-            <div class="w-4 h-4 bg-red-400 rounded-full"></div>
-            <span class="text-red-700"><strong>Demasiado Difícil:</strong> Ansiedad y frustración</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="w-4 h-4 bg-green-400 rounded-full"></div>
-            <span class="text-green-700"><strong>Justo Bien:</strong> Flujo y compromiso máximo</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="w-4 h-4 bg-blue-400 rounded-full"></div>
-            <span class="text-blue-700"><strong>Demasiado Fácil:</strong> Aburrimiento y desinterés</span>
-          </div>
-        </div>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🔄 La Importancia de la Reflexión y Revisión</h2>
-      <p class="mb-4 text-gray-700">La reflexión y revisión es un proceso para permanecer consciente de tu rendimiento a lo largo del tiempo.</p>
-      
-      <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-purple-900 mb-4">📝 Preguntas de Reflexión Anual</h3>
-        <ul class="list-disc list-inside text-purple-800 space-y-2">
-          <li>¿Qué salió bien este año?</li>
-          <li>¿Qué no salió tan bien?</li>
-          <li>¿Qué aprendí?</li>
-          <li>¿Cómo puedo mejorar estos hábitos el próximo año?</li>
-          <li>¿Qué quiero lograr en los próximos 12 meses?</li>
-        </ul>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏆 Cómo Mantener la Motivación a Largo Plazo</h2>
-      <p class="mb-4 text-gray-700">Los profesionales se adhieren al horario; los aficionados dejan que la vida se interponga en el camino.</p>
-      
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">💪 Estrategias para la Consistencia</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <h4 class="font-medium text-gray-800 mb-2">🎭 Cambia la historia que te cuentas</h4>
-            <p class="text-gray-600 text-sm">En lugar de "tengo que", di "llego a"</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-gray-800 mb-2">🔄 Abraza el aburrimiento</h4>
-            <p class="text-gray-600 text-sm">La maestría requiere práctica incluso cuando no tienes ganas</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-gray-800 mb-2">📊 Enfócate en el proceso</h4>
-            <p class="text-gray-600 text-sm">Los resultados son un indicador rezagado del proceso</p>
-          </div>
-          <div>
-            <h4 class="font-medium text-gray-800 mb-2">🎯 Mantén la identidad</h4>
-            <p class="text-gray-600 text-sm">Pregúntate: "¿Qué haría una persona como yo?"</p>
-          </div>
-        </div>
-      </div>
-      
-      <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
-        "El secreto para obtener resultados que duren es nunca dejar de hacer mejoras."
-      </blockquote>
-    </div>
-  `,
-      estimated_reading_minutes: 33,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-1-8",
-      book_id: "1",
-      chapter_number: 8,
-      title: "Conclusión: El Secreto de los Resultados que Duran",
-      content: `
-    <div class="chapter-content">
-      <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 8: El Secreto de los Resultados que Duran</h1>
-      <p class="text-lg mb-6 text-gray-700">El cambio verdadero viene de cientos de pequeñas decisiones: hacer dos flexiones al día, despertar cinco minutos antes, o mantener una conversación corta.</p>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🌟 Los Hábitos y la Identidad</h2>
-      <p class="mb-4 text-gray-700">En última instancia, tus hábitos importan porque te ayudan a convertirte en el tipo de persona que deseas ser. Son el canal a través del cual desarrollas tus creencias más profundas sobre ti mismo.</p>
-      
-      <div class="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-blue-900 mb-4">🔄 El Ciclo de Identidad y Hábitos</h3>
-        <div class="space-y-4">
-          <div class="flex items-center gap-4">
-            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
-            <div>
-              <h4 class="font-medium text-blue-800">Decide el tipo de persona que quieres ser</h4>
-              <p class="text-blue-600 text-sm">¿Qué tipo de persona podría obtener el resultado que quiero?</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
-            <div>
-              <h4 class="font-medium text-purple-800">Demuéstratelo con pequeñas victorias</h4>
-              <p class="text-purple-600 text-sm">¿Qué haría esa persona todos los días?</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📋 Resumen de las Cuatro Leyes</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
-        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-green-900 mb-4">✅ Crear un Buen Hábito</h3>
-          <ul class="space-y-2 text-green-800">
-            <li><strong>1ª Ley:</strong> Hazlo obvio</li>
-            <li><strong>2ª Ley:</strong> Hazlo atractivo</li>
-            <li><strong>3ª Ley:</strong> Hazlo fácil</li>
-            <li><strong>4ª Ley:</strong> Hazlo satisfactorio</li>
-          </ul>
-        </div>
-        
-        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-red-900 mb-4">❌ Romper un Mal Hábito</h3>
-          <ul class="space-y-2 text-red-800">
-            <li><strong>Inversión de la 1ª:</strong> Hazlo invisible</li>
-            <li><strong>Inversión de la 2ª:</strong> Hazlo poco atractivo</li>
-            <li><strong>Inversión de la 3ª:</strong> Hazlo difícil</li>
-            <li><strong>Inversión de la 4ª:</strong> Hazlo insatisfactorio</li>
-          </ul>
-        </div>
-      </div>
-      
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🚀 Tu Plan de Acción</h2>
-      <p class="mb-4 text-gray-700">Ahora que conoces las cuatro leyes, es hora de ponerlas en práctica. Aquí tienes un plan de acción simple:</p>
-      
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
-        <h3 class="text-lg font-semibold text-yellow-900 mb-4">📝 Pasos Siguientes</h3>
-        <ol class="list-decimal list-inside text-yellow-800 space-y-3">
-          <li><strong>Elige un hábito:</strong> Empieza con algo pequeño y específico</li>
-          <li><strong>Aplica las cuatro leyes:</strong> Hazlo obvio, atractivo, fácil y satisfactorio</li>
-          <li><strong>Sigue tu progreso:</strong> Usa un rastreador de hábitos simple</li>
-          <li><strong>Sé paciente:</strong> Los cambios toman tiempo, pero son compuestos</li>
-          <li><strong>Celebra las pequeñas victorias:</strong> Reconoce cada paso hacia adelante</li>
-        </ol>
-      </div>
-      
-      <div class="bg-gray-900 text-white rounded-lg p-8 my-8 text-center">
-        <h3 class="text-2xl font-bold mb-4">🎯 Recuerda</h3>
-        <p class="text-lg mb-4">Los hábitos no restringen la libertad. La crean.</p>
-        <p class="text-gray-300">Sin buenos hábitos, siempre estarás luchando por encontrar tiempo para las cosas que importan.</p>
-      </div>
-      
-      <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-xl text-blue-900 text-center">
-        "Cada acción que tomas es un voto por el tipo de persona que deseas convertirte."
-      </blockquote>
-      
-      <div class="text-center mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-        <h3 class="text-xl font-bold text-gray-900 mb-2">¡Felicitaciones!</h3>
-        <p class="text-gray-700">Has completado "Hábitos Atómicos". Ahora es momento de poner en práctica lo aprendido.</p>
-      </div>
-    </div>
-  `,
-      estimated_reading_minutes: 25,
-      created_at: new Date().toISOString(),
-    },
-  ],
-  "2": [
-    {
-      id: "ch-2-1",
-      book_id: "2",
-      chapter_number: 1,
-      title: "Trabajo Profundo: Una Habilidad Valiosa",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 1: Trabajo Profundo - Una Habilidad Valiosa</h1>
-        <p class="text-lg mb-6 text-gray-700">El trabajo profundo es la habilidad de enfocarse sin distracción en una tarea cognitivamente demandante. Es una habilidad que permite dominar rápidamente información complicada y producir mejores resultados en menos tiempo.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎯 Definiciones Fundamentales</h2>
-        
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-blue-900 mb-4">📚 Conceptos Clave</h3>
-          <div class="space-y-4">
-            <div>
-              <h4 class="font-medium text-blue-800 mb-2">Trabajo Profundo</h4>
-              <p class="text-blue-700 text-sm">Actividades profesionales realizadas en un estado de concentración libre de distracciones que empujan tus capacidades cognitivas a su límite.</p>
-            </div>
-            <div>
-              <h4 class="font-medium text-blue-800 mb-2">Trabajo Superficial</h4>
-              <p class="text-blue-700 text-sm">Tareas de estilo logístico, a menudo realizadas mientras se está distraído. Estas tareas no crean mucho valor nuevo y son fáciles de replicar.</p>
-            </div>
-          </div>
-        </div>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">💡 La Hipótesis del Trabajo Profundo</h2>
-        <p class="mb-4 text-gray-700">La capacidad de realizar trabajo profundo se está volviendo cada vez más rara al mismo tiempo que se vuelve cada vez más valiosa en nuestra economía.</p>
-        
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-yellow-900 mb-4">⚡ Por qué el Trabajo Profundo es Valioso</h3>
-          <ul class="list-disc list-inside text-yellow-800 space-y-2">
-            <li><strong>Aprendizaje rápido:</strong> Dominar rápidamente cosas difíciles</li>
-            <li><strong>Producción de élite:</strong> Producir a un nivel de élite, tanto en calidad como en velocidad</li>
-            <li><strong>Ventaja competitiva:</strong> Diferenciarse en un mercado saturado</li>
-            <li><strong>Satisfacción personal:</strong> Encontrar significado y propósito en el trabajo</li>
-          </ul>
-        </div>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🌊 El Gran Reordenamiento</h2>
-        <p class="mb-4 text-gray-700">Nuestra economía se está moviendo rápidamente hacia la automatización y la globalización. En este nuevo panorama, tres grupos tendrán una ventaja particular:</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-          <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-            <h4 class="font-semibold text-green-900 mb-2">🤖 Los que trabajan bien con máquinas inteligentes</h4>
-            <p class="text-green-800 text-sm">Aquellos que pueden trabajar creativamente con tecnología avanzada</p>
-          </div>
-          <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <h4 class="font-semibold text-purple-900 mb-2">⭐ Los mejores en lo que hacen</h4>
-            <p class="text-purple-800 text-sm">Los superstars en sus campos específicos</p>
-          </div>
-          <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-            <h4 class="font-semibold text-orange-900 mb-2">💰 Los que tienen acceso al capital</h4>
-            <p class="text-orange-800 text-sm">Aquellos que pueden invertir en las nuevas tecnologías</p>
-          </div>
-        </div>
-        
-        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
-          "Para tener éxito debes producir lo mejor que puedas producir, un objetivo que requiere trabajo profundo."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 31,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-2-2",
-      book_id: "2",
-      chapter_number: 2,
-      title: "El Trabajo Profundo es Raro",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 2: El Trabajo Profundo es Raro</h1>
-        <p class="text-lg mb-6 text-gray-700">A pesar de la creciente evidencia de que el trabajo profundo es valioso, muchas organizaciones están adoptando prácticas que lo destruyen sistemáticamente.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">📧 La Tiranía del Email</h2>
-        <p class="mb-4 text-gray-700">El trabajador promedio revisa el email cada 6 minutos. Esta fragmentación constante de la atención hace que el trabajo profundo sea prácticamente imposible.</p>
-        
-        <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-red-900 mb-4">⚠️ Los Destructores del Trabajo Profundo</h3>
-          <ul class="list-disc list-inside text-red-800 space-y-2">
-            <li><strong>Oficinas abiertas:</strong> Interrupciones constantes y ruido de fondo</li>
-            <li><strong>Mensajería instantánea:</strong> Expectativa de respuesta inmediata</li>
-            <li><strong>Reuniones excesivas:</strong> Fragmentación del tiempo disponible</li>
-            <li><strong>Redes sociales:</strong> Distracción constante y cambio de contexto</li>
-            <li><strong>Multitarea:</strong> Ilusión de productividad que reduce la calidad</li>
-          </ul>
-        </div>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏢 El Principio del Menor Denominador Común</h2>
-        <p class="mb-4 text-gray-700">En ausencia de indicadores claros de lo que significa ser productivo y valioso en el trabajo, muchos trabajadores recurren a un indicador industrial: hacer muchas cosas de manera visible.</p>
-        
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-yellow-900 mb-4">🎭 El Teatro de la Productividad</h3>
-          <p class="text-yellow-800 mb-3">Comportamientos que parecen productivos pero que en realidad no lo son:</p>
-          <ul class="list-disc list-inside text-yellow-800 space-y-2">
-            <li>Responder emails inmediatamente</li>
-            <li>Estar siempre disponible en chat</li>
-            <li>Asistir a todas las reuniones</li>
-            <li>Trabajar largas horas visiblemente</li>
-            <li>Estar constantemente "ocupado"</li>
-          </ul>
-        </div>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Costo del Cambio de Contexto</h2>
-        <p class="mb-4 text-gray-700">Cuando cambias de una tarea A a una tarea B, tu atención no sigue inmediatamente. Un residuo de tu atención permanece atascado pensando en la tarea original.</p>
-        
-        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-purple-900 mb-4">⏱️ Residuo de Atención</h3>
-          <p class="text-purple-800 mb-3">Sophie Leroy descubrió que cuando cambias de tarea:</p>
-          <ul class="list-disc list-inside text-purple-800 space-y-2">
-            <li>Parte de tu atención permanece en la tarea anterior</li>
-            <li>Este residuo se intensifica si la tarea anterior no estaba completa</li>
-            <li>Puede tomar hasta 23 minutos recuperar la concentración completa</li>
-            <li>El rendimiento en la nueva tarea se ve significativamente reducido</li>
-          </ul>
-        </div>
-        
-        <blockquote class="border-l-4 border-red-500 pl-6 py-4 my-6 bg-red-50 rounded-r-lg italic text-lg text-red-900">
-          "La claridad sobre lo que importa proporciona claridad sobre lo que no importa."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 30,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-2-3",
-      book_id: "2",
-      chapter_number: 3,
-      title: "El Trabajo Profundo es Significativo",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 3: El Trabajo Profundo es Significativo</h1>
-        <p class="text-lg mb-6 text-gray-700">El trabajo profundo no es solo económicamente valioso, sino que también puede ser una fuente de gran satisfacción personal y significado en nuestras vidas.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧘 La Perspectiva Neurológica</h2>
-        <p class="mb-4 text-gray-700">Los neurocientíficos han descubierto que el estado de concentración profunda activa los mismos circuitos cerebrales asociados con la felicidad y el bienestar.</p>
-        
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-blue-900 mb-4">🧠 Beneficios Neurológicos del Trabajo Profundo</h3>
-          <ul class="list-disc list-inside text-blue-800 space-y-2">
-            <li><strong>Liberación de dopamina:</strong> Sensación natural de recompensa y satisfacción</li>
-            <li><strong>Reducción del cortisol:</strong> Menor estrés y ansiedad</li>
-            <li><strong>Fortalecimiento de la mielina:</strong> Mejora de las conexiones neuronales</li>
-            <li><strong>Neuroplasticidad:</strong> Mayor capacidad de aprendizaje y adaptación</li>
-          </ul>
-        </div>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎨 La Perspectiva Psicológica</h2>
-        <p class="mb-4 text-gray-700">Mihaly Csikszentmihalyi descubrió que las personas son más felices cuando están en un estado de "flujo" - completamente absortas en una actividad desafiante.</p>
-        
-        <div class="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-green-900 mb-4">🌊 Características del Estado de Flujo</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 class="font-medium text-green-800 mb-2">🎯 Concentración total</h4>
-              <p class="text-green-700 text-sm">Atención completamente enfocada en la tarea</p>
-            </div>
-            <div>
-              <h4 class="font-medium text-green-800 mb-2">⚖️ Equilibrio desafío-habilidad</h4>
-              <p class="text-green-700 text-sm">La tarea es desafiante pero alcanzable</p>
-            </div>
-            <div>
-              <h4 class="font-medium text-green-800 mb-2">🎭 Pérdida de autoconciencia</h4>
-              <p class="text-green-700 text-sm">Desaparece la preocupación por uno mismo</p>
-            </div>
-            <div>
-              <h4 class="font-medium text-green-800 mb-2">⏰ Distorsión del tiempo</h4>
-              <p class="text-green-700 text-sm">El tiempo pasa sin que te des cuenta</p>
-            </div>
-          </div>
-        </div>
-        
-        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
-          "Una vida profunda es una vida buena, en cualquier sentido que importe."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 28,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-2-4",
-      book_id: "2",
-      chapter_number: 4,
-      title: "Regla #1: Trabaja Profundamente",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 4: Regla #1 - Trabaja Profundamente</h1>
-        <p class="text-lg mb-6 text-gray-700">Desarrollar una práctica de trabajo profundo requiere más que buenas intenciones. Necesitas estrategias específicas y sistemáticas para transformar el trabajo profundo de una aspiración a una realidad regular en tu vida profesional.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🏗️ Filosofías de Trabajo Profundo</h2>
-        <p class="mb-4 text-gray-700">No existe un enfoque único para integrar el trabajo profundo en tu vida. Debes encontrar una filosofía que se ajuste a tus circunstancias específicas.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-4">🏔️ Filosofía Monástica</h3>
-            <p class="text-blue-800 mb-3">Eliminar o minimizar radicalmente las obligaciones superficiales.</p>
-            <ul class="list-disc list-inside text-blue-700 text-sm space-y-1">
-              <li>Aislamiento total de distracciones</li>
-              <li>Enfoque en una sola actividad de alto valor</li>
-              <li>Ejemplo: Donald Knuth (no usa email)</li>
-            </ul>
-          </div>
-          
-          <div class="bg-green-50 border border-green-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-green-900 mb-4">🔄 Filosofía Bimodal</h3>
-            <p class="text-green-800 mb-3">Dividir el tiempo entre períodos de trabajo profundo y todo lo demás.</p>
-            <ul class="list-disc list-inside text-green-700 text-sm space-y-1">
-              <li>Bloques de tiempo dedicados exclusivamente</li>
-              <li>Mínimo de un día completo por sesión</li>
-              <li>Ejemplo: Carl Jung (mañanas en torre, tardes con pacientes)</li>
-            </ul>
-          </div>
-          
-          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-yellow-900 mb-4">⏰ Filosofía Rítmica</h3>
-            <p class="text-yellow-800 mb-3">Establecer un ritmo regular para el trabajo profundo.</p>
-            <ul class="list-disc list-inside text-yellow-700 text-sm space-y-1">
-              <li>Misma hora todos los días</li>
-              <li>Crear una cadena de hábitos</li>
-              <li>Ejemplo: Jerry Seinfeld (escribir chistes diariamente)</li>
-            </ul>
-          </div>
-          
-          <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-purple-900 mb-4">🎯 Filosofía Periodística</h3>
-            <p class="text-purple-800 mb-3">Cambiar al modo de trabajo profundo cuando sea posible.</p>
-            <ul class="list-disc list-inside text-purple-700 text-sm space-y-1">
-              <li>Flexibilidad total en el horario</li>
-              <li>Requiere práctica para cambiar rápidamente</li>
-              <li>Ejemplo: Walter Isaacson (escribir entre reuniones)</li>
-            </ul>
-          </div>
-        </div>
-        
-        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-6 bg-blue-50 rounded-r-lg italic text-lg text-blue-900">
-          "El trabajo profundo no es un hábito como revisar el email - es una habilidad que debe ser entrenada."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 32,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-2-5",
-      book_id: "2",
-      chapter_number: 5,
-      title: "Regla #2: Abraza el Aburrimiento",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 5: Regla #2 - Abraza el Aburrimiento</h1>
-        <p class="text-lg mb-6 text-gray-700">La capacidad de concentrarse intensamente es una habilidad que debe ser entrenada. No puedes esperar poder concentrarte profundamente si pasas el resto de tu tiempo huyendo de la menor insinuación de aburrimiento.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🧠 El Músculo de la Concentración</h2>
-        <p class="mb-4 text-gray-700">Tu capacidad de concentración es como un músculo: se fortalece con el uso regular y se debilita con la negligencia.</p>
-        
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-blue-900 mb-4">💪 Entrenamiento de la Atención</h3>
-          <p class="text-blue-800 mb-3">Así como no puedes esperar correr un maratón sin entrenamiento, no puedes esperar concentrarte profundamente sin práctica:</p>
-          <ul class="list-disc list-inside text-blue-700 space-y-2">
-            <li><strong>Consistencia:</strong> Practica la concentración regularmente</li>
-            <li><strong>Progresión:</strong> Aumenta gradualmente la duración e intensidad</li>
-            <li><strong>Resistencia:</strong> Aprende a resistir las distracciones</li>
-            <li><strong>Recuperación:</strong> Permite períodos de descanso mental</li>
-          </ul>
-        </div>
-        
-        <blockquote class="border-l-4 border-purple-500 pl-6 py-4 my-6 bg-purple-50 rounded-r-lg italic text-lg text-purple-900">
-          "El aburrimiento es el espacio donde nace la creatividad."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 29,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "ch-2-6",
-      book_id: "2",
-      chapter_number: 6,
-      title: "Regla #3: Abandona las Redes Sociales",
-      content: `
-      <div class="chapter-content">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Capítulo 6: Regla #3 - Abandona las Redes Sociales</h1>
-        <p class="text-lg mb-6 text-gray-700">Las redes sociales están diseñadas para ser adictivas. Para trabajar profundamente, debes ser más selectivo sobre las herramientas tecnológicas que permites en tu vida profesional y personal.</p>
-        
-        <h2 class="text-2xl font-semibold mb-4 text-gray-900 flex items-center">🎣 La Economía de la Atención</h2>
-        <p class="mb-4 text-gray-700">Las empresas de redes sociales están en el negocio de capturar y vender tu atención. Utilizan las técnicas más sofisticadas de la psicología conductual para mantenerte enganchado.</p>
-        
-        <div class="bg-red-50 border border-red-200 rounded-lg p-6 my-6">
-          <h3 class="text-lg font-semibold text-red-900 mb-4">🧠 Técnicas de Manipulación Psicológica</h3>
-          <ul class="list-disc list-inside text-red-800 space-y-2">
-            <li><strong>Refuerzo intermitente:</strong> Recompensas impredecibles que crean adicción</li>
-            <li><strong>FOMO (Fear of Missing Out):</strong> Miedo a perderse algo importante</li>
-            <li><strong>Validación social:</strong> Likes y comentarios como dopamina instantánea</li>
-            <li><strong>Scroll infinito:</strong> Nunca hay un punto natural de parada</li>
-            <li><strong>Notificaciones push:</strong> Interrupciones constantes para traerte de vuelta</li>
-          </ul>
-        </div>
-        
-        <blockquote class="border-l-4 border-red-500 pl-6 py-4 my-6 bg-red-50 rounded-r-lg italic text-lg text-red-900">
-          "Las herramientas son solo herramientas. Depende de ti decidir si te sirven o si tú les sirves a ellas."
-        </blockquote>
-      </div>
-    `,
-      estimated_reading_minutes: 25,
-      created_at: new Date().toISOString(),
-    },
-  ],
+interface Chapter {
+  id: string
+  title: string
+  content: string
+  page_start: number
+  page_end: number
+  reading_time: number
+}
+
+interface Bookmarks {
+  id: string
+  chapter_id: string
+  chapter_title: string
+  position: number
+  selected_text: string
+  note?: string
+  created_at: string
+  page_number: number
+}
+
+interface Note {
+  id: string
+  chapter_id: string
+  chapter_title: string
+  title: string
+  content: string
+  selected_text?: string
+  position?: number
+  created_at: string
+  updated_at: string
+  page_number: number
+}
+
+interface ReadingProgress {
+  current_chapter: number
+  current_position: number
+  progress_percentage: number
+  time_spent: number
+  last_read: string
+  bookmarks_count: number
+  notes_count: number
+}
+
+interface Book {
+  id: string
+  title: string
+  author: string
+  description: string
+  cover_url: string
+  total_pages: number
+  total_chapters: number
+  estimated_reading_time: number
 }
 
 export default function BookReaderPage() {
   const params = useParams()
   const router = useRouter()
+  const { toast } = useToast()
   const bookId = params.id as string
 
+  // Book and content state
   const [book, setBook] = useState<Book | null>(null)
-  const [chapters, setChapters] = useState<BookChapter[]>([])
-  const [currentChapter, setCurrentChapter] = useState<BookChapter | null>(null)
-  const [userProgress, setUserProgress] = useState<UserBookProgress | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [chapters, setChapters] = useState<Chapter[]>([])
+  const [currentChapter, setCurrentChapter] = useState(0)
+  const [readingProgress, setReadingProgress] = useState<ReadingProgress | null>(null)
+
+  // Bookmarks and notes state
+  const [bookmarks, setBookmarks] = useState<Bookmarks[]>([])
+  const [notes, setNotes] = useState<Note[]>([])
+  const [selectedText, setSelectedText] = useState("")
+  const [selectionRange, setSelectionRange] = useState<{ start: number; end: number } | null>(null)
+
+  // UI state
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [showBookmarkDialog, setShowBookmarkDialog] = useState(false)
+  const [showNoteDialog, setShowNoteDialog] = useState(false)
+  const [editingNote, setEditingNote] = useState<Note | null>(null)
+  const [newNoteTitle, setNewNoteTitle] = useState("")
+  const [newNoteContent, setNewNoteContent] = useState("")
+  const [bookmarkNote, setBookmarkNote] = useState("")
+
+  // Reading settings
+  const [fontSize, setFontSize] = useState(16)
+  const [darkMode, setDarkMode] = useState(false)
+  const [lineHeight, setLineHeight] = useState(1.6)
+
+  // Refs
+  const contentRef = useRef<HTMLDivElement>(null)
+  const readingTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    if (bookId) {
-      loadBookData()
+    loadBookData()
+    startReadingTimer()
+
+    return () => {
+      if (readingTimerRef.current) {
+        clearInterval(readingTimerRef.current)
+      }
     }
   }, [bookId])
 
+  useEffect(() => {
+    updateReadingProgress()
+  }, [currentChapter])
+
   const loadBookData = async () => {
     try {
-      setLoading(true)
-
-      // Try to find book in mock data first (for development)
-      let bookData = mockBooks.find((b) => b.id === bookId)
-      let chaptersData = mockChapters[bookId] || []
-
-      if (!bookData) {
-        // Try to load from Supabase
-        const { data: supabaseBook, error: bookError } = await getBookById(bookId)
-        if (!bookError && supabaseBook) {
-          bookData = supabaseBook
-        }
+      // Mock book data
+      const mockBook: Book = {
+        id: bookId,
+        title: "Hábitos Atómicos",
+        author: "James Clear",
+        description: "Un método fácil y comprobado para crear buenos hábitos y eliminar los malos.",
+        cover_url: "/books/atomic-habits.jpg",
+        total_pages: 320,
+        total_chapters: 20,
+        estimated_reading_time: 270, // 4.5 hours in minutes
       }
 
-      if (!bookData) {
-        console.error("Book not found for ID:", bookId)
-        setLoading(false)
-        return
+      const mockChapters: Chapter[] = [
+        {
+          id: "1",
+          title: "Los fundamentos: Por qué los pequeños cambios generan una gran diferencia",
+          content: `Los hábitos son el interés compuesto del autodesarrollo. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican conforme los repites. Parecen generar poca diferencia en un día determinado y, sin embargo, el impacto que producen a lo largo de los meses y años puede ser enorme.
+
+Es solo cuando miramos hacia atrás —dos, cinco o quizás diez años después— que el valor de los buenos hábitos y el costo de los malos se vuelve asombrosamente evidente.
+
+Lamentablemente, los hábitos lentos del cambio también hace que sea fácil dejar que los malos hábitos se deslicen. Si comes una hamburguesa poco saludable hoy, la báscula no se moverá mucho. Si trabajas hasta tarde esta noche e ignoras a tu familia, ellos te perdonarán. Si pospones tu proyecto por un día más, siempre habrá mañana para ponerte al día.
+
+Un solo error no arruinará tu vida, de la misma manera que una sola decisión inteligente no te catapultará al éxito. Pero conforme las decisiones se acumulan, también lo hacen los resultados de tus decisiones.
+
+Los hábitos son una espada de doble filo. Los malos hábitos pueden reducirte tanto como los buenos hábitos pueden elevarte, razón por la cual entender los detalles es crucial.
+
+Pequeños cambios a menudo parecen no generar diferencia hasta que cruzas un umbral crítico. Los resultados más poderosos de cualquier proceso de cambio compuesto se retrasan. Necesitas ser paciente.
+
+Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse. Un grado de diferencia, aparentemente pequeño e insignificante, ha desencadenado una transformación enorme.
+
+Los avances a menudo son el resultado de muchas acciones previas, que construyen el potencial requerido para desencadenar un cambio mayor. Esto es similar a como los átomos se acumulan en una reacción nuclear, lentamente al principio, luego todo a la vez en una explosión masiva.
+
+Bambú que crece en China puede crecer hasta 90 pies en seis semanas, pero durante los primeros cinco años, apenas se ve crecimiento sobre el suelo. Durante esos cinco años, una extensa red de raíces se extiende bajo tierra. El trabajo no fue inútil, simplemente no era visible.
+
+Los hábitos funcionan de la misma manera. Puedes trabajar durante años para cambiar y no ver nada. Pero si te mantienes en ello, puedes lograr resultados extraordinarios.
+
+El valle de la desilusión
+
+Imagina que estás corriendo en una cinta de correr. Durante los primeros minutos, no sientes mucho. Tu respiración es normal, tu ritmo cardíaco está bien. Pero si continúas, eventualmente comenzarás a sudar. Tu respiración se volverá más pesada. Tu ritmo cardíaco aumentará.
+
+Los hábitos son similares. Al principio, no hay mucho que mostrar por tus esfuerzos. Durante días, semanas, incluso meses, puedes sentir que estás corriendo en el lugar. Es un período que yo llamo el Valle de la Desilusión.
+
+Esperas progreso lineal. Esperas que cada día de trabajo duro se traduzca inmediatamente en un resultado medible. Pero los hábitos no funcionan de esa manera. En los primeros días y semanas, hay una brecha entre el trabajo que pones y los resultados que obtienes.
+
+No es hasta meses o años después que te das cuenta del verdadero valor del trabajo previo que has hecho. Esto puede resultar increíblemente frustrante porque sientes que has estado trabajando duro durante semanas con poco que mostrar por ello.
+
+Sin embargo, el trabajo no fue desperdiciado. Simplemente se estaba almacenando. No es hasta mucho después que el valor completo de los esfuerzos previos se revela.
+
+Todas las grandes cosas provienen de pequeños comienzos. La semilla de cada hábito es una sola decisión diminuta. Pero conforme esa decisión se repite, un hábito brota y se fortalece.
+
+Las raíces se entrelazan y se espesan hasta que la idea de vivir de manera diferente se vuelve impensable. Este es uno de los significados centrales de los hábitos atómicos: un cambio regular pequeño o una rutina que es parte de un sistema más grande.
+
+Así como los átomos son los bloques de construcción de las moléculas, los hábitos atómicos son los bloques de construcción de resultados extraordinarios.`,
+          page_start: 1,
+          page_end: 16,
+          reading_time: 12,
+        },
+        {
+          id: "2",
+          title: "Cómo tus hábitos moldean tu identidad (y viceversa)",
+          content: `¿Por qué es tan fácil repetir los malos hábitos y tan difícil formar buenos? Pocas cosas pueden tener un impacto más poderoso en tu vida que mejorar tus hábitos diarios. Y sin embargo es probable que este tiempo el próximo año estarás haciendo las mismas cosas que estás haciendo hoy.
+
+¿Por qué es tan difícil el cambio?
+
+Cambiamos a tres niveles: cambio de resultados, cambio de procesos y cambio de identidad.
+
+El primer nivel es cambiar tus resultados. Este nivel se preocupa por cambiar tus resultados: perder peso, publicar un libro, ganar un campeonato. La mayoría de las metas que te fijas están en este nivel.
+
+El segundo nivel es cambiar tu proceso. Este nivel se preocupa por cambiar tus hábitos y sistemas: implementar una nueva rutina en el gimnasio, decluttering tu escritorio para un mejor flujo de trabajo, desarrollar una práctica de meditación. La mayoría de los hábitos que construyes están en este nivel.
+
+El tercer y más profundo nivel es cambiar tu identidad. Este nivel se preocupa por cambiar tus creencias: tu visión del mundo, tu autoimagen, tus juicios sobre ti mismo y otros. La mayoría de las creencias, suposiciones y sesgos que tienes están en este nivel.
+
+Los resultados son sobre lo que obtienes. Los procesos son sobre lo que haces. La identidad es sobre lo que crees.
+
+Cuando se trata de construir hábitos que duran —cuando se trata de construir un sistema de 1 por ciento de mejoras— el problema no es que un nivel sea "mejor" o "peor" que otro. Todos los niveles de cambio son útiles a su manera. El problema es la dirección del cambio.
+
+Muchas personas comienzan el proceso de cambiar sus hábitos enfocándose en lo que quieren lograr. Esto los lleva a hábitos basados en resultados. La alternativa es construir hábitos basados en identidad. Con este enfoque, comenzamos enfocándonos en quién deseamos convertirnos.
+
+Imagina dos personas resistiendo un cigarrillo. Cuando se les ofrece un humo, la primera persona dice: "No, gracias. Estoy tratando de dejar de fumar". Suena como una respuesta razonable, pero esta persona todavía cree que es un fumador que está tratando de ser algo más. Espera que su comportamiento cambie mientras se aferra a la misma creencia.
+
+La segunda persona declina diciendo: "No, gracias. No soy fumador". Es una pequeña diferencia, pero esta declaración proviene de una identidad diferente. Ya no se ven a sí mismos como fumadores.
+
+La mayoría de las personas ni siquiera consideran el cambio de identidad cuando se proponen mejorar. Solo piensan: "Quiero ser delgado" o "Quiero ser fuerte" o "Quiero ser inteligente". Todas estas son metas basadas en resultados.
+
+Deberías estar mucho más preocupado por tu identidad actual que por tus resultados actuales. Si tienes las mismas creencias que antes, entonces es natural que vuelvas a tus viejos hábitos.
+
+El objetivo no es leer un libro, el objetivo es convertirse en lector.
+El objetivo no es correr un maratón, el objetivo es convertirse en corredor.
+El objetivo no es aprender un instrumento, el objetivo es convertirse en músico.
+
+Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es una indicación del tipo de persona que crees que eres —ya sea consciente o inconscientemente.
+
+La investigación ha demostrado que una vez que una persona cree en un aspecto particular de su identidad, estará motivada a actuar de manera alineada con esa creencia. Por ejemplo, las personas que se identificaron como "siendo un votante" tenían más probabilidades de votar que aquellas que simplemente afirmaron "votar".
+
+De manera similar, la persona que incorpora el ejercicio en su identidad no tiene que convencerse a sí misma de entrenar. Hacer lo correcto es fácil. Después de todo, cuando tu comportamiento y tu identidad están completamente alineados, ya no estás persiguiendo el cambio de comportamiento. Simplemente estás actuando como el tipo de persona que ya eres.
+
+Como todas las formas de cambio, el cambio de identidad puede ser una espada de doble filo. Cuando trabajas a tu favor, el cambio de identidad puede ser una fuerza poderosa para el autodesarrollo. Cuando trabaja en tu contra, puede ser una maldición.
+
+El efecto de una sola experiencia tiende a desvanecerse, pero el efecto de los hábitos se refuerza. Pueden ser una maldición o una bendición. Los malos hábitos se repiten una y otra vez no porque no quieras cambiar, sino porque tienes la identidad equivocada.
+
+Para cambiar tu comportamiento para bien, debes comenzar por cambiar tu identidad. Tienes que decidir el tipo de persona que quieres ser. Esto se mantiene en cualquier nivel de cambio. Quieres perder peso, pero si tienes la misma mentalidad y los mismos hábitos que antes, entonces vas a luchar para hacer progreso.
+
+Tienes que cambiar las creencias subyacentes que llevaron a tus acciones pasadas. Tienes que construir mejores hábitos porque eres el tipo de persona que quiere esas cosas.
+
+Una vez que hayas decidido el tipo de persona que quieres ser, puedes comenzar a dar pequeños pasos para reforzar tu identidad deseada.
+
+Tengo un amigo que perdió más de 100 libras preguntándose: "¿Qué haría una persona saludable?" Durante todo el día, usaría esta pregunta como guía. ¿Una persona saludable caminaría o tomaría un taxi? ¿Una persona saludable ordenaría una hamburguesa o una ensalada? ¿Una persona saludable miraría Netflix durante tres horas o saldría a caminar?
+
+Él se imaginó el tipo de persona que quería ser y luego demostró que era ese tipo de persona con pequeñas victorias. Y eventualmente, comenzó a creer realmente que era una persona saludable.
+
+El proceso de cambio de identidad es un proceso de dos pasos:
+
+1. Decide el tipo de persona que quieres ser.
+2. Demuéstratelo a ti mismo con pequeñas victorias.
+
+Primero, decide quién quieres ser. Esto se mantiene en cualquier nivel —como individuo, como equipo, como comunidad, como nación. ¿Qué quieres representar? ¿Qué principios y valores quieres encarnar?
+
+Estas son preguntas grandes, y muchas personas no están seguras de dónde comenzar, pero saben qué tipo de resultados quieren: estar en forma, construir un negocio exitoso, escribir un libro, ganar un campeonato, pasar más tiempo con su familia, y así sucesivamente.
+
+Está bien. Comienza ahí y trabaja hacia atrás desde los resultados que quieres hasta el tipo de persona que podría obtener esos resultados. Pregúntate: "¿Quién es el tipo de persona que podría obtener el resultado que quiero?"
+
+¿Quién es el tipo de persona que podría perder 40 libras? Probablemente alguien que es consistente con el ejercicio. ¿Quién es el tipo de persona que podría aprender un nuevo idioma? Probablemente alguien que es diligente y estudioso. ¿Quién es el tipo de persona que podría dirigir un negocio exitoso? Probablemente alguien que es organizado y trabajador.
+
+Una vez que tengas un manejo de qué tipo de persona quieres ser, puedes comenzar a dar pequeños pasos para reforzar tu identidad deseada.
+
+El proceso es simple:
+
+1. Cada vez que escribes una página, eres un escritor.
+2. Cada vez que practicas el violín, eres un músico.
+3. Cada vez que empiezas un entrenamiento, eres un atleta.
+4. Cada vez que animas a tus empleados, eres un líder.
+
+Cada acción que tomas es un voto por el tipo de persona que quieres convertirte. Ninguna instancia individual transformará tus creencias, pero conforme los votos se acumulan, también lo hace la evidencia de tu nueva identidad.
+
+Esta es una de las razones por las que el cambio significativo no requiere cambios radicales. Los pequeños hábitos pueden hacer una diferencia significativa al proporcionar evidencia de una nueva identidad. Y si un cambio es significativo, en realidad no importa si es grande o pequeño. Lo que importa es que esté dirigiendo tu vida en la dirección que quieres que vaya.
+
+Cada hábito no solo obtiene resultados, también te enseña algo mucho más importante: confiar en ti mismo. Empiezas a creer que puedes lograr estas pequeñas mejoras.
+
+Cuando el voto se acumula y la evidencia comienza a cambiar la historia que te cuentas sobre ti mismo, empiezas a crecer en una nueva identidad.
+
+Por supuesto, también funciona en sentido contrario. Cada vez que eliges realizar un mal hábito, es un voto por esa identidad. La buena noticia es que no necesitas ser perfecto. En cualquier elección, puedes simplemente elegir el mejor voto disponible.
+
+Los nuevos hábitos pueden parecer que van en contra de tu identidad actual. Puedes pensar: "No soy una persona matutina" o "No soy bueno con la tecnología" o "Soy terrible dirigiendo". Cuando has repetido una historia para ti mismo durante años, es fácil deslizarse en estos patrones mentales y aceptarlos como un hecho.
+
+Con el tiempo, sin embargo, conforme la evidencia se acumula, tus creencias de autoconcepto comienzan a cambiar. El efecto acumulativo de estos pequeños cambios en comportamiento es un cambio poderoso en identidad.
+
+Decidir el tipo de persona que quieres ser es probablemente la decisión más importante que puedes tomar. Construye la persona que quieres ser con cada hábito.
+
+El verdadero cambio de comportamiento es cambio de identidad. Podrías empezar un hábito debido a la motivación, pero la única razón por la que te apegarás a uno es que se convierte en parte de tu identidad.
+
+Cualquiera puede convencerse de visitar el gimnasio o comer saludable una o dos veces, pero si no cambias la creencia detrás del comportamiento, entonces es difícil mantener el cambio a largo plazo. Las mejoras son solo temporales hasta que se conviertan en parte de quién eres.
+
+El objetivo no es leer un libro, el objetivo es convertirse en lector.
+El objetivo no es correr un maratón, el objetivo es convertirse en corredor.
+El objetivo no es aprender un instrumento, el objetivo es convertirse en músico.
+
+Tu identidad emerge de tus hábitos. Cada acción es un voto por el tipo de persona que quieres convertirte.
+
+Convertirse en la mejor versión de ti mismo requiere que edites continuamente tus creencias, y que actualices y expandas tu identidad.
+
+Este proceso de cambio de identidad es como escribir un nuevo libro. Al principio, tienes una página en blanco y una idea vaga de la historia que quieres contar. Cada capítulo que escribes añade detalles y desarrolla el argumento.
+
+Los hábitos son el camino por el cual encarnas una identidad particular. Cuanto más repites un comportamiento, más refuerzas la identidad asociada con ese comportamiento.
+
+De hecho, la palabra identidad originalmente se derivó de las palabras latinas essentitas, que significa ser, e identidem, que significa repetidamente. Tu identidad es literalmente tus "seres repetidos".
+
+Cualquiera que sea tu identidad ahora, solo crees en ella porque tienes prueba de ello. Si vas a la iglesia cada domingo durante 20 años, tienes evidencia de que eres religioso. Si estudias biología durante una hora cada noche, tienes evidencia de que eres estudioso. Si vas al gimnasio incluso cuando llueve, tienes evidencia de que estás comprometido con el fitness.
+
+Cuanto más evidencia tengas para una creencia, más fuertemente la creerás. Por esta razón, los hábitos son el camino hacia el cambio de identidad. La forma más práctica de cambiar quién eres es cambiar lo que haces.
+
+Cada vez que repites un hábito, realizas los rituales de tu identidad deseada.
+Cada vez que haces tu cama, encarnas la identidad de alguien que es organizado.
+Cada vez que escribes, encarnas la identidad de alguien que es creativo.
+Cada vez que entrenas, encarnas la identidad de alguien que está en forma.
+
+Cualquiera que sea la identidad que quieras reforzar hoy, puedes creerla un poco más haciendo el hábito asociado.
+
+Este es un proceso gradual. Como el agua que lentamente cambia la forma de una roca, tus hábitos moldean tu identidad. Pero una vez que esa nueva identidad se cristaliza, tus hábitos se vuelven fáciles de mantener.
+
+La clave para construir hábitos duraderos es enfocarse en crear una nueva identidad primero. Tu comportamiento actual es simplemente un reflejo de tu identidad actual. Lo que haces ahora es un espejo de quién crees que eres (ya sea consciente o subconscientemente).
+
+Para cambiar tu comportamiento para bien, debes empezar por cambiar tu identidad. Tienes que decidir el tipo de persona que quieres ser. Esto se mantiene en cualquier nivel de cambio.
+
+Quieres perder peso, pero si tienes la misma mentalidad y los mismos hábitos que antes, entonces vas a luchar para hacer progreso. En su lugar, debes demostrar que eres el tipo de persona que quiere estar saludable.
+
+Quieres escribir un libro, pero si tu identidad es "No soy un escritor", entonces cada día que no escribes será evidencia de que no eres un escritor. En su lugar, debes demostrar que eres el tipo de persona que escribe todos los días.
+
+Una vez que hayas decidido el tipo de persona que quieres ser, puedes comenzar a dar pequeños pasos para reforzar tu identidad deseada. Tengo un amigo que perdió más de 100 libras preguntándose: "¿Qué haría una persona saludable?" Durante todo el día, usaría esta pregunta como guía.
+
+El proceso de cambio de identidad es un proceso de dos pasos:
+
+1. Decide el tipo de persona que quieres ser.
+2. Demuéstratelo a ti mismo con pequeñas victorias.
+
+Tu identidad no está tallada en piedra. Tienes una opción en cada momento. Puedes elegir la identidad que quieres reforzar hoy con los hábitos que eliges hoy. Y esto nos lleva a la pregunta más profunda de todas: si tus creencias y visión del mundo juegan un papel tan importante en tu comportamiento, ¿de dónde vienen en primer lugar? ¿Cómo, exactamente, se forman tus creencias?
+
+Y lo más importante, ¿cómo puedes cambiarlas?`,
+          page_start: 17,
+          page_end: 32,
+          reading_time: 15,
+        },
+        {
+          id: "3",
+          title: "Cómo construir mejores hábitos en 4 simples pasos",
+          content: `En 1898, un psicólogo llamado Edward Thorndike realizó un experimento que cambiaría la forma en que pensamos sobre la formación de hábitos.
+
+Thorndike estaba interesado en estudiar el comportamiento animal, así que construyó un dispositivo conocido como una caja de rompecabezas. Era una caja de madera con una puerta que podía abrirse desde adentro presionando un pestillo.
+
+Thorndike colocaría un gato dentro de la caja. Al principio, el gato deambularía, olería, y arañaría aleatoriamente. Después de unos minutos de exploración, el gato presionaría accidentalmente el pestillo, la puerta se abriría, y el gato escaparía.
+
+Thorndike repetiría este experimento una y otra vez con el mismo gato. Registró el comportamiento en cada ensayo. La primera vez, el gato tardó mucho tiempo en escapar. En ensayos posteriores, el gato escaparía cada vez más rápido. Después de veinte o treinta intentos, el gato podría escapar en unos pocos segundos.
+
+Durante el curso de cada experimento, el comportamiento inútil ocurría con menos frecuencia y las acciones útiles se volvían más comunes. El gato estaba aprendiendo a asociar presionar el pestillo con la recompensa de escapar.
+
+Thorndike describió este proceso de aprendizaje como la Ley del Efecto: "Las respuestas que producen un efecto satisfactorio en una situación particular se vuelven más probables de ocurrir nuevamente en esa situación, y las respuestas que producen un efecto incómodo se vuelven menos probables de ocurrir nuevamente en esa situación."
+
+En otras palabras, los comportamientos seguidos de consecuencias satisfactorias tienden a repetirse y aquellos que producen consecuencias desagradables son menos probables de repetirse. Thorndike había descubierto la idea central detrás de la formación de hábitos: los comportamientos que son recompensados se repiten y los comportamientos que son castigados se evitan.
+
+Décadas después, los hallazgos de Thorndike fueron expandidos por B.F. Skinner, quien estudió cómo los animales y humanos predicen recompensas. Durante sus experimentos, Skinner se referiría a un estímulo que aumenta el comportamiento como reforzador. Estos reforzadores podrían ser positivos (agregar algo bueno) o negativos (quitar algo malo), pero Skinner encontró que todos los reforzadores aumentan la probabilidad de repetir un comportamiento.
+
+Los hallazgos de Skinner sugieren que podemos usar recompensas para nuestro beneficio. Al hacer que las recompensas de nuestros buenos hábitos sean más satisfactorias, podemos entrenar a nuestro cerebro para que disfrute realizando ellos.
+
+Pero aquí está el problema: la mayoría de las recompensas que obtenemos hoy son retrasadas. Es el resultado de vivir en una sociedad moderna. Hace cien años, la mayoría de las recompensas en la vida diaria eran instantáneas. Cazabas y comías. Trabajabas y te pagaban. Ganabas y celebrabas.
+
+Hoy, trabajamos durante años para obtener un título. Hacemos ejercicio durante meses antes de ver nuestro cuerpo cambiar. Ahorramos durante décadas para la jubilación.
+
+Con nuestros malos hábitos, la situación es inversa: las recompensas son inmediatas, pero las consecuencias son retrasadas. Fumar puede matarte en diez años, pero alivia el estrés ahora. El exceso de comida puede enfermarte mañana, pero te hace sentir bien esta noche. El sexo puede producir un bebé no deseado en nueve meses, pero proporciona placer ahora.
+
+Como regla general, cuanto más inmediata es la recompensa, más probable es que se repita el comportamiento.
+
+Esta es exactamente la razón por la que es tan difícil construir hábitos que paguen a largo plazo. Estás luchando contra la tendencia de tu cerebro a priorizar las recompensas inmediatas sobre las retrasadas.
+
+Afortunadamente, es posible entrenar a tu cerebro para retrasar la gratificación, pero necesitas trabajar con el grano de la naturaleza humana, no contra él. La mejor manera de hacer esto es agregar un poco de placer inmediato a los hábitos que pagan a largo plazo y un poco de dolor inmediato a los que no.
+
+Supongamos que quieres convertirte en alguien que lee más libros, pero cada vez que te sientas a leer, te aburres después de unos minutos. El hábito necesita una recompensa que sea inmediata.
+
+Una solución es crear una cuenta de ahorros y depositar $5 cada vez que leas durante una hora. Es una pequeña recompensa inmediata que refuerza tu hábito de lectura y, después de unos meses, también tendrás dinero ahorrado para comprar algo agradable.
+
+O digamos que quieres comer más saludable, pero las comidas saludables no saben tan bien como la comida chatarra. Aquí, puedes agregar un poco de placer inmediato cocinando de una manera que disfrutes. Puedes hacer que las verduras sepan mejor agregando especias o cocinándolas en aceite de oliva. Puedes hacer que las comidas saludables sean más convenientes preparándolas con anticipación.
+
+La clave es hacer que tus buenos hábitos sean tan atractivos como sea posible y tus malos hábitos tan poco atractivos como sea posible.
+
+Pero incluso con estas estrategias, cambiar hábitos puede ser desafiante por otra razón: después de décadas de patrones mentales, tu cerebro ha sido entrenado para predecir que ciertos comportamientos serán recompensados y otros serán castigados.
+
+Cuando tu cerebro predice que un comportamiento será recompensado, liberas una ráfaga de dopamina. La dopamina es liberada no solo cuando experimentas placer, sino también cuando lo anticipas.
+
+Los investigadores han encontrado que el 100 por ciento de la dopamina se libera antes de experimentar placer, no después. Es la anticipación de una recompensa, no el cumplimiento de ella, lo que nos hace actuar.
+
+Esta es una de las razones por las que los malos hábitos son tan difíciles de romper. Tu cerebro ha aprendido a predecir que ciertos comportamientos serán recompensados, incluso si esas recompensas ya no son beneficiosas para ti.
+
+Cada vez que sientes el impulso de revisar tu teléfono, tu cerebro está prediciendo que encontrarás algo interesante. Cada vez que sientes el impulso de comer comida chatarra, tu cerebro está prediciendo que sabrá bien. Cada vez que sientes el impulso de procrastinar, tu cerebro está prediciendo que evitar el trabajo se sentirá bien.
+
+Estos impulsos pueden persistir durante años, incluso después de que hayas decidido conscientemente que quieres cambiar. Es por eso que simplemente resistir la tentación es una estrategia ineficaz. En su lugar, necesitas hacer que tus buenos hábitos sean más atractivos que tus malos hábitos.
+
+Aquí es donde entra el concepto de agrupación de tentaciones. La agrupación de tentaciones funciona vinculando una acción que quieres hacer con una acción que necesitas hacer.
+
+Por ejemplo, después de que [NECESITO] revise mi correo electrónico, [QUIERO] leer las noticias deportivas.
+Después de que [NECESITO] saque la basura, [QUIERO] ver Netflix.
+Después de que [NECESITO] termine mi entrenamiento, [QUIERO] revisar las redes sociales.
+
+La agrupación de tentaciones es una aplicación del Principio de Premack. Nombrado después del psicólogo David Premack, el principio establece que "los comportamientos más probables reforzarán los comportamientos menos probables."
+
+En otras palabras, incluso si no quieres procesar el correo electrónico, harás la tarea si significa que puedes hacer algo que realmente quieres hacer después.
+
+Puedes incluso combinar la agrupación de tentaciones con el apilamiento de hábitos. La fórmula es:
+
+Después de [HÁBITO ACTUAL], haré [HÁBITO QUE NECESITO].
+Después de [HÁBITO QUE NECESITO], haré [HÁBITO QUE QUIERO].
+
+Por ejemplo:
+Después de que me sirva mi café matutino, haré una cosa en mi lista de tareas pendientes (necesito).
+Después de que haga una cosa en mi lista de tareas pendientes, revisaré Facebook (quiero).
+
+O:
+Después de que me siente a cenar, diré una cosa por la que estoy agradecido (necesito).
+Después de que diga una cosa por la que estoy agradecido, encenderé Netflix (quiero).
+
+La esperanza es que eventualmente busques hacer el hábito del medio tanto como el último hábito. Idealmente, harás ejercicio porque disfrutas el sentimiento de estar en forma, no porque disfrutas la ducha después. Pero en las primeras etapas del cambio de hábitos, es importante aprovechar cualquier impulso disponible para que el comportamiento se mantenga.
+
+Los hábitos son un bucle de retroalimentación de cuatro pasos: señal, anhelo, respuesta, recompensa. Estos cuatro pasos se combinan para formar un bucle neurológico que, en última instancia, te permite crear hábitos automáticos. Este ciclo se conoce como el bucle del hábito.
+
+Primero, está la señal. La señal desencadena tu cerebro para iniciar un comportamiento. Es un poco de información que predice una recompensa.
+
+Segundo, está el anhelo. Los anhelos son la fuerza motivacional detrás de cada hábito. Sin algún nivel de motivación o deseo, sin anhelo de cambio, no tenemos razón para actuar. Lo que anhelas no es el hábito en sí, sino el cambio de estado que entrega.
+
+Tercero, está la respuesta. La respuesta es el hábito real que realizas, que puede tomar la forma de un pensamiento o una acción.
+
+Finalmente, está la recompensa. Las recompensas son el objetivo final de cada hábito. La señal es sobre notar la recompensa. El anhelo es sobre querer la recompensa. La respuesta es sobre obtener la recompensa.
+
+Perseguimos recompensas porque sirven dos propósitos: (1) nos satisfacen y (2) nos enseñan.
+
+Las recompensas proporcionan beneficios por sí mismas. La comida y el agua entregan la energía que necesitas para sobrevivir. Obtener una promoción trae más dinero y respeto. Hacer ejercicio mejora tu salud y tu apariencia física.
+
+Pero lo más importante es que las recompensas enseñan a tu cerebro qué acciones vale la pena recordar en el futuro. Tu cerebro es un detector de recompensas. Conforme navegas por la vida, tu sistema nervioso está monitoreando continuamente qué acciones satisfacen tus deseos y entregan placer.
+
+Las recompensas cierran el bucle y completan el ciclo del hábito. Si un comportamiento es insuficiente en cualquiera de los cuatro pasos, no se convertirá en un hábito. Elimina la señal y tu hábito nunca comenzará. Reduce el anhelo y no tendrás suficiente motivación para actuar. Haz que el comportamiento sea difícil y no podrás hacerlo. Y si la recompensa no satisface tu deseo, entonces no tendrás razón para hacerlo de nuevo en el futuro.
+
+Sin los primeros tres pasos, un comportamiento no ocurrirá. Sin los cuatro, un comportamiento no se repetirá.
+
+En resumen, la señal desencadena un anhelo, que motiva una respuesta, que proporciona una recompensa, que satisface el anhelo y, en última instancia, se asocia con la señal. Juntos, estos cuatro pasos forman un bucle neurológico que permite que cualquier comportamiento se convierta en un hábito automático.
+
+Este ciclo es conocido como el bucle del hábito.
+
+Podemos dividir estos cuatro pasos en dos fases: la fase del problema y la fase de la solución. La fase del problema incluye la señal y el anhelo, y es cuando te das cuenta de que algo necesita cambiar. La fase de la solución incluye la respuesta y la recompensa, y es cuando tomas acción y logras el cambio que deseas.
+
+Todas las conductas están impulsadas por el deseo de resolver un problema. A veces el problema es que notas algo bueno y quieres obtenerlo. A veces el problema es que estás experimentando dolor y quieres aliviarlo. De cualquier manera, el propósito de cada hábito es resolver los problemas que enfrentas.
+
+En la tabla a continuación, puedes ver algunos ejemplos de lo que cada paso del bucle del hábito podría verse en la vida real.
+
+Problema fase 1: Señal
+Tu teléfono hace un zumbido con una nueva notificación de mensaje de texto.
+
+Problema fase 2: Anhelo
+Quieres aprender el contenido del mensaje.
+
+Solución fase 1: Respuesta
+Tomas tu teléfono y lees el texto.
+
+Solución fase 2: Recompensa
+Satisfaces tu anhelo de leer el mensaje. Tomar tu teléfono se asocia con tu teléfono haciendo zumbido.
+
+Imagina caminar hacia una habitación oscura. Alcanzas el interruptor de la luz y lo enciendes. Has realizado este simple hábito tantas veces que ocurre sin pensar. Procedes a través de los cuatro pasos en una fracción de segundo. La urgencia de actuar golpea instantáneamente.
+
+Problema fase 1: Señal
+Entras en una habitación oscura.
+
+Problema fase 2: Anhelo
+Quieres poder ver.
+
+Solución fase 1: Respuesta
+Enciendes el interruptor de la luz.
+
+Solución fase 2: Recompensa
+Satisfaces tu anhelo de ver. Encender el interruptor de la luz se asocia con estar en una habitación oscura.
+
+Al entender estos cuatro pasos, podemos crear un marco simple para construir mejores hábitos. Podemos transformar estos cuatro pasos en un conjunto práctico de reglas que podemos usar para diseñar buenos hábitos y eliminar los malos.
+
+Quiero llamar a este marco las Cuatro Leyes del Cambio de Comportamiento, y proporciona un conjunto simple de reglas para crear buenos hábitos y romper los malos.
+
+Cómo crear un buen hábito
+La 1ª ley (Señal): Hazlo obvio.
+La 2ª ley (Anhelo): Hazlo atractivo.
+La 3ª ley (Respuesta): Hazlo fácil.
+La 4ª ley (Recompensa): Hazlo satisfactorio.
+
+Cómo romper un mal hábito
+Inversión de la 1ª ley (Señal): Hazlo invisible.
+Inversión de la 2ª ley (Anhelo): Hazlo poco atractivo.
+Inversión de la 3ª ley (Respuesta): Hazlo difícil.
+Inversión de la 4ª ley (Recompensa): Hazlo insatisfactorio.
+
+Sería irresponsable afirmar que estas cuatro leyes son una solución exhaustiva para cada problema relacionado con el cambio de hábitos, pero creo que proporcionan un marco útil para pensar sobre los hábitos. Como verás a lo largo de este libro, las Cuatro Leyes del Cambio de Comportamiento se aplican a casi todos los campos, desde los deportes hasta la política, desde el arte hasta la medicina, desde la comedia hasta la gestión.
+
+Estas leyes pueden usarse sin importar el desafío que estés enfrentando o el comportamiento que esperes cambiar. Siempre que quieras cambiar tu comportamiento, puedes simplemente preguntarte:
+
+1. ¿Cómo puedo hacerlo obvio?
+2. ¿Cómo puedo hacerlo atractivo?
+3. ¿Cómo puedo hacerlo fácil?
+4. ¿Cómo puedo hacerlo satisfactorio?
+
+Si quieres romper un mal hábito, simplemente invierte cada ley:
+
+1. ¿Cómo puedo hacerlo invisible?
+2. ¿Cómo puedo hacerlo poco atractivo?
+3. ¿Cómo puedo hacerlo difícil?
+4. ¿Cómo puedo hacerlo insatisfactorio?
+
+Más adelante en este libro, aprenderemos cómo aplicar cada ley a tus hábitos particulares, pero antes de eso, necesitas saber dónde empezar.`,
+          page_start: 33,
+          page_end: 48,
+          reading_time: 18,
+        },
+      ]
+
+      const mockProgress: ReadingProgress = {
+        current_chapter: 0,
+        current_position: 0,
+        progress_percentage: 65,
+        time_spent: 180,
+        last_read: "2024-01-15T10:30:00Z",
+        bookmarks_count: 8,
+        notes_count: 12,
       }
 
-      setBook(bookData)
+      const mockBookmarks: Bookmarks[] = [
+        {
+          id: "1",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          position: 150,
+          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
+          note: "Concepto clave - los hábitos se acumulan con el tiempo",
+          created_at: "2024-01-10T14:20:00Z",
+          page_number: 3,
+        },
+        {
+          id: "2",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          position: 890,
+          selected_text:
+            "Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse.",
+          note: "Excelente metáfora sobre los puntos de inflexión",
+          created_at: "2024-01-11T09:15:00Z",
+          page_number: 8,
+        },
+        {
+          id: "3",
+          chapter_id: "2",
+          chapter_title: "Cómo tus hábitos moldean tu identidad",
+          position: 420,
+          selected_text: "El objetivo no es leer un libro, el objetivo es convertirse en lector",
+          created_at: "2024-01-12T16:45:00Z",
+          page_number: 22,
+        },
+        {
+          id: "4",
+          chapter_id: "2",
+          chapter_title: "Cómo tus hábitos moldean tu identidad",
+          position: 1200,
+          selected_text: "Cada acción que tomas es un voto por el tipo de persona que quieres convertirte",
+          note: "Esto cambió mi perspectiva completamente",
+          created_at: "2024-01-13T11:30:00Z",
+          page_number: 28,
+        },
+      ]
 
-      // Load chapters
-      if (chaptersData.length === 0) {
-        const { data: supabaseChapters, error: chaptersError } = await getBookChapters(bookId)
-        if (!chaptersError && supabaseChapters) {
-          chaptersData = supabaseChapters
-        }
-      }
+      const mockNotes: Note[] = [
+        {
+          id: "1",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          title: "Reflexión sobre el interés compuesto",
+          content:
+            "Me parece fascinante cómo Clear conecta el concepto financiero del interés compuesto con el desarrollo personal. Esto me hace pensar en cómo pequeñas acciones diarias en mi carrera profesional pueden acumularse para generar grandes resultados a largo plazo.",
+          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
+          position: 150,
+          created_at: "2024-01-10T14:25:00Z",
+          updated_at: "2024-01-10T14:25:00Z",
+          page_number: 3,
+        },
+        {
+          id: "2",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          title: "El Valle de la Desilusión",
+          content:
+            "Este concepto explica perfectamente por qué he abandonado tantos hábitos en el pasado. No veía resultados inmediatos y me desanimaba. Ahora entiendo que es normal y parte del proceso.",
+          created_at: "2024-01-11T10:00:00Z",
+          updated_at: "2024-01-11T10:00:00Z",
+          page_number: 12,
+        },
+        {
+          id: "3",
+          chapter_id: "2",
+          chapter_title: "Cómo tus hábitos moldean tu identidad",
+          title: "Cambio de identidad vs cambio de comportamiento",
+          content:
+            "La idea de que debemos cambiar nuestra identidad antes que nuestro comportamiento es revolucionaria. En lugar de decir 'quiero hacer ejercicio', debería decir 'soy una persona activa'. Esto cambia completamente la mentalidad.",
+          selected_text: "Para cambiar tu comportamiento para bien, debes comenzar por cambiar tu identidad",
+          position: 800,
+          created_at: "2024-01-12T17:00:00Z",
+          updated_at: "2024-01-12T17:00:00Z",
+          page_number: 25,
+        },
+        {
+          id: "4",
+          chapter_id: "2",
+          chapter_title: "Cómo tus hábitos moldean tu identidad",
+          title: "Aplicación práctica: Mi carrera",
+          content:
+            "Voy a aplicar esto a mi desarrollo profesional. En lugar de 'quiero aprender programación', voy a adoptar la identidad de 'soy un programador'. Cada línea de código que escriba será evidencia de esta nueva identidad.",
+          created_at: "2024-01-13T12:00:00Z",
+          updated_at: "2024-01-14T09:30:00Z",
+          page_number: 30,
+        },
+      ]
 
-      if (chaptersData.length === 0) {
-        // Create a default chapter if none exist
-        chaptersData = [
-          {
-            id: `default-${bookId}`,
-            book_id: bookId,
-            chapter_number: 1,
-            title: "Introducción",
-            content: `
-              <div class="chapter-content">
-                <h1 class="text-3xl font-bold mb-6 text-gray-900">Introducción</h1>
-                <p class="text-lg mb-6 text-gray-700">Bienvenido a "${bookData.title}" por ${bookData.author}.</p>
-                <p class="mb-4 text-gray-700">${bookData.description}</p>
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 my-6">
-                  <h3 class="text-lg font-semibold text-blue-900 mb-4">📚 Sobre este libro</h3>
-                  <ul class="list-disc list-inside text-blue-800 space-y-2">
-                    <li><strong>Categoría:</strong> ${bookData.category}</li>
-                    <li><strong>Dificultad:</strong> ${bookData.difficulty}</li>
-                    <li><strong>Tiempo de lectura:</strong> ${bookData.reading_time}</li>
-                    <li><strong>Año de publicación:</strong> ${bookData.published_year}</li>
-                  </ul>
-                </div>
-              </div>
-            `,
-            estimated_reading_minutes: 15,
-            created_at: new Date().toISOString(),
-          },
-        ]
-      }
-
-      setChapters(chaptersData)
-      setCurrentChapter(chaptersData[0])
-
-      // Load user progress (mock for now)
-      const mockProgress: UserBookProgress = {
-        id: "1",
-        user_id: "demo-user",
-        book_id: bookId,
-        progress_percentage: Math.round((1 / chaptersData.length) * 100),
-        current_chapter: 1,
-        total_chapters: chaptersData.length,
-        reading_time_minutes: 45,
-        started_at: new Date().toISOString(),
-        last_read_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      }
-      setUserProgress(mockProgress)
+      setBook(mockBook)
+      setChapters(mockChapters)
+      setReadingProgress(mockProgress)
+      setBookmarks(mockBookmarks)
+      setNotes(mockNotes)
     } catch (error) {
       console.error("Error loading book data:", error)
-    } finally {
-      setLoading(false)
+      toast({
+        title: "Error",
+        description: "No se pudo cargar el libro. Intenta nuevamente.",
+        variant: "destructive",
+      })
     }
   }
 
-  const navigateToChapter = (chapterNumber: number) => {
-    const chapter = chapters.find((c) => c.chapter_number === chapterNumber)
-    if (chapter) {
-      setCurrentChapter(chapter)
+  const startReadingTimer = () => {
+    readingTimerRef.current = setInterval(() => {
+      setReadingProgress((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          time_spent: prev.time_spent + 1,
+        }
+      })
+    }, 60000) // Update every minute
+  }
+
+  const updateReadingProgress = () => {
+    if (!readingProgress) return
+
+    const newProgress = {
+      ...readingProgress,
+      current_chapter: currentChapter,
+      current_position: 0,
+      progress_percentage: Math.round(((currentChapter + 1) / chapters.length) * 100),
+      last_read: new Date().toISOString(),
+    }
+
+    setReadingProgress(newProgress)
+
+    // Save progress to backend (mock)
+    toast({
+      title: "Progreso guardado",
+      description: `Capítulo ${currentChapter + 1} - ${newProgress.progress_percentage}% completado`,
+    })
+  }
+
+  const handleTextSelection = () => {
+    const selection = window.getSelection()
+    if (selection && selection.toString().trim()) {
+      const selectedText = selection.toString().trim()
+      setSelectedText(selectedText)
+
+      // Calculate position (simplified)
+      const range = selection.getRangeAt(0)
+      const position = range.startOffset
+
+      setSelectionRange({ start: range.startOffset, end: range.endOffset })
+    }
+  }
+
+  const createBookmark = async () => {
+    if (!selectedText) {
+      toast({
+        title: "Error",
+        description: "Selecciona texto para crear un marcador",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const newBookmark: Bookmarks = {
+      id: Date.now().toString(),
+      chapter_id: chapters[currentChapter].id,
+      chapter_title: chapters[currentChapter].title,
+      position: selectionRange?.start || 0,
+      selected_text: selectedText,
+      note: bookmarkNote,
+      created_at: new Date().toISOString(),
+      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
+    }
+
+    setBookmarks((prev) => [...prev, newBookmark])
+    setReadingProgress((prev) => (prev ? { ...prev, bookmarks_count: prev.bookmarks_count + 1 } : prev))
+
+    setShowBookmarkDialog(false)
+    setSelectedText("")
+    setBookmarkNote("")
+    setSelectionRange(null)
+
+    toast({
+      title: "Marcador creado",
+      description: "El marcador se ha guardado exitosamente",
+    })
+  }
+
+  const createNote = async () => {
+    if (!newNoteTitle.trim()) {
+      toast({
+        title: "Error",
+        description: "El título de la nota es requerido",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const newNote: Note = {
+      id: Date.now().toString(),
+      chapter_id: chapters[currentChapter].id,
+      chapter_title: chapters[currentChapter].title,
+      title: newNoteTitle,
+      content: newNoteContent,
+      selected_text: selectedText || undefined,
+      position: selectionRange?.start || undefined,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
+    }
+
+    setNotes((prev) => [...prev, newNote])
+    setReadingProgress((prev) => (prev ? { ...prev, notes_count: prev.notes_count + 1 } : prev))
+
+    setShowNoteDialog(false)
+    setNewNoteTitle("")
+    setNewNoteContent("")
+    setSelectedText("")
+    setSelectionRange(null)
+
+    toast({
+      title: "Nota creada",
+      description: "La nota se ha guardado exitosamente",
+    })
+  }
+
+  const updateNote = async () => {
+    if (!editingNote || !newNoteTitle.trim()) return
+
+    const updatedNote: Note = {
+      ...editingNote,
+      title: newNoteTitle,
+      content: newNoteContent,
+      updated_at: new Date().toISOString(),
+    }
+
+    setNotes((prev) => prev.map((note) => (note.id === editingNote.id ? updatedNote : note)))
+
+    setEditingNote(null)
+    setNewNoteTitle("")
+    setNewNoteContent("")
+    setShowNoteDialog(false)
+
+    toast({
+      title: "Nota actualizada",
+      description: "Los cambios se han guardado exitosamente",
+    })
+  }
+
+  const deleteBookmark = (bookmarkId: string) => {
+    setBookmarks((prev) => prev.filter((bookmark) => bookmark.id !== bookmarkId))
+    setReadingProgress((prev) => (prev ? { ...prev, bookmarks_count: prev.bookmarks_count - 1 } : prev))
+
+    toast({
+      title: "Marcador eliminado",
+      description: "El marcador se ha eliminado exitosamente",
+    })
+  }
+
+  const deleteNote = (noteId: string) => {
+    setNotes((prev) => prev.filter((note) => note.id !== noteId))
+    setReadingProgress((prev) => (prev ? { ...prev, notes_count: prev.notes_count - 1 } : prev))
+
+    toast({
+      title: "Nota eliminada",
+      description: "La nota se ha eliminado exitosamente",
+    })
+  }
+
+  const jumpToBookmark = (bookmark: Bookmarks) => {
+    const chapterIndex = chapters.findIndex((chapter) => chapter.id === bookmark.chapter_id)
+    if (chapterIndex !== -1) {
+      setCurrentChapter(chapterIndex)
       setSidebarOpen(false)
 
-      // Update progress
-      if (userProgress) {
-        const newProgress = {
-          ...userProgress,
-          current_chapter: chapterNumber,
-          progress_percentage: Math.round((chapterNumber / chapters.length) * 100),
-          last_read_at: new Date().toISOString(),
-        }
-        setUserProgress(newProgress)
-
-        // Update in database (would work with real auth)
-        updateUserBookProgress("demo-user", bookId, {
-          current_chapter: chapterNumber,
-          progress_percentage: newProgress.progress_percentage,
-        })
-      }
+      toast({
+        title: "Navegando al marcador",
+        description: `${bookmark.chapter_title}`,
+      })
     }
   }
 
-  const goToPreviousChapter = () => {
-    if (currentChapter && currentChapter.chapter_number > 1) {
-      navigateToChapter(currentChapter.chapter_number - 1)
-    }
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
   }
 
-  const goToNextChapter = () => {
-    if (currentChapter && currentChapter.chapter_number < chapters.length) {
-      navigateToChapter(currentChapter.chapter_number + 1)
-    }
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
   }
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Fácil":
-        return "bg-green-100 text-green-800"
-      case "Intermedio":
-        return "bg-yellow-100 text-yellow-800"
-      case "Avanzado":
-        return "bg-red-100 text-red-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
-  }
-
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "Productividad":
-        return "bg-blue-100 text-blue-800"
-      case "Liderazgo":
-        return "bg-purple-100 text-purple-800"
-      case "Habilidades Blandas":
-        return "bg-green-100 text-green-800"
-      case "Desarrollo Personal":
-        return "bg-pink-100 text-pink-800"
-      case "Negocios":
-        return "bg-orange-100 text-orange-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
-  }
-
-  if (loading) {
+  if (!book || chapters.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <Skeleton className="h-8 w-64 mb-6" />
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-1">
-              <Skeleton className="h-96" />
-            </div>
-            <div className="lg:col-span-3">
-              <Skeleton className="h-12 mb-4" />
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-1/2 mb-8" />
-              <div className="space-y-4">
-                {[...Array(10)].map((_, i) => (
-                  <Skeleton key={i} className="h-4 w-full" />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (!book || !currentChapter) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Libro no encontrado</h3>
-          <p class="text-gray-600 mb-4">El libro que buscas no existe o no está disponible</p>
-          <Link href="/library">
-            <Button>Volver a la biblioteca</Button>
-          </Link>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Cargando libro...</p>
         </div>
       </div>
     )
   }
+
+  const currentChapterData = chapters[currentChapter]
+  const chapterBookmarks = bookmarks.filter((bookmark) => bookmark.chapter_id === currentChapterData.id)
+  const chapterNotes = notes.filter((note) => note.chapter_id === currentChapterData.id)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "dark bg-gray-900 text-white" : "bg-white"}`}>
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/library">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Biblioteca
-                </Button>
-              </Link>
-              <Separator orientation="vertical" className="h-6" />
-              <div className="hidden md:block">
-                <h1 className="font-semibold text-gray-900">{book.title}</h1>
-                <p className="text-sm text-gray-600">{book.author}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              {userProgress && (
-                <div className="hidden md:flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Progreso:</span>
-                  <Progress value={userProgress.progress_percentage} className="w-24" />
-                  <span className="text-sm font-medium">{userProgress.progress_percentage}%</span>
-                </div>
-              )}
-
-              <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="lg:hidden bg-transparent">
-                    <Menu className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-80">
-                  <SheetHeader>
-                    <SheetTitle>Tabla de Contenidos</SheetTitle>
-                    <SheetDescription>Navega por los capítulos del libro</SheetDescription>
-                  </SheetHeader>
-                  <div className="mt-6">
-                    <TableOfContents
-                      chapters={chapters}
-                      currentChapter={currentChapter}
-                      onChapterSelect={navigateToChapter}
-                    />
-                  </div>
-                </SheetContent>
-              </Sheet>
+      <div className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => router.back()}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Biblioteca
+            </Button>
+            <div className="hidden md:block">
+              <h1 className="font-semibold text-lg">{book.title}</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{book.author}</p>
             </div>
           </div>
+
+          <div className="flex items-center gap-2">
+            {/* Reading Progress */}
+            {readingProgress && (
+              <div className="hidden md:flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span>{formatTime(readingProgress.time_spent)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  <span>{readingProgress.progress_percentage}%</span>
+                </div>
+              </div>
+            )}
+
+            {/* Reading Settings */}
+            <Button variant="ghost" size="sm" onClick={() => setDarkMode(!darkMode)}>
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+
+            <Button variant="ghost" size="sm" onClick={() => setFontSize(Math.max(12, fontSize - 2))}>
+              <Minus className="h-4 w-4" />
+            </Button>
+
+            <Button variant="ghost" size="sm" onClick={() => setFontSize(Math.min(24, fontSize + 2))}>
+              <Type className="h-4 w-4" />
+            </Button>
+
+            {/* Mobile Sidebar Toggle */}
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="md:hidden">
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle>Navegación</SheetTitle>
+                  <SheetDescription>Capítulos, marcadores y notas</SheetDescription>
+                </SheetHeader>
+                <div className="mt-6">
+                  <Tabs defaultValue="chapters" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="chapters">Capítulos</TabsTrigger>
+                      <TabsTrigger value="bookmarks">Marcadores ({bookmarks.length})</TabsTrigger>
+                      <TabsTrigger value="notes">Notas ({notes.length})</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="chapters" className="mt-4">
+                      <ScrollArea className="h-[calc(100vh-200px)]">
+                        <div className="space-y-2">
+                          {chapters.map((chapter, index) => (
+                            <Button
+                              key={chapter.id}
+                              variant={index === currentChapter ? "default" : "ghost"}
+                              className="w-full justify-start text-left h-auto p-3"
+                              onClick={() => {
+                                setCurrentChapter(index)
+                                setSidebarOpen(false)
+                              }}
+                            >
+                              <div>
+                                <div className="font-medium text-sm mb-1">Capítulo {index + 1}</div>
+                                <div className="text-xs opacity-75 line-clamp-2">{chapter.title}</div>
+                                <div className="text-xs opacity-50 mt-1">
+                                  {chapter.reading_time} min • Páginas {chapter.page_start}-{chapter.page_end}
+                                </div>
+                              </div>
+                            </Button>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent value="bookmarks" className="mt-4">
+                      <ScrollArea className="h-[calc(100vh-200px)]">
+                        <div className="space-y-3">
+                          {bookmarks.map((bookmark) => (
+                            <Card
+                              key={bookmark.id}
+                              className="p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                            >
+                              <div onClick={() => jumpToBookmark(bookmark)}>
+                                <div className="flex items-start justify-between mb-2">
+                                  <Badge variant="outline" className="text-xs">
+                                    {bookmark.chapter_title}
+                                  </Badge>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      deleteBookmark(bookmark.id)
+                                    }}
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                                <blockquote className="text-sm italic border-l-2 border-blue-500 pl-2 mb-2">
+                                  "{bookmark.selected_text}"
+                                </blockquote>
+                                {bookmark.note && (
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{bookmark.note}</p>
+                                )}
+                                <div className="flex items-center gap-2 text-xs text-gray-500">
+                                  <MapPin className="h-3 w-3" />
+                                  <span>Página {bookmark.page_number}</span>
+                                  <Calendar className="h-3 w-3" />
+                                  <span>{formatDate(bookmark.created_at)}</span>
+                                </div>
+                              </div>
+                            </Card>
+                          ))}
+                          {bookmarks.length === 0 && (
+                            <div className="text-center py-8 text-gray-500">
+                              <Bookmark className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                              <p className="text-sm">No hay marcadores aún</p>
+                              <p className="text-xs">Selecciona texto para crear uno</p>
+                            </div>
+                          )}
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent value="notes" className="mt-4">
+                      <ScrollArea className="h-[calc(100vh-200px)]">
+                        <div className="space-y-3">
+                          {notes.map((note) => (
+                            <Card key={note.id} className="p-3">
+                              <div className="flex items-start justify-between mb-2">
+                                <Badge variant="outline" className="text-xs">
+                                  {note.chapter_title}
+                                </Badge>
+                                <div className="flex gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={() => {
+                                      setEditingNote(note)
+                                      setNewNoteTitle(note.title)
+                                      setNewNoteContent(note.content)
+                                      setShowNoteDialog(true)
+                                    }}
+                                  >
+                                    <Edit className="h-3 w-3" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={() => deleteNote(note.id)}
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </div>
+                              <h4 className="font-medium text-sm mb-2">{note.title}</h4>
+                              {note.selected_text && (
+                                <blockquote className="text-sm italic border-l-2 border-green-500 pl-2 mb-2">
+                                  "{note.selected_text}"
+                                </blockquote>
+                              )}
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-3">
+                                {note.content}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <MapPin className="h-3 w-3" />
+                                <span>Página {note.page_number}</span>
+                                <Calendar className="h-3 w-3" />
+                                <span>{formatDate(note.updated_at)}</span>
+                              </div>
+                            </Card>
+                          ))}
+                          {notes.length === 0 && (
+                            <div className="text-center py-8 text-gray-500">
+                              <StickyNote className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                              <p className="text-sm">No hay notas aún</p>
+                              <p className="text-xs">Crea tu primera nota</p>
+                            </div>
+                          )}
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
+
+        {/* Progress Bar */}
+        {readingProgress && (
+          <div className="px-4 pb-2">
+            <Progress value={readingProgress.progress_percentage} className="h-1" />
+          </div>
+        )}
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar - Desktop */}
-          <div className="hidden lg:block lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardHeader>
-                <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 overflow-hidden">
-                  <img
-                    src={book.cover_url || "/placeholder.svg"}
-                    alt={book.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardTitle className="text-lg">{book.title}</CardTitle>
-                <CardDescription>{book.author}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className={getCategoryColor(book.category)}>{book.category}</Badge>
-                    <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
-                  </div>
+      <div className="flex">
+        {/* Desktop Sidebar */}
+        <div className="hidden md:block w-80 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-120px)] sticky top-[120px]">
+          <Tabs defaultValue="chapters" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 m-4">
+              <TabsTrigger value="chapters">Capítulos</TabsTrigger>
+              <TabsTrigger value="bookmarks">Marcadores ({bookmarks.length})</TabsTrigger>
+              <TabsTrigger value="notes">Notas ({notes.length})</TabsTrigger>
+            </TabsList>
 
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {book.reading_time}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3" />
-                      {book.rating}
-                    </div>
-                  </div>
-
-                  {userProgress && (
-                    <div>
-                      <div className="flex items-center justify-between text-sm mb-2">
-                        <span>Progreso</span>
-                        <span>{userProgress.progress_percentage}%</span>
+            <TabsContent value="chapters" className="mt-0 px-4">
+              <ScrollArea className="h-[calc(100vh-200px)]">
+                <div className="space-y-2">
+                  {chapters.map((chapter, index) => (
+                    <Button
+                      key={chapter.id}
+                      variant={index === currentChapter ? "default" : "ghost"}
+                      className="w-full justify-start text-left h-auto p-3"
+                      onClick={() => setCurrentChapter(index)}
+                    >
+                      <div>
+                        <div className="font-medium text-sm mb-1">Capítulo {index + 1}</div>
+                        <div className="text-xs opacity-75 line-clamp-2">{chapter.title}</div>
+                        <div className="text-xs opacity-50 mt-1">
+                          {chapter.reading_time} min • Páginas {chapter.page_start}-{chapter.page_end}
+                        </div>
                       </div>
-                      <Progress value={userProgress.progress_percentage} />
+                    </Button>
+                  ))}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="bookmarks" className="mt-0 px-4">
+              <ScrollArea className="h-[calc(100vh-200px)]">
+                <div className="space-y-3">
+                  {bookmarks.map((bookmark) => (
+                    <Card key={bookmark.id} className="p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <div onClick={() => jumpToBookmark(bookmark)}>
+                        <div className="flex items-start justify-between mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            {bookmark.chapter_title}
+                          </Badge>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteBookmark(bookmark.id)
+                            }}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <blockquote className="text-sm italic border-l-2 border-blue-500 pl-2 mb-2">
+                          "{bookmark.selected_text}"
+                        </blockquote>
+                        {bookmark.note && (
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{bookmark.note}</p>
+                        )}
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <MapPin className="h-3 w-3" />
+                          <span>Página {bookmark.page_number}</span>
+                          <Calendar className="h-3 w-3" />
+                          <span>{formatDate(bookmark.created_at)}</span>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                  {bookmarks.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      <Bookmark className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No hay marcadores aún</p>
+                      <p className="text-xs">Selecciona texto para crear uno</p>
                     </div>
                   )}
-
-                  <Separator />
-
-                  <TableOfContents
-                    chapters={chapters}
-                    currentChapter={currentChapter}
-                    onChapterSelect={navigateToChapter}
-                  />
                 </div>
-              </CardContent>
-            </Card>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="notes" className="mt-0 px-4">
+              <ScrollArea className="h-[calc(100vh-200px)]">
+                <div className="space-y-3">
+                  {notes.map((note) => (
+                    <Card key={note.id} className="p-3">
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge variant="outline" className="text-xs">
+                          {note.chapter_title}
+                        </Badge>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              setEditingNote(note)
+                              setNewNoteTitle(note.title)
+                              setNewNoteContent(note.content)
+                              setShowNoteDialog(true)
+                            }}
+                          >
+                            <Edit className="h-3 w-3" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => deleteNote(note.id)}>
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                      <h4 className="font-medium text-sm mb-2">{note.title}</h4>
+                      {note.selected_text && (
+                        <blockquote className="text-sm italic border-l-2 border-green-500 pl-2 mb-2">
+                          "{note.selected_text}"
+                        </blockquote>
+                      )}
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-3">{note.content}</p>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <MapPin className="h-3 w-3" />
+                        <span>Página {note.page_number}</span>
+                        <Calendar className="h-3 w-3" />
+                        <span>{formatDate(note.updated_at)}</span>
+                      </div>
+                    </Card>
+                  ))}
+                  {notes.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      <StickyNote className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No hay notas aún</p>
+                      <p className="text-xs">Crea tu primera nota</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Chapter Navigation */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentChapter(Math.max(0, currentChapter - 1))}
+              disabled={currentChapter === 0}
+            >
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Anterior
+            </Button>
+
+            <div className="text-center">
+              <h2 className="font-semibold text-lg">Capítulo {currentChapter + 1}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{currentChapterData.title}</p>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentChapter(Math.min(chapters.length - 1, currentChapter + 1))}
+              disabled={currentChapter === chapters.length - 1}
+            >
+              Siguiente
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
           </div>
 
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-xl">
-                      Capítulo {currentChapter.chapter_number}: {currentChapter.title}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-2">
-                      <Clock className="h-4 w-4" />
-                      {currentChapter.estimated_reading_minutes} min de lectura
-                    </CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    <Bookmark className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div
-                  className="prose prose-gray max-w-none"
-                  dangerouslySetInnerHTML={{ __html: currentChapter.content }}
-                />
+          {/* Reading Content */}
+          <div className="max-w-4xl mx-auto p-8">
+            <div
+              ref={contentRef}
+              className="prose prose-lg dark:prose-invert max-w-none"
+              style={{
+                fontSize: `${fontSize}px`,
+                lineHeight: lineHeight,
+              }}
+              onMouseUp={handleTextSelection}
+            >
+              <h1 className="text-2xl font-bold mb-6">{currentChapterData.title}</h1>
+              <div className="whitespace-pre-wrap leading-relaxed">{currentChapterData.content}</div>
+            </div>
 
-                {/* Navigation */}
-                <div className="flex items-center justify-between mt-12 pt-8 border-t">
-                  <Button
-                    variant="outline"
-                    onClick={goToPreviousChapter}
-                    disabled={currentChapter.chapter_number === 1}
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-2" />
-                    Anterior
+            {/* Chapter Actions */}
+            <div className="flex items-center justify-center gap-4 mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+              {selectedText && (
+                <>
+                  <Button variant="outline" size="sm" onClick={() => setShowBookmarkDialog(true)}>
+                    <BookmarkPlus className="h-4 w-4 mr-2" />
+                    Crear Marcador
                   </Button>
-
-                  <span className="text-sm text-gray-600">
-                    {currentChapter.chapter_number} de {chapters.length}
-                  </span>
-
-                  <Button onClick={goToNextChapter} disabled={currentChapter.chapter_number === chapters.length}>
-                    Siguiente
-                    <ChevronRight className="h-4 w-4 ml-2" />
+                  <Button variant="outline" size="sm" onClick={() => setShowNoteDialog(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Crear Nota
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </>
+              )}
+              {!selectedText && (
+                <Button variant="outline" size="sm" onClick={() => setShowNoteDialog(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Crear Nota
+                </Button>
+              )}
+            </div>
+
+            {/* Chapter Summary */}
+            <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                <span>Tiempo de lectura estimado: {currentChapterData.reading_time} minutos</span>
+                <span>
+                  Páginas {currentChapterData.page_start}-{currentChapterData.page_end}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-4 text-sm">
+                <span>Marcadores en este capítulo: {chapterBookmarks.length}</span>
+                <span>Notas en este capítulo: {chapterNotes.length}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
-function TableOfContents({
-  chapters,
-  currentChapter,
-  onChapterSelect,
-}: {
-  chapters: BookChapter[]
-  currentChapter: BookChapter
-  onChapterSelect: (chapterNumber: number) => void
-}) {
-  return (
-    <div>
-      <h4 className="font-medium text-sm text-gray-900 mb-3">Tabla de Contenidos</h4>
-      <div className="space-y-1">
-        {chapters.map((chapter) => (
-          <button
-            key={chapter.id}
-            onClick={() => onChapterSelect(chapter.chapter_number)}
-            className={`w-full text-left p-2 rounded-md text-sm transition-colors ${
-              currentChapter.id === chapter.id
-                ? "bg-blue-50 text-blue-700 font-medium"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            }`}
-          >
-            <div className="flex items-start gap-2">
-              <span className="text-xs text-gray-400 mt-0.5 flex-shrink-0">{chapter.chapter_number}</span>
-              <span className="line-clamp-2">{chapter.title}</span>
+      {/* Bookmark Dialog */}
+      <Dialog open={showBookmarkDialog} onOpenChange={setShowBookmarkDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Crear Marcador</DialogTitle>
+            <DialogDescription>Guarda este fragmento para referencia futura</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Texto seleccionado:</label>
+              <blockquote className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded border-l-4 border-blue-500 italic">
+                "{selectedText}"
+              </blockquote>
             </div>
-          </button>
-        ))}
-      </div>
+            <div>
+              <label className="text-sm font-medium">Nota (opcional):</label>
+              <Textarea
+                placeholder="Agrega una nota personal sobre este marcador..."
+                value={bookmarkNote}
+                onChange={(e) => setBookmarkNote(e.target.value)}
+                className="mt-2"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowBookmarkDialog(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={createBookmark}>Crear Marcador</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Note Dialog */}
+      <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{editingNote ? "Editar Nota" : "Crear Nueva Nota"}</DialogTitle>
+            <DialogDescription>
+              {editingNote ? "Modifica tu nota existente" : "Crea una nota personal sobre este capítulo"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {selectedText && (
+              <div>
+                <label className="text-sm font-medium">Texto seleccionado:</label>
+                <blockquote className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded border-l-4 border-green-500 italic">
+                  "{selectedText}"
+                </blockquote>
+              </div>
+            )}
+            <div>
+              <label className="text-sm font-medium">Título de la nota:</label>
+              <Input
+                placeholder="Título de tu nota..."
+                value={newNoteTitle}
+                onChange={(e) => setNewNoteTitle(e.target.value)}
+                className="mt-2"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Contenido:</label>
+              <Textarea
+                placeholder="Escribe tus reflexiones, ideas o comentarios..."
+                value={newNoteContent}
+                onChange={(e) => setNewNoteContent(e.target.value)}
+                className="mt-2 min-h-[120px]"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowNoteDialog(false)
+                  setEditingNote(null)
+                  setNewNoteTitle("")
+                  setNewNoteContent("")
+                  setSelectedText("")
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button onClick={editingNote ? updateNote : createNote}>
+                {editingNote ? "Actualizar Nota" : "Crear Nota"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

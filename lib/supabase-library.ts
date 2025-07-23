@@ -61,6 +61,32 @@ export interface UserBookProgress {
   updated_at: string
 }
 
+export interface BookmarkData {
+  id: string
+  user_id: string
+  book_id: string
+  chapter_id: string
+  chapter_number: number
+  title: string
+  content: string
+  position: number
+  created_at: string
+}
+
+export interface NoteData {
+  id: string
+  user_id: string
+  book_id: string
+  chapter_id: string
+  chapter_number: number
+  title: string
+  content: string
+  selected_text?: string
+  position: number
+  created_at: string
+  updated_at: string
+}
+
 // Mock data for development
 export const mockBooks: Book[] = [
   {
@@ -358,6 +384,112 @@ export async function updateUserBookProgress(userId: string, bookId: string, pro
       ...progress,
       updated_at: new Date().toISOString(),
     })
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function getUserBookmarks(userId: string, bookId?: string) {
+  try {
+    let query = supabase.from("user_bookmarks").select("*").eq("user_id", userId)
+
+    if (bookId) {
+      query = query.eq("book_id", bookId)
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false })
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function createBookmark(
+  userId: string,
+  bookId: string,
+  chapterId: string,
+  bookmark: Partial<BookmarkData>,
+) {
+  try {
+    const { data, error } = await supabase.from("user_bookmarks").insert({
+      user_id: userId,
+      book_id: bookId,
+      chapter_id: chapterId,
+      ...bookmark,
+      created_at: new Date().toISOString(),
+    })
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function deleteBookmark(bookmarkId: string) {
+  try {
+    const { data, error } = await supabase.from("user_bookmarks").delete().eq("id", bookmarkId)
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function getUserNotes(userId: string, bookId?: string) {
+  try {
+    let query = supabase.from("user_notes").select("*").eq("user_id", userId)
+
+    if (bookId) {
+      query = query.eq("book_id", bookId)
+    }
+
+    const { data, error } = await query.order("updated_at", { ascending: false })
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function createNote(userId: string, bookId: string, chapterId: string, note: Partial<NoteData>) {
+  try {
+    const { data, error } = await supabase.from("user_notes").insert({
+      user_id: userId,
+      book_id: bookId,
+      chapter_id: chapterId,
+      ...note,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function updateNote(noteId: string, note: Partial<NoteData>) {
+  try {
+    const { data, error } = await supabase
+      .from("user_notes")
+      .update({
+        ...note,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", noteId)
+
+    return { data, error }
+  } catch (error) {
+    return { data: null, error }
+  }
+}
+
+export async function deleteNote(noteId: string) {
+  try {
+    const { data, error } = await supabase.from("user_notes").delete().eq("id", noteId)
 
     return { data, error }
   } catch (error) {
