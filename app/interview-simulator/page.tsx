@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { toast } from "sonner"
 import {
   Play,
   Pause,
@@ -20,6 +22,8 @@ import {
   CheckCircle,
   AlertCircle,
   RotateCcw,
+  Volume2,
+  VolumeX,
 } from "lucide-react"
 
 interface Question {
@@ -42,6 +46,7 @@ interface InterviewSession {
     response: string
     timeSpent: number
     score?: number
+    recordingMethod: "text" | "voice"
   }>
   startTime: Date
   status: "setup" | "active" | "paused" | "completed"
@@ -96,7 +101,84 @@ export default function InterviewSimulatorPage() {
   const [isRecording, setIsRecording] = useState(false)
   const [selectedPosition, setSelectedPosition] = useState("")
   const [selectedCompany, setSelectedCompany] = useState("")
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+  const [transcript, setTranscript] = useState("")
+  const [recordingMethod, setRecordingMethod] = useState<"text" | "voice">("text")
+
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const recognitionRef = useRef<any>(null)
+  const finalTranscriptRef = useRef("")
+
+  // Check for speech recognition support
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+      if (SpeechRecognition) {
+        setSpeechSupported(true)
+        recognitionRef.current = new SpeechRecognition()
+
+        // Configure speech recognition
+        recognitionRef.current.continuous = true
+        recognitionRef.current.interimResults = true
+        recognitionRef.current.lang = "es-ES"
+
+        recognitionRef.current.onstart = () => {
+          setIsListening(true)
+          toast.success("Grabación iniciada - Habla ahora")
+        }
+
+        recognitionRef.current.onend = () => {
+          setIsListening(false)
+          setIsRecording(false)
+        }
+
+        recognitionRef.current.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error)
+          setIsListening(false)
+          setIsRecording(false)
+
+          let errorMessage = "Error en el reconocimiento de voz"
+          switch (event.error) {
+            case "no-speech":
+              errorMessage = "No se detectó voz. Intenta hablar más claro."
+              break
+            case "audio-capture":
+              errorMessage = "No se pudo acceder al micrófono."
+              break
+            case "not-allowed":
+              errorMessage = "Permiso de micrófono denegado."
+              break
+            case "network":
+              errorMessage = "Error de conexión. Verifica tu internet."
+              break
+          }
+
+          toast.error(errorMessage)
+        }
+
+        recognitionRef.current.onresult = (event: any) => {
+          let interimTranscript = ""
+          let finalTranscript = ""
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript + " "
+            } else {
+              interimTranscript += transcript
+            }
+          }
+
+          finalTranscriptRef.current += finalTranscript
+          setTranscript(finalTranscriptRef.current + interimTranscript)
+
+          // Update the response textarea with the transcribed text
+          setCurrentResponse(finalTranscriptRef.current + interimTranscript)
+        }
+      }
+    }
+  }, [])
 
   // Timer effect
   useEffect(() => {
@@ -143,6 +225,10 @@ export default function InterviewSimulatorPage() {
 
   const handleTimeUp = () => {
     if (session && session.status === "active") {
+      // Stop recording if active
+      if (isRecording && recognitionRef.current) {
+        recognitionRef.current.stop()
+      }
       submitCurrentResponse()
     }
   }
@@ -158,6 +244,7 @@ export default function InterviewSimulatorPage() {
       response: currentResponse,
       timeSpent,
       score: Math.floor(Math.random() * 30) + 70, // Mock score 70-100
+      recordingMethod,
     }
 
     const updatedSession = {
@@ -171,6 +258,9 @@ export default function InterviewSimulatorPage() {
       updatedSession.currentQuestionIndex = nextIndex
       setSession(updatedSession)
       setCurrentResponse("")
+      setTranscript("")
+      finalTranscriptRef.current = ""
+      setRecordingMethod("text")
       setTimeRemaining(session.questions[nextIndex].timeLimit)
     } else {
       // Interview completed
@@ -183,6 +273,10 @@ export default function InterviewSimulatorPage() {
   const pauseInterview = () => {
     if (session) {
       setSession({ ...session, status: "paused" })
+      // Stop recording if active
+      if (isRecording && recognitionRef.current) {
+        recognitionRef.current.stop()
+      }
     }
   }
 
@@ -193,11 +287,44 @@ export default function InterviewSimulatorPage() {
   }
 
   const restartInterview = () => {
+    // Stop any active recording
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop()
+    }
+
     setSession(null)
     setCurrentResponse("")
+    setTranscript("")
+    finalTranscriptRef.current = ""
     setTimeRemaining(0)
     setSelectedPosition("")
     setSelectedCompany("")
+    setRecordingMethod("text")
+  }
+
+  const toggleRecording = () => {
+    if (!speechSupported) {
+      toast.error("Tu navegador no soporta reconocimiento de voz")
+      return
+    }
+
+    if (isRecording) {
+      // Stop recording
+      if (recognitionRef.current) {
+        recognitionRef.current.stop()
+      }
+      setIsRecording(false)
+      toast.info("Grabación detenida")
+    } else {
+      // Start recording
+      if (recognitionRef.current) {
+        finalTranscriptRef.current = currentResponse
+        setTranscript(currentResponse)
+        setRecordingMethod("voice")
+        recognitionRef.current.start()
+        setIsRecording(true)
+      }
+    }
   }
 
   const formatTime = (seconds: number) => {
@@ -226,6 +353,16 @@ export default function InterviewSimulatorPage() {
           <h1 className="text-3xl font-bold mb-2">Simulador de Entrevistas</h1>
           <p className="text-muted-foreground">Practica entrevistas de trabajo con IA y recibe feedback detallado</p>
         </div>
+
+        {!speechSupported && (
+          <Alert className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Tu navegador no soporta reconocimiento de voz. Podrás usar el simulador solo con texto. Para mejor
+              experiencia, usa Chrome, Edge o Safari.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <Card>
           <CardHeader>
@@ -294,6 +431,23 @@ export default function InterviewSimulatorPage() {
               </div>
             </div>
 
+            <div className="flex items-center gap-2 p-4 bg-blue-50 rounded-lg">
+              <Mic className="w-5 h-5 text-blue-600" />
+              <div className="flex-1">
+                <div className="font-medium text-blue-900">Respuestas por Voz</div>
+                <div className="text-sm text-blue-700">
+                  {speechSupported
+                    ? "Podrás responder usando tu voz durante la entrevista"
+                    : "Reconocimiento de voz no disponible en tu navegador"}
+                </div>
+              </div>
+              {speechSupported ? (
+                <Volume2 className="w-5 h-5 text-green-600" />
+              ) : (
+                <VolumeX className="w-5 h-5 text-red-600" />
+              )}
+            </div>
+
             <Button
               onClick={startInterview}
               disabled={!selectedPosition || !selectedCompany}
@@ -312,6 +466,7 @@ export default function InterviewSimulatorPage() {
   if (session.status === "completed") {
     const averageScore = session.responses.reduce((acc, r) => acc + (r.score || 0), 0) / session.responses.length
     const totalTime = session.responses.reduce((acc, r) => acc + r.timeSpent, 0)
+    const voiceResponses = session.responses.filter((r) => r.recordingMethod === "voice").length
 
     return (
       <div className="container mx-auto p-6 max-w-4xl">
@@ -328,7 +483,7 @@ export default function InterviewSimulatorPage() {
           </TabsList>
 
           <TabsContent value="summary" className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-4 gap-6">
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
@@ -358,6 +513,16 @@ export default function InterviewSimulatorPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <Mic className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+                    <div className="text-2xl font-bold">{voiceResponses}</div>
+                    <div className="text-sm text-muted-foreground">Respuestas por Voz</div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             <Card>
@@ -370,7 +535,15 @@ export default function InterviewSimulatorPage() {
                   return (
                     <div key={question.id} className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="font-medium">{question.category}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{question.category}</span>
+                          {response?.recordingMethod === "voice" && (
+                            <Badge variant="secondary" className="text-xs">
+                              <Mic className="w-3 h-3 mr-1" />
+                              Voz
+                            </Badge>
+                          )}
+                        </div>
                         <span className="text-sm text-muted-foreground">{response?.score || 0}%</span>
                       </div>
                       <Progress value={response?.score || 0} className="h-2" />
@@ -389,7 +562,15 @@ export default function InterviewSimulatorPage() {
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">{question.category}</CardTitle>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          {question.category}
+                          {response.recordingMethod === "voice" && (
+                            <Badge variant="secondary">
+                              <Mic className="w-3 h-3 mr-1" />
+                              Respuesta por Voz
+                            </Badge>
+                          )}
+                        </CardTitle>
                         <CardDescription>{question.question}</CardDescription>
                       </div>
                       <div className="text-right">
@@ -433,6 +614,12 @@ export default function InterviewSimulatorPage() {
                     <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
                     <span>Ejemplos concretos y relevantes</span>
                   </li>
+                  {voiceResponses > 0 && (
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
+                      <span>Excelente uso de respuestas por voz - más natural y fluido</span>
+                    </li>
+                  )}
                 </ul>
               </CardContent>
             </Card>
@@ -458,6 +645,12 @@ export default function InterviewSimulatorPage() {
                     <AlertCircle className="w-4 h-4 text-orange-500 mt-1" />
                     <span>Mejorar la conexión entre experiencias y el rol</span>
                   </li>
+                  {voiceResponses === 0 && speechSupported && (
+                    <li className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-orange-500 mt-1" />
+                      <span>Considera usar respuestas por voz para una experiencia más realista</span>
+                    </li>
+                  )}
                 </ul>
               </CardContent>
             </Card>
@@ -542,24 +735,61 @@ export default function InterviewSimulatorPage() {
       {/* Response Area */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Tu Respuesta</CardTitle>
+          <CardTitle className="flex items-center justify-between">
+            <span>Tu Respuesta</span>
+            {isListening && (
+              <Badge variant="secondary" className="animate-pulse">
+                <Mic className="w-3 h-3 mr-1" />
+                Escuchando...
+              </Badge>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
-            placeholder="Escribe tu respuesta aquí..."
+            placeholder={
+              isListening
+                ? "Habla ahora... Tu voz se está transcribiendo automáticamente."
+                : "Escribe tu respuesta aquí o usa el micrófono para responder por voz..."
+            }
             value={currentResponse}
             onChange={(e) => setCurrentResponse(e.target.value)}
             rows={8}
             className="resize-none"
+            disabled={isListening}
           />
+
+          {isListening && (
+            <div className="p-3 bg-blue-50 rounded-lg border-2 border-blue-200">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-blue-900">Grabando...</span>
+              </div>
+              <div className="text-sm text-blue-700">
+                Habla claramente hacia tu micrófono. Tu respuesta se transcribirá automáticamente.
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => setIsRecording(!isRecording)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleRecording}
+                disabled={!speechSupported || session.status !== "active"}
+                className={isRecording ? "bg-red-50 border-red-200 text-red-700" : ""}
+              >
                 {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                {isRecording ? "Detener" : "Grabar"}
+                {isRecording ? "Detener Grabación" : "Grabar Respuesta"}
               </Button>
-              <span className="text-sm text-muted-foreground">{currentResponse.length} caracteres</span>
+
+              {!speechSupported && <span className="text-xs text-muted-foreground">Voz no disponible</span>}
+
+              <span className="text-sm text-muted-foreground">
+                {currentResponse.length} caracteres
+                {recordingMethod === "voice" && " (por voz)"}
+              </span>
             </div>
 
             <div className="flex gap-2">
@@ -575,7 +805,7 @@ export default function InterviewSimulatorPage() {
                 </Button>
               )}
 
-              <Button onClick={submitCurrentResponse}>
+              <Button onClick={submitCurrentResponse} disabled={isRecording}>
                 {session.currentQuestionIndex < session.questions.length - 1 ? "Siguiente" : "Finalizar"}
               </Button>
             </div>

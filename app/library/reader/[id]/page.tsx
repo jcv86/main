@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   ArrowLeft,
   ChevronLeft,
@@ -41,6 +42,10 @@ import {
   SkipForward,
   SkipBack,
   Headphones,
+  Highlighter,
+  MessageSquare,
+  Eye,
+  EyeOff,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -77,6 +82,20 @@ interface Note {
   page_number: number
 }
 
+interface Highlight {
+  id: string
+  chapter_id: string
+  chapter_title: string
+  selected_text: string
+  start_position: number
+  end_position: number
+  color: string
+  annotation?: string
+  created_at: string
+  updated_at: string
+  page_number: number
+}
+
 interface ReadingProgress {
   current_chapter: number
   current_position: number
@@ -85,6 +104,7 @@ interface ReadingProgress {
   last_read: string
   bookmarks_count: number
   notes_count: number
+  highlights_count: number
 }
 
 interface Book {
@@ -106,6 +126,15 @@ interface TTSSettings {
   enabled: boolean
 }
 
+const HIGHLIGHT_COLORS = [
+  { name: "Amarillo", value: "#fef08a", class: "bg-yellow-200" },
+  { name: "Verde", value: "#bbf7d0", class: "bg-green-200" },
+  { name: "Azul", value: "#bfdbfe", class: "bg-blue-200" },
+  { name: "Rosa", value: "#fce7f3", class: "bg-pink-200" },
+  { name: "Púrpura", value: "#e9d5ff", class: "bg-purple-200" },
+  { name: "Naranja", value: "#fed7aa", class: "bg-orange-200" },
+]
+
 export default function BookReaderPage() {
   const params = useParams()
   const router = useRouter()
@@ -121,6 +150,7 @@ export default function BookReaderPage() {
   // Bookmarks and notes state
   const [bookmarks, setBookmarks] = useState<Bookmarks[]>([])
   const [notes, setNotes] = useState<Note[]>([])
+  const [highlights, setHighlights] = useState<Highlight[]>([])
   const [selectedText, setSelectedText] = useState("")
   const [selectionRange, setSelectionRange] = useState<{ start: number; end: number } | null>(null)
 
@@ -128,11 +158,17 @@ export default function BookReaderPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false)
   const [showNoteDialog, setShowNoteDialog] = useState(false)
+  const [showHighlightDialog, setShowHighlightDialog] = useState(false)
+  const [showAnnotationDialog, setShowAnnotationDialog] = useState(false)
   const [showTTSSettings, setShowTTSSettings] = useState(false)
   const [editingNote, setEditingNote] = useState<Note | null>(null)
+  const [editingHighlight, setEditingHighlight] = useState<Highlight | null>(null)
   const [newNoteTitle, setNewNoteTitle] = useState("")
   const [newNoteContent, setNewNoteContent] = useState("")
   const [bookmarkNote, setBookmarkNote] = useState("")
+  const [selectedHighlightColor, setSelectedHighlightColor] = useState(HIGHLIGHT_COLORS[0].value)
+  const [highlightAnnotation, setHighlightAnnotation] = useState("")
+  const [showHighlights, setShowHighlights] = useState(true)
 
   // Reading settings
   const [fontSize, setFontSize] = useState(16)
@@ -555,6 +591,7 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
         last_read: "2024-01-15T10:30:00Z",
         bookmarks_count: 8,
         notes_count: 12,
+        highlights_count: 15,
       }
 
       const mockBookmarks: Bookmarks[] = [
@@ -567,17 +604,6 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
           note: "Concepto clave - los hábitos se acumulan con el tiempo",
           created_at: "2024-01-10T14:20:00Z",
           page_number: 3,
-        },
-        {
-          id: "2",
-          chapter_id: "1",
-          chapter_title: "Los fundamentos",
-          position: 890,
-          selected_text:
-            "Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse.",
-          note: "Excelente metáfora sobre los puntos de inflexión",
-          created_at: "2024-01-11T09:15:00Z",
-          page_number: 8,
         },
       ]
 
@@ -597,11 +623,54 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
         },
       ]
 
+      const mockHighlights: Highlight[] = [
+        {
+          id: "1",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
+          start_position: 0,
+          end_position: 54,
+          color: "#fef08a",
+          annotation: "Concepto fundamental del libro",
+          created_at: "2024-01-10T14:20:00Z",
+          updated_at: "2024-01-10T14:20:00Z",
+          page_number: 3,
+        },
+        {
+          id: "2",
+          chapter_id: "1",
+          chapter_title: "Los fundamentos",
+          selected_text:
+            "Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse.",
+          start_position: 890,
+          end_position: 1030,
+          color: "#bbf7d0",
+          annotation: "Excelente metáfora sobre los puntos de inflexión",
+          created_at: "2024-01-11T09:15:00Z",
+          updated_at: "2024-01-11T09:15:00Z",
+          page_number: 8,
+        },
+        {
+          id: "3",
+          chapter_id: "2",
+          chapter_title: "Cómo tus hábitos moldean tu identidad",
+          selected_text: "El objetivo no es leer un libro, el objetivo es convertirse en lector",
+          start_position: 420,
+          end_position: 485,
+          color: "#bfdbfe",
+          created_at: "2024-01-12T16:45:00Z",
+          updated_at: "2024-01-12T16:45:00Z",
+          page_number: 22,
+        },
+      ]
+
       setBook(mockBook)
       setChapters(mockChapters)
       setReadingProgress(mockProgress)
       setBookmarks(mockBookmarks)
       setNotes(mockNotes)
+      setHighlights(mockHighlights)
     } catch (error) {
       console.error("Error loading book data:", error)
       toast({
@@ -791,6 +860,19 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
     }
   }
 
+  const jumpToHighlight = (highlight: Highlight) => {
+    const chapterIndex = chapters.findIndex((chapter) => chapter.id === highlight.chapter_id)
+    if (chapterIndex !== -1) {
+      setCurrentChapter(chapterIndex)
+      setSidebarOpen(false)
+
+      toast({
+        title: "Navegando al resaltado",
+        description: `Capítulo: ${highlight.chapter_title}`,
+      })
+    }
+  }
+
   const nextChapter = () => {
     if (currentChapter < chapters.length - 1) {
       setCurrentChapter(currentChapter + 1)
@@ -803,6 +885,85 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
       setCurrentChapter(currentChapter - 1)
       stopTTS()
     }
+  }
+
+  const renderHighlightedText = (text: string) => {
+    if (!showHighlights) return text
+
+    const chapterHighlights = highlights.filter((h) => h.chapter_id === chapters[currentChapter]?.id)
+    if (chapterHighlights.length === 0) return text
+
+    // Sort highlights by start position
+    const sortedHighlights = [...chapterHighlights].sort((a, b) => a.start_position - b.start_position)
+
+    const result = []
+    let lastIndex = 0
+
+    sortedHighlights.forEach((highlight) => {
+      // Add text before highlight
+      if (highlight.start_position > lastIndex) {
+        result.push(text.slice(lastIndex, highlight.start_position))
+      }
+
+      // Add highlighted text
+      const highlightedText = text.slice(highlight.start_position, highlight.end_position)
+      const colorClass = HIGHLIGHT_COLORS.find((c) => c.value === highlight.color)?.class || "bg-yellow-200"
+
+      result.push(
+        <Popover key={highlight.id}>
+          <PopoverTrigger asChild>
+            <span
+              className={`${colorClass} cursor-pointer rounded px-1 hover:opacity-80 transition-opacity`}
+              style={{ backgroundColor: highlight.color }}
+            >
+              {highlightedText}
+            </span>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="space-y-3">
+              <div>
+                <h4 className="font-medium text-sm mb-1">Texto resaltado</h4>
+                <p className="text-xs text-gray-600 italic">"{highlight.selected_text}"</p>
+              </div>
+              {highlight.annotation && (
+                <div>
+                  <h4 className="font-medium text-sm mb-1">Anotación</h4>
+                  <p className="text-xs text-gray-700">{highlight.annotation}</p>
+                </div>
+              )}
+              <div className="flex items-center justify-between text-xs text-gray-500">
+                <span>{formatDate(highlight.created_at)}</span>
+                <div className="flex space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setEditingHighlight(highlight)
+                      setHighlightAnnotation(highlight.annotation || "")
+                      setShowAnnotationDialog(true)
+                    }}
+                  >
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => deleteHighlight(highlight.id)}>
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>,
+      )
+
+      lastIndex = highlight.end_position
+    })
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      result.push(text.slice(lastIndex))
+    }
+
+    return result
   }
 
   const formatTime = (minutes: number) => {
@@ -818,6 +979,77 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+    })
+  }
+
+  const createHighlight = async () => {
+    if (!selectedText) {
+      toast({
+        title: "Error",
+        description: "Selecciona texto para crear un resaltado",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const newHighlight: Highlight = {
+      id: Date.now().toString(),
+      chapter_id: chapters[currentChapter].id,
+      chapter_title: chapters[currentChapter].title,
+      selected_text: selectedText,
+      start_position: selectionRange?.start || 0,
+      end_position: selectionRange?.end || 0,
+      color: selectedHighlightColor,
+      annotation: highlightAnnotation,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
+    }
+
+    setHighlights((prev) => [...prev, newHighlight])
+    setReadingProgress((prev) => (prev ? { ...prev, highlights_count: prev.highlights_count + 1 } : prev))
+
+    setShowHighlightDialog(false)
+    setSelectedText("")
+    setHighlightAnnotation("")
+    setSelectionRange(null)
+
+    toast({
+      title: "Resaltado creado",
+      description: "El resaltado se ha guardado exitosamente",
+    })
+  }
+
+  const updateHighlightAnnotation = async () => {
+    if (!editingHighlight) return
+
+    const updatedHighlight: Highlight = {
+      ...editingHighlight,
+      annotation: highlightAnnotation,
+      updated_at: new Date().toISOString(),
+    }
+
+    setHighlights((prev) =>
+      prev.map((highlight) => (highlight.id === editingHighlight.id ? updatedHighlight : highlight)),
+    )
+
+    setEditingHighlight(null)
+    setHighlightAnnotation("")
+    setShowAnnotationDialog(false)
+
+    toast({
+      title: "Anotación actualizada",
+      description: "La anotación se ha guardado exitosamente",
+    })
+  }
+
+  const deleteHighlight = (highlightId: string) => {
+    setHighlights((prev) => prev.filter((highlight) => highlight.id !== highlightId))
+    setReadingProgress((prev) => (prev ? { ...prev, highlights_count: prev.highlights_count - 1 } : prev))
+
+    toast({
+      title: "Resaltado eliminado",
+      description: "El resaltado se ha eliminado exitosamente",
     })
   }
 
@@ -905,6 +1137,18 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
 
             <Separator orientation="vertical" className="h-6" />
 
+            {/* Highlight Controls */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowHighlights(!showHighlights)}
+              title={showHighlights ? "Ocultar resaltados" : "Mostrar resaltados"}
+            >
+              {showHighlights ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+            </Button>
+
+            <Separator orientation="vertical" className="h-6" />
+
             {/* Reading Controls */}
             <Button variant="ghost" size="sm" onClick={() => setFontSize(Math.max(12, fontSize - 2))}>
               <Minus className="h-4 w-4" />
@@ -927,12 +1171,13 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle>Navegación y Notas</SheetTitle>
-                  <SheetDescription>Capítulos, marcadores y notas del libro</SheetDescription>
+                  <SheetDescription>Capítulos, marcadores, notas y resaltados</SheetDescription>
                 </SheetHeader>
 
                 <Tabs defaultValue="chapters" className="mt-6">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="chapters">Capítulos</TabsTrigger>
+                    <TabsTrigger value="highlights">Resaltados</TabsTrigger>
                     <TabsTrigger value="bookmarks">Marcadores</TabsTrigger>
                     <TabsTrigger value="notes">Notas</TabsTrigger>
                   </TabsList>
@@ -974,6 +1219,59 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
                             </div>
                           </Card>
                         ))}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="highlights" className="mt-4">
+                    <ScrollArea className="h-[500px]">
+                      <div className="space-y-3">
+                        {highlights.map((highlight) => (
+                          <Card key={highlight.id} className="p-3">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-1">
+                                  <div className="w-3 h-3 rounded" style={{ backgroundColor: highlight.color }}></div>
+                                  <p className="text-sm font-medium text-blue-600">{highlight.chapter_title}</p>
+                                </div>
+                                <p className="text-xs text-gray-600 italic mb-2">"{highlight.selected_text}"</p>
+                                {highlight.annotation && (
+                                  <p className="text-xs text-gray-700 mb-2">{highlight.annotation}</p>
+                                )}
+                                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                  <Calendar className="h-3 w-3" />
+                                  <span>{formatDate(highlight.created_at)}</span>
+                                  <MapPin className="h-3 w-3 ml-2" />
+                                  <span>Pág. {highlight.page_number}</span>
+                                </div>
+                              </div>
+                              <div className="flex space-x-1 ml-2">
+                                <Button variant="ghost" size="sm" onClick={() => jumpToHighlight(highlight)}>
+                                  <Target className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEditingHighlight(highlight)
+                                    setHighlightAnnotation(highlight.annotation || "")
+                                    setShowAnnotationDialog(true)
+                                  }}
+                                >
+                                  <MessageSquare className="h-3 w-3" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteHighlight(highlight.id)}>
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                        {highlights.length === 0 && (
+                          <p className="text-center text-gray-500 text-sm py-8">
+                            No hay resaltados aún. Selecciona texto y crea tu primer resaltado.
+                          </p>
+                        )}
                       </div>
                     </ScrollArea>
                   </TabsContent>
@@ -1116,6 +1414,24 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
               size="sm"
               onClick={() => {
                 if (selectedText) {
+                  setShowHighlightDialog(true)
+                } else {
+                  toast({
+                    title: "Selecciona texto",
+                    description: "Selecciona texto para crear un resaltado",
+                    variant: "destructive",
+                  })
+                }
+              }}
+            >
+              <Highlighter className="h-4 w-4 mr-2" />
+              Resaltar
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if (selectedText) {
                   setShowBookmarkDialog(true)
                 } else {
                   toast({
@@ -1177,7 +1493,7 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
             >
               {chapters[currentChapter].content.split("\n\n").map((paragraph, index) => (
                 <p key={index} className="mb-4">
-                  {paragraph}
+                  {renderHighlightedText(paragraph)}
                 </p>
               ))}
             </div>
@@ -1296,6 +1612,104 @@ Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es u
                 </p>
               </div>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Highlight Dialog */}
+      <Dialog open={showHighlightDialog} onOpenChange={setShowHighlightDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Crear Resaltado</DialogTitle>
+            <DialogDescription>Resalta este texto para referencia futura</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Texto seleccionado:</label>
+              <div className="p-3 bg-gray-50 rounded-lg border">
+                <p className="text-sm italic text-gray-600">"{selectedText}"</p>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Color del resaltado:</label>
+              <div className="flex space-x-2">
+                {HIGHLIGHT_COLORS.map((color) => (
+                  <button
+                    key={color.value}
+                    className={`w-8 h-8 rounded-full border-2 ${
+                      selectedHighlightColor === color.value ? "border-gray-800" : "border-gray-300"
+                    }`}
+                    style={{ backgroundColor: color.value }}
+                    onClick={() => setSelectedHighlightColor(color.value)}
+                    title={color.name}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Anotación (opcional):</label>
+              <Textarea
+                placeholder="Añade una anotación personal sobre este resaltado..."
+                value={highlightAnnotation}
+                onChange={(e) => setHighlightAnnotation(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setShowHighlightDialog(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={createHighlight}>Crear Resaltado</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Annotation Dialog */}
+      <Dialog open={showAnnotationDialog} onOpenChange={setShowAnnotationDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Anotación</DialogTitle>
+            <DialogDescription>Modifica la anotación de este resaltado</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {editingHighlight && (
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Texto resaltado:</label>
+                <div className="p-3 bg-gray-50 rounded-lg border">
+                  <p className="text-sm italic text-gray-600">"{editingHighlight.selected_text}"</p>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Anotación:</label>
+              <Textarea
+                placeholder="Añade una anotación personal sobre este resaltado..."
+                value={highlightAnnotation}
+                onChange={(e) => setHighlightAnnotation(e.target.value)}
+                rows={4}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowAnnotationDialog(false)
+                  setEditingHighlight(null)
+                  setHighlightAnnotation("")
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button onClick={updateHighlightAnnotation}>Guardar Anotación</Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
