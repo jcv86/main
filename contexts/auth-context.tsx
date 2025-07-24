@@ -3,10 +3,13 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
+import { createClient } from "@/lib/supabase"
 
 interface AuthContextType {
   user: User | null
   loading: boolean
+  isAdmin: boolean
+  userRole: "admin" | "moderator" | "user"
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signUp: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => Promise<void>
@@ -15,53 +18,135 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Demo user for demo mode
-const DEMO_USER = {
-  id: "00000000-0000-0000-0000-000000000000",
-  email: "demo@example.com",
-  user_metadata: {
-    full_name: "Usuario Demo",
-    avatar_url: "/placeholder-user.jpg",
-  },
-  app_metadata: {},
-  aud: "authenticated",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-} as User
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [userRole, setUserRole] = useState<"admin" | "moderator" | "user">("user")
+
+  const supabase = createClient()
 
   useEffect(() => {
-    // Always use demo mode for now to avoid Supabase initialization issues
-    setUser(DEMO_USER)
-    setLoading(false)
+    // Check for existing session
+    const checkSession = async () => {
+      try {
+        const storedUser = localStorage.getItem("demo-user")
+        if (storedUser) {
+          const userData = JSON.parse(storedUser)
+          setUser(userData)
+          await checkUserRole(userData.id)
+        }
+      } catch (error) {
+        console.error("Error checking session:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkSession()
   }, [])
 
+  const checkUserRole = async (userId: string) => {
+    try {
+      // Check if user is admin (travis@nuanu.com)
+      const adminStatus = userId === "11111111-1111-1111-1111-111111111111"
+      const role = adminStatus ? "admin" : "user"
+
+      setIsAdmin(adminStatus)
+      setUserRole(role)
+    } catch (error) {
+      console.error("Error checking user role:", error)
+      setIsAdmin(false)
+      setUserRole("user")
+    }
+  }
+
+  const setCookie = (name: string, value: string, days = 1) => {
+    const expires = new Date()
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`
+  }
+
   const signIn = async (email: string, password: string) => {
-    // Always succeed in demo mode
-    setUser(DEMO_USER)
-    return { error: null }
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        return { error }
+      }
+
+      if (data.user) {
+        setUser(data.user)
+        localStorage.setItem("demo-user", JSON.stringify(data.user))
+
+        // Set cookie for middleware
+        setCookie("demo-user", JSON.stringify(data.user), 7)
+
+        await checkUserRole(data.user.id)
+      }
+
+      return { error: null }
+    } catch (error) {
+      return { error }
+    }
   }
 
   const signUp = async (email: string, password: string) => {
-    // Always succeed in demo mode
-    setUser(DEMO_USER)
-    return { error: null }
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) {
+        return { error }
+      }
+
+      if (data.user) {
+        setUser(data.user)
+        localStorage.setItem("demo-user", JSON.stringify(data.user))
+        setCookie("demo-user", JSON.stringify(data.user), 7)
+        await checkUserRole(data.user.id)
+      }
+
+      return { error: null }
+    } catch (error) {
+      return { error }
+    }
   }
 
   const signOut = async () => {
-    setUser(null)
+    try {
+      await supabase.auth.signOut()
+      setUser(null)
+      setIsAdmin(false)
+      setUserRole("user")
+      localStorage.removeItem("demo-user")
+
+      // Clear cookie
+      document.cookie = "demo-user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
   }
 
   const resetPassword = async (email: string) => {
-    return { error: null }
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email)
+      return { error }
+    } catch (error) {
+      return { error }
+    }
   }
 
   const value = {
     user,
     loading,
+    isAdmin,
+    userRole,
     signIn,
     signUp,
     signOut,

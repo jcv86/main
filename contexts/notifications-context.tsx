@@ -8,17 +8,17 @@ interface Notification {
   title: string
   message: string
   type: "info" | "success" | "warning" | "error"
+  timestamp: Date
   read: boolean
-  createdAt: Date
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
   unreadCount: number
-  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
+  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
-  removeNotification: (id: string) => void
+  clearNotifications: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
@@ -27,46 +27,44 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
-      title: "¡Bienvenido a DTC!",
-      message: "Completa tu perfil para obtener recomendaciones personalizadas",
+      title: "Welcome!",
+      message: "Welcome to the Career Development Platform",
       type: "info",
+      timestamp: new Date(),
       read: false,
-      createdAt: new Date(),
     },
     {
       id: "2",
-      title: "Nueva oportunidad laboral",
-      message: "Encontramos 3 trabajos que coinciden con tu perfil en Santiago",
+      title: "Profile Updated",
+      message: "Your profile has been successfully updated",
       type: "success",
+      timestamp: new Date(Date.now() - 1000 * 60 * 30),
       read: false,
-      createdAt: new Date(Date.now() - 3600000), // 1 hour ago
     },
   ])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
-  const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
+  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
     const newNotification: Notification = {
       ...notification,
       id: Date.now().toString(),
+      timestamp: new Date(),
       read: false,
-      createdAt: new Date(),
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
   }
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
   }
 
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
+  const clearNotifications = () => {
+    setNotifications([])
   }
 
   return (
@@ -77,7 +75,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         addNotification,
         markAsRead,
         markAllAsRead,
-        removeNotification,
+        clearNotifications,
       }}
     >
       {children}

@@ -1,71 +1,46 @@
-// Always run in demo mode to avoid initialization issues
-export function isDemoMode(): boolean {
-  return true
+import { createClient as createSupabaseClient } from "@supabase/supabase-js"
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn("Missing Supabase environment variables. Some features may not work.")
 }
 
-// Create a mock Supabase client for demo mode
-export const supabase = null
+export function createClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Return a mock client that will always fail gracefully
+    return {
+      from: () => ({
+        select: () => ({ error: { message: "Supabase not configured" } }),
+        insert: () => ({ error: { message: "Supabase not configured" } }),
+        update: () => ({ error: { message: "Supabase not configured" } }),
+        delete: () => ({ error: { message: "Supabase not configured" } }),
+        eq: function () {
+          return this
+        },
+        single: function () {
+          return this
+        },
+        limit: function () {
+          return this
+        },
+        order: function () {
+          return this
+        },
+        or: function () {
+          return this
+        },
+      }),
+      rpc: () => ({ error: { message: "Supabase not configured" } }),
+      auth: {
+        getUser: () => ({ data: { user: null }, error: null }),
+        signInWithPassword: () => ({ error: { message: "Supabase not configured" } }),
+        signUp: () => ({ error: { message: "Supabase not configured" } }),
+        signOut: () => ({ error: null }),
+      },
+    } as any
+  }
 
-// Demo mode indicator
-export const DEMO_MODE = true
-
-console.log("Supabase client initialized: DEMO MODE")
-
-// Mock data for Chilean market (fallback when Supabase is not available)
-const mockChileanData = {
-  conversations: [
-    {
-      id: "1",
-      session_id: "session-1",
-      user_id: "user-1",
-      role: "assistant",
-      content:
-        "¡Hola! Soy tu coach de carrera especializado en el mercado laboral chileno. Estoy aquí para ayudarte a navegar tu desarrollo profesional en Chile.\n\n¿En qué puedo ayudarte hoy? Puedo asesorarte sobre:\n🎯 Planificación de carrera en el mercado chileno\n💼 Búsqueda de empleo en Santiago y regiones\n💰 Negociación salarial según estándares locales\n📈 Desarrollo de habilidades demandadas en Chile\n🎤 Preparación para entrevistas\n🚀 Transición a roles de liderazgo",
-      message_type: "text",
-      created_at: new Date().toISOString(),
-    },
-  ],
-  sessions: [
-    {
-      id: "session-1",
-      user_id: "user-1",
-      session_title: "Coaching de Carrera - Mercado Chileno",
-      session_summary: "Sesión enfocada en oportunidades profesionales en Chile",
-      total_messages: 1,
-      last_activity: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-    },
-  ],
-  jobs: [
-    {
-      id: "1",
-      title: "Desarrollador Full Stack Senior",
-      company: "NotCo",
-      location: "Santiago, Chile",
-      salary_min: 2500000,
-      salary_max: 4000000,
-      currency: "CLP",
-      type: "full-time",
-      remote: true,
-      description: "Únete al unicornio chileno que está revolucionando la industria alimentaria",
-      requirements: ["React", "Node.js", "TypeScript", "AWS", "Inglés intermedio"],
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "2",
-      title: "Tech Lead Frontend",
-      company: "Fintual",
-      location: "Santiago, Chile",
-      salary_min: 3500000,
-      salary_max: 5500000,
-      currency: "CLP",
-      type: "full-time",
-      remote: false,
-      description: "Lidera el equipo frontend de la fintech más innovadora de Chile",
-      requirements: ["React", "TypeScript", "Leadership", "Fintech experience", "Inglés avanzado"],
-      created_at: new Date().toISOString(),
-    },
-  ],
+  return createSupabaseClient(supabaseUrl, supabaseAnonKey)
 }
-
-export { mockChileanData }
