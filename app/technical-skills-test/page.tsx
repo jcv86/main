@@ -1,9 +1,8 @@
 "use client"
 
+import { DialogTrigger } from "@/components/ui/dialog"
 import React from "react"
-
 import type { FC } from "react"
-
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -15,14 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Slider } from "@/components/ui/slider"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -61,6 +53,11 @@ import {
   Server,
   Palette,
   Shield,
+  Settings,
+  Volume2,
+  Keyboard,
+  CheckCircle,
+  Trash2,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -76,6 +73,7 @@ const SKILL_CATEGORIES = {
 
 // Question types
 type QuestionType = "scale" | "open" | "multiple" | "scenario" | "ranking" | "checkbox" | "slider" | "binary" | "code"
+type InputMode = "mixed" | "voice-complete"
 
 interface Question {
   id: number
@@ -691,7 +689,7 @@ const TECHNICAL_QUESTIONS: Question[] = [
   },
 ]
 
-// Enhanced Speech Recognition Hook (same as personality test)
+// Enhanced Speech Recognition Hook
 const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
@@ -703,6 +701,7 @@ const useSpeechRecognition = () => {
   const recognitionRef = useRef<any>(null)
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
   const restartTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const initTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Initialize speech recognition
   useEffect(() => {
@@ -711,125 +710,6 @@ const useSpeechRecognition = () => {
 
       if (SpeechRecognition) {
         setIsSupported(true)
-        recognitionRef.current = new SpeechRecognition()
-
-        // Enhanced configuration for Spanish
-        recognitionRef.current.continuous = true
-        recognitionRef.current.interimResults = true
-        recognitionRef.current.lang = "es-ES" // Primary Spanish
-        recognitionRef.current.maxAlternatives = 3 // More alternatives for better accuracy
-
-        // Additional Spanish variants for better recognition
-        const spanishVariants = ["es-ES", "es-MX", "es-AR", "es-CO", "es-CL"]
-        let currentVariantIndex = 0
-
-        // Handle results with enhanced processing
-        recognitionRef.current.onresult = (event: any) => {
-          let finalTranscript = ""
-          let interimTranscript = ""
-
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const result = event.results[i]
-            const transcript = result[0].transcript
-
-            if (result.isFinal) {
-              finalTranscript += transcript
-            } else {
-              interimTranscript += transcript
-            }
-          }
-
-          if (finalTranscript) {
-            setTranscript((prev) => {
-              const newTranscript = prev + finalTranscript + " "
-              return newTranscript
-            })
-            setInterimTranscript("")
-            resetSilenceTimer()
-            setError(null) // Clear any previous errors
-          } else {
-            setInterimTranscript(interimTranscript)
-          }
-        }
-
-        // Enhanced error handling
-        recognitionRef.current.onerror = (event: any) => {
-          console.error("Speech recognition error:", event.error)
-
-          switch (event.error) {
-            case "no-speech":
-              setError("No se detectó voz. Intenta hablar más cerca del micrófono.")
-              break
-            case "audio-capture":
-              setError("No se pudo acceder al micrófono. Verifica los permisos.")
-              break
-            case "not-allowed":
-              setError("Permiso de micrófono denegado. Habilita el micrófono en tu navegador.")
-              break
-            case "network":
-              setError("Error de conexión. Verifica tu conexión a internet.")
-              break
-            case "language-not-supported":
-              // Try next Spanish variant
-              if (currentVariantIndex < spanishVariants.length - 1) {
-                currentVariantIndex++
-                recognitionRef.current.lang = spanishVariants[currentVariantIndex]
-                console.log(`Trying Spanish variant: ${spanishVariants[currentVariantIndex]}`)
-                // Don't set error, just try again
-                return
-              } else {
-                setError("Idioma español no soportado en este navegador.")
-              }
-              break
-            default:
-              setError(`Error de reconocimiento: ${event.error}`)
-          }
-
-          setIsListening(false)
-          setIsInitializing(false)
-        }
-
-        // Handle end
-        recognitionRef.current.onend = () => {
-          setIsListening(false)
-          setInterimTranscript("")
-          setIsInitializing(false)
-
-          // Auto-restart if it was stopped due to silence timeout
-          if (restartTimerRef.current) {
-            clearTimeout(restartTimerRef.current)
-            restartTimerRef.current = null
-          }
-        }
-
-        // Handle start
-        recognitionRef.current.onstart = () => {
-          setIsListening(true)
-          setIsInitializing(false)
-          setError(null)
-          resetSilenceTimer()
-        }
-
-        // Handle speech start (user started speaking)
-        recognitionRef.current.onspeechstart = () => {
-          resetSilenceTimer()
-          setError(null)
-        }
-
-        // Handle speech end (user stopped speaking)
-        recognitionRef.current.onspeechend = () => {
-          startSilenceTimer()
-        }
-
-        // Handle sound start (any sound detected)
-        recognitionRef.current.onsoundstart = () => {
-          resetSilenceTimer()
-        }
-
-        // Handle sound end (no sound detected)
-        recognitionRef.current.onsoundend = () => {
-          startSilenceTimer()
-        }
       } else {
         setIsSupported(false)
         setError("Tu navegador no soporta reconocimiento de voz. Prueba con Chrome o Edge.")
@@ -837,9 +717,6 @@ const useSpeechRecognition = () => {
     }
 
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop()
-      }
       clearAllTimers()
     }
   }, [])
@@ -853,49 +730,218 @@ const useSpeechRecognition = () => {
       clearTimeout(restartTimerRef.current)
       restartTimerRef.current = null
     }
+    if (initTimeoutRef.current) {
+      clearTimeout(initTimeoutRef.current)
+      initTimeoutRef.current = null
+    }
   }
 
   const startSilenceTimer = () => {
     clearAllTimers()
 
+    console.log("Iniciando timer de silencio de 3 segundos...")
     silenceTimerRef.current = setTimeout(() => {
+      console.log("3 segundos de silencio completados, deteniendo reconocimiento")
       if (recognitionRef.current && isListening) {
-        console.log("Stopping due to 3 seconds of silence")
         recognitionRef.current.stop()
       }
-    }, 3000) // Stop after 3 seconds of silence
+    }, 3000) // 3 segundos de silencio
   }
 
   const resetSilenceTimer = () => {
     if (silenceTimerRef.current) {
+      console.log("Reseteando timer de silencio...")
       clearTimeout(silenceTimerRef.current)
       silenceTimerRef.current = null
     }
   }
 
   const startListening = useCallback(() => {
-    if (recognitionRef.current && !isListening && !isInitializing) {
+    if (!isSupported || isListening || isInitializing) return
+
+    try {
       setIsInitializing(true)
       setError(null)
+      console.log("Iniciando reconocimiento de voz...")
 
-      try {
-        recognitionRef.current.start()
-      } catch (error) {
-        console.error("Error starting recognition:", error)
-        setError("Error al iniciar el reconocimiento de voz")
+      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+      const recognition = new SpeechRecognition()
+
+      // Enhanced configuration for Spanish
+      recognition.continuous = true
+      recognition.interimResults = true
+      recognition.lang = "es-ES" // Primary Spanish
+      recognition.maxAlternatives = 3 // More alternatives for better accuracy
+
+      let hasReceivedFinalResult = false
+      let lastSpeechTime = Date.now()
+
+      // Handle start
+      recognition.onstart = () => {
+        console.log("Reconocimiento de voz iniciado exitosamente")
+        setIsListening(true)
         setIsInitializing(false)
+        setError(null)
+        hasReceivedFinalResult = false
+        lastSpeechTime = Date.now()
+
+        if (initTimeoutRef.current) {
+          clearTimeout(initTimeoutRef.current)
+          initTimeoutRef.current = null
+        }
       }
+
+      // Handle speech start (user started speaking)
+      recognition.onspeechstart = () => {
+        console.log("Detectado inicio de habla del usuario")
+        resetSilenceTimer()
+        setError(null)
+        lastSpeechTime = Date.now()
+      }
+
+      // Handle speech end (user stopped speaking)
+      recognition.onspeechend = () => {
+        console.log("Detectado fin de habla del usuario, iniciando timer de silencio")
+        lastSpeechTime = Date.now()
+        startSilenceTimer()
+      }
+
+      // Handle sound start (any sound detected)
+      recognition.onsoundstart = () => {
+        console.log("Detectado sonido")
+        resetSilenceTimer()
+        lastSpeechTime = Date.now()
+      }
+
+      // Handle sound end (no sound detected)
+      recognition.onsoundend = () => {
+        console.log("Fin de sonido detectado")
+        // Solo iniciar timer si ha pasado tiempo suficiente desde la última actividad
+        const timeSinceLastSpeech = Date.now() - lastSpeechTime
+        if (timeSinceLastSpeech > 500) {
+          // 500ms of buffer
+          startSilenceTimer()
+        }
+      }
+
+      // Handle results with enhanced processing
+      recognition.onresult = (event: any) => {
+        console.log("Resultado de reconocimiento recibido:", event)
+        let finalTranscript = ""
+        let interimTranscript = ""
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i]
+          const transcript = result[0].transcript
+
+          if (result.isFinal) {
+            finalTranscript += transcript
+            hasReceivedFinalResult = true
+          } else {
+            interimTranscript += transcript
+          }
+        }
+
+        if (finalTranscript) {
+          console.log("Transcripción final recibida:", finalTranscript)
+          setTranscript((prev) => {
+            const newTranscript = prev + finalTranscript + " "
+            console.log("Transcripción total actualizada:", newTranscript)
+            return newTranscript
+          })
+          setInterimTranscript("")
+          resetSilenceTimer()
+          setError(null) // Clear any previous errors
+          lastSpeechTime = Date.now()
+        } else {
+          console.log("Transcripción temporal:", interimTranscript)
+          setInterimTranscript(interimTranscript)
+          lastSpeechTime = Date.now()
+        }
+      }
+
+      // Enhanced error handling
+      recognition.onerror = (event: any) => {
+        console.error("Error en reconocimiento de voz:", event.error, event)
+
+        // No mostrar errores si ya tenemos resultados válidos
+        if (hasReceivedFinalResult && (event.error === "no-speech" || event.error === "aborted")) {
+          console.log("Error menor ignorado, ya tenemos resultados")
+          return
+        }
+
+        setIsListening(false)
+        setIsInitializing(false)
+
+        switch (event.error) {
+          case "no-speech":
+            if (!hasReceivedFinalResult) {
+              setError("No se detectó voz. Intenta hablar más cerca del micrófono.")
+            }
+            break
+          case "audio-capture":
+            setError("No se pudo acceder al micrófono. Verifica los permisos.")
+            break
+          case "not-allowed":
+            setError("Permiso de micrófono denegado. Habilita el micrófono en tu navegador.")
+            break
+          case "network":
+            setError("Error de conexión. Verifica tu conexión a internet.")
+            break
+          case "language-not-supported":
+            setError("Idioma español no soportado en este navegador.")
+            break
+          case "aborted":
+            // Error normal cuando se detiene manualmente
+            console.log("Reconocimiento detenido manualmente")
+            break
+          default:
+            setError(`Error de reconocimiento: ${event.error}`)
+        }
+      }
+
+      // Handle end
+      recognition.onend = () => {
+        console.log("Reconocimiento de voz terminado")
+        setIsListening(false)
+        setInterimTranscript("")
+        setIsInitializing(false)
+        clearAllTimers()
+      }
+
+      recognitionRef.current = recognition
+      recognition.start()
+
+      // Timeout de inicialización más generoso
+      initTimeoutRef.current = setTimeout(() => {
+        if (isInitializing) {
+          console.log("Timeout de inicialización alcanzado")
+          recognition.stop()
+          setError("No se pudo inicializar el reconocimiento de voz. Intenta nuevamente.")
+          setIsInitializing(false)
+        }
+      }, 10000) // 10 segundos para inicializar
+    } catch (error) {
+      console.error("Error al iniciar reconocimiento de voz:", error)
+      setError("Error al inicializar el reconocimiento de voz. Intenta nuevamente.")
+      setIsInitializing(false)
     }
-  }, [isListening, isInitializing])
+  }, [isListening, isInitializing, isSupported])
 
   const stopListening = useCallback(() => {
+    console.log("Deteniendo reconocimiento de voz manualmente...")
     if (recognitionRef.current && (isListening || isInitializing)) {
       recognitionRef.current.stop()
-      clearAllTimers()
+      recognitionRef.current = null
     }
+    clearAllTimers()
+    setIsListening(false)
+    setIsInitializing(false)
+    setInterimTranscript("")
   }, [isListening, isInitializing])
 
   const clearTranscript = useCallback(() => {
+    console.log("Limpiando transcripción...")
     setTranscript("")
     setInterimTranscript("")
     setError(null)
@@ -1007,6 +1053,8 @@ export default function TechnicalSkillsTestPage() {
   const [answers, setAnswers] = useState<Record<number, any>>({})
   const [isCompleting, setIsCompleting] = useState(false)
   const [rankingItems, setRankingItems] = useState<{ [key: number]: string[] }>({})
+  const [inputMode, setInputMode] = useState<InputMode>("mixed")
+  const [showModeSelection, setShowModeSelection] = useState(true)
 
   // Help system states
   const [showHelpDialog, setShowHelpDialog] = useState(false)
@@ -1030,11 +1078,11 @@ export default function TechnicalSkillsTestPage() {
 
   const question = TECHNICAL_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / TECHNICAL_QUESTIONS.length) * 100
-  const isAnswered = answers[question.id] !== undefined
+  const isAnswered = answers[question?.id] !== undefined
 
   // Initialize ranking items when question changes
   useEffect(() => {
-    if (question.type === "ranking" && question.items && !rankingItems[question.id]) {
+    if (question?.type === "ranking" && question.items && !rankingItems[question.id]) {
       setRankingItems((prev) => ({
         ...prev,
         [question.id]: [...question.items!],
@@ -1044,24 +1092,41 @@ export default function TechnicalSkillsTestPage() {
 
   // Update text answer when transcript changes
   useEffect(() => {
-    if (transcript && (question.type === "open" || question.type === "code")) {
+    if (transcript && (question?.type === "open" || question?.type === "code")) {
       handleAnswerChange(transcript.trim())
     }
-  }, [transcript, question.type])
+  }, [transcript, question?.type])
+
+  // Auto-start voice recognition for voice-complete mode
+  useEffect(() => {
+    if (
+      inputMode === "voice-complete" &&
+      (question?.type === "open" || question?.type === "code") &&
+      isSupported &&
+      !isListening &&
+      !isInitializing
+    ) {
+      // Auto-start voice recognition after a short delay
+      const timer = setTimeout(() => {
+        startListening()
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [currentQuestion, inputMode, isSupported, isListening, isInitializing, startListening, question?.type])
 
   // Get current question text (original or reformulated)
   const getCurrentQuestionText = () => {
-    const formIndex = currentFormulation[question.id] || 0
-    if (formIndex > 0 && question.alternativeFormulations && question.alternativeFormulations[formIndex - 1]) {
+    const formIndex = currentFormulation[question?.id] || 0
+    if (formIndex > 0 && question?.alternativeFormulations && question.alternativeFormulations[formIndex - 1]) {
       return question.alternativeFormulations[formIndex - 1]
     }
-    return question.question
+    return question?.question || ""
   }
 
   // Handle question reformulation
   const handleReformulate = () => {
-    const maxFormulations = (question.alternativeFormulations?.length || 0) + 1
-    const currentIndex = currentFormulation[question.id] || 0
+    const maxFormulations = (question?.alternativeFormulations?.length || 0) + 1
+    const currentIndex = currentFormulation[question?.id] || 0
     const nextIndex = (currentIndex + 1) % maxFormulations
 
     setCurrentFormulation((prev) => ({
@@ -1198,6 +1263,7 @@ export default function TechnicalSkillsTestPage() {
         answers,
         completedAt: new Date().toISOString(),
         type: "technical-skills",
+        inputMode,
         helpUsage: {
           questionsWithHelp: Object.keys(hasUsedHelp).length,
           questionsReformulated: Object.keys(hasReformulated).length,
@@ -1210,6 +1276,11 @@ export default function TechnicalSkillsTestPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     router.push("/technical-skills-results")
+  }
+
+  const handleStartTest = (mode: InputMode) => {
+    setInputMode(mode)
+    setShowModeSelection(false)
   }
 
   // Calculate technical skill scores
@@ -1311,6 +1382,149 @@ export default function TechnicalSkillsTestPage() {
     return finalScores
   }
 
+  // Mode Selection Screen
+  if (showModeSelection) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Test de Habilidades Técnicas</h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Elige cómo prefieres responder las preguntas abiertas y de código
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Mixed Mode */}
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-blue-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Settings className="w-6 h-6 text-blue-600" />
+                  </div>
+                  Modo Mixto
+                </CardTitle>
+                <CardDescription>Puedes elegir entre voz y escritura para cada pregunta técnica</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Flexibilidad total para cada pregunta
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Ideal para explicaciones técnicas complejas
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Combina voz para ideas y escritura para código
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Control completo sobre el método de entrada
+                  </div>
+                </div>
+                <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
+                  <Keyboard className="w-4 h-4 mr-2" />
+                  Elegir Modo Mixto
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Voice Complete Mode */}
+            <Card
+              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${!isSupported ? "opacity-50" : ""}`}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <Volume2 className="w-6 h-6 text-green-600" />
+                  </div>
+                  Hablado Completo
+                </CardTitle>
+                <CardDescription>
+                  Todas las preguntas técnicas abiertas se responden automáticamente por voz
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Reconocimiento de voz automático
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Perfecto para explicar conceptos técnicos
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Evaluación más natural y conversacional
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Detección automática de silencio (3 seg)
+                  </div>
+                </div>
+                <Button onClick={() => handleStartTest("voice-complete")} className="w-full" disabled={!isSupported}>
+                  <Mic className="w-4 h-4 mr-2" />
+                  Elegir Hablado Completo
+                </Button>
+                {!isSupported && (
+                  <p className="text-xs text-amber-600 text-center">
+                    Reconocimiento de voz no disponible en este navegador
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Information about speech recognition */}
+          {isSupported && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Volume2 className="w-5 h-5 text-green-600" />
+                  Información sobre Reconocimiento de Voz Técnico
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                  <div>
+                    <h4 className="font-semibold mb-2">Características:</h4>
+                    <ul className="space-y-1">
+                      <li>• Optimizado para terminología técnica</li>
+                      <li>• Detección automática de silencio</li>
+                      <li>• Transcripción en tiempo real</li>
+                      <li>• Se detiene tras 3 segundos sin habla</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Ideal para:</h4>
+                    <ul className="space-y-1">
+                      <li>• Explicar arquitecturas de software</li>
+                      <li>• Describir experiencias con tecnologías</li>
+                      <li>• Analizar código y optimizaciones</li>
+                      <li>• Compartir desafíos técnicos resueltos</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-4">Puedes cambiar el modo más tarde si es necesario</p>
+            <Button variant="ghost" onClick={() => router.back()}>
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Volver
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // Render question based on type
   const renderQuestion = () => {
     const categoryConfig = SKILL_CATEGORIES[question.category]
@@ -1345,69 +1559,6 @@ export default function TechnicalSkillsTestPage() {
         )
 
       case "open":
-        return (
-          <div className="space-y-6">
-            <p className="text-lg font-medium">{getCurrentQuestionText()}</p>
-            <div className="space-y-4">
-              <div className="relative">
-                <Textarea
-                  placeholder="Describe tu experiencia aquí o usa el reconocimiento de voz..."
-                  value={answers[question.id] || ""}
-                  onChange={(e) => handleAnswerChange(e.target.value)}
-                  className="min-h-[120px] pr-12"
-                />
-                {isSupported && (
-                  <div className="absolute top-3 right-3 flex flex-col gap-2">
-                    <Button
-                      type="button"
-                      variant={isListening ? "destructive" : "outline"}
-                      size="sm"
-                      onClick={handleSpeechInput}
-                      disabled={isInitializing}
-                      className="w-10 h-10 p-0"
-                    >
-                      {isInitializing ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : isListening ? (
-                        <MicOff className="w-4 h-4" />
-                      ) : (
-                        <Mic className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              {/* Speech recognition feedback */}
-              {isSupported && (
-                <div className="space-y-2">
-                  {isListening && (
-                    <div className="flex items-center gap-2 text-sm text-green-600">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span>Escuchando... Habla ahora</span>
-                    </div>
-                  )}
-
-                  {interimTranscript && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <span className="font-medium">Procesando:</span> {interimTranscript}
-                      </p>
-                    </div>
-                  )}
-
-                  {speechError && (
-                    <Alert>
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{speechError}</AlertDescription>
-                    </Alert>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )
-
       case "code":
         return (
           <div className="space-y-6">
@@ -1428,29 +1579,38 @@ export default function TechnicalSkillsTestPage() {
             <div className="space-y-4">
               <div className="relative">
                 <Textarea
-                  placeholder="Explica tu análisis y optimizaciones aquí..."
+                  placeholder={
+                    inputMode === "voice-complete"
+                      ? "El reconocimiento de voz se iniciará automáticamente..."
+                      : question.type === "code"
+                        ? "Explica tu análisis y optimizaciones aquí..."
+                        : "Describe tu experiencia técnica aquí..."
+                  }
                   value={answers[question.id] || ""}
                   onChange={(e) => handleAnswerChange(e.target.value)}
                   className="min-h-[120px] pr-12"
+                  disabled={inputMode === "voice-complete" && isListening}
                 />
                 {isSupported && (
                   <div className="absolute top-3 right-3 flex flex-col gap-2">
-                    <Button
-                      type="button"
-                      variant={isListening ? "destructive" : "outline"}
-                      size="sm"
-                      onClick={handleSpeechInput}
-                      disabled={isInitializing}
-                      className="w-10 h-10 p-0"
-                    >
-                      {isInitializing ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : isListening ? (
-                        <MicOff className="w-4 h-4" />
-                      ) : (
-                        <Mic className="w-4 h-4" />
-                      )}
-                    </Button>
+                    {inputMode === "mixed" && (
+                      <Button
+                        type="button"
+                        variant={isListening ? "destructive" : "outline"}
+                        size="sm"
+                        onClick={handleSpeechInput}
+                        disabled={isInitializing}
+                        className="w-10 h-10 p-0"
+                      >
+                        {isInitializing ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : isListening ? (
+                          <MicOff className="w-4 h-4" />
+                        ) : (
+                          <Mic className="w-4 h-4" />
+                        )}
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>
@@ -1458,10 +1618,43 @@ export default function TechnicalSkillsTestPage() {
               {/* Speech recognition feedback */}
               {isSupported && (
                 <div className="space-y-2">
-                  {isListening && (
+                  {inputMode === "voice-complete" && (
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 text-sm text-green-600">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        {isListening ? "Escuchando..." : "Modo hablado completo activo"}
+                      </div>
+                      {isListening && (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={stopListening}
+                          className="flex items-center gap-2"
+                        >
+                          <MicOff className="w-4 h-4" />
+                          Detener
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {inputMode === "mixed" && isListening && (
                     <div className="flex items-center gap-2 text-sm text-green-600">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                       <span>Escuchando... Habla ahora</span>
+                      {transcript && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearTranscript}
+                          className="flex items-center gap-2 text-gray-600"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Limpiar
+                        </Button>
+                      )}
                     </div>
                   )}
 
@@ -1479,6 +1672,24 @@ export default function TechnicalSkillsTestPage() {
                       <AlertDescription>{speechError}</AlertDescription>
                     </Alert>
                   )}
+
+                  {/* Speech Recognition Tips */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className="text-sm text-blue-800">
+                      <div className="font-medium mb-1">💡 Consejos para respuestas técnicas por voz:</div>
+                      <ul className="text-xs space-y-1 text-blue-700">
+                        <li>• Usa terminología técnica específica</li>
+                        <li>• Explica paso a paso tu razonamiento</li>
+                        <li>• Menciona tecnologías y herramientas concretas</li>
+                        <li>
+                          •{" "}
+                          {inputMode === "voice-complete"
+                            ? "El reconocimiento se inicia automáticamente"
+                            : "Puedes combinar voz y escritura"}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -1654,7 +1865,22 @@ export default function TechnicalSkillsTestPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Test de Habilidades Técnicas</h1>
-                <p className="text-muted-foreground">Evaluación de Competencias Técnicas</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-muted-foreground">Evaluación de Competencias Técnicas</p>
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                    {inputMode === "voice-complete" ? (
+                      <>
+                        <Volume2 className="w-3 h-3 mr-1" />
+                        Hablado Completo
+                      </>
+                    ) : (
+                      <>
+                        <Settings className="w-3 h-3 mr-1" />
+                        Modo Mixto
+                      </>
+                    )}
+                  </Badge>
+                </div>
               </div>
             </div>
             <Badge variant="secondary" className="text-sm">
@@ -1878,8 +2104,9 @@ export default function TechnicalSkillsTestPage() {
                             Reconocimiento de Voz
                           </h4>
                           <p className="text-xs text-green-700">
-                            Haz clic en el micrófono y explica tu respuesta técnica. El sistema se detendrá
-                            automáticamente después de 3 segundos de silencio.
+                            {inputMode === "voice-complete"
+                              ? "El reconocimiento se inicia automáticamente. Explica tu respuesta técnica claramente."
+                              : "Haz clic en el micrófono y explica tu respuesta técnica. El sistema se detendrá automáticamente después de 3 segundos de silencio."}
                           </p>
                         </div>
                       )}
