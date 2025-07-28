@@ -46,6 +46,8 @@ import {
   Info,
   Settings,
   Keyboard,
+  Pause,
+  RotateCcw,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
@@ -72,96 +74,161 @@ interface SoftSkillsResults {
 
 type InputMode = "mixed" | "voice-complete"
 
-export default function SoftSkillsTestPage() {
-  const router = useRouter()
-  const { t } = useLanguage()
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, any>>({})
-  const [isStarted, setIsStarted] = useState(false)
-  const [isCompleting, setIsCompleting] = useState(false)
-  const [helpUsed, setHelpUsed] = useState<Set<number>>(new Set())
-  const [reformulated, setReformulated] = useState<Set<number>>(new Set())
-  const [currentReformulation, setCurrentReformulation] = useState<Record<number, number>>({})
-  const [showTips, setShowTips] = useState(false)
-  const [inputMode, setInputMode] = useState<InputMode>("mixed")
-  const [showModeSelection, setShowModeSelection] = useState(true)
+// Conversational flow for voice-complete mode
+const CONVERSATION_FLOW = [
+  {
+    id: "intro",
+    category: "Introducción",
+    systemMessage:
+      "¡Hola! Soy tu asistente de evaluación de habilidades blandas. Vamos a tener una conversación natural sobre tus competencias profesionales en el contexto del mercado laboral chileno. No hay respuestas correctas o incorrectas, solo queremos conocerte mejor. ¿Estás listo para comenzar?",
+    userPrompt: "Responde cuando estés listo para iniciar la evaluación",
+    skills: [],
+  },
+  {
+    id: "communication",
+    category: "Comunicación",
+    systemMessage:
+      "Perfecto, comencemos. Me gustaría conocer sobre tu comunicación en el trabajo. Cuéntame, ¿cómo te sientes cuando tienes que presentar ideas o proyectos frente a tu equipo o jefes en Chile? ¿Hay alguna situación comunicacional que recuerdes especialmente, ya sea positiva o desafiante?",
+    userPrompt: "Habla sobre tu experiencia comunicándote en el ambiente laboral chileno",
+    skills: ["communication"],
+  },
+  {
+    id: "leadership",
+    category: "Liderazgo",
+    systemMessage:
+      "Interesante lo que me cuentas sobre comunicación. Ahora hablemos de liderazgo. En el contexto empresarial chileno, ¿has tenido oportunidades de liderar equipos o proyectos? Me gustaría que me cuentes sobre tu estilo de liderazgo. ¿Prefieres un enfoque más directo y tradicional, o te inclinas por un estilo más colaborativo y moderno?",
+    userPrompt: "Describe tu experiencia y estilo de liderazgo en Chile",
+    skills: ["leadership"],
+  },
+  {
+    id: "teamwork",
+    category: "Trabajo en Equipo",
+    systemMessage:
+      "Muy bien, ahora me gustaría conocer sobre tu trabajo en equipo. En Chile tenemos una cultura laboral bastante colaborativa. ¿Cómo te adaptas a trabajar con personas de diferentes regiones del país o backgrounds socioeconómicos? ¿Qué rol sueles tomar naturalmente en los equipos de trabajo?",
+    userPrompt: "Comparte tu experiencia trabajando en equipos diversos en Chile",
+    skills: ["teamwork"],
+  },
+  {
+    id: "problem_solving",
+    category: "Resolución de Problemas",
+    systemMessage:
+      "Excelente. Ahora hablemos de cómo resuelves problemas. En el mercado laboral chileno, a menudo enfrentamos desafíos únicos. ¿Puedes contarme sobre algún problema complejo que hayas resuelto en tu trabajo? ¿Cómo fue tu proceso? ¿Prefieres seguir procedimientos establecidos o buscar soluciones innovadoras?",
+    userPrompt: "Describe tu enfoque para resolver problemas complejos en el contexto chileno",
+    skills: ["problemSolving"],
+  },
+  {
+    id: "adaptability",
+    category: "Adaptabilidad",
+    systemMessage:
+      "Me parece muy interesante tu enfoque. Ahora, sobre adaptabilidad. El mercado laboral chileno ha cambiado mucho, especialmente con la transformación digital y los cambios post-pandemia. ¿Cómo has manejado estos cambios? ¿Qué tan cómodo te sientes adaptándote a nuevas tecnologías, modalidades de trabajo, o cambios en regulaciones laborales?",
+    userPrompt: "Habla sobre tu capacidad de adaptación a los cambios del mercado chileno",
+    skills: ["adaptability"],
+  },
+  {
+    id: "emotional_intelligence",
+    category: "Inteligencia Emocional",
+    systemMessage:
+      "Perfecto. Ahora me gustaría conocer sobre tu inteligencia emocional. En la cultura laboral chilena, las relaciones personales son muy importantes. ¿Cómo manejas las emociones en el trabajo, tanto las tuyas como las de tus colegas? ¿Has enfrentado situaciones emocionalmente desafiantes en tu ambiente laboral?",
+    userPrompt: "Comparte tu experiencia manejando emociones en el trabajo en Chile",
+    skills: ["emotionalIntelligence"],
+  },
+  {
+    id: "time_management",
+    category: "Gestión del Tiempo",
+    systemMessage:
+      "Muy bien, para finalizar, hablemos de gestión del tiempo. En Chile tenemos nuestras particularidades, como los horarios de almuerzo, los feriados largos, y el balance vida-trabajo. ¿Cómo organizas tu tiempo? ¿Qué estrategias usas para ser productivo considerando el ritmo laboral chileno?",
+    userPrompt: "Describe tu sistema de gestión del tiempo adaptado al contexto chileno",
+    skills: ["timeManagement"],
+  },
+  {
+    id: "conclusion",
+    category: "Conclusión",
+    systemMessage:
+      "Excelente, hemos terminado nuestra conversación. Ha sido muy enriquecedor conocer sobre tus habilidades blandas y cómo las aplicas en el contexto laboral chileno. Ahora voy a procesar toda la información que me has compartido para generar tu perfil personalizado de competencias. ¡Muchas gracias por tu tiempo y honestidad!",
+    userPrompt: "Puedes agregar cualquier comentario final o simplemente decir que has terminado",
+    skills: [
+      "communication",
+      "leadership",
+      "teamwork",
+      "problemSolving",
+      "adaptability",
+      "emotionalIntelligence",
+      "timeManagement",
+    ],
+  },
+]
 
-  // Speech recognition states
+// Enhanced Speech Recognition Hook
+const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
-  const [isInitializing, setIsInitializing] = useState(false)
   const [transcript, setTranscript] = useState("")
   const [interimTranscript, setInterimTranscript] = useState("")
-  const [speechError, setSpeechError] = useState("")
-  const [speechSupported, setSpeechSupported] = useState(false)
-  const [wordCount, setWordCount] = useState(0)
+  const [isSupported, setIsSupported] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isInitializing, setIsInitializing] = useState(false)
 
   const recognitionRef = useRef<any>(null)
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
   const initTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const startListening = async () => {
-    if (!speechSupported) {
-      setSpeechError("El reconocimiento de voz no está soportado en este navegador. Prueba con Chrome o Edge.")
-      return
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+      setIsSupported(!!SpeechRecognition)
     }
+    return () => clearAllTimers()
+  }, [])
+
+  const clearAllTimers = () => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current)
+      silenceTimerRef.current = null
+    }
+    if (initTimeoutRef.current) {
+      clearTimeout(initTimeoutRef.current)
+      initTimeoutRef.current = null
+    }
+  }
+
+  const startListening = () => {
+    if (!isSupported || isListening || isInitializing) return
 
     try {
       setIsInitializing(true)
-      setSpeechError("")
-      console.log("Iniciando reconocimiento de voz...")
+      setError(null)
 
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
       const recognition = new SpeechRecognition()
 
-      recognition.lang = "es-ES"
       recognition.continuous = true
       recognition.interimResults = true
+      recognition.lang = "es-ES"
       recognition.maxAlternatives = 3
 
       let hasReceivedFinalResult = false
-      let lastSpeechTime = Date.now()
 
       recognition.onstart = () => {
-        console.log("Reconocimiento de voz iniciado")
         setIsListening(true)
         setIsInitializing(false)
         hasReceivedFinalResult = false
-        lastSpeechTime = Date.now()
-
         if (initTimeoutRef.current) {
           clearTimeout(initTimeoutRef.current)
           initTimeoutRef.current = null
         }
       }
 
-      recognition.onspeechstart = () => {
-        console.log("Detectado inicio de habla")
-        lastSpeechTime = Date.now()
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current)
-          silenceTimerRef.current = null
-        }
-      }
-
       recognition.onspeechend = () => {
-        console.log("Detectado fin de habla, iniciando timer de silencio")
-        lastSpeechTime = Date.now()
-
-        // Iniciar timer de 3 segundos después de que termine el habla
         if (silenceTimerRef.current) {
           clearTimeout(silenceTimerRef.current)
         }
-
         silenceTimerRef.current = setTimeout(() => {
-          console.log("3 segundos de silencio completados, deteniendo reconocimiento")
           if (recognition && isListening) {
             recognition.stop()
           }
         }, 3000)
       }
 
-      recognition.onresult = (event) => {
-        console.log("Resultado recibido:", event)
+      recognition.onresult = (event: any) => {
         let finalTranscript = ""
         let interimTranscript = ""
 
@@ -176,126 +243,326 @@ export default function SoftSkillsTestPage() {
         }
 
         if (finalTranscript) {
-          console.log("Transcripción final:", finalTranscript)
-          setTranscript((prev) => {
-            const newTranscript = prev + finalTranscript + " "
-            console.log("Transcripción actualizada:", newTranscript)
-            return newTranscript
-          })
+          setTranscript((prev) => prev + finalTranscript + " ")
           setInterimTranscript("")
-          lastSpeechTime = Date.now()
-
-          // Resetear timer cuando recibimos texto final
-          if (silenceTimerRef.current) {
-            clearTimeout(silenceTimerRef.current)
-            silenceTimerRef.current = null
-          }
         } else {
-          console.log("Transcripción temporal:", interimTranscript)
           setInterimTranscript(interimTranscript)
-          lastSpeechTime = Date.now()
         }
       }
 
-      recognition.onerror = (event) => {
-        console.error("Error en reconocimiento de voz:", event.error)
+      recognition.onerror = (event: any) => {
+        if (hasReceivedFinalResult && (event.error === "no-speech" || event.error === "aborted")) {
+          return
+        }
         setIsListening(false)
         setIsInitializing(false)
 
-        // No detener por errores menores si ya tenemos resultados
-        if (hasReceivedFinalResult && (event.error === "no-speech" || event.error === "aborted")) {
-          console.log("Error menor ignorado, ya tenemos resultados")
-          return
-        }
-
         switch (event.error) {
           case "not-allowed":
-            setSpeechError(
-              "Permisos de micrófono denegados. Por favor, permite el acceso al micrófono y recarga la página.",
-            )
+            setError("Permisos de micrófono denegados. Por favor, permite el acceso al micrófono.")
             break
           case "network":
-            setSpeechError("Error de conexión. Verifica tu conexión a internet e intenta nuevamente.")
+            setError("Error de conexión. Verifica tu conexión a internet.")
             break
           case "no-speech":
             if (!hasReceivedFinalResult) {
-              setSpeechError("No se detectó voz. Intenta hablar más cerca del micrófono.")
+              setError("No se detectó voz. Intenta hablar más cerca del micrófono.")
             }
             break
-          case "audio-capture":
-            setSpeechError("No se pudo acceder al micrófono. Verifica que esté conectado y funcionando.")
-            break
-          case "service-not-allowed":
-            setSpeechError("El servicio de reconocimiento de voz no está disponible.")
-            break
-          case "aborted":
-            // Error normal cuando se detiene manualmente
-            console.log("Reconocimiento detenido manualmente")
-            break
           default:
-            setSpeechError(`Error de reconocimiento de voz: ${event.error}. Intenta nuevamente.`)
+            setError(`Error de reconocimiento de voz: ${event.error}`)
         }
       }
 
       recognition.onend = () => {
-        console.log("Reconocimiento de voz terminado")
         setIsListening(false)
-        setIsInitializing(false)
         setInterimTranscript("")
-
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current)
-          silenceTimerRef.current = null
-        }
+        setIsInitializing(false)
+        clearAllTimers()
       }
 
       recognitionRef.current = recognition
       recognition.start()
 
-      // Timeout de inicialización más largo
       initTimeoutRef.current = setTimeout(() => {
         if (isInitializing) {
-          console.log("Timeout de inicialización")
           recognition.stop()
-          setSpeechError("No se pudo inicializar el reconocimiento de voz. Intenta nuevamente.")
+          setError("No se pudo inicializar el reconocimiento de voz.")
           setIsInitializing(false)
         }
-      }, 10000) // 10 segundos para inicializar
+      }, 10000)
     } catch (error) {
-      console.error("Error al iniciar reconocimiento de voz:", error)
-      setSpeechError("Error al inicializar el reconocimiento de voz. Intenta nuevamente.")
+      setError("Error al inicializar el reconocimiento de voz.")
       setIsInitializing(false)
     }
   }
 
   const stopListening = () => {
-    console.log("Deteniendo reconocimiento de voz manualmente...")
-    if (recognitionRef.current) {
+    if (recognitionRef.current && (isListening || isInitializing)) {
       recognitionRef.current.stop()
       recognitionRef.current = null
     }
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current)
-      silenceTimerRef.current = null
-    }
-    if (initTimeoutRef.current) {
-      clearTimeout(initTimeoutRef.current)
-      initTimeoutRef.current = null
-    }
+    clearAllTimers()
     setIsListening(false)
     setIsInitializing(false)
     setInterimTranscript("")
   }
 
-  const clearTranscription = () => {
-    console.log("Limpiando transcripción...")
+  const clearTranscript = () => {
     setTranscript("")
     setInterimTranscript("")
-    setSpeechError("")
-    setWordCount(0)
-    setAnswers((prev) => ({ ...prev, [questions[currentQuestion].id]: "" }))
+    setError(null)
   }
 
+  return {
+    isListening,
+    transcript,
+    interimTranscript,
+    isSupported,
+    error,
+    isInitializing,
+    startListening,
+    stopListening,
+    clearTranscript,
+  }
+}
+
+// Text-to-Speech Hook
+const useTextToSpeech = () => {
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isSupported, setIsSupported] = useState(false)
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setIsSupported(true)
+
+      const loadVoices = () => {
+        const availableVoices = window.speechSynthesis.getVoices()
+        setVoices(availableVoices)
+      }
+
+      loadVoices()
+      window.speechSynthesis.onvoiceschanged = loadVoices
+    }
+  }, [])
+
+  const speak = (text: string) => {
+    if (!isSupported) return
+
+    window.speechSynthesis.cancel()
+
+    const utterance = new SpeechSynthesisUtterance(text)
+
+    // Try to find a Spanish voice
+    const spanishVoice = voices.find(
+      (voice) => voice.lang.startsWith("es") || voice.name.toLowerCase().includes("spanish"),
+    )
+
+    if (spanishVoice) {
+      utterance.voice = spanishVoice
+    }
+
+    utterance.lang = "es-ES"
+    utterance.rate = 0.9
+    utterance.pitch = 1
+    utterance.volume = 0.8
+
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+
+    window.speechSynthesis.speak(utterance)
+  }
+
+  const stop = () => {
+    if (isSupported) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+    }
+  }
+
+  return { speak, stop, isSpeaking, isSupported }
+}
+
+export default function SoftSkillsTestPage() {
+  const router = useRouter()
+  const { t } = useLanguage()
+
+  // Mode selection
+  const [inputMode, setInputMode] = useState<InputMode>("mixed")
+  const [showModeSelection, setShowModeSelection] = useState(true)
+
+  // Traditional mode states
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, any>>({})
+  const [isStarted, setIsStarted] = useState(false)
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [helpUsed, setHelpUsed] = useState<Set<number>>(new Set())
+  const [reformulated, setReformulated] = useState<Set<number>>(new Set())
+  const [currentReformulation, setCurrentReformulation] = useState<Record<number, number>>({})
+  const [showTips, setShowTips] = useState(false)
+
+  // Conversational mode states
+  const [currentStep, setCurrentStep] = useState(0)
+  const [conversationAnswers, setConversationAnswers] = useState<Record<string, string>>({})
+  const [isConversationActive, setIsConversationActive] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const [showCountdown, setShowCountdown] = useState(false)
+
+  // Speech recognition and synthesis
+  const {
+    isListening,
+    transcript,
+    interimTranscript,
+    isSupported: speechRecognitionSupported,
+    error: speechError,
+    isInitializing,
+    startListening,
+    stopListening,
+    clearTranscript,
+  } = useSpeechRecognition()
+
+  const { speak, stop: stopSpeaking, isSpeaking, isSupported: textToSpeechSupported } = useTextToSpeech()
+
+  // Auto-start conversation when step changes in voice-complete mode
+  useEffect(() => {
+    if (inputMode === "voice-complete" && isConversationActive && !isSpeaking && !isListening) {
+      const currentStepData = CONVERSATION_FLOW[currentStep]
+      if (currentStepData && currentStepData.systemMessage) {
+        // Start countdown before speaking
+        setShowCountdown(true)
+        setCountdown(3)
+
+        const countdownInterval = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(countdownInterval)
+              setShowCountdown(false)
+              // Start speaking after countdown
+              setTimeout(() => {
+                speak(currentStepData.systemMessage)
+              }, 500)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+      }
+    }
+  }, [currentStep, inputMode, isConversationActive, isSpeaking, isListening, speak])
+
+  // Auto-start listening after system finishes speaking
+  useEffect(() => {
+    if (inputMode === "voice-complete" && !isSpeaking && isConversationActive && speechRecognitionSupported) {
+      const timer = setTimeout(() => {
+        if (!isListening && !isInitializing) {
+          startListening()
+        }
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [
+    isSpeaking,
+    isConversationActive,
+    inputMode,
+    speechRecognitionSupported,
+    isListening,
+    isInitializing,
+    startListening,
+  ])
+
+  // Save conversation answer when transcript changes
+  useEffect(() => {
+    if (inputMode === "voice-complete" && transcript) {
+      const currentStepData = CONVERSATION_FLOW[currentStep]
+      if (currentStepData) {
+        setConversationAnswers((prev) => ({
+          ...prev,
+          [currentStepData.id]: transcript.trim(),
+        }))
+      }
+    }
+  }, [transcript, currentStep, inputMode])
+
+  const handleStartTest = (mode: InputMode) => {
+    setInputMode(mode)
+    setShowModeSelection(false)
+
+    if (mode === "voice-complete") {
+      setIsConversationActive(true)
+      setCurrentStep(0)
+    } else {
+      setIsStarted(true)
+    }
+  }
+
+  const handleNextConversationStep = () => {
+    if (currentStep < CONVERSATION_FLOW.length - 1) {
+      setCurrentStep((prev) => prev + 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    } else {
+      handleCompleteConversation()
+    }
+  }
+
+  const handlePreviousConversationStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    }
+  }
+
+  const handleRestartCurrentStep = () => {
+    clearTranscript()
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Restart the current step
+    const currentStepData = CONVERSATION_FLOW[currentStep]
+    if (currentStepData) {
+      setTimeout(() => {
+        speak(currentStepData.systemMessage)
+      }, 500)
+    }
+  }
+
+  const handleCompleteConversation = async () => {
+    setIsCompleting(true)
+
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Process conversational answers
+    const results = processConversationalAnswers(conversationAnswers)
+
+    localStorage.setItem("softSkillsResults", JSON.stringify(results))
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    router.push("/soft-skills-results")
+  }
+
+  // Traditional question handling functions
   const handleAnswer = (questionId: number, value: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }))
   }
@@ -310,6 +577,14 @@ export default function SoftSkillsTestPage() {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1)
     }
+  }
+
+  const handleComplete = async () => {
+    setIsCompleting(true)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    const results = calculateResults()
+    localStorage.setItem("softSkillsResults", JSON.stringify(results))
+    router.push("/soft-skills-results")
   }
 
   const handleHelp = (questionId: number) => {
@@ -341,6 +616,180 @@ export default function SoftSkillsTestPage() {
     items.splice(result.destination.index, 0, reorderedItem)
 
     handleAnswer(questionId, items)
+  }
+
+  // Process conversational answers into skill scores
+  const processConversationalAnswers = (answers: Record<string, string>): SoftSkillsResults => {
+    const skillScores = {
+      communication: 0,
+      leadership: 0,
+      teamwork: 0,
+      problemSolving: 0,
+      adaptability: 0,
+      emotionalIntelligence: 0,
+      timeManagement: 0,
+    }
+
+    // Analyze each answer for skill indicators
+    Object.entries(answers).forEach(([stepId, answer]) => {
+      const step = CONVERSATION_FLOW.find((s) => s.id === stepId)
+      if (!step || !answer) return
+
+      const text = answer.toLowerCase()
+      const words = text.split(/\s+/).filter((word) => word.length > 2)
+      const wordCount = words.length
+
+      // Base score from response length and detail
+      const baseScore = Math.min(85, Math.max(40, (wordCount / 20) * 60 + 25))
+
+      // Skill-specific keyword analysis
+      step.skills.forEach((skill) => {
+        const keywords = getSkillKeywords(skill)
+        const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
+        const keywordBonus = Math.min(15, keywordMatches * 3)
+
+        skillScores[skill as keyof typeof skillScores] = Math.min(100, baseScore + keywordBonus)
+      })
+    })
+
+    // Ensure all skills have at least a base score
+    Object.keys(skillScores).forEach((skill) => {
+      if (skillScores[skill as keyof typeof skillScores] === 0) {
+        skillScores[skill as keyof typeof skillScores] = 60 // Default neutral score
+      }
+    })
+
+    const overallScore = Math.round(Object.values(skillScores).reduce((sum, score) => sum + score, 0) / 7)
+
+    const results = Object.entries(skillScores).map(([skill, score]) => ({
+      category: skill.charAt(0).toUpperCase() + skill.slice(1),
+      score,
+      level: Math.floor(score / 20) + 1,
+    }))
+
+    return {
+      ...skillScores,
+      overallScore,
+      completedAt: new Date().toISOString(),
+      totalQuestions: CONVERSATION_FLOW.length,
+      answeredQuestions: Object.keys(answers).length,
+      results,
+    }
+  }
+
+  const getSkillKeywords = (skill: string): string[] => {
+    const keywordMap: Record<string, string[]> = {
+      communication: [
+        "comunicar",
+        "hablar",
+        "explicar",
+        "presentar",
+        "escuchar",
+        "mensaje",
+        "reunión",
+        "equipo",
+        "claro",
+        "entender",
+        "expresar",
+        "dialogar",
+        "conversar",
+        "feedback",
+      ],
+      leadership: [
+        "liderar",
+        "dirigir",
+        "equipo",
+        "decisión",
+        "responsabilidad",
+        "motivar",
+        "guiar",
+        "proyecto",
+        "objetivo",
+        "estrategia",
+        "delegar",
+        "inspirar",
+        "coordinar",
+        "gestionar",
+      ],
+      teamwork: [
+        "colaborar",
+        "equipo",
+        "grupo",
+        "cooperar",
+        "compartir",
+        "ayudar",
+        "juntos",
+        "apoyo",
+        "compañeros",
+        "unidos",
+        "sinergia",
+        "coordinación",
+        "integración",
+      ],
+      problemSolving: [
+        "problema",
+        "solución",
+        "resolver",
+        "analizar",
+        "pensar",
+        "estrategia",
+        "método",
+        "proceso",
+        "lógica",
+        "creatividad",
+        "innovar",
+        "optimizar",
+        "mejorar",
+        "eficiencia",
+      ],
+      adaptability: [
+        "cambio",
+        "adaptar",
+        "flexible",
+        "nuevo",
+        "diferente",
+        "ajustar",
+        "aprender",
+        "evolucionar",
+        "modificar",
+        "versátil",
+        "transformar",
+        "actualizar",
+        "innovación",
+      ],
+      emotionalIntelligence: [
+        "emociones",
+        "sentir",
+        "empatía",
+        "entender",
+        "relaciones",
+        "social",
+        "sensible",
+        "comprensivo",
+        "apoyo",
+        "humano",
+        "inteligencia",
+        "autocontrol",
+        "motivación",
+      ],
+      timeManagement: [
+        "tiempo",
+        "organizar",
+        "planificar",
+        "prioridad",
+        "deadline",
+        "eficiente",
+        "productivo",
+        "horario",
+        "gestión",
+        "puntual",
+        "calendario",
+        "agenda",
+        "programar",
+      ],
+    }
+
+    return keywordMap[skill] || []
   }
 
   const calculateResults = (): SoftSkillsResults => {
@@ -563,116 +1012,6 @@ export default function SoftSkillsTestPage() {
     }
   }
 
-  const handleComplete = async () => {
-    setIsCompleting(true)
-
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    const results = calculateResults()
-    localStorage.setItem("softSkillsResults", JSON.stringify(results))
-    router.push("/soft-skills-results")
-  }
-
-  const handleStartTest = (mode: InputMode) => {
-    setInputMode(mode)
-    setShowModeSelection(false)
-    setIsStarted(true)
-  }
-
-  const progress = ((currentQuestion + 1) / questions.length) * 100
-  const currentQ = questions[currentQuestion]
-  const isAnswered = answers[currentQ?.id] !== undefined
-  const allAnswered = questions.every((q) => answers[q.id] !== undefined)
-
-  // Validation for different question types
-  const isValid = () => {
-    const answer = answers[currentQ.id]
-
-    switch (currentQ.type) {
-      case "open":
-        return answer?.toString().trim().length >= 10
-      case "ranking":
-        return Array.isArray(answer) && answer.length > 0
-      case "checkbox":
-        return Array.isArray(answer) && answer.length > 0
-      default:
-        return isAnswered
-    }
-  }
-
-  const canProceed = isValid()
-
-  // Check speech recognition support
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      setSpeechSupported(!!SpeechRecognition)
-    }
-  }, [])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop()
-        recognitionRef.current = null
-      }
-      if (silenceTimerRef.current) {
-        clearTimeout(silenceTimerRef.current)
-        silenceTimerRef.current = null
-      }
-      if (initTimeoutRef.current) {
-        clearTimeout(initTimeoutRef.current)
-        initTimeoutRef.current = null
-      }
-    }
-  }, [])
-
-  // Clear transcription when changing questions
-  useEffect(() => {
-    setTranscript("")
-    setInterimTranscript("")
-    setSpeechError("")
-    setWordCount(0)
-    if (isListening) {
-      stopListening()
-    }
-  }, [currentQuestion])
-
-  // Update word count when transcript changes
-  useEffect(() => {
-    const words = transcript
-      .trim()
-      .split(/\s+/)
-      .filter((word) => word.length > 0)
-    setWordCount(words.length)
-  }, [transcript])
-
-  // Update textarea when transcript changes
-  useEffect(() => {
-    if (transcript && currentQ?.type === "open") {
-      console.log("Actualizando respuesta con transcripción:", transcript)
-      setAnswers((prev) => ({ ...prev, [currentQ.id]: transcript }))
-    }
-  }, [transcript, currentQ?.id, currentQ?.type])
-
-  // Auto-start voice recognition for voice-complete mode
-  useEffect(() => {
-    if (
-      inputMode === "voice-complete" &&
-      currentQ?.type === "open" &&
-      speechSupported &&
-      !isListening &&
-      !isInitializing
-    ) {
-      // Auto-start voice recognition after a short delay
-      const timer = setTimeout(() => {
-        startListening()
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [currentQuestion, inputMode, speechSupported, isListening, isInitializing])
-
   // Mode Selection Screen
   if (showModeSelection) {
     return (
@@ -680,7 +1019,7 @@ export default function SoftSkillsTestPage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Evaluación de Habilidades Blandas</h1>
-            <p className="text-xl text-gray-600 mb-8">Elige cómo prefieres responder las preguntas abiertas</p>
+            <p className="text-xl text-gray-600 mb-8">Elige tu método de evaluación preferido</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -691,121 +1030,88 @@ export default function SoftSkillsTestPage() {
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <Settings className="w-6 h-6 text-blue-600" />
                   </div>
-                  Modo Mixto
+                  Cuestionario Tradicional
                 </CardTitle>
-                <CardDescription>Puedes elegir entre voz y escritura para cada pregunta abierta</CardDescription>
+                <CardDescription>Preguntas estructuradas con opciones específicas</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Flexibilidad total para cada pregunta
+                    35 preguntas estructuradas
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Botones de voz y escritura disponibles
+                    Diferentes tipos: escalas, ranking, múltiple opción
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Puedes cambiar de método cuando quieras
+                    Control total sobre el ritmo
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Ideal para usuarios que prefieren control
+                    Sistema de ayuda contextual
                   </div>
                 </div>
                 <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
                   <Keyboard className="w-4 h-4 mr-2" />
-                  Elegir Modo Mixto
+                  Elegir Cuestionario
                 </Button>
               </CardContent>
             </Card>
 
             {/* Voice Complete Mode */}
             <Card
-              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${!speechSupported ? "opacity-50" : ""}`}
+              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${
+                !speechRecognitionSupported || !textToSpeechSupported ? "opacity-50" : ""
+              }`}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <Volume2 className="w-6 h-6 text-green-600" />
                   </div>
-                  Hablado Completo
+                  Conversación Natural
                 </CardTitle>
-                <CardDescription>Todas las preguntas abiertas se responden automáticamente por voz</CardDescription>
+                <CardDescription>Conversación completamente hablada con el asistente de IA</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Reconocimiento de voz automático
+                    Conversación natural y fluida
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Experiencia completamente hablada
+                    El sistema habla automáticamente
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Detección automática de silencio (3 seg)
+                    Respuestas libres y espontáneas
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Ideal para evaluación natural y fluida
+                    Evaluación más natural y humana
                   </div>
                 </div>
                 <Button
                   onClick={() => handleStartTest("voice-complete")}
                   className="w-full"
-                  disabled={!speechSupported}
+                  disabled={!speechRecognitionSupported || !textToSpeechSupported}
                 >
-                  <Mic className="w-4 h-4 mr-2" />
-                  Elegir Hablado Completo
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Elegir Conversación
                 </Button>
-                {!speechSupported && (
+                {(!speechRecognitionSupported || !textToSpeechSupported) && (
                   <p className="text-xs text-amber-600 text-center">
-                    Reconocimiento de voz no disponible en este navegador
+                    Funciones de voz no disponibles en este navegador
                   </p>
                 )}
               </CardContent>
             </Card>
           </div>
 
-          {/* Information about speech recognition */}
-          {speechSupported && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Volume2 className="w-5 h-5 text-green-600" />
-                  Información sobre Reconocimiento de Voz
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                  <div>
-                    <h4 className="font-semibold mb-2">Características:</h4>
-                    <ul className="space-y-1">
-                      <li>• Optimizado para español chileno</li>
-                      <li>• Detección automática de silencio</li>
-                      <li>• Transcripción en tiempo real</li>
-                      <li>• Se detiene tras 3 segundos sin habla</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Consejos:</h4>
-                    <ul className="space-y-1">
-                      <li>• Habla claramente y pausadamente</li>
-                      <li>• Usa un ambiente silencioso</li>
-                      <li>• Permite acceso al micrófono</li>
-                      <li>• Puedes hacer pausas naturales</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-4">Puedes cambiar el modo más tarde si es necesario</p>
             <Button variant="ghost" onClick={() => router.back()}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver
@@ -816,6 +1122,262 @@ export default function SoftSkillsTestPage() {
     )
   }
 
+  // Conversational Mode Interface
+  if (inputMode === "voice-complete") {
+    const currentStepData = CONVERSATION_FLOW[currentStep]
+    const progress = ((currentStep + 1) / CONVERSATION_FLOW.length) * 100
+
+    if (isCompleting) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
+              <div className="relative">
+                <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+                </div>
+                <Heart className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-2">Procesando tu conversación...</h3>
+                <p className="text-muted-foreground">
+                  Analizando tus respuestas y generando tu perfil de habilidades blandas
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">Conversación sobre Habilidades Blandas</h1>
+              <Badge variant="outline" className="bg-green-50 text-green-700">
+                <Volume2 className="w-3 h-3 mr-1" />
+                Conversación Natural
+              </Badge>
+            </div>
+            <p className="text-gray-600">
+              Paso {currentStep + 1} de {CONVERSATION_FLOW.length} • {currentStepData?.category}
+            </p>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700">Progreso de la conversación</span>
+              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          {/* Countdown */}
+          {showCountdown && countdown > 0 && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <Card className="p-8">
+                <CardContent className="text-center">
+                  <div className="text-6xl font-bold text-blue-600 mb-4">{countdown}</div>
+                  <p className="text-lg text-gray-600">El asistente hablará en...</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Main Conversation Card */}
+          <Card className="mb-8 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-xl">{currentStepData?.category}</CardTitle>
+                  <CardDescription>Conversación natural sobre tus habilidades</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  {isSpeaking && (
+                    <Badge variant="secondary" className="bg-green-50 text-green-700">
+                      <Volume2 className="w-3 h-3 mr-1 animate-pulse" />
+                      Hablando
+                    </Badge>
+                  )}
+                  {isListening && (
+                    <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+                      <Mic className="w-3 h-3 mr-1 animate-pulse" />
+                      Escuchando
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* System Message */}
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Volume2 className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-green-900 mb-2">Asistente de Evaluación:</h4>
+                    <p className="text-green-800 leading-relaxed">{currentStepData?.systemMessage}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Response Area */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mic className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-blue-900 mb-2">Tu respuesta:</h4>
+                    <div className="min-h-[100px] bg-white rounded-lg p-3 border">
+                      {transcript && <p className="text-gray-900 mb-2">{transcript}</p>}
+                      {interimTranscript && <p className="text-gray-600 italic">{interimTranscript}</p>}
+                      {!transcript && !interimTranscript && !isListening && (
+                        <p className="text-gray-500 italic">
+                          {isSpeaking
+                            ? "Escucha al asistente y luego responde..."
+                            : "Tu respuesta aparecerá aquí cuando hables..."}
+                        </p>
+                      )}
+                      {isListening && !transcript && !interimTranscript && (
+                        <p className="text-blue-600 italic flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          Escuchando... Habla ahora
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Speech Error */}
+              {speechError && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-red-800">{speechError}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Controls */}
+              <div className="flex flex-wrap gap-3 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRestartCurrentStep}
+                  disabled={isInitializing}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Repetir pregunta
+                </Button>
+
+                {isListening && (
+                  <Button variant="destructive" size="sm" onClick={stopListening} className="flex items-center gap-2">
+                    <MicOff className="w-4 h-4" />
+                    Detener grabación
+                  </Button>
+                )}
+
+                {isSpeaking && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={stopSpeaking}
+                    className="flex items-center gap-2 bg-transparent"
+                  >
+                    <Pause className="w-4 h-4" />
+                    Pausar asistente
+                  </Button>
+                )}
+
+                {transcript && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearTranscript}
+                    className="flex items-center gap-2 text-gray-600"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Limpiar respuesta
+                  </Button>
+                )}
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousConversationStep}
+                  disabled={currentStep === 0}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Anterior
+                </Button>
+
+                <Button onClick={handleNextConversationStep} className="flex items-center gap-2">
+                  {currentStep === CONVERSATION_FLOW.length - 1 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Finalizar Conversación
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Conversation Tips */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                Consejos para la conversación
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                <div>
+                  <h4 className="font-semibold mb-2">Durante la conversación:</h4>
+                  <ul className="space-y-1">
+                    <li>• Responde de forma natural y espontánea</li>
+                    <li>• Comparte experiencias específicas del trabajo en Chile</li>
+                    <li>• No hay respuestas correctas o incorrectas</li>
+                    <li>• Puedes tomarte el tiempo que necesites</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Aspectos técnicos:</h4>
+                  <ul className="space-y-1">
+                    <li>• El sistema se detiene automáticamente tras 3 segundos de silencio</li>
+                    <li>• Puedes repetir la pregunta si no la escuchaste bien</li>
+                    <li>• Habla claramente y en un ambiente silencioso</li>
+                    <li>• Puedes navegar entre pasos si necesitas volver atrás</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  // Traditional Mode - Start Screen
   if (!isStarted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -919,12 +1481,57 @@ export default function SoftSkillsTestPage() {
                 </ul>
               </div>
 
-              <Button onClick={() => setShowModeSelection(true)} className="w-full" size="lg">
-                Comenzar Evaluación Especializada para Chile
+              <Button onClick={() => setIsStarted(true)} className="w-full" size="lg">
+                Comenzar Evaluación Tradicional
               </Button>
             </CardContent>
           </Card>
         </div>
+      </div>
+    )
+  }
+
+  // Traditional Mode - Main Interface
+  const progress = ((currentQuestion + 1) / questions.length) * 100
+  const currentQ = questions[currentQuestion]
+  const isAnswered = answers[currentQ?.id] !== undefined
+  const allAnswered = questions.every((q) => answers[q.id] !== undefined)
+
+  // Validation for different question types
+  const isValid = () => {
+    const answer = answers[currentQ.id]
+
+    switch (currentQ.type) {
+      case "open":
+        return answer?.toString().trim().length >= 10
+      case "ranking":
+        return Array.isArray(answer) && answer.length > 0
+      case "checkbox":
+        return Array.isArray(answer) && answer.length > 0
+      default:
+        return isAnswered
+    }
+  }
+
+  const canProceed = isValid()
+
+  if (isCompleting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
+                <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+              </div>
+              <Heart className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-2">Analizando tus habilidades blandas...</h3>
+              <p className="text-muted-foreground">Procesando tus respuestas y generando tu perfil de competencias</p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
@@ -937,17 +1544,8 @@ export default function SoftSkillsTestPage() {
           <div className="flex items-center justify-center gap-2 mb-2">
             <h1 className="text-3xl font-bold text-gray-900">Evaluación de Habilidades Blandas - Chile</h1>
             <Badge variant="outline" className="bg-blue-50 text-blue-700">
-              {inputMode === "voice-complete" ? (
-                <>
-                  <Volume2 className="w-3 h-3 mr-1" />
-                  Hablado Completo
-                </>
-              ) : (
-                <>
-                  <Settings className="w-3 h-3 mr-1" />
-                  Modo Mixto
-                </>
-              )}
+              <Settings className="w-3 h-3 mr-1" />
+              Cuestionario Tradicional
             </Badge>
           </div>
           <p className="text-gray-600">
@@ -981,10 +1579,10 @@ export default function SoftSkillsTestPage() {
                   {currentQ.type === "open" && (
                     <div className="flex items-center gap-1">
                       <Badge variant="outline">Pregunta Abierta</Badge>
-                      {speechSupported && (
+                      {speechRecognitionSupported && (
                         <Badge variant="outline" className="bg-green-50 text-green-700">
                           <Volume2 className="w-3 h-3 mr-1" />
-                          {inputMode === "voice-complete" ? "Auto-Voz" : "Voz Disponible"}
+                          Voz Disponible
                         </Badge>
                       )}
                     </div>
@@ -1115,7 +1713,6 @@ export default function SoftSkillsTestPage() {
                     placeholder="Escribe tu respuesta aquí considerando el contexto chileno... (mínimo 10 caracteres)"
                     className="min-h-[120px] resize-none"
                     rows={5}
-                    disabled={inputMode === "voice-complete" && isListening}
                   />
                   <div className="absolute bottom-2 right-2 text-xs text-gray-500">
                     {(answers[currentQ.id]?.toString() || "").length} caracteres
@@ -1123,79 +1720,45 @@ export default function SoftSkillsTestPage() {
                 </div>
 
                 {/* Speech Recognition Controls */}
-                {speechSupported && (
+                {speechRecognitionSupported && (
                   <div className="space-y-3">
-                    {inputMode === "mixed" && (
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant={isListening ? "destructive" : "outline"}
+                        size="sm"
+                        onClick={isListening ? stopListening : startListening}
+                        disabled={isInitializing}
+                        className="flex items-center gap-2"
+                      >
+                        {isInitializing ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : isListening ? (
+                          <>
+                            <MicOff className="w-4 h-4" />
+                            Detener Grabación
+                          </>
+                        ) : (
+                          <>
+                            <Mic className="w-4 h-4" />
+                            Hablar Respuesta
+                          </>
+                        )}
+                      </Button>
+
+                      {transcript && (
                         <Button
                           type="button"
-                          variant={isListening ? "destructive" : "outline"}
+                          variant="ghost"
                           size="sm"
-                          onClick={isListening ? stopListening : startListening}
-                          disabled={isInitializing}
-                          className="flex items-center gap-2"
+                          onClick={clearTranscript}
+                          className="flex items-center gap-2 text-gray-600"
                         >
-                          {isInitializing ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : isListening ? (
-                            <>
-                              <MicOff className="w-4 h-4" />
-                              Detener Grabación
-                            </>
-                          ) : (
-                            <>
-                              <Mic className="w-4 h-4" />
-                              Hablar Respuesta
-                            </>
-                          )}
+                          <Trash2 className="w-4 h-4" />
+                          Limpiar
                         </Button>
-
-                        {transcript && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={clearTranscription}
-                            className="flex items-center gap-2 text-gray-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Limpiar
-                          </Button>
-                        )}
-                      </div>
-                    )}
-
-                    {inputMode === "voice-complete" && (
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-2 text-sm text-green-600">
-                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                          {isListening ? "Escuchando..." : "Modo hablado completo activo"}
-                        </div>
-                        {isListening && (
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            onClick={stopListening}
-                            className="flex items-center gap-2"
-                          >
-                            <MicOff className="w-4 h-4" />
-                            Detener
-                          </Button>
-                        )}
-                      </div>
-                    )}
-
-                    {(isListening || isInitializing) && (
-                      <div className="flex items-center gap-2 text-sm">
-                        {isInitializing && (
-                          <div className="flex items-center gap-2 text-blue-600">
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Inicializando...
-                          </div>
-                        )}
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     {/* Real-time Transcription Display */}
                     {(transcript || interimTranscript || isListening) && (
@@ -1213,7 +1776,7 @@ export default function SoftSkillsTestPage() {
                         </div>
                         {(transcript || interimTranscript) && (
                           <div className="text-xs text-green-600 mt-2 flex items-center gap-4">
-                            <span>{wordCount} palabras</span>
+                            <span>{transcript.split(" ").filter((w) => w.length > 0).length} palabras</span>
                             <span>{transcript.length} caracteres</span>
                             {isListening && (
                               <span className="flex items-center gap-1">
@@ -1242,12 +1805,7 @@ export default function SoftSkillsTestPage() {
                           <li>• Habla claramente en español chileno</li>
                           <li>• Asegúrate de estar en un lugar silencioso</li>
                           <li>• La grabación se detendrá automáticamente tras 3 segundos de silencio</li>
-                          <li>
-                            •{" "}
-                            {inputMode === "voice-complete"
-                              ? "El reconocimiento se inicia automáticamente"
-                              : "Puedes combinar voz y escritura en la misma respuesta"}
-                          </li>
+                          <li>• Puedes combinar voz y escritura en la misma respuesta</li>
                         </ul>
                       </div>
                     </div>
@@ -1463,9 +2021,7 @@ export default function SoftSkillsTestPage() {
           <p className="text-sm text-blue-800">
             <span className="font-semibold">🇨🇱 Consejo para Chile:</span>{" "}
             {currentQ.type === "open"
-              ? inputMode === "voice-complete"
-                ? "En modo hablado completo, el reconocimiento de voz se inicia automáticamente. Habla claramente sobre tu experiencia en el mercado laboral chileno."
-                : "Para preguntas abiertas, menciona experiencias específicas del mercado laboral chileno. Puedes usar reconocimiento de voz o escribir. Considera aspectos culturales y regionales de Chile."
+              ? "Para preguntas abiertas, menciona experiencias específicas del mercado laboral chileno. Puedes usar reconocimiento de voz o escribir. Considera aspectos culturales y regionales de Chile."
               : currentQ.type === "ranking"
                 ? "Ordena según tu experiencia en el ambiente laboral chileno. Considera las particularidades de nuestra cultura empresarial."
                 : currentQ.type === "checkbox"

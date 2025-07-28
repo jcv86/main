@@ -1,52 +1,25 @@
 "use client"
-
-import { DialogTrigger } from "@/components/ui/dialog"
-import React from "react"
-import type { FC } from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
+import type React from "react"
+
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Code,
   ChevronLeft,
-  ChevronRight,
-  MessageSquare,
-  List,
-  BarChart3,
-  Users,
   Mic,
   MicOff,
   AlertCircle,
-  Loader2,
-  FileSlidersIcon as SliderIcon,
-  ChevronUp,
-  ChevronDown,
-  GripVertical,
-  CheckSquare,
-  ToggleLeft,
-  Sparkles,
-  Target,
-  TrendingUp,
-  HelpCircle,
-  RefreshCw,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  Lightbulb,
-  BookOpen,
-  MessageCircle,
   Info,
-  Shuffle,
   Database,
   Globe,
   Smartphone,
@@ -58,17 +31,25 @@ import {
   Keyboard,
   CheckCircle,
   Trash2,
+  Pause,
+  RotateCcw,
+  ArrowLeft,
+  ArrowRight,
+  HelpCircle,
+  Lightbulb,
+  Target,
+  Square,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 // Technical skill categories
 const SKILL_CATEGORIES = {
-  frontend: { color: "bg-blue-500", icon: Globe },
-  backend: { color: "bg-green-500", icon: Server },
-  database: { color: "bg-purple-500", icon: Database },
-  mobile: { color: "bg-orange-500", icon: Smartphone },
-  design: { color: "bg-pink-500", icon: Palette },
-  security: { color: "bg-red-500", icon: Shield },
+  frontend: { color: "bg-blue-500", icon: Globe, name: "Frontend" },
+  backend: { color: "bg-green-500", icon: Server, name: "Backend" },
+  database: { color: "bg-purple-500", icon: Database, name: "Base de Datos" },
+  mobile: { color: "bg-orange-500", icon: Smartphone, name: "Móvil" },
+  design: { color: "bg-pink-500", icon: Palette, name: "Diseño" },
+  security: { color: "bg-red-500", icon: Shield, name: "Seguridad" },
 }
 
 // Question types
@@ -96,596 +77,443 @@ interface Question {
   tips?: string[]
 }
 
-// Technical skills questions with enhanced help system
+// Technical Questions Database
 const TECHNICAL_QUESTIONS: Question[] = [
-  // Frontend questions
+  // Frontend Questions
   {
     id: 1,
-    type: "scale",
+    type: "code",
     category: "frontend",
-    question: "Me siento cómodo/a desarrollando interfaces de usuario interactivas",
-    reverse: false,
+    question: "Optimiza este componente React para mejorar su rendimiento:",
+    code: `function UserList({ users }) {
+  return (
+    <div>
+      {users.map(user => (
+        <div key={user.id}>
+          <img src={user.avatar || "/placeholder.svg"} />
+          <span>{user.name}</span>
+          <span>{user.email}</span>
+        </div>
+      ))}
+    </div>
+  );
+}`,
+    language: "javascript",
     explanation:
-      "Esta pregunta evalúa tu confianza y experiencia en el desarrollo de interfaces de usuario que respondan a las acciones del usuario.",
+      "Este componente puede optimizarse usando React.memo, lazy loading de imágenes, y virtualization para listas grandes.",
     examples: [
-      "Crear formularios con validación en tiempo real",
-      "Implementar animaciones y transiciones suaves",
-      "Desarrollar componentes reutilizables (botones, modales, etc.)",
-      "Manejar eventos del usuario (clicks, hover, scroll)",
-      "Crear interfaces responsivas que se adapten a diferentes dispositivos",
-    ],
-    alternativeFormulations: [
-      "Tengo experiencia creando interfaces que respondan a las interacciones del usuario",
-      "Me resulta natural desarrollar componentes de UI interactivos",
-      "Soy capaz de crear experiencias de usuario dinámicas y atractivas",
+      "Usar React.memo para evitar re-renders innecesarios",
+      "Implementar lazy loading para las imágenes",
+      "Considerar virtualization con react-window para listas grandes",
     ],
     tips: [
-      "Piensa en proyectos donde hayas creado elementos interactivos",
-      "Considera tu experiencia con frameworks como React, Vue, o Angular",
-      "Reflexiona sobre tu comodidad con HTML, CSS y JavaScript",
-      "Evalúa tu capacidad para hacer que las interfaces sean intuitivas",
+      "Piensa en cuándo se re-renderiza este componente",
+      "Considera el performance con miles de usuarios",
+      "¿Qué pasa si las imágenes son pesadas?",
     ],
   },
   {
     id: 2,
-    type: "open",
+    type: "multiple",
     category: "frontend",
-    question: "Describe tu experiencia con frameworks de JavaScript (React, Vue, Angular, etc.)",
+    question: "¿Cuál es la mejor práctica para manejar estado global en una aplicación React grande?",
+    options: [
+      "Usar solo useState en el componente raíz",
+      "Context API para todo el estado",
+      "Redux Toolkit con RTK Query",
+      "Zustand con persistencia",
+      "Combinar Context API para UI y Redux para datos de servidor",
+    ],
     explanation:
-      "Esta pregunta busca entender tu nivel de experiencia práctica con los principales frameworks de desarrollo frontend.",
+      "Para aplicaciones grandes, es recomendable separar el estado de UI del estado de servidor, usando diferentes herramientas para cada caso.",
     examples: [
-      "Proyectos específicos que hayas desarrollado",
-      "Tiempo de experiencia con cada framework",
-      "Características avanzadas que hayas implementado",
-      "Desafíos técnicos que hayas resuelto",
-      "Comparaciones entre diferentes frameworks que hayas usado",
-    ],
-    alternativeFormulations: [
-      "¿Cuál ha sido tu experiencia trabajando con librerías de JavaScript modernas?",
-      "Cuéntame sobre tu conocimiento de frameworks frontend populares",
-      "Describe tu nivel de competencia con herramientas de desarrollo web modernas",
-    ],
-    tips: [
-      "Menciona frameworks específicos que hayas usado",
-      "Incluye tanto proyectos personales como profesionales",
-      "Describe el nivel de complejidad de los proyectos",
-      "Explica qué aspectos te resultan más fáciles o difíciles",
-      "Si no tienes experiencia, menciona tu interés por aprender",
+      "Context API: Estado de tema, usuario autenticado",
+      "Redux/Zustand: Cache de datos, estado complejo de aplicación",
+      "React Query: Estado de servidor, cache automático",
     ],
   },
   {
     id: 3,
-    type: "multiple",
+    type: "ranking",
     category: "frontend",
-    question: "¿Cuál consideras tu mayor fortaleza en desarrollo frontend?",
-    options: ["Diseño y UX/UI", "Lógica de programación", "Optimización de rendimiento", "Testing y debugging"],
-    explanation: "Esta pregunta identifica en qué área del desarrollo frontend te sientes más competente y confiado.",
-    examples: [
-      "Diseño: crear interfaces atractivas, usar herramientas de diseño, principios de UX",
-      "Lógica: resolver problemas complejos, algoritmos, arquitectura de código",
-      "Optimización: mejorar velocidad de carga, bundle size, performance",
-      "Testing: escribir pruebas unitarias, debugging, control de calidad",
-    ],
-    alternativeFormulations: [
-      "¿En qué aspecto del desarrollo frontend destacas más?",
-      "¿Cuál es tu área de especialización en el frontend?",
-      "¿Qué habilidad frontend consideras tu punto fuerte?",
-    ],
-    tips: [
-      "Piensa en qué actividades disfrutas más",
-      "Considera en qué recibes más reconocimiento",
-      "Reflexiona sobre qué te resulta más natural",
-      "Evalúa dónde sientes que agregas más valor",
-    ],
+    question: "Ordena estas tecnologías frontend según tu nivel de experiencia (mayor a menor):",
+    items: ["HTML/CSS", "JavaScript ES6+", "React", "TypeScript", "Next.js", "Vue.js", "Angular", "Svelte"],
+    explanation:
+      "Este ranking nos ayuda a entender tu stack tecnológico y experiencia relativa con diferentes frameworks.",
   },
   {
     id: 4,
-    type: "code",
+    type: "scenario",
     category: "frontend",
-    question: "¿Cómo optimizarías este código JavaScript?",
-    code: `function findUser(users, id) {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].id === id) {
-      return users[i];
-    }
-  }
-  return null;
-}`,
-    language: "javascript",
-    explanation: "Esta pregunta evalúa tu capacidad para identificar y aplicar optimizaciones en código JavaScript.",
-    examples: [
-      "Usar métodos de array más eficientes como find()",
-      "Implementar early returns para mejorar legibilidad",
-      "Considerar estructuras de datos más eficientes",
-      "Agregar validaciones de entrada",
-      "Usar destructuring o sintaxis moderna",
-    ],
-    alternativeFormulations: [
-      "¿Qué mejoras aplicarías a esta función de búsqueda?",
-      "¿Cómo refactorizarías este código para hacerlo más eficiente?",
-      "¿Qué optimizaciones implementarías en esta función?",
-    ],
-    tips: [
-      "Considera tanto rendimiento como legibilidad",
-      "Piensa en métodos de array nativos de JavaScript",
-      "Evalúa si hay formas más modernas de escribir el código",
-      "Considera casos edge y validaciones",
-    ],
-  },
-  {
-    id: 5,
-    type: "ranking",
-    category: "frontend",
-    question: "Ordena estas tecnologías frontend según tu nivel de experiencia (1 = más experiencia)",
-    instruction: "Arrastra para reordenar según tu experiencia real",
-    items: ["HTML/CSS básico", "JavaScript vanilla", "React o Vue", "TypeScript", "Sass/SCSS", "Webpack/Vite"],
-    reverse: false,
+    question:
+      "Tu aplicación React se vuelve lenta al cargar una tabla con 10,000 filas. Los usuarios se quejan del performance. ¿Cómo solucionarías este problema paso a paso?",
     explanation:
-      "Esta pregunta evalúa tu nivel de experiencia con diferentes tecnologías fundamentales del desarrollo frontend.",
-    examples: [
-      "HTML/CSS: estructura, estilos, responsive design",
-      "JavaScript: DOM manipulation, eventos, ES6+",
-      "React/Vue: componentes, estado, lifecycle",
-      "TypeScript: tipado estático, interfaces, generics",
-      "Sass/SCSS: variables, mixins, nesting",
-      "Webpack/Vite: bundling, optimización, configuración",
-    ],
-    alternativeFormulations: [
-      "Clasifica estas herramientas frontend por tu nivel de dominio",
-      "Ordena estas tecnologías desde la que mejor manejas hasta la que menos",
-      "Prioriza estas tecnologías según tu experiencia práctica",
-    ],
+      "Este escenario evalúa tu capacidad de diagnóstico y optimización de performance en aplicaciones reales.",
     tips: [
-      "Ordena según tu experiencia real, no aspiracional",
-      "Considera tanto tiempo de uso como profundidad de conocimiento",
-      "Piensa en qué tecnologías usas más frecuentemente",
-      "Evalúa en cuáles te sientes más confiado resolviendo problemas",
+      "Considera virtualization",
+      "Piensa en paginación",
+      "¿Qué herramientas usarías para diagnosticar?",
+      "¿Cómo medirías la mejora?",
     ],
   },
 
-  // Backend questions
+  // Backend Questions
   {
-    id: 6,
-    type: "scale",
+    id: 5,
+    type: "code",
     category: "backend",
-    question: "Tengo experiencia diseñando y desarrollando APIs RESTful",
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu experiencia en el diseño y desarrollo de APIs siguiendo los principios REST.",
+    question: "Revisa esta API REST en Node.js y sugiere mejoras de seguridad y performance:",
+    code: `app.get('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const query = \`SELECT * FROM users WHERE id = \${userId}\`;
+  
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(500).send('Error');
+      return;
+    }
+    res.json(result[0]);
+  });
+});`,
+    language: "javascript",
+    explanation: "Este código tiene vulnerabilidades de SQL injection y falta de validación de entrada.",
     examples: [
-      "Definir endpoints con métodos HTTP apropiados (GET, POST, PUT, DELETE)",
-      "Estructurar respuestas JSON consistentes",
-      "Implementar códigos de estado HTTP correctos",
-      "Manejar autenticación y autorización",
-      "Documentar APIs con herramientas como Swagger",
-    ],
-    alternativeFormulations: [
-      "Soy competente creando servicios web que sigan estándares REST",
-      "Tengo conocimiento sólido en el desarrollo de APIs web",
-      "Me siento cómodo/a diseñando arquitecturas de servicios REST",
+      "Usar prepared statements o ORM",
+      "Validar y sanitizar parámetros de entrada",
+      "Implementar rate limiting",
+      "Agregar logging y manejo de errores apropiado",
     ],
     tips: [
-      "Piensa en APIs que hayas desarrollado o consumido",
-      "Considera tu conocimiento de métodos HTTP y códigos de estado",
-      "Reflexiona sobre tu experiencia con autenticación en APIs",
-      "Evalúa tu comprensión de los principios REST",
+      "¿Qué pasa si userId es malicioso?",
+      "¿Cómo protegerías contra ataques?",
+      "¿Qué información no debería exponerse?",
+    ],
+  },
+  {
+    id: 6,
+    type: "multiple",
+    category: "backend",
+    question: "Para una API que maneja 100,000 requests por minuto, ¿cuál sería la mejor arquitectura?",
+    options: [
+      "Monolito con cache Redis",
+      "Microservicios con API Gateway",
+      "Serverless functions",
+      "Arquitectura híbrida con CDN",
+      "Event-driven con message queues",
+    ],
+    explanation:
+      "Para alto tráfico, necesitas considerar escalabilidad horizontal, cache distribuido, y separación de responsabilidades.",
+    examples: [
+      "API Gateway: Rate limiting, routing, authentication",
+      "Microservicios: Escalabilidad independiente por servicio",
+      "Cache: Redis para datos frecuentes, CDN para assets",
     ],
   },
   {
     id: 7,
-    type: "open",
+    type: "checkbox",
     category: "backend",
-    question: "Describe tu experiencia con bases de datos y cómo manejas la persistencia de datos",
-    explanation:
-      "Esta pregunta busca entender tu experiencia práctica con diferentes tipos de bases de datos y estrategias de persistencia.",
-    examples: [
-      "Bases de datos relacionales (MySQL, PostgreSQL, SQL Server)",
-      "Bases de datos NoSQL (MongoDB, Redis, Cassandra)",
-      "ORMs y query builders (Sequelize, Prisma, Mongoose)",
-      "Optimización de consultas y índices",
-      "Migraciones y versionado de esquemas",
+    question:
+      "¿Qué consideraciones de seguridad implementarías en una API de producción? (Selecciona todas las aplicables)",
+    options: [
+      "Autenticación JWT con refresh tokens",
+      "Rate limiting por IP y usuario",
+      "Validación de entrada con schemas",
+      "HTTPS obligatorio con HSTS",
+      "CORS configurado correctamente",
+      "Logging de eventos de seguridad",
+      "Sanitización de datos de salida",
+      "Monitoreo de vulnerabilidades",
     ],
-    alternativeFormulations: [
-      "¿Cuál es tu experiencia trabajando con sistemas de almacenamiento de datos?",
-      "Cuéntame sobre tu conocimiento en gestión y persistencia de datos",
-      "Describe tu competencia con diferentes tecnologías de bases de datos",
-    ],
-    tips: [
-      "Menciona tipos específicos de bases de datos que hayas usado",
-      "Incluye tanto experiencia con SQL como NoSQL",
-      "Describe proyectos donde hayas diseñado esquemas de datos",
-      "Explica cómo manejas la integridad y consistencia de datos",
-      "Si tienes poca experiencia, menciona tu interés por aprender",
-    ],
+    explanation: "La seguridad en APIs requiere múltiples capas de protección, desde la red hasta la aplicación.",
   },
+
+  // Database Questions
   {
     id: 8,
-    type: "multiple",
-    category: "backend",
-    question: "¿Cuál es tu lenguaje de programación backend preferido?",
-    options: ["JavaScript/Node.js", "Python", "Java", "C#/.NET", "PHP", "Go/Rust", "Otro"],
-    explanation: "Esta pregunta identifica tu lenguaje de programación principal para desarrollo backend.",
+    type: "code",
+    category: "database",
+    question: "Optimiza esta consulta SQL que está causando timeouts:",
+    code: `SELECT u.name, u.email, 
+       COUNT(o.id) as order_count,
+       SUM(o.total) as total_spent
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at > '2023-01-01'
+GROUP BY u.id, u.name, u.email
+ORDER BY total_spent DESC;`,
+    language: "sql",
+    explanation: "Esta consulta puede optimizarse con índices apropiados y posiblemente reestructuración.",
     examples: [
-      "JavaScript/Node.js: Express, Nest.js, serverless functions",
-      "Python: Django, Flask, FastAPI",
-      "Java: Spring Boot, Spring Framework",
-      "C#/.NET: ASP.NET Core, Entity Framework",
-      "PHP: Laravel, Symfony, WordPress",
-      "Go/Rust: alta performance, concurrencia",
+      "Crear índice en users.created_at",
+      "Índice compuesto en orders(user_id, total)",
+      "Considerar materializar la vista para reportes frecuentes",
     ],
-    alternativeFormulations: [
-      "¿Con qué lenguaje backend te sientes más cómodo/a?",
-      "¿Cuál es tu tecnología principal para desarrollo del lado del servidor?",
-      "¿En qué lenguaje tienes más experiencia para backend?",
-    ],
-    tips: [
-      "Elige el lenguaje con el que tienes más experiencia práctica",
-      "Considera tanto proyectos personales como profesionales",
-      "Piensa en qué lenguaje te resulta más productivo",
-      "Evalúa en cuál te sientes más confiado resolviendo problemas",
-    ],
+    tips: ["¿Qué índices faltan?", "¿Se puede evitar el GROUP BY?", "¿Es necesario LEFT JOIN o puede ser INNER?"],
   },
   {
     id: 9,
     type: "scenario",
-    category: "backend",
-    question: "Tu API está recibiendo muchas solicitudes y se está volviendo lenta. ¿Cuál sería tu primer enfoque?",
-    options: [
-      "Implementar caché",
-      "Optimizar consultas de base de datos",
-      "Escalar horizontalmente",
-      "Revisar y optimizar el código",
-    ],
-    explanation:
-      "Esta pregunta evalúa tu capacidad para diagnosticar y resolver problemas de rendimiento en sistemas backend.",
-    examples: [
-      "Caché: Redis, Memcached, caché de aplicación",
-      "Optimizar consultas: índices, query optimization, N+1 problems",
-      "Escalar: load balancers, múltiples instancias, microservicios",
-      "Optimizar código: profiling, algoritmos más eficientes, async/await",
-    ],
-    alternativeFormulations: [
-      "¿Cómo abordarías un problema de rendimiento en tu API?",
-      "¿Cuál sería tu estrategia inicial para mejorar la velocidad de respuesta?",
-      "Ante una API lenta, ¿por dónde empezarías a optimizar?",
-    ],
+    category: "database",
+    question:
+      "Tu base de datos PostgreSQL está al 90% de CPU constantemente. Las consultas más lentas involucran JOINs complejos entre 5 tablas. ¿Cómo diagnosticarías y solucionarías este problema?",
+    explanation: "Este escenario evalúa tu capacidad de diagnóstico y optimización de bases de datos en producción.",
     tips: [
-      "Piensa en tu experiencia previa con problemas de rendimiento",
-      "Considera qué solución suele tener mayor impacto",
-      "Reflexiona sobre qué es más fácil de implementar primero",
-      "Evalúa qué enfoque conoces mejor",
+      "¿Qué herramientas usarías para identificar consultas lentas?",
+      "¿Cómo analizarías los planes de ejecución?",
+      "¿Considerarías denormalización o cache?",
     ],
   },
   {
     id: 10,
-    type: "checkbox",
-    category: "backend",
-    question: "¿Con cuáles de estas tecnologías backend tienes experiencia? (Selecciona todas las que apliquen)",
-    instruction: "Marca solo las que hayas usado en proyectos reales",
+    type: "multiple",
+    category: "database",
+    question:
+      "Para una aplicación con lecturas frecuentes pero escrituras ocasionales, ¿qué estrategia de base de datos recomendarías?",
     options: [
-      "Docker y contenedores",
-      "Servicios en la nube (AWS, Azure, GCP)",
-      "Microservicios",
-      "Message queues (RabbitMQ, Kafka)",
-      "Testing automatizado",
-      "CI/CD pipelines",
+      "Read replicas con PostgreSQL",
+      "Cache Redis con write-through",
+      "CQRS con Event Sourcing",
+      "Base de datos columnares como ClickHouse",
+      "Híbrido: PostgreSQL + Elasticsearch",
     ],
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu experiencia con tecnologías y prácticas modernas de desarrollo backend.",
-    examples: [
-      "Docker: containerización, Docker Compose, Kubernetes",
-      "Cloud: EC2, Lambda, Azure Functions, Google Cloud Run",
-      "Microservicios: arquitectura distribuida, comunicación entre servicios",
-      "Message queues: procesamiento asíncrono, event-driven architecture",
-      "Testing: unit tests, integration tests, TDD",
-      "CI/CD: GitHub Actions, Jenkins, automated deployment",
-    ],
-    alternativeFormulations: [
-      "¿Qué herramientas y prácticas backend has utilizado en proyectos?",
-      "Marca las tecnologías backend con las que tienes experiencia práctica",
-      "¿Con cuáles de estas tecnologías modernas has trabajado?",
-    ],
-    tips: [
-      "Selecciona solo las que hayas usado realmente",
-      "No marques tecnologías que solo hayas leído sobre ellas",
-      "Considera tanto experiencia profesional como proyectos personales",
-      "Piensa en qué tan cómodo/a te sientes usando cada tecnología",
-    ],
+    explanation:
+      "Para workloads read-heavy, necesitas optimizar para consultas rápidas manteniendo consistencia en escrituras.",
   },
 
-  // Database questions
+  // Mobile Questions
   {
     id: 11,
-    type: "scale",
-    category: "database",
-    question: "Me siento competente escribiendo consultas SQL complejas",
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu nivel de confianza y habilidad con consultas SQL avanzadas.",
+    type: "multiple",
+    category: "mobile",
+    question: "Para desarrollar una app móvil que funcione en iOS y Android, ¿qué tecnología elegirías y por qué?",
+    options: [
+      "React Native - Reutilización de código web",
+      "Flutter - Performance nativo y UI consistente",
+      "Ionic - Desarrollo web familiar",
+      "Xamarin - Integración con ecosistema Microsoft",
+      "Desarrollo nativo - Máximo control y performance",
+    ],
+    explanation:
+      "La elección depende del equipo, requisitos de performance, y necesidades específicas de la aplicación.",
     examples: [
-      "JOINs múltiples entre varias tablas",
-      "Subconsultas y CTEs (Common Table Expressions)",
-      "Funciones de ventana (window functions)",
-      "Consultas de agregación complejas con GROUP BY y HAVING",
-      "Optimización de consultas para mejor rendimiento",
-    ],
-    alternativeFormulations: [
-      "Tengo habilidades sólidas para crear consultas SQL avanzadas",
-      "Me siento cómodo/a trabajando con SQL complejo",
-      "Soy capaz de escribir consultas SQL sofisticadas",
-    ],
-    tips: [
-      "Piensa en las consultas más complejas que hayas escrito",
-      "Considera tu experiencia con JOINs y subconsultas",
-      "Reflexiona sobre tu capacidad para optimizar consultas",
-      "Evalúa qué tan cómodo/a te sientes con diferentes tipos de consultas",
+      "React Native: Ideal si ya tienes equipo React",
+      "Flutter: Mejor para UI compleja y animaciones",
+      "Nativo: Necesario para apps con requisitos específicos de plataforma",
     ],
   },
   {
     id: 12,
-    type: "binary",
-    category: "database",
-    question: "¿Prefieres trabajar con bases de datos relacionales (SQL) o no relacionales (NoSQL)?",
-    instruction: "Elige según tu experiencia y preferencia",
-    options: ["Bases de datos relacionales (SQL)", "Bases de datos no relacionales (NoSQL)"],
-    reverse: false,
+    type: "scenario",
+    category: "mobile",
+    question:
+      "Tu app React Native tiene problemas de performance en listas largas y la navegación se siente lenta. Los usuarios reportan crashes ocasionales. ¿Cómo abordarías estos problemas?",
     explanation:
-      "Esta pregunta identifica tu preferencia y experiencia entre los dos paradigmas principales de bases de datos.",
-    examples: [
-      "SQL: MySQL, PostgreSQL, SQL Server - estructura rígida, ACID, relaciones",
-      "NoSQL: MongoDB, Redis, Cassandra - flexibilidad, escalabilidad, documentos/key-value",
-    ],
-    alternativeFormulations: [
-      "¿Con qué tipo de base de datos te sientes más cómodo/a?",
-      "¿Cuál es tu preferencia entre SQL y NoSQL?",
-      "¿Qué paradigma de base de datos prefieres usar?",
-    ],
+      "Performance en mobile requiere consideraciones específicas de memoria, CPU, y experiencia de usuario.",
     tips: [
-      "Considera con cuál tienes más experiencia práctica",
-      "Piensa en qué tipo de proyectos has desarrollado",
-      "Reflexiona sobre cuál te resulta más intuitivo",
-      "Evalúa en cuál te sientes más productivo/a",
+      "¿Cómo optimizarías las listas?",
+      "¿Qué herramientas usarías para debugging?",
+      "¿Cómo manejarías la memoria limitada?",
     ],
   },
+
+  // Design Questions
   {
     id: 13,
-    type: "slider",
-    category: "database",
-    question: "¿Qué tan cómodo/a te sientes diseñando esquemas de base de datos? (0-100)",
-    instruction: "Desliza para indicar tu nivel de comodidad",
-    min: 0,
-    max: 100,
-    step: 5,
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu confianza en el diseño de estructuras de datos y relaciones entre tablas.",
-    examples: [
-      "0-25: Principiante, necesito mucha ayuda",
-      "26-50: Básico, puedo hacer esquemas simples",
-      "51-75: Intermedio, manejo relaciones y normalization",
-      "76-100: Avanzado, diseño esquemas complejos y optimizados",
+    type: "multiple",
+    category: "design",
+    question:
+      "Al diseñar una interfaz para usuarios chilenos, ¿qué consideraciones culturales y de UX son más importantes?",
+    options: [
+      "Colores que reflejen la identidad chilena",
+      "Patrones de navegación familiares en el mercado local",
+      "Terminología y lenguaje específico de Chile",
+      "Consideraciones de conectividad y dispositivos",
+      "Todas las anteriores",
     ],
-    alternativeFormulations: [
-      "¿Cuál es tu nivel de competencia en diseño de bases de datos?",
-      "¿Qué tan seguro/a te sientes creando estructuras de datos?",
-      "En una escala de 0 a 100, ¿cuál es tu habilidad para diseñar esquemas?",
-    ],
-    tips: [
-      "Considera tu experiencia diseñando desde cero",
-      "Piensa en tu conocimiento de normalización",
-      "Reflexiona sobre tu capacidad para optimizar estructuras",
-      "Evalúa qué tan cómodo/a te sientes con relaciones complejas",
-    ],
+    explanation:
+      "El diseño para mercados específicos requiere entender el contexto cultural, tecnológico y de usuario local.",
   },
-
-  // Mobile questions
   {
     id: 14,
-    type: "multiple",
-    category: "mobile",
-    question: "¿Cuál es tu enfoque preferido para desarrollo móvil?",
-    options: ["Nativo (iOS/Android)", "React Native", "Flutter", "Híbrido (Cordova/Ionic)", "No tengo experiencia"],
-    explanation: "Esta pregunta identifica tu experiencia y preferencia en diferentes enfoques de desarrollo móvil.",
-    examples: [
-      "Nativo: Swift/Objective-C para iOS, Java/Kotlin para Android",
-      "React Native: JavaScript, componentes nativos, código compartido",
-      "Flutter: Dart, widgets, rendimiento nativo",
-      "Híbrido: HTML/CSS/JS en webview, plugins nativos",
-      "Sin experiencia: interés en aprender desarrollo móvil",
-    ],
-    alternativeFormulations: [
-      "¿Qué tecnología prefieres para crear aplicaciones móviles?",
-      "¿Cuál es tu stack tecnológico favorito para mobile?",
-      "¿Con qué herramientas desarrollas aplicaciones móviles?",
-    ],
+    type: "scenario",
+    category: "design",
+    question:
+      "Necesitas diseñar una app de banca móvil para usuarios chilenos de 50+ años que no son muy tech-savvy. ¿Cuál sería tu enfoque de diseño?",
+    explanation: "Diseñar para usuarios menos técnicos requiere priorizar simplicidad, accesibilidad, y confianza.",
     tips: [
-      "Elige según tu experiencia real, no aspiraciones",
-      "Considera qué enfoque has usado en proyectos",
-      "Piensa en qué tecnología te resulta más productiva",
-      "Si no tienes experiencia, está bien seleccionar esa opción",
+      "¿Cómo simplificarías la navegación?",
+      "¿Qué elementos generan confianza?",
+      "¿Cómo manejarías la accesibilidad?",
     ],
   },
+
+  // Security Questions
   {
     id: 15,
-    type: "open",
-    category: "mobile",
-    question: "Describe un desafío técnico que hayas enfrentado en desarrollo móvil y cómo lo resolviste",
-    explanation: "Esta pregunta evalúa tu experiencia práctica resolviendo problemas específicos del desarrollo móvil.",
-    examples: [
-      "Optimización de rendimiento en dispositivos de gama baja",
-      "Manejo de diferentes tamaños de pantalla y orientaciones",
-      "Integración con APIs nativas del dispositivo",
-      "Gestión de estado en aplicaciones complejas",
-      "Problemas de compatibilidad entre versiones de OS",
-    ],
-    alternativeFormulations: [
-      "¿Puedes describir un problema técnico móvil que hayas solucionado?",
-      "Cuéntame sobre una dificultad en desarrollo móvil que hayas superado",
-      "¿Qué obstáculo técnico móvil recuerdas haber resuelto?",
-    ],
-    tips: [
-      "Describe un problema específico y concreto",
-      "Explica tanto el problema como tu solución",
-      "Incluye qué aprendiste de la experiencia",
-      "Si no tienes experiencia móvil, puedes mencionar tu interés por aprender",
-      "Menciona herramientas o recursos que usaste",
-    ],
-  },
-
-  // Design questions
-  {
-    id: 16,
-    type: "scale",
-    category: "design",
-    question: "Tengo buen ojo para el diseño y la experiencia de usuario",
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu autopercepción sobre tus habilidades de diseño y comprensión de UX/UI.",
-    examples: [
-      "Crear interfaces visualmente atractivas y coherentes",
-      "Entender principios de diseño como jerarquía visual y espaciado",
-      "Considerar la usabilidad y experiencia del usuario",
-      "Trabajar con sistemas de diseño y guías de estilo",
-      "Colaborar efectivamente con diseñadores",
-    ],
-    alternativeFormulations: [
-      "Me considero competente en aspectos de diseño y usabilidad",
-      "Tengo habilidades sólidas para crear interfaces atractivas",
-      "Soy capaz de desarrollar experiencias de usuario efectivas",
-    ],
-    tips: [
-      "Piensa en feedback que hayas recibido sobre tus interfaces",
-      "Considera si otros han elogiado tus habilidades de diseño",
-      "Reflexiona sobre tu atención a detalles visuales",
-      "Evalúa qué tan natural te resulta pensar en la experiencia del usuario",
-    ],
-  },
-  {
-    id: 17,
-    type: "ranking",
-    category: "design",
-    question: "Ordena estos aspectos de diseño según tu nivel de interés/habilidad",
-    instruction: "1 = mayor interés/habilidad, 5 = menor",
-    items: [
-      "Diseño visual y estética",
-      "Experiencia de usuario (UX)",
-      "Prototipado y wireframing",
-      "Sistemas de diseño",
-      "Accesibilidad web",
-    ],
-    reverse: false,
-    explanation: "Esta pregunta identifica tus áreas de mayor interés y competencia dentro del diseño digital.",
-    examples: [
-      "Visual: colores, tipografía, composición, branding",
-      "UX: research, user journeys, usability testing",
-      "Prototipado: Figma, Sketch, wireframes, mockups",
-      "Sistemas: design tokens, componentes reutilizables, guías de estilo",
-      "Accesibilidad: WCAG, screen readers, inclusive design",
-    ],
-    alternativeFormulations: [
-      "Prioriza estas áreas de diseño según tu competencia",
-      "Ordena estos aspectos de diseño por tu nivel de dominio",
-      "Clasifica estas disciplinas de diseño según tu experiencia",
-    ],
-    tips: [
-      "Ordena según tu experiencia e interés real",
-      "Considera en qué áreas has trabajado más",
-      "Piensa en qué aspectos disfrutas más",
-      "Evalúa dónde sientes que tienes más habilidad natural",
-    ],
-  },
-
-  // Security questions
-  {
-    id: 18,
     type: "checkbox",
     category: "security",
-    question: "¿Con cuáles de estos conceptos de seguridad tienes experiencia? (Selecciona todas las que apliquen)",
-    instruction: "Marca solo las que hayas implementado o trabajado",
+    question:
+      "¿Qué medidas de seguridad implementarías en una aplicación web que maneja datos financieros? (Selecciona todas las aplicables)",
     options: [
-      "Autenticación y autorización",
-      "Encriptación de datos",
-      "Validación y sanitización de inputs",
-      "HTTPS y certificados SSL",
-      "Prevención de ataques (XSS, CSRF, SQL injection)",
-      "Auditorías de seguridad",
+      "Autenticación multifactor obligatoria",
+      "Encriptación end-to-end",
+      "Auditoría completa de acciones",
+      "Tokenización de datos sensibles",
+      "WAF (Web Application Firewall)",
+      "Monitoreo de anomalías en tiempo real",
+      "Backup encriptado y disaster recovery",
+      "Penetration testing regular",
     ],
-    reverse: false,
-    explanation: "Esta pregunta evalúa tu experiencia con diferentes aspectos de la seguridad en desarrollo web.",
+    explanation: "Aplicaciones financieras requieren el más alto nivel de seguridad en múltiples capas.",
+  },
+  {
+    id: 16,
+    type: "code",
+    category: "security",
+    question: "Identifica las vulnerabilidades en este código de autenticación:",
+    code: `function login(username, password) {
+  const user = db.query(
+    \`SELECT * FROM users WHERE username = '\${username}' AND password = '\${password}'\`
+  );
+  
+  if (user) {
+    const token = jwt.sign({ id: user.id }, 'secret123');
+    res.cookie('token', token);
+    return { success: true, user };
+  }
+  
+  return { success: false };
+}`,
+    language: "javascript",
+    explanation: "Este código tiene múltiples vulnerabilidades críticas de seguridad.",
     examples: [
-      "Auth: JWT, OAuth, session management, role-based access",
-      "Encriptación: hashing passwords, data encryption, secure storage",
-      "Validación: input sanitization, data validation, parameter checking",
-      "HTTPS: SSL certificates, secure connections, HSTS",
-      "Prevención: XSS protection, CSRF tokens, prepared statements",
-      "Auditorías: security testing, vulnerability assessment, code review",
-    ],
-    alternativeFormulations: [
-      "¿Qué prácticas de seguridad has implementado en tus proyectos?",
-      "Marca los aspectos de seguridad con los que tienes experiencia",
-      "¿Con cuáles de estas medidas de seguridad has trabajado?",
+      "SQL injection en la consulta",
+      "Contraseña en texto plano",
+      "JWT secret hardcodeado",
+      "Cookie sin flags de seguridad",
+      "Falta rate limiting",
     ],
     tips: [
-      "Selecciona solo las que hayas implementado realmente",
-      "Considera tanto conocimiento teórico como práctica",
-      "Piensa en medidas de seguridad que hayas aplicado en proyectos",
-      "No marques conceptos que solo hayas leído sobre ellos",
+      "¿Cómo protegerías contra SQL injection?",
+      "¿Cómo deberían almacenarse las contraseñas?",
+      "¿Qué flags de seguridad faltan en la cookie?",
     ],
+  },
+
+  // Mixed Technical Questions
+  {
+    id: 17,
+    type: "open",
+    category: "frontend",
+    question:
+      "Explica cómo implementarías un sistema de notificaciones en tiempo real para una aplicación web. Considera tanto el frontend como el backend.",
+    explanation: "Esta pregunta evalúa tu comprensión de arquitecturas full-stack y tecnologías de tiempo real.",
+    tips: [
+      "Considera WebSockets, Server-Sent Events, o Push API",
+      "¿Cómo manejarías la persistencia de notificaciones?",
+      "¿Qué pasa si el usuario está offline?",
+    ],
+  },
+  {
+    id: 18,
+    type: "slider",
+    category: "backend",
+    question: "En una escala del 1 al 10, ¿qué tan cómodo te sientes diseñando arquitecturas de microservicios?",
+    min: 1,
+    max: 10,
+    step: 1,
+    explanation:
+      "Los microservicios requieren entender distributed systems, service discovery, y event-driven architecture.",
   },
   {
     id: 19,
-    type: "scenario",
-    category: "security",
-    question: "Descubres una vulnerabilidad de seguridad en tu aplicación en producción. ¿Cuál es tu primera acción?",
-    options: [
-      "Parchear inmediatamente y desplegar",
-      "Evaluar el impacto y crear un plan",
-      "Notificar al equipo y stakeholders",
-      "Documentar la vulnerabilidad primero",
-    ],
-    explanation:
-      "Esta pregunta evalúa tu comprensión de los procedimientos apropiados para manejar incidentes de seguridad.",
-    examples: [
-      "Parchear: fix rápido, hotfix, deployment urgente",
-      "Evaluar: análisis de riesgo, impacto assessment, priorización",
-      "Notificar: comunicación a equipo, escalation, incident response",
-      "Documentar: registro del incidente, post-mortem, lessons learned",
-    ],
-    alternativeFormulations: [
-      "¿Cómo manejarías un incidente de seguridad crítico?",
-      "¿Cuál sería tu respuesta inmediata ante una vulnerabilidad en producción?",
-      "¿Qué harías primero al descubrir un problema de seguridad grave?",
-    ],
-    tips: [
-      "Piensa en el balance entre velocidad y precaución",
-      "Considera la importancia de la comunicación",
-      "Reflexiona sobre procedimientos de incident response",
-      "Evalúa qué acción tendría mayor impacto positivo",
-    ],
+    type: "ranking",
+    category: "database",
+    question: "Ordena estas bases de datos según tu experiencia práctica (mayor a menor):",
+    items: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Elasticsearch", "SQLite", "DynamoDB", "Cassandra"],
+    explanation: "Tu experiencia con diferentes tipos de bases de datos indica tu versatilidad en manejo de datos.",
   },
   {
     id: 20,
-    type: "open",
+    type: "scenario",
     category: "security",
-    question: "¿Cómo implementas la seguridad en tus aplicaciones web desde el desarrollo?",
-    explanation:
-      "Esta pregunta busca entender tu enfoque proactivo hacia la seguridad durante el proceso de desarrollo.",
-    examples: [
-      "Secure coding practices desde el inicio",
-      "Validación de inputs en frontend y backend",
-      "Implementación de autenticación robusta",
-      "Uso de HTTPS y headers de seguridad",
-      "Testing de seguridad automatizado",
-      "Code reviews enfocados en seguridad",
-    ],
-    alternativeFormulations: [
-      "Describe tu estrategia para desarrollar aplicaciones seguras",
-      "¿Qué medidas de seguridad integras en tu proceso de desarrollo?",
-      "¿Cómo aseguras que tus aplicaciones sean seguras desde el código?",
-    ],
+    question:
+      "Tu aplicación web fue comprometida y los atacantes accedieron a datos de usuarios. ¿Cuál sería tu plan de respuesta a incidentes paso a paso?",
+    explanation: "La respuesta a incidentes de seguridad requiere un plan estructurado y comunicación efectiva.",
     tips: [
-      "Describe prácticas específicas que implementes",
-      "Menciona herramientas de seguridad que uses",
-      "Incluye tanto medidas preventivas como reactivas",
-      "Explica cómo integras seguridad en tu workflow",
-      "Si tienes poca experiencia, menciona tu interés por aprender",
+      "¿Cuáles serían tus primeros pasos?",
+      "¿Cómo comunicarías a los usuarios?",
+      "¿Qué medidas preventivas implementarías?",
     ],
+  },
+]
+
+// Conversational flow for technical skills
+const TECHNICAL_CONVERSATION_FLOW = [
+  {
+    id: "intro",
+    category: "Introducción",
+    systemMessage:
+      "¡Hola! Soy tu asistente especializado en evaluación de habilidades técnicas. Vamos a tener una conversación natural sobre tu experiencia y competencias en desarrollo de software. No es un examen, sino una charla técnica para conocer mejor tu perfil profesional. ¿Estás listo para comenzar?",
+    userPrompt: "Responde cuando estés listo para iniciar la evaluación técnica",
+    skills: [],
+  },
+  {
+    id: "frontend",
+    category: "Desarrollo Frontend",
+    systemMessage:
+      "Perfecto, comencemos hablando sobre desarrollo frontend. Me gustaría conocer tu experiencia con interfaces de usuario. ¿Con qué tecnologías frontend has trabajado? ¿React, Vue, Angular, o tal vez vanilla JavaScript? Cuéntame sobre algún proyecto frontend que hayas desarrollado y qué desafíos técnicos enfrentaste.",
+    userPrompt: "Habla sobre tu experiencia en desarrollo frontend y las tecnologías que manejas",
+    skills: ["frontend"],
+  },
+  {
+    id: "backend",
+    category: "Desarrollo Backend",
+    systemMessage:
+      "Interesante tu experiencia frontend. Ahora hablemos del backend. ¿Qué lenguajes de programación del lado del servidor manejas? ¿Has desarrollado APIs REST? ¿Cómo manejas la arquitectura de tus aplicaciones backend? Me gustaría que me cuentes sobre tu experiencia con bases de datos y cómo estructuras tus servicios.",
+    userPrompt: "Describe tu experiencia en desarrollo backend, APIs y arquitectura de servicios",
+    skills: ["backend", "database"],
+  },
+  {
+    id: "database",
+    category: "Bases de Datos",
+    systemMessage:
+      "Muy bien, profundicemos en bases de datos. ¿Prefieres trabajar con bases de datos relacionales como MySQL o PostgreSQL, o has trabajado con NoSQL como MongoDB? ¿Cómo diseñas los esquemas de datos? ¿Has optimizado consultas complejas? Cuéntame sobre tu experiencia gestionando datos.",
+    userPrompt: "Comparte tu experiencia con bases de datos, diseño de esquemas y optimización",
+    skills: ["database"],
+  },
+  {
+    id: "mobile_design",
+    category: "Mobile y Diseño",
+    systemMessage:
+      "Ahora me gustaría conocer sobre desarrollo móvil y diseño. ¿Has desarrollado aplicaciones móviles? ¿Nativo, React Native, Flutter, o aplicaciones híbridas? Y en cuanto a diseño, ¿qué tan cómodo te sientes con UX/UI? ¿Trabajas con herramientas de diseño como Figma?",
+    userPrompt: "Habla sobre tu experiencia en desarrollo móvil y habilidades de diseño",
+    skills: ["mobile", "design"],
+  },
+  {
+    id: "security_devops",
+    category: "Seguridad y DevOps",
+    systemMessage:
+      "Excelente. Para finalizar, hablemos de seguridad y DevOps. ¿Cómo implementas seguridad en tus aplicaciones? ¿Manejas autenticación, encriptación, prevención de vulnerabilidades? ¿Has trabajado con Docker, CI/CD, despliegues en la nube? ¿Qué herramientas de DevOps conoces?",
+    userPrompt: "Describe tu experiencia con seguridad, DevOps y despliegue de aplicaciones",
+    skills: ["security"],
+  },
+  {
+    id: "problem_solving",
+    category: "Resolución de Problemas Técnicos",
+    systemMessage:
+      "Para cerrar, me gustaría conocer sobre tu enfoque para resolver problemas técnicos. ¿Puedes contarme sobre algún bug complejo que hayas resuelto? ¿Cómo debuggeas código? ¿Qué estrategias usas cuando te enfrentas a tecnologías nuevas que no conoces? ¿Cómo te mantienes actualizado en el mundo tech?",
+    userPrompt: "Comparte tu metodología para resolver problemas técnicos y aprender nuevas tecnologías",
+    skills: ["frontend", "backend", "database", "mobile", "design", "security"],
+  },
+  {
+    id: "conclusion",
+    category: "Conclusión",
+    systemMessage:
+      "Excelente, hemos terminado nuestra conversación técnica. Ha sido muy enriquecedor conocer sobre tu experiencia y competencias en desarrollo de software. Ahora voy a procesar toda la información técnica que me has compartido para generar tu perfil personalizado de habilidades. ¡Gracias por compartir tu conocimiento!",
+    userPrompt: "Puedes agregar cualquier comentario final sobre tu experiencia técnica",
+    skills: ["frontend", "backend", "database", "mobile", "design", "security"],
   },
 ]
 
@@ -700,25 +528,14 @@ const useSpeechRecognition = () => {
 
   const recognitionRef = useRef<any>(null)
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const restartTimerRef = useRef<NodeJS.Timeout | null>(null)
   const initTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
-
-      if (SpeechRecognition) {
-        setIsSupported(true)
-      } else {
-        setIsSupported(false)
-        setError("Tu navegador no soporta reconocimiento de voz. Prueba con Chrome o Edge.")
-      }
+      setIsSupported(!!SpeechRecognition)
     }
-
-    return () => {
-      clearAllTimers()
-    }
+    return () => clearAllTimers()
   }, [])
 
   const clearAllTimers = () => {
@@ -726,33 +543,9 @@ const useSpeechRecognition = () => {
       clearTimeout(silenceTimerRef.current)
       silenceTimerRef.current = null
     }
-    if (restartTimerRef.current) {
-      clearTimeout(restartTimerRef.current)
-      restartTimerRef.current = null
-    }
     if (initTimeoutRef.current) {
       clearTimeout(initTimeoutRef.current)
       initTimeoutRef.current = null
-    }
-  }
-
-  const startSilenceTimer = () => {
-    clearAllTimers()
-
-    console.log("Iniciando timer de silencio de 3 segundos...")
-    silenceTimerRef.current = setTimeout(() => {
-      console.log("3 segundos de silencio completados, deteniendo reconocimiento")
-      if (recognitionRef.current && isListening) {
-        recognitionRef.current.stop()
-      }
-    }, 3000) // 3 segundos de silencio
-  }
-
-  const resetSilenceTimer = () => {
-    if (silenceTimerRef.current) {
-      console.log("Reseteando timer de silencio...")
-      clearTimeout(silenceTimerRef.current)
-      silenceTimerRef.current = null
     }
   }
 
@@ -762,79 +555,45 @@ const useSpeechRecognition = () => {
     try {
       setIsInitializing(true)
       setError(null)
-      console.log("Iniciando reconocimiento de voz...")
 
       const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
       const recognition = new SpeechRecognition()
 
-      // Enhanced configuration for Spanish
       recognition.continuous = true
       recognition.interimResults = true
-      recognition.lang = "es-ES" // Primary Spanish
-      recognition.maxAlternatives = 3 // More alternatives for better accuracy
+      recognition.lang = "es-ES"
+      recognition.maxAlternatives = 3
 
       let hasReceivedFinalResult = false
-      let lastSpeechTime = Date.now()
 
-      // Handle start
       recognition.onstart = () => {
-        console.log("Reconocimiento de voz iniciado exitosamente")
         setIsListening(true)
         setIsInitializing(false)
-        setError(null)
         hasReceivedFinalResult = false
-        lastSpeechTime = Date.now()
-
         if (initTimeoutRef.current) {
           clearTimeout(initTimeoutRef.current)
           initTimeoutRef.current = null
         }
       }
 
-      // Handle speech start (user started speaking)
-      recognition.onspeechstart = () => {
-        console.log("Detectado inicio de habla del usuario")
-        resetSilenceTimer()
-        setError(null)
-        lastSpeechTime = Date.now()
-      }
-
-      // Handle speech end (user stopped speaking)
       recognition.onspeechend = () => {
-        console.log("Detectado fin de habla del usuario, iniciando timer de silencio")
-        lastSpeechTime = Date.now()
-        startSilenceTimer()
-      }
-
-      // Handle sound start (any sound detected)
-      recognition.onsoundstart = () => {
-        console.log("Detectado sonido")
-        resetSilenceTimer()
-        lastSpeechTime = Date.now()
-      }
-
-      // Handle sound end (no sound detected)
-      recognition.onsoundend = () => {
-        console.log("Fin de sonido detectado")
-        // Solo iniciar timer si ha pasado tiempo suficiente desde la última actividad
-        const timeSinceLastSpeech = Date.now() - lastSpeechTime
-        if (timeSinceLastSpeech > 500) {
-          // 500ms of buffer
-          startSilenceTimer()
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current)
         }
+        silenceTimerRef.current = setTimeout(() => {
+          if (recognition && isListening) {
+            recognition.stop()
+          }
+        }, 3000)
       }
 
-      // Handle results with enhanced processing
       recognition.onresult = (event: any) => {
-        console.log("Resultado de reconocimiento recibido:", event)
         let finalTranscript = ""
         let interimTranscript = ""
 
         for (let i = event.resultIndex; i < event.results.length; i++) {
-          const result = event.results[i]
-          const transcript = result[0].transcript
-
-          if (result.isFinal) {
+          const transcript = event.results[i][0].transcript
+          if (event.results[i].isFinal) {
             finalTranscript += transcript
             hasReceivedFinalResult = true
           } else {
@@ -843,66 +602,38 @@ const useSpeechRecognition = () => {
         }
 
         if (finalTranscript) {
-          console.log("Transcripción final recibida:", finalTranscript)
-          setTranscript((prev) => {
-            const newTranscript = prev + finalTranscript + " "
-            console.log("Transcripción total actualizada:", newTranscript)
-            return newTranscript
-          })
+          setTranscript((prev) => prev + finalTranscript + " ")
           setInterimTranscript("")
-          resetSilenceTimer()
-          setError(null) // Clear any previous errors
-          lastSpeechTime = Date.now()
         } else {
-          console.log("Transcripción temporal:", interimTranscript)
           setInterimTranscript(interimTranscript)
-          lastSpeechTime = Date.now()
         }
       }
 
-      // Enhanced error handling
       recognition.onerror = (event: any) => {
-        console.error("Error en reconocimiento de voz:", event.error, event)
-
-        // No mostrar errores si ya tenemos resultados válidos
         if (hasReceivedFinalResult && (event.error === "no-speech" || event.error === "aborted")) {
-          console.log("Error menor ignorado, ya tenemos resultados")
           return
         }
-
         setIsListening(false)
         setIsInitializing(false)
 
         switch (event.error) {
+          case "not-allowed":
+            setError("Permisos de micrófono denegados. Por favor, permite el acceso al micrófono.")
+            break
+          case "network":
+            setError("Error de conexión. Verifica tu conexión a internet.")
+            break
           case "no-speech":
             if (!hasReceivedFinalResult) {
               setError("No se detectó voz. Intenta hablar más cerca del micrófono.")
             }
             break
-          case "audio-capture":
-            setError("No se pudo acceder al micrófono. Verifica los permisos.")
-            break
-          case "not-allowed":
-            setError("Permiso de micrófono denegado. Habilita el micrófono en tu navegador.")
-            break
-          case "network":
-            setError("Error de conexión. Verifica tu conexión a internet.")
-            break
-          case "language-not-supported":
-            setError("Idioma español no soportado en este navegador.")
-            break
-          case "aborted":
-            // Error normal cuando se detiene manualmente
-            console.log("Reconocimiento detenido manualmente")
-            break
           default:
-            setError(`Error de reconocimiento: ${event.error}`)
+            setError(`Error de reconocimiento de voz: ${event.error}`)
         }
       }
 
-      // Handle end
       recognition.onend = () => {
-        console.log("Reconocimiento de voz terminado")
         setIsListening(false)
         setInterimTranscript("")
         setIsInitializing(false)
@@ -912,24 +643,20 @@ const useSpeechRecognition = () => {
       recognitionRef.current = recognition
       recognition.start()
 
-      // Timeout de inicialización más generoso
       initTimeoutRef.current = setTimeout(() => {
         if (isInitializing) {
-          console.log("Timeout de inicialización alcanzado")
           recognition.stop()
-          setError("No se pudo inicializar el reconocimiento de voz. Intenta nuevamente.")
+          setError("No se pudo inicializar el reconocimiento de voz.")
           setIsInitializing(false)
         }
-      }, 10000) // 10 segundos para inicializar
+      }, 10000)
     } catch (error) {
-      console.error("Error al iniciar reconocimiento de voz:", error)
-      setError("Error al inicializar el reconocimiento de voz. Intenta nuevamente.")
+      setError("Error al inicializar el reconocimiento de voz.")
       setIsInitializing(false)
     }
-  }, [isListening, isInitializing, isSupported])
+  }, [isSupported, isListening, isInitializing])
 
   const stopListening = useCallback(() => {
-    console.log("Deteniendo reconocimiento de voz manualmente...")
     if (recognitionRef.current && (isListening || isInitializing)) {
       recognitionRef.current.stop()
       recognitionRef.current = null
@@ -941,7 +668,6 @@ const useSpeechRecognition = () => {
   }, [isListening, isInitializing])
 
   const clearTranscript = useCallback(() => {
-    console.log("Limpiando transcripción...")
     setTranscript("")
     setInterimTranscript("")
     setError(null)
@@ -960,115 +686,142 @@ const useSpeechRecognition = () => {
   }
 }
 
-interface RankingComponentProps {
-  items: string[]
-  value: string[]
-  onChange: (newOrder: string[]) => void
-  category: keyof typeof SKILL_CATEGORIES
-}
+// Text-to-Speech Hook
+const useTextToSpeech = () => {
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isSupported, setIsSupported] = useState(false)
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
 
-const RankingComponent: FC<RankingComponentProps> = ({ items, value, onChange, category }) => {
-  const moveItem = (fromIndex: number, toIndex: number) => {
-    const newOrder = [...value]
-    const [movedItem] = newOrder.splice(fromIndex, 1)
-    newOrder.splice(toIndex, 0, movedItem)
-    onChange(newOrder)
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setIsSupported(true)
+
+      const loadVoices = () => {
+        const availableVoices = window.speechSynthesis.getVoices()
+        setVoices(availableVoices)
+      }
+
+      loadVoices()
+      window.speechSynthesis.onvoiceschanged = loadVoices
+    }
+  }, [])
+
+  const speak = (text: string) => {
+    if (!isSupported) return
+
+    window.speechSynthesis.cancel()
+
+    const utterance = new SpeechSynthesisUtterance(text)
+
+    // Try to find a Spanish voice
+    const spanishVoice = voices.find(
+      (voice) => voice.lang.startsWith("es") || voice.name.toLowerCase().includes("spanish"),
+    )
+
+    if (spanishVoice) {
+      utterance.voice = spanishVoice
+    }
+
+    utterance.lang = "es-ES"
+    utterance.rate = 0.9
+    utterance.pitch = 1
+    utterance.volume = 0.8
+
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+
+    window.speechSynthesis.speak(utterance)
   }
 
-  const categoryConfig = SKILL_CATEGORIES[category]
-  const CategoryIcon = categoryConfig.icon
+  const stop = () => {
+    if (isSupported) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+    }
+  }
 
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-        <CategoryIcon className="w-4 h-4" />
-        <span>Arrastra los elementos o usa las flechas para reordenar según tu experiencia</span>
-      </div>
+  return { speak, stop, isSpeaking, isSupported }
+}
 
-      {value.map((item, index) => (
-        <div
-          key={item}
-          className={`flex items-center gap-4 p-4 bg-gradient-to-r from-${category === "frontend" ? "blue" : category === "backend" ? "green" : category === "database" ? "purple" : category === "mobile" ? "orange" : category === "design" ? "pink" : "red"}-50 to-gray-50 rounded-lg border border-${category === "frontend" ? "blue" : category === "backend" ? "green" : category === "database" ? "purple" : category === "mobile" ? "orange" : category === "design" ? "pink" : "red"}-200 hover:shadow-md transition-all`}
-        >
-          <div className="flex flex-col gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0 hover:bg-white/50"
-              onClick={() => index > 0 && moveItem(index, index - 1)}
-              disabled={index === 0}
-            >
-              <ChevronUp className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0 hover:bg-white/50"
-              onClick={() => index < value.length - 1 && moveItem(index, index + 1)}
-              disabled={index === value.length - 1}
-            >
-              <ChevronDown className="w-4 h-4" />
-            </Button>
-          </div>
+// Drag and Drop Hook for Ranking Questions
+const useDragAndDrop = (initialItems: string[]) => {
+  const [items, setItems] = useState(initialItems)
+  const [draggedItem, setDraggedItem] = useState<string | null>(null)
 
-          <div
-            className={`w-10 h-10 ${categoryConfig.color} text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg`}
-          >
-            {index + 1}
-          </div>
+  const handleDragStart = (item: string) => {
+    setDraggedItem(item)
+  }
 
-          <div className="flex-1">
-            <p className="font-semibold text-gray-900">{item}</p>
-            <p className="text-sm text-gray-600">
-              {index === 0 && "🥇 Mayor experiencia"}
-              {index === 1 && "🥈 Segunda mayor experiencia"}
-              {index === 2 && "🥉 Tercera mayor experiencia"}
-              {index > 2 && `#${index + 1} en tu ranking`}
-            </p>
-          </div>
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
 
-          <div className="w-8 h-8 bg-white/70 rounded-lg flex items-center justify-center cursor-grab active:cursor-grabbing">
-            <GripVertical className="w-5 h-5 text-gray-400" />
-          </div>
-        </div>
-      ))}
+  const handleDrop = (targetItem: string) => {
+    if (!draggedItem) return
 
-      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-        <div className="flex items-center gap-2 text-blue-800">
-          <Target className="w-4 h-4" />
-          <span className="font-medium">Consejo:</span>
-        </div>
-        <p className="text-sm text-blue-700 mt-1">
-          Ordena según tu experiencia real y nivel de comodidad con cada tecnología.
-        </p>
-      </div>
-    </div>
-  )
+    const draggedIndex = items.indexOf(draggedItem)
+    const targetIndex = items.indexOf(targetItem)
+
+    if (draggedIndex === -1 || targetIndex === -1) return
+
+    const newItems = [...items]
+    newItems.splice(draggedIndex, 1)
+    newItems.splice(targetIndex, 0, draggedItem)
+
+    setItems(newItems)
+    setDraggedItem(null)
+  }
+
+  const moveItem = (fromIndex: number, toIndex: number) => {
+    const newItems = [...items]
+    const [movedItem] = newItems.splice(fromIndex, 1)
+    newItems.splice(toIndex, 0, movedItem)
+    setItems(newItems)
+  }
+
+  return {
+    items,
+    setItems,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+    moveItem,
+    draggedItem,
+  }
 }
 
 export default function TechnicalSkillsTestPage() {
   const { t, language } = useLanguage()
   const router = useRouter()
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, any>>({})
-  const [isCompleting, setIsCompleting] = useState(false)
-  const [rankingItems, setRankingItems] = useState<{ [key: number]: string[] }>({})
+
+  // Mode selection
   const [inputMode, setInputMode] = useState<InputMode>("mixed")
   const [showModeSelection, setShowModeSelection] = useState(true)
 
-  // Help system states
-  const [showHelpDialog, setShowHelpDialog] = useState(false)
-  const [showContextualHelp, setShowContextualHelp] = useState(false)
-  const [currentFormulation, setCurrentFormulation] = useState<{ [key: number]: number }>({})
-  const [hasUsedHelp, setHasUsedHelp] = useState<{ [key: number]: boolean }>({})
-  const [hasReformulated, setHasReformulated] = useState<{ [key: number]: boolean }>({})
+  // Traditional mode states
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, any>>({})
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [showHelp, setShowHelp] = useState(false)
+  const [textAnswer, setTextAnswer] = useState("")
+  const [sliderValue, setSliderValue] = useState([5])
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
+  const [selectedOption, setSelectedOption] = useState("")
 
-  // Speech recognition
+  // Conversational mode states
+  const [currentStep, setCurrentStep] = useState(0)
+  const [conversationAnswers, setConversationAnswers] = useState<Record<string, string>>({})
+  const [isConversationActive, setIsConversationActive] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const [showCountdown, setShowCountdown] = useState(false)
+
+  // Speech recognition and synthesis
   const {
     isListening,
     transcript,
     interimTranscript,
-    isSupported,
+    isSupported: speechRecognitionSupported,
     error: speechError,
     isInitializing,
     startListening,
@@ -1076,215 +829,339 @@ export default function TechnicalSkillsTestPage() {
     clearTranscript,
   } = useSpeechRecognition()
 
-  const question = TECHNICAL_QUESTIONS[currentQuestion]
-  const progress = ((currentQuestion + 1) / TECHNICAL_QUESTIONS.length) * 100
-  const isAnswered = answers[question?.id] !== undefined
+  const { speak, stop: stopSpeaking, isSpeaking, isSupported: textToSpeechSupported } = useTextToSpeech()
 
-  // Initialize ranking items when question changes
+  // Drag and drop for ranking questions
+  const currentQuestionData = TECHNICAL_QUESTIONS[currentQuestion]
+  const {
+    items: rankingItems,
+    setItems: setRankingItems,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+    moveItem,
+  } = useDragAndDrop(currentQuestionData?.items || [])
+
+  // Auto-start conversation when step changes in voice-complete mode
   useEffect(() => {
-    if (question?.type === "ranking" && question.items && !rankingItems[question.id]) {
-      setRankingItems((prev) => ({
-        ...prev,
-        [question.id]: [...question.items!],
-      }))
+    if (inputMode === "voice-complete" && isConversationActive && !isSpeaking && !isListening) {
+      const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
+      if (currentStepData && currentStepData.systemMessage) {
+        // Start countdown before speaking
+        setShowCountdown(true)
+        setCountdown(3)
+
+        const countdownInterval = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(countdownInterval)
+              setShowCountdown(false)
+              // Start speaking after countdown
+              setTimeout(() => {
+                speak(currentStepData.systemMessage)
+              }, 500)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+      }
     }
-  }, [question, rankingItems])
+  }, [currentStep, inputMode, isConversationActive, isSpeaking, isListening, speak])
 
-  // Update text answer when transcript changes
+  // Auto-start listening after system finishes speaking
   useEffect(() => {
-    if (transcript && (question?.type === "open" || question?.type === "code")) {
-      handleAnswerChange(transcript.trim())
-    }
-  }, [transcript, question?.type])
-
-  // Auto-start voice recognition for voice-complete mode
-  useEffect(() => {
-    if (
-      inputMode === "voice-complete" &&
-      (question?.type === "open" || question?.type === "code") &&
-      isSupported &&
-      !isListening &&
-      !isInitializing
-    ) {
-      // Auto-start voice recognition after a short delay
+    if (inputMode === "voice-complete" && !isSpeaking && isConversationActive && speechRecognitionSupported) {
       const timer = setTimeout(() => {
-        startListening()
+        if (!isListening && !isInitializing) {
+          startListening()
+        }
       }, 1000)
       return () => clearTimeout(timer)
     }
-  }, [currentQuestion, inputMode, isSupported, isListening, isInitializing, startListening, question?.type])
+  }, [
+    isSpeaking,
+    isConversationActive,
+    inputMode,
+    speechRecognitionSupported,
+    isListening,
+    isInitializing,
+    startListening,
+  ])
 
-  // Get current question text (original or reformulated)
-  const getCurrentQuestionText = () => {
-    const formIndex = currentFormulation[question?.id] || 0
-    if (formIndex > 0 && question?.alternativeFormulations && question.alternativeFormulations[formIndex - 1]) {
-      return question.alternativeFormulations[formIndex - 1]
-    }
-    return question?.question || ""
-  }
-
-  // Handle question reformulation
-  const handleReformulate = () => {
-    const maxFormulations = (question?.alternativeFormulations?.length || 0) + 1
-    const currentIndex = currentFormulation[question?.id] || 0
-    const nextIndex = (currentIndex + 1) % maxFormulations
-
-    setCurrentFormulation((prev) => ({
-      ...prev,
-      [question.id]: nextIndex,
-    }))
-
-    setHasReformulated((prev) => ({
-      ...prev,
-      [question.id]: true,
-    }))
-  }
-
-  // Handle help usage
-  const handleHelpUsed = () => {
-    setHasUsedHelp((prev) => ({
-      ...prev,
-      [question.id]: true,
-    }))
-  }
-
-  // Get question type icon
-  const getQuestionTypeIcon = (type: QuestionType) => {
-    switch (type) {
-      case "scale":
-        return BarChart3
-      case "open":
-        return MessageSquare
-      case "multiple":
-        return List
-      case "scenario":
-        return Users
-      case "ranking":
-        return TrendingUp
-      case "checkbox":
-        return CheckSquare
-      case "slider":
-        return SliderIcon
-      case "binary":
-        return ToggleLeft
-      case "code":
-        return Code
-      default:
-        return Code
-    }
-  }
-
-  // Get question type label
-  const getQuestionTypeLabel = (type: QuestionType) => {
-    switch (type) {
-      case "scale":
-        return "Escala de Competencia"
-      case "open":
-        return "Respuesta Abierta"
-      case "multiple":
-        return "Selección Múltiple"
-      case "scenario":
-        return "Escenario Técnico"
-      case "ranking":
-        return "Ordenar por Experiencia"
-      case "checkbox":
-        return "Selección Múltiple"
-      case "slider":
-        return "Deslizador"
-      case "binary":
-        return "Elección Binaria"
-      case "code":
-        return "Análisis de Código"
-      default:
-        return ""
-    }
-  }
-
-  // Handle answer change
-  const handleAnswerChange = (value: any) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [question.id]: value,
-    }))
-  }
-
-  // Handle speech input for open questions
-  const handleSpeechInput = () => {
-    if (isListening || isInitializing) {
-      stopListening()
-    } else {
-      startListening()
-    }
-  }
-
-  // Navigate to next question
-  const handleNext = () => {
-    if (currentQuestion < TECHNICAL_QUESTIONS.length - 1) {
-      setCurrentQuestion((prev) => prev + 1)
-      // Clear speech recognition when moving to next question
-      if (isListening) {
-        stopListening()
+  // Save conversation answer when transcript changes
+  useEffect(() => {
+    if (inputMode === "voice-complete" && transcript) {
+      const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
+      if (currentStepData) {
+        setConversationAnswers((prev) => ({
+          ...prev,
+          [currentStepData.id]: transcript.trim(),
+        }))
       }
-      clearTranscript()
-    } else {
-      handleComplete()
     }
-  }
+  }, [transcript, currentStep, inputMode])
 
-  // Navigate to previous question
-  const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((prev) => prev - 1)
-      // Clear speech recognition when moving to previous question
-      if (isListening) {
-        stopListening()
-      }
-      clearTranscript()
+  // Update text answer from speech recognition in traditional mode
+  useEffect(() => {
+    if (
+      inputMode === "mixed" &&
+      transcript &&
+      (currentQuestionData?.type === "open" || currentQuestionData?.type === "scenario")
+    ) {
+      setTextAnswer(transcript)
     }
-  }
+  }, [transcript, inputMode, currentQuestionData?.type])
 
-  // Complete assessment
-  const handleComplete = async () => {
-    setIsCompleting(true)
+  // Reset form states when question changes
+  useEffect(() => {
+    setTextAnswer("")
+    setSliderValue([currentQuestionData?.min || 5])
+    setSelectedOptions([])
+    setSelectedOption("")
+    setShowHelp(false)
+    clearTranscript()
 
-    // Stop any ongoing speech recognition
-    if (isListening) {
-      stopListening()
+    // Reset ranking items when question changes
+    if (currentQuestionData?.items) {
+      setRankingItems(currentQuestionData.items)
     }
-
-    // Calculate technical skill scores
-    const scores = calculateTechnicalScores(answers)
-
-    // Save results to localStorage (in a real app, save to database)
-    localStorage.setItem(
-      "technicalSkillsResults",
-      JSON.stringify({
-        scores,
-        answers,
-        completedAt: new Date().toISOString(),
-        type: "technical-skills",
-        inputMode,
-        helpUsage: {
-          questionsWithHelp: Object.keys(hasUsedHelp).length,
-          questionsReformulated: Object.keys(hasReformulated).length,
-          totalQuestions: TECHNICAL_QUESTIONS.length,
-        },
-      }),
-    )
-
-    // Simulate processing time
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    router.push("/technical-skills-results")
-  }
+  }, [currentQuestion, currentQuestionData, clearTranscript, setRankingItems])
 
   const handleStartTest = (mode: InputMode) => {
     setInputMode(mode)
     setShowModeSelection(false)
+
+    if (mode === "voice-complete") {
+      setIsConversationActive(true)
+      setCurrentStep(0)
+    }
   }
 
-  // Calculate technical skill scores
-  const calculateTechnicalScores = (answers: Record<number, any>) => {
+  const handleNextConversationStep = () => {
+    if (currentStep < TECHNICAL_CONVERSATION_FLOW.length - 1) {
+      setCurrentStep((prev) => prev + 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    } else {
+      handleCompleteConversation()
+    }
+  }
+
+  const handlePreviousConversationStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    }
+  }
+
+  const handleRestartCurrentStep = () => {
+    clearTranscript()
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Restart the current step
+    const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
+    if (currentStepData) {
+      setTimeout(() => {
+        speak(currentStepData.systemMessage)
+      }, 500)
+    }
+  }
+
+  const handleCompleteConversation = async () => {
+    setIsCompleting(true)
+
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Process conversational answers
+    const results = processConversationalAnswers(conversationAnswers)
+
+    localStorage.setItem(
+      "technicalSkillsResults",
+      JSON.stringify({
+        scores: results,
+        answers: conversationAnswers,
+        completedAt: new Date().toISOString(),
+        type: "technical-skills",
+        inputMode,
+      }),
+    )
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    router.push("/technical-skills-results")
+  }
+
+  // Traditional mode handlers
+  const handleNextQuestion = () => {
+    // Save current answer
+    let answerValue: any = null
+
+    switch (currentQuestionData.type) {
+      case "open":
+      case "scenario":
+      case "code":
+        answerValue = textAnswer || transcript
+        break
+      case "multiple":
+      case "binary":
+        answerValue = selectedOption
+        break
+      case "checkbox":
+        answerValue = selectedOptions
+        break
+      case "slider":
+      case "scale":
+        answerValue = sliderValue[0]
+        break
+      case "ranking":
+        answerValue = rankingItems
+        break
+      default:
+        answerValue = textAnswer
+    }
+
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestionData.id]: answerValue,
+    }))
+
+    if (currentQuestion < TECHNICAL_QUESTIONS.length - 1) {
+      setCurrentQuestion((prev) => prev + 1)
+    } else {
+      handleCompleteTraditionalTest()
+    }
+  }
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((prev) => prev - 1)
+
+      // Load previous answer
+      const prevQuestion = TECHNICAL_QUESTIONS[currentQuestion - 1]
+      const prevAnswer = answers[prevQuestion.id]
+
+      if (prevAnswer !== undefined) {
+        switch (prevQuestion.type) {
+          case "open":
+          case "scenario":
+          case "code":
+            setTextAnswer(prevAnswer || "")
+            break
+          case "multiple":
+          case "binary":
+            setSelectedOption(prevAnswer || "")
+            break
+          case "checkbox":
+            setSelectedOptions(prevAnswer || [])
+            break
+          case "slider":
+          case "scale":
+            setSliderValue([prevAnswer || 5])
+            break
+          case "ranking":
+            setRankingItems(prevAnswer || prevQuestion.items || [])
+            break
+        }
+      }
+    }
+  }
+
+  const handleCompleteTraditionalTest = async () => {
+    setIsCompleting(true)
+
+    // Process traditional answers
+    const results = processTraditionalAnswers(answers)
+
+    localStorage.setItem(
+      "technicalSkillsResults",
+      JSON.stringify({
+        scores: results,
+        answers,
+        completedAt: new Date().toISOString(),
+        type: "technical-skills",
+        inputMode,
+      }),
+    )
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    router.push("/technical-skills-results")
+  }
+
+  // Process conversational answers into technical skill scores
+  const processConversationalAnswers = (answers: Record<string, string>) => {
+    const skillScores = {
+      frontend: 0,
+      backend: 0,
+      database: 0,
+      mobile: 0,
+      design: 0,
+      security: 0,
+    }
+
+    // Analyze each answer for technical skill indicators
+    Object.entries(answers).forEach(([stepId, answer]) => {
+      const step = TECHNICAL_CONVERSATION_FLOW.find((s) => s.id === stepId)
+      if (!step || !answer) return
+
+      const text = answer.toLowerCase()
+      const words = text.split(/\s+/).filter((word) => word.length > 2)
+      const wordCount = words.length
+
+      // Base score from response length and technical detail
+      const baseScore = Math.min(90, Math.max(30, (wordCount / 25) * 70 + 20))
+
+      // Technical skill-specific keyword analysis
+      step.skills.forEach((skill) => {
+        const keywords = getTechnicalSkillKeywords(skill)
+        const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
+        const keywordBonus = Math.min(20, keywordMatches * 4)
+
+        skillScores[skill as keyof typeof skillScores] = Math.min(100, baseScore + keywordBonus)
+      })
+    })
+
+    // Ensure all skills have at least a base score
+    Object.keys(skillScores).forEach((skill) => {
+      if (skillScores[skill as keyof typeof skillScores] === 0) {
+        skillScores[skill as keyof typeof skillScores] = 50 // Default neutral score
+      }
+    })
+
+    return skillScores
+  }
+
+  // Process traditional answers into technical skill scores
+  const processTraditionalAnswers = (answers: Record<number, any>) => {
+    const skillScores = {
+      frontend: 0,
+      backend: 0,
+      database: 0,
+      mobile: 0,
+      design: 0,
+      security: 0,
+    }
+
     const categoryScores: Record<string, number[]> = {
       frontend: [],
       backend: [],
@@ -1294,92 +1171,276 @@ export default function TechnicalSkillsTestPage() {
       security: [],
     }
 
-    TECHNICAL_QUESTIONS.forEach((q) => {
-      const answer = answers[q.id]
-      if (answer === undefined) return
+    // Process each answer
+    Object.entries(answers).forEach(([questionId, answer]) => {
+      const question = TECHNICAL_QUESTIONS.find((q) => q.id === Number.parseInt(questionId))
+      if (!question || answer === undefined || answer === null) return
 
+      const category = question.category
       let score = 0
 
-      switch (q.type) {
+      switch (question.type) {
         case "scale":
-          score = typeof answer === "number" ? answer : 3
-          if (q.reverse) score = 6 - score
-          break
-
-        case "ranking":
-          // Para ranking, calculamos el score basado en las posiciones
-          const items = answer as string[]
-          const originalItems = q.items || []
-
-          // Calculamos un score basado en qué tan "positivo" es el ranking
-          let rankingScore = 0
-          items.forEach((item, position) => {
-            const originalIndex = originalItems.indexOf(item)
-            // Items más "positivos" en posiciones altas dan más puntos
-            const positionScore = (items.length - position) / items.length
-            rankingScore += positionScore
-          })
-          score = (rankingScore / items.length) * 5 + 1 // Normalizar a escala 1-6
-          break
-
-        case "checkbox":
-          // Para checkbox, contamos cuántas opciones se seleccionaron
-          const selectedOptions = answer as string[]
-          const totalOptions = q.options?.length || 1
-          score = (selectedOptions.length / totalOptions) * 5 + 1
-          break
-
         case "slider":
-          // Para slider, normalizamos el valor a escala 1-6
-          const sliderValue = answer as number
-          const min = q.min || 0
-          const max = q.max || 100
-          score = ((sliderValue - min) / (max - min)) * 5 + 1
+          score = (answer / (question.max || 10)) * 100
           break
-
-        case "binary":
-          // Para binary, asignamos 1 o 6 según la opción
-          const binaryAnswer = answer as string
-          const isPositiveAnswer = q.options && binaryAnswer === q.options[1]
-          score = isPositiveAnswer ? 6 : 1
-          break
-
         case "multiple":
-        case "scenario":
-          // Para multiple choice, asignamos scores basados en la posición
-          const selectedIndex = q.options?.indexOf(answer as string) || 0
-          const optionCount = q.options?.length || 1
-          score = ((selectedIndex + 1) / optionCount) * 5 + 1
+          // Score based on quality of selected option (simplified)
+          score = answer ? 75 : 0
           break
-
+        case "binary":
+          score = answer === "true" || answer === "yes" ? 80 : 40
+          break
+        case "checkbox":
+          // Score based on number of relevant selections
+          const selections = Array.isArray(answer) ? answer.length : 0
+          const maxSelections = question.options?.length || 1
+          score = Math.min(100, (selections / maxSelections) * 120)
+          break
+        case "ranking":
+          // Score based on logical ordering (simplified)
+          score = Array.isArray(answer) && answer.length > 0 ? 70 : 0
+          break
         case "open":
+        case "scenario":
         case "code":
-          // Para respuestas abiertas y código, asignamos un score basado en la longitud y contenido
-          const textAnswer = answer as string
-          if (textAnswer && textAnswer.length > 50) {
-            score = 4.5 // Score alto por respuesta detallada
-          } else if (textAnswer && textAnswer.length > 20) {
-            score = 3.5 // Score medio por respuesta básica
-          } else {
-            score = 2.5 // Score bajo por respuesta muy corta
-          }
+          // Score based on answer length and technical keywords
+          const text = (answer || "").toLowerCase()
+          const words = text.split(/\s+/).filter((w: string) => w.length > 2)
+          const wordCount = words.length
+
+          const baseScore = Math.min(90, Math.max(20, (wordCount / 30) * 70 + 20))
+          const keywords = getTechnicalSkillKeywords(category)
+          const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
+          const keywordBonus = Math.min(25, keywordMatches * 5)
+
+          score = Math.min(100, baseScore + keywordBonus)
           break
+        default:
+          score = 50
       }
 
-      categoryScores[q.category].push(score)
+      categoryScores[category].push(score)
     })
 
     // Calculate average scores for each category
-    const finalScores: Record<string, number> = {}
-    Object.entries(categoryScores).forEach(([category, scores]) => {
+    Object.keys(categoryScores).forEach((category) => {
+      const scores = categoryScores[category]
       if (scores.length > 0) {
-        finalScores[category] = scores.reduce((sum, score) => sum + score, 0) / scores.length
+        skillScores[category as keyof typeof skillScores] = Math.round(
+          scores.reduce((sum, score) => sum + score, 0) / scores.length,
+        )
       } else {
-        finalScores[category] = 3 // Default neutral score
+        skillScores[category as keyof typeof skillScores] = 50 // Default score
       }
     })
 
-    return finalScores
+    return skillScores
+  }
+
+  const getTechnicalSkillKeywords = (skill: string): string[] => {
+    const keywordMap: Record<string, string[]> = {
+      frontend: [
+        "react",
+        "vue",
+        "angular",
+        "javascript",
+        "typescript",
+        "html",
+        "css",
+        "sass",
+        "scss",
+        "webpack",
+        "vite",
+        "babel",
+        "npm",
+        "yarn",
+        "component",
+        "jsx",
+        "dom",
+        "responsive",
+        "bootstrap",
+        "tailwind",
+        "material",
+        "ui",
+        "ux",
+        "interface",
+        "browser",
+        "chrome",
+        "performance",
+        "optimization",
+        "bundle",
+        "lazy loading",
+        "code splitting",
+      ],
+      backend: [
+        "node",
+        "express",
+        "nestjs",
+        "python",
+        "django",
+        "flask",
+        "java",
+        "spring",
+        "php",
+        "laravel",
+        "ruby",
+        "rails",
+        "go",
+        "rust",
+        "api",
+        "rest",
+        "graphql",
+        "microservices",
+        "server",
+        "endpoint",
+        "middleware",
+        "authentication",
+        "authorization",
+        "jwt",
+        "oauth",
+        "scaling",
+        "load balancing",
+        "caching",
+        "redis",
+        "session",
+      ],
+      database: [
+        "mysql",
+        "postgresql",
+        "mongodb",
+        "redis",
+        "cassandra",
+        "elasticsearch",
+        "sql",
+        "nosql",
+        "query",
+        "schema",
+        "migration",
+        "orm",
+        "sequelize",
+        "prisma",
+        "mongoose",
+        "index",
+        "optimization",
+        "transaction",
+        "acid",
+        "join",
+        "aggregate",
+        "backup",
+        "replication",
+        "sharding",
+        "normalization",
+        "denormalization",
+      ],
+      mobile: [
+        "react native",
+        "flutter",
+        "ionic",
+        "cordova",
+        "swift",
+        "kotlin",
+        "java",
+        "dart",
+        "android",
+        "ios",
+        "mobile",
+        "app",
+        "responsive",
+        "touch",
+        "gesture",
+        "native",
+        "hybrid",
+        "cross-platform",
+        "store",
+        "deployment",
+        "device",
+        "sensor",
+        "push notifications",
+        "offline",
+        "sync",
+        "performance",
+      ],
+      design: [
+        "figma",
+        "sketch",
+        "adobe",
+        "photoshop",
+        "illustrator",
+        "ui",
+        "ux",
+        "design",
+        "wireframe",
+        "prototype",
+        "mockup",
+        "user",
+        "experience",
+        "interface",
+        "usability",
+        "accessibility",
+        "color",
+        "typography",
+        "layout",
+        "grid",
+        "responsive",
+        "mobile",
+        "user research",
+        "personas",
+        "user journey",
+        "information architecture",
+      ],
+      security: [
+        "security",
+        "authentication",
+        "authorization",
+        "encryption",
+        "ssl",
+        "https",
+        "jwt",
+        "oauth",
+        "cors",
+        "xss",
+        "csrf",
+        "sql injection",
+        "vulnerability",
+        "penetration",
+        "firewall",
+        "vpn",
+        "certificate",
+        "hash",
+        "salt",
+        "bcrypt",
+        "audit",
+        "compliance",
+        "owasp",
+        "security headers",
+        "input validation",
+        "sanitization",
+      ],
+    }
+
+    return keywordMap[skill] || []
+  }
+
+  const isAnswerValid = () => {
+    switch (currentQuestionData?.type) {
+      case "open":
+      case "scenario":
+      case "code":
+        return (textAnswer || transcript).trim().length > 10
+      case "multiple":
+      case "binary":
+        return selectedOption.length > 0
+      case "checkbox":
+        return selectedOptions.length > 0
+      case "slider":
+      case "scale":
+        return true // Always valid
+      case "ranking":
+        return rankingItems.length > 0
+      default:
+        return true
+    }
   }
 
   // Mode Selection Screen
@@ -1389,9 +1450,7 @@ export default function TechnicalSkillsTestPage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Test de Habilidades Técnicas</h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Elige cómo prefieres responder las preguntas abiertas y de código
-            </p>
+            <p className="text-xl text-gray-600 mb-8">Elige tu método de evaluación técnica preferido</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -1402,119 +1461,88 @@ export default function TechnicalSkillsTestPage() {
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <Settings className="w-6 h-6 text-blue-600" />
                   </div>
-                  Modo Mixto
+                  Cuestionario Técnico
                 </CardTitle>
-                <CardDescription>Puedes elegir entre voz y escritura para cada pregunta técnica</CardDescription>
+                <CardDescription>Preguntas estructuradas sobre tecnologías específicas</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Flexibilidad total para cada pregunta
+                    {TECHNICAL_QUESTIONS.length} preguntas técnicas especializadas
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Ideal para explicaciones técnicas complejas
+                    Análisis de código y optimizaciones
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Combina voz para ideas y escritura para código
+                    Ranking de tecnologías por experiencia
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Control completo sobre el método de entrada
+                    Sistema de ayuda técnica contextual
                   </div>
                 </div>
                 <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
                   <Keyboard className="w-4 h-4 mr-2" />
-                  Elegir Modo Mixto
+                  Elegir Cuestionario
                 </Button>
               </CardContent>
             </Card>
 
             {/* Voice Complete Mode */}
             <Card
-              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${!isSupported ? "opacity-50" : ""}`}
+              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${
+                !speechRecognitionSupported || !textToSpeechSupported ? "opacity-50" : ""
+              }`}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <Volume2 className="w-6 h-6 text-green-600" />
                   </div>
-                  Hablado Completo
+                  Entrevista Técnica
                 </CardTitle>
-                <CardDescription>
-                  Todas las preguntas técnicas abiertas se responden automáticamente por voz
-                </CardDescription>
+                <CardDescription>Conversación técnica natural con el asistente especializado</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Reconocimiento de voz automático
+                    Conversación técnica natural
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Perfecto para explicar conceptos técnicos
+                    Discusión sobre proyectos reales
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Evaluación más natural y conversacional
+                    Evaluación de problem-solving
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Detección automática de silencio (3 seg)
+                    Experiencia similar a entrevista real
                   </div>
                 </div>
-                <Button onClick={() => handleStartTest("voice-complete")} className="w-full" disabled={!isSupported}>
-                  <Mic className="w-4 h-4 mr-2" />
-                  Elegir Hablado Completo
+                <Button
+                  onClick={() => handleStartTest("voice-complete")}
+                  className="w-full"
+                  disabled={!speechRecognitionSupported || !textToSpeechSupported}
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Elegir Entrevista
                 </Button>
-                {!isSupported && (
+                {(!speechRecognitionSupported || !textToSpeechSupported) && (
                   <p className="text-xs text-amber-600 text-center">
-                    Reconocimiento de voz no disponible en este navegador
+                    Funciones de voz no disponibles en este navegador
                   </p>
                 )}
               </CardContent>
             </Card>
           </div>
 
-          {/* Information about speech recognition */}
-          {isSupported && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Volume2 className="w-5 h-5 text-green-600" />
-                  Información sobre Reconocimiento de Voz Técnico
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                  <div>
-                    <h4 className="font-semibold mb-2">Características:</h4>
-                    <ul className="space-y-1">
-                      <li>• Optimizado para terminología técnica</li>
-                      <li>• Detección automática de silencio</li>
-                      <li>• Transcripción en tiempo real</li>
-                      <li>• Se detiene tras 3 segundos sin habla</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Ideal para:</h4>
-                    <ul className="space-y-1">
-                      <li>• Explicar arquitecturas de software</li>
-                      <li>• Describir experiencias con tecnologías</li>
-                      <li>• Analizar código y optimizaciones</li>
-                      <li>• Compartir desafíos técnicos resueltos</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-4">Puedes cambiar el modo más tarde si es necesario</p>
             <Button variant="ghost" onClick={() => router.back()}>
               <ChevronLeft className="w-4 h-4 mr-2" />
               Volver
@@ -1525,311 +1553,260 @@ export default function TechnicalSkillsTestPage() {
     )
   }
 
-  // Render question based on type
-  const renderQuestion = () => {
-    const categoryConfig = SKILL_CATEGORIES[question.category]
-    const TypeIcon = getQuestionTypeIcon(question.type)
+  // Conversational Mode Interface
+  if (inputMode === "voice-complete") {
+    const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
+    const progress = ((currentStep + 1) / TECHNICAL_CONVERSATION_FLOW.length) * 100
 
-    switch (question.type) {
-      case "scale":
-        return (
-          <div className="space-y-6">
-            <div className="text-center">
-              <p className="text-lg font-medium mb-6">{getCurrentQuestionText()}</p>
-              <RadioGroup
-                value={answers[question.id]?.toString() || ""}
-                onValueChange={(value) => handleAnswerChange(Number.parseInt(value))}
-                className="flex justify-center space-x-4"
-              >
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <div key={value} className="flex flex-col items-center space-y-2">
-                    <RadioGroupItem value={value.toString()} id={`scale-${value}`} />
-                    <Label htmlFor={`scale-${value}`} className="text-sm">
-                      {value === 1 && "Principiante"}
-                      {value === 2 && "Básico"}
-                      {value === 3 && "Intermedio"}
-                      {value === 4 && "Avanzado"}
-                      {value === 5 && "Experto"}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          </div>
-        )
-
-      case "open":
-      case "code":
-        return (
-          <div className="space-y-6">
-            <p className="text-lg font-medium">{getCurrentQuestionText()}</p>
-
-            {question.code && (
-              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">{question.language || "javascript"}</span>
-                  <Code className="w-4 h-4 text-gray-400" />
-                </div>
-                <pre className="text-sm">
-                  <code>{question.code}</code>
-                </pre>
-              </div>
-            )}
-
-            <div className="space-y-4">
+    if (isCompleting) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
               <div className="relative">
-                <Textarea
-                  placeholder={
-                    inputMode === "voice-complete"
-                      ? "El reconocimiento de voz se iniciará automáticamente..."
-                      : question.type === "code"
-                        ? "Explica tu análisis y optimizaciones aquí..."
-                        : "Describe tu experiencia técnica aquí..."
-                  }
-                  value={answers[question.id] || ""}
-                  onChange={(e) => handleAnswerChange(e.target.value)}
-                  className="min-h-[120px] pr-12"
-                  disabled={inputMode === "voice-complete" && isListening}
-                />
-                {isSupported && (
-                  <div className="absolute top-3 right-3 flex flex-col gap-2">
-                    {inputMode === "mixed" && (
-                      <Button
-                        type="button"
-                        variant={isListening ? "destructive" : "outline"}
-                        size="sm"
-                        onClick={handleSpeechInput}
-                        disabled={isInitializing}
-                        className="w-10 h-10 p-0"
-                      >
-                        {isInitializing ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : isListening ? (
-                          <MicOff className="w-4 h-4" />
-                        ) : (
-                          <Mic className="w-4 h-4" />
-                        )}
-                      </Button>
-                    )}
+                <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+                </div>
+                <Code className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-2">Procesando tu entrevista técnica...</h3>
+                <p className="text-muted-foreground">Analizando tus respuestas y generando tu perfil técnico</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">Entrevista Técnica</h1>
+              <Badge variant="outline" className="bg-green-50 text-green-700">
+                <Volume2 className="w-3 h-3 mr-1" />
+                Conversación Técnica
+              </Badge>
+            </div>
+            <p className="text-gray-600">
+              Paso {currentStep + 1} de {TECHNICAL_CONVERSATION_FLOW.length} • {currentStepData?.category}
+            </p>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700">Progreso de la entrevista</span>
+              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          {/* Countdown */}
+          {showCountdown && countdown > 0 && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <Card className="p-8">
+                <CardContent className="text-center">
+                  <div className="text-6xl font-bold text-green-600 mb-4">{countdown}</div>
+                  <p className="text-lg text-gray-600">El entrevistador técnico hablará en...</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Main Conversation Card */}
+          <Card className="mb-8 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
+                  <Code className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-xl">{currentStepData?.category}</CardTitle>
+                  <CardDescription>Entrevista técnica especializada</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  {isSpeaking && (
+                    <Badge variant="secondary" className="bg-green-50 text-green-700">
+                      <Volume2 className="w-3 h-3 mr-1 animate-pulse" />
+                      Entrevistador
+                    </Badge>
+                  )}
+                  {isListening && (
+                    <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+                      <Mic className="w-3 h-3 mr-1 animate-pulse" />
+                      Escuchando
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* System Message */}
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Volume2 className="w-4 h-4 text-white" />
                   </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-green-900 mb-2">Entrevistador Técnico:</h4>
+                    <p className="text-green-800 leading-relaxed">{currentStepData?.systemMessage}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Response Area */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mic className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-blue-900 mb-2">Tu respuesta técnica:</h4>
+                    <div className="min-h-[100px] bg-white rounded-lg p-3 border">
+                      {transcript && <p className="text-gray-900 mb-2">{transcript}</p>}
+                      {interimTranscript && <p className="text-gray-600 italic">{interimTranscript}</p>}
+                      {!transcript && !interimTranscript && !isListening && (
+                        <p className="text-gray-500 italic">
+                          {isSpeaking
+                            ? "Escucha la pregunta técnica y luego responde..."
+                            : "Tu respuesta técnica aparecerá aquí cuando hables..."}
+                        </p>
+                      )}
+                      {isListening && !transcript && !interimTranscript && (
+                        <p className="text-blue-600 italic flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          Escuchando... Comparte tu experiencia técnica
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Speech Error */}
+              {speechError && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-red-800">{speechError}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Controls */}
+              <div className="flex flex-wrap gap-3 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRestartCurrentStep}
+                  disabled={isInitializing}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Repetir pregunta
+                </Button>
+
+                {isListening && (
+                  <Button variant="destructive" size="sm" onClick={stopListening} className="flex items-center gap-2">
+                    <MicOff className="w-4 h-4" />
+                    Detener grabación
+                  </Button>
+                )}
+
+                {isSpeaking && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={stopSpeaking}
+                    className="flex items-center gap-2 bg-transparent"
+                  >
+                    <Pause className="w-4 h-4" />
+                    Pausar entrevistador
+                  </Button>
+                )}
+
+                {transcript && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearTranscript}
+                    className="flex items-center gap-2 text-gray-600"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Limpiar respuesta
+                  </Button>
                 )}
               </div>
 
-              {/* Speech recognition feedback */}
-              {isSupported && (
-                <div className="space-y-2">
-                  {inputMode === "voice-complete" && (
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        {isListening ? "Escuchando..." : "Modo hablado completo activo"}
-                      </div>
-                      {isListening && (
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          onClick={stopListening}
-                          className="flex items-center gap-2"
-                        >
-                          <MicOff className="w-4 h-4" />
-                          Detener
-                        </Button>
-                      )}
-                    </div>
-                  )}
-
-                  {inputMode === "mixed" && isListening && (
-                    <div className="flex items-center gap-2 text-sm text-green-600">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span>Escuchando... Habla ahora</span>
-                      {transcript && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={clearTranscript}
-                          className="flex items-center gap-2 text-gray-600"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Limpiar
-                        </Button>
-                      )}
-                    </div>
-                  )}
-
-                  {interimTranscript && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <span className="font-medium">Procesando:</span> {interimTranscript}
-                      </p>
-                    </div>
-                  )}
-
-                  {speechError && (
-                    <Alert>
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{speechError}</AlertDescription>
-                    </Alert>
-                  )}
-
-                  {/* Speech Recognition Tips */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <div className="text-sm text-blue-800">
-                      <div className="font-medium mb-1">💡 Consejos para respuestas técnicas por voz:</div>
-                      <ul className="text-xs space-y-1 text-blue-700">
-                        <li>• Usa terminología técnica específica</li>
-                        <li>• Explica paso a paso tu razonamiento</li>
-                        <li>• Menciona tecnologías y herramientas concretas</li>
-                        <li>
-                          •{" "}
-                          {inputMode === "voice-complete"
-                            ? "El reconocimiento se inicia automáticamente"
-                            : "Puedes combinar voz y escritura"}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )
-
-      case "multiple":
-      case "scenario":
-        return (
-          <div className="space-y-6">
-            <p className="text-lg font-medium">{getCurrentQuestionText()}</p>
-            <RadioGroup value={answers[question.id] || ""} onValueChange={handleAnswerChange} className="space-y-3">
-              {question.options?.map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                  <RadioGroupItem value={option} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                    {option}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-        )
-
-      case "ranking":
-        return (
-          <div className="space-y-6">
-            <div>
-              <p className="text-lg font-medium mb-2">{getCurrentQuestionText()}</p>
-              {question.instruction && <p className="text-sm text-muted-foreground">{question.instruction}</p>}
-            </div>
-            <RankingComponent
-              items={question.items || []}
-              value={rankingItems[question.id] || question.items || []}
-              onChange={(newOrder) => {
-                setRankingItems((prev) => ({
-                  ...prev,
-                  [question.id]: newOrder,
-                }))
-                handleAnswerChange(newOrder)
-              }}
-              category={question.category}
-            />
-          </div>
-        )
-
-      case "checkbox":
-        return (
-          <div className="space-y-6">
-            <div>
-              <p className="text-lg font-medium mb-2">{getCurrentQuestionText()}</p>
-              {question.instruction && <p className="text-sm text-muted-foreground">{question.instruction}</p>}
-            </div>
-            <div className="space-y-3">
-              {question.options?.map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                  <Checkbox
-                    id={`checkbox-${index}`}
-                    checked={((answers[question.id] as string[]) || []).includes(option)}
-                    onCheckedChange={(checked) => {
-                      const currentAnswers = (answers[question.id] as string[]) || []
-                      if (checked) {
-                        handleAnswerChange([...currentAnswers, option])
-                      } else {
-                        handleAnswerChange(currentAnswers.filter((item) => item !== option))
-                      }
-                    }}
-                  />
-                  <Label htmlFor={`checkbox-${index}`} className="flex-1 cursor-pointer">
-                    {option}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </div>
-        )
-
-      case "slider":
-        return (
-          <div className="space-y-6">
-            <div>
-              <p className="text-lg font-medium mb-2">{getCurrentQuestionText()}</p>
-              {question.instruction && <p className="text-sm text-muted-foreground">{question.instruction}</p>}
-            </div>
-            <div className="space-y-4">
-              <Slider
-                value={[answers[question.id] || question.min || 0]}
-                onValueChange={(value) => handleAnswerChange(value[0])}
-                min={question.min || 0}
-                max={question.max || 100}
-                step={question.step || 1}
-                className="w-full"
-              />
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>{question.min || 0}</span>
-                <span className="font-medium text-lg text-primary">{answers[question.id] || question.min || 0}</span>
-                <span>{question.max || 100}</span>
-              </div>
-            </div>
-          </div>
-        )
-
-      case "binary":
-        return (
-          <div className="space-y-6">
-            <div>
-              <p className="text-lg font-medium mb-2">{getCurrentQuestionText()}</p>
-              {question.instruction && <p className="text-sm text-muted-foreground">{question.instruction}</p>}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {question.options?.map((option, index) => (
+              {/* Navigation */}
+              <div className="flex justify-between pt-6 border-t">
                 <Button
-                  key={index}
-                  variant={answers[question.id] === option ? "default" : "outline"}
-                  className="h-auto p-6 text-left justify-start"
-                  onClick={() => handleAnswerChange(option)}
+                  variant="outline"
+                  onClick={handlePreviousConversationStep}
+                  disabled={currentStep === 0}
+                  className="flex items-center gap-2 bg-transparent"
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-4 h-4 rounded-full border-2 ${
-                        answers[question.id] === option ? "bg-primary border-primary" : "border-muted-foreground"
-                      }`}
-                    >
-                      {answers[question.id] === option && (
-                        <div className="w-full h-full rounded-full bg-white scale-50" />
-                      )}
-                    </div>
-                    <span className="font-medium">{option}</span>
-                  </div>
+                  <ArrowLeft className="w-4 h-4" />
+                  Anterior
                 </Button>
-              ))}
-            </div>
-          </div>
-        )
 
-      default:
-        return <div>Tipo de pregunta no soportado</div>
-    }
+                <Button onClick={handleNextConversationStep} className="flex items-center gap-2">
+                  {currentStep === TECHNICAL_CONVERSATION_FLOW.length - 1 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Finalizar Entrevista
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Technical Interview Tips */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                Consejos para la entrevista técnica
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                <div>
+                  <h4 className="font-semibold mb-2">Durante la entrevista:</h4>
+                  <ul className="space-y-1">
+                    <li>• Menciona tecnologías específicas que hayas usado</li>
+                    <li>• Describe proyectos reales con detalles técnicos</li>
+                    <li>• Explica tu proceso de resolución de problemas</li>
+                    <li>• Comparte desafíos técnicos que hayas superado</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Aspectos técnicos:</h4>
+                  <ul className="space-y-1">
+                    <li>• Usa terminología técnica apropiada</li>
+                    <li>• Explica arquitecturas y patrones de diseño</li>
+                    <li>• Menciona herramientas y frameworks específicos</li>
+                    <li>• Describe tu experiencia con diferentes paradigmas</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
   }
 
+  // Traditional Mode Interface
   if (isCompleting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 flex items-center justify-center p-4">
@@ -1842,8 +1819,8 @@ export default function TechnicalSkillsTestPage() {
               <Code className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             </div>
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Analizando tus habilidades técnicas...</h3>
-              <p className="text-muted-foreground">Procesando tus respuestas y generando tu perfil de competencias</p>
+              <h3 className="text-lg font-semibold mb-2">Procesando tu evaluación técnica...</h3>
+              <p className="text-muted-foreground">Analizando tus respuestas y generando tu perfil técnico</p>
             </div>
           </CardContent>
         </Card>
@@ -1851,308 +1828,418 @@ export default function TechnicalSkillsTestPage() {
     )
   }
 
+  const progress = ((currentQuestion + 1) / TECHNICAL_QUESTIONS.length) * 100
+  const CategoryIcon = SKILL_CATEGORIES[currentQuestionData.category].icon
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-12 h-12 ${SKILL_CATEGORIES[question.category].color} text-white rounded-full flex items-center justify-center shadow-lg`}
-              >
-                <Code className="w-6 h-6" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">Test de Habilidades Técnicas</h1>
-                <div className="flex items-center gap-2">
-                  <p className="text-muted-foreground">Evaluación de Competencias Técnicas</p>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                    {inputMode === "voice-complete" ? (
-                      <>
-                        <Volume2 className="w-3 h-3 mr-1" />
-                        Hablado Completo
-                      </>
-                    ) : (
-                      <>
-                        <Settings className="w-3 h-3 mr-1" />
-                        Modo Mixto
-                      </>
-                    )}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-            <Badge variant="secondary" className="text-sm">
-              {currentQuestion + 1} de {TECHNICAL_QUESTIONS.length}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900">Cuestionario Técnico</h1>
+            <Badge variant="outline" className="bg-blue-50 text-blue-700">
+              <Keyboard className="w-3 h-3 mr-1" />
+              Evaluación Estructurada
             </Badge>
           </div>
-
-          {/* Progress */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Progreso del test</span>
-              <span>{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
+          <p className="text-gray-600">
+            Pregunta {currentQuestion + 1} de {TECHNICAL_QUESTIONS.length} •{" "}
+            {SKILL_CATEGORIES[currentQuestionData.category].name}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Main Question Card */}
-          <div className="lg:col-span-3">
-            <Card className="shadow-lg">
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-10 h-10 ${SKILL_CATEGORIES[question.category].color} text-white rounded-full flex items-center justify-center`}
-                    >
-                      {React.createElement(getQuestionTypeIcon(question.type), { className: "w-5 h-5" })}
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">
-                        {question.category.charAt(0).toUpperCase() + question.category.slice(1)}
-                      </CardTitle>
-                      <CardDescription>{getQuestionTypeLabel(question.type)}</CardDescription>
-                    </div>
-                  </div>
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-gray-700">Progreso del cuestionario</span>
+            <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
+          </div>
+          <Progress value={progress} className="h-2" />
+        </div>
 
-                  {/* Help and Reformulation Badges */}
-                  <div className="flex gap-2">
-                    {hasUsedHelp[question.id] && (
-                      <Badge variant="secondary" className="text-xs">
-                        <Lightbulb className="w-3 h-3 mr-1" />
-                        Ayuda usada
-                      </Badge>
-                    )}
-                    {hasReformulated[question.id] && (
-                      <Badge variant="outline" className="text-xs">
-                        <Shuffle className="w-3 h-3 mr-1" />
-                        Reformulada
-                      </Badge>
-                    )}
-                  </div>
+        {/* Main Question Card */}
+        <Card className="mb-8 shadow-lg">
+          <CardHeader>
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className={`w-12 h-12 ${SKILL_CATEGORIES[currentQuestionData.category].color} rounded-full flex items-center justify-center`}
+              >
+                <CategoryIcon className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-xl">{SKILL_CATEGORIES[currentQuestionData.category].name}</CardTitle>
+                <CardDescription>
+                  Pregunta {currentQuestion + 1} de {TECHNICAL_QUESTIONS.length}
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="capitalize">
+                  {currentQuestionData.type}
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowHelp(!showHelp)}
+                  className="flex items-center gap-1"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  Ayuda
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            {/* Question */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold leading-relaxed">{currentQuestionData.question}</h3>
+
+              {currentQuestionData.instruction && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-blue-800 text-sm">{currentQuestionData.instruction}</p>
                 </div>
-              </CardHeader>
+              )}
 
-              <CardContent className="space-y-6">
-                {renderQuestion()}
+              {/* Code Block for Code Questions */}
+              {currentQuestionData.code && (
+                <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-400 text-xs uppercase tracking-wide">
+                      {currentQuestionData.language}
+                    </span>
+                    <Badge variant="secondary" className="text-xs">
+                      Código para revisar
+                    </Badge>
+                  </div>
+                  <pre className="text-green-400 text-sm leading-relaxed">
+                    <code>{currentQuestionData.code}</code>
+                  </pre>
+                </div>
+              )}
+            </div>
 
-                {/* Help Buttons */}
-                <div className="flex flex-wrap gap-3 pt-4 border-t">
-                  <Dialog open={showHelpDialog} onOpenChange={setShowHelpDialog}>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleHelpUsed}
-                        className="flex items-center gap-2 bg-transparent"
-                      >
-                        <HelpCircle className="w-4 h-4" />
-                        ¿No entiendes la pregunta?
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                          <Info className="w-5 h-5" />
-                          Ayuda para esta pregunta
-                        </DialogTitle>
-                        <DialogDescription>
-                          Información detallada para ayudarte a entender y responder esta pregunta técnica
-                        </DialogDescription>
-                      </DialogHeader>
+            {/* Help Section */}
+            {showHelp && currentQuestionData.explanation && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-amber-600" />
+                  <h4 className="font-semibold text-amber-900">Ayuda Contextual</h4>
+                </div>
 
-                      <div className="space-y-6">
-                        {/* Explanation */}
-                        {question.explanation && (
-                          <div>
-                            <h4 className="font-semibold flex items-center gap-2 mb-2">
-                              <BookOpen className="w-4 h-4" />
-                              ¿Qué evalúa esta pregunta?
-                            </h4>
-                            <p className="text-sm text-muted-foreground">{question.explanation}</p>
-                          </div>
-                        )}
+                <p className="text-amber-800">{currentQuestionData.explanation}</p>
 
-                        {/* Examples */}
-                        {question.examples && question.examples.length > 0 && (
-                          <div>
-                            <h4 className="font-semibold flex items-center gap-2 mb-2">
-                              <Lightbulb className="w-4 h-4" />
-                              Ejemplos técnicos
-                            </h4>
-                            <ul className="space-y-1">
-                              {question.examples.map((example, index) => (
-                                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                                  <span className="text-primary mt-1">•</span>
-                                  <span>{example}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                {currentQuestionData.examples && (
+                  <div>
+                    <h5 className="font-medium text-amber-900 mb-2">Ejemplos:</h5>
+                    <ul className="text-amber-800 text-sm space-y-1">
+                      {currentQuestionData.examples.map((example, index) => (
+                        <li key={index}>• {example}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                        {/* Tips */}
-                        {question.tips && question.tips.length > 0 && (
-                          <div>
-                            <h4 className="font-semibold flex items-center gap-2 mb-2">
-                              <Target className="w-4 h-4" />
-                              Consejos para responder
-                            </h4>
-                            <ul className="space-y-1">
-                              {question.tips.map((tip, index) => (
-                                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                                  <span className="text-green-500 mt-1">✓</span>
-                                  <span>{tip}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                {currentQuestionData.tips && (
+                  <div>
+                    <h5 className="font-medium text-amber-900 mb-2">Consejos:</h5>
+                    <ul className="text-amber-800 text-sm space-y-1">
+                      {currentQuestionData.tips.map((tip, index) => (
+                        <li key={index}>💡 {tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Answer Input Based on Question Type */}
+            <div className="space-y-4">
+              {/* Open Text Questions */}
+              {(currentQuestionData.type === "open" ||
+                currentQuestionData.type === "scenario" ||
+                currentQuestionData.type === "code") && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="answer" className="text-base font-medium">
+                      Tu respuesta:
+                    </Label>
+                    {speechRecognitionSupported && (
+                      <div className="flex items-center gap-2">
+                        {isListening ? (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={stopListening}
+                            className="flex items-center gap-2"
+                          >
+                            <Square className="w-4 h-4" />
+                            Detener
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={startListening}
+                            className="flex items-center gap-2 bg-transparent"
+                          >
+                            <Mic className="w-4 h-4" />
+                            Dictar
+                          </Button>
                         )}
                       </div>
-                    </DialogContent>
-                  </Dialog>
+                    )}
+                  </div>
 
-                  {question.alternativeFormulations && question.alternativeFormulations.length > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleReformulate}
-                      className="flex items-center gap-2 bg-transparent"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                      Reformular pregunta
-                    </Button>
+                  <Textarea
+                    id="answer"
+                    value={textAnswer}
+                    onChange={(e) => setTextAnswer(e.target.value)}
+                    placeholder="Escribe tu respuesta técnica detallada aquí..."
+                    className="min-h-[120px] resize-none"
+                  />
+
+                  {interimTranscript && (
+                    <div className="bg-blue-50 border border-blue-200 rounded p-2">
+                      <p className="text-blue-800 text-sm italic">Dictando: {interimTranscript}</p>
+                    </div>
+                  )}
+
+                  {speechError && (
+                    <Alert className="border-red-200 bg-red-50">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription className="text-red-800">{speechError}</AlertDescription>
+                    </Alert>
                   )}
                 </div>
+              )}
 
-                {/* Navigation */}
-                <div className="flex justify-between pt-6 border-t">
-                  <Button
-                    variant="outline"
-                    onClick={handlePrevious}
-                    disabled={currentQuestion === 0}
-                    className="flex items-center gap-2 bg-transparent"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Anterior
-                  </Button>
-
-                  <Button onClick={handleNext} disabled={!isAnswered} className="flex items-center gap-2">
-                    {currentQuestion === TECHNICAL_QUESTIONS.length - 1 ? (
-                      <>
-                        <Sparkles className="w-4 h-4" />
-                        Completar Test
-                      </>
-                    ) : (
-                      <>
-                        Siguiente
-                        <ChevronRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contextual Help Panel */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-4">
-              <CardHeader className="pb-3">
-                <Collapsible open={showContextualHelp} onOpenChange={setShowContextualHelp}>
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                      <CardTitle className="text-base flex items-center gap-2">
-                        <MessageCircle className="w-4 h-4" />
-                        Ayuda Contextual
-                      </CardTitle>
-                      {showContextualHelp ? (
-                        <ChevronUpIcon className="w-4 h-4" />
-                      ) : (
-                        <ChevronDownIcon className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="space-y-4 mt-4">
-                    <div className="space-y-3">
-                      {/* Question Type Help */}
-                      <div className="p-3 bg-blue-50 rounded-lg">
-                        <h4 className="font-medium text-sm text-blue-900 mb-1">
-                          Tipo: {getQuestionTypeLabel(question.type)}
-                        </h4>
-                        <p className="text-xs text-blue-700">
-                          {question.type === "scale" && "Evalúa tu nivel de competencia del 1 al 5"}
-                          {question.type === "open" && "Describe tu experiencia técnica con detalles"}
-                          {question.type === "multiple" && "Selecciona la opción que mejor represente tu experiencia"}
-                          {question.type === "scenario" && "Elige cómo abordarías este desafío técnico"}
-                          {question.type === "ranking" && "Ordena las tecnologías según tu nivel de experiencia"}
-                          {question.type === "checkbox" && "Puedes seleccionar múltiples tecnologías"}
-                          {question.type === "slider" && "Desliza para indicar tu nivel de competencia"}
-                          {question.type === "binary" && "Elige entre las dos opciones técnicas"}
-                          {question.type === "code" && "Analiza el código y propón mejoras"}
-                        </p>
+              {/* Multiple Choice Questions */}
+              {currentQuestionData.type === "multiple" && (
+                <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
+                  <div className="space-y-3">
+                    {currentQuestionData.options?.map((option, index) => (
+                      <div key={index} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50">
+                        <RadioGroupItem value={option} id={`option-${index}`} />
+                        <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                          {option}
+                        </Label>
                       </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              )}
 
-                      {/* Speech Recognition Help */}
-                      {(question.type === "open" || question.type === "code") && isSupported && (
-                        <div className="p-3 bg-green-50 rounded-lg">
-                          <h4 className="font-medium text-sm text-green-900 mb-1 flex items-center gap-1">
-                            <Mic className="w-3 h-3" />
-                            Reconocimiento de Voz
-                          </h4>
-                          <p className="text-xs text-green-700">
-                            {inputMode === "voice-complete"
-                              ? "El reconocimiento se inicia automáticamente. Explica tu respuesta técnica claramente."
-                              : "Haz clic en el micrófono y explica tu respuesta técnica. El sistema se detendrá automáticamente después de 3 segundos de silencio."}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Ranking Help */}
-                      {question.type === "ranking" && (
-                        <div className="p-3 bg-purple-50 rounded-lg">
-                          <h4 className="font-medium text-sm text-purple-900 mb-1 flex items-center gap-1">
-                            <TrendingUp className="w-3 h-3" />
-                            Cómo Ordenar
-                          </h4>
-                          <p className="text-xs text-purple-700">
-                            Usa las flechas ↑↓ o arrastra los elementos. El #1 es tu mayor experiencia.
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Code Analysis Help */}
-                      {question.type === "code" && (
-                        <div className="p-3 bg-orange-50 rounded-lg">
-                          <h4 className="font-medium text-sm text-orange-900 mb-1 flex items-center gap-1">
-                            <Code className="w-3 h-3" />
-                            Análisis de Código
-                          </h4>
-                          <p className="text-xs text-orange-700">
-                            Revisa el código, identifica problemas y sugiere mejoras en rendimiento, legibilidad o
-                            mejores prácticas.
-                          </p>
-                        </div>
-                      )}
-
-                      {/* General Tips */}
-                      <div className="p-3 bg-gray-50 rounded-lg">
-                        <h4 className="font-medium text-sm text-gray-900 mb-1">💡 Consejo Técnico</h4>
-                        <p className="text-xs text-gray-700">
-                          Responde basándote en tu experiencia real con tecnologías. Es mejor ser honesto sobre tu nivel
-                          actual que exagerar.
-                        </p>
-                      </div>
+              {/* Binary Questions */}
+              {currentQuestionData.type === "binary" && (
+                <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
+                  <div className="flex gap-4">
+                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 flex-1">
+                      <RadioGroupItem value="yes" id="yes" />
+                      <Label htmlFor="yes" className="cursor-pointer">
+                        Sí
+                      </Label>
                     </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
+                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 flex-1">
+                      <RadioGroupItem value="no" id="no" />
+                      <Label htmlFor="no" className="cursor-pointer">
+                        No
+                      </Label>
+                    </div>
+                  </div>
+                </RadioGroup>
+              )}
+
+              {/* Checkbox Questions */}
+              {currentQuestionData.type === "checkbox" && (
+                <div className="space-y-3">
+                  {currentQuestionData.options?.map((option, index) => (
+                    <div key={index} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50">
+                      <Checkbox
+                        id={`checkbox-${index}`}
+                        checked={selectedOptions.includes(option)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedOptions([...selectedOptions, option])
+                          } else {
+                            setSelectedOptions(selectedOptions.filter((item) => item !== option))
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`checkbox-${index}`} className="flex-1 cursor-pointer">
+                        {option}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Slider Questions */}
+              {(currentQuestionData.type === "slider" || currentQuestionData.type === "scale") && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-base font-medium">Nivel de experiencia:</Label>
+                    <Badge variant="outline" className="text-lg px-3 py-1">
+                      {sliderValue[0]}/{currentQuestionData.max || 10}
+                    </Badge>
+                  </div>
+
+                  <Slider
+                    value={sliderValue}
+                    onValueChange={setSliderValue}
+                    min={currentQuestionData.min || 1}
+                    max={currentQuestionData.max || 10}
+                    step={currentQuestionData.step || 1}
+                    className="w-full"
+                  />
+
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Principiante ({currentQuestionData.min || 1})</span>
+                    <span>Experto ({currentQuestionData.max || 10})</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Ranking Questions */}
+              {currentQuestionData.type === "ranking" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Arrastra para ordenar (mayor experiencia arriba):</Label>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setRankingItems([...rankingItems].reverse())}
+                      className="text-xs"
+                    >
+                      <RotateCcw className="w-3 h-3 mr-1" />
+                      Invertir
+                    </Button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {rankingItems.map((item, index) => (
+                      <div
+                        key={item}
+                        draggable
+                        onDragStart={() => handleDragStart(item)}
+                        onDragOver={handleDragOver}
+                        onDrop={() => handleDrop(item)}
+                        className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-move hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full text-sm font-medium">
+                          {index + 1}
+                        </div>
+                        <span className="flex-1">{item}</span>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => moveItem(index, Math.max(0, index - 1))}
+                            disabled={index === 0}
+                            className="w-8 h-8 p-0"
+                          >
+                            ↑
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => moveItem(index, Math.min(rankingItems.length - 1, index + 1))}
+                            disabled={index === rankingItems.length - 1}
+                            className="w-8 h-8 p-0"
+                          >
+                            ↓
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-between pt-6 border-t">
+              <Button
+                variant="outline"
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestion === 0}
+                className="flex items-center gap-2 bg-transparent"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Anterior
+              </Button>
+
+              <div className="flex items-center gap-2">
+                {!isAnswerValid() && (
+                  <span className="text-sm text-amber-600 flex items-center gap-1">
+                    <AlertCircle className="w-4 h-4" />
+                    Respuesta requerida
+                  </span>
+                )}
+
+                <Button onClick={handleNextQuestion} disabled={!isAnswerValid()} className="flex items-center gap-2">
+                  {currentQuestion === TECHNICAL_QUESTIONS.length - 1 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Finalizar Test
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Question Navigation */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Navegación de preguntas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+              {TECHNICAL_QUESTIONS.map((_, index) => {
+                const isAnswered = answers[TECHNICAL_QUESTIONS[index].id] !== undefined
+                const isCurrent = index === currentQuestion
+
+                return (
+                  <Button
+                    key={index}
+                    variant={isCurrent ? "default" : isAnswered ? "secondary" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentQuestion(index)}
+                    className={`w-full ${isCurrent ? "ring-2 ring-blue-500" : ""}`}
+                  >
+                    {index + 1}
+                    {isAnswered && !isCurrent && <CheckCircle className="w-3 h-3 ml-1" />}
+                  </Button>
+                )
+              })}
+            </div>
+
+            <div className="flex items-center justify-center gap-4 mt-4 text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-blue-600 rounded"></div>
+                <span>Actual</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-gray-200 rounded"></div>
+                <span>Respondida</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 border border-gray-300 rounded"></div>
+                <span>Pendiente</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
