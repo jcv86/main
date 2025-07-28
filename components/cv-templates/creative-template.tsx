@@ -1,180 +1,325 @@
-import type { CVData } from "@/lib/cv-types"
+import {
+  type CVData,
+  formatDateRange,
+  groupSkillsByCategory,
+  sortExperienceByDate,
+  sortEducationByDate,
+} from "@/lib/cv-types"
+import { Mail, Phone, MapPin, Globe, Github, Linkedin, Calendar, Star, Zap, Target } from "lucide-react"
 
 interface CreativeTemplateProps {
   data: CVData
+  className?: string
 }
 
-export function CreativeTemplate({ data }: CreativeTemplateProps) {
+export function CreativeTemplate({ data, className = "" }: CreativeTemplateProps) {
+  const sortedExperience = sortExperienceByDate(data.experience)
+  const sortedEducation = sortEducationByDate(data.education)
+  const skillsByCategory = groupSkillsByCategory(data.skills)
+
   return (
-    <div className="bg-white min-h-[297mm] w-[210mm] mx-auto shadow-lg overflow-hidden">
-      {/* Colorful Header */}
-      <div className="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white p-8 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+    <div className={`bg-white min-h-[297mm] w-[210mm] mx-auto shadow-lg ${className}`}>
+      {/* Header Section */}
+      <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 text-white p-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="relative z-10">
-          <h1 className="text-4xl font-bold mb-3 animate-pulse">{data.personalInfo.fullName}</h1>
-          <div className="flex flex-wrap gap-4 text-purple-100">
-            {data.personalInfo.email && (
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">✉️ {data.personalInfo.email}</span>
+          <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">{data.personalInfo.fullName}</h1>
+          {data.personalInfo.jobTitle && (
+            <h2 className="text-2xl font-light mb-4 opacity-90">{data.personalInfo.jobTitle}</h2>
+          )}
+
+          <div className="flex flex-wrap gap-4 text-sm">
+            <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+              <Mail className="w-4 h-4" />
+              <span>{data.personalInfo.email}</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+              <Phone className="w-4 h-4" />
+              <span>{data.personalInfo.phone}</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+              <MapPin className="w-4 h-4" />
+              <span>{data.personalInfo.location}</span>
+            </div>
+            {data.personalInfo.website && (
+              <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                <Globe className="w-4 h-4" />
+                <span>{data.personalInfo.website}</span>
+              </div>
             )}
-            {data.personalInfo.phone && (
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
-                📞 {data.personalInfo.phone}
-              </span>
+            {data.personalInfo.linkedin && (
+              <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                <Linkedin className="w-4 h-4" />
+                <span>{data.personalInfo.linkedin}</span>
+              </div>
             )}
-            {data.personalInfo.location && (
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
-                🌍 {data.personalInfo.location}
-              </span>
+            {data.personalInfo.github && (
+              <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-3 py-1">
+                <Github className="w-4 h-4" />
+                <span>{data.personalInfo.github}</span>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       <div className="p-8">
-        {/* Creative Summary */}
+        {/* Summary Section */}
         {data.personalInfo.summary && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-4">
-              ✨ Sobre Mí
-            </h2>
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border-l-4 border-purple-500">
-              <p className="text-gray-700 leading-relaxed italic">{data.personalInfo.summary}</p>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <Star className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">Resumen Profesional</h3>
+            </div>
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border-l-4 border-purple-500">
+              <p className="text-gray-700 leading-relaxed">{data.personalInfo.summary}</p>
             </div>
           </section>
         )}
 
-        {/* Creative Experience */}
-        {data.experience.length > 0 && (
+        {/* Experience Section */}
+        {sortedExperience.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
-              🚀 Mi Trayectoria
-            </h2>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">Experiencia Profesional</h3>
+            </div>
             <div className="space-y-6">
-              {data.experience.map((exp, index) => (
+              {sortedExperience.map((exp, index) => (
                 <div key={exp.id} className="relative">
-                  <div
-                    className={`p-6 rounded-2xl shadow-lg transform hover:scale-105 transition-transform ${
-                      index % 2 === 0
-                        ? "bg-gradient-to-r from-purple-100 to-pink-100 ml-0 mr-8"
-                        : "bg-gradient-to-r from-orange-100 to-yellow-100 ml-8 mr-0"
-                    }`}
-                  >
-                    <div className="flex items-center mb-3">
-                      <div
-                        className={`w-3 h-3 rounded-full mr-3 ${index % 2 === 0 ? "bg-purple-500" : "bg-orange-500"}`}
-                      ></div>
-                      <h3 className="text-xl font-bold text-gray-800">{exp.position}</h3>
+                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 border-l-4 border-blue-500">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-800">{exp.jobTitle}</h4>
+                        <p className="text-lg text-blue-600 font-semibold">{exp.company}</p>
+                        <p className="text-gray-600">{exp.location}</p>
+                      </div>
+                      <div className="text-right text-sm text-gray-500 bg-white rounded-full px-3 py-1 flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{formatDateRange(exp.startDate, exp.endDate)}</span>
+                      </div>
                     </div>
-                    <p className="text-purple-600 font-semibold text-lg">{exp.company}</p>
-                    <p className="text-gray-600 text-sm mb-3">
-                      📅 {exp.startDate} - {exp.endDate} • 📍 {exp.location}
-                    </p>
-                    <p className="text-gray-700">{exp.description}</p>
+                    <p className="text-gray-700 mb-4">{exp.description}</p>
+
+                    {exp.achievements && exp.achievements.length > 0 && (
+                      <div className="mb-4">
+                        <h5 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                          <Target className="w-4 h-4 text-green-600" />
+                          Logros Principales:
+                        </h5>
+                        <ul className="list-none space-y-1">
+                          {exp.achievements.map((achievement, achIndex) => (
+                            <li key={achIndex} className="flex items-start gap-2">
+                              <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-gray-700">{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {exp.technologies && exp.technologies.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {exp.technologies.map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium shadow-md"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
+                  {index < sortedExperience.length - 1 && (
+                    <div className="flex justify-center my-4">
+                      <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-transparent rounded-full"></div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Creative Education */}
-        {data.education.length > 0 && (
+        {/* Education Section */}
+        {sortedEducation.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
-              🎓 Formación Académica
-            </h2>
-            <div className="grid gap-4">
-              {data.education.map((edu) => (
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                <Star className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">Educación</h3>
+            </div>
+            <div className="space-y-4">
+              {sortedEducation.map((edu) => (
                 <div
                   key={edu.id}
-                  className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border-l-4 border-blue-500 shadow-md"
+                  className="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-6 border-l-4 border-green-500"
                 >
-                  <h3 className="text-lg font-bold text-gray-800">{edu.degree}</h3>
-                  <p className="text-blue-600 font-semibold">{edu.institution}</p>
-                  <p className="text-gray-600 text-sm">
-                    📚 {edu.field} • 📅 {edu.startDate} - {edu.endDate}
-                  </p>
-                  {edu.description && <p className="text-gray-700 mt-2">{edu.description}</p>}
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="text-xl font-bold text-gray-800">{edu.degree}</h4>
+                      <p className="text-lg text-green-600 font-semibold">{edu.institution}</p>
+                      <p className="text-gray-600">{edu.location}</p>
+                      {edu.gpa && <p className="text-gray-600">Promedio: {edu.gpa}</p>}
+                    </div>
+                    <div className="text-right text-sm text-gray-500 bg-white rounded-full px-3 py-1 flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      <span>{formatDateRange(edu.startDate, edu.endDate)}</span>
+                    </div>
+                  </div>
+                  {edu.description && <p className="text-gray-700">{edu.description}</p>}
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Creative Projects */}
+        {/* Projects Section */}
         {data.projects.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
-              💡 Proyectos Creativos
-            </h2>
-            <div className="grid gap-6">
-              {data.projects.map((project, index) => (
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                <Target className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">Proyectos Destacados</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.projects.map((project) => (
                 <div
                   key={project.id}
-                  className={`p-6 rounded-2xl shadow-lg ${
-                    index % 3 === 0
-                      ? "bg-gradient-to-br from-pink-100 to-rose-100"
-                      : index % 3 === 1
-                        ? "bg-gradient-to-br from-purple-100 to-indigo-100"
-                        : "bg-gradient-to-br from-orange-100 to-amber-100"
-                  }`}
+                  className="bg-gradient-to-br from-orange-50 to-red-50 rounded-lg p-6 border-l-4 border-orange-500"
                 >
-                  <div className="flex items-center mb-3">
-                    <span className="text-2xl mr-3">🎨</span>
-                    <h3 className="text-lg font-bold text-gray-800">{project.name}</h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="text-lg font-bold text-gray-800">{project.name}</h4>
+                      {project.role && <p className="text-orange-600 font-medium">{project.role}</p>}
+                    </div>
+                    <div className="flex gap-2">
+                      {project.url && (
+                        <a href={project.url} className="text-orange-600 hover:underline text-sm">
+                          Ver
+                        </a>
+                      )}
+                      {project.githubUrl && (
+                        <a href={project.githubUrl} className="text-orange-600 hover:underline text-sm">
+                          GitHub
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  {project.url && <p className="text-blue-600 text-sm mb-2">🔗 {project.url}</p>}
-                  <p className="text-gray-600 text-sm mb-3">
-                    🛠️ {project.technologies} • 📅 {project.startDate} - {project.endDate}
-                  </p>
-                  <p className="text-gray-700">{project.description}</p>
+                  <p className="text-gray-700 mb-3 text-sm">{project.description}</p>
+                  {project.technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {project.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full text-xs font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Creative Skills */}
-        {data.skills.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
-              ⭐ Superpoderes
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {["Técnica", "Blanda", "Idioma"].map((category, categoryIndex) => {
-                const categorySkills = data.skills.filter((skill) => skill.category === category)
-                if (categorySkills.length === 0) return null
-
-                const gradients = [
-                  "from-purple-200 to-pink-200",
-                  "from-blue-200 to-indigo-200",
-                  "from-orange-200 to-yellow-200",
-                ]
-
-                return (
-                  <div
-                    key={category}
-                    className={`bg-gradient-to-br ${gradients[categoryIndex]} p-6 rounded-2xl shadow-lg`}
-                  >
-                    <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
-                      {category === "Técnica" ? "💻" : category === "Blanda" ? "🤝" : "🌐"} {category}s
-                    </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Skills Section */}
+          {data.skills.length > 0 && (
+            <section className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Habilidades</h3>
+              </div>
+              <div className="space-y-4">
+                {Object.entries(skillsByCategory).map(([category, skills]) => (
+                  <div key={category} className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4">
+                    <h4 className="font-bold text-gray-800 mb-3 text-center">{category}</h4>
                     <div className="space-y-3">
-                      {categorySkills.map((skill) => (
-                        <div key={skill.id} className="bg-white bg-opacity-60 p-3 rounded-lg">
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium text-gray-800">{skill.name}</span>
-                            <span className="text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
-                              {skill.level}
-                            </span>
+                      {skills.map((skill) => (
+                        <div key={skill.id}>
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-gray-700 font-medium">{skill.name}</span>
+                            <span className="text-sm text-gray-500">{skill.level}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3">
+                            <div
+                              className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-300 shadow-sm"
+                              style={{ width: `${skill.level}%` }}
+                            />
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                )
-              })}
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Languages Section */}
+          {data.languages.length > 0 && (
+            <section className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                  <Star className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Idiomas</h3>
+              </div>
+              <div className="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-lg p-4 space-y-3">
+                {data.languages.map((language) => (
+                  <div
+                    key={language.id}
+                    className="flex justify-between items-center bg-white rounded-lg p-3 shadow-sm"
+                  >
+                    <span className="text-gray-700 font-semibold">{language.name}</span>
+                    <span className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full text-sm font-medium">
+                      {language.proficiency}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* Certifications Section */}
+        {data.certifications.length > 0 && (
+          <section className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
+                <Star className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">Certificaciones</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.certifications.map((cert) => (
+                <div
+                  key={cert.id}
+                  className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-4 border-l-4 border-yellow-500"
+                >
+                  <h4 className="font-bold text-gray-800">{cert.name}</h4>
+                  <p className="text-yellow-600 font-semibold">{cert.issuer}</p>
+                  <p className="text-sm text-gray-500">Emitido: {formatDateRange(cert.issueDate, cert.expiryDate)}</p>
+                  {cert.credentialId && <p className="text-sm text-gray-500">ID: {cert.credentialId}</p>}
+                  {cert.url && (
+                    <a href={cert.url} className="text-yellow-600 hover:underline text-sm">
+                      Verificar Certificación
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
         )}
@@ -182,47 +327,3 @@ export function CreativeTemplate({ data }: CreativeTemplateProps) {
     </div>
   )
 }
-
-export function generateCreativePDF(data: CVData): string {
-  return `
-    <html>
-      <head>
-        <style>
-          body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
-          .header { background: linear-gradient(135deg, #9333ea, #ec4899, #f97316); color: white; padding: 2rem; }
-          .header h1 { font-size: 2.5rem; margin: 0 0 1rem 0; }
-          .content { padding: 2rem; }
-          .section { margin-bottom: 2rem; }
-          .section h2 { background: linear-gradient(135deg, #9333ea, #ec4899); -webkit-background-clip: text; color: transparent; }
-          .creative-box { background: linear-gradient(135deg, #f3e8ff, #fce7f3); padding: 1.5rem; border-radius: 1rem; margin: 1rem 0; }
-          .skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>${data.personalInfo.fullName}</h1>
-          <div>
-            ${data.personalInfo.email ? `<span>✉️ ${data.personalInfo.email}</span>` : ""}
-            ${data.personalInfo.phone ? `<span>📞 ${data.personalInfo.phone}</span>` : ""}
-          </div>
-        </div>
-        <div class="content">
-          ${
-            data.personalInfo.summary
-              ? `
-            <div class="section">
-              <h2>✨ Sobre Mí</h2>
-              <div class="creative-box">
-                <p>${data.personalInfo.summary}</p>
-              </div>
-            </div>
-          `
-              : ""
-          }
-        </div>
-      </body>
-    </html>
-  `
-}
-
-export default CreativeTemplate

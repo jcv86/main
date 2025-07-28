@@ -1,511 +1,1122 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Trash2, Save } from "lucide-react"
-import type { CVData, Education, Experience, Project, Skill } from "@/lib/cv-types"
-import { createClient } from "@/lib/supabase"
-import { toast } from "sonner"
+import {
+  User,
+  GraduationCap,
+  Briefcase,
+  Code,
+  Award,
+  Languages,
+  BadgeIcon as Certificate,
+  Plus,
+  Trash2,
+  Save,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react"
+import type {
+  CVData,
+  PersonalInfo,
+  Education,
+  Experience,
+  Project,
+  Skill,
+  Language,
+  Certification,
+} from "@/lib/cv-types"
+import { generateId, calculateCompletionPercentage, validateCVData } from "@/lib/cv-types"
 
 interface CVFormProps {
-  data: CVData
-  onChange: (data: CVData) => void
-  onSave: () => void
+  initialData: CVData
+  onSave: (data: CVData) => Promise<void>
+  onDataChange: (data: CVData) => void
 }
 
-export default function CVForm({ data, onChange, onSave }: CVFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const supabase = createClient()
+export function CVForm({ initialData, onSave, onDataChange }: CVFormProps) {
+  const [cvData, setCVData] = useState<CVData>(initialData)
+  const [isSaving, setIsSaving] = useState(false)
+  const [activeTab, setActiveTab] = useState("personal")
+  const [completionPercentage, setCompletionPercentage] = useState(0)
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
 
-  const updatePersonalInfo = (field: string, value: string) => {
-    onChange({
-      ...data,
+  useEffect(() => {
+    setCVData(initialData)
+  }, [initialData])
+
+  useEffect(() => {
+    const percentage = calculateCompletionPercentage(cvData)
+    setCompletionPercentage(percentage)
+
+    const validation = validateCVData(cvData)
+    setValidationErrors(validation.errors)
+
+    onDataChange(cvData)
+  }, [cvData, onDataChange])
+
+  const updatePersonalInfo = (field: keyof PersonalInfo, value: string) => {
+    setCVData((prev) => ({
+      ...prev,
       personalInfo: {
-        ...data.personalInfo,
+        ...prev.personalInfo,
         [field]: value,
       },
-    })
+    }))
   }
 
   const addEducation = () => {
     const newEducation: Education = {
-      id: Date.now().toString(),
-      institution: "",
+      id: generateId(),
       degree: "",
-      field: "",
+      institution: "",
+      location: "",
       startDate: "",
       endDate: "",
       description: "",
     }
-    onChange({
-      ...data,
-      education: [...data.education, newEducation],
-    })
+    setCVData((prev) => ({
+      ...prev,
+      education: [...prev.education, newEducation],
+    }))
   }
 
-  const updateEducation = (id: string, field: string, value: string) => {
-    onChange({
-      ...data,
-      education: data.education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
-    })
+  const updateEducation = (id: string, field: keyof Education, value: string | string[]) => {
+    setCVData((prev) => ({
+      ...prev,
+      education: prev.education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
+    }))
   }
 
   const removeEducation = (id: string) => {
-    onChange({
-      ...data,
-      education: data.education.filter((edu) => edu.id !== id),
-    })
+    setCVData((prev) => ({
+      ...prev,
+      education: prev.education.filter((edu) => edu.id !== id),
+    }))
   }
 
   const addExperience = () => {
     const newExperience: Experience = {
-      id: Date.now().toString(),
+      id: generateId(),
+      jobTitle: "",
       company: "",
-      position: "",
+      location: "",
       startDate: "",
       endDate: "",
       description: "",
-      location: "",
+      achievements: [],
+      technologies: [],
     }
-    onChange({
-      ...data,
-      experience: [...data.experience, newExperience],
-    })
+    setCVData((prev) => ({
+      ...prev,
+      experience: [...prev.experience, newExperience],
+    }))
   }
 
-  const updateExperience = (id: string, field: string, value: string) => {
-    onChange({
-      ...data,
-      experience: data.experience.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp)),
-    })
+  const updateExperience = (id: string, field: keyof Experience, value: string | string[]) => {
+    setCVData((prev) => ({
+      ...prev,
+      experience: prev.experience.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp)),
+    }))
   }
 
   const removeExperience = (id: string) => {
-    onChange({
-      ...data,
-      experience: data.experience.filter((exp) => exp.id !== id),
-    })
+    setCVData((prev) => ({
+      ...prev,
+      experience: prev.experience.filter((exp) => exp.id !== id),
+    }))
   }
 
   const addProject = () => {
     const newProject: Project = {
-      id: Date.now().toString(),
+      id: generateId(),
       name: "",
       description: "",
-      technologies: "",
+      technologies: [],
       url: "",
-      startDate: "",
-      endDate: "",
+      githubUrl: "",
+      role: "",
     }
-    onChange({
-      ...data,
-      projects: [...data.projects, newProject],
-    })
+    setCVData((prev) => ({
+      ...prev,
+      projects: [...prev.projects, newProject],
+    }))
   }
 
-  const updateProject = (id: string, field: string, value: string) => {
-    onChange({
-      ...data,
-      projects: data.projects.map((proj) => (proj.id === id ? { ...proj, [field]: value } : proj)),
-    })
+  const updateProject = (id: string, field: keyof Project, value: string | string[] | number) => {
+    setCVData((prev) => ({
+      ...prev,
+      projects: prev.projects.map((proj) => (proj.id === id ? { ...proj, [field]: value } : proj)),
+    }))
   }
 
   const removeProject = (id: string) => {
-    onChange({
-      ...data,
-      projects: data.projects.filter((proj) => proj.id !== id),
-    })
+    setCVData((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((proj) => proj.id !== id),
+    }))
   }
 
   const addSkill = () => {
     const newSkill: Skill = {
-      id: Date.now().toString(),
+      id: generateId(),
       name: "",
-      level: "Intermedio",
+      level: 50,
       category: "Técnica",
+      yearsOfExperience: 1,
     }
-    onChange({
-      ...data,
-      skills: [...data.skills, newSkill],
-    })
+    setCVData((prev) => ({
+      ...prev,
+      skills: [...prev.skills, newSkill],
+    }))
   }
 
-  const updateSkill = (id: string, field: string, value: string) => {
-    onChange({
-      ...data,
-      skills: data.skills.map((skill) => (skill.id === id ? { ...skill, [field]: value } : skill)),
-    })
+  const updateSkill = (id: string, field: keyof Skill, value: string | number | boolean) => {
+    setCVData((prev) => ({
+      ...prev,
+      skills: prev.skills.map((skill) => (skill.id === id ? { ...skill, [field]: value } : skill)),
+    }))
   }
 
   const removeSkill = (id: string) => {
-    onChange({
-      ...data,
-      skills: data.skills.filter((skill) => skill.id !== id),
-    })
+    setCVData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((skill) => skill.id !== id),
+    }))
+  }
+
+  const addLanguage = () => {
+    const newLanguage: Language = {
+      id: generateId(),
+      name: "",
+      proficiency: "Intermedio",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      languages: [...prev.languages, newLanguage],
+    }))
+  }
+
+  const updateLanguage = (id: string, field: keyof Language, value: string | boolean) => {
+    setCVData((prev) => ({
+      ...prev,
+      languages: prev.languages.map((lang) => (lang.id === id ? { ...lang, [field]: value } : lang)),
+    }))
+  }
+
+  const removeLanguage = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      languages: prev.languages.filter((lang) => lang.id !== id),
+    }))
+  }
+
+  const addCertification = () => {
+    const newCertification: Certification = {
+      id: generateId(),
+      name: "",
+      issuer: "",
+      issueDate: "",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      certifications: [...prev.certifications, newCertification],
+    }))
+  }
+
+  const updateCertification = (id: string, field: keyof Certification, value: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      certifications: prev.certifications.map((cert) => (cert.id === id ? { ...cert, [field]: value } : cert)),
+    }))
+  }
+
+  const removeCertification = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      certifications: prev.certifications.filter((cert) => cert.id !== id),
+    }))
   }
 
   const handleSave = async () => {
-    setIsLoading(true)
+    setIsSaving(true)
     try {
-      await onSave()
-      toast.success("CV guardado exitosamente")
+      await onSave(cvData)
     } catch (error) {
-      toast.error("Error al guardar el CV")
+      console.error("Error saving CV:", error)
     } finally {
-      setIsLoading(false)
+      setIsSaving(false)
     }
+  }
+
+  const addArrayItem = (field: string, value: string, id: string, arrayField: string) => {
+    if (!value.trim()) return
+
+    setCVData((prev) => ({
+      ...prev,
+      [field]: (prev[field as keyof CVData] as any[]).map((item: any) =>
+        item.id === id ? { ...item, [arrayField]: [...(item[arrayField] || []), value.trim()] } : item,
+      ),
+    }))
+  }
+
+  const removeArrayItem = (field: string, id: string, arrayField: string, index: number) => {
+    setCVData((prev) => ({
+      ...prev,
+      [field]: (prev[field as keyof CVData] as any[]).map((item: any) =>
+        item.id === id
+          ? {
+              ...item,
+              [arrayField]: (item[arrayField] || []).filter((_: any, i: number) => i !== index),
+            }
+          : item,
+      ),
+    }))
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Editor de CV</h2>
-        <Button onClick={handleSave} disabled={isLoading}>
-          <Save className="w-4 h-4 mr-2" />
-          {isLoading ? "Guardando..." : "Guardar CV"}
-        </Button>
-      </div>
+      {/* Progress Header */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              Progreso del CV
+            </CardTitle>
+            <Badge variant={completionPercentage >= 80 ? "default" : "secondary"}>
+              {completionPercentage}% Completo
+            </Badge>
+          </div>
+          <Progress value={completionPercentage} className="w-full" />
+          {validationErrors.length > 0 && (
+            <div className="flex items-center gap-2 text-sm text-red-600">
+              <AlertCircle className="w-4 h-4" />
+              {validationErrors.length} campo(s) requerido(s)
+            </div>
+          )}
+        </CardHeader>
+      </Card>
 
-      <Tabs defaultValue="personal" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="education">Educación</TabsTrigger>
-          <TabsTrigger value="experience">Experiencia</TabsTrigger>
-          <TabsTrigger value="projects">Proyectos</TabsTrigger>
-          <TabsTrigger value="skills">Habilidades</TabsTrigger>
+      {/* CV Form Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="personal" className="flex items-center gap-1">
+            <User className="w-4 h-4" />
+            Personal
+          </TabsTrigger>
+          <TabsTrigger value="education" className="flex items-center gap-1">
+            <GraduationCap className="w-4 h-4" />
+            Educación
+          </TabsTrigger>
+          <TabsTrigger value="experience" className="flex items-center gap-1">
+            <Briefcase className="w-4 h-4" />
+            Experiencia
+          </TabsTrigger>
+          <TabsTrigger value="projects" className="flex items-center gap-1">
+            <Code className="w-4 h-4" />
+            Proyectos
+          </TabsTrigger>
+          <TabsTrigger value="skills" className="flex items-center gap-1">
+            <Award className="w-4 h-4" />
+            Habilidades
+          </TabsTrigger>
+          <TabsTrigger value="languages" className="flex items-center gap-1">
+            <Languages className="w-4 h-4" />
+            Idiomas
+          </TabsTrigger>
+          <TabsTrigger value="certifications" className="flex items-center gap-1">
+            <Certificate className="w-4 h-4" />
+            Certificaciones
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="personal" className="space-y-4">
+        {/* Personal Information Tab */}
+        <TabsContent value="personal">
           <Card>
             <CardHeader>
               <CardTitle>Información Personal</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="fullName">Nombre Completo</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="fullName">Nombre Completo *</Label>
                   <Input
                     id="fullName"
-                    value={data.personalInfo.fullName}
+                    value={cvData.personalInfo.fullName}
                     onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
+                    placeholder="Juan Pérez González"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="email">Email</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email *</Label>
                   <Input
                     id="email"
                     type="email"
-                    value={data.personalInfo.email}
+                    value={cvData.personalInfo.email}
                     onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                    placeholder="juan.perez@email.com"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="phone">Teléfono</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Teléfono *</Label>
                   <Input
                     id="phone"
-                    value={data.personalInfo.phone}
+                    value={cvData.personalInfo.phone}
                     onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                    placeholder="+56 9 1234 5678"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="location">Ubicación</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Ubicación *</Label>
                   <Input
                     id="location"
-                    value={data.personalInfo.location}
+                    value={cvData.personalInfo.location}
                     onChange={(e) => updatePersonalInfo("location", e.target.value)}
+                    placeholder="Santiago, Chile"
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobTitle">Título Profesional</Label>
+                  <Input
+                    id="jobTitle"
+                    value={cvData.personalInfo.jobTitle || ""}
+                    onChange={(e) => updatePersonalInfo("jobTitle", e.target.value)}
+                    placeholder="Desarrollador Full Stack Senior"
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="linkedin">LinkedIn</Label>
                   <Input
                     id="linkedin"
-                    value={data.personalInfo.linkedin}
+                    value={cvData.personalInfo.linkedin || ""}
                     onChange={(e) => updatePersonalInfo("linkedin", e.target.value)}
+                    placeholder="linkedin.com/in/juanperez"
                   />
                 </div>
-                <div>
+                <div className="space-y-2">
+                  <Label htmlFor="github">GitHub</Label>
+                  <Input
+                    id="github"
+                    value={cvData.personalInfo.github || ""}
+                    onChange={(e) => updatePersonalInfo("github", e.target.value)}
+                    placeholder="github.com/juanperez"
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="website">Sitio Web</Label>
                   <Input
                     id="website"
-                    value={data.personalInfo.website}
+                    value={cvData.personalInfo.website || ""}
                     onChange={(e) => updatePersonalInfo("website", e.target.value)}
+                    placeholder="juanperez.dev"
                   />
                 </div>
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="summary">Resumen Profesional</Label>
                 <Textarea
                   id="summary"
-                  rows={4}
-                  value={data.personalInfo.summary}
+                  value={cvData.personalInfo.summary || ""}
                   onChange={(e) => updatePersonalInfo("summary", e.target.value)}
+                  placeholder="Describe tu experiencia profesional, habilidades clave y objetivos de carrera..."
+                  rows={4}
                 />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="education" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Educación</h3>
-            <Button onClick={addEducation} variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Agregar Educación
-            </Button>
-          </div>
-          {data.education.map((edu) => (
-            <Card key={edu.id}>
-              <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div className="flex justify-end">
-                    <Button onClick={() => removeEducation(edu.id)} variant="ghost" size="sm">
+        {/* Education Tab */}
+        <TabsContent value="education">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Educación</CardTitle>
+                <Button onClick={addEducation} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Educación
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.education.map((edu, index) => (
+                <div key={edu.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Educación #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeEducation(edu.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Título/Grado</Label>
+                      <Input
+                        value={edu.degree}
+                        onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
+                        placeholder="Ingeniería Civil en Computación"
+                      />
+                    </div>
+                    <div className="space-y-2">
                       <Label>Institución</Label>
                       <Input
                         value={edu.institution}
                         onChange={(e) => updateEducation(edu.id, "institution", e.target.value)}
+                        placeholder="Universidad de Chile"
                       />
                     </div>
-                    <div>
-                      <Label>Título</Label>
-                      <Input value={edu.degree} onChange={(e) => updateEducation(edu.id, "degree", e.target.value)} />
+                    <div className="space-y-2">
+                      <Label>Ubicación</Label>
+                      <Input
+                        value={edu.location}
+                        onChange={(e) => updateEducation(edu.id, "location", e.target.value)}
+                        placeholder="Santiago, Chile"
+                      />
                     </div>
-                    <div>
-                      <Label>Campo de Estudio</Label>
-                      <Input value={edu.field} onChange={(e) => updateEducation(edu.id, "field", e.target.value)} />
+                    <div className="space-y-2">
+                      <Label>Promedio (opcional)</Label>
+                      <Input
+                        value={edu.gpa || ""}
+                        onChange={(e) => updateEducation(edu.id, "gpa", e.target.value)}
+                        placeholder="6.2"
+                      />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label>Fecha Inicio</Label>
-                        <Input
-                          type="date"
-                          value={edu.startDate}
-                          onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label>Fecha Fin</Label>
-                        <Input
-                          type="date"
-                          value={edu.endDate}
-                          onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label>Fecha Inicio</Label>
+                      <Input
+                        type="month"
+                        value={edu.startDate}
+                        onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Fecha Fin</Label>
+                      <Input
+                        type="month"
+                        value={edu.endDate}
+                        onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
+                      />
                     </div>
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label>Descripción</Label>
                     <Textarea
-                      value={edu.description}
+                      value={edu.description || ""}
                       onChange={(e) => updateEducation(edu.id, "description", e.target.value)}
+                      placeholder="Describe tu formación académica, especialización, tesis, etc."
+                      rows={3}
                     />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              ))}
+              {cvData.education.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <GraduationCap className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado información educativa aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Educación" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="experience" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Experiencia Laboral</h3>
-            <Button onClick={addExperience} variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Agregar Experiencia
-            </Button>
-          </div>
-          {data.experience.map((exp) => (
-            <Card key={exp.id}>
-              <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div className="flex justify-end">
-                    <Button onClick={() => removeExperience(exp.id)} variant="ghost" size="sm">
+        {/* Experience Tab */}
+        <TabsContent value="experience">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Experiencia Laboral</CardTitle>
+                <Button onClick={addExperience} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Experiencia
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.experience.map((exp, index) => (
+                <div key={exp.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Experiencia #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeExperience(exp.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Cargo</Label>
+                      <Input
+                        value={exp.jobTitle}
+                        onChange={(e) => updateExperience(exp.id, "jobTitle", e.target.value)}
+                        placeholder="Ingeniero de Software Senior"
+                      />
+                    </div>
+                    <div className="space-y-2">
                       <Label>Empresa</Label>
                       <Input
                         value={exp.company}
                         onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
+                        placeholder="NotCo"
                       />
                     </div>
-                    <div>
-                      <Label>Cargo</Label>
-                      <Input
-                        value={exp.position}
-                        onChange={(e) => updateExperience(exp.id, "position", e.target.value)}
-                      />
-                    </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label>Ubicación</Label>
                       <Input
                         value={exp.location}
                         onChange={(e) => updateExperience(exp.id, "location", e.target.value)}
+                        placeholder="Santiago, Chile"
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label>Fecha Inicio</Label>
-                        <Input
-                          type="date"
-                          value={exp.startDate}
-                          onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label>Fecha Fin</Label>
-                        <Input
-                          type="date"
-                          value={exp.endDate}
-                          onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)}
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label>Fecha Inicio</Label>
+                      <Input
+                        type="month"
+                        value={exp.startDate}
+                        onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Fecha Fin</Label>
+                      <Input
+                        type="month"
+                        value={exp.endDate || ""}
+                        onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)}
+                        placeholder="Dejar vacío si es trabajo actual"
+                      />
                     </div>
                   </div>
-                  <div>
-                    <Label>Descripción</Label>
+                  <div className="space-y-2">
+                    <Label>Descripción del Trabajo</Label>
                     <Textarea
-                      rows={3}
                       value={exp.description}
                       onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
+                      placeholder="Describe tus responsabilidades principales y el impacto de tu trabajo..."
+                      rows={4}
                     />
                   </div>
+
+                  {/* Achievements */}
+                  <div className="space-y-2">
+                    <Label>Logros Principales</Label>
+                    <div className="space-y-2">
+                      {(exp.achievements || []).map((achievement, achIndex) => (
+                        <div key={achIndex} className="flex items-center gap-2">
+                          <Input value={achievement} readOnly className="flex-1" />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeArrayItem("experience", exp.id, "achievements", achIndex)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-2">
+                        <Input
+                          placeholder="Ej: Reducción de latencia del sistema en 40%"
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              const target = e.target as HTMLInputElement
+                              addArrayItem("experience", target.value, exp.id, "achievements")
+                              target.value = ""
+                            }
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            const input = (e.target as HTMLElement).parentElement?.querySelector(
+                              "input",
+                            ) as HTMLInputElement
+                            if (input) {
+                              addArrayItem("experience", input.value, exp.id, "achievements")
+                              input.value = ""
+                            }
+                          }}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Technologies */}
+                  <div className="space-y-2">
+                    <Label>Tecnologías Utilizadas</Label>
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap gap-2">
+                        {(exp.technologies || []).map((tech, techIndex) => (
+                          <Badge key={techIndex} variant="secondary" className="flex items-center gap-1">
+                            {tech}
+                            <button
+                              onClick={() => removeArrayItem("experience", exp.id, "technologies", techIndex)}
+                              className="ml-1 hover:text-red-600"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          placeholder="Ej: React, Node.js, AWS"
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              const target = e.target as HTMLInputElement
+                              addArrayItem("experience", target.value, exp.id, "technologies")
+                              target.value = ""
+                            }
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            const input = (e.target as HTMLElement).parentElement?.querySelector(
+                              "input",
+                            ) as HTMLInputElement
+                            if (input) {
+                              addArrayItem("experience", input.value, exp.id, "technologies")
+                              input.value = ""
+                            }
+                          }}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              ))}
+              {cvData.experience.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado experiencia laboral aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Experiencia" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="projects" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Proyectos</h3>
-            <Button onClick={addProject} variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Agregar Proyecto
-            </Button>
-          </div>
-          {data.projects.map((project) => (
-            <Card key={project.id}>
-              <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div className="flex justify-end">
-                    <Button onClick={() => removeProject(project.id)} variant="ghost" size="sm">
+        {/* Projects Tab */}
+        <TabsContent value="projects">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Proyectos</CardTitle>
+                <Button onClick={addProject} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Proyecto
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.projects.map((project, index) => (
+                <div key={project.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Proyecto #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeProject(project.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
                       <Label>Nombre del Proyecto</Label>
-                      <Input value={project.name} onChange={(e) => updateProject(project.id, "name", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label>URL</Label>
-                      <Input value={project.url} onChange={(e) => updateProject(project.id, "url", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label>Tecnologías</Label>
                       <Input
-                        value={project.technologies}
-                        onChange={(e) => updateProject(project.id, "technologies", e.target.value)}
-                        placeholder="React, Node.js, PostgreSQL"
+                        value={project.name}
+                        onChange={(e) => updateProject(project.id, "name", e.target.value)}
+                        placeholder="E-commerce Platform Chile"
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label>Fecha Inicio</Label>
-                        <Input
-                          type="date"
-                          value={project.startDate}
-                          onChange={(e) => updateProject(project.id, "startDate", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label>Fecha Fin</Label>
-                        <Input
-                          type="date"
-                          value={project.endDate}
-                          onChange={(e) => updateProject(project.id, "endDate", e.target.value)}
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label>Tu Rol</Label>
+                      <Input
+                        value={project.role || ""}
+                        onChange={(e) => updateProject(project.id, "role", e.target.value)}
+                        placeholder="Full Stack Developer"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>URL del Proyecto</Label>
+                      <Input
+                        value={project.url || ""}
+                        onChange={(e) => updateProject(project.id, "url", e.target.value)}
+                        placeholder="https://proyecto.com"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>GitHub URL</Label>
+                      <Input
+                        value={project.githubUrl || ""}
+                        onChange={(e) => updateProject(project.id, "githubUrl", e.target.value)}
+                        placeholder="https://github.com/usuario/proyecto"
+                      />
                     </div>
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label>Descripción</Label>
                     <Textarea
-                      rows={3}
                       value={project.description}
                       onChange={(e) => updateProject(project.id, "description", e.target.value)}
+                      placeholder="Describe el proyecto, su propósito, tu contribución y el impacto..."
+                      rows={3}
                     />
                   </div>
+
+                  {/* Technologies */}
+                  <div className="space-y-2">
+                    <Label>Tecnologías</Label>
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech, techIndex) => (
+                          <Badge key={techIndex} variant="secondary" className="flex items-center gap-1">
+                            {tech}
+                            <button
+                              onClick={() => removeArrayItem("projects", project.id, "technologies", techIndex)}
+                              className="ml-1 hover:text-red-600"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          placeholder="Ej: React, Node.js, PostgreSQL"
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              const target = e.target as HTMLInputElement
+                              addArrayItem("projects", target.value, project.id, "technologies")
+                              target.value = ""
+                            }
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            const input = (e.target as HTMLElement).parentElement?.querySelector(
+                              "input",
+                            ) as HTMLInputElement
+                            if (input) {
+                              addArrayItem("projects", input.value, project.id, "technologies")
+                              input.value = ""
+                            }
+                          }}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              ))}
+              {cvData.projects.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Code className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado proyectos aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Proyecto" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="skills" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Habilidades</h3>
-            <Button onClick={addSkill} variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Agregar Habilidad
-            </Button>
-          </div>
-          <div className="grid gap-4">
-            {data.skills.map((skill) => (
-              <Card key={skill.id}>
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <Label>Habilidad</Label>
-                      <Input value={skill.name} onChange={(e) => updateSkill(skill.id, "name", e.target.value)} />
-                    </div>
-                    <div className="w-32">
-                      <Label>Nivel</Label>
-                      <select
-                        className="w-full p-2 border rounded"
-                        value={skill.level}
-                        onChange={(e) => updateSkill(skill.id, "level", e.target.value)}
-                      >
-                        <option value="Básico">Básico</option>
-                        <option value="Intermedio">Intermedio</option>
-                        <option value="Avanzado">Avanzado</option>
-                        <option value="Experto">Experto</option>
-                      </select>
-                    </div>
-                    <div className="w-32">
-                      <Label>Categoría</Label>
-                      <select
-                        className="w-full p-2 border rounded"
-                        value={skill.category}
-                        onChange={(e) => updateSkill(skill.id, "category", e.target.value)}
-                      >
-                        <option value="Técnica">Técnica</option>
-                        <option value="Blanda">Blanda</option>
-                        <option value="Idioma">Idioma</option>
-                      </select>
-                    </div>
-                    <Button onClick={() => removeSkill(skill.id)} variant="ghost" size="sm">
+        {/* Skills Tab */}
+        <TabsContent value="skills">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Habilidades</CardTitle>
+                <Button onClick={addSkill} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Habilidad
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.skills.map((skill, index) => (
+                <div key={skill.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Habilidad #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeSkill(skill.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label>Nombre de la Habilidad</Label>
+                      <Input
+                        value={skill.name}
+                        onChange={(e) => updateSkill(skill.id, "name", e.target.value)}
+                        placeholder="JavaScript"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Categoría</Label>
+                      <Select
+                        value={skill.category}
+                        onValueChange={(value) => updateSkill(skill.id, "category", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Frontend">Frontend</SelectItem>
+                          <SelectItem value="Backend">Backend</SelectItem>
+                          <SelectItem value="Database">Base de Datos</SelectItem>
+                          <SelectItem value="Cloud">Cloud</SelectItem>
+                          <SelectItem value="DevOps">DevOps</SelectItem>
+                          <SelectItem value="Mobile">Móvil</SelectItem>
+                          <SelectItem value="Blanda">Habilidad Blanda</SelectItem>
+                          <SelectItem value="Técnica">Técnica</SelectItem>
+                          <SelectItem value="Otras">Otras</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Años de Experiencia</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="20"
+                        value={skill.yearsOfExperience || 1}
+                        onChange={(e) => updateSkill(skill.id, "yearsOfExperience", Number.parseInt(e.target.value))}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Nivel de Competencia: {skill.level}%</Label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={skill.level}
+                      onChange={(e) => updateSkill(skill.id, "level", Number.parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Principiante</span>
+                      <span>Intermedio</span>
+                      <span>Avanzado</span>
+                      <span>Experto</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {cvData.skills.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Award className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado habilidades aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Habilidad" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Languages Tab */}
+        <TabsContent value="languages">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Idiomas</CardTitle>
+                <Button onClick={addLanguage} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Idioma
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.languages.map((language, index) => (
+                <div key={language.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Idioma #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeLanguage(language.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Idioma</Label>
+                      <Input
+                        value={language.name}
+                        onChange={(e) => updateLanguage(language.id, "name", e.target.value)}
+                        placeholder="Español"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Nivel de Competencia</Label>
+                      <Select
+                        value={language.proficiency}
+                        onValueChange={(value) => updateLanguage(language.id, "proficiency", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Básico">Básico</SelectItem>
+                          <SelectItem value="Intermedio">Intermedio</SelectItem>
+                          <SelectItem value="Avanzado">Avanzado</SelectItem>
+                          <SelectItem value="Profesional">Profesional</SelectItem>
+                          <SelectItem value="Nativo">Nativo</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {cvData.languages.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Languages className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado idiomas aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Idioma" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Certifications Tab */}
+        <TabsContent value="certifications">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Certificaciones</CardTitle>
+                <Button onClick={addCertification} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Agregar Certificación
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {cvData.certifications.map((cert, index) => (
+                <div key={cert.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">Certificación #{index + 1}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeCertification(cert.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Nombre de la Certificación</Label>
+                      <Input
+                        value={cert.name}
+                        onChange={(e) => updateCertification(cert.id, "name", e.target.value)}
+                        placeholder="AWS Solutions Architect Associate"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Emisor</Label>
+                      <Input
+                        value={cert.issuer}
+                        onChange={(e) => updateCertification(cert.id, "issuer", e.target.value)}
+                        placeholder="Amazon Web Services"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Fecha de Emisión</Label>
+                      <Input
+                        type="month"
+                        value={cert.issueDate}
+                        onChange={(e) => updateCertification(cert.id, "issueDate", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Fecha de Expiración (opcional)</Label>
+                      <Input
+                        type="month"
+                        value={cert.expiryDate || ""}
+                        onChange={(e) => updateCertification(cert.id, "expiryDate", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>ID de Credencial (opcional)</Label>
+                      <Input
+                        value={cert.credentialId || ""}
+                        onChange={(e) => updateCertification(cert.id, "credentialId", e.target.value)}
+                        placeholder="AWS-SAA-2023-001"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>URL de Verificación (opcional)</Label>
+                      <Input
+                        value={cert.url || ""}
+                        onChange={(e) => updateCertification(cert.id, "url", e.target.value)}
+                        placeholder="https://aws.amazon.com/certification/"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {cvData.certifications.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Certificate className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No has agregado certificaciones aún.</p>
+                  <p className="text-sm">Haz clic en "Agregar Certificación" para comenzar.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Save Button */}
+      <div className="flex justify-end">
+        <Button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2">
+          {isSaving ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Guardando...
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" />
+              Guardar CV
+            </>
+          )}
+        </Button>
+      </div>
     </div>
   )
 }

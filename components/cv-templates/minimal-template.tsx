@@ -1,149 +1,222 @@
-import type { CVData } from "@/lib/cv-types"
+import {
+  type CVData,
+  formatDateRange,
+  groupSkillsByCategory,
+  sortExperienceByDate,
+  sortEducationByDate,
+} from "@/lib/cv-types"
 
 interface MinimalTemplateProps {
   data: CVData
+  className?: string
 }
 
-export function MinimalTemplate({ data }: MinimalTemplateProps) {
+export function MinimalTemplate({ data, className = "" }: MinimalTemplateProps) {
+  const sortedExperience = sortExperienceByDate(data.experience)
+  const sortedEducation = sortEducationByDate(data.education)
+  const skillsByCategory = groupSkillsByCategory(data.skills)
+
   return (
-    <div className="bg-white min-h-[297mm] w-[210mm] mx-auto shadow-lg font-light">
-      {/* Minimal Header */}
-      <div className="border-b border-gray-200 pb-8 mb-12 p-12">
-        <h1 className="text-6xl font-thin text-gray-900 mb-6 tracking-wide">{data.personalInfo.fullName}</h1>
-        <div className="text-gray-600 space-y-2 text-lg">
-          {data.personalInfo.email && (
-            <div className="flex items-center">
-              <span className="w-20 text-gray-400">Email</span>
-              <span>{data.personalInfo.email}</span>
-            </div>
+    <div className={`bg-white min-h-[297mm] w-[210mm] mx-auto shadow-lg font-light ${className}`}>
+      {/* Header Section */}
+      <div className="p-12 border-b border-gray-200">
+        <div className="text-center">
+          <h1 className="text-5xl font-thin text-gray-900 mb-3 tracking-wide">{data.personalInfo.fullName}</h1>
+          {data.personalInfo.jobTitle && (
+            <h2 className="text-xl text-gray-600 mb-6 font-light tracking-wide">{data.personalInfo.jobTitle}</h2>
           )}
-          {data.personalInfo.phone && (
-            <div className="flex items-center">
-              <span className="w-20 text-gray-400">Phone</span>
-              <span>{data.personalInfo.phone}</span>
-            </div>
-          )}
-          {data.personalInfo.location && (
-            <div className="flex items-center">
-              <span className="w-20 text-gray-400">Location</span>
-              <span>{data.personalInfo.location}</span>
-            </div>
-          )}
-          {data.personalInfo.linkedin && (
-            <div className="flex items-center">
-              <span className="w-20 text-gray-400">LinkedIn</span>
-              <span>{data.personalInfo.linkedin}</span>
-            </div>
-          )}
+
+          <div className="flex justify-center flex-wrap gap-8 text-sm text-gray-600">
+            <span>{data.personalInfo.email}</span>
+            <span>{data.personalInfo.phone}</span>
+            <span>{data.personalInfo.location}</span>
+            {data.personalInfo.website && <span>{data.personalInfo.website}</span>}
+            {data.personalInfo.linkedin && <span>{data.personalInfo.linkedin}</span>}
+            {data.personalInfo.github && <span>{data.personalInfo.github}</span>}
+          </div>
         </div>
       </div>
 
-      <div className="px-12 pb-12">
-        {/* Minimal Summary */}
+      <div className="p-12">
+        {/* Summary Section */}
         {data.personalInfo.summary && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-thin text-gray-900 mb-8 tracking-widest uppercase">About</h2>
-            <p className="text-gray-700 leading-loose text-lg max-w-4xl">{data.personalInfo.summary}</p>
+          <section className="mb-12">
+            <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Resumen</h3>
+            <p className="text-gray-700 leading-relaxed text-justify max-w-4xl">{data.personalInfo.summary}</p>
           </section>
         )}
 
-        {/* Minimal Experience */}
-        {data.experience.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-thin text-gray-900 mb-8 tracking-widest uppercase">Experience</h2>
-            <div className="space-y-12">
-              {data.experience.map((exp) => (
-                <div key={exp.id} className="grid grid-cols-4 gap-8">
-                  <div className="col-span-1">
-                    <p className="text-gray-500 text-sm uppercase tracking-wide">
-                      {exp.startDate} — {exp.endDate}
-                    </p>
-                    <p className="text-gray-500 text-sm mt-2">{exp.location}</p>
-                  </div>
-                  <div className="col-span-3">
-                    <h3 className="text-xl font-normal text-gray-900 mb-2">{exp.position}</h3>
-                    <p className="text-gray-600 mb-4 font-medium">{exp.company}</p>
-                    <p className="text-gray-700 leading-relaxed">{exp.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Minimal Education */}
-        {data.education.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-thin text-gray-900 mb-8 tracking-widest uppercase">Education</h2>
+        {/* Experience Section */}
+        {sortedExperience.length > 0 && (
+          <section className="mb-12">
+            <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Experiencia</h3>
             <div className="space-y-8">
-              {data.education.map((edu) => (
-                <div key={edu.id} className="grid grid-cols-4 gap-8">
-                  <div className="col-span-1">
-                    <p className="text-gray-500 text-sm uppercase tracking-wide">
-                      {edu.startDate} — {edu.endDate}
-                    </p>
+              {sortedExperience.map((exp) => (
+                <div key={exp.id}>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <div>
+                      <h4 className="text-xl font-light text-gray-900">{exp.jobTitle}</h4>
+                      <p className="text-gray-600">
+                        {exp.company} • {exp.location}
+                      </p>
+                    </div>
+                    <div className="text-sm text-gray-500 font-light">
+                      {formatDateRange(exp.startDate, exp.endDate)}
+                    </div>
                   </div>
-                  <div className="col-span-3">
-                    <h3 className="text-xl font-normal text-gray-900 mb-2">{edu.degree}</h3>
-                    <p className="text-gray-600 mb-2 font-medium">{edu.institution}</p>
-                    <p className="text-gray-500 text-sm mb-3">{edu.field}</p>
-                    {edu.description && <p className="text-gray-700 leading-relaxed">{edu.description}</p>}
-                  </div>
+                  <p className="text-gray-700 leading-relaxed mb-4 text-justify">{exp.description}</p>
+
+                  {exp.achievements && exp.achievements.length > 0 && (
+                    <div className="mb-4">
+                      <ul className="text-gray-700 space-y-1">
+                        {exp.achievements.map((achievement, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="text-gray-400 mr-3">•</span>
+                            <span>{achievement}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {exp.technologies && exp.technologies.length > 0 && (
+                    <div className="text-sm text-gray-500">{exp.technologies.join(" • ")}</div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Minimal Projects */}
+        {/* Education Section */}
+        {sortedEducation.length > 0 && (
+          <section className="mb-12">
+            <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Educación</h3>
+            <div className="space-y-6">
+              {sortedEducation.map((edu) => (
+                <div key={edu.id}>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <div>
+                      <h4 className="text-xl font-light text-gray-900">{edu.degree}</h4>
+                      <p className="text-gray-600">
+                        {edu.institution} • {edu.location}
+                      </p>
+                      {edu.gpa && <p className="text-gray-500 text-sm">Promedio: {edu.gpa}</p>}
+                    </div>
+                    <div className="text-sm text-gray-500 font-light">
+                      {formatDateRange(edu.startDate, edu.endDate)}
+                    </div>
+                  </div>
+                  {edu.description && <p className="text-gray-700 leading-relaxed text-justify">{edu.description}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Projects Section */}
         {data.projects.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-thin text-gray-900 mb-8 tracking-widest uppercase">Projects</h2>
-            <div className="space-y-8">
+          <section className="mb-12">
+            <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Proyectos</h3>
+            <div className="space-y-6">
               {data.projects.map((project) => (
-                <div key={project.id} className="grid grid-cols-4 gap-8">
-                  <div className="col-span-1">
-                    <p className="text-gray-500 text-sm uppercase tracking-wide">
-                      {project.startDate} — {project.endDate}
-                    </p>
-                    {project.url && <p className="text-gray-500 text-sm mt-2 break-all">{project.url}</p>}
+                <div key={project.id}>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <div>
+                      <h4 className="text-xl font-light text-gray-900">{project.name}</h4>
+                      {project.role && <p className="text-gray-600">{project.role}</p>}
+                    </div>
+                    <div className="flex gap-4 text-sm text-gray-500">
+                      {project.url && (
+                        <a href={project.url} className="hover:text-gray-700">
+                          Ver Proyecto
+                        </a>
+                      )}
+                      {project.githubUrl && (
+                        <a href={project.githubUrl} className="hover:text-gray-700">
+                          GitHub
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  <div className="col-span-3">
-                    <h3 className="text-xl font-normal text-gray-900 mb-2">{project.name}</h3>
-                    <p className="text-gray-500 text-sm mb-3 uppercase tracking-wide">{project.technologies}</p>
-                    <p className="text-gray-700 leading-relaxed">{project.description}</p>
-                  </div>
+                  <p className="text-gray-700 leading-relaxed mb-3 text-justify">{project.description}</p>
+                  {project.technologies.length > 0 && (
+                    <div className="text-sm text-gray-500">{project.technologies.join(" • ")}</div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Minimal Skills */}
-        {data.skills.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-thin text-gray-900 mb-8 tracking-widest uppercase">Skills</h2>
-            <div className="grid grid-cols-3 gap-12">
-              {["Técnica", "Blanda", "Idioma"].map((category) => {
-                const categorySkills = data.skills.filter((skill) => skill.category === category)
-                if (categorySkills.length === 0) return null
-
-                return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Skills Section */}
+          {data.skills.length > 0 && (
+            <section className="mb-12">
+              <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Habilidades</h3>
+              <div className="space-y-6">
+                {Object.entries(skillsByCategory).map(([category, skills]) => (
                   <div key={category}>
-                    <h3 className="text-lg font-normal text-gray-900 mb-6 uppercase tracking-wide">{category}s</h3>
-                    <div className="space-y-4">
-                      {categorySkills.map((skill) => (
-                        <div key={skill.id} className="border-b border-gray-100 pb-3">
-                          <div className="flex justify-between items-baseline">
-                            <span className="text-gray-700 font-medium">{skill.name}</span>
-                            <span className="text-gray-400 text-sm uppercase tracking-wider">{skill.level}</span>
+                    <h4 className="font-light text-gray-800 mb-3 text-sm tracking-wide uppercase">{category}</h4>
+                    <div className="space-y-3">
+                      {skills.map((skill) => (
+                        <div key={skill.id} className="flex justify-between items-center">
+                          <span className="text-gray-700">{skill.name}</span>
+                          <div className="flex items-center gap-3">
+                            <div className="w-16 bg-gray-200 rounded-full h-1">
+                              <div className="bg-gray-900 h-1 rounded-full" style={{ width: `${skill.level}%` }} />
+                            </div>
+                            <span className="text-xs text-gray-500 w-8">{skill.level}%</span>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                )
-              })}
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Languages Section */}
+          {data.languages.length > 0 && (
+            <section className="mb-12">
+              <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Idiomas</h3>
+              <div className="space-y-4">
+                {data.languages.map((language) => (
+                  <div key={language.id} className="flex justify-between items-center">
+                    <span className="text-gray-700">{language.name}</span>
+                    <span className="text-gray-500 text-sm">{language.proficiency}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* Certifications Section */}
+        {data.certifications.length > 0 && (
+          <section className="mb-12">
+            <h3 className="text-lg font-light text-gray-900 mb-6 tracking-widest uppercase">Certificaciones</h3>
+            <div className="space-y-6">
+              {data.certifications.map((cert) => (
+                <div key={cert.id}>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <div>
+                      <h4 className="text-lg font-light text-gray-900">{cert.name}</h4>
+                      <p className="text-gray-600">{cert.issuer}</p>
+                    </div>
+                    <div className="text-sm text-gray-500 font-light">
+                      {formatDateRange(cert.issueDate, cert.expiryDate)}
+                    </div>
+                  </div>
+                  {cert.credentialId && <p className="text-sm text-gray-500">ID: {cert.credentialId}</p>}
+                  {cert.url && (
+                    <a href={cert.url} className="text-gray-600 hover:text-gray-800 text-sm">
+                      Verificar Certificación
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
         )}
@@ -151,73 +224,3 @@ export function MinimalTemplate({ data }: MinimalTemplateProps) {
     </div>
   )
 }
-
-export function generateMinimalPDF(data: CVData): string {
-  return `
-    <html>
-      <head>
-        <style>
-          body { font-family: 'Helvetica Neue', sans-serif; font-weight: 300; margin: 0; padding: 0; }
-          .header { border-bottom: 1px solid #e5e7eb; padding: 3rem; }
-          .header h1 { font-size: 4rem; font-weight: 100; margin: 0 0 2rem 0; letter-spacing: 2px; }
-          .content { padding: 3rem; }
-          .section { margin-bottom: 4rem; }
-          .section h2 { font-size: 1.5rem; font-weight: 100; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 2rem; }
-          .experience-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 2rem; margin: 3rem 0; }
-          .skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>${data.personalInfo.fullName}</h1>
-          <div>
-            ${data.personalInfo.email ? `<div>Email: ${data.personalInfo.email}</div>` : ""}
-            ${data.personalInfo.phone ? `<div>Phone: ${data.personalInfo.phone}</div>` : ""}
-            ${data.personalInfo.location ? `<div>Location: ${data.personalInfo.location}</div>` : ""}
-          </div>
-        </div>
-        <div class="content">
-          ${
-            data.personalInfo.summary
-              ? `
-            <div class="section">
-              <h2>About</h2>
-              <p>${data.personalInfo.summary}</p>
-            </div>
-          `
-              : ""
-          }
-          
-          ${
-            data.experience.length > 0
-              ? `
-            <div class="section">
-              <h2>Experience</h2>
-              ${data.experience
-                .map(
-                  (exp) => `
-                <div class="experience-grid">
-                  <div>
-                    <p>${exp.startDate} — ${exp.endDate}</p>
-                    <p>${exp.location}</p>
-                  </div>
-                  <div>
-                    <h3>${exp.position}</h3>
-                    <p><strong>${exp.company}</strong></p>
-                    <p>${exp.description}</p>
-                  </div>
-                </div>
-              `,
-                )
-                .join("")}
-            </div>
-          `
-              : ""
-          }
-        </div>
-      </body>
-    </html>
-  `
-}
-
-export default MinimalTemplate
