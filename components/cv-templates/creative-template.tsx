@@ -1,168 +1,228 @@
-import jsPDF from "jspdf"
 import type { CVData } from "@/lib/cv-types"
 
-export function generateCreativeCV(data: CVData): jsPDF {
-  const doc = new jsPDF()
-  const pageWidth = doc.internal.pageSize.width
-  const pageHeight = doc.internal.pageSize.height
-  const sidebarWidth = 60
-  let yPosition = 20
-
-  // Dark sidebar
-  doc.setFillColor(45, 55, 72) // Gray-800
-  doc.rect(0, 0, sidebarWidth, pageHeight, "F")
-
-  // Main content area
-  doc.setFillColor(248, 250, 252) // Gray-50
-  doc.rect(sidebarWidth, 0, pageWidth - sidebarWidth, pageHeight, "F")
-
-  // Name in sidebar
-  doc.setTextColor(255, 255, 255)
-  doc.setFontSize(16)
-  doc.setFont("helvetica", "bold")
-  const nameLines = doc.splitTextToSize(data.fullName, sidebarWidth - 10)
-  nameLines.forEach((line: string, index: number) => {
-    doc.text(line, 5, 25 + index * 8)
-  })
-
-  // Contact info in sidebar
-  yPosition = 25 + nameLines.length * 8 + 15
-  doc.setFontSize(8)
-  doc.setFont("helvetica", "normal")
-
-  if (data.email) {
-    doc.text("EMAIL", 5, yPosition)
-    yPosition += 5
-    const emailLines = doc.splitTextToSize(data.email, sidebarWidth - 10)
-    emailLines.forEach((line: string) => {
-      doc.text(line, 5, yPosition)
-      yPosition += 4
-    })
-    yPosition += 8
-  }
-
-  if (data.phone) {
-    doc.text("PHONE", 5, yPosition)
-    yPosition += 5
-    doc.text(data.phone, 5, yPosition)
-    yPosition += 12
-  }
-
-  if (data.location) {
-    doc.text("LOCATION", 5, yPosition)
-    yPosition += 5
-    const locationLines = doc.splitTextToSize(data.location, sidebarWidth - 10)
-    locationLines.forEach((line: string) => {
-      doc.text(line, 5, yPosition)
-      yPosition += 4
-    })
-    yPosition += 12
-  }
-
-  // Skills in sidebar
-  if (data.skills.length > 0) {
-    doc.setFontSize(10)
-    doc.setFont("helvetica", "bold")
-    doc.text("SKILLS", 5, yPosition)
-    yPosition += 10
-
-    doc.setFontSize(8)
-    doc.setFont("helvetica", "normal")
-
-    const skillsByCategory = data.skills.reduce(
-      (acc, skill) => {
-        if (!acc[skill.category]) acc[skill.category] = []
-        acc[skill.category].push(skill.name)
-        return acc
-      },
-      {} as Record<string, string[]>,
-    )
-
-    Object.entries(skillsByCategory).forEach(([category, skills]) => {
-      if (yPosition > pageHeight - 30) return
-
-      doc.setFont("helvetica", "bold")
-      doc.text(category.toUpperCase(), 5, yPosition)
-      yPosition += 6
-
-      doc.setFont("helvetica", "normal")
-      skills.forEach((skill) => {
-        if (yPosition > pageHeight - 20) return
-        doc.text(`• ${skill}`, 5, yPosition)
-        yPosition += 4
-      })
-      yPosition += 6
-    })
-  }
-
-  // Main content
-  yPosition = 30
-  doc.setTextColor(0, 0, 0)
-
-  // Professional Summary
-  if (data.summary) {
-    doc.setFillColor(239, 68, 68) // Red-500
-    doc.rect(sidebarWidth + 10, yPosition - 8, 100, 12, "F")
-
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(12)
-    doc.setFont("helvetica", "bold")
-    doc.text("PROFESSIONAL SUMMARY", sidebarWidth + 15, yPosition)
-    yPosition += 15
-
-    doc.setTextColor(0, 0, 0)
-    doc.setFontSize(10)
-    doc.setFont("helvetica", "normal")
-    const summaryLines = doc.splitTextToSize(data.summary, pageWidth - sidebarWidth - 30)
-    doc.text(summaryLines, sidebarWidth + 15, yPosition)
-    yPosition += summaryLines.length * 5 + 15
-  }
-
-  // Work Experience
-  if (data.experience.length > 0) {
-    doc.setFillColor(34, 197, 94) // Green-500
-    doc.rect(sidebarWidth + 10, yPosition - 8, 100, 12, "F")
-
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(12)
-    doc.setFont("helvetica", "bold")
-    doc.text("WORK EXPERIENCE", sidebarWidth + 15, yPosition)
-    yPosition += 20
-
-    doc.setTextColor(0, 0, 0)
-
-    data.experience.forEach((exp) => {
-      if (yPosition > pageHeight - 50) {
-        doc.addPage()
-        doc.setFillColor(45, 55, 72)
-        doc.rect(0, 0, sidebarWidth, pageHeight, "F")
-        doc.setFillColor(248, 250, 252)
-        doc.rect(sidebarWidth, 0, pageWidth - sidebarWidth, pageHeight, "F")
-        yPosition = 30
-      }
-
-      doc.setFontSize(11)
-      doc.setFont("helvetica", "bold")
-      doc.text(exp.title, sidebarWidth + 15, yPosition)
-
-      doc.setFont("helvetica", "normal")
-      doc.text(`${exp.company} | ${exp.location}`, sidebarWidth + 15, yPosition + 7)
-
-      const dateRange = exp.current ? `${exp.startDate} - Present` : `${exp.startDate} - ${exp.endDate}`
-      doc.text(dateRange, pageWidth - 15, yPosition + 7, { align: "right" })
-
-      yPosition += 15
-
-      if (exp.description) {
-        doc.setFontSize(9)
-        const descLines = doc.splitTextToSize(exp.description, pageWidth - sidebarWidth - 30)
-        doc.text(descLines, sidebarWidth + 15, yPosition)
-        yPosition += descLines.length * 4 + 5
-      }
-
-      yPosition += 10
-    })
-  }
-
-  return doc
+interface CreativeTemplateProps {
+  data: CVData
 }
+
+export function CreativeTemplate({ data }: CreativeTemplateProps) {
+  return (
+    <div className="bg-white min-h-[297mm] w-[210mm] mx-auto shadow-lg overflow-hidden">
+      {/* Colorful Header */}
+      <div className="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white p-8 relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+        <div className="relative z-10">
+          <h1 className="text-4xl font-bold mb-3 animate-pulse">{data.personalInfo.fullName}</h1>
+          <div className="flex flex-wrap gap-4 text-purple-100">
+            {data.personalInfo.email && (
+              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">✉️ {data.personalInfo.email}</span>
+            )}
+            {data.personalInfo.phone && (
+              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                📞 {data.personalInfo.phone}
+              </span>
+            )}
+            {data.personalInfo.location && (
+              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                🌍 {data.personalInfo.location}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-8">
+        {/* Creative Summary */}
+        {data.personalInfo.summary && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-4">
+              ✨ Sobre Mí
+            </h2>
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border-l-4 border-purple-500">
+              <p className="text-gray-700 leading-relaxed italic">{data.personalInfo.summary}</p>
+            </div>
+          </section>
+        )}
+
+        {/* Creative Experience */}
+        {data.experience.length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+              🚀 Mi Trayectoria
+            </h2>
+            <div className="space-y-6">
+              {data.experience.map((exp, index) => (
+                <div key={exp.id} className="relative">
+                  <div
+                    className={`p-6 rounded-2xl shadow-lg transform hover:scale-105 transition-transform ${
+                      index % 2 === 0
+                        ? "bg-gradient-to-r from-purple-100 to-pink-100 ml-0 mr-8"
+                        : "bg-gradient-to-r from-orange-100 to-yellow-100 ml-8 mr-0"
+                    }`}
+                  >
+                    <div className="flex items-center mb-3">
+                      <div
+                        className={`w-3 h-3 rounded-full mr-3 ${index % 2 === 0 ? "bg-purple-500" : "bg-orange-500"}`}
+                      ></div>
+                      <h3 className="text-xl font-bold text-gray-800">{exp.position}</h3>
+                    </div>
+                    <p className="text-purple-600 font-semibold text-lg">{exp.company}</p>
+                    <p className="text-gray-600 text-sm mb-3">
+                      📅 {exp.startDate} - {exp.endDate} • 📍 {exp.location}
+                    </p>
+                    <p className="text-gray-700">{exp.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Creative Education */}
+        {data.education.length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+              🎓 Formación Académica
+            </h2>
+            <div className="grid gap-4">
+              {data.education.map((edu) => (
+                <div
+                  key={edu.id}
+                  className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border-l-4 border-blue-500 shadow-md"
+                >
+                  <h3 className="text-lg font-bold text-gray-800">{edu.degree}</h3>
+                  <p className="text-blue-600 font-semibold">{edu.institution}</p>
+                  <p className="text-gray-600 text-sm">
+                    📚 {edu.field} • 📅 {edu.startDate} - {edu.endDate}
+                  </p>
+                  {edu.description && <p className="text-gray-700 mt-2">{edu.description}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Creative Projects */}
+        {data.projects.length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+              💡 Proyectos Creativos
+            </h2>
+            <div className="grid gap-6">
+              {data.projects.map((project, index) => (
+                <div
+                  key={project.id}
+                  className={`p-6 rounded-2xl shadow-lg ${
+                    index % 3 === 0
+                      ? "bg-gradient-to-br from-pink-100 to-rose-100"
+                      : index % 3 === 1
+                        ? "bg-gradient-to-br from-purple-100 to-indigo-100"
+                        : "bg-gradient-to-br from-orange-100 to-amber-100"
+                  }`}
+                >
+                  <div className="flex items-center mb-3">
+                    <span className="text-2xl mr-3">🎨</span>
+                    <h3 className="text-lg font-bold text-gray-800">{project.name}</h3>
+                  </div>
+                  {project.url && <p className="text-blue-600 text-sm mb-2">🔗 {project.url}</p>}
+                  <p className="text-gray-600 text-sm mb-3">
+                    🛠️ {project.technologies} • 📅 {project.startDate} - {project.endDate}
+                  </p>
+                  <p className="text-gray-700">{project.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Creative Skills */}
+        {data.skills.length > 0 && (
+          <section>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+              ⭐ Superpoderes
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {["Técnica", "Blanda", "Idioma"].map((category, categoryIndex) => {
+                const categorySkills = data.skills.filter((skill) => skill.category === category)
+                if (categorySkills.length === 0) return null
+
+                const gradients = [
+                  "from-purple-200 to-pink-200",
+                  "from-blue-200 to-indigo-200",
+                  "from-orange-200 to-yellow-200",
+                ]
+
+                return (
+                  <div
+                    key={category}
+                    className={`bg-gradient-to-br ${gradients[categoryIndex]} p-6 rounded-2xl shadow-lg`}
+                  >
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
+                      {category === "Técnica" ? "💻" : category === "Blanda" ? "🤝" : "🌐"} {category}s
+                    </h3>
+                    <div className="space-y-3">
+                      {categorySkills.map((skill) => (
+                        <div key={skill.id} className="bg-white bg-opacity-60 p-3 rounded-lg">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium text-gray-800">{skill.name}</span>
+                            <span className="text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                              {skill.level}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export function generateCreativePDF(data: CVData): string {
+  return `
+    <html>
+      <head>
+        <style>
+          body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
+          .header { background: linear-gradient(135deg, #9333ea, #ec4899, #f97316); color: white; padding: 2rem; }
+          .header h1 { font-size: 2.5rem; margin: 0 0 1rem 0; }
+          .content { padding: 2rem; }
+          .section { margin-bottom: 2rem; }
+          .section h2 { background: linear-gradient(135deg, #9333ea, #ec4899); -webkit-background-clip: text; color: transparent; }
+          .creative-box { background: linear-gradient(135deg, #f3e8ff, #fce7f3); padding: 1.5rem; border-radius: 1rem; margin: 1rem 0; }
+          .skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${data.personalInfo.fullName}</h1>
+          <div>
+            ${data.personalInfo.email ? `<span>✉️ ${data.personalInfo.email}</span>` : ""}
+            ${data.personalInfo.phone ? `<span>📞 ${data.personalInfo.phone}</span>` : ""}
+          </div>
+        </div>
+        <div class="content">
+          ${
+            data.personalInfo.summary
+              ? `
+            <div class="section">
+              <h2>✨ Sobre Mí</h2>
+              <div class="creative-box">
+                <p>${data.personalInfo.summary}</p>
+              </div>
+            </div>
+          `
+              : ""
+          }
+        </div>
+      </body>
+    </html>
+  `
+}
+
+export default CreativeTemplate
