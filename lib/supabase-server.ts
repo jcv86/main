@@ -1,43 +1,83 @@
-import { createServerClient } from "@supabase/ssr"
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
-export const createServerSupabaseClient = async () => {
-  const cookieStore = await cookies()
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  // Check if environment variables are available
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// Check if we have the required environment variables
+const hasSupabaseCredentials = supabaseUrl && supabaseAnonKey
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn("Supabase environment variables not found, running in demo mode")
-    return null
+// Mock server client for demo mode
+const createMockServerClient = () => ({
+  auth: {
+    getUser: () =>
+      Promise.resolve({
+        data: {
+          user: {
+            id: "demo-user-id",
+            email: "demo@example.com",
+            user_metadata: {
+              first_name: "Demo",
+              last_name: "User",
+            },
+          },
+        },
+        error: null,
+      }),
+    getSession: () =>
+      Promise.resolve({
+        data: {
+          session: {
+            user: {
+              id: "demo-user-id",
+              email: "demo@example.com",
+              user_metadata: {
+                first_name: "Demo",
+                last_name: "User",
+              },
+            },
+          },
+        },
+        error: null,
+      }),
+  },
+  from: () => ({
+    select: () => Promise.resolve({ data: [], error: null }),
+    insert: () => Promise.resolve({ data: [], error: null }),
+    update: () => Promise.resolve({ data: [], error: null }),
+    delete: () => Promise.resolve({ data: [], error: null }),
+    upsert: () => Promise.resolve({ data: [], error: null }),
+  }),
+})
+
+export const createClient = () => {
+  if (!hasSupabaseCredentials) {
+    return createMockServerClient() as any
   }
 
-  try {
-    return createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-          } catch (error) {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-            console.warn("Cookie setting failed in server component:", error)
-          }
-        },
+  const cookieStore = cookies()
+
+  return createServerClient(supabaseUrl!, supabaseAnonKey!, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value
       },
-    })
-  } catch (error) {
-    console.error("Failed to create Supabase server client:", error)
-    return null
-  }
+      set(name: string, value: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value, ...options })
+        } catch (error) {
+          // Handle cookie setting errors in server components
+        }
+      },
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value: "", ...options })
+        } catch (error) {
+          // Handle cookie removal errors in server components
+        }
+      },
+    },
+  })
 }
 
-// Alternative export for compatibility
-export const createClient = async () => {
-  return await createServerSupabaseClient()
-}
+export const isDemoMode = !hasSupabaseCredentials
