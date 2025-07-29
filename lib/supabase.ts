@@ -44,3 +44,6 @@ export function createClient() {
 
   return createSupabaseClient(supabaseUrl, supabaseAnonKey)
 }
+
+// Create a singleton instance for direct usage
+export const supabase = createClient()
