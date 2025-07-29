@@ -21,16 +21,26 @@ import {
   Users,
   Briefcase,
   Star,
+  Plus,
+  History,
 } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { useRouter } from "next/navigation"
 
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
   timestamp: Date
+}
+
+interface Session {
+  sessionId: string
+  lastMessage: Date
+  messageCount: number
 }
 
 const quickActions = [
@@ -92,31 +102,90 @@ export default function CareerCoachPage() {
   const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingHistory, setIsLoadingHistory] = useState(true)
+  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentSessionId, setCurrentSessionId] = useState<string>("")
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [showSessions, setShowSessions] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const supabase = createClientComponentClient()
+  const router = useRouter()
 
   useEffect(() => {
-    loadConversationHistory()
+    checkUser()
   }, [])
+
+  useEffect(() => {
+    if (currentUser) {
+      loadConversationHistory()
+      loadUserSessions()
+    } else {
+      loadConversationHistory()
+    }
+  }, [currentUser])
 
   useEffect(() => {
     scrollToBottom()
   }, [messages])
 
+  const checkUser = async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setCurrentUser(user)
+    } catch (error) {
+      console.error("Error checking user:", error)
+    }
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const loadUserSessions = async () => {
+    if (!currentUser) return
+
+    try {
+      const response = await fetch(`/api/career-coach?action=sessions&userId=${currentUser.id}`)
+      if (response.ok) {
+        const data = await response.json()
+        setSessions(data.sessions || [])
+      }
+    } catch (error) {
+      console.error("Error loading sessions:", error)
+    }
   }
 
   const loadConversationHistory = async () => {
     try {
       setIsLoadingHistory(true)
-      const response = await fetch("/api/career-coach", {
-        method: "GET",
-      })
+      const url = currentUser ? `/api/career-coach?userId=${currentUser.id}` : "/api/career-coach"
+
+      const response = await fetch(url)
 
       if (response.ok) {
         const data = await response.json()
-        setMessages(data.messages || [])
+        if (data.messages && Array.isArray(data.messages)) {
+          const formattedMessages = data.messages.map((msg: any) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp),
+          }))
+          setMessages(formattedMessages)
+          setCurrentSessionId(data.sessionId || "demo-session")
+        } else {
+          // Fallback to welcome message
+          setMessages([
+            {
+              id: "1",
+              role: "assistant",
+              content:
+                "¡Hola! Soy tu AI Career Coach personalizado para el mercado laboral chileno. Estoy aquí para ayudarte con tu desarrollo profesional, búsqueda de empleo, y crecimiento de carrera. ¿En qué puedo asistirte hoy?",
+              timestamp: new Date(),
+            },
+          ])
+          setCurrentSessionId("demo-session")
+        }
       } else {
         // If API fails, start with a welcome message
         setMessages([
@@ -128,6 +197,7 @@ export default function CareerCoachPage() {
             timestamp: new Date(),
           },
         ])
+        setCurrentSessionId("demo-session")
       }
     } catch (error) {
       console.error("Error loading conversation history:", error)
@@ -141,14 +211,71 @@ export default function CareerCoachPage() {
           timestamp: new Date(),
         },
       ])
+      setCurrentSessionId("demo-session")
     } finally {
       setIsLoadingHistory(false)
+    }
+  }
+
+  const startNewSession = async () => {
+    if (!currentUser) {
+      toast.error("Debes iniciar sesión para crear una nueva sesión")
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      const response = await fetch("/api/career-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "new_session",
+          userId: currentUser.id,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrentSessionId(data.sessionId)
+        setMessages([
+          {
+            id: "1",
+            role: "assistant",
+            content: data.response || "¡Nueva sesión iniciada! Soy tu AI Career Coach. ¿En qué puedo ayudarte hoy?",
+            timestamp: new Date(),
+          },
+        ])
+        loadUserSessions()
+        toast.success("Nueva sesión creada")
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Error creating session")
+      }
+    } catch (error) {
+      console.error("Error starting new session:", error)
+      toast.error("Error al crear nueva sesión")
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const sendMessage = async (messageContent?: string) => {
     const content = messageContent || inputMessage.trim()
     if (!content || isLoading) return
+
+    // If no session exists and user is authenticated, create one
+    if (!currentSessionId || currentSessionId === "demo-session") {
+      if (currentUser) {
+        await startNewSession()
+        // Wait a bit for session creation
+        await new Promise((resolve) => setTimeout(resolve, 500))
+      } else {
+        // For non-authenticated users, use demo session
+        setCurrentSessionId("demo-session")
+      }
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -170,20 +297,34 @@ export default function CareerCoachPage() {
         body: JSON.stringify({
           message: content,
           conversationHistory: messages,
+          userId: currentUser?.id,
+          sessionId: currentSessionId,
+          action: "chat", // Explicitly set action
         }),
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.response,
-          timestamp: new Date(),
-        }
-        setMessages((prev) => [...prev, assistantMessage])
-      } else {
-        throw new Error("Failed to get response")
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.error && !data.response) {
+        throw new Error(data.error)
+      }
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: data.response || "Lo siento, no pude generar una respuesta en este momento.",
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+
+      // Update session list if user is authenticated
+      if (currentUser) {
+        loadUserSessions()
       }
     } catch (error) {
       console.error("Error sending message:", error)
@@ -198,6 +339,10 @@ export default function CareerCoachPage() {
       toast.error("Error al enviar mensaje. Intenta nuevamente.")
     } finally {
       setIsLoading(false)
+      // Focus back to input after sending
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
     }
   }
 
@@ -210,6 +355,10 @@ export default function CareerCoachPage() {
 
   const handleQuickAction = (action: (typeof quickActions)[0]) => {
     sendMessage(action.prompt)
+  }
+
+  const handleLogin = () => {
+    router.push("/auth/login")
   }
 
   if (isLoadingHistory) {
@@ -227,6 +376,78 @@ export default function CareerCoachPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-8rem)]">
         {/* Sidebar with Quick Actions */}
         <div className="lg:col-span-1 space-y-4">
+          {/* User Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Estado
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {currentUser ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-green-600">✓ Sesión guardada</p>
+                  <p className="text-xs text-muted-foreground">{currentUser.email}</p>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={startNewSession} className="flex-1 bg-transparent">
+                      <Plus className="h-3 w-3 mr-1" />
+                      Nueva
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setShowSessions(!showSessions)}
+                      className="flex-1"
+                    >
+                      <History className="h-3 w-3 mr-1" />
+                      Historial
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-sm text-yellow-600">⚠ Sesión temporal</p>
+                  <p className="text-xs text-muted-foreground">Inicia sesión para guardar conversaciones</p>
+                  <Button size="sm" onClick={handleLogin} className="w-full">
+                    Iniciar Sesión
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Sessions History */}
+          {showSessions && currentUser && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <History className="h-5 w-5" />
+                  Sesiones Anteriores
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {sessions.map((session) => (
+                    <div
+                      key={session.sessionId}
+                      className="p-2 border rounded text-xs cursor-pointer hover:bg-muted"
+                      onClick={() => {
+                        setCurrentSessionId(session.sessionId)
+                        loadConversationHistory()
+                        setShowSessions(false)
+                      }}
+                    >
+                      <div className="font-medium">{format(session.lastMessage, "dd/MM HH:mm", { locale: es })}</div>
+                      <div className="text-muted-foreground">{session.messageCount} mensajes</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Quick Actions */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -261,6 +482,7 @@ export default function CareerCoachPage() {
             </CardContent>
           </Card>
 
+          {/* Suggestions */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -294,6 +516,11 @@ export default function CareerCoachPage() {
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5" />
                 AI Career Coach
+                {currentUser && currentSessionId !== "demo-session" && (
+                  <Badge variant="secondary" className="ml-auto">
+                    Sesión: {currentSessionId.split("-").pop()?.slice(0, 8)}
+                  </Badge>
+                )}
               </CardTitle>
               <CardDescription>Tu asistente personal para desarrollo profesional en Chile</CardDescription>
             </CardHeader>

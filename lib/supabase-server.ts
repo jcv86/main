@@ -1,63 +1,11 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr"
+import { createClient, type CookieOptions } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-// Check if we have the required environment variables
-const hasSupabaseCredentials = supabaseUrl && supabaseAnonKey
-
-// Mock server client for demo mode
-const createMockServerClient = () => ({
-  auth: {
-    getUser: () =>
-      Promise.resolve({
-        data: {
-          user: {
-            id: "demo-user-id",
-            email: "demo@example.com",
-            user_metadata: {
-              first_name: "Demo",
-              last_name: "User",
-            },
-          },
-        },
-        error: null,
-      }),
-    getSession: () =>
-      Promise.resolve({
-        data: {
-          session: {
-            user: {
-              id: "demo-user-id",
-              email: "demo@example.com",
-              user_metadata: {
-                first_name: "Demo",
-                last_name: "User",
-              },
-            },
-          },
-        },
-        error: null,
-      }),
-  },
-  from: () => ({
-    select: () => Promise.resolve({ data: [], error: null }),
-    insert: () => Promise.resolve({ data: [], error: null }),
-    update: () => Promise.resolve({ data: [], error: null }),
-    delete: () => Promise.resolve({ data: [], error: null }),
-    upsert: () => Promise.resolve({ data: [], error: null }),
-  }),
-})
-
-export const createClient = () => {
-  if (!hasSupabaseCredentials) {
-    return createMockServerClient() as any
-  }
-
+// Function to create a server client for Supabase
+export function createSupabaseServerClient() {
   const cookieStore = cookies()
 
-  return createServerClient(supabaseUrl!, supabaseAnonKey!, {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
       get(name: string) {
         return cookieStore.get(name)?.value
@@ -66,18 +14,30 @@ export const createClient = () => {
         try {
           cookieStore.set({ name, value, ...options })
         } catch (error) {
-          // Handle cookie setting errors in server components
+          // The `set` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
         }
       },
       remove(name: string, options: CookieOptions) {
         try {
           cookieStore.set({ name, value: "", ...options })
         } catch (error) {
-          // Handle cookie removal errors in server components
+          // The `delete` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
         }
       },
     },
   })
 }
 
-export const isDemoMode = !hasSupabaseCredentials
+// Service role client for admin operations
+export function createServiceRoleClient() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  })
+}
