@@ -1,8 +1,12 @@
 "use client"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect } from "react"
+import { useCallback } from "react"
+
+import { useRef } from "react"
+
 import type React from "react"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -10,37 +14,31 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Code,
-  ChevronLeft,
-  Mic,
-  MicOff,
   AlertCircle,
-  Info,
   Database,
   Globe,
   Smartphone,
   Server,
   Palette,
   Shield,
-  Settings,
-  Volume2,
-  Keyboard,
   CheckCircle,
-  Trash2,
-  Pause,
-  RotateCcw,
-  ArrowLeft,
-  ArrowRight,
-  HelpCircle,
-  Lightbulb,
   Target,
-  Square,
+  Clock,
+  FileSpreadsheet,
+  Presentation,
+  Download,
+  Upload,
+  Play,
+  BookOpen,
+  TrendingUp,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { toast } from "@/hooks/use-toast"
+import { TECHNICAL_TESTS, TECHNICAL_SKILLS } from "@/lib/technical-skills-types"
 
 // Technical skill categories
 const SKILL_CATEGORIES = {
@@ -794,1453 +792,591 @@ const useDragAndDrop = (initialItems: string[]) => {
 export default function TechnicalSkillsTestPage() {
   const { t, language } = useLanguage()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const testId = searchParams.get("testId")
 
-  // Mode selection
-  const [inputMode, setInputMode] = useState<InputMode>("mixed")
-  const [showModeSelection, setShowModeSelection] = useState(true)
+  const [test, setTest] = useState<any>(null)
+  const [skill, setSkill] = useState<any>(null)
+  const [currentStep, setCurrentStep] = useState<"intro" | "test" | "results">("intro")
+  const [timeLeft, setTimeLeft] = useState(0)
+  const [submission, setSubmission] = useState<any>({
+    type: "text",
+    content: "",
+    files: [],
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [results, setResults] = useState<any>(null)
+  const [startTime, setStartTime] = useState<number>(0)
 
-  // Traditional mode states
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, any>>({})
-  const [isCompleting, setIsCompleting] = useState(false)
-  const [showHelp, setShowHelp] = useState(false)
-  const [textAnswer, setTextAnswer] = useState("")
-  const [sliderValue, setSliderValue] = useState([5])
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
-  const [selectedOption, setSelectedOption] = useState("")
-
-  // Conversational mode states
-  const [currentStep, setCurrentStep] = useState(0)
-  const [conversationAnswers, setConversationAnswers] = useState<Record<string, string>>({})
-  const [isConversationActive, setIsConversationActive] = useState(false)
-  const [countdown, setCountdown] = useState(0)
-  const [showCountdown, setShowCountdown] = useState(false)
-
-  // Speech recognition and synthesis
-  const {
-    isListening,
-    transcript,
-    interimTranscript,
-    isSupported: speechRecognitionSupported,
-    error: speechError,
-    isInitializing,
-    startListening,
-    stopListening,
-    clearTranscript,
-  } = useSpeechRecognition()
-
-  const { speak, stop: stopSpeaking, isSpeaking, isSupported: textToSpeechSupported } = useTextToSpeech()
-
-  // Drag and drop for ranking questions
-  const currentQuestionData = TECHNICAL_QUESTIONS[currentQuestion]
-  const {
-    items: rankingItems,
-    setItems: setRankingItems,
-    handleDragStart,
-    handleDragOver,
-    handleDrop,
-    moveItem,
-  } = useDragAndDrop(currentQuestionData?.items || [])
-
-  // Auto-start conversation when step changes in voice-complete mode
   useEffect(() => {
-    if (inputMode === "voice-complete" && isConversationActive && !isSpeaking && !isListening) {
-      const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
-      if (currentStepData && currentStepData.systemMessage) {
-        // Start countdown before speaking
-        setShowCountdown(true)
-        setCountdown(3)
-
-        const countdownInterval = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(countdownInterval)
-              setShowCountdown(false)
-              // Start speaking after countdown
-              setTimeout(() => {
-                speak(currentStepData.systemMessage)
-              }, 500)
-              return 0
-            }
-            return prev - 1
-          })
-        }, 1000)
+    if (testId) {
+      const foundTest = TECHNICAL_TESTS.find((t) => t.id === testId)
+      if (foundTest) {
+        setTest(foundTest)
+        const foundSkill = TECHNICAL_SKILLS.find((s) => s.id === foundTest.skillId)
+        setSkill(foundSkill)
+        setTimeLeft(foundTest.timeLimit * 60) // Convert to seconds
       }
     }
-  }, [currentStep, inputMode, isConversationActive, isSpeaking, isListening, speak])
+  }, [testId])
 
-  // Auto-start listening after system finishes speaking
   useEffect(() => {
-    if (inputMode === "voice-complete" && !isSpeaking && isConversationActive && speechRecognitionSupported) {
-      const timer = setTimeout(() => {
-        if (!isListening && !isInitializing) {
-          startListening()
-        }
+    let timer: NodeJS.Timeout
+    if (currentStep === "test" && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            handleSubmit() // Auto-submit when time runs out
+            return 0
+          }
+          return prev - 1
+        })
       }, 1000)
-      return () => clearTimeout(timer)
     }
-  }, [
-    isSpeaking,
-    isConversationActive,
-    inputMode,
-    speechRecognitionSupported,
-    isListening,
-    isInitializing,
-    startListening,
-  ])
+    return () => clearInterval(timer)
+  }, [currentStep, timeLeft])
 
-  // Save conversation answer when transcript changes
-  useEffect(() => {
-    if (inputMode === "voice-complete" && transcript) {
-      const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
-      if (currentStepData) {
-        setConversationAnswers((prev) => ({
-          ...prev,
-          [currentStepData.id]: transcript.trim(),
-        }))
-      }
-    }
-  }, [transcript, currentStep, inputMode])
-
-  // Update text answer from speech recognition in traditional mode
-  useEffect(() => {
-    if (
-      inputMode === "mixed" &&
-      transcript &&
-      (currentQuestionData?.type === "open" || currentQuestionData?.type === "scenario")
-    ) {
-      setTextAnswer(transcript)
-    }
-  }, [transcript, inputMode, currentQuestionData?.type])
-
-  // Reset form states when question changes
-  useEffect(() => {
-    setTextAnswer("")
-    setSliderValue([currentQuestionData?.min || 5])
-    setSelectedOptions([])
-    setSelectedOption("")
-    setShowHelp(false)
-    clearTranscript()
-
-    // Reset ranking items when question changes
-    if (currentQuestionData?.items) {
-      setRankingItems(currentQuestionData.items)
-    }
-  }, [currentQuestion, currentQuestionData, clearTranscript, setRankingItems])
-
-  const handleStartTest = (mode: InputMode) => {
-    setInputMode(mode)
-    setShowModeSelection(false)
-
-    if (mode === "voice-complete") {
-      setIsConversationActive(true)
-      setCurrentStep(0)
-    }
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
   }
 
-  const handleNextConversationStep = () => {
-    if (currentStep < TECHNICAL_CONVERSATION_FLOW.length - 1) {
-      setCurrentStep((prev) => prev + 1)
-      clearTranscript()
-      if (isListening) {
-        stopListening()
-      }
-      if (isSpeaking) {
-        stopSpeaking()
-      }
-    } else {
-      handleCompleteConversation()
-    }
-  }
-
-  const handlePreviousConversationStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1)
-      clearTranscript()
-      if (isListening) {
-        stopListening()
-      }
-      if (isSpeaking) {
-        stopSpeaking()
-      }
-    }
-  }
-
-  const handleRestartCurrentStep = () => {
-    clearTranscript()
-    if (isListening) {
-      stopListening()
-    }
-    if (isSpeaking) {
-      stopSpeaking()
-    }
-
-    // Restart the current step
-    const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
-    if (currentStepData) {
-      setTimeout(() => {
-        speak(currentStepData.systemMessage)
-      }, 500)
-    }
-  }
-
-  const handleCompleteConversation = async () => {
-    setIsCompleting(true)
-
-    if (isListening) {
-      stopListening()
-    }
-    if (isSpeaking) {
-      stopSpeaking()
-    }
-
-    // Process conversational answers
-    const results = processConversationalAnswers(conversationAnswers)
-
-    localStorage.setItem(
-      "technicalSkillsResults",
-      JSON.stringify({
-        scores: results,
-        answers: conversationAnswers,
-        completedAt: new Date().toISOString(),
-        type: "technical-skills",
-        inputMode,
-      }),
-    )
-
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    router.push("/technical-skills-results")
-  }
-
-  // Traditional mode handlers
-  const handleNextQuestion = () => {
-    // Save current answer
-    let answerValue: any = null
-
-    switch (currentQuestionData.type) {
-      case "open":
-      case "scenario":
+  const getTestIcon = (type: string) => {
+    switch (type) {
       case "code":
-        answerValue = textAnswer || transcript
-        break
-      case "multiple":
-      case "binary":
-        answerValue = selectedOption
-        break
-      case "checkbox":
-        answerValue = selectedOptions
-        break
-      case "slider":
-      case "scale":
-        answerValue = sliderValue[0]
-        break
-      case "ranking":
-        answerValue = rankingItems
-        break
+        return <Code className="w-6 h-6" />
+      case "excel":
+        return <FileSpreadsheet className="w-6 h-6" />
+      case "sql":
+        return <Database className="w-6 h-6" />
+      case "presentation":
+        return <Presentation className="w-6 h-6" />
       default:
-        answerValue = textAnswer
+        return <Target className="w-6 h-6" />
     }
+  }
 
-    setAnswers((prev) => ({
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "beginner":
+        return "bg-green-100 text-green-800"
+      case "intermediate":
+        return "bg-yellow-100 text-yellow-800"
+      case "advanced":
+        return "bg-orange-100 text-orange-800"
+      case "expert":
+        return "bg-red-100 text-red-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
+  const handleStartTest = () => {
+    setCurrentStep("test")
+    setStartTime(Date.now())
+  }
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    setSubmission((prev) => ({
       ...prev,
-      [currentQuestionData.id]: answerValue,
+      files: files.map((file) => ({
+        name: file.name,
+        size: file.size,
+        url: URL.createObjectURL(file), // In real app, would upload to server
+      })),
     }))
-
-    if (currentQuestion < TECHNICAL_QUESTIONS.length - 1) {
-      setCurrentQuestion((prev) => prev + 1)
-    } else {
-      handleCompleteTraditionalTest()
-    }
   }
 
-  const handlePreviousQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((prev) => prev - 1)
+  const handleSubmit = async () => {
+    if (isSubmitting) return
 
-      // Load previous answer
-      const prevQuestion = TECHNICAL_QUESTIONS[currentQuestion - 1]
-      const prevAnswer = answers[prevQuestion.id]
+    setIsSubmitting(true)
 
-      if (prevAnswer !== undefined) {
-        switch (prevQuestion.type) {
-          case "open":
-          case "scenario":
-          case "code":
-            setTextAnswer(prevAnswer || "")
-            break
-          case "multiple":
-          case "binary":
-            setSelectedOption(prevAnswer || "")
-            break
-          case "checkbox":
-            setSelectedOptions(prevAnswer || [])
-            break
-          case "slider":
-          case "scale":
-            setSliderValue([prevAnswer || 5])
-            break
-          case "ranking":
-            setRankingItems(prevAnswer || prevQuestion.items || [])
-            break
-        }
-      }
-    }
-  }
+    try {
+      const timeSpent = Math.floor((Date.now() - startTime) / 1000)
 
-  const handleCompleteTraditionalTest = async () => {
-    setIsCompleting(true)
-
-    // Process traditional answers
-    const results = processTraditionalAnswers(answers)
-
-    localStorage.setItem(
-      "technicalSkillsResults",
-      JSON.stringify({
-        scores: results,
-        answers,
-        completedAt: new Date().toISOString(),
-        type: "technical-skills",
-        inputMode,
-      }),
-    )
-
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    router.push("/technical-skills-results")
-  }
-
-  // Process conversational answers into technical skill scores
-  const processConversationalAnswers = (answers: Record<string, string>) => {
-    const skillScores = {
-      frontend: 0,
-      backend: 0,
-      database: 0,
-      mobile: 0,
-      design: 0,
-      security: 0,
-    }
-
-    // Analyze each answer for technical skill indicators
-    Object.entries(answers).forEach(([stepId, answer]) => {
-      const step = TECHNICAL_CONVERSATION_FLOW.find((s) => s.id === stepId)
-      if (!step || !answer) return
-
-      const text = answer.toLowerCase()
-      const words = text.split(/\s+/).filter((word) => word.length > 2)
-      const wordCount = words.length
-
-      // Base score from response length and technical detail
-      const baseScore = Math.min(90, Math.max(30, (wordCount / 25) * 70 + 20))
-
-      // Technical skill-specific keyword analysis
-      step.skills.forEach((skill) => {
-        const keywords = getTechnicalSkillKeywords(skill)
-        const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
-        const keywordBonus = Math.min(20, keywordMatches * 4)
-
-        skillScores[skill as keyof typeof skillScores] = Math.min(100, baseScore + keywordBonus)
+      const response = await fetch("/api/technical-tests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          testId: test.id,
+          submission: {
+            ...submission,
+            timeSpent,
+          },
+        }),
       })
-    })
 
-    // Ensure all skills have at least a base score
-    Object.keys(skillScores).forEach((skill) => {
-      if (skillScores[skill as keyof typeof skillScores] === 0) {
-        skillScores[skill as keyof typeof skillScores] = 50 // Default neutral score
-      }
-    })
-
-    return skillScores
-  }
-
-  // Process traditional answers into technical skill scores
-  const processTraditionalAnswers = (answers: Record<number, any>) => {
-    const skillScores = {
-      frontend: 0,
-      backend: 0,
-      database: 0,
-      mobile: 0,
-      design: 0,
-      security: 0,
-    }
-
-    const categoryScores: Record<string, number[]> = {
-      frontend: [],
-      backend: [],
-      database: [],
-      mobile: [],
-      design: [],
-      security: [],
-    }
-
-    // Process each answer
-    Object.entries(answers).forEach(([questionId, answer]) => {
-      const question = TECHNICAL_QUESTIONS.find((q) => q.id === Number.parseInt(questionId))
-      if (!question || answer === undefined || answer === null) return
-
-      const category = question.category
-      let score = 0
-
-      switch (question.type) {
-        case "scale":
-        case "slider":
-          score = (answer / (question.max || 10)) * 100
-          break
-        case "multiple":
-          // Score based on quality of selected option (simplified)
-          score = answer ? 75 : 0
-          break
-        case "binary":
-          score = answer === "true" || answer === "yes" ? 80 : 40
-          break
-        case "checkbox":
-          // Score based on number of relevant selections
-          const selections = Array.isArray(answer) ? answer.length : 0
-          const maxSelections = question.options?.length || 1
-          score = Math.min(100, (selections / maxSelections) * 120)
-          break
-        case "ranking":
-          // Score based on logical ordering (simplified)
-          score = Array.isArray(answer) && answer.length > 0 ? 70 : 0
-          break
-        case "open":
-        case "scenario":
-        case "code":
-          // Score based on answer length and technical keywords
-          const text = (answer || "").toLowerCase()
-          const words = text.split(/\s+/).filter((w: string) => w.length > 2)
-          const wordCount = words.length
-
-          const baseScore = Math.min(90, Math.max(20, (wordCount / 30) * 70 + 20))
-          const keywords = getTechnicalSkillKeywords(category)
-          const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
-          const keywordBonus = Math.min(25, keywordMatches * 5)
-
-          score = Math.min(100, baseScore + keywordBonus)
-          break
-        default:
-          score = 50
+      if (!response.ok) {
+        throw new Error("Failed to submit test")
       }
 
-      categoryScores[category].push(score)
-    })
+      const data = await response.json()
+      setResults(data.data.evaluation)
+      setCurrentStep("results")
 
-    // Calculate average scores for each category
-    Object.keys(categoryScores).forEach((category) => {
-      const scores = categoryScores[category]
-      if (scores.length > 0) {
-        skillScores[category as keyof typeof skillScores] = Math.round(
-          scores.reduce((sum, score) => sum + score, 0) / scores.length,
-        )
-      } else {
-        skillScores[category as keyof typeof skillScores] = 50 // Default score
-      }
-    })
-
-    return skillScores
-  }
-
-  const getTechnicalSkillKeywords = (skill: string): string[] => {
-    const keywordMap: Record<string, string[]> = {
-      frontend: [
-        "react",
-        "vue",
-        "angular",
-        "javascript",
-        "typescript",
-        "html",
-        "css",
-        "sass",
-        "scss",
-        "webpack",
-        "vite",
-        "babel",
-        "npm",
-        "yarn",
-        "component",
-        "jsx",
-        "dom",
-        "responsive",
-        "bootstrap",
-        "tailwind",
-        "material",
-        "ui",
-        "ux",
-        "interface",
-        "browser",
-        "chrome",
-        "performance",
-        "optimization",
-        "bundle",
-        "lazy loading",
-        "code splitting",
-      ],
-      backend: [
-        "node",
-        "express",
-        "nestjs",
-        "python",
-        "django",
-        "flask",
-        "java",
-        "spring",
-        "php",
-        "laravel",
-        "ruby",
-        "rails",
-        "go",
-        "rust",
-        "api",
-        "rest",
-        "graphql",
-        "microservices",
-        "server",
-        "endpoint",
-        "middleware",
-        "authentication",
-        "authorization",
-        "jwt",
-        "oauth",
-        "scaling",
-        "load balancing",
-        "caching",
-        "redis",
-        "session",
-      ],
-      database: [
-        "mysql",
-        "postgresql",
-        "mongodb",
-        "redis",
-        "cassandra",
-        "elasticsearch",
-        "sql",
-        "nosql",
-        "query",
-        "schema",
-        "migration",
-        "orm",
-        "sequelize",
-        "prisma",
-        "mongoose",
-        "index",
-        "optimization",
-        "transaction",
-        "acid",
-        "join",
-        "aggregate",
-        "backup",
-        "replication",
-        "sharding",
-        "normalization",
-        "denormalization",
-      ],
-      mobile: [
-        "react native",
-        "flutter",
-        "ionic",
-        "cordova",
-        "swift",
-        "kotlin",
-        "java",
-        "dart",
-        "android",
-        "ios",
-        "mobile",
-        "app",
-        "responsive",
-        "touch",
-        "gesture",
-        "native",
-        "hybrid",
-        "cross-platform",
-        "store",
-        "deployment",
-        "device",
-        "sensor",
-        "push notifications",
-        "offline",
-        "sync",
-        "performance",
-      ],
-      design: [
-        "figma",
-        "sketch",
-        "adobe",
-        "photoshop",
-        "illustrator",
-        "ui",
-        "ux",
-        "design",
-        "wireframe",
-        "prototype",
-        "mockup",
-        "user",
-        "experience",
-        "interface",
-        "usability",
-        "accessibility",
-        "color",
-        "typography",
-        "layout",
-        "grid",
-        "responsive",
-        "mobile",
-        "user research",
-        "personas",
-        "user journey",
-        "information architecture",
-      ],
-      security: [
-        "security",
-        "authentication",
-        "authorization",
-        "encryption",
-        "ssl",
-        "https",
-        "jwt",
-        "oauth",
-        "cors",
-        "xss",
-        "csrf",
-        "sql injection",
-        "vulnerability",
-        "penetration",
-        "firewall",
-        "vpn",
-        "certificate",
-        "hash",
-        "salt",
-        "bcrypt",
-        "audit",
-        "compliance",
-        "owasp",
-        "security headers",
-        "input validation",
-        "sanitization",
-      ],
-    }
-
-    return keywordMap[skill] || []
-  }
-
-  const isAnswerValid = () => {
-    switch (currentQuestionData?.type) {
-      case "open":
-      case "scenario":
-      case "code":
-        return (textAnswer || transcript).trim().length > 10
-      case "multiple":
-      case "binary":
-        return selectedOption.length > 0
-      case "checkbox":
-        return selectedOptions.length > 0
-      case "slider":
-      case "scale":
-        return true // Always valid
-      case "ranking":
-        return rankingItems.length > 0
-      default:
-        return true
+      toast({
+        title: "Test Submitted",
+        description: "Your test has been evaluated successfully!",
+      })
+    } catch (error) {
+      console.error("Error submitting test:", error)
+      toast({
+        title: "Error",
+        description: "Failed to submit test. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  // Mode Selection Screen
-  if (showModeSelection) {
+  if (!test || !skill) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Test de Habilidades Técnicas</h1>
-            <p className="text-xl text-gray-600 mb-8">Elige tu método de evaluación técnica preferido</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Mixed Mode */}
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-blue-300">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Settings className="w-6 h-6 text-blue-600" />
-                  </div>
-                  Cuestionario Técnico
-                </CardTitle>
-                <CardDescription>Preguntas estructuradas sobre tecnologías específicas</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    {TECHNICAL_QUESTIONS.length} preguntas técnicas especializadas
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Análisis de código y optimizaciones
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Ranking de tecnologías por experiencia
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Sistema de ayuda técnica contextual
-                  </div>
-                </div>
-                <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
-                  <Keyboard className="w-4 h-4 mr-2" />
-                  Elegir Cuestionario
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Voice Complete Mode */}
-            <Card
-              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${
-                !speechRecognitionSupported || !textToSpeechSupported ? "opacity-50" : ""
-              }`}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <Volume2 className="w-6 h-6 text-green-600" />
-                  </div>
-                  Entrevista Técnica
-                </CardTitle>
-                <CardDescription>Conversación técnica natural con el asistente especializado</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Conversación técnica natural
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Discusión sobre proyectos reales
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Evaluación de problem-solving
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Experiencia similar a entrevista real
-                  </div>
-                </div>
-                <Button
-                  onClick={() => handleStartTest("voice-complete")}
-                  className="w-full"
-                  disabled={!speechRecognitionSupported || !textToSpeechSupported}
-                >
-                  <Volume2 className="w-4 h-4 mr-2" />
-                  Elegir Entrevista
-                </Button>
-                {(!speechRecognitionSupported || !textToSpeechSupported) && (
-                  <p className="text-xs text-amber-600 text-center">
-                    Funciones de voz no disponibles en este navegador
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center">
-            <Button variant="ghost" onClick={() => router.back()}>
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Volver
-            </Button>
-          </div>
+      <div className="container mx-auto py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Test no encontrado</h1>
+          <Button onClick={() => router.push("/technical-skills")}>Volver a Habilidades Técnicas</Button>
         </div>
       </div>
     )
   }
 
-  // Conversational Mode Interface
-  if (inputMode === "voice-complete") {
-    const currentStepData = TECHNICAL_CONVERSATION_FLOW[currentStep]
-    const progress = ((currentStep + 1) / TECHNICAL_CONVERSATION_FLOW.length) * 100
-
-    if (isCompleting) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
-                  <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
-                </div>
-                <Code className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Procesando tu entrevista técnica...</h3>
-                <p className="text-muted-foreground">Analizando tus respuestas y generando tu perfil técnico</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
-
+  if (currentStep === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900">Entrevista Técnica</h1>
-              <Badge variant="outline" className="bg-green-50 text-green-700">
-                <Volume2 className="w-3 h-3 mr-1" />
-                Conversación Técnica
-              </Badge>
-            </div>
-            <p className="text-gray-600">
-              Paso {currentStep + 1} de {TECHNICAL_CONVERSATION_FLOW.length} • {currentStepData?.category}
-            </p>
-          </div>
-
-          {/* Progress */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Progreso de la entrevista</span>
-              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-
-          {/* Countdown */}
-          {showCountdown && countdown > 0 && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <Card className="p-8">
-                <CardContent className="text-center">
-                  <div className="text-6xl font-bold text-green-600 mb-4">{countdown}</div>
-                  <p className="text-lg text-gray-600">El entrevistador técnico hablará en...</p>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Main Conversation Card */}
-          <Card className="mb-8 shadow-lg">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
-                  <Code className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <CardTitle className="text-xl">{currentStepData?.category}</CardTitle>
-                  <CardDescription>Entrevista técnica especializada</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  {isSpeaking && (
-                    <Badge variant="secondary" className="bg-green-50 text-green-700">
-                      <Volume2 className="w-3 h-3 mr-1 animate-pulse" />
-                      Entrevistador
-                    </Badge>
-                  )}
-                  {isListening && (
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-700">
-                      <Mic className="w-3 h-3 mr-1 animate-pulse" />
-                      Escuchando
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="space-y-6">
-              {/* System Message */}
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Volume2 className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-green-900 mb-2">Entrevistador Técnico:</h4>
-                    <p className="text-green-800 leading-relaxed">{currentStepData?.systemMessage}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* User Response Area */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mic className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-blue-900 mb-2">Tu respuesta técnica:</h4>
-                    <div className="min-h-[100px] bg-white rounded-lg p-3 border">
-                      {transcript && <p className="text-gray-900 mb-2">{transcript}</p>}
-                      {interimTranscript && <p className="text-gray-600 italic">{interimTranscript}</p>}
-                      {!transcript && !interimTranscript && !isListening && (
-                        <p className="text-gray-500 italic">
-                          {isSpeaking
-                            ? "Escucha la pregunta técnica y luego responde..."
-                            : "Tu respuesta técnica aparecerá aquí cuando hables..."}
-                        </p>
-                      )}
-                      {isListening && !transcript && !interimTranscript && (
-                        <p className="text-blue-600 italic flex items-center gap-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                          Escuchando... Comparte tu experiencia técnica
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Speech Error */}
-              {speechError && (
-                <Alert className="border-red-200 bg-red-50">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-red-800">{speechError}</AlertDescription>
-                </Alert>
-              )}
-
-              {/* Controls */}
-              <div className="flex flex-wrap gap-3 pt-4 border-t">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRestartCurrentStep}
-                  disabled={isInitializing}
-                  className="flex items-center gap-2 bg-transparent"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Repetir pregunta
-                </Button>
-
-                {isListening && (
-                  <Button variant="destructive" size="sm" onClick={stopListening} className="flex items-center gap-2">
-                    <MicOff className="w-4 h-4" />
-                    Detener grabación
-                  </Button>
-                )}
-
-                {isSpeaking && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={stopSpeaking}
-                    className="flex items-center gap-2 bg-transparent"
-                  >
-                    <Pause className="w-4 h-4" />
-                    Pausar entrevistador
-                  </Button>
-                )}
-
-                {transcript && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearTranscript}
-                    className="flex items-center gap-2 text-gray-600"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Limpiar respuesta
-                  </Button>
-                )}
-              </div>
-
-              {/* Navigation */}
-              <div className="flex justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePreviousConversationStep}
-                  disabled={currentStep === 0}
-                  className="flex items-center gap-2 bg-transparent"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Anterior
-                </Button>
-
-                <Button onClick={handleNextConversationStep} className="flex items-center gap-2">
-                  {currentStep === TECHNICAL_CONVERSATION_FLOW.length - 1 ? (
-                    <>
-                      <CheckCircle className="w-4 h-4" />
-                      Finalizar Entrevista
-                    </>
-                  ) : (
-                    <>
-                      Siguiente
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Technical Interview Tips */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                Consejos para la entrevista técnica
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                <div>
-                  <h4 className="font-semibold mb-2">Durante la entrevista:</h4>
-                  <ul className="space-y-1">
-                    <li>• Menciona tecnologías específicas que hayas usado</li>
-                    <li>• Describe proyectos reales con detalles técnicos</li>
-                    <li>• Explica tu proceso de resolución de problemas</li>
-                    <li>• Comparte desafíos técnicos que hayas superado</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Aspectos técnicos:</h4>
-                  <ul className="space-y-1">
-                    <li>• Usa terminología técnica apropiada</li>
-                    <li>• Explica arquitecturas y patrones de diseño</li>
-                    <li>• Menciona herramientas y frameworks específicos</li>
-                    <li>• Describe tu experiencia con diferentes paradigmas</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
-  // Traditional Mode Interface
-  if (isCompleting) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
-            <div className="relative">
-              <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
-                <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
-              </div>
-              <Code className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-            </div>
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Procesando tu evaluación técnica...</h3>
-              <p className="text-muted-foreground">Analizando tus respuestas y generando tu perfil técnico</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  const progress = ((currentQuestion + 1) / TECHNICAL_QUESTIONS.length) * 100
-  const CategoryIcon = SKILL_CATEGORIES[currentQuestionData.category].icon
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-purple-50 p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+      <div className="container mx-auto py-8 max-w-4xl">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">Cuestionario Técnico</h1>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700">
-              <Keyboard className="w-3 h-3 mr-1" />
-              Evaluación Estructurada
-            </Badge>
-          </div>
-          <p className="text-gray-600">
-            Pregunta {currentQuestion + 1} de {TECHNICAL_QUESTIONS.length} •{" "}
-            {SKILL_CATEGORIES[currentQuestionData.category].name}
-          </p>
+          <h1 className="text-3xl font-bold mb-2">{test.title}</h1>
+          <p className="text-xl text-muted-foreground">{skill.name}</p>
         </div>
 
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-700">Progreso del cuestionario</span>
-            <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-
-        {/* Main Question Card */}
-        <Card className="mb-8 shadow-lg">
+        <Card className="mb-6">
           <CardHeader>
-            <div className="flex items-center gap-3 mb-4">
-              <div
-                className={`w-12 h-12 ${SKILL_CATEGORIES[currentQuestionData.category].color} rounded-full flex items-center justify-center`}
-              >
-                <CategoryIcon className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                {getTestIcon(test.type)}
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{SKILL_CATEGORIES[currentQuestionData.category].name}</CardTitle>
-                <CardDescription>
-                  Pregunta {currentQuestion + 1} de {TECHNICAL_QUESTIONS.length}
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="capitalize">
-                  {currentQuestionData.type}
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowHelp(!showHelp)}
-                  className="flex items-center gap-1"
-                >
-                  <HelpCircle className="w-4 h-4" />
-                  Ayuda
-                </Button>
+                <CardTitle className="flex items-center gap-2">
+                  {test.title}
+                  <Badge className={getDifficultyColor(test.difficulty)}>{test.difficulty}</Badge>
+                </CardTitle>
+                <CardDescription>{test.description}</CardDescription>
               </div>
             </div>
           </CardHeader>
-
-          <CardContent className="space-y-6">
-            {/* Question */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold leading-relaxed">{currentQuestionData.question}</h3>
-
-              {currentQuestionData.instruction && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-blue-800 text-sm">{currentQuestionData.instruction}</p>
-                </div>
-              )}
-
-              {/* Code Block for Code Questions */}
-              {currentQuestionData.code && (
-                <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-400 text-xs uppercase tracking-wide">
-                      {currentQuestionData.language}
-                    </span>
-                    <Badge variant="secondary" className="text-xs">
-                      Código para revisar
-                    </Badge>
-                  </div>
-                  <pre className="text-green-400 text-sm leading-relaxed">
-                    <code>{currentQuestionData.code}</code>
-                  </pre>
-                </div>
-              )}
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="text-center p-4 bg-muted rounded-lg">
+                <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="font-semibold">{test.timeLimit} minutos</div>
+                <div className="text-sm text-muted-foreground">Tiempo límite</div>
+              </div>
+              <div className="text-center p-4 bg-muted rounded-lg">
+                <Target className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="font-semibold">{test.maxScore} puntos</div>
+                <div className="text-sm text-muted-foreground">Puntuación máxima</div>
+              </div>
+              <div className="text-center p-4 bg-muted rounded-lg">
+                <TrendingUp className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="font-semibold">{test.difficulty}</div>
+                <div className="text-sm text-muted-foreground">Nivel de dificultad</div>
+              </div>
             </div>
 
-            {/* Help Section */}
-            {showHelp && currentQuestionData.explanation && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-amber-600" />
-                  <h4 className="font-semibold text-amber-900">Ayuda Contextual</h4>
-                </div>
+            <div className="prose max-w-none">
+              <h3>Instrucciones:</h3>
+              <div className="whitespace-pre-line text-sm">{test.instructions}</div>
+            </div>
 
-                <p className="text-amber-800">{currentQuestionData.explanation}</p>
-
-                {currentQuestionData.examples && (
-                  <div>
-                    <h5 className="font-medium text-amber-900 mb-2">Ejemplos:</h5>
-                    <ul className="text-amber-800 text-sm space-y-1">
-                      {currentQuestionData.examples.map((example, index) => (
-                        <li key={index}>• {example}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {currentQuestionData.tips && (
-                  <div>
-                    <h5 className="font-medium text-amber-900 mb-2">Consejos:</h5>
-                    <ul className="text-amber-800 text-sm space-y-1">
-                      {currentQuestionData.tips.map((tip, index) => (
-                        <li key={index}>💡 {tip}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Answer Input Based on Question Type */}
-            <div className="space-y-4">
-              {/* Open Text Questions */}
-              {(currentQuestionData.type === "open" ||
-                currentQuestionData.type === "scenario" ||
-                currentQuestionData.type === "code") && (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="answer" className="text-base font-medium">
-                      Tu respuesta:
-                    </Label>
-                    {speechRecognitionSupported && (
-                      <div className="flex items-center gap-2">
-                        {isListening ? (
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={stopListening}
-                            className="flex items-center gap-2"
-                          >
-                            <Square className="w-4 h-4" />
-                            Detener
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={startListening}
-                            className="flex items-center gap-2 bg-transparent"
-                          >
-                            <Mic className="w-4 h-4" />
-                            Dictar
-                          </Button>
-                        )}
+            {test.files && test.files.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-semibold mb-3">Archivos necesarios:</h3>
+                <div className="space-y-2">
+                  {test.files.map((file: any) => (
+                    <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <div className="font-medium">{file.name}</div>
+                        <div className="text-sm text-muted-foreground">{file.description}</div>
                       </div>
-                    )}
-                  </div>
-
-                  <Textarea
-                    id="answer"
-                    value={textAnswer}
-                    onChange={(e) => setTextAnswer(e.target.value)}
-                    placeholder="Escribe tu respuesta técnica detallada aquí..."
-                    className="min-h-[120px] resize-none"
-                  />
-
-                  {interimTranscript && (
-                    <div className="bg-blue-50 border border-blue-200 rounded p-2">
-                      <p className="text-blue-800 text-sm italic">Dictando: {interimTranscript}</p>
-                    </div>
-                  )}
-
-                  {speechError && (
-                    <Alert className="border-red-200 bg-red-50">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="text-red-800">{speechError}</AlertDescription>
-                    </Alert>
-                  )}
-                </div>
-              )}
-
-              {/* Multiple Choice Questions */}
-              {currentQuestionData.type === "multiple" && (
-                <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
-                  <div className="space-y-3">
-                    {currentQuestionData.options?.map((option, index) => (
-                      <div key={index} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50">
-                        <RadioGroupItem value={option} id={`option-${index}`} />
-                        <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                          {option}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </RadioGroup>
-              )}
-
-              {/* Binary Questions */}
-              {currentQuestionData.type === "binary" && (
-                <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
-                  <div className="flex gap-4">
-                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 flex-1">
-                      <RadioGroupItem value="yes" id="yes" />
-                      <Label htmlFor="yes" className="cursor-pointer">
-                        Sí
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 flex-1">
-                      <RadioGroupItem value="no" id="no" />
-                      <Label htmlFor="no" className="cursor-pointer">
-                        No
-                      </Label>
-                    </div>
-                  </div>
-                </RadioGroup>
-              )}
-
-              {/* Checkbox Questions */}
-              {currentQuestionData.type === "checkbox" && (
-                <div className="space-y-3">
-                  {currentQuestionData.options?.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50">
-                      <Checkbox
-                        id={`checkbox-${index}`}
-                        checked={selectedOptions.includes(option)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setSelectedOptions([...selectedOptions, option])
-                          } else {
-                            setSelectedOptions(selectedOptions.filter((item) => item !== option))
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`checkbox-${index}`} className="flex-1 cursor-pointer">
-                        {option}
-                      </Label>
+                      <Button variant="outline" size="sm">
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar
+                      </Button>
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Slider Questions */}
-              {(currentQuestionData.type === "slider" || currentQuestionData.type === "scale") && (
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <Label className="text-base font-medium">Nivel de experiencia:</Label>
-                    <Badge variant="outline" className="text-lg px-3 py-1">
-                      {sliderValue[0]}/{currentQuestionData.max || 10}
-                    </Badge>
+            {test.hints && test.hints.length > 0 && (
+              <Alert className="mt-6">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Consejos:</strong>
+                  <ul className="mt-2 space-y-1">
+                    {test.hints.map((hint: string, index: number) => (
+                      <li key={index} className="text-sm">
+                        • {hint}
+                      </li>
+                    ))}
+                  </ul>
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <Button onClick={handleStartTest} size="lg" className="px-8">
+            <Play className="w-5 h-5 mr-2" />
+            Comenzar Test
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (currentStep === "test") {
+    return (
+      <div className="container mx-auto py-8 max-w-4xl">
+        {/* Timer Header */}
+        <div className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 pb-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">{test.title}</h1>
+              <p className="text-muted-foreground">{skill.name}</p>
+            </div>
+            <div className="text-right">
+              <div className={`text-2xl font-mono font-bold ${timeLeft < 300 ? "text-red-600" : "text-primary"}`}>
+                {formatTime(timeLeft)}
+              </div>
+              <div className="text-sm text-muted-foreground">Tiempo restante</div>
+            </div>
+          </div>
+          <Progress value={(timeLeft / (test.timeLimit * 60)) * 100} className="mt-2" />
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Tu Solución</CardTitle>
+            <CardDescription>Completa la prueba según las instrucciones proporcionadas</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Tabs defaultValue="solution" className="w-full">
+              <TabsList>
+                <TabsTrigger value="solution">Solución</TabsTrigger>
+                <TabsTrigger value="instructions">Instrucciones</TabsTrigger>
+                {test.files && <TabsTrigger value="files">Archivos</TabsTrigger>}
+              </TabsList>
+
+              <TabsContent value="solution" className="space-y-4">
+                {test.type === "code" && (
+                  <div>
+                    <Label htmlFor="code">Escribe tu código aquí:</Label>
+                    <Textarea
+                      id="code"
+                      placeholder="// Escribe tu código aquí..."
+                      className="min-h-[300px] font-mono"
+                      value={submission.content}
+                      onChange={(e) => setSubmission((prev) => ({ ...prev, content: e.target.value }))}
+                    />
                   </div>
+                )}
 
-                  <Slider
-                    value={sliderValue}
-                    onValueChange={setSliderValue}
-                    min={currentQuestionData.min || 1}
-                    max={currentQuestionData.max || 10}
-                    step={currentQuestionData.step || 1}
-                    className="w-full"
-                  />
-
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Principiante ({currentQuestionData.min || 1})</span>
-                    <span>Experto ({currentQuestionData.max || 10})</span>
+                {test.type === "sql" && (
+                  <div>
+                    <Label htmlFor="sql">Escribe tus consultas SQL:</Label>
+                    <Textarea
+                      id="sql"
+                      placeholder="-- Escribe tus consultas SQL aquí..."
+                      className="min-h-[300px] font-mono"
+                      value={submission.content}
+                      onChange={(e) => setSubmission((prev) => ({ ...prev, content: e.target.value }))}
+                    />
                   </div>
+                )}
+
+                {(test.type === "excel" || test.type === "presentation") && (
+                  <div>
+                    <Label htmlFor="file">Sube tu archivo completado:</Label>
+                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                      <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                      <div className="text-sm text-muted-foreground mb-2">
+                        Arrastra tu archivo aquí o haz clic para seleccionar
+                      </div>
+                      <Input
+                        type="file"
+                        accept={test.type === "excel" ? ".xlsx,.xls" : ".pptx,.ppt"}
+                        onChange={handleFileUpload}
+                        className="max-w-xs"
+                      />
+                    </div>
+                    {submission.files.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="font-medium mb-2">Archivos subidos:</h4>
+                        {submission.files.map((file: any, index: number) => (
+                          <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span className="text-sm">{file.name}</span>
+                            <span className="text-xs text-muted-foreground">({Math.round(file.size / 1024)} KB)</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {test.type === "data_analysis" && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="analysis">Tu análisis:</Label>
+                      <Textarea
+                        id="analysis"
+                        placeholder="Escribe tu análisis de los datos aquí..."
+                        className="min-h-[200px]"
+                        value={submission.content}
+                        onChange={(e) => setSubmission((prev) => ({ ...prev, content: e.target.value }))}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="file">Sube gráficos o archivos de soporte (opcional):</Label>
+                      <Input type="file" multiple accept=".png,.jpg,.jpeg,.xlsx,.csv" onChange={handleFileUpload} />
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="instructions">
+                <div className="prose max-w-none">
+                  <div className="whitespace-pre-line text-sm">{test.instructions}</div>
                 </div>
-              )}
+              </TabsContent>
 
-              {/* Ranking Questions */}
-              {currentQuestionData.type === "ranking" && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Arrastra para ordenar (mayor experiencia arriba):</Label>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setRankingItems([...rankingItems].reverse())}
-                      className="text-xs"
-                    >
-                      <RotateCcw className="w-3 h-3 mr-1" />
-                      Invertir
-                    </Button>
-                  </div>
-
+              {test.files && (
+                <TabsContent value="files">
                   <div className="space-y-2">
-                    {rankingItems.map((item, index) => (
-                      <div
-                        key={item}
-                        draggable
-                        onDragStart={() => handleDragStart(item)}
-                        onDragOver={handleDragOver}
-                        onDrop={() => handleDrop(item)}
-                        className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-move hover:shadow-md transition-shadow"
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full text-sm font-medium">
-                          {index + 1}
+                    {test.files.map((file: any) => (
+                      <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <div className="font-medium">{file.name}</div>
+                          <div className="text-sm text-muted-foreground">{file.description}</div>
                         </div>
-                        <span className="flex-1">{item}</span>
-                        <div className="flex gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => moveItem(index, Math.max(0, index - 1))}
-                            disabled={index === 0}
-                            className="w-8 h-8 p-0"
-                          >
-                            ↑
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => moveItem(index, Math.min(rankingItems.length - 1, index + 1))}
-                            disabled={index === rankingItems.length - 1}
-                            className="w-8 h-8 p-0"
-                          >
-                            ↓
-                          </Button>
-                        </div>
+                        <Button variant="outline" size="sm">
+                          <Download className="w-4 h-4 mr-2" />
+                          Descargar
+                        </Button>
                       </div>
                     ))}
                   </div>
-                </div>
+                </TabsContent>
               )}
-            </div>
-
-            {/* Navigation */}
-            <div className="flex justify-between pt-6 border-t">
-              <Button
-                variant="outline"
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestion === 0}
-                className="flex items-center gap-2 bg-transparent"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Anterior
-              </Button>
-
-              <div className="flex items-center gap-2">
-                {!isAnswerValid() && (
-                  <span className="text-sm text-amber-600 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    Respuesta requerida
-                  </span>
-                )}
-
-                <Button onClick={handleNextQuestion} disabled={!isAnswerValid()} className="flex items-center gap-2">
-                  {currentQuestion === TECHNICAL_QUESTIONS.length - 1 ? (
-                    <>
-                      <CheckCircle className="w-4 h-4" />
-                      Finalizar Test
-                    </>
-                  ) : (
-                    <>
-                      Siguiente
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
+            </Tabs>
           </CardContent>
         </Card>
 
-        {/* Question Navigation */}
-        <Card>
+        <div className="flex justify-center mt-6">
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitting || (!submission.content && submission.files.length === 0)}
+            size="lg"
+            className="px-8"
+          >
+            {isSubmitting ? "Enviando..." : "Enviar Test"}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (currentStep === "results" && results) {
+    return (
+      <div className="container mx-auto py-8 max-w-4xl">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2">¡Test Completado!</h1>
+          <p className="text-xl text-muted-foreground">Resultados de {test.title}</p>
+        </div>
+
+        {/* Overall Score */}
+        <Card className="mb-6 border-green-200 bg-green-50">
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Target className="w-4 h-4" />
-              Navegación de preguntas
+            <CardTitle className="flex items-center gap-2 text-green-800">
+              <CheckCircle className="w-6 h-6" />
+              Puntuación Final
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-              {TECHNICAL_QUESTIONS.map((_, index) => {
-                const isAnswered = answers[TECHNICAL_QUESTIONS[index].id] !== undefined
-                const isCurrent = index === currentQuestion
-
-                return (
-                  <Button
-                    key={index}
-                    variant={isCurrent ? "default" : isAnswered ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setCurrentQuestion(index)}
-                    className={`w-full ${isCurrent ? "ring-2 ring-blue-500" : ""}`}
-                  >
-                    {index + 1}
-                    {isAnswered && !isCurrent && <CheckCircle className="w-3 h-3 ml-1" />}
-                  </Button>
-                )
-              })}
-            </div>
-
-            <div className="flex items-center justify-center gap-4 mt-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-blue-600 rounded"></div>
-                <span>Actual</span>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="text-4xl font-bold text-green-600">
+                  {results.feedback.overallScore}/{results.feedback.maxScore}
+                </div>
+                <div className="text-sm text-green-700">Puntuación Total</div>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-gray-200 rounded"></div>
-                <span>Respondida</span>
+              <div>
+                <div className="text-2xl font-bold text-blue-600 capitalize">{results.feedback.level}</div>
+                <div className="text-sm text-blue-700">Nivel Alcanzado</div>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 border border-gray-300 rounded"></div>
-                <span>Pendiente</span>
+              <div>
+                <div className={`text-2xl font-bold ${results.feedback.passed ? "text-green-600" : "text-red-600"}`}>
+                  {results.feedback.passed ? "APROBADO" : "NO APROBADO"}
+                </div>
+                <div className="text-sm text-gray-700">Estado</div>
               </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* AI Coaching Message */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-purple-600" />
+              Mensaje del Coach IA
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-700 leading-relaxed">{results.feedback.aiCoachingMessage}</p>
+          </CardContent>
+        </Card>
+
+        {/* Detailed Feedback */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Feedback Detallado</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {results.feedback.detailedFeedback.map((item: any, index: number) => (
+                <div key={index} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="font-medium">{item.criterion}</h4>
+                    <Badge variant="outline">
+                      {item.score}/{item.maxScore}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">{item.feedback}</p>
+                  {item.suggestions.length > 0 && (
+                    <div>
+                      <p className="text-xs font-medium text-gray-700 mb-1">Sugerencias:</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        {item.suggestions.map((suggestion: string, idx: number) => (
+                          <li key={idx}>• {suggestion}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Strengths and Improvements */}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {results.feedback.strengths.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-green-700">Fortalezas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {results.feedback.strengths.map((strength: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">{strength}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+
+          {results.feedback.improvements.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-orange-700">Áreas de Mejora</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {results.feedback.improvements.map((improvement: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">{improvement}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* Next Steps */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Próximos Pasos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ol className="space-y-2">
+              {results.feedback.nextSteps.map((step: string, index: number) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <span className="text-sm">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </CardContent>
+        </Card>
+
+        {/* Recommended Resources */}
+        {results.feedback.recommendedResources.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Recursos Recomendados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                {results.feedback.recommendedResources.map((resource: any, index: number) => (
+                  <div key={index} className="flex items-start gap-3 p-4 border rounded-lg">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <BookOpen className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium">{resource.title}</h4>
+                      <p className="text-sm text-gray-600 mb-2">{resource.description}</p>
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <span>⏱️ {resource.estimatedTime}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-4 justify-center">
+          <Button onClick={() => router.push("/career-coach")}>Hablar con el Coach</Button>
+          <Button variant="outline" onClick={() => router.push("/technical-skills")}>
+            Ver Más Tests
+          </Button>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Repetir Test
+          </Button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return null
 }
