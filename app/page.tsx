@@ -2,34 +2,84 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/contexts/auth-context"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { FileText, Brain, BookOpen, MessageSquare, Calendar, Search, ArrowRight, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Brain,
+  Target,
+  MessageSquare,
+  Search,
+  FileText,
+  BookOpen,
+  ArrowRight,
+  CheckCircle,
+  Users,
+  TrendingUp,
+} from "lucide-react"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function HomePage() {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && user) {
+    if (user) {
       router.push("/dashboard")
     }
-  }, [user, loading, router])
+  }, [user, router])
 
-  if (loading) {
-    return (
-      <div className="container mx-auto py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const features = [
+    {
+      icon: Brain,
+      title: "Test de Personalidad",
+      description: "Descubre tu perfil profesional con evaluaciones científicamente validadas",
+      href: "/personality-test",
+      color: "bg-blue-500",
+    },
+    {
+      icon: Target,
+      title: "Evaluación de Habilidades",
+      description: "Identifica tus fortalezas y áreas de mejora profesional",
+      href: "/skills-assessment",
+      color: "bg-green-500",
+    },
+    {
+      icon: MessageSquare,
+      title: "Coach Profesional IA",
+      description: "Recibe orientación personalizada para tu desarrollo profesional",
+      href: "/career-coach",
+      color: "bg-purple-500",
+    },
+    {
+      icon: Search,
+      title: "Búsqueda de Empleo",
+      description: "Encuentra oportunidades laborales adaptadas a tu perfil",
+      href: "/job-search",
+      color: "bg-orange-500",
+    },
+    {
+      icon: FileText,
+      title: "Constructor de CV",
+      description: "Crea currículums profesionales con plantillas optimizadas",
+      href: "/cv-builder",
+      color: "bg-red-500",
+    },
+    {
+      icon: BookOpen,
+      title: "Biblioteca de Recursos",
+      description: "Accede a libros y materiales para tu crecimiento profesional",
+      href: "/library",
+      color: "bg-indigo-500",
+    },
+  ]
+
+  const stats = [
+    { label: "Usuarios Activos", value: "10,000+", icon: Users },
+    { label: "Empleos Encontrados", value: "2,500+", icon: TrendingUp },
+    { label: "Tests Completados", value: "15,000+", icon: CheckCircle },
+  ]
 
   if (user) {
     return null // Will redirect to dashboard
@@ -37,16 +87,41 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600" />
+              <span className="text-xl font-bold text-gray-900">Desarrollo Profesional</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" asChild>
+                <Link href="/auth/login">Iniciar Sesión</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/auth/register">Registrarse Gratis</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <Badge variant="secondary" className="mb-4">
+            🚀 Plataforma Líder en Chile
+          </Badge>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Despega tu Carrera
-            <span className="block text-primary">Profesional en Chile</span>
+            Impulsa tu{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Carrera Profesional
+            </span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Plataforma integral de desarrollo profesional diseñada específicamente para el mercado laboral chileno.
-            Construye tu CV, evalúa tus habilidades y encuentra tu próxima oportunidad.
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            La plataforma integral que te ayuda a descubrir tu potencial, desarrollar tus habilidades y encontrar las
+            mejores oportunidades laborales en Chile.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
@@ -56,237 +131,181 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/auth/login">Iniciar Sesión</Link>
+              <Link href="/auth/login">Ya tengo cuenta</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Herramientas Profesionales Completas</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Todo lo que necesitas para impulsar tu carrera profesional en un solo lugar
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* CV Builder */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle>Constructor de CV</CardTitle>
-              <CardDescription>
-                Crea CVs profesionales adaptados al mercado chileno con plantillas modernas y optimizadas para ATS.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Plantillas profesionales
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Optimizado para empresas chilenas
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Exportación a PDF
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Skills Assessment */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Brain className="h-6 w-6 text-purple-600" />
-              </div>
-              <CardTitle>Evaluación de Habilidades</CardTitle>
-              <CardDescription>
-                Evalúa tus habilidades técnicas y blandas con tests adaptativos y recibe feedback personalizado.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Tests de personalidad
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Habilidades técnicas
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Feedback con IA
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Career Coach */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                <MessageSquare className="h-6 w-6 text-green-600" />
-              </div>
-              <CardTitle>Coach de Carrera IA</CardTitle>
-              <CardDescription>
-                Recibe orientación personalizada sobre tu desarrollo profesional con nuestro coach impulsado por IA.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Consejos personalizados
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Planificación de carrera
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Disponible 24/7
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Job Search */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                <Search className="h-6 w-6 text-orange-600" />
-              </div>
-              <CardTitle>Búsqueda de Empleos</CardTitle>
-              <CardDescription>
-                Encuentra oportunidades laborales en Chile con nuestra integración a los principales portales de empleo.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Portales chilenos integrados
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Alertas personalizadas
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Análisis de compatibilidad
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Library */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                <BookOpen className="h-6 w-6 text-indigo-600" />
-              </div>
-              <CardTitle>Biblioteca de Desarrollo</CardTitle>
-              <CardDescription>
-                Accede a libros, cursos y recursos curados para tu crecimiento profesional continuo.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Libros profesionales
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Recomendaciones IA
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Progreso de lectura
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Calendar & Goals */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                <Calendar className="h-6 w-6 text-red-600" />
-              </div>
-              <CardTitle>Calendario y Metas</CardTitle>
-              <CardDescription>
-                Organiza tu desarrollo profesional con metas claras y seguimiento de progreso.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Planificación de metas
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Seguimiento de progreso
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  Recordatorios automáticos
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
+      {/* Stats Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
+              return (
+                <div key={index} className="text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-4">
+                    <Icon className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
+                  <div className="text-gray-600">{stat.label}</div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="bg-primary text-primary-foreground py-16">
+      {/* Features Section */}
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold mb-2">10,000+</div>
-              <div className="text-primary-foreground/80">CVs Creados</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">5,000+</div>
-              <div className="text-primary-foreground/80">Usuarios Activos</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-primary-foreground/80">Empresas Chilenas</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">95%</div>
-              <div className="text-primary-foreground/80">Satisfacción</div>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Todo lo que necesitas para crecer profesionalmente
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Herramientas científicamente validadas y recursos especializados para el mercado laboral chileno
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => {
+              const Icon = feature.icon
+              return (
+                <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md">
+                  <CardHeader>
+                    <div
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${feature.color} mb-4`}
+                    >
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
+                    <CardDescription className="text-gray-600">{feature.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="ghost" className="group-hover:bg-gray-50 w-full justify-between" asChild>
+                      <Link href={feature.href}>
+                        Explorar
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Listo para Impulsar tu Carrera?</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Únete a miles de profesionales chilenos que ya están transformando sus carreras con nuestra plataforma.
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">¿Listo para transformar tu carrera?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Únete a miles de profesionales que ya están creciendo con nuestra plataforma
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" variant="secondary" asChild>
             <Link href="/auth/register">
-              Comenzar Ahora - Es Gratis
+              Crear Cuenta Gratuita
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600" />
+                <span className="text-xl font-bold">Desarrollo Profesional</span>
+              </div>
+              <p className="text-gray-400">Tu plataforma integral para el crecimiento profesional en Chile.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Herramientas</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/personality-test" className="hover:text-white">
+                    Test de Personalidad
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/skills-assessment" className="hover:text-white">
+                    Evaluación de Habilidades
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/cv-builder" className="hover:text-white">
+                    Constructor de CV
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/job-search" className="hover:text-white">
+                    Búsqueda de Empleo
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Recursos</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/library" className="hover:text-white">
+                    Biblioteca
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/career-coach" className="hover:text-white">
+                    Coach Profesional
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/calendar" className="hover:text-white">
+                    Calendario
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/goals" className="hover:text-white">
+                    Metas
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Cuenta</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <Link href="/auth/login" className="hover:text-white">
+                    Iniciar Sesión
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/auth/register" className="hover:text-white">
+                    Registrarse
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/profile" className="hover:text-white">
+                    Mi Perfil
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/settings" className="hover:text-white">
+                    Configuración
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Desarrollo Profesional. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

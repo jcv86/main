@@ -1,57 +1,43 @@
 "use client"
 
+import { DialogTrigger } from "@/components/ui/dialog"
+
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Slider } from "@/components/ui/slider"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import {
-  MessageSquare,
-  Crown,
   Users,
-  Lightbulb,
-  Zap,
   Heart,
   Clock,
-  ArrowLeft,
-  ArrowRight,
   CheckCircle,
-  Mic,
-  MicOff,
-  Loader2,
-  Trash2,
-  Volume2,
-  AlertCircle,
-  HelpCircle,
   RefreshCw,
-  ChevronDown,
-  ChevronUp,
-  GripVertical,
-  Info,
-  Settings,
-  Keyboard,
-  Pause,
-  RotateCcw,
+  Home,
+  Laptop,
+  Building2,
+  Globe,
+  TrendingUp,
+  Award,
+  Search,
+  SlidersHorizontal,
+  AlertTriangle,
+  Verified,
+  MapPin,
+  Eye,
+  Target,
+  Star,
+  Send,
+  ExternalLink,
+  Briefcase,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { questions } from "./questions"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface SoftSkillsResults {
   communication: number
@@ -169,7 +155,7 @@ const useSpeechRecognition = () => {
 
   const recognitionRef = useRef<any>(null)
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const initTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const initTimeoutRef = useRef<NodeJS.Timeout | null>
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -385,6 +371,32 @@ const useTextToSpeech = () => {
   return { speak, stop, isSpeaking, isSupported }
 }
 
+interface ChileanJob {
+  id: string
+  title: string
+  company: string
+  location: string
+  modality: string
+  postedDate: string
+  experience: string
+  type: string
+  industry: string
+  salary?: string
+  salaryMin?: number
+  salaryMax?: number
+  currency?: string
+  description: string
+  skills: string[]
+  isUrgent: boolean
+  source: string
+  verified: boolean
+  companyDescription: string
+  responsibilities: string[]
+  requirements: string[]
+  benefits: string[]
+  applicationUrl: string
+}
+
 export default function SoftSkillsTestPage() {
   const router = useRouter()
   const { t } = useLanguage()
@@ -497,72 +509,6 @@ export default function SoftSkillsTestPage() {
     }
   }
 
-  const handleNextConversationStep = () => {
-    if (currentStep < CONVERSATION_FLOW.length - 1) {
-      setCurrentStep((prev) => prev + 1)
-      clearTranscript()
-      if (isListening) {
-        stopListening()
-      }
-      if (isSpeaking) {
-        stopSpeaking()
-      }
-    } else {
-      handleCompleteConversation()
-    }
-  }
-
-  const handlePreviousConversationStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1)
-      clearTranscript()
-      if (isListening) {
-        stopListening()
-      }
-      if (isSpeaking) {
-        stopSpeaking()
-      }
-    }
-  }
-
-  const handleRestartCurrentStep = () => {
-    clearTranscript()
-    if (isListening) {
-      stopListening()
-    }
-    if (isSpeaking) {
-      stopSpeaking()
-    }
-
-    // Restart the current step
-    const currentStepData = CONVERSATION_FLOW[currentStep]
-    if (currentStepData) {
-      setTimeout(() => {
-        speak(currentStepData.systemMessage)
-      }, 500)
-    }
-  }
-
-  const handleCompleteConversation = async () => {
-    setIsCompleting(true)
-
-    if (isListening) {
-      stopListening()
-    }
-    if (isSpeaking) {
-      stopSpeaking()
-    }
-
-    // Process conversational answers
-    const results = processConversationalAnswers(conversationAnswers)
-
-    localStorage.setItem("softSkillsResults", JSON.stringify(results))
-
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    router.push("/soft-skills-results")
-  }
-
-  // Traditional question handling functions
   const handleAnswer = (questionId: number, value: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }))
   }
@@ -576,6 +522,86 @@ export default function SoftSkillsTestPage() {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1)
+    }
+  }
+
+  const calculateResults = () => {
+    const skillScores = {
+      communication: 0,
+      leadership: 0,
+      teamwork: 0,
+      problemSolving: 0,
+      adaptability: 0,
+      emotionalIntelligence: 0,
+      timeManagement: 0,
+    }
+
+    questions.forEach((question) => {
+      const answer = answers[question.id]
+
+      if (answer !== undefined) {
+        Object.keys(skillScores).forEach((skill) => {
+          if (question.skills.includes(skill)) {
+            const baseScore = 100 / question.skills.length
+            let adjustedScore = baseScore
+
+            if (question.type === "radio") {
+              adjustedScore = baseScore * (answer / 4)
+            } else if (question.type === "checkbox") {
+              if (Array.isArray(answer)) {
+                adjustedScore = baseScore * (answer.includes(true) ? 1 : 0)
+              } else {
+                adjustedScore = baseScore * (answer ? 1 : 0)
+              }
+            } else if (question.type === "slider") {
+              adjustedScore = baseScore * (answer / 100)
+            } else if (question.type === "drag") {
+              const correctOrder = question.options.map((option) => option.id)
+              let orderScore = 0
+              if (Array.isArray(answer)) {
+                answer.forEach((item, index) => {
+                  if (item.id === correctOrder[index]) {
+                    orderScore += baseScore / answer.length
+                  }
+                })
+              }
+              adjustedScore = orderScore
+            }
+
+            skillScores[skill as keyof typeof skillScores] += adjustedScore
+          }
+        })
+      }
+    })
+
+    Object.keys(skillScores).forEach((skill) => {
+      skillScores[skill as keyof typeof skillScores] = Math.max(
+        0,
+        Math.min(100, skillScores[skill as keyof typeof skillScores]),
+      )
+    })
+
+    const overallScore = Math.round(Object.values(skillScores).reduce((sum, score) => sum + score, 0) / 7)
+
+    const results = Object.entries(skillScores).map(([skill, score]) => ({
+      category: skill.charAt(0).toUpperCase() + skill.slice(1),
+      score,
+      level: Math.floor(score / 20) + 1,
+    }))
+
+    return {
+      communication: skillScores.communication,
+      leadership: skillScores.leadership,
+      teamwork: skillScores.teamwork,
+      problemSolving: skillScores.problemSolving,
+      adaptability: skillScores.adaptability,
+      emotionalIntelligence: skillScores.emotionalIntelligence,
+      timeManagement: skillScores.timeManagement,
+      overallScore,
+      completedAt: new Date().toISOString(),
+      totalQuestions: questions.length,
+      answeredQuestions: Object.keys(answers).length,
+      results,
     }
   }
 
@@ -792,1245 +818,852 @@ export default function SoftSkillsTestPage() {
     return keywordMap[skill] || []
   }
 
-  const calculateResults = (): SoftSkillsResults => {
-    const categories = {
-      communication: [1, 2, 3, 4, 5],
-      leadership: [6, 7, 8, 9, 10],
-      teamwork: [11, 12, 13, 14, 15],
-      problemSolving: [16, 17, 18, 19, 20],
-      adaptability: [21, 22, 23, 24, 25],
-      emotionalIntelligence: [26, 27, 28, 29, 30],
-      timeManagement: [31, 32, 33, 34, 35],
+  const validatePassword = (password: string) => {
+    const errors = []
+    if (password.length < 8) {
+      errors.push("La contraseña debe tener al menos 8 caracteres.")
     }
-
-    const categoryScores: Record<string, number> = {}
-
-    Object.entries(categories).forEach(([category, questionIds]) => {
-      let totalScore = 0
-      let maxScore = 0
-
-      questionIds.forEach((id) => {
-        const question = questions.find((q) => q.id === id)
-        const answer = answers[id]
-
-        if (question && answer !== undefined) {
-          let score = 0
-          let max = 0
-
-          switch (question.type) {
-            case "scale":
-              score = question.reverse ? 6 - answer : answer
-              max = 5
-              break
-
-            case "open":
-              const text = answer.toString().toLowerCase()
-              const words = text.split(/\s+/).filter((word) => word.length > 2)
-              score = Math.min(5, Math.max(1, Math.floor(words.length / 10) + 1))
-
-              // Keyword bonuses específicos para Chile
-              const keywords = {
-                communication: [
-                  "comunicar",
-                  "explicar",
-                  "hablar",
-                  "escuchar",
-                  "presentar",
-                  "reunión",
-                  "equipo",
-                  "mensaje",
-                  "claro",
-                  "entender",
-                  "chileno",
-                  "chile",
-                  "cordial",
-                  "respetuoso",
-                ],
-                leadership: [
-                  "liderar",
-                  "dirigir",
-                  "equipo",
-                  "decisión",
-                  "responsabilidad",
-                  "motivar",
-                  "guiar",
-                  "proyecto",
-                  "objetivo",
-                  "estrategia",
-                  "chile",
-                  "chileno",
-                  "empresa",
-                ],
-                teamwork: [
-                  "colaborar",
-                  "equipo",
-                  "grupo",
-                  "cooperar",
-                  "compartir",
-                  "ayudar",
-                  "juntos",
-                  "apoyo",
-                  "compañeros",
-                  "unidos",
-                  "chile",
-                  "chileno",
-                ],
-                problemSolving: [
-                  "problema",
-                  "solución",
-                  "resolver",
-                  "analizar",
-                  "pensar",
-                  "estrategia",
-                  "método",
-                  "proceso",
-                  "lógica",
-                  "creatividad",
-                  "chile",
-                  "mercado",
-                ],
-                adaptability: [
-                  "cambio",
-                  "adaptar",
-                  "flexible",
-                  "nuevo",
-                  "diferente",
-                  "ajustar",
-                  "aprender",
-                  "evolucionar",
-                  "modificar",
-                  "versátil",
-                  "chile",
-                  "mercado",
-                ],
-                emotionalIntelligence: [
-                  "emociones",
-                  "sentir",
-                  "empatía",
-                  "entender",
-                  "relaciones",
-                  "social",
-                  "sensible",
-                  "comprensivo",
-                  "apoyo",
-                  "humano",
-                  "chile",
-                  "cultura",
-                ],
-                timeManagement: [
-                  "tiempo",
-                  "organizar",
-                  "planificar",
-                  "prioridad",
-                  "deadline",
-                  "eficiente",
-                  "productivo",
-                  "horario",
-                  "gestión",
-                  "puntual",
-                  "chile",
-                  "trabajo",
-                ],
-              }
-
-              const categoryKeywords = keywords[category as keyof typeof keywords] || []
-              const keywordMatches = categoryKeywords.filter((keyword) => text.includes(keyword)).length
-              score += Math.min(2, keywordMatches * 0.3)
-
-              if (words.length > 50) score += 0.5
-              max = 5
-              break
-
-            case "multiple":
-            case "scenario":
-              score = answer
-              max = 4
-              break
-
-            case "ranking":
-              if (Array.isArray(answer)) {
-                score = answer.length > 0 ? 4 : 0
-              } else {
-                score = 2
-              }
-              max = 4
-              break
-
-            case "checkbox":
-              if (Array.isArray(answer)) {
-                score = Math.min(4, answer.length)
-              } else {
-                score = 0
-              }
-              max = 4
-              break
-
-            case "slider":
-              score = (answer / 100) * 5
-              max = 5
-              break
-
-            case "binary":
-              score = 3
-              max = 4
-              break
-
-            default:
-              score = 0
-              max = 5
-          }
-
-          totalScore += score
-          maxScore += max
-        }
-      })
-
-      categoryScores[category] = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
-    })
-
-    const overallScore = Math.round(Object.values(categoryScores).reduce((sum, score) => sum + score, 0) / 7)
-
-    const results = Object.entries(categoryScores).map(([category, score]) => ({
-      category: category.charAt(0).toUpperCase() + category.slice(1),
-      score,
-      level: Math.floor(score / 20) + 1,
-    }))
+    if (!/[A-Z]/.test(password)) {
+      errors.push("La contraseña debe contener al menos una letra mayúscula.")
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push("La contraseña debe contener al menos una letra minúscula.")
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push("La contraseña debe contener al menos un número.")
+    }
+    if (!/[^a-zA-Z0-9\s]/.test(password)) {
+      errors.push("La contraseña debe contener al menos un símbolo.")
+    }
 
     return {
-      communication: categoryScores.communication,
-      leadership: categoryScores.leadership,
-      teamwork: categoryScores.teamwork,
-      problemSolving: categoryScores.problemSolving,
-      adaptability: categoryScores.adaptability,
-      emotionalIntelligence: categoryScores.emotionalIntelligence,
-      timeManagement: categoryScores.timeManagement,
-      overallScore,
-      completedAt: new Date().toISOString(),
-      totalQuestions: questions.length,
-      answeredQuestions: Object.keys(answers).length,
-      results,
+      isValid: errors.length === 0,
+      errors: errors,
     }
   }
 
-  // Mode Selection Screen
-  if (showModeSelection) {
+  const getPasswordStrength = (password: string) => {
+    if (password.length === 0) return { strength: "none", color: "text-gray-400" }
+    if (password.length < 6) return { strength: "weak", color: "text-red-500" }
+    if (password.length < 8) return { strength: "fair", color: "text-orange-500" }
+
+    const validation = validatePassword(password)
+    if (validation.isValid) return { strength: "strong", color: "text-green-500" }
+    if (validation.errors.length <= 2) return { strength: "good", color: "text-yellow-500" }
+    return { strength: "fair", color: "text-orange-500" }
+  }
+
+  const getTypeLabel = (type: string) => {
+    const labels = {
+      "full-time": "Tiempo completo",
+      "part-time": "Medio tiempo",
+      contract: "Contrato",
+      internship: "Práctica",
+      freelance: "Freelance",
+    }
+    return labels[type as keyof typeof labels] || type
+  }
+
+  const getModalityIcon = (modality: string) => {
+    switch (modality) {
+      case "remoto":
+        return <Home className="w-4 h-4" />
+      case "híbrido":
+        return <Laptop className="w-4 h-4" />
+      case "presencial":
+        return <Building2 className="w-4 h-4" />
+      default:
+        return <Building2 className="w-4 h-4" />
+    }
+  }
+
+  const getSourceBadge = (source: string) => {
+    const sourceMap = {
+      trabajando: { name: "Trabajando.com", color: "bg-blue-100 text-blue-800" },
+      getonboard: { name: "GetOnBoard", color: "bg-green-100 text-green-800" },
+      laborum: { name: "Laborum", color: "bg-purple-100 text-purple-800" },
+      computrabajo: { name: "CompuTrabajo", color: "bg-orange-100 text-orange-800" },
+      "indeed-chile": { name: "Indeed Chile", color: "bg-red-100 text-red-800" },
+    }
+
+    const sourceInfo = sourceMap[source as keyof typeof sourceMap] || {
+      name: source,
+      color: "bg-gray-100 text-gray-800",
+    }
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Evaluación de Habilidades Blandas</h1>
-            <p className="text-xl text-gray-600 mb-8">Elige tu método de evaluación preferido</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Mixed Mode */}
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-blue-300">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Settings className="w-6 h-6 text-blue-600" />
-                  </div>
-                  Cuestionario Tradicional
-                </CardTitle>
-                <CardDescription>Preguntas estructuradas con opciones específicas</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    35 preguntas estructuradas
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Diferentes tipos: escalas, ranking, múltiple opción
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Control total sobre el ritmo
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Sistema de ayuda contextual
-                  </div>
-                </div>
-                <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
-                  <Keyboard className="w-4 h-4 mr-2" />
-                  Elegir Cuestionario
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Voice Complete Mode */}
-            <Card
-              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-green-300 ${
-                !speechRecognitionSupported || !textToSpeechSupported ? "opacity-50" : ""
-              }`}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <Volume2 className="w-6 h-6 text-green-600" />
-                  </div>
-                  Conversación Natural
-                </CardTitle>
-                <CardDescription>Conversación completamente hablada con el asistente de IA</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Conversación natural y fluida
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    El sistema habla automáticamente
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Respuestas libres y espontáneas
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Evaluación más natural y humana
-                  </div>
-                </div>
-                <Button
-                  onClick={() => handleStartTest("voice-complete")}
-                  className="w-full"
-                  disabled={!speechRecognitionSupported || !textToSpeechSupported}
-                >
-                  <Volume2 className="w-4 h-4 mr-2" />
-                  Elegir Conversación
-                </Button>
-                {(!speechRecognitionSupported || !textToSpeechSupported) && (
-                  <p className="text-xs text-amber-600 text-center">
-                    Funciones de voz no disponibles en este navegador
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center">
-            <Button variant="ghost" onClick={() => router.back()}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver
-            </Button>
-          </div>
-        </div>
-      </div>
+      <Badge className={sourceInfo.color} variant="secondary">
+        <Globe className="w-3 h-3 mr-1" />
+        {sourceInfo.name}
+      </Badge>
     )
   }
 
-  // Conversational Mode Interface
-  if (inputMode === "voice-complete") {
-    const currentStepData = CONVERSATION_FLOW[currentStep]
-    const progress = ((currentStep + 1) / CONVERSATION_FLOW.length) * 100
-
-    if (isCompleting) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
-                  <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
-                </div>
-                <Heart className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Procesando tu conversación...</h3>
-                <p className="text-muted-foreground">
-                  Analizando tus respuestas y generando tu perfil de habilidades blandas
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )
+  const formatSalary = (job: ChileanJob) => {
+    if (job.salary) return job.salary
+    if (job.salaryMin && job.salaryMax) {
+      return `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()} ${job.currency}`
     }
+    if (job.salaryMin) {
+      return `Desde $${job.salaryMin.toLocaleString()} ${job.currency}`
+    }
+    return "Salario a convenir"
+  }
 
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900">Conversación sobre Habilidades Blandas</h1>
-              <Badge variant="outline" className="bg-green-50 text-green-700">
-                <Volume2 className="w-3 h-3 mr-1" />
-                Conversación Natural
-              </Badge>
-            </div>
-            <p className="text-gray-600">
-              Paso {currentStep + 1} de {CONVERSATION_FLOW.length} • {currentStepData?.category}
-            </p>
-          </div>
+  const formatPostedDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - date.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-          {/* Progress */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Progreso de la conversación</span>
-              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
+    if (diffDays === 1) return "Hace 1 día"
+    if (diffDays < 7) return `Hace ${diffDays} días`
+    if (diffDays < 30) return `Hace ${Math.floor(diffDays / 7)} semanas`
+    return `Hace ${Math.floor(diffDays / 30)} meses`
+  }
 
-          {/* Countdown */}
-          {showCountdown && countdown > 0 && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <Card className="p-8">
-                <CardContent className="text-center">
-                  <div className="text-6xl font-bold text-blue-600 mb-4">{countdown}</div>
-                  <p className="text-lg text-gray-600">El asistente hablará en...</p>
-                </CardContent>
-              </Card>
+  const getExperienceLabel = (experience: string) => {
+    const labels = {
+      "sin-experiencia": "Sin experiencia",
+      junior: "Junior (0-2 años)",
+      "semi-senior": "Semi-Senior (3-5 años)",
+      senior: "Senior (5+ años)",
+      gerencial: "Gerencial/Ejecutivo",
+    }
+    return labels[experience as keyof typeof labels] || experience
+  }
+
+  const [searchTerm, setSearchTerm] = useState("")
+  const [regionFilter, setRegionFilter] = useState("all")
+  const [locationFilter, setLocationFilter] = useState("all")
+  const [typeFilter, setTypeFilter] = useState("all")
+  const [experienceFilter, setExperienceFilter] = useState("all")
+  const [modalityFilter, setModalityFilter] = useState("all")
+  const [industryFilter, setIndustryFilter] = useState("all")
+  const [salaryMinFilter, setSalaryMinFilter] = useState("")
+  const [salaryMaxFilter, setSalaryMaxFilter] = useState("")
+  const [postedDaysFilter, setPostedDaysFilter] = useState("all")
+  const [jobs, setJobs] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [totalJobs, setTotalJobs] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [error, setError] = useState(null)
+  const [stats, setStats] = useState(null)
+  const [savedJobs, setSavedJobs] = useState([])
+  const [appliedJobs, setAppliedJobs] = useState([])
+  const [selectedJob, setSelectedJob] = useState(null)
+
+  const searchJobs = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setJobs([
+        {
+          id: "1",
+          title: "Frontend Developer",
+          company: "NotCo",
+          location: "Santiago",
+          modality: "híbrido",
+          postedDate: new Date().toISOString(),
+          experience: "junior",
+          type: "full-time",
+          industry: "FoodTech",
+          salary: "$1.500.000 - $2.000.000 CLP",
+          description: "Buscamos un desarrollador frontend con experiencia en React para unirse a nuestro equipo.",
+          skills: ["React", "JavaScript", "HTML", "CSS"],
+          isUrgent: true,
+          source: "getonboard",
+          verified: true,
+          companyDescription: "NotCo es una empresa de alimentos de tecnología.",
+          responsibilities: ["Desarrollo de interfaces de usuario", "Mantenimiento de código"],
+          requirements: ["Experiencia en React", "Conocimientos de JavaScript"],
+          benefits: ["Seguro de salud", "Días de vacaciones"],
+          applicationUrl: "https://www.getonbrd.com",
+        },
+      ])
+      setTotalJobs(1)
+      setTotalPages(1)
+      setStats({
+        totalJobs: 1,
+        lastUpdated: new Date().toISOString(),
+        avgSalary: 1750000,
+        bySource: { getonboard: 1 },
+        byRegion: { Metropolitana: 1 },
+        byIndustry: { FoodTech: 1 },
+      })
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSaveJob = (jobId) => {
+    if (savedJobs.includes(jobId)) {
+      setSavedJobs(savedJobs.filter((id) => id !== jobId))
+    } else {
+      setSavedJobs([...savedJobs, jobId])
+    }
+  }
+
+  const handleApplyJob = (jobId, applicationUrl) => {
+    setAppliedJobs([...appliedJobs, jobId])
+    window.open(applicationUrl, "_blank")
+  }
+
+  const getJobTypeColor = (type) => {
+    const typeColors = {
+      "full-time": "bg-green-100 text-green-800",
+      "part-time": "bg-blue-100 text-blue-800",
+      contract: "bg-yellow-100 text-yellow-800",
+      internship: "bg-purple-100 text-purple-800",
+      freelance: "bg-orange-100 text-orange-800",
+    }
+    return typeColors[type] || "bg-gray-100 text-gray-800"
+  }
+
+  const clearFilters = () => {
+    setSearchTerm("")
+    setRegionFilter("all")
+    setLocationFilter("all")
+    setTypeFilter("all")
+    setExperienceFilter("all")
+    setModalityFilter("all")
+    setIndustryFilter("all")
+    setSalaryMinFilter("")
+    setSalaryMaxFilter("")
+    setPostedDaysFilter("all")
+  }
+
+  const Separator = () => <div className="w-full h-px bg-gray-200" />
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Búsqueda de Empleos en Chile</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Encuentra las mejores oportunidades laborales en Chile. Empleos de empresas líderes como Banco de Chile,
+            NotCo, Fintual y más.
+          </p>
+          {stats && (
+            <div className="flex justify-center items-center space-x-6 mt-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-1">
+                <TrendingUp className="w-4 h-4" />
+                <span>{stats.totalJobs.toLocaleString()} empleos disponibles</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <RefreshCw className="w-4 h-4" />
+                <span>Actualizado: {new Date(stats.lastUpdated).toLocaleDateString("es-CL")}</span>
+              </div>
+              {stats.avgSalary > 0 && (
+                <div className="flex items-center space-x-1">
+                  <Award className="w-4 h-4" />
+                  <span>Salario promedio: ${stats.avgSalary.toLocaleString()} CLP</span>
+                </div>
+              )}
             </div>
           )}
-
-          {/* Main Conversation Card */}
-          <Card className="mb-8 shadow-lg">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <CardTitle className="text-xl">{currentStepData?.category}</CardTitle>
-                  <CardDescription>Conversación natural sobre tus habilidades</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  {isSpeaking && (
-                    <Badge variant="secondary" className="bg-green-50 text-green-700">
-                      <Volume2 className="w-3 h-3 mr-1 animate-pulse" />
-                      Hablando
-                    </Badge>
-                  )}
-                  {isListening && (
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-700">
-                      <Mic className="w-3 h-3 mr-1 animate-pulse" />
-                      Escuchando
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="space-y-6">
-              {/* System Message */}
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Volume2 className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-green-900 mb-2">Asistente de Evaluación:</h4>
-                    <p className="text-green-800 leading-relaxed">{currentStepData?.systemMessage}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* User Response Area */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mic className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-blue-900 mb-2">Tu respuesta:</h4>
-                    <div className="min-h-[100px] bg-white rounded-lg p-3 border">
-                      {transcript && <p className="text-gray-900 mb-2">{transcript}</p>}
-                      {interimTranscript && <p className="text-gray-600 italic">{interimTranscript}</p>}
-                      {!transcript && !interimTranscript && !isListening && (
-                        <p className="text-gray-500 italic">
-                          {isSpeaking
-                            ? "Escucha al asistente y luego responde..."
-                            : "Tu respuesta aparecerá aquí cuando hables..."}
-                        </p>
-                      )}
-                      {isListening && !transcript && !interimTranscript && (
-                        <p className="text-blue-600 italic flex items-center gap-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                          Escuchando... Habla ahora
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Speech Error */}
-              {speechError && (
-                <Alert className="border-red-200 bg-red-50">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-red-800">{speechError}</AlertDescription>
-                </Alert>
-              )}
-
-              {/* Controls */}
-              <div className="flex flex-wrap gap-3 pt-4 border-t">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRestartCurrentStep}
-                  disabled={isInitializing}
-                  className="flex items-center gap-2 bg-transparent"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Repetir pregunta
-                </Button>
-
-                {isListening && (
-                  <Button variant="destructive" size="sm" onClick={stopListening} className="flex items-center gap-2">
-                    <MicOff className="w-4 h-4" />
-                    Detener grabación
-                  </Button>
-                )}
-
-                {isSpeaking && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={stopSpeaking}
-                    className="flex items-center gap-2 bg-transparent"
-                  >
-                    <Pause className="w-4 h-4" />
-                    Pausar asistente
-                  </Button>
-                )}
-
-                {transcript && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearTranscript}
-                    className="flex items-center gap-2 text-gray-600"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Limpiar respuesta
-                  </Button>
-                )}
-              </div>
-
-              {/* Navigation */}
-              <div className="flex justify-between pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePreviousConversationStep}
-                  disabled={currentStep === 0}
-                  className="flex items-center gap-2 bg-transparent"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Anterior
-                </Button>
-
-                <Button onClick={handleNextConversationStep} className="flex items-center gap-2">
-                  {currentStep === CONVERSATION_FLOW.length - 1 ? (
-                    <>
-                      <CheckCircle className="w-4 h-4" />
-                      Finalizar Conversación
-                    </>
-                  ) : (
-                    <>
-                      Siguiente
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Conversation Tips */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                Consejos para la conversación
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                <div>
-                  <h4 className="font-semibold mb-2">Durante la conversación:</h4>
-                  <ul className="space-y-1">
-                    <li>• Responde de forma natural y espontánea</li>
-                    <li>• Comparte experiencias específicas del trabajo en Chile</li>
-                    <li>• No hay respuestas correctas o incorrectas</li>
-                    <li>• Puedes tomarte el tiempo que necesites</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Aspectos técnicos:</h4>
-                  <ul className="space-y-1">
-                    <li>• El sistema se detiene automáticamente tras 3 segundos de silencio</li>
-                    <li>• Puedes repetir la pregunta si no la escuchaste bien</li>
-                    <li>• Habla claramente y en un ambiente silencioso</li>
-                    <li>• Puedes navegar entre pasos si necesitas volver atrás</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
-      </div>
-    )
-  }
 
-  // Traditional Mode - Start Screen
-  if (!isStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Evaluación de Habilidades Blandas</h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Evalúa tus habilidades interpersonales y de trabajo en el contexto del mercado laboral chileno
-            </p>
-          </div>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Heart className="w-6 h-6 text-red-500" />
-                Evaluación Especializada para el Mercado Chileno
-              </CardTitle>
-              <CardDescription>
-                Evaluación integral de 35 preguntas adaptadas específicamente al ambiente laboral y cultura empresarial
-                de Chile
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  { icon: MessageSquare, name: "Comunicación", color: "bg-blue-100 text-blue-700" },
-                  { icon: Crown, name: "Liderazgo", color: "bg-purple-100 text-purple-700" },
-                  { icon: Users, name: "Trabajo en Equipo", color: "bg-green-100 text-green-700" },
-                  { icon: Lightbulb, name: "Resolución de Problemas", color: "bg-yellow-100 text-yellow-700" },
-                  { icon: Zap, name: "Adaptabilidad", color: "bg-orange-100 text-orange-700" },
-                  { icon: Heart, name: "Inteligencia Emocional", color: "bg-red-100 text-red-700" },
-                  { icon: Clock, name: "Gestión del Tiempo", color: "bg-indigo-100 text-indigo-700" },
-                ].map((category, index) => {
-                  const Icon = category.icon
-                  return (
-                    <div key={index} className="text-center">
-                      <div
-                        className={`w-16 h-16 rounded-full ${category.color} flex items-center justify-center mx-auto mb-2`}
-                      >
-                        <Icon className="w-8 h-8" />
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">{category.name}</p>
-                    </div>
-                  )
-                })}
-              </div>
-
-              <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg border border-blue-200">
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  🇨🇱 Especializado para Chile:
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Preguntas adaptadas a la cultura laboral y empresarial chilena
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Escenarios basados en situaciones reales del mercado de trabajo en Chile
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Considera particularidades regionales y diversidad socioeconómica chilena
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Evaluación contextualizada para empresas tradicionales y startups chilenas
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">Características Avanzadas:</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    35 preguntas con 8 tipos diferentes: escala, abiertas, ranking, checkbox, slider, binarias, múltiple
-                    opción y escenarios
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Sistema de ayuda contextual con explicaciones específicas para Chile
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <Volume2 className="w-4 h-4 text-green-500" />
-                    Reconocimiento de voz en español chileno para preguntas abiertas
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Interfaz drag-and-drop para preguntas de ranking
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Resultados con recomendaciones para el mercado laboral chileno
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    Tiempo estimado: 20-25 minutos
-                  </li>
-                </ul>
-              </div>
-
-              <Button onClick={() => setIsStarted(true)} className="w-full" size="lg">
-                Comenzar Evaluación Tradicional
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
-  // Traditional Mode - Main Interface
-  const progress = ((currentQuestion + 1) / questions.length) * 100
-  const currentQ = questions[currentQuestion]
-  const isAnswered = answers[currentQ?.id] !== undefined
-  const allAnswered = questions.every((q) => answers[q.id] !== undefined)
-
-  // Validation for different question types
-  const isValid = () => {
-    const answer = answers[currentQ.id]
-
-    switch (currentQ.type) {
-      case "open":
-        return answer?.toString().trim().length >= 10
-      case "ranking":
-        return Array.isArray(answer) && answer.length > 0
-      case "checkbox":
-        return Array.isArray(answer) && answer.length > 0
-      default:
-        return isAnswered
-    }
-  }
-
-  const canProceed = isValid()
-
-  if (isCompleting) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
+        {/* Search and Filters */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Search className="w-5 h-5" />
+              <span>Buscar Empleos</span>
+              <Badge variant="outline" className="ml-auto">
+                Empresas chilenas verificadas
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Main Search */}
             <div className="relative">
-              <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin">
-                <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
-              </div>
-              <Heart className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Buscar por título, empresa, tecnología o habilidad..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Analizando tus habilidades blandas...</h3>
-              <p className="text-muted-foreground">Procesando tus respuestas y generando tu perfil de competencias</p>
+
+            {/* Filters Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+              <Select value={regionFilter} onValueChange={setRegionFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Región" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las regiones</SelectItem>
+                  <SelectItem value="Metropolitana">Metropolitana</SelectItem>
+                  <SelectItem value="Valparaíso">Valparaíso</SelectItem>
+                  <SelectItem value="Biobío">Biobío</SelectItem>
+                  <SelectItem value="Coquimbo">Coquimbo</SelectItem>
+                  <SelectItem value="Antofagasta">Antofagasta</SelectItem>
+                  <SelectItem value="La Araucanía">La Araucanía</SelectItem>
+                  <SelectItem value="O'Higgins">O'Higgins</SelectItem>
+                  <SelectItem value="Maule">Maule</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={locationFilter} onValueChange={setLocationFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Comuna" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las comunas</SelectItem>
+                  <SelectItem value="Santiago">Santiago</SelectItem>
+                  <SelectItem value="Las Condes">Las Condes</SelectItem>
+                  <SelectItem value="Providencia">Providencia</SelectItem>
+                  <SelectItem value="Vitacura">Vitacura</SelectItem>
+                  <SelectItem value="Ñuñoa">Ñuñoa</SelectItem>
+                  <SelectItem value="Concepción">Concepción</SelectItem>
+                  <SelectItem value="Valparaíso">Valparaíso</SelectItem>
+                  <SelectItem value="Viña del Mar">Viña del Mar</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tipo de empleo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos los tipos</SelectItem>
+                  <SelectItem value="full-time">Tiempo completo</SelectItem>
+                  <SelectItem value="part-time">Medio tiempo</SelectItem>
+                  <SelectItem value="contract">Contrato</SelectItem>
+                  <SelectItem value="internship">Práctica</SelectItem>
+                  <SelectItem value="freelance">Freelance</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={experienceFilter} onValueChange={setExperienceFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Experiencia" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos los niveles</SelectItem>
+                  <SelectItem value="sin-experiencia">Sin experiencia</SelectItem>
+                  <SelectItem value="junior">Junior (0-2 años)</SelectItem>
+                  <SelectItem value="semi-senior">Semi-Senior (3-5 años)</SelectItem>
+                  <SelectItem value="senior">Senior (5+ años)</SelectItem>
+                  <SelectItem value="gerencial">Gerencial/Ejecutivo</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={modalityFilter} onValueChange={setModalityFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Modalidad" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las modalidades</SelectItem>
+                  <SelectItem value="presencial">Presencial</SelectItem>
+                  <SelectItem value="remoto">Remoto</SelectItem>
+                  <SelectItem value="híbrido">Híbrido</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={industryFilter} onValueChange={setIndustryFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Industria" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las industrias</SelectItem>
+                  <SelectItem value="Tecnología">Tecnología</SelectItem>
+                  <SelectItem value="Servicios Financieros">Servicios Financieros</SelectItem>
+                  <SelectItem value="FinTech">FinTech</SelectItem>
+                  <SelectItem value="FoodTech">FoodTech</SelectItem>
+                  <SelectItem value="Retail">Retail</SelectItem>
+                  <SelectItem value="Telecomunicaciones">Telecomunicaciones</SelectItem>
+                  <SelectItem value="Minería">Minería</SelectItem>
+                  <SelectItem value="Educación">Educación</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Salary Range */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Salario mínimo (CLP)</label>
+                <Input
+                  type="number"
+                  placeholder="Ej: 1500000"
+                  value={salaryMinFilter}
+                  onChange={(e) => setSalaryMinFilter(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Salario máximo (CLP)</label>
+                <Input
+                  type="number"
+                  placeholder="Ej: 3000000"
+                  value={salaryMaxFilter}
+                  onChange={(e) => setSalaryMaxFilter(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Posted Date Filter */}
+            <Select value={postedDaysFilter} onValueChange={setPostedDaysFilter}>
+              <SelectTrigger className="w-full md:w-64">
+                <SelectValue placeholder="Publicado en los últimos..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Cualquier fecha</SelectItem>
+                <SelectItem value="1">Último día</SelectItem>
+                <SelectItem value="7">Última semana</SelectItem>
+                <SelectItem value="30">Último mes</SelectItem>
+                <SelectItem value="90">Últimos 3 meses</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={searchJobs} disabled={loading} className="flex items-center space-x-2">
+                <Search className="w-4 h-4" />
+                <span>{loading ? "Buscando..." : "Buscar Empleos"}</span>
+              </Button>
+              <Button variant="outline" onClick={clearFilters}>
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                Limpiar Filtros
+              </Button>
             </div>
           </CardContent>
         </Card>
-      </div>
-    )
-  }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">Evaluación de Habilidades Blandas - Chile</h1>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700">
-              <Settings className="w-3 h-3 mr-1" />
-              Cuestionario Tradicional
-            </Badge>
-          </div>
-          <p className="text-gray-600">
-            Pregunta {currentQuestion + 1} de {questions.length} • Especializada para el mercado laboral chileno
-          </p>
-        </div>
-
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-700">Progreso</span>
-            <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-
-        {/* Question Card */}
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <currentQ.categoryIcon className="w-6 h-6 text-white" />
+        {/* Results Summary */}
+        {!loading && (
+          <div className="mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="text-gray-600">
+                {totalJobs > 0 ? (
+                  <span>
+                    Mostrando {jobs.length} de {totalJobs.toLocaleString()} empleos encontrados
+                  </span>
+                ) : (
+                  <span>No se encontraron empleos con los filtros seleccionados</span>
+                )}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <Badge variant="secondary">{currentQ.category}</Badge>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                    🇨🇱 Chile
-                  </Badge>
-                  {currentQ.type === "scale" && <Badge variant="outline">Escala 1-5</Badge>}
-                  {currentQ.type === "open" && (
-                    <div className="flex items-center gap-1">
-                      <Badge variant="outline">Pregunta Abierta</Badge>
-                      {speechRecognitionSupported && (
-                        <Badge variant="outline" className="bg-green-50 text-green-700">
-                          <Volume2 className="w-3 h-3 mr-1" />
-                          Voz Disponible
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                  {currentQ.type === "multiple" && <Badge variant="outline">Opción Múltiple</Badge>}
-                  {currentQ.type === "scenario" && <Badge variant="outline">Escenario</Badge>}
-                  {currentQ.type === "ranking" && <Badge variant="outline">Ranking</Badge>}
-                  {currentQ.type === "checkbox" && <Badge variant="outline">Selección Múltiple</Badge>}
-                  {currentQ.type === "slider" && <Badge variant="outline">Deslizador</Badge>}
-                  {currentQ.type === "binary" && <Badge variant="outline">Elección Binaria</Badge>}
-
-                  {helpUsed.has(currentQ.id) && (
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                      <Info className="w-3 h-3 mr-1" />
-                      Ayuda Usada
+              {stats && (
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(stats.bySource).map(([source, count]) => (
+                    <Badge key={source} variant="outline" className="text-xs">
+                      {source}: {count}
                     </Badge>
-                  )}
-                  {reformulated.has(currentQ.id) && (
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700">
-                      <RefreshCw className="w-3 h-3 mr-1" />
-                      Reformulada
-                    </Badge>
-                  )}
+                  ))}
                 </div>
-                <CardTitle className="text-xl">Pregunta {currentQuestion + 1}</CardTitle>
-              </div>
-            </div>
-
-            <CardDescription className="text-lg leading-relaxed mb-4">
-              {getCurrentQuestionText(currentQ)}
-            </CardDescription>
-
-            {/* Help System */}
-            <div className="flex gap-2 mb-4">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleHelp(currentQ.id)}
-                    className="flex items-center gap-2"
-                  >
-                    <HelpCircle className="w-4 h-4" />
-                    ¿No entiendes la pregunta?
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Explicación de la Pregunta</DialogTitle>
-                    <DialogDescription className="text-base leading-relaxed">{currentQ.explanation}</DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-
-              {currentQ.reformulations && currentQ.reformulations.length > 0 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleReformulate(currentQ.id)}
-                  className="flex items-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Reformular pregunta
-                </Button>
               )}
             </div>
+          </div>
+        )}
 
-            {/* Tips Section */}
-            <Collapsible open={showTips} onOpenChange={setShowTips}>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-600">
-                  {showTips ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  Tips para el contexto chileno
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-2">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <div className="text-sm text-blue-800">
-                    <div className="font-medium mb-1">💡 Consejos para esta evaluación en Chile:</div>
-                    <ul className="text-xs space-y-1 text-blue-700">
-                      <li>• Responde considerando la cultura laboral chilena</li>
-                      <li>• Piensa en situaciones reales que hayas vivido en Chile</li>
-                      <li>• Considera las particularidades regionales y sociales del país</li>
-                      <li>• Para preguntas abiertas, menciona contexto chileno específico</li>
-                      <li>• Usa la ayuda contextual si necesitas clarificación</li>
-                    </ul>
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </CardHeader>
+        {/* Error State */}
+        {error && (
+          <Alert className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          <CardContent>
-            {/* Scale Questions */}
-            {currentQ.type === "scale" && (
-              <RadioGroup
-                value={answers[currentQ.id]?.toString() || ""}
-                onValueChange={(value) => handleAnswer(currentQ.id, Number.parseInt(value))}
-                className="space-y-4"
-              >
-                {[
-                  { value: 1, label: "Totalmente en desacuerdo" },
-                  { value: 2, label: "En desacuerdo" },
-                  { value: 3, label: "Neutral" },
-                  { value: 4, label: "De acuerdo" },
-                  { value: 5, label: "Totalmente de acuerdo" },
-                ].map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-gray-50 transition-colors"
-                  >
-                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                    <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            )}
-
-            {/* Open-ended Questions */}
-            {currentQ.type === "open" && (
-              <div className="space-y-4">
-                <div className="relative">
-                  <Textarea
-                    value={answers[currentQ.id] || ""}
-                    onChange={(e) => handleAnswer(currentQ.id, e.target.value)}
-                    placeholder="Escribe tu respuesta aquí considerando el contexto chileno... (mínimo 10 caracteres)"
-                    className="min-h-[120px] resize-none"
-                    rows={5}
-                  />
-                  <div className="absolute bottom-2 right-2 text-xs text-gray-500">
-                    {(answers[currentQ.id]?.toString() || "").length} caracteres
-                  </div>
-                </div>
-
-                {/* Speech Recognition Controls */}
-                {speechRecognitionSupported && (
+        {/* Loading State */}
+        {loading && (
+          <div className="space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-6">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                    <div className="flex space-x-2">
+                      <Skeleton className="h-6 w-20" />
+                      <Skeleton className="h-6 w-24" />
+                      <Skeleton className="h-6 w-16" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Job Results */}
+        {!loading && jobs.length > 0 && (
+          <div className="space-y-4">
+            {jobs.map((job) => (
+              <Card key={job.id} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    {/* Job Info */}
+                    <div className="flex-1 space-y-3">
+                      {/* Header */}
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                          <h3 className="text-xl font-semibold text-gray-900 mb-1">{job.title}</h3>
+                          <div className="flex items-center space-x-2 text-gray-600">
+                            <Building2 className="w-4 h-4" />
+                            <span className="font-medium">{job.company}</span>
+                            {job.verified && (
+                              <Badge variant="secondary" className="bg-green-100 text-green-800">
+                                <Verified className="w-3 h-3 mr-1" />
+                                Verificada
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {job.isUrgent && (
+                            <Badge className="bg-red-100 text-red-800">
+                              <AlertTriangle className="w-3 h-3 mr-1" />
+                              Urgente
+                            </Badge>
+                          )}
+                          {getSourceBadge(job.source)}
+                        </div>
+                      </div>
+
+                      {/* Location and Details */}
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center space-x-1">
+                          <MapPin className="w-4 h-4" />
+                          <span>{job.location}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          {getModalityIcon(job.modality)}
+                          <span className="capitalize">{job.modality}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Clock className="w-4 h-4" />
+                          <span>{formatPostedDate(job.postedDate)}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Users className="w-4 h-4" />
+                          <span>{getExperienceLabel(job.experience)}</span>
+                        </div>
+                      </div>
+
+                      {/* Salary and Type */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge className={getJobTypeColor(job.type)}>{getTypeLabel(job.type)}</Badge>
+                        <Badge variant="outline">{job.industry}</Badge>
+                        <Badge variant="outline" className="font-semibold">
+                          {formatSalary(job)}
+                        </Badge>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-gray-700 line-clamp-2">{job.description}</p>
+
+                      {/* Skills */}
+                      {job.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {job.skills.slice(0, 6).map((skill) => (
+                            <Badge key={skill} variant="secondary" className="text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                          {job.skills.length > 6 && (
+                            <Badge variant="secondary" className="text-xs">
+                              +{job.skills.length - 6} más
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col space-y-2 lg:w-48">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => setSelectedJob(job)}
+                          >
+                            <Eye className="w-4 h-4 mr-2" />
+                            Ver Detalles
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle className="flex items-center justify-between">
+                              <span>{job.title}</span>
+                              <div className="flex items-center space-x-2">
+                                {job.verified && (
+                                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                                    <Verified className="w-3 h-3 mr-1" />
+                                    Verificada
+                                  </Badge>
+                                )}
+                                {getSourceBadge(job.source)}
+                              </div>
+                            </DialogTitle>
+                            <DialogDescription>
+                              <div className="flex items-center space-x-4 text-sm">
+                                <span className="font-medium">{job.company}</span>
+                                <span>•</span>
+                                <span>{job.location}</span>
+                                <span>•</span>
+                                <span>{formatPostedDate(job.postedDate)}</span>
+                              </div>
+                            </DialogDescription>
+                          </DialogHeader>
+
+                          <div className="space-y-6">
+                            {/* Job Overview */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              <div>
+                                <h4 className="font-medium text-gray-900">Salario</h4>
+                                <p className="text-sm text-gray-600">{formatSalary(job)}</p>
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900">Tipo</h4>
+                                <p className="text-sm text-gray-600">{getTypeLabel(job.type)}</p>
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900">Modalidad</h4>
+                                <p className="text-sm text-gray-600 capitalize">{job.modality}</p>
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900">Experiencia</h4>
+                                <p className="text-sm text-gray-600">{getExperienceLabel(job.experience)}</p>
+                              </div>
+                            </div>
+
+                            <Separator />
+
+                            {/* Company Description */}
+                            <div>
+                              <h4 className="font-medium text-gray-900 mb-2">Sobre la empresa</h4>
+                              <p className="text-sm text-gray-600">{job.companyDescription}</p>
+                            </div>
+
+                            <Separator />
+
+                            {/* Job Description */}
+                            <div>
+                              <h4 className="font-medium text-gray-900 mb-2">Descripción del puesto</h4>
+                              <p className="text-sm text-gray-600">{job.description}</p>
+                            </div>
+
+                            {/* Responsibilities */}
+                            {job.responsibilities.length > 0 && (
+                              <div>
+                                <h4 className="font-medium text-gray-900 mb-2">Responsabilidades</h4>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  {job.responsibilities.map((responsibility, index) => (
+                                    <li key={index} className="flex items-start space-x-2">
+                                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                      <span>{responsibility}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Requirements */}
+                            {job.requirements.length > 0 && (
+                              <div>
+                                <h4 className="font-medium text-gray-900 mb-2">Requisitos</h4>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  {job.requirements.map((requirement, index) => (
+                                    <li key={index} className="flex items-start space-x-2">
+                                      <Target className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                                      <span>{requirement}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Benefits */}
+                            {job.benefits.length > 0 && (
+                              <div>
+                                <h4 className="font-medium text-gray-900 mb-2">Beneficios</h4>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  {job.benefits.map((benefit, index) => (
+                                    <li key={index} className="flex items-start space-x-2">
+                                      <Star className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                                      <span>{benefit}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {/* Skills */}
+                            {job.skills.length > 0 && (
+                              <div>
+                                <h4 className="font-medium text-gray-900 mb-2">Habilidades requeridas</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {job.skills.map((skill) => (
+                                    <Badge key={skill} variant="secondary">
+                                      {skill}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex space-x-3 pt-4">
+                              <Button
+                                onClick={() => handleApplyJob(job.id, job.applicationUrl)}
+                                className="flex-1"
+                                disabled={appliedJobs.includes(job.id)}
+                              >
+                                {appliedJobs.includes(job.id) ? (
+                                  <>
+                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                    Aplicado
+                                  </>
+                                ) : (
+                                  <>
+                                    <ExternalLink className="w-4 h-4 mr-2" />
+                                    Aplicar en {job.source}
+                                  </>
+                                )}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleSaveJob(job.id)}
+                                className={savedJobs.includes(job.id) ? "bg-red-50 text-red-600" : ""}
+                              >
+                                <Heart className={`w-4 h-4 ${savedJobs.includes(job.id) ? "fill-current" : ""}`} />
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+
                       <Button
-                        type="button"
-                        variant={isListening ? "destructive" : "outline"}
-                        size="sm"
-                        onClick={isListening ? stopListening : startListening}
-                        disabled={isInitializing}
-                        className="flex items-center gap-2"
+                        onClick={() => handleApplyJob(job.id, job.applicationUrl)}
+                        disabled={appliedJobs.includes(job.id)}
+                        className="w-full"
                       >
-                        {isInitializing ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : isListening ? (
+                        {appliedJobs.includes(job.id) ? (
                           <>
-                            <MicOff className="w-4 h-4" />
-                            Detener Grabación
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Aplicado
                           </>
                         ) : (
                           <>
-                            <Mic className="w-4 h-4" />
-                            Hablar Respuesta
+                            <Send className="w-4 h-4 mr-2" />
+                            Aplicar
                           </>
                         )}
                       </Button>
 
-                      {transcript && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={clearTranscript}
-                          className="flex items-center gap-2 text-gray-600"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Limpiar
-                        </Button>
-                      )}
-                    </div>
-
-                    {/* Real-time Transcription Display */}
-                    {(transcript || interimTranscript || isListening) && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <div className="text-sm font-medium text-green-800 mb-2 flex items-center gap-2">
-                          <Volume2 className="w-4 h-4" />
-                          Transcripción en Tiempo Real
-                        </div>
-                        <div className="text-sm min-h-[40px]">
-                          <span className="text-green-900">{transcript}</span>
-                          <span className="text-green-600 italic">{interimTranscript}</span>
-                          {isListening && !transcript && !interimTranscript && (
-                            <span className="text-green-600 italic">Esperando que hables...</span>
-                          )}
-                        </div>
-                        {(transcript || interimTranscript) && (
-                          <div className="text-xs text-green-600 mt-2 flex items-center gap-4">
-                            <span>{transcript.split(" ").filter((w) => w.length > 0).length} palabras</span>
-                            <span>{transcript.length} caracteres</span>
-                            {isListening && (
-                              <span className="flex items-center gap-1">
-                                <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                                Se detendrá automáticamente tras 3 segundos de silencio
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Speech Error Display */}
-                    {speechError && (
-                      <Alert className="border-red-200 bg-red-50">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription className="text-red-800">{speechError}</AlertDescription>
-                      </Alert>
-                    )}
-
-                    {/* Speech Recognition Tips */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                      <div className="text-sm text-blue-800">
-                        <div className="font-medium mb-1">💡 Consejos para usar el reconocimiento de voz:</div>
-                        <ul className="text-xs space-y-1 text-blue-700">
-                          <li>• Habla claramente en español chileno</li>
-                          <li>• Asegúrate de estar en un lugar silencioso</li>
-                          <li>• La grabación se detendrá automáticamente tras 3 segundos de silencio</li>
-                          <li>• Puedes combinar voz y escritura en la misma respuesta</li>
-                        </ul>
-                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleSaveJob(job.id)}
+                        className={`w-full ${savedJobs.includes(job.id) ? "bg-red-50 text-red-600" : ""}`}
+                      >
+                        <Heart className={`w-4 h-4 mr-2 ${savedJobs.includes(job.id) ? "fill-current" : ""}`} />
+                        {savedJobs.includes(job.id) ? "Guardado" : "Guardar"}
+                      </Button>
                     </div>
                   </div>
-                )}
-
-                {/* Validation Message */}
-                {currentQ.type === "open" &&
-                  answers[currentQ.id] &&
-                  answers[currentQ.id]?.toString().trim().length < 10 && (
-                    <p className="text-sm text-amber-600 flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4" />
-                      Necesitas al menos 10 caracteres para continuar
-                    </p>
-                  )}
-              </div>
-            )}
-
-            {/* Multiple Choice and Scenario Questions */}
-            {(currentQ.type === "multiple" || currentQ.type === "scenario") && currentQ.options && (
-              <RadioGroup
-                value={answers[currentQ.id]?.toString() || ""}
-                onValueChange={(value) => handleAnswer(currentQ.id, Number.parseInt(value))}
-                className="space-y-4"
-              >
-                {currentQ.options.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-start space-x-3 p-4 rounded-lg border hover:bg-gray-50 transition-colors"
-                  >
-                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} className="mt-1" />
-                    <Label htmlFor={`option-${option.value}`} className="flex-1 text-sm leading-relaxed cursor-pointer">
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            )}
-
-            {/* Binary Questions */}
-            {currentQ.type === "binary" && currentQ.options && (
-              <RadioGroup
-                value={answers[currentQ.id]?.toString() || ""}
-                onValueChange={(value) => handleAnswer(currentQ.id, Number.parseInt(value))}
-                className="space-y-4"
-              >
-                {currentQ.options.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-start space-x-3 p-4 rounded-lg border hover:bg-gray-50 transition-colors"
-                  >
-                    <RadioGroupItem value={option.value.toString()} id={`binary-${option.value}`} className="mt-1" />
-                    <Label htmlFor={`binary-${option.value}`} className="flex-1 text-sm leading-relaxed cursor-pointer">
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            )}
-
-            {/* Ranking Questions */}
-            {currentQ.type === "ranking" && currentQ.options && (
-              <div className="space-y-4">
-                <p className="text-sm text-gray-600 mb-4">
-                  Arrastra y suelta para ordenar según tu preferencia en el contexto chileno (1 = más importante, 5 =
-                  menos importante):
-                </p>
-                <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentQ.id)}>
-                  <Droppable droppableId="ranking">
-                    {(provided) => (
-                      <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                        {(answers[currentQ.id] || currentQ.options || []).map((item: any, index: number) => (
-                          <Draggable key={item.value} draggableId={item.value.toString()} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`flex items-center space-x-3 p-4 rounded-lg border transition-colors ${
-                                  snapshot.isDragging ? "bg-blue-50 border-blue-300" : "bg-white hover:bg-gray-50"
-                                }`}
-                              >
-                                <GripVertical className="w-5 h-5 text-gray-400" />
-                                <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2 py-1 rounded">
-                                  {index + 1}
-                                </span>
-                                <span className="flex-1 text-sm">{item.label}</span>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              </div>
-            )}
-
-            {/* Checkbox Questions */}
-            {currentQ.type === "checkbox" && currentQ.options && (
-              <div className="space-y-4">
-                <p className="text-sm text-gray-600 mb-4">
-                  Selecciona todas las opciones que apliquen en tu experiencia en Chile:
-                </p>
-                {currentQ.options.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-start space-x-3 p-4 rounded-lg border hover:bg-gray-50 transition-colors"
-                  >
-                    <Checkbox
-                      id={`checkbox-${option.value}`}
-                      checked={(answers[currentQ.id] || []).includes(option.value)}
-                      onCheckedChange={(checked) => {
-                        const currentAnswers = answers[currentQ.id] || []
-                        if (checked) {
-                          handleAnswer(currentQ.id, [...currentAnswers, option.value])
-                        } else {
-                          handleAnswer(
-                            currentQ.id,
-                            currentAnswers.filter((v: number) => v !== option.value),
-                          )
-                        }
-                      }}
-                      className="mt-1"
-                    />
-                    <Label
-                      htmlFor={`checkbox-${option.value}`}
-                      className="flex-1 text-sm leading-relaxed cursor-pointer"
-                    >
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Slider Questions */}
-            {currentQ.type === "slider" && currentQ.sliderConfig && (
-              <div className="space-y-6">
-                <div className="px-4">
-                  <Slider
-                    value={[answers[currentQ.id] || 50]}
-                    onValueChange={(value) => handleAnswer(currentQ.id, value[0])}
-                    min={currentQ.sliderConfig.min}
-                    max={currentQ.sliderConfig.max}
-                    step={currentQ.sliderConfig.step}
-                    className="w-full"
-                  />
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 px-4">
-                  {currentQ.sliderConfig.labels.map((label, index) => (
-                    <span
-                      key={index}
-                      className={index === 1 ? "text-center" : index === 2 ? "text-right" : "text-left"}
-                    >
-                      {label}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-center">
-                  <span className="text-2xl font-bold text-blue-600">{answers[currentQ.id] || 50}%</span>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={currentQuestion === 0}
-            className="flex items-center gap-2 bg-transparent"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Anterior
-          </Button>
-
-          <div className="text-sm text-gray-500">
-            {currentQuestion + 1} / {questions.length}
+                </CardContent>
+              </Card>
+            ))}
           </div>
+        )}
 
-          {currentQuestion === questions.length - 1 ? (
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="flex justify-center items-center space-x-2 mt-8">
             <Button
-              onClick={handleComplete}
-              disabled={!allAnswered || isCompleting}
-              className="flex items-center gap-2"
+              variant="outline"
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
             >
-              {isCompleting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Analizando...
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  Completar Evaluación
-                </>
-              )}
+              Anterior
             </Button>
-          ) : (
-            <Button onClick={handleNext} disabled={!canProceed} className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">
+              Página {currentPage} de {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+            >
               Siguiente
-              <ArrowRight className="w-4 h-4" />
             </Button>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Enhanced Tip */}
-        <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-blue-800">
-            <span className="font-semibold">🇨🇱 Consejo para Chile:</span>{" "}
-            {currentQ.type === "open"
-              ? "Para preguntas abiertas, menciona experiencias específicas del mercado laboral chileno. Puedes usar reconocimiento de voz o escribir. Considera aspectos culturales y regionales de Chile."
-              : currentQ.type === "ranking"
-                ? "Ordena según tu experiencia en el ambiente laboral chileno. Considera las particularidades de nuestra cultura empresarial."
-                : currentQ.type === "checkbox"
-                  ? "Selecciona todas las opciones que reflejen tu experiencia real en Chile. Considera diferentes tipos de empresas y regiones."
-                  : currentQ.type === "slider"
-                    ? "Ajusta según tu experiencia en el contexto laboral chileno. Considera las normas culturales y profesionales del país."
-                    : "Elige la respuesta que mejor refleje tu comportamiento en el ambiente laboral chileno. Considera nuestra cultura empresarial y normas sociales."}
-          </p>
-        </div>
+        {/* Empty State */}
+        {!loading && jobs.length === 0 && !error && (
+          <Card className="text-center py-12">
+            <CardContent>
+              <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No se encontraron empleos</h3>
+              <p className="text-gray-600 mb-4">
+                Intenta ajustar tus filtros de búsqueda o busca términos más generales.
+              </p>
+              <Button onClick={clearFilters} variant="outline">
+                Limpiar todos los filtros
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Stats Summary */}
+        {stats && !loading && (
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Estadísticas del Mercado Laboral Chileno</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Por Portal</h4>
+                  <div className="space-y-1">
+                    {Object.entries(stats.bySource).map(([source, count]) => (
+                      <div key={source} className="flex justify-between text-sm">
+                        <span className="capitalize">{source}</span>
+                        <span className="font-medium">{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Por Región</h4>
+                  <div className="space-y-1">
+                    {Object.entries(stats.byRegion)
+                      .slice(0, 5)
+                      .map(([region, count]) => (
+                        <div key={region} className="flex justify-between text-sm">
+                          <span>{region}</span>
+                          <span className="font-medium">{count}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Por Industria</h4>
+                  <div className="space-y-1">
+                    {Object.entries(stats.byIndustry)
+                      .slice(0, 5)
+                      .map(([industry, count]) => (
+                        <div key={industry} className="flex justify-between text-sm">
+                          <span>{industry}</span>
+                          <span className="font-medium">{count}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
