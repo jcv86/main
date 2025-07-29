@@ -3,38 +3,40 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { SearchDialog } from "@/components/search-dialog"
+import { VoiceSearchButton } from "@/components/voice-search-button"
 import {
-  MessageCircle,
   Send,
   Bot,
   User,
-  Lightbulb,
-  Target,
-  TrendingUp,
-  BookOpen,
-  Users,
-  Briefcase,
-  Star,
+  MessageSquare,
   Plus,
   History,
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Mic,
+  Volume2,
 } from "lucide-react"
-import { toast } from "sonner"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { toast } from "sonner"
 
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
-  timestamp: Date
+  timestamp: string | Date
+  isHighlighted?: boolean
 }
 
 interface Session {
@@ -43,188 +45,189 @@ interface Session {
   messageCount: number
 }
 
-const quickActions = [
-  {
-    id: "cv-review",
-    title: "Revisar mi CV",
-    description: "Obtén feedback sobre tu currículum",
-    icon: Briefcase,
-    prompt: "¿Puedes revisar mi CV y darme consejos para mejorarlo para el mercado chileno?",
-  },
-  {
-    id: "interview-prep",
-    title: "Preparar entrevista",
-    description: "Consejos para entrevistas de trabajo",
-    icon: Users,
-    prompt: "Tengo una entrevista próximamente. ¿Qué consejos me das para prepararme para el mercado laboral chileno?",
-  },
-  {
-    id: "salary-negotiation",
-    title: "Negociar salario",
-    description: "Estrategias de negociación salarial",
-    icon: TrendingUp,
-    prompt: "¿Cómo puedo negociar mi salario de manera efectiva en Chile? ¿Cuáles son los rangos típicos para mi área?",
-  },
-  {
-    id: "career-change",
-    title: "Cambio de carrera",
-    description: "Planificar transición profesional",
-    icon: Target,
-    prompt:
-      "Estoy considerando un cambio de carrera. ¿Qué pasos debo seguir para hacer una transición exitosa en Chile?",
-  },
-  {
-    id: "skill-development",
-    title: "Desarrollar habilidades",
-    description: "Identificar skills a mejorar",
-    icon: BookOpen,
-    prompt: "¿Qué habilidades técnicas y blandas debería desarrollar para ser más competitivo en el mercado chileno?",
-  },
-  {
-    id: "networking",
-    title: "Networking profesional",
-    description: "Construir red de contactos",
-    icon: Users,
-    prompt: "¿Cómo puedo hacer networking efectivo en Chile? ¿Qué eventos o plataformas me recomiendas?",
-  },
-]
-
-const conversationStarters = [
-  "¿Cómo puedo mejorar mi perfil profesional para el mercado chileno?",
-  "¿Qué empresas tech están contratando en Santiago?",
-  "¿Cuáles son los salarios típicos en mi área en Chile?",
-  "¿Cómo puedo prepararme para una entrevista técnica?",
-  "¿Qué certificaciones son más valoradas en Chile?",
-]
-
 export default function CareerCoachPage() {
+  const { user, isDemoMode } = useAuth()
   const [messages, setMessages] = useState<Message[]>([])
-  const [inputMessage, setInputMessage] = useState("")
+  const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingHistory, setIsLoadingHistory] = useState(true)
-  const [currentUser, setCurrentUser] = useState<any>(null)
   const [currentSessionId, setCurrentSessionId] = useState<string>("")
   const [sessions, setSessions] = useState<Session[]>([])
-  const [showSessions, setShowSessions] = useState(false)
+  const [isDemo, setIsDemo] = useState(isDemoMode)
+  const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null)
+  const [isVoiceInput, setIsVoiceInput] = useState(false)
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const supabase = createClientComponentClient()
-  const router = useRouter()
+  const messageRefs = useRef<{ [key: string]: HTMLDivElement }>({})
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  useEffect(() => {
-    if (currentUser) {
-      loadConversationHistory()
-      loadUserSessions()
-    } else {
-      loadConversationHistory()
-    }
-  }, [currentUser])
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
-
-  const checkUser = async () => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setCurrentUser(user)
-    } catch (error) {
-      console.error("Error checking user:", error)
-    }
-  }
-
+  // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const loadUserSessions = async () => {
-    if (!currentUser) return
+  // Scroll to specific message
+  const scrollToMessage = (messageId: string) => {
+    const messageElement = messageRefs.current[messageId]
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: "smooth", block: "center" })
 
-    try {
-      const response = await fetch(`/api/career-coach?action=sessions&userId=${currentUser.id}`)
-      if (response.ok) {
-        const data = await response.json()
-        setSessions(data.sessions || [])
-      }
-    } catch (error) {
-      console.error("Error loading sessions:", error)
+      // Highlight the message
+      setHighlightedMessageId(messageId)
+
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        setHighlightedMessageId(null)
+      }, 3000)
     }
   }
 
-  const loadConversationHistory = async () => {
+  // Load conversation history
+  const loadConversationHistory = async (sessionId?: string) => {
+    setIsLoadingHistory(true)
     try {
-      setIsLoadingHistory(true)
-      const url = currentUser ? `/api/career-coach?userId=${currentUser.id}` : "/api/career-coach"
+      const params = new URLSearchParams()
+      if (user?.id) params.append("userId", user.id)
+      if (sessionId) params.append("sessionId", sessionId)
 
-      const response = await fetch(url)
+      const response = await fetch(`/api/career-coach?${params}`)
 
-      if (response.ok) {
-        const data = await response.json()
-        if (data.messages && Array.isArray(data.messages)) {
-          const formattedMessages = data.messages.map((msg: any) => ({
-            ...msg,
-            timestamp: new Date(msg.timestamp),
-          }))
-          setMessages(formattedMessages)
-          setCurrentSessionId(data.sessionId || "demo-session")
-        } else {
-          // Fallback to welcome message
-          setMessages([
-            {
-              id: "1",
-              role: "assistant",
-              content:
-                "¡Hola! Soy tu AI Career Coach personalizado para el mercado laboral chileno. Estoy aquí para ayudarte con tu desarrollo profesional, búsqueda de empleo, y crecimiento de carrera. ¿En qué puedo asistirte hoy?",
-              timestamp: new Date(),
-            },
-          ])
-          setCurrentSessionId("demo-session")
-        }
-      } else {
-        // If API fails, start with a welcome message
-        setMessages([
-          {
-            id: "1",
-            role: "assistant",
-            content:
-              "¡Hola! Soy tu AI Career Coach personalizado para el mercado laboral chileno. Estoy aquí para ayudarte con tu desarrollo profesional, búsqueda de empleo, y crecimiento de carrera. ¿En qué puedo asistirte hoy?",
-            timestamp: new Date(),
-          },
-        ])
-        setCurrentSessionId("demo-session")
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
+
+      const data = await response.json()
+
+      setMessages(data.messages || [])
+      setCurrentSessionId(data.sessionId || "")
+      setIsDemo(data.isDemo || isDemoMode || !user)
+
+      // Auto-scroll to bottom after loading
+      setTimeout(scrollToBottom, 100)
     } catch (error) {
       console.error("Error loading conversation history:", error)
-      // Fallback to welcome message
+      toast.error("Error al cargar el historial de conversación")
+
+      // Set default welcome message on error
+      const demoSessionId = `demo-session-${Date.now()}`
       setMessages([
         {
           id: "1",
           role: "assistant",
           content:
-            "¡Hola! Soy tu AI Career Coach. Estoy aquí para ayudarte con tu desarrollo profesional en el mercado chileno. ¿En qué puedo asistirte hoy?",
-          timestamp: new Date(),
+            "¡Hola! Soy tu AI Career Coach. Estoy aquí para ayudarte con tu desarrollo profesional. ¿En qué puedo asistirte hoy?",
+          timestamp: new Date().toISOString(),
         },
       ])
-      setCurrentSessionId("demo-session")
+      setCurrentSessionId(demoSessionId)
+      setIsDemo(true)
     } finally {
       setIsLoadingHistory(false)
     }
   }
 
-  const startNewSession = async () => {
-    if (!currentUser) {
-      toast.error("Debes iniciar sesión para crear una nueva sesión")
-      return
-    }
+  // Load user sessions
+  const loadUserSessions = async () => {
+    if (!user?.id) return
 
     try {
-      setIsLoading(true)
+      const response = await fetch(`/api/career-coach?action=sessions&userId=${user.id}`)
+
+      if (response.ok) {
+        const data = await response.json()
+        setSessions(data.sessions || [])
+      }
+    } catch (error) {
+      console.error("Error loading user sessions:", error)
+    }
+  }
+
+  // Send message
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!input.trim() || isLoading) return
+
+    const userMessage = input.trim()
+    setInput("")
+    setIsLoading(true)
+
+    // Add user message immediately
+    const newUserMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: userMessage,
+      timestamp: new Date().toISOString(),
+    }
+
+    setMessages((prev) => [...prev, newUserMessage])
+
+    // Auto-scroll after adding user message
+    setTimeout(scrollToBottom, 100)
+
+    try {
+      const response = await fetch("/api/career-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          conversationHistory: messages,
+          userId: user?.id,
+          sessionId: currentSessionId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      // Add assistant response
+      const assistantMessage: Message = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: data.response,
+        timestamp: data.timestamp || new Date().toISOString(),
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+      setIsDemo(data.isDemo || isDemoMode || !user)
+
+      // Update session ID if provided
+      if (data.sessionId) {
+        setCurrentSessionId(data.sessionId)
+      }
+
+      // Auto-scroll after adding assistant message
+      setTimeout(scrollToBottom, 100)
+
+      // Reload sessions to update the list
+      if (user?.id) {
+        loadUserSessions()
+      }
+    } catch (error) {
+      console.error("Error sending message:", error)
+      toast.error("Error al enviar el mensaje. Inténtalo de nuevo.")
+
+      // Add error message
+      const errorMessage: Message = {
+        id: `error-${Date.now()}`,
+        role: "assistant",
+        content: "Disculpa, hubo un error al procesar tu mensaje. Por favor, inténtalo de nuevo.",
+        timestamp: new Date().toISOString(),
+      }
+
+      setMessages((prev) => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Start new session
+  const startNewSession = async () => {
+    try {
       const response = await fetch("/api/career-coach", {
         method: "POST",
         headers: {
@@ -232,350 +235,249 @@ export default function CareerCoachPage() {
         },
         body: JSON.stringify({
           action: "new_session",
-          userId: currentUser.id,
-        }),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setCurrentSessionId(data.sessionId)
-        setMessages([
-          {
-            id: "1",
-            role: "assistant",
-            content: data.response || "¡Nueva sesión iniciada! Soy tu AI Career Coach. ¿En qué puedo ayudarte hoy?",
-            timestamp: new Date(),
-          },
-        ])
-        loadUserSessions()
-        toast.success("Nueva sesión creada")
-      } else {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Error creating session")
-      }
-    } catch (error) {
-      console.error("Error starting new session:", error)
-      toast.error("Error al crear nueva sesión")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const sendMessage = async (messageContent?: string) => {
-    const content = messageContent || inputMessage.trim()
-    if (!content || isLoading) return
-
-    // If no session exists and user is authenticated, create one
-    if (!currentSessionId || currentSessionId === "demo-session") {
-      if (currentUser) {
-        await startNewSession()
-        // Wait a bit for session creation
-        await new Promise((resolve) => setTimeout(resolve, 500))
-      } else {
-        // For non-authenticated users, use demo session
-        setCurrentSessionId("demo-session")
-      }
-    }
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content,
-      timestamp: new Date(),
-    }
-
-    setMessages((prev) => [...prev, userMessage])
-    setInputMessage("")
-    setIsLoading(true)
-
-    try {
-      const response = await fetch("/api/career-coach", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: content,
-          conversationHistory: messages,
-          userId: currentUser?.id,
-          sessionId: currentSessionId,
-          action: "chat", // Explicitly set action
+          userId: user?.id,
         }),
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const data = await response.json()
 
-      if (data.error && !data.response) {
-        throw new Error(data.error)
-      }
+      // Reset messages and set new session
+      setMessages([
+        {
+          id: "1",
+          role: "assistant",
+          content: data.response,
+          timestamp: new Date().toISOString(),
+        },
+      ])
+      setCurrentSessionId(data.sessionId)
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: data.response || "Lo siento, no pude generar una respuesta en este momento.",
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-
-      // Update session list if user is authenticated
-      if (currentUser) {
+      // Reload sessions
+      if (user?.id) {
         loadUserSessions()
       }
+
+      toast.success("Nueva sesión iniciada")
     } catch (error) {
-      console.error("Error sending message:", error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content:
-          "Disculpa, estoy experimentando dificultades técnicas. En el mercado chileno, te recomiendo enfocarte en desarrollar habilidades demandadas como JavaScript, Python o AWS. Empresas como NotCo, Fintual y Cornershop están creciendo rápidamente y buscan talento.",
-        timestamp: new Date(),
+      console.error("Error starting new session:", error)
+      toast.error("Error al iniciar nueva sesión")
+    }
+  }
+
+  // Switch to different session
+  const switchToSession = async (sessionId: string) => {
+    if (sessionId === currentSessionId) return
+
+    await loadConversationHistory(sessionId)
+    toast.success("Sesión cambiada")
+  }
+
+  // Handle search result click
+  const handleSearchResultClick = (sessionId: string, messageId: string) => {
+    if (sessionId !== currentSessionId) {
+      // Switch to the session first, then scroll to message
+      switchToSession(sessionId).then(() => {
+        setTimeout(() => scrollToMessage(messageId), 500)
+      })
+    } else {
+      // Just scroll to the message in current session
+      scrollToMessage(messageId)
+    }
+  }
+
+  // Handle voice transcript
+  const handleVoiceTranscript = (transcript: string) => {
+    setInput(transcript)
+    setIsVoiceInput(false)
+    // Auto-send voice messages after a short delay
+    setTimeout(() => {
+      if (transcript.trim()) {
+        // Trigger form submission
+        const form = document.querySelector("form")
+        if (form) {
+          form.requestSubmit()
+        }
       }
-      setMessages((prev) => [...prev, errorMessage])
-      toast.error("Error al enviar mensaje. Intenta nuevamente.")
-    } finally {
-      setIsLoading(false)
-      // Focus back to input after sending
-      setTimeout(() => {
-        inputRef.current?.focus()
-      }, 100)
+    }, 100)
+  }
+
+  const handleVoiceStart = () => {
+    setIsVoiceInput(true)
+  }
+
+  const handleVoiceEnd = () => {
+    setIsVoiceInput(false)
+  }
+
+  // Load initial data
+  useEffect(() => {
+    loadConversationHistory()
+    if (user?.id) {
+      loadUserSessions()
     }
-  }
+  }, [user])
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
-    }
-  }
-
-  const handleQuickAction = (action: (typeof quickActions)[0]) => {
-    sendMessage(action.prompt)
-  }
-
-  const handleLogin = () => {
-    router.push("/auth/login")
-  }
-
-  if (isLoadingHistory) {
-    return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    )
-  }
+  // Auto-scroll when messages change
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-8rem)]">
-        {/* Sidebar with Quick Actions */}
-        <div className="lg:col-span-1 space-y-4">
-          {/* User Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Estado
+    <div className="container mx-auto max-w-4xl p-4 h-screen flex flex-col">
+      {/* Header */}
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarFallback>
+                  <Bot className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle className="text-lg">AI Career Coach</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Tu asistente personalizado para el mercado laboral chileno
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {isDemo && (
+                <Badge variant="outline" className="text-xs">
+                  <AlertCircle className="h-3 w-3 mr-1" />
+                  Modo Demo
+                </Badge>
+              )}
+
+              <SearchDialog
+                userId={user?.id || null}
+                currentSessionId={currentSessionId}
+                onResultClick={handleSearchResultClick}
+              />
+
+              <Button variant="outline" size="sm" onClick={startNewSession}>
+                <Plus className="h-4 w-4 mr-2" />
+                Nueva Sesión
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      <div className="flex-1 flex gap-4 min-h-0">
+        {/* Sessions Sidebar */}
+        {sessions.length > 0 && (
+          <Card className="w-64 flex-shrink-0">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <History className="h-4 w-4" />
+                Sesiones ({sessions.length})
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              {currentUser ? (
-                <div className="space-y-2">
-                  <p className="text-sm text-green-600">✓ Sesión guardada</p>
-                  <p className="text-xs text-muted-foreground">{currentUser.email}</p>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={startNewSession} className="flex-1 bg-transparent">
-                      <Plus className="h-3 w-3 mr-1" />
-                      Nueva
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setShowSessions(!showSessions)}
-                      className="flex-1"
-                    >
-                      <History className="h-3 w-3 mr-1" />
-                      Historial
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <p className="text-sm text-yellow-600">⚠ Sesión temporal</p>
-                  <p className="text-xs text-muted-foreground">Inicia sesión para guardar conversaciones</p>
-                  <Button size="sm" onClick={handleLogin} className="w-full">
-                    Iniciar Sesión
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Sessions History */}
-          {showSessions && currentUser && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <History className="h-5 w-5" />
-                  Sesiones Anteriores
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 max-h-40 overflow-y-auto">
+            <CardContent className="p-0">
+              <ScrollArea className="h-[calc(100vh-300px)]">
+                <div className="space-y-1 p-3">
                   {sessions.map((session) => (
                     <div
                       key={session.sessionId}
-                      className="p-2 border rounded text-xs cursor-pointer hover:bg-muted"
-                      onClick={() => {
-                        setCurrentSessionId(session.sessionId)
-                        loadConversationHistory()
-                        setShowSessions(false)
-                      }}
+                      className={`p-2 rounded-lg cursor-pointer transition-colors ${
+                        session.sessionId === currentSessionId
+                          ? "bg-primary/10 border border-primary/20"
+                          : "hover:bg-muted/50"
+                      }`}
+                      onClick={() => switchToSession(session.sessionId)}
                     >
-                      <div className="font-medium">{format(session.lastMessage, "dd/MM HH:mm", { locale: es })}</div>
-                      <div className="text-muted-foreground">{session.messageCount} mensajes</div>
+                      <div className="flex items-center justify-between mb-1">
+                        <Badge variant="outline" className="text-xs">
+                          {session.messageCount} mensajes
+                        </Badge>
+                        {session.sessionId === currentSessionId && <CheckCircle className="h-3 w-3 text-primary" />}
+                      </div>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {format(session.lastMessage, "dd MMM, HH:mm", { locale: es })}
+                      </p>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5" />
-                Acciones Rápidas
-              </CardTitle>
-              <CardDescription>Consultas comunes para empezar</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {quickActions.map((action) => {
-                  const IconComponent = action.icon
-                  return (
-                    <Button
-                      key={action.id}
-                      variant="ghost"
-                      className="w-full justify-start h-auto p-3"
-                      onClick={() => handleQuickAction(action)}
-                      disabled={isLoading}
-                    >
-                      <div className="flex items-start gap-3">
-                        <IconComponent className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <div className="text-left">
-                          <div className="font-medium text-sm">{action.title}</div>
-                          <div className="text-xs text-muted-foreground">{action.description}</div>
-                        </div>
-                      </div>
-                    </Button>
-                  )
-                })}
-              </div>
+              </ScrollArea>
             </CardContent>
           </Card>
-
-          {/* Suggestions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
-                Sugerencias
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {conversationStarters.slice(0, 3).map((starter, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-left h-auto p-2 text-xs bg-transparent"
-                    onClick={() => sendMessage(starter)}
-                    disabled={isLoading}
-                  >
-                    {starter}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        )}
 
         {/* Main Chat Area */}
-        <div className="lg:col-span-3">
-          <Card className="h-full flex flex-col">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5" />
-                AI Career Coach
-                {currentUser && currentSessionId !== "demo-session" && (
-                  <Badge variant="secondary" className="ml-auto">
-                    Sesión: {currentSessionId.split("-").pop()?.slice(0, 8)}
-                  </Badge>
-                )}
-              </CardTitle>
-              <CardDescription>Tu asistente personal para desarrollo profesional en Chile</CardDescription>
-            </CardHeader>
-
-            <CardContent className="flex-1 flex flex-col p-0">
-              {/* Messages Area */}
-              <ScrollArea className="flex-1 p-4">
+        <Card className="flex-1 flex flex-col min-h-0">
+          <CardContent className="flex-1 flex flex-col p-0 min-h-0">
+            {/* Messages */}
+            <ScrollArea className="flex-1 p-4">
+              {isLoadingHistory ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span className="text-sm text-muted-foreground">Cargando conversación...</span>
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">No hay mensajes aún. ¡Comienza la conversación!</p>
+                </div>
+              ) : (
                 <div className="space-y-4">
                   {messages.map((message) => (
-                    <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "justify-end" : ""}`}>
+                    <div
+                      key={message.id}
+                      ref={(el) => {
+                        if (el) messageRefs.current[message.id] = el
+                      }}
+                      className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"} ${
+                        highlightedMessageId === message.id
+                          ? "bg-yellow-100 dark:bg-yellow-900/20 p-2 rounded-lg transition-colors duration-1000"
+                          : ""
+                      }`}
+                    >
                       {message.role === "assistant" && (
-                        <div className="flex-shrink-0">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <Bot className="h-4 w-4 text-primary" />
-                          </div>
-                        </div>
+                        <Avatar className="flex-shrink-0">
+                          <AvatarFallback>
+                            <Bot className="h-4 w-4" />
+                          </AvatarFallback>
+                        </Avatar>
                       )}
 
                       <div
-                        className={`max-w-[80%] rounded-lg p-3 ${
-                          message.role === "user"
-                            ? "bg-primary text-primary-foreground ml-auto"
-                            : "bg-muted text-muted-foreground"
+                        className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                          message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                         }`}
                       >
-                        <div className="text-sm whitespace-pre-wrap">{message.content}</div>
-                        <div
-                          className={`text-xs mt-2 ${
-                            message.role === "user" ? "text-primary-foreground/70" : "text-muted-foreground/70"
-                          }`}
-                        >
-                          {format(message.timestamp, "HH:mm", { locale: es })}
-                        </div>
+                        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                        <p className="text-xs opacity-70 mt-1">
+                          {format(new Date(message.timestamp), "HH:mm", { locale: es })}
+                        </p>
                       </div>
 
                       {message.role === "user" && (
-                        <div className="flex-shrink-0">
-                          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                        <Avatar className="flex-shrink-0">
+                          <AvatarFallback>
                             <User className="h-4 w-4" />
-                          </div>
-                        </div>
+                          </AvatarFallback>
+                        </Avatar>
                       )}
                     </div>
                   ))}
 
                   {isLoading && (
-                    <div className="flex gap-3">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Bot className="h-4 w-4 text-primary" />
-                        </div>
-                      </div>
-                      <div className="bg-muted rounded-lg p-3">
+                    <div className="flex gap-3 justify-start">
+                      <Avatar className="flex-shrink-0">
+                        <AvatarFallback>
+                          <Bot className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="bg-muted rounded-lg px-4 py-2">
                         <div className="flex items-center gap-2">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                          <Loader2 className="h-4 w-4 animate-spin" />
                           <span className="text-sm text-muted-foreground">Escribiendo...</span>
                         </div>
                       </div>
@@ -584,43 +486,63 @@ export default function CareerCoachPage() {
 
                   <div ref={messagesEndRef} />
                 </div>
-              </ScrollArea>
+              )}
+            </ScrollArea>
 
-              <Separator />
+            <Separator />
 
-              {/* Input Area */}
-              <div className="p-4">
-                <div className="flex gap-2">
-                  <Input
-                    ref={inputRef}
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Escribe tu consulta sobre desarrollo profesional..."
-                    disabled={isLoading}
-                    className="flex-1"
-                  />
-                  <Button onClick={() => sendMessage()} disabled={isLoading || !inputMessage.trim()}>
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {conversationStarters.slice(3).map((starter, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="cursor-pointer hover:bg-secondary/80 text-xs"
-                      onClick={() => sendMessage(starter)}
-                    >
-                      {starter}
-                    </Badge>
-                  ))}
+            {/* Voice Input Status */}
+            {isVoiceInput && (
+              <div className="mx-4 mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-blue-700">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  <Volume2 className="h-4 w-4" />
+                  Escuchando... Habla claramente para enviar tu mensaje
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            )}
+
+            {/* Input Form */}
+            <form onSubmit={sendMessage} className="p-4">
+              <div className="flex gap-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={
+                    isVoiceInput
+                      ? "Escuchando... Habla claramente"
+                      : "Escribe tu pregunta sobre desarrollo profesional..."
+                  }
+                  disabled={isLoading || isVoiceInput}
+                  className="flex-1"
+                />
+
+                {/* Voice Input Button */}
+                <VoiceSearchButton
+                  onTranscript={handleVoiceTranscript}
+                  onStart={handleVoiceStart}
+                  onEnd={handleVoiceEnd}
+                  disabled={isLoading}
+                />
+
+                <Button type="submit" disabled={!input.trim() || isLoading || isVoiceInput}>
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-4">
+                  <span>Presiona Enter para enviar</span>
+                  <div className="flex items-center gap-1">
+                    <Mic className="h-3 w-3" />
+                    <span>Usa el micrófono para mensajes por voz</span>
+                  </div>
+                </div>
+                {!user && <span className="text-orange-600">Inicia sesión para guardar tu historial</span>}
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

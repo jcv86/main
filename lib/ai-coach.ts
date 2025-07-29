@@ -26,10 +26,561 @@ export interface ConversationHistory {
   sessionId: string
 }
 
+export interface SearchResult {
+  id: string
+  role: "user" | "assistant"
+  content: string
+  timestamp: Date
+  session_id: string
+  snippet: string
+  relevanceScore: number
+}
+
+export interface SearchResponse {
+  results: SearchResult[]
+  totalCount: number
+  query: string
+}
+
+export interface SearchSuggestion {
+  text: string
+  type: "keyword" | "topic" | "recent" | "popular"
+  frequency: number
+  category?: string
+}
+
+export interface SuggestionResponse {
+  suggestions: SearchSuggestion[]
+  categories: string[]
+}
+
 // Validate UUID format
 function isValidUUID(uuid: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
   return uuidRegex.test(uuid)
+}
+
+// Extract keywords and topics from conversation content
+export function extractKeywords(content: string): string[] {
+  // Remove common Spanish stop words and short words
+  const stopWords = new Set([
+    "el",
+    "la",
+    "de",
+    "que",
+    "y",
+    "a",
+    "en",
+    "un",
+    "es",
+    "se",
+    "no",
+    "te",
+    "lo",
+    "le",
+    "da",
+    "su",
+    "por",
+    "son",
+    "con",
+    "para",
+    "al",
+    "del",
+    "los",
+    "las",
+    "una",
+    "pero",
+    "sus",
+    "le",
+    "ya",
+    "o",
+    "fue",
+    "este",
+    "ha",
+    "si",
+    "porque",
+    "esta",
+    "son",
+    "entre",
+    "cuando",
+    "muy",
+    "sin",
+    "sobre",
+    "también",
+    "me",
+    "hasta",
+    "hay",
+    "donde",
+    "quien",
+    "desde",
+    "todo",
+    "nos",
+    "durante",
+    "todos",
+    "uno",
+    "les",
+    "ni",
+    "contra",
+    "otros",
+    "ese",
+    "eso",
+    "ante",
+    "ellos",
+    "e",
+    "esto",
+    "mí",
+    "antes",
+    "algunos",
+    "qué",
+    "unos",
+    "yo",
+    "otro",
+    "otras",
+    "otra",
+    "él",
+    "tanto",
+    "esa",
+    "estos",
+    "mucho",
+    "quienes",
+    "nada",
+    "muchos",
+    "cual",
+    "poco",
+    "ella",
+    "estar",
+    "estas",
+    "algunas",
+    "algo",
+    "nosotros",
+    "mi",
+    "mis",
+    "tú",
+    "te",
+    "ti",
+    "tu",
+    "tus",
+    "ellas",
+    "nosotras",
+    "vosotros",
+    "vosotras",
+    "os",
+    "mío",
+    "mía",
+    "míos",
+    "mías",
+    "tuyo",
+    "tuya",
+    "tuyos",
+    "tuyas",
+    "suyo",
+    "suya",
+    "suyos",
+    "suyas",
+    "nuestro",
+    "nuestra",
+    "nuestros",
+    "nuestras",
+    "vuestro",
+    "vuestra",
+    "vuestros",
+    "vuestras",
+    "esos",
+    "esas",
+    "estoy",
+    "está",
+    "estamos",
+    "estáis",
+    "están",
+    "esté",
+    "estés",
+    "estemos",
+    "estéis",
+    "estén",
+    "estaré",
+    "estarás",
+    "estará",
+    "estaremos",
+    "estaréis",
+    "estarán",
+    "estaría",
+    "estarías",
+    "estaríamos",
+    "estaríais",
+    "estarían",
+    "estaba",
+    "estabas",
+    "estábamos",
+    "estabais",
+    "estaban",
+    "estuve",
+    "estuviste",
+    "estuvo",
+    "estuvimos",
+    "estuvisteis",
+    "estuvieron",
+  ])
+
+  // Clean and tokenize content
+  const words = content
+    .toLowerCase()
+    .replace(/[^\w\sáéíóúñü]/g, " ") // Keep Spanish characters
+    .split(/\s+/)
+    .filter(
+      (word) => word.length >= 3 && !stopWords.has(word) && !/^\d+$/.test(word), // Remove pure numbers
+    )
+
+  // Count word frequency
+  const wordCount = new Map<string, number>()
+  words.forEach((word) => {
+    wordCount.set(word, (wordCount.get(word) || 0) + 1)
+  })
+
+  // Return words sorted by frequency, minimum 2 occurrences
+  return Array.from(wordCount.entries())
+    .filter(([_, count]) => count >= 2)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 20) // Top 20 keywords
+    .map(([word]) => word)
+}
+
+// Extract career-related topics and categories
+export function extractTopics(content: string): { topic: string; category: string }[] {
+  const topicPatterns = [
+    // Career Development
+    {
+      patterns: ["carrera", "desarrollo profesional", "crecimiento", "promoción", "ascenso"],
+      category: "Desarrollo de Carrera",
+    },
+    { patterns: ["habilidades", "competencias", "skills", "capacidades", "destrezas"], category: "Habilidades" },
+    { patterns: ["trabajo", "empleo", "puesto", "posición", "vacante", "oportunidad"], category: "Búsqueda de Empleo" },
+    { patterns: ["entrevista", "entrevistas", "proceso de selección", "reclutamiento"], category: "Entrevistas" },
+    { patterns: ["cv", "currículum", "curriculum", "hoja de vida", "perfil profesional"], category: "CV y Perfil" },
+    { patterns: ["salario", "sueldo", "remuneración", "compensación", "beneficios"], category: "Compensación" },
+    { patterns: ["networking", "contactos", "red profesional", "conexiones"], category: "Networking" },
+    { patterns: ["liderazgo", "gestión", "management", "equipo", "liderar"], category: "Liderazgo" },
+    { patterns: ["tecnología", "tech", "programación", "desarrollo", "software"], category: "Tecnología" },
+    { patterns: ["startup", "emprendimiento", "innovación", "empresa"], category: "Emprendimiento" },
+    { patterns: ["capacitación", "formación", "curso", "certificación", "aprendizaje"], category: "Formación" },
+    { patterns: ["chile", "chileno", "santiago", "mercado laboral"], category: "Mercado Chileno" },
+  ]
+
+  const topics: { topic: string; category: string }[] = []
+  const contentLower = content.toLowerCase()
+
+  topicPatterns.forEach(({ patterns, category }) => {
+    patterns.forEach((pattern) => {
+      if (contentLower.includes(pattern)) {
+        topics.push({ topic: pattern, category })
+      }
+    })
+  })
+
+  return topics
+}
+
+export async function getSearchSuggestions(userId: string, query = "", limit = 10): Promise<SuggestionResponse> {
+  if (!userId || !isValidUUID(userId)) {
+    return { suggestions: [], categories: [] }
+  }
+
+  try {
+    // Check if we have valid Supabase credentials
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return getDefaultSuggestions(query)
+    }
+
+    const suggestions: SearchSuggestion[] = []
+    const categories = new Set<string>()
+
+    // Get recent conversations to extract keywords and topics
+    const { data: recentMessages, error } = await supabaseAdmin
+      .from("coaching_conversations")
+      .select("content, role, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(100) // Analyze last 100 messages
+
+    if (error) {
+      console.error("Error fetching messages for suggestions:", error)
+      return getDefaultSuggestions(query)
+    }
+
+    if (recentMessages && recentMessages.length > 0) {
+      // Combine all content for analysis
+      const allContent = recentMessages.map((msg) => msg.content).join(" ")
+
+      // Extract keywords
+      const keywords = extractKeywords(allContent)
+      keywords.forEach((keyword) => {
+        if (!query || keyword.toLowerCase().includes(query.toLowerCase())) {
+          suggestions.push({
+            text: keyword,
+            type: "keyword",
+            frequency: 1,
+          })
+        }
+      })
+
+      // Extract topics
+      const topics = extractTopics(allContent)
+      const topicCounts = new Map<string, number>()
+
+      topics.forEach(({ topic, category }) => {
+        categories.add(category)
+        topicCounts.set(topic, (topicCounts.get(topic) || 0) + 1)
+
+        if (!query || topic.toLowerCase().includes(query.toLowerCase())) {
+          const existingIndex = suggestions.findIndex((s) => s.text === topic)
+          if (existingIndex >= 0) {
+            suggestions[existingIndex].frequency += 1
+          } else {
+            suggestions.push({
+              text: topic,
+              type: "topic",
+              frequency: topicCounts.get(topic) || 1,
+              category,
+            })
+          }
+        }
+      })
+    }
+
+    // Add popular career-related suggestions if query is short or empty
+    if (query.length < 3) {
+      const popularSuggestions = getPopularCareerSuggestions()
+      popularSuggestions.forEach((suggestion) => {
+        if (!suggestions.some((s) => s.text === suggestion.text)) {
+          suggestions.push(suggestion)
+          if (suggestion.category) {
+            categories.add(suggestion.category)
+          }
+        }
+      })
+    }
+
+    // Sort by frequency and relevance
+    suggestions.sort((a, b) => {
+      // Prioritize exact matches
+      if (query) {
+        const aExact = a.text.toLowerCase() === query.toLowerCase()
+        const bExact = b.text.toLowerCase() === query.toLowerCase()
+        if (aExact && !bExact) return -1
+        if (!aExact && bExact) return 1
+
+        // Then by starts with
+        const aStarts = a.text.toLowerCase().startsWith(query.toLowerCase())
+        const bStarts = b.text.toLowerCase().startsWith(query.toLowerCase())
+        if (aStarts && !bStarts) return -1
+        if (!aStarts && bStarts) return 1
+      }
+
+      // Then by frequency
+      return b.frequency - a.frequency
+    })
+
+    return {
+      suggestions: suggestions.slice(0, limit),
+      categories: Array.from(categories).sort(),
+    }
+  } catch (error) {
+    console.error("Error getting search suggestions:", error)
+    return getDefaultSuggestions(query)
+  }
+}
+
+function getDefaultSuggestions(query = ""): SuggestionResponse {
+  const defaultSuggestions: SearchSuggestion[] = [
+    { text: "desarrollo profesional", type: "popular", frequency: 10, category: "Desarrollo de Carrera" },
+    { text: "búsqueda de empleo", type: "popular", frequency: 9, category: "Búsqueda de Empleo" },
+    { text: "habilidades técnicas", type: "popular", frequency: 8, category: "Habilidades" },
+    { text: "entrevista de trabajo", type: "popular", frequency: 7, category: "Entrevistas" },
+    { text: "cv curriculum", type: "popular", frequency: 6, category: "CV y Perfil" },
+    { text: "salario negociación", type: "popular", frequency: 5, category: "Compensación" },
+    { text: "networking profesional", type: "popular", frequency: 4, category: "Networking" },
+    { text: "liderazgo equipos", type: "popular", frequency: 3, category: "Liderazgo" },
+    { text: "tecnología programación", type: "popular", frequency: 2, category: "Tecnología" },
+    { text: "mercado laboral chile", type: "popular", frequency: 1, category: "Mercado Chileno" },
+  ]
+
+  const filtered = query
+    ? defaultSuggestions.filter((s) => s.text.toLowerCase().includes(query.toLowerCase()))
+    : defaultSuggestions
+
+  return {
+    suggestions: filtered,
+    categories: [
+      "Desarrollo de Carrera",
+      "Búsqueda de Empleo",
+      "Habilidades",
+      "Entrevistas",
+      "CV y Perfil",
+      "Compensación",
+      "Networking",
+      "Liderazgo",
+      "Tecnología",
+      "Mercado Chileno",
+    ],
+  }
+}
+
+function getPopularCareerSuggestions(): SearchSuggestion[] {
+  return [
+    { text: "cambio de carrera", type: "popular", frequency: 8, category: "Desarrollo de Carrera" },
+    { text: "trabajo remoto", type: "popular", frequency: 7, category: "Búsqueda de Empleo" },
+    { text: "soft skills", type: "popular", frequency: 6, category: "Habilidades" },
+    { text: "preguntas entrevista", type: "popular", frequency: 5, category: "Entrevistas" },
+    { text: "linkedin perfil", type: "popular", frequency: 4, category: "CV y Perfil" },
+    { text: "aumento sueldo", type: "popular", frequency: 3, category: "Compensación" },
+    { text: "eventos networking", type: "popular", frequency: 2, category: "Networking" },
+    { text: "gestión tiempo", type: "popular", frequency: 1, category: "Liderazgo" },
+  ]
+}
+
+export async function searchConversations(
+  userId: string,
+  query: string,
+  limit = 20,
+  sessionId?: string,
+): Promise<SearchResponse> {
+  if (!userId || !isValidUUID(userId) || !query.trim()) {
+    return {
+      results: [],
+      totalCount: 0,
+      query: query.trim(),
+    }
+  }
+
+  try {
+    // Check if we have valid Supabase credentials
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.log("Supabase credentials not available for search")
+      return {
+        results: [],
+        totalCount: 0,
+        query: query.trim(),
+      }
+    }
+
+    // Build the query
+    let searchQuery = supabaseAdmin
+      .from("coaching_conversations")
+      .select("*")
+      .eq("user_id", userId)
+      .ilike("content", `%${query.trim()}%`)
+      .order("created_at", { ascending: false })
+      .limit(limit)
+
+    // Filter by session if provided
+    if (sessionId) {
+      searchQuery = searchQuery.eq("session_id", sessionId)
+    }
+
+    const { data, error } = await searchQuery
+
+    if (error) {
+      console.error("Error searching conversations:", error)
+      return {
+        results: [],
+        totalCount: 0,
+        query: query.trim(),
+      }
+    }
+
+    // Process results and create snippets
+    const results: SearchResult[] = data.map((msg) => {
+      const content = msg.content
+      const queryLower = query.toLowerCase()
+      const contentLower = content.toLowerCase()
+
+      // Find the position of the search term
+      const matchIndex = contentLower.indexOf(queryLower)
+
+      // Create a snippet around the match
+      let snippet = content
+      if (matchIndex !== -1) {
+        const start = Math.max(0, matchIndex - 50)
+        const end = Math.min(content.length, matchIndex + query.length + 50)
+        snippet = content.substring(start, end)
+
+        if (start > 0) snippet = "..." + snippet
+        if (end < content.length) snippet = snippet + "..."
+
+        // Highlight the search term
+        const regex = new RegExp(`(${query})`, "gi")
+        snippet = snippet.replace(regex, "**$1**")
+      }
+
+      // Calculate relevance score (simple implementation)
+      const relevanceScore = calculateRelevanceScore(content, query)
+
+      return {
+        id: msg.id,
+        role: msg.role,
+        content: msg.content,
+        timestamp: new Date(msg.created_at),
+        session_id: msg.session_id,
+        snippet,
+        relevanceScore,
+      }
+    })
+
+    // Sort by relevance score
+    results.sort((a, b) => b.relevanceScore - a.relevanceScore)
+
+    return {
+      results,
+      totalCount: results.length,
+      query: query.trim(),
+    }
+  } catch (error) {
+    console.error("Error searching conversations:", error)
+    return {
+      results: [],
+      totalCount: 0,
+      query: query.trim(),
+    }
+  }
+}
+
+function calculateRelevanceScore(content: string, query: string): number {
+  const contentLower = content.toLowerCase()
+  const queryLower = query.toLowerCase()
+  const queryWords = queryLower.split(/\s+/)
+
+  let score = 0
+
+  // Exact phrase match gets highest score
+  if (contentLower.includes(queryLower)) {
+    score += 100
+  }
+
+  // Individual word matches
+  queryWords.forEach((word) => {
+    if (word.length > 2) {
+      // Ignore very short words
+      const wordCount = (contentLower.match(new RegExp(word, "g")) || []).length
+      score += wordCount * 10
+    }
+  })
+
+  // Bonus for matches at the beginning of content
+  if (contentLower.startsWith(queryLower)) {
+    score += 50
+  }
+
+  // Penalty for very long content (less relevant)
+  if (content.length > 500) {
+    score *= 0.8
+  }
+
+  return score
 }
 
 export async function getConversationHistory(userId?: string, sessionId?: string): Promise<ConversationHistory> {
