@@ -1,496 +1,553 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "sonner"
-import { FileText, Download, Eye, Save, Palette, User, CheckCircle, AlertCircle, Clock } from "lucide-react"
 import { CVForm } from "@/components/cv-form/cv-form"
-import { ModernTemplate } from "@/components/cv-templates/modern-template"
-import { ClassicTemplate } from "@/components/cv-templates/classic-template"
-import { CreativeTemplate } from "@/components/cv-templates/creative-template"
-import { MinimalTemplate } from "@/components/cv-templates/minimal-template"
-import type { CVData, CVTemplate } from "@/lib/cv-types"
-import { useAuth } from "@/contexts/auth-context"
+import { type CVData, getEmptyCV, formatDate } from "@/lib/cv-types"
 import { createClient } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { InfoIcon } from "lucide-react"
+import { toast } from "sonner"
+import jsPDF from "jspdf"
 
-const templates: { id: CVTemplate; name: string; description: string }[] = [
-  { id: "modern", name: "Moderno", description: "Diseño limpio y contemporáneo" },
-  { id: "classic", name: "Clásico", description: "Formato tradicional y profesional" },
-  { id: "creative", name: "Creativo", description: "Diseño innovador con colores" },
-  { id: "minimal", name: "Minimalista", description: "Estilo simple y elegante" },
-]
-
-const initialCVData: CVData = {
-  personalInfo: {
-    fullName: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedIn: "",
-    website: "",
-    summary: "",
-    firstName: "",
-    lastName: "",
-    address: "",
-    city: "",
-  },
-  experience: [],
-  education: [],
-  skills: {
-    technical: [],
-    soft: [],
-    languages: [],
-  },
-  projects: [],
-  certifications: [],
-}
-
-// Initialize Supabase client with fallback for demo mode
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
+// Initialize Supabase client (will work even without env vars)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
+)
 
 export default function CVBuilderPage() {
-  const [cvData, setCVData] = useState<CVData>(initialCVData)
-  const [selectedTemplate, setSelectedTemplate] = useState<CVTemplate>("modern")
-  const [activeTab, setActiveTab] = useState("form")
-  const [isSaving, setIsSaving] = useState(false)
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [progress, setProgress] = useState(0)
-  const { user } = useAuth()
-  const router = useRouter()
-  const [initialData, setInitialData] = useState<Partial<CVData> | undefined>()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isDemoMode, setIsDemoMode] = useState(!supabase)
+  const [cvData, setCvData] = useState<CVData>(getEmptyCV())
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasSupabase, setHasSupabase] = useState(false)
 
   useEffect(() => {
-    loadExistingCV()
+    // Check if Supabase is properly configured
+    const checkSupabase = async () => {
+      try {
+        const { data, error } = await supabase.from("profiles").select("id").limit(1)
+        setHasSupabase(!error)
+      } catch {
+        setHasSupabase(false)
+      }
+    }
+
+    checkSupabase()
+    loadCVData()
   }, [])
 
-  const loadExistingCV = async () => {
-    setIsLoading(true)
-
+  const loadCVData = async () => {
     try {
-      if (supabase) {
-        // Try to load from Supabase
+      // Try to load from Supabase first
+      if (hasSupabase) {
         const {
           data: { user },
         } = await supabase.auth.getUser()
-
         if (user) {
-          const { data: cvData, error } = await supabase
-            .from("cv_data")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("updated_at", { ascending: false })
-            .limit(1)
-            .single()
+          const { data, error } = await supabase.from("cv_data").select("*").eq("user_id", user.id).single()
 
-          if (cvData && !error) {
-            setInitialData(cvData.data)
-            setIsDemoMode(false)
-          } else {
-            // No CV found, start fresh
-            setInitialData(undefined)
+          if (data && !error) {
+            setCvData(data.cv_data)
+            return
           }
-        } else {
-          // Not authenticated, use demo mode
-          setIsDemoMode(true)
-          loadFromLocalStorage()
         }
-      } else {
-        // No Supabase configuration, use demo mode
-        setIsDemoMode(true)
-        loadFromLocalStorage()
+      }
+
+      // Fallback to localStorage
+      const savedData = localStorage.getItem("cv-data")
+      if (savedData) {
+        setCvData(JSON.parse(savedData))
       }
     } catch (error) {
-      console.error("Error loading CV:", error)
-      setIsDemoMode(true)
-      loadFromLocalStorage()
+      console.error("Error loading CV data:", error)
+      // Load from localStorage as fallback
+      const savedData = localStorage.getItem("cv-data")
+      if (savedData) {
+        setCvData(JSON.parse(savedData))
+      }
+    }
+  }
+
+  const saveCVData = async (data: CVData) => {
+    setIsLoading(true)
+    try {
+      // Always save to localStorage first
+      localStorage.setItem("cv-data", JSON.stringify(data))
+      setCvData(data)
+
+      // Try to save to Supabase if available
+      if (hasSupabase) {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        if (user) {
+          const { error } = await supabase.from("cv_data").upsert({
+            user_id: user.id,
+            cv_data: data,
+            updated_at: new Date().toISOString(),
+          })
+
+          if (!error) {
+            toast.success("CV guardado en la nube")
+          } else {
+            toast.success("CV guardado localmente")
+          }
+        } else {
+          toast.success("CV guardado localmente")
+        }
+      } else {
+        toast.success("CV guardado localmente")
+      }
+    } catch (error) {
+      console.error("Error saving CV:", error)
+      toast.success("CV guardado localmente")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const loadFromLocalStorage = () => {
+  const exportToPDF = (data: CVData) => {
     try {
-      const savedCV = localStorage.getItem("cv-builder-data")
-      if (savedCV) {
-        setInitialData(JSON.parse(savedCV))
+      const pdf = new jsPDF()
+      const pageWidth = pdf.internal.pageSize.width
+      const margin = 20
+      let yPosition = margin
+
+      // Helper function to add text with word wrap
+      const addText = (text: string, x: number, y: number, maxWidth: number, fontSize = 10) => {
+        pdf.setFontSize(fontSize)
+        const lines = pdf.splitTextToSize(text, maxWidth)
+        pdf.text(lines, x, y)
+        return y + lines.length * fontSize * 0.4
       }
-    } catch (error) {
-      console.error("Error loading from localStorage:", error)
-    }
-  }
 
-  const handleDataChange = (newData: CVData) => {
-    setCVData(newData)
-  }
+      // Header
+      pdf.setFontSize(20)
+      pdf.setFont("helvetica", "bold")
+      pdf.text(data.personalInfo.fullName, margin, yPosition)
+      yPosition += 10
 
-  const handleExportPDF = () => {
-    toast.success("Exportando CV a PDF...")
-    // PDF export logic would go here
-  }
+      pdf.setFontSize(12)
+      pdf.setFont("helvetica", "normal")
+      pdf.text(data.personalInfo.email, margin, yPosition)
+      yPosition += 6
+      pdf.text(data.personalInfo.phone, margin, yPosition)
+      yPosition += 6
+      pdf.text(`${data.personalInfo.city}, Chile`, margin, yPosition)
+      yPosition += 10
 
-  const renderTemplate = () => {
-    const props = { data: cvData }
-
-    switch (selectedTemplate) {
-      case "modern":
-        return <ModernTemplate {...props} />
-      case "classic":
-        return <ClassicTemplate {...props} />
-      case "creative":
-        return <CreativeTemplate {...props} />
-      case "minimal":
-        return <MinimalTemplate {...props} />
-      default:
-        return <ModernTemplate {...props} />
-    }
-  }
-
-  const getCompletionFeedback = () => {
-    if (progress < 30) {
-      return {
-        icon: AlertCircle,
-        message: "Completa la información básica para comenzar",
-        color: "text-red-500",
+      // Summary
+      if (data.personalInfo.summary) {
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text("RESUMEN PROFESIONAL", margin, yPosition)
+        yPosition += 8
+        pdf.setFont("helvetica", "normal")
+        yPosition = addText(data.personalInfo.summary, margin, yPosition, pageWidth - 2 * margin, 10)
+        yPosition += 10
       }
-    } else if (progress < 70) {
-      return {
-        icon: Clock,
-        message: "Buen progreso, agrega más secciones",
-        color: "text-yellow-500",
-      }
-    } else {
-      return {
-        icon: CheckCircle,
-        message: "¡Excelente! Tu CV está casi completo",
-        color: "text-green-500",
-      }
-    }
-  }
 
-  const feedback = getCompletionFeedback()
+      // Experience
+      if (data.experience.length > 0) {
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text("EXPERIENCIA LABORAL", margin, yPosition)
+        yPosition += 8
 
-  const handleSave = async (cvData: CVData) => {
-    try {
-      if (supabase && !isDemoMode) {
-        // Save to Supabase
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-
-        if (user) {
-          const { error } = await supabase.from("cv_data").upsert({
-            user_id: user.id,
-            data: cvData,
-            updated_at: new Date().toISOString(),
-          })
-
-          if (error) {
-            throw error
+        data.experience.forEach((exp) => {
+          if (yPosition > 250) {
+            pdf.addPage()
+            yPosition = margin
           }
 
-          setLastSaved(new Date())
-          toast.success("CV guardado en la nube exitosamente")
-        } else {
-          throw new Error("Usuario no autenticado")
+          pdf.setFontSize(12)
+          pdf.setFont("helvetica", "bold")
+          pdf.text(exp.position, margin, yPosition)
+          yPosition += 6
+
+          pdf.setFont("helvetica", "normal")
+          pdf.text(exp.company, margin, yPosition)
+          yPosition += 6
+
+          const startDate = formatDate(exp.startDate)
+          const endDate = exp.current ? "Presente" : formatDate(exp.endDate || "")
+          pdf.text(`${startDate} - ${endDate}`, margin, yPosition)
+          yPosition += 6
+
+          if (exp.description) {
+            yPosition = addText(exp.description, margin, yPosition, pageWidth - 2 * margin, 10)
+          }
+          yPosition += 8
+        })
+      }
+
+      // Education
+      if (data.education.length > 0) {
+        if (yPosition > 200) {
+          pdf.addPage()
+          yPosition = margin
         }
-      } else {
-        // Save to localStorage (demo mode)
-        localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
-        setLastSaved(new Date())
-        toast.success("CV guardado localmente")
-      }
-    } catch (error) {
-      console.error("Error saving CV:", error)
 
-      // Fallback to localStorage
-      try {
-        localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
-        setLastSaved(new Date())
-        toast.success("CV guardado localmente como respaldo")
-      } catch (localError) {
-        toast.error("Error al guardar el CV")
-        throw localError
-      }
-    }
-  }
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text("EDUCACIÓN", margin, yPosition)
+        yPosition += 8
 
-  const handlePreview = (cvData: CVData) => {
-    // Open preview in new tab/window
-    const previewData = encodeURIComponent(JSON.stringify(cvData))
-    const previewUrl = `/cv-preview?data=${previewData}`
-    window.open(previewUrl, "_blank")
-  }
+        data.education.forEach((edu) => {
+          pdf.setFontSize(12)
+          pdf.setFont("helvetica", "bold")
+          pdf.text(edu.degree, margin, yPosition)
+          yPosition += 6
 
-  const handleExport = async (cvData: CVData) => {
-    try {
-      // Dynamic import to avoid SSR issues
-      const { jsPDF } = await import("jspdf")
+          pdf.setFont("helvetica", "normal")
+          pdf.text(edu.institution, margin, yPosition)
+          yPosition += 6
 
-      const doc = new jsPDF()
-
-      // Add content to PDF
-      doc.setFontSize(20)
-      doc.text(`${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}`, 20, 30)
-
-      doc.setFontSize(12)
-      doc.text(`Email: ${cvData.personalInfo.email}`, 20, 45)
-      doc.text(`Teléfono: ${cvData.personalInfo.phone}`, 20, 55)
-      doc.text(`Dirección: ${cvData.personalInfo.address}, ${cvData.personalInfo.city}`, 20, 65)
-
-      if (cvData.personalInfo.summary) {
-        doc.setFontSize(14)
-        doc.text("Resumen Profesional", 20, 85)
-        doc.setFontSize(10)
-        const summaryLines = doc.splitTextToSize(cvData.personalInfo.summary, 170)
-        doc.text(summaryLines, 20, 95)
+          const startDate = formatDate(edu.startDate)
+          const endDate = edu.current ? "Presente" : formatDate(edu.endDate || "")
+          pdf.text(`${startDate} - ${endDate}`, margin, yPosition)
+          yPosition += 8
+        })
       }
 
-      // Add more sections as needed...
+      // Skills
+      if (data.skills.length > 0) {
+        if (yPosition > 220) {
+          pdf.addPage()
+          yPosition = margin
+        }
+
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text("HABILIDADES", margin, yPosition)
+        yPosition += 8
+
+        const skillsByCategory = data.skills.reduce(
+          (acc, skill) => {
+            if (!acc[skill.category]) acc[skill.category] = []
+            acc[skill.category].push(skill)
+            return acc
+          },
+          {} as Record<string, typeof data.skills>,
+        )
+
+        Object.entries(skillsByCategory).forEach(([category, skills]) => {
+          pdf.setFontSize(11)
+          pdf.setFont("helvetica", "bold")
+          pdf.text(category + ":", margin, yPosition)
+          yPosition += 5
+
+          pdf.setFont("helvetica", "normal")
+          const skillsText = skills.map((s) => `${s.name} (${s.level})`).join(", ")
+          yPosition = addText(skillsText, margin + 5, yPosition, pageWidth - 2 * margin - 5, 10)
+          yPosition += 5
+        })
+      }
+
+      // Projects
+      if (data.projects.length > 0) {
+        if (yPosition > 200) {
+          pdf.addPage()
+          yPosition = margin
+        }
+
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text("PROYECTOS", margin, yPosition)
+        yPosition += 8
+
+        data.projects.forEach((project) => {
+          if (yPosition > 240) {
+            pdf.addPage()
+            yPosition = margin
+          }
+
+          pdf.setFontSize(12)
+          pdf.setFont("helvetica", "bold")
+          pdf.text(project.name, margin, yPosition)
+          yPosition += 6
+
+          pdf.setFont("helvetica", "normal")
+          yPosition = addText(project.description, margin, yPosition, pageWidth - 2 * margin, 10)
+          yPosition += 8
+        })
+      }
 
       // Save the PDF
-      doc.save(`CV_${cvData.personalInfo.firstName}_${cvData.personalInfo.lastName}.pdf`)
-      toast.success("CV exportado como PDF")
+      pdf.save(`CV_${data.personalInfo.fullName.replace(/\s+/g, "_")}.pdf`)
+      toast.success("PDF exportado exitosamente")
     } catch (error) {
       console.error("Error exporting PDF:", error)
-      toast.error("Error al exportar el PDF")
+      toast.error("Error al exportar PDF")
     }
   }
 
-  useEffect(() => {
-    const autoSave = async () => {
-      if (!user || !cvData.personalInfo.fullName) return
-
-      setIsSaving(true)
-      try {
-        if (supabase && !isDemoMode) {
-          // Save to Supabase
-          const {
-            data: { user },
-          } = await supabase.auth.getUser()
-
-          if (user) {
-            const { error } = await supabase.from("cv_data").upsert({
-              user_id: user.id,
-              data: cvData,
-              updated_at: new Date().toISOString(),
-            })
-
-            if (error) throw error
-
-            setLastSaved(new Date())
-            toast.success("CV guardado automáticamente")
-          } else {
-            throw new Error("Usuario no autenticado")
+  const previewCV = (data: CVData) => {
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CV - ${data.personalInfo.fullName}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
           }
-        } else {
-          // Save to localStorage (demo mode)
-          localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
-          setLastSaved(new Date())
-          toast.success("CV guardado localmente como respaldo")
-        }
-      } catch (error) {
-        console.error("Error saving CV:", error)
-        toast.error("Error al guardar el CV")
-      } finally {
-        setIsSaving(false)
-      }
-    }
-
-    const timer = setTimeout(autoSave, 2000)
-    return () => clearTimeout(timer)
-  }, [cvData, user])
-
-  useEffect(() => {
-    const calculateProgress = () => {
-      let completed = 0
-      const total = 7
-
-      if (cvData.personalInfo.fullName && cvData.personalInfo.email) completed++
-      if (cvData.personalInfo.summary) completed++
-      if (cvData.experience.length > 0) completed++
-      if (cvData.education.length > 0) completed++
-      if (cvData.skills.technical.length > 0 || cvData.skills.soft.length > 0) completed++
-      if (cvData.projects.length > 0) completed++
-      if (cvData.certifications.length > 0) completed++
-
-      setProgress((completed / total) * 100)
-    }
-
-    calculateProgress()
-  }, [cvData])
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-          <p className="mt-4 text-muted-foreground">Cargando constructor de CV...</p>
+          .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+          }
+          .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #2c3e50;
+          }
+          .contact-info {
+            margin: 10px 0;
+            font-size: 1.1em;
+          }
+          .section {
+            margin-bottom: 30px;
+          }
+          .section h2 {
+            color: #2c3e50;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+          }
+          .item {
+            margin-bottom: 20px;
+          }
+          .item h3 {
+            margin: 0 0 5px 0;
+            color: #34495e;
+          }
+          .item .company {
+            font-weight: bold;
+            color: #7f8c8d;
+          }
+          .item .date {
+            font-style: italic;
+            color: #95a5a6;
+            margin-bottom: 10px;
+          }
+          .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+          }
+          .skill-category {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+          }
+          .skill-category h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+          }
+          .skill-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          }
+          .skill-list li {
+            padding: 2px 0;
+            font-size: 0.9em;
+          }
+          @media print {
+            body { padding: 0; }
+            .section { page-break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${data.personalInfo.fullName}</h1>
+          <div class="contact-info">
+            <div>${data.personalInfo.email} | ${data.personalInfo.phone}</div>
+            <div>${data.personalInfo.city}, Chile</div>
+            ${data.personalInfo.linkedin ? `<div><a href="${data.personalInfo.linkedin}">LinkedIn</a></div>` : ""}
+            ${data.personalInfo.github ? `<div><a href="${data.personalInfo.github}">GitHub</a></div>` : ""}
+          </div>
         </div>
-      </div>
-    )
+
+        ${
+          data.personalInfo.summary
+            ? `
+          <div class="section">
+            <h2>Resumen Profesional</h2>
+            <p>${data.personalInfo.summary}</p>
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.experience.length > 0
+            ? `
+          <div class="section">
+            <h2>Experiencia Laboral</h2>
+            ${data.experience
+              .map(
+                (exp) => `
+              <div class="item">
+                <h3>${exp.position}</h3>
+                <div class="company">${exp.company}</div>
+                <div class="date">${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate || "")}</div>
+                ${exp.description ? `<p>${exp.description}</p>` : ""}
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.education.length > 0
+            ? `
+          <div class="section">
+            <h2>Educación</h2>
+            ${data.education
+              .map(
+                (edu) => `
+              <div class="item">
+                <h3>${edu.degree}</h3>
+                <div class="company">${edu.institution}</div>
+                <div class="date">${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate || "")}</div>
+                ${edu.description ? `<p>${edu.description}</p>` : ""}
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.skills.length > 0
+            ? `
+          <div class="section">
+            <h2>Habilidades</h2>
+            <div class="skills-grid">
+              ${Object.entries(
+                data.skills.reduce(
+                  (acc, skill) => {
+                    if (!acc[skill.category]) acc[skill.category] = []
+                    acc[skill.category].push(skill)
+                    return acc
+                  },
+                  {} as Record<string, typeof data.skills>,
+                ),
+              )
+                .map(
+                  ([category, skills]) => `
+                <div class="skill-category">
+                  <h4>${category}</h4>
+                  <ul class="skill-list">
+                    ${skills.map((skill) => `<li>${skill.name} - ${skill.level}</li>`).join("")}
+                  </ul>
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.projects.length > 0
+            ? `
+          <div class="section">
+            <h2>Proyectos</h2>
+            ${data.projects
+              .map(
+                (project) => `
+              <div class="item">
+                <h3>${project.name}</h3>
+                ${project.url ? `<div><a href="${project.url}" target="_blank">Ver Proyecto</a></div>` : ""}
+                ${project.github ? `<div><a href="${project.github}" target="_blank">Ver Código</a></div>` : ""}
+                <p>${project.description}</p>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.certifications.length > 0
+            ? `
+          <div class="section">
+            <h2>Certificaciones</h2>
+            ${data.certifications
+              .map(
+                (cert) => `
+              <div class="item">
+                <h3>${cert.name}</h3>
+                <div class="company">${cert.issuer}</div>
+                <div class="date">${formatDate(cert.date)}</div>
+                ${cert.description ? `<p>${cert.description}</p>` : ""}
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          data.languages.length > 0
+            ? `
+          <div class="section">
+            <h2>Idiomas</h2>
+            ${data.languages
+              .map(
+                (lang) => `
+              <div class="item">
+                <h3>${lang.name} - ${lang.level}</h3>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+            : ""
+        }
+      </body>
+      </html>
+    `
+
+    const newWindow = window.open("", "_blank")
+    if (newWindow) {
+      newWindow.document.write(htmlContent)
+      newWindow.document.close()
+    }
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <FileText className="h-8 w-8 text-blue-600" />
-            Constructor de CV
-          </h1>
-          <p className="text-muted-foreground">Crea tu currículum profesional con nuestras plantillas optimizadas</p>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          {lastSaved && (
-            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-              <Save className="h-4 w-4" />
-              <span>Guardado {lastSaved.toLocaleTimeString()}</span>
-            </div>
-          )}
-          {isSaving && (
-            <Badge variant="secondary" className="animate-pulse">
-              Guardando...
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {isDemoMode && (
-        <Alert className="mb-6">
-          <InfoIcon className="h-4 w-4" />
-          <AlertDescription>
-            Estás usando el modo demo. Los datos se guardarán localmente en tu navegador. Para guardar en la nube,
-            inicia sesión con tu cuenta.
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {/* Progress Card */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <feedback.icon className={`h-5 w-5 ${feedback.color}`} />
-                <span className="font-medium">Progreso del CV</span>
-              </div>
-              <span className="text-sm font-medium">{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-            <p className={`text-sm ${feedback.color}`}>{feedback.message}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="form" className="flex items-center space-x-2">
-            <User className="h-4 w-4" />
-            <span>Información</span>
-          </TabsTrigger>
-          <TabsTrigger value="template" className="flex items-center space-x-2">
-            <Palette className="h-4 w-4" />
-            <span>Plantilla</span>
-          </TabsTrigger>
-          <TabsTrigger value="preview" className="flex items-center space-x-2">
-            <Eye className="h-4 w-4" />
-            <span>Vista Previa</span>
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Form Tab */}
-        <TabsContent value="form" className="space-y-6">
-          <CVForm
-            data={cvData}
-            onChange={handleDataChange}
-            onSave={handleSave}
-            onPreview={handlePreview}
-            onExport={handleExport}
-          />
-        </TabsContent>
-
-        {/* Template Selection Tab */}
-        <TabsContent value="template" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Palette className="h-5 w-5" />
-                <span>Selecciona una Plantilla</span>
-              </CardTitle>
-              <CardDescription>Elige el diseño que mejor represente tu perfil profesional</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {templates.map((template) => (
-                  <Card
-                    key={template.id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
-                      selectedTemplate === template.id ? "ring-2 ring-blue-500 shadow-md" : ""
-                    }`}
-                    onClick={() => setSelectedTemplate(template.id)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <div className="h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                        <FileText className="h-12 w-12 text-gray-400" />
-                      </div>
-                      <h3 className="font-semibold">{template.name}</h3>
-                      <p className="text-sm text-muted-foreground">{template.description}</p>
-                      {selectedTemplate === template.id && <Badge className="mt-2">Seleccionada</Badge>}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Preview Tab */}
-        <TabsContent value="preview" className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Vista Previa</h2>
-            <div className="flex items-center space-x-2">
-              <Select value={selectedTemplate} onValueChange={(value: CVTemplate) => setSelectedTemplate(value)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {templates.map((template) => (
-                    <SelectItem key={template.id} value={template.id}>
-                      {template.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button onClick={() => handleExport(cvData)} className="flex items-center space-x-2">
-                <Download className="h-4 w-4" />
-                <span>Exportar PDF</span>
-              </Button>
-            </div>
-          </div>
-
-          <Card>
-            <CardContent className="p-8">
-              <div className="max-w-4xl mx-auto bg-white shadow-lg">{renderTemplate()}</div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+    <div className="min-h-screen bg-background">
+      <CVForm
+        initialData={cvData}
+        onSave={saveCVData}
+        onExportPDF={exportToPDF}
+        onPreview={previewCV}
+        isLoading={isLoading}
+      />
     </div>
   )
 }

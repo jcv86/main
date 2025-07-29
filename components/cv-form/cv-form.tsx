@@ -4,47 +4,49 @@ import { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
 import {
   Plus,
-  Trash2,
+  Minus,
   ChevronDown,
   ChevronUp,
   User,
   GraduationCap,
   Briefcase,
   Code,
-  Save,
-  Eye,
-  Download,
+  FolderOpen,
+  Award,
+  Languages,
 } from "lucide-react"
 import {
   type CVData,
-  cvSchema,
-  chileanCities,
-  chileanUniversities,
-  commonTechnicalSkills,
-  calculateCompletionPercentage,
+  CVDataSchema,
+  getCompletionPercentage,
+  CHILEAN_CITIES,
+  CHILEAN_UNIVERSITIES,
+  SKILL_CATEGORIES,
+  SKILL_LEVELS,
+  LANGUAGE_LEVELS,
+  getEmptyCV,
 } from "@/lib/cv-types"
 
 interface CVFormProps {
   initialData?: Partial<CVData>
-  onSave?: (data: CVData) => Promise<void>
-  onPreview?: (data: CVData) => void
-  onExport?: (data: CVData) => void
+  onSave: (data: CVData) => void
+  onExportPDF: (data: CVData) => void
+  onPreview: (data: CVData) => void
+  isLoading?: boolean
 }
 
-export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps) {
+export function CVForm({ initialData, onSave, onExportPDF, onPreview, isLoading }: CVFormProps) {
   const [openSections, setOpenSections] = useState({
     personal: true,
     education: false,
@@ -52,164 +54,146 @@ export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps
     skills: false,
     projects: false,
     certifications: false,
+    languages: false,
   })
-  const [isSaving, setIsSaving] = useState(false)
-  const [completionPercentage, setCompletionPercentage] = useState(0)
 
   const form = useForm<CVData>({
-    resolver: zodResolver(cvSchema),
-    defaultValues: {
-      personalInfo: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        city: "",
-        country: "Chile",
-        linkedIn: "",
-        website: "",
-        summary: "",
-      },
-      education: [],
-      experience: [],
-      skills: {
-        technical: [],
-        soft: [],
-        languages: [],
-      },
-      projects: [],
-      certifications: [],
-      ...initialData,
-    },
+    resolver: zodResolver(CVDataSchema),
+    defaultValues: initialData || getEmptyCV(),
+    mode: "onChange",
   })
 
   const {
-    fields: educationFields,
-    append: appendEducation,
-    remove: removeEducation,
-  } = useFieldArray({
-    control: form.control,
-    name: "education",
-  })
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isValid },
+  } = form
 
-  const {
-    fields: experienceFields,
-    append: appendExperience,
-    remove: removeExperience,
-  } = useFieldArray({
-    control: form.control,
-    name: "experience",
-  })
+  const watchedData = watch()
+  const completionPercentage = getCompletionPercentage(watchedData)
 
-  const {
-    fields: technicalSkillsFields,
-    append: appendTechnicalSkill,
-    remove: removeTechnicalSkill,
-  } = useFieldArray({
-    control: form.control,
-    name: "skills.technical",
-  })
+  // Field arrays
+  const educationFields = useFieldArray({ control, name: "education" })
+  const experienceFields = useFieldArray({ control, name: "experience" })
+  const skillsFields = useFieldArray({ control, name: "skills" })
+  const projectsFields = useFieldArray({ control, name: "projects" })
+  const certificationsFields = useFieldArray({ control, name: "certifications" })
+  const languagesFields = useFieldArray({ control, name: "languages" })
 
-  const {
-    fields: languageFields,
-    append: appendLanguage,
-    remove: removeLanguage,
-  } = useFieldArray({
-    control: form.control,
-    name: "skills.languages",
-  })
-
-  const {
-    fields: projectFields,
-    append: appendProject,
-    remove: removeProject,
-  } = useFieldArray({
-    control: form.control,
-    name: "projects",
-  })
-
-  const {
-    fields: certificationFields,
-    append: appendCertification,
-    remove: removeCertification,
-  } = useFieldArray({
-    control: form.control,
-    name: "certifications",
-  })
-
-  // Watch form data for completion percentage
-  const watchedData = form.watch()
-
+  // Auto-save effect
   useEffect(() => {
-    const percentage = calculateCompletionPercentage(watchedData)
-    setCompletionPercentage(percentage)
-  }, [watchedData])
+    const subscription = watch((data) => {
+      if (isValid) {
+        onSave(data as CVData)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, onSave, isValid])
 
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }))
   }
 
-  const handleSave = async (data: CVData) => {
-    if (!onSave) return
-
-    setIsSaving(true)
-    try {
-      await onSave(data)
-      toast.success("CV guardado exitosamente")
-    } catch (error) {
-      toast.error("Error al guardar el CV")
-      console.error("Save error:", error)
-    } finally {
-      setIsSaving(false)
-    }
+  const addEducation = () => {
+    educationFields.append({
+      id: Date.now().toString(),
+      institution: "",
+      degree: "",
+      field: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      gpa: "",
+      description: "",
+    })
+    setOpenSections((prev) => ({ ...prev, education: true }))
   }
 
-  const handlePreview = () => {
-    const data = form.getValues()
-    onPreview?.(data)
+  const addExperience = () => {
+    experienceFields.append({
+      id: Date.now().toString(),
+      company: "",
+      position: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      description: "",
+      achievements: [],
+    })
+    setOpenSections((prev) => ({ ...prev, experience: true }))
   }
 
-  const handleExport = () => {
-    const data = form.getValues()
-    onExport?.(data)
+  const addSkill = () => {
+    skillsFields.append({
+      id: Date.now().toString(),
+      name: "",
+      category: "Programación",
+      level: "Básico",
+    })
+    setOpenSections((prev) => ({ ...prev, skills: true }))
+  }
+
+  const addProject = () => {
+    projectsFields.append({
+      id: Date.now().toString(),
+      name: "",
+      description: "",
+      technologies: [],
+      url: "",
+      github: "",
+      startDate: "",
+      endDate: "",
+    })
+    setOpenSections((prev) => ({ ...prev, projects: true }))
+  }
+
+  const addCertification = () => {
+    certificationsFields.append({
+      id: Date.now().toString(),
+      name: "",
+      issuer: "",
+      date: "",
+      url: "",
+      description: "",
+    })
+    setOpenSections((prev) => ({ ...prev, certifications: true }))
+  }
+
+  const addLanguage = () => {
+    languagesFields.append({
+      id: Date.now().toString(),
+      name: "",
+      level: "Básico",
+    })
+    setOpenSections((prev) => ({ ...prev, languages: true }))
+  }
+
+  const onSubmit = (data: CVData) => {
+    onSave(data)
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Header with progress */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Constructor de CV</h1>
-            <p className="text-muted-foreground">Crea tu currículum profesional paso a paso</p>
+      {/* Progress Header */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Constructor de CV</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">Completa tu información profesional</p>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-primary">{completionPercentage}%</div>
+              <p className="text-xs text-muted-foreground">Completado</p>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handlePreview}>
-              <Eye className="w-4 h-4 mr-2" />
-              Vista Previa
-            </Button>
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="w-4 h-4 mr-2" />
-              Exportar PDF
-            </Button>
-            <Button onClick={form.handleSubmit(handleSave)} disabled={isSaving}>
-              <Save className="w-4 h-4 mr-2" />
-              {isSaving ? "Guardando..." : "Guardar"}
-            </Button>
-          </div>
-        </div>
+          <Progress value={completionPercentage} className="mt-4" />
+        </CardHeader>
+      </Card>
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span>Progreso del CV</span>
-            <span>{completionPercentage}% completado</span>
-          </div>
-          <Progress value={completionPercentage} className="w-full" />
-        </div>
-      </div>
-
-      <form onSubmit={form.handleSubmit(handleSave)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Personal Information */}
         <Card>
           <Collapsible open={openSections.personal} onOpenChange={() => toggleSection("personal")}>
@@ -217,122 +201,105 @@ export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps
               <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <User className="w-5 h-5" />
+                    <User className="h-5 w-5" />
                     <CardTitle>Información Personal</CardTitle>
+                    <Badge variant="secondary">Requerido</Badge>
                   </div>
-                  {openSections.personal ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {openSections.personal ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
-                <CardDescription>Información básica y de contacto</CardDescription>
               </CardHeader>
             </CollapsibleTrigger>
             <CollapsibleContent>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">Nombre *</Label>
-                    <Input id="firstName" {...form.register("personalInfo.firstName")} placeholder="Tu nombre" />
-                    {form.formState.errors.personalInfo?.firstName && (
-                      <p className="text-sm text-destructive">{form.formState.errors.personalInfo.firstName.message}</p>
+                  <div>
+                    <Label htmlFor="fullName">Nombre Completo *</Label>
+                    <Input
+                      id="fullName"
+                      {...form.register("personalInfo.fullName")}
+                      placeholder="Juan Pérez González"
+                    />
+                    {errors.personalInfo?.fullName && (
+                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.fullName.message}</p>
                     )}
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Apellido *</Label>
-                    <Input id="lastName" {...form.register("personalInfo.lastName")} placeholder="Tu apellido" />
-                    {form.formState.errors.personalInfo?.lastName && (
-                      <p className="text-sm text-destructive">{form.formState.errors.personalInfo.lastName.message}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="email">Email *</Label>
                     <Input
                       id="email"
                       type="email"
                       {...form.register("personalInfo.email")}
-                      placeholder="tu@email.com"
+                      placeholder="juan@ejemplo.com"
                     />
-                    {form.formState.errors.personalInfo?.email && (
-                      <p className="text-sm text-destructive">{form.formState.errors.personalInfo.email.message}</p>
+                    {errors.personalInfo?.email && (
+                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.email.message}</p>
                     )}
                   </div>
-
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="phone">Teléfono *</Label>
                     <Input id="phone" {...form.register("personalInfo.phone")} placeholder="+56 9 1234 5678" />
-                    {form.formState.errors.personalInfo?.phone && (
-                      <p className="text-sm text-destructive">{form.formState.errors.personalInfo.phone.message}</p>
+                    {errors.personalInfo?.phone && (
+                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.phone.message}</p>
                     )}
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="address">Dirección *</Label>
-                  <Input id="address" {...form.register("personalInfo.address")} placeholder="Tu dirección completa" />
-                  {form.formState.errors.personalInfo?.address && (
-                    <p className="text-sm text-destructive">{form.formState.errors.personalInfo.address.message}</p>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="city">Ciudad *</Label>
-                    <Select onValueChange={(value) => form.setValue("personalInfo.city", value)}>
+                    <Select
+                      value={watchedData.personalInfo?.city}
+                      onValueChange={(value) => setValue("personalInfo.city", value as any)}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecciona tu ciudad" />
+                        <SelectValue placeholder="Selecciona una ciudad" />
                       </SelectTrigger>
                       <SelectContent>
-                        {chileanCities.map((city) => (
+                        {CHILEAN_CITIES.map((city) => (
                           <SelectItem key={city} value={city}>
                             {city}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {form.formState.errors.personalInfo?.city && (
-                      <p className="text-sm text-destructive">{form.formState.errors.personalInfo.city.message}</p>
-                    )}
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="country">País</Label>
-                    <Input id="country" {...form.register("personalInfo.country")} disabled />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="linkedIn">LinkedIn</Label>
+                  <div>
+                    <Label htmlFor="address">Dirección</Label>
                     <Input
-                      id="linkedIn"
-                      {...form.register("personalInfo.linkedIn")}
+                      id="address"
+                      {...form.register("personalInfo.address")}
+                      placeholder="Av. Providencia 123, Santiago"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="linkedin">LinkedIn</Label>
+                    <Input
+                      id="linkedin"
+                      {...form.register("personalInfo.linkedin")}
                       placeholder="https://linkedin.com/in/tu-perfil"
                     />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="website">Sitio Web</Label>
+                  <div>
+                    <Label htmlFor="github">GitHub</Label>
                     <Input
-                      id="website"
-                      {...form.register("personalInfo.website")}
-                      placeholder="https://tu-sitio-web.com"
+                      id="github"
+                      {...form.register("personalInfo.github")}
+                      placeholder="https://github.com/tu-usuario"
                     />
                   </div>
+                  <div>
+                    <Label htmlFor="website">Sitio Web</Label>
+                    <Input id="website" {...form.register("personalInfo.website")} placeholder="https://tu-sitio.com" />
+                  </div>
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="summary">Resumen Profesional *</Label>
+                <div>
+                  <Label htmlFor="summary">Resumen Profesional</Label>
                   <Textarea
                     id="summary"
                     {...form.register("personalInfo.summary")}
-                    placeholder="Describe brevemente tu experiencia, habilidades y objetivos profesionales..."
+                    placeholder="Breve descripción de tu perfil profesional..."
                     rows={4}
                   />
-                  {form.formState.errors.personalInfo?.summary && (
-                    <p className="text-sm text-destructive">{form.formState.errors.personalInfo.summary.message}</p>
-                  )}
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {watchedData.personalInfo?.summary?.length || 0}/500 caracteres
+                  </p>
                 </div>
               </CardContent>
             </CollapsibleContent>
@@ -346,104 +313,95 @@ export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps
               <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5" />
+                    <GraduationCap className="h-5 w-5" />
                     <CardTitle>Educación</CardTitle>
-                    {educationFields.length > 0 && <Badge variant="secondary">{educationFields.length}</Badge>}
+                    <Badge variant="outline">{educationFields.fields.length} entradas</Badge>
                   </div>
-                  {openSections.education ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {openSections.education ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
-                <CardDescription>Tu formación académica</CardDescription>
               </CardHeader>
             </CollapsibleTrigger>
             <CollapsibleContent>
               <CardContent className="space-y-4">
-                {educationFields.map((field, index) => (
-                  <div key={field.id} className="p-4 border rounded-lg space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-medium">Educación {index + 1}</h4>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeEducation(index)}>
-                        <Trash2 className="w-4 h-4" />
+                {educationFields.fields.map((field, index) => (
+                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Educación #{index + 1}</h4>
+                      <Button type="button" variant="outline" size="sm" onClick={() => educationFields.remove(index)}>
+                        <Minus className="h-4 w-4" />
                       </Button>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
+                      <div>
                         <Label>Institución *</Label>
-                        <Select onValueChange={(value) => form.setValue(`education.${index}.institution`, value)}>
+                        <Select
+                          value={watchedData.education?.[index]?.institution}
+                          onValueChange={(value) => setValue(`education.${index}.institution`, value)}
+                        >
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecciona institución" />
+                            <SelectValue placeholder="Selecciona una institución" />
                           </SelectTrigger>
                           <SelectContent>
-                            {chileanUniversities.map((uni) => (
+                            {CHILEAN_UNIVERSITIES.map((uni) => (
                               <SelectItem key={uni} value={uni}>
                                 {uni}
                               </SelectItem>
                             ))}
+                            <SelectItem value="Otra">Otra institución</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
-
-                      <div className="space-y-2">
+                      <div>
                         <Label>Título *</Label>
                         <Input
                           {...form.register(`education.${index}.degree`)}
-                          placeholder="Ej: Ingeniería en Informática"
+                          placeholder="Ingeniería en Informática"
                         />
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Campo de Estudio *</Label>
-                      <Input
-                        {...form.register(`education.${index}.field`)}
-                        placeholder="Ej: Ciencias de la Computación"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
+                      <div>
+                        <Label>Campo de Estudio *</Label>
+                        <Input
+                          {...form.register(`education.${index}.field`)}
+                          placeholder="Ciencias de la Computación"
+                        />
+                      </div>
+                      <div>
+                        <Label>Promedio (Opcional)</Label>
+                        <Input {...form.register(`education.${index}.gpa`)} placeholder="6.5" />
+                      </div>
+                      <div>
                         <Label>Fecha de Inicio *</Label>
                         <Input type="month" {...form.register(`education.${index}.startDate`)} />
                       </div>
-
-                      <div className="space-y-2">
+                      <div>
                         <Label>Fecha de Fin</Label>
                         <Input
                           type="month"
                           {...form.register(`education.${index}.endDate`)}
-                          disabled={form.watch(`education.${index}.current`)}
+                          disabled={watchedData.education?.[index]?.current}
                         />
                       </div>
                     </div>
-
                     <div className="flex items-center space-x-2">
                       <Checkbox
-                        id={`education-current-${index}`}
-                        checked={form.watch(`education.${index}.current`)}
-                        onCheckedChange={(checked) => form.setValue(`education.${index}.current`, checked as boolean)}
+                        id={`current-education-${index}`}
+                        checked={watchedData.education?.[index]?.current}
+                        onCheckedChange={(checked) => setValue(`education.${index}.current`, !!checked)}
                       />
-                      <Label htmlFor={`education-current-${index}`}>Actualmente estudiando</Label>
+                      <Label htmlFor={`current-education-${index}`}>Actualmente estudiando</Label>
+                    </div>
+                    <div>
+                      <Label>Descripción</Label>
+                      <Textarea
+                        {...form.register(`education.${index}.description`)}
+                        placeholder="Descripción adicional, logros académicos..."
+                        rows={3}
+                      />
                     </div>
                   </div>
                 ))}
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() =>
-                    appendEducation({
-                      id: Math.random().toString(36).substr(2, 9),
-                      institution: "",
-                      degree: "",
-                      field: "",
-                      startDate: "",
-                      endDate: "",
-                      current: false,
-                    })
-                  }
-                  className="w-full"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
+                <Button type="button" variant="outline" onClick={addEducation} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
                   Agregar Educación
                 </Button>
               </CardContent>
@@ -458,98 +416,69 @@ export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps
               <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Briefcase className="w-5 h-5" />
+                    <Briefcase className="h-5 w-5" />
                     <CardTitle>Experiencia Laboral</CardTitle>
-                    {experienceFields.length > 0 && <Badge variant="secondary">{experienceFields.length}</Badge>}
+                    <Badge variant="outline">{experienceFields.fields.length} entradas</Badge>
                   </div>
-                  {openSections.experience ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {openSections.experience ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
-                <CardDescription>Tu experiencia profesional</CardDescription>
               </CardHeader>
             </CollapsibleTrigger>
             <CollapsibleContent>
               <CardContent className="space-y-4">
-                {experienceFields.map((field, index) => (
-                  <div key={field.id} className="p-4 border rounded-lg space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-medium">Experiencia {index + 1}</h4>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeExperience(index)}>
-                        <Trash2 className="w-4 h-4" />
+                {experienceFields.fields.map((field, index) => (
+                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Experiencia #{index + 1}</h4>
+                      <Button type="button" variant="outline" size="sm" onClick={() => experienceFields.remove(index)}>
+                        <Minus className="h-4 w-4" />
                       </Button>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
+                      <div>
                         <Label>Empresa *</Label>
                         <Input {...form.register(`experience.${index}.company`)} placeholder="Nombre de la empresa" />
                       </div>
-
-                      <div className="space-y-2">
+                      <div>
                         <Label>Cargo *</Label>
-                        <Input {...form.register(`experience.${index}.position`)} placeholder="Tu cargo o posición" />
+                        <Input
+                          {...form.register(`experience.${index}.position`)}
+                          placeholder="Desarrollador Full Stack"
+                        />
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Ubicación *</Label>
-                      <Input {...form.register(`experience.${index}.location`)} placeholder="Ciudad, País" />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
+                      <div>
                         <Label>Fecha de Inicio *</Label>
                         <Input type="month" {...form.register(`experience.${index}.startDate`)} />
                       </div>
-
-                      <div className="space-y-2">
+                      <div>
                         <Label>Fecha de Fin</Label>
                         <Input
                           type="month"
                           {...form.register(`experience.${index}.endDate`)}
-                          disabled={form.watch(`experience.${index}.current`)}
+                          disabled={watchedData.experience?.[index]?.current}
                         />
                       </div>
                     </div>
-
                     <div className="flex items-center space-x-2">
                       <Checkbox
-                        id={`experience-current-${index}`}
-                        checked={form.watch(`experience.${index}.current`)}
-                        onCheckedChange={(checked) => form.setValue(`experience.${index}.current`, checked as boolean)}
+                        id={`current-job-${index}`}
+                        checked={watchedData.experience?.[index]?.current}
+                        onCheckedChange={(checked) => setValue(`experience.${index}.current`, !!checked)}
                       />
-                      <Label htmlFor={`experience-current-${index}`}>Trabajo actual</Label>
+                      <Label htmlFor={`current-job-${index}`}>Trabajo actual</Label>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label>Descripción *</Label>
+                    <div>
+                      <Label>Descripción</Label>
                       <Textarea
                         {...form.register(`experience.${index}.description`)}
-                        placeholder="Describe tus responsabilidades y logros en este puesto..."
-                        rows={3}
+                        placeholder="Describe tus responsabilidades y logros..."
+                        rows={4}
                       />
                     </div>
                   </div>
                 ))}
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() =>
-                    appendExperience({
-                      id: Math.random().toString(36).substr(2, 9),
-                      company: "",
-                      position: "",
-                      location: "",
-                      startDate: "",
-                      endDate: "",
-                      current: false,
-                      description: "",
-                      achievements: [],
-                    })
-                  }
-                  className="w-full"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
+                <Button type="button" variant="outline" onClick={addExperience} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
                   Agregar Experiencia
                 </Button>
               </CardContent>
@@ -564,124 +493,307 @@ export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps
               <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Code className="w-5 h-5" />
+                    <Code className="h-5 w-5" />
                     <CardTitle>Habilidades</CardTitle>
+                    <Badge variant="outline">{skillsFields.fields.length} habilidades</Badge>
                   </div>
-                  {openSections.skills ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {openSections.skills ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
-                <CardDescription>Tus habilidades técnicas y blandas</CardDescription>
               </CardHeader>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <CardContent className="space-y-6">
-                {/* Technical Skills */}
-                <div className="space-y-4">
-                  <h4 className="font-medium">Habilidades Técnicas</h4>
-                  {technicalSkillsFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2 items-end">
-                      <div className="flex-1 space-y-2">
-                        <Label>Habilidad</Label>
-                        <Select onValueChange={(value) => form.setValue(`skills.technical.${index}.name`, value)}>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {skillsFields.fields.map((field, index) => (
+                    <div key={field.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium">Habilidad #{index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => skillsFields.remove(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div>
+                        <Label>Nombre *</Label>
+                        <Input {...form.register(`skills.${index}.name`)} placeholder="JavaScript, React, etc." />
+                      </div>
+                      <div>
+                        <Label>Categoría</Label>
+                        <Select
+                          value={watchedData.skills?.[index]?.category}
+                          onValueChange={(value) => setValue(`skills.${index}.category`, value as any)}
+                        >
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecciona habilidad" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {commonTechnicalSkills.map((skill) => (
-                              <SelectItem key={skill} value={skill}>
-                                {skill}
+                            {SKILL_CATEGORIES.map((category) => (
+                              <SelectItem key={category} value={category}>
+                                {category}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="w-32 space-y-2">
+                      <div>
                         <Label>Nivel</Label>
                         <Select
-                          onValueChange={(value) => form.setValue(`skills.technical.${index}.level`, value as any)}
+                          value={watchedData.skills?.[index]?.level}
+                          onValueChange={(value) => setValue(`skills.${index}.level`, value as any)}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Nivel" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Básico">Básico</SelectItem>
-                            <SelectItem value="Intermedio">Intermedio</SelectItem>
-                            <SelectItem value="Avanzado">Avanzado</SelectItem>
-                            <SelectItem value="Experto">Experto</SelectItem>
+                            {SKILL_LEVELS.map((level) => (
+                              <SelectItem key={level} value={level}>
+                                {level}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeTechnicalSkill(index)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
                     </div>
                   ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => appendTechnicalSkill({ name: "", level: "Básico" })}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Agregar Habilidad Técnica
-                  </Button>
                 </div>
+                <Button type="button" variant="outline" onClick={addSkill} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar Habilidad
+                </Button>
+              </CardContent>
+            </CollapsibleContent>
+          </Collapsible>
+        </Card>
 
-                <Separator />
-
-                {/* Languages */}
-                <div className="space-y-4">
-                  <h4 className="font-medium">Idiomas</h4>
-                  {languageFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2 items-end">
-                      <div className="flex-1 space-y-2">
-                        <Label>Idioma</Label>
-                        <Input {...form.register(`skills.languages.${index}.name`)} placeholder="Ej: Inglés" />
+        {/* Projects */}
+        <Card>
+          <Collapsible open={openSections.projects} onOpenChange={() => toggleSection("projects")}>
+            <CollapsibleTrigger asChild>
+              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FolderOpen className="h-5 w-5" />
+                    <CardTitle>Proyectos</CardTitle>
+                    <Badge variant="outline">{projectsFields.fields.length} proyectos</Badge>
+                  </div>
+                  {openSections.projects ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </div>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="space-y-4">
+                {projectsFields.fields.map((field, index) => (
+                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Proyecto #{index + 1}</h4>
+                      <Button type="button" variant="outline" size="sm" onClick={() => projectsFields.remove(index)}>
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Nombre del Proyecto *</Label>
+                        <Input {...form.register(`projects.${index}.name`)} placeholder="Mi Aplicación Web" />
                       </div>
-                      <div className="w-32 space-y-2">
+                      <div>
+                        <Label>URL del Proyecto</Label>
+                        <Input {...form.register(`projects.${index}.url`)} placeholder="https://mi-proyecto.com" />
+                      </div>
+                      <div>
+                        <Label>GitHub</Label>
+                        <Input
+                          {...form.register(`projects.${index}.github`)}
+                          placeholder="https://github.com/usuario/proyecto"
+                        />
+                      </div>
+                      <div>
+                        <Label>Fecha de Inicio</Label>
+                        <Input type="month" {...form.register(`projects.${index}.startDate`)} />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Descripción *</Label>
+                      <Textarea
+                        {...form.register(`projects.${index}.description`)}
+                        placeholder="Describe el proyecto, su propósito y tu rol..."
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addProject} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar Proyecto
+                </Button>
+              </CardContent>
+            </CollapsibleContent>
+          </Collapsible>
+        </Card>
+
+        {/* Certifications */}
+        <Card>
+          <Collapsible open={openSections.certifications} onOpenChange={() => toggleSection("certifications")}>
+            <CollapsibleTrigger asChild>
+              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Award className="h-5 w-5" />
+                    <CardTitle>Certificaciones</CardTitle>
+                    <Badge variant="outline">{certificationsFields.fields.length} certificaciones</Badge>
+                  </div>
+                  {openSections.certifications ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </div>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="space-y-4">
+                {certificationsFields.fields.map((field, index) => (
+                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Certificación #{index + 1}</h4>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => certificationsFields.remove(index)}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Nombre *</Label>
+                        <Input
+                          {...form.register(`certifications.${index}.name`)}
+                          placeholder="AWS Certified Developer"
+                        />
+                      </div>
+                      <div>
+                        <Label>Emisor *</Label>
+                        <Input {...form.register(`certifications.${index}.issuer`)} placeholder="Amazon Web Services" />
+                      </div>
+                      <div>
+                        <Label>Fecha *</Label>
+                        <Input type="month" {...form.register(`certifications.${index}.date`)} />
+                      </div>
+                      <div>
+                        <Label>URL de Verificación</Label>
+                        <Input
+                          {...form.register(`certifications.${index}.url`)}
+                          placeholder="https://certificado.com/verify"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Descripción</Label>
+                      <Textarea
+                        {...form.register(`certifications.${index}.description`)}
+                        placeholder="Descripción de la certificación..."
+                        rows={2}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addCertification} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar Certificación
+                </Button>
+              </CardContent>
+            </CollapsibleContent>
+          </Collapsible>
+        </Card>
+
+        {/* Languages */}
+        <Card>
+          <Collapsible open={openSections.languages} onOpenChange={() => toggleSection("languages")}>
+            <CollapsibleTrigger asChild>
+              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Languages className="h-5 w-5" />
+                    <CardTitle>Idiomas</CardTitle>
+                    <Badge variant="outline">{languagesFields.fields.length} idiomas</Badge>
+                  </div>
+                  {openSections.languages ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </div>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {languagesFields.fields.map((field, index) => (
+                    <div key={field.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium">Idioma #{index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => languagesFields.remove(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div>
+                        <Label>Idioma *</Label>
+                        <Input {...form.register(`languages.${index}.name`)} placeholder="Inglés, Francés, etc." />
+                      </div>
+                      <div>
                         <Label>Nivel</Label>
                         <Select
-                          onValueChange={(value) => form.setValue(`skills.languages.${index}.level`, value as any)}
+                          value={watchedData.languages?.[index]?.level}
+                          onValueChange={(value) => setValue(`languages.${index}.level`, value as any)}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Nivel" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Básico">Básico</SelectItem>
-                            <SelectItem value="Intermedio">Intermedio</SelectItem>
-                            <SelectItem value="Avanzado">Avanzado</SelectItem>
-                            <SelectItem value="Nativo">Nativo</SelectItem>
+                            {LANGUAGE_LEVELS.map((level) => (
+                              <SelectItem key={level} value={level}>
+                                {level}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeLanguage(index)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
                     </div>
                   ))}
-                  <Button type="button" variant="outline" onClick={() => appendLanguage({ name: "", level: "Básico" })}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Agregar Idioma
-                  </Button>
                 </div>
+                <Button type="button" variant="outline" onClick={addLanguage} className="w-full bg-transparent">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar Idioma
+                </Button>
               </CardContent>
             </CollapsibleContent>
           </Collapsible>
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2 pt-6">
-          <Button type="button" variant="outline" onClick={handlePreview}>
-            <Eye className="w-4 h-4 mr-2" />
-            Vista Previa
-          </Button>
-          <Button type="button" variant="outline" onClick={handleExport}>
-            <Download className="w-4 h-4 mr-2" />
-            Exportar PDF
-          </Button>
-          <Button type="submit" disabled={isSaving}>
-            <Save className="w-4 h-4 mr-2" />
-            {isSaving ? "Guardando..." : "Guardar CV"}
-          </Button>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onPreview(watchedData as CVData)}
+                disabled={!isValid || isLoading}
+                className="flex-1"
+              >
+                Vista Previa
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onExportPDF(watchedData as CVData)}
+                disabled={!isValid || isLoading}
+                className="flex-1"
+              >
+                Exportar PDF
+              </Button>
+              <Button type="submit" disabled={!isValid || isLoading} className="flex-1">
+                {isLoading ? "Guardando..." : "Guardar CV"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </form>
     </div>
   )
