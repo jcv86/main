@@ -77,7 +77,7 @@ export const supabase = hasSupabaseCredentials
   ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!)
   : (createMockClient() as any)
 
-// Export createClient function - this was missing!
+// Export createClient function
 export function createClient() {
   return hasSupabaseCredentials ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!) : (createMockClient() as any)
 }
@@ -158,24 +158,30 @@ export interface Database {
         Row: {
           id: string
           user_id: string
-          data: any
-          template_id: string
+          title: string
+          template: string
+          content: any
+          is_active: boolean
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           user_id: string
-          data: any
-          template_id: string
+          title: string
+          template: string
+          content: any
+          is_active?: boolean
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           user_id?: string
-          data?: any
-          template_id?: string
+          title?: string
+          template?: string
+          content?: any
+          is_active?: boolean
           created_at?: string
           updated_at?: string
         }

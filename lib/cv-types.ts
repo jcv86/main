@@ -1,110 +1,7 @@
 import { z } from "zod"
 
-// Validation schemas
-export const personalInfoSchema = z.object({
-  fullName: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(8, "Teléfono debe tener al menos 8 dígitos"),
-  location: z.string().min(2, "Ubicación requerida"),
-  linkedIn: z.string().url("URL de LinkedIn inválida").optional().or(z.literal("")),
-  website: z.string().url("URL del sitio web inválida").optional().or(z.literal("")),
-  summary: z
-    .string()
-    .min(50, "El resumen debe tener al menos 50 caracteres")
-    .max(500, "El resumen no puede exceder 500 caracteres"),
-})
-
-// Types
-export interface PersonalInfo {
-  fullName: string
-  email: string
-  phone: string
-  location: string
-  linkedIn?: string
-  website?: string
-  summary: string
-}
-
-export interface Experience {
-  id: string
-  company: string
-  position: string
-  startDate: string
-  endDate: string
-  current: boolean
-  description: string
-  location: string
-  achievements: string[]
-}
-
-export interface Education {
-  id: string
-  institution: string
-  degree: string
-  field: string
-  startDate: string
-  endDate: string
-  current: boolean
-  gpa?: string
-  honors?: string
-  relevantCourses: string[]
-}
-
-export interface Skill {
-  name: string
-  level: "Básico" | "Intermedio" | "Avanzado" | "Experto"
-  category: "technical" | "soft"
-}
-
-export interface Language {
-  name: string
-  level: "Básico" | "Intermedio" | "Avanzado" | "Nativo"
-  certifications: string[]
-}
-
-export interface Project {
-  id: string
-  name: string
-  description: string
-  technologies: string[]
-  startDate: string
-  endDate: string
-  current: boolean
-  url?: string
-  github?: string
-  role: string
-  teamSize?: number
-  achievements: string[]
-}
-
-export interface Certification {
-  id: string
-  name: string
-  issuer: string
-  date: string
-  expiryDate?: string
-  credentialId?: string
-  url?: string
-  skills: string[]
-}
-
-export interface CVData {
-  personalInfo: PersonalInfo
-  experience: Experience[]
-  education: Education[]
-  skills: {
-    technical: Skill[]
-    soft: Skill[]
-    languages: Language[]
-  }
-  projects: Project[]
-  certifications: Certification[]
-}
-
-export type CVTemplate = "modern" | "classic" | "creative" | "minimal"
-
-// Constants
-export const chileanCities = [
+// Datos específicos de Chile
+export const CHILEAN_CITIES = [
   "Santiago",
   "Valparaíso",
   "Viña del Mar",
@@ -119,112 +16,231 @@ export const chileanCities = [
   "Iquique",
   "Los Ángeles",
   "Puerto Montt",
+  "Valdivia",
+  "Osorno",
+  "Quilpué",
+  "Villa Alemana",
+  "Curicó",
+  "Melipilla",
   "Calama",
   "Copiapó",
-  "Osorno",
   "Quillota",
-  "Valdivia",
-  "Punta Arenas",
+  "San Antonio",
+  "Linares",
 ]
 
-export const chileanUniversities = [
+export const CHILEAN_UNIVERSITIES = [
   "Universidad de Chile",
   "Pontificia Universidad Católica de Chile",
   "Universidad de Santiago de Chile",
   "Universidad de Concepción",
   "Universidad Técnica Federico Santa María",
-  "Universidad del Desarrollo",
-  "Universidad Diego Portales",
-  "Universidad Adolfo Ibáñez",
-  "Universidad de los Andes",
-  "Universidad Mayor",
-  "Universidad Central de Chile",
-  "Universidad de Talca",
-  "Universidad de La Frontera",
+  "Universidad Austral de Chile",
   "Universidad Católica del Norte",
+  "Universidad de La Frontera",
+  "Universidad de Talca",
   "Universidad de Valparaíso",
+  "Universidad del Bío-Bío",
   "Universidad de Antofagasta",
+  "Universidad de Atacama",
   "Universidad de Magallanes",
-  "Universidad de Tarapacá",
+  "Universidad Católica de Valparaíso",
   "Universidad Católica de Temuco",
-  "Universidad Católica de la Santísima Concepción",
+  "Universidad Católica del Maule",
+  "Universidad de Tarapacá",
+  "Universidad Arturo Prat",
+  "Universidad de Los Lagos",
 ]
 
-export const commonSkillsChile = [
-  // Technical Skills
-  "JavaScript",
-  "Python",
-  "Java",
-  "React",
-  "Node.js",
-  "SQL",
-  "HTML/CSS",
-  "Git",
-  "Docker",
-  "AWS",
-  "Excel Avanzado",
-  "Power BI",
-  "Tableau",
-  "SAP",
-  "Salesforce",
-
-  // Soft Skills
+export const SKILL_CATEGORIES = [
+  "Programación",
+  "Diseño",
+  "Marketing",
+  "Ventas",
+  "Gestión",
+  "Comunicación",
+  "Análisis",
   "Liderazgo",
-  "Trabajo en Equipo",
-  "Comunicación Efectiva",
-  "Resolución de Problemas",
-  "Pensamiento Crítico",
-  "Adaptabilidad",
-  "Gestión del Tiempo",
-  "Negociación",
-  "Presentaciones",
-  "Servicio al Cliente",
-  "Gestión de Proyectos",
-  "Análisis de Datos",
-  "Planificación Estratégica",
-  "Innovación",
-  "Mentoring",
+  "Idiomas",
+  "Herramientas",
+  "Certificaciones",
 ]
 
-// Utility functions
-export const generateId = () => Math.random().toString(36).substr(2, 9)
+// Esquemas de validación
+export const PersonalInfoSchema = z.object({
+  firstName: z.string().min(2, "Nombre debe tener al menos 2 caracteres"),
+  lastName: z.string().min(2, "Apellido debe tener al menos 2 caracteres"),
+  email: z.string().email("Email inválido"),
+  phone: z.string().min(8, "Teléfono debe tener al menos 8 dígitos"),
+  city: z.string().min(2, "Ciudad requerida"),
+  address: z.string().optional(),
+  linkedIn: z.string().url("URL de LinkedIn inválida").optional().or(z.literal("")),
+  github: z.string().url("URL de GitHub inválida").optional().or(z.literal("")),
+  portfolio: z.string().url("URL de portafolio inválida").optional().or(z.literal("")),
+  summary: z.string().min(50, "Resumen debe tener al menos 50 caracteres").max(500, "Resumen muy largo"),
+})
 
-export const formatDate = (dateString: string) => {
-  if (!dateString) return ""
-  const [year, month] = dateString.split("-")
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ]
-  return `${monthNames[Number.parseInt(month) - 1]} ${year}`
+export const ExperienceSchema = z.object({
+  id: z.string(),
+  company: z.string().min(2, "Nombre de empresa requerido"),
+  position: z.string().min(2, "Cargo requerido"),
+  startDate: z.string().min(1, "Fecha de inicio requerida"),
+  endDate: z.string().optional(),
+  current: z.boolean().default(false),
+  description: z.string().min(20, "Descripción debe tener al menos 20 caracteres"),
+  achievements: z.array(z.string()).default([]),
+  location: z.string().optional(),
+})
+
+export const EducationSchema = z.object({
+  id: z.string(),
+  institution: z.string().min(2, "Institución requerida"),
+  degree: z.string().min(2, "Título requerido"),
+  field: z.string().min(2, "Campo de estudio requerido"),
+  startDate: z.string().min(1, "Fecha de inicio requerida"),
+  endDate: z.string().optional(),
+  current: z.boolean().default(false),
+  gpa: z.string().optional(),
+  honors: z.string().optional(),
+  description: z.string().optional(),
+})
+
+export const SkillSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Nombre de habilidad requerido"),
+  level: z.enum(["Básico", "Intermedio", "Avanzado", "Experto"]),
+  category: z.string().min(1, "Categoría requerida"),
+  yearsOfExperience: z.number().min(0).max(50).optional(),
+})
+
+export const ProjectSchema = z.object({
+  id: z.string(),
+  name: z.string().min(2, "Nombre del proyecto requerido"),
+  description: z.string().min(20, "Descripción debe tener al menos 20 caracteres"),
+  technologies: z.array(z.string()).min(1, "Al menos una tecnología requerida"),
+  startDate: z.string().min(1, "Fecha de inicio requerida"),
+  endDate: z.string().optional(),
+  current: z.boolean().default(false),
+  url: z.string().url("URL inválida").optional().or(z.literal("")),
+  github: z.string().url("URL de GitHub inválida").optional().or(z.literal("")),
+  role: z.string().optional(),
+  teamSize: z.number().min(1).optional(),
+})
+
+export const CertificationSchema = z.object({
+  id: z.string(),
+  name: z.string().min(2, "Nombre de certificación requerido"),
+  issuer: z.string().min(2, "Emisor requerido"),
+  date: z.string().min(1, "Fecha requerida"),
+  expiryDate: z.string().optional(),
+  credentialId: z.string().optional(),
+  url: z.string().url("URL inválida").optional().or(z.literal("")),
+})
+
+export const LanguageSchema = z.object({
+  id: z.string(),
+  language: z.string().min(2, "Idioma requerido"),
+  level: z.enum(["Básico", "Intermedio", "Avanzado", "Nativo", "Bilingüe"]),
+  certification: z.string().optional(),
+})
+
+export const CVDataSchema = z.object({
+  personalInfo: PersonalInfoSchema,
+  experience: z.array(ExperienceSchema).default([]),
+  education: z.array(EducationSchema).default([]),
+  skills: z.array(SkillSchema).default([]),
+  projects: z.array(ProjectSchema).default([]),
+  certifications: z.array(CertificationSchema).default([]),
+  languages: z.array(LanguageSchema).default([]),
+})
+
+// Tipos derivados
+export type PersonalInfo = z.infer<typeof PersonalInfoSchema>
+export type Experience = z.infer<typeof ExperienceSchema>
+export type Education = z.infer<typeof EducationSchema>
+export type Skill = z.infer<typeof SkillSchema>
+export type Project = z.infer<typeof ProjectSchema>
+export type Certification = z.infer<typeof CertificationSchema>
+export type Language = z.infer<typeof LanguageSchema>
+export type CVData = z.infer<typeof CVDataSchema>
+
+// Funciones utilitarias
+export function generateId(): string {
+  return Math.random().toString(36).substr(2, 9)
 }
 
-export const calculateExperience = (experiences: Experience[]) => {
+export function formatDate(date: string): string {
+  if (!date) return ""
+  const d = new Date(date)
+  return d.toLocaleDateString("es-CL", { year: "numeric", month: "long" })
+}
+
+export function calculateExperience(experiences: Experience[]): number {
   let totalMonths = 0
 
   experiences.forEach((exp) => {
-    const startDate = new Date(exp.startDate + "-01")
-    const endDate = exp.current ? new Date() : new Date(exp.endDate + "-01")
-
-    const months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth())
-
-    totalMonths += months
+    const start = new Date(exp.startDate)
+    const end = exp.current ? new Date() : new Date(exp.endDate || new Date())
+    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
+    totalMonths += Math.max(0, months)
   })
 
-  const years = Math.floor(totalMonths / 12)
-  const months = totalMonths % 12
+  return Math.round((totalMonths / 12) * 10) / 10 // Años con 1 decimal
+}
 
-  if (years === 0) return `${months} meses`
-  if (months === 0) return `${years} años`
-  return `${years} años, ${months} meses`
+export function getCompletionPercentage(data: CVData): number {
+  let completed = 0
+  const total = 7 // Total sections
+
+  // Personal info (required)
+  if (
+    data.personalInfo.firstName &&
+    data.personalInfo.lastName &&
+    data.personalInfo.email &&
+    data.personalInfo.phone &&
+    data.personalInfo.summary
+  ) {
+    completed++
+  }
+
+  // Experience
+  if (data.experience.length > 0) completed++
+
+  // Education
+  if (data.education.length > 0) completed++
+
+  // Skills
+  if (data.skills.length > 0) completed++
+
+  // Projects (optional but recommended)
+  if (data.projects.length > 0) completed++
+
+  // Certifications (optional)
+  if (data.certifications.length > 0) completed++
+
+  // Languages (optional)
+  if (data.languages.length > 0) completed++
+
+  return Math.round((completed / total) * 100)
+}
+
+export const DEFAULT_CV_DATA: CVData = {
+  personalInfo: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    city: "",
+    address: "",
+    linkedIn: "",
+    github: "",
+    portfolio: "",
+    summary: "",
+  },
+  experience: [],
+  education: [],
+  skills: [],
+  projects: [],
+  certifications: [],
+  languages: [],
 }

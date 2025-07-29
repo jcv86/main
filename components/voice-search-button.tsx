@@ -1,40 +1,44 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Mic, MicOff } from "lucide-react"
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition"
 import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 
 interface VoiceSearchButtonProps {
-  onTranscript: (transcript: string) => void
-  disabled?: boolean
+  onTranscript?: (transcript: string) => void
+  className?: string
 }
 
-export function VoiceSearchButton({ onTranscript, disabled }: VoiceSearchButtonProps) {
+export function VoiceSearchButton({ onTranscript, className }: VoiceSearchButtonProps) {
   const { isListening, transcript, isSupported, error, startListening, stopListening, resetTranscript } =
     useSpeechRecognition()
-
-  useEffect(() => {
-    if (transcript) {
-      onTranscript(transcript)
-      resetTranscript()
-    }
-  }, [transcript, onTranscript, resetTranscript])
-
-  useEffect(() => {
-    if (error) {
-      toast.error(`Error de reconocimiento de voz: ${error}`)
-    }
-  }, [error])
 
   const handleClick = () => {
     if (isListening) {
       stopListening()
     } else {
+      resetTranscript()
       startListening()
     }
   }
+
+  // Handle transcript changes
+  useState(() => {
+    if (transcript && onTranscript) {
+      onTranscript(transcript)
+      resetTranscript()
+    }
+  })
+
+  // Handle errors
+  useState(() => {
+    if (error) {
+      toast.error(error)
+    }
+  })
 
   if (!isSupported) {
     return null
@@ -43,12 +47,19 @@ export function VoiceSearchButton({ onTranscript, disabled }: VoiceSearchButtonP
   return (
     <Button
       variant="ghost"
-      size="sm"
+      size="icon"
       onClick={handleClick}
-      disabled={disabled}
-      className={`${isListening ? "text-red-500 animate-pulse" : ""}`}
+      className={cn("relative", isListening && "text-red-500 animate-pulse", className)}
+      disabled={!isSupported}
     >
-      {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+      {isListening ? (
+        <>
+          <MicOff className="h-4 w-4" />
+          <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-ping" />
+        </>
+      ) : (
+        <Mic className="h-4 w-4" />
+      )}
       <span className="sr-only">{isListening ? "Detener búsqueda por voz" : "Iniciar búsqueda por voz"}</span>
     </Button>
   )

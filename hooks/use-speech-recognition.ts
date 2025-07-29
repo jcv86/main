@@ -40,13 +40,13 @@ export function useSpeechRecognition() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setIsSupported(!!(window.SpeechRecognition || window.webkitSpeechRecognition))
+      setIsSupported("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
     }
   }, [])
 
   const startListening = useCallback(() => {
     if (!isSupported) {
-      setError("Speech recognition is not supported in this browser")
+      setError("El reconocimiento de voz no está soportado en este navegador")
       return
     }
 
@@ -68,7 +68,7 @@ export function useSpeechRecognition() {
     }
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-      setError(event.error)
+      setError(`Error de reconocimiento de voz: ${event.error}`)
       setIsListening(false)
     }
 

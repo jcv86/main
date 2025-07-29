@@ -1,1115 +1,1070 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
+  Plus,
+  Minus,
+  ChevronDown,
+  ChevronUp,
+  Save,
+  Eye,
+  Download,
   User,
   Briefcase,
   GraduationCap,
-  Award,
   Code,
-  Languages,
   FolderOpen,
-  Plus,
-  Trash2,
-  Edit,
-  Save,
-  MapPin,
-  Mail,
-  Phone,
-  Globe,
-  Linkedin,
-  Star,
-  Link,
-  Github,
+  Award,
+  Languages,
 } from "lucide-react"
+import { toast } from "sonner"
+import { supabase } from "@/lib/supabase"
 import {
+  CVDataSchema,
   type CVData,
-  personalInfoSchema,
-  chileanCities,
-  chileanUniversities,
-  commonSkillsChile,
+  DEFAULT_CV_DATA,
+  CHILEAN_CITIES,
+  CHILEAN_UNIVERSITIES,
+  SKILL_CATEGORIES,
   generateId,
-  type Experience,
-  type Education,
-  type Project,
-  type Certification,
-  type Skill,
-  type Language,
+  getCompletionPercentage,
 } from "@/lib/cv-types"
 
 interface CVFormProps {
-  data: CVData
-  onChange: (data: CVData) => void
+  initialData?: CVData
+  onSave?: (data: CVData) => void
+  onPreview?: (data: CVData) => void
+  onExport?: (data: CVData) => void
 }
 
-export function CVForm({ data, onChange }: CVFormProps) {
-  const [activeSection, setActiveSection] = useState<string>("personal")
-  const [editingExperience, setEditingExperience] = useState<string | null>(null)
-  const [editingEducation, setEditingEducation] = useState<string | null>(null)
-  const [editingProject, setEditingProject] = useState<string | null>(null)
-  const [editingCertification, setEditingCertification] = useState<string | null>(null)
-
-  const personalForm = useForm({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: data.personalInfo,
-    mode: "onChange",
+export function CVForm({ initialData, onSave, onPreview, onExport }: CVFormProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [openSections, setOpenSections] = useState({
+    personal: true,
+    experience: false,
+    education: false,
+    skills: false,
+    projects: false,
+    certifications: false,
+    languages: false,
   })
 
-  // Update form when data changes
-  useState(() => {
-    personalForm.reset(data.personalInfo)
+  const form = useForm<CVData>({
+    resolver: zodResolver(CVDataSchema),
+    defaultValues: initialData || DEFAULT_CV_DATA,
   })
 
-  const updateData = (section: keyof CVData, newData: any) => {
-    onChange({
-      ...data,
-      [section]: newData,
-    })
+  const {
+    fields: experienceFields,
+    append: appendExperience,
+    remove: removeExperience,
+  } = useFieldArray({
+    control: form.control,
+    name: "experience",
+  })
+
+  const {
+    fields: educationFields,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
+    control: form.control,
+    name: "education",
+  })
+
+  const {
+    fields: skillFields,
+    append: appendSkill,
+    remove: removeSkill,
+  } = useFieldArray({
+    control: form.control,
+    name: "skills",
+  })
+
+  const {
+    fields: projectFields,
+    append: appendProject,
+    remove: removeProject,
+  } = useFieldArray({
+    control: form.control,
+    name: "projects",
+  })
+
+  const {
+    fields: certificationFields,
+    append: appendCertification,
+    remove: removeCertification,
+  } = useFieldArray({
+    control: form.control,
+    name: "certifications",
+  })
+
+  const {
+    fields: languageFields,
+    append: appendLanguage,
+    remove: removeLanguage,
+  } = useFieldArray({
+    control: form.control,
+    name: "languages",
+  })
+
+  const watchedData = form.watch()
+  const completionPercentage = getCompletionPercentage(watchedData)
+
+  const toggleSection = (section: keyof typeof openSections) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }))
   }
 
-  const addExperience = () => {
-    const newExperience: Experience = {
-      id: generateId(),
-      company: "",
-      position: "",
-      startDate: "",
-      endDate: "",
-      current: false,
-      description: "",
-      location: "",
-      achievements: [],
+  const handleSave = async (data: CVData) => {
+    setIsLoading(true)
+    try {
+      // Intentar guardar en Supabase si está disponible
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (user) {
+        const { error } = await supabase.from("cv_data").upsert({
+          user_id: user.id,
+          title: `CV - ${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
+          template: "modern",
+          content: data,
+          is_active: true,
+          updated_at: new Date().toISOString(),
+        })
+
+        if (error) throw error
+        toast.success("CV guardado exitosamente")
+      } else {
+        // Modo demo - guardar en localStorage
+        localStorage.setItem("cv-data", JSON.stringify(data))
+        toast.success("CV guardado localmente (modo demo)")
+      }
+
+      onSave?.(data)
+    } catch (error) {
+      console.error("Error saving CV:", error)
+      toast.error("Error al guardar el CV")
+    } finally {
+      setIsLoading(false)
     }
-    updateData("experience", [...data.experience, newExperience])
-    setEditingExperience(newExperience.id)
   }
 
-  const updateExperience = (id: string, updates: Partial<Experience>) => {
-    const updated = data.experience.map((exp) => (exp.id === id ? { ...exp, ...updates } : exp))
-    updateData("experience", updated)
-  }
-
-  const removeExperience = (id: string) => {
-    updateData(
-      "experience",
-      data.experience.filter((exp) => exp.id !== id),
-    )
-    toast.success("Experiencia eliminada")
-  }
-
-  const addEducation = () => {
-    const newEducation: Education = {
-      id: generateId(),
-      institution: "",
-      degree: "",
-      field: "",
-      startDate: "",
-      endDate: "",
-      current: false,
-      gpa: "",
-      honors: "",
-      relevantCourses: [],
-    }
-    updateData("education", [...data.education, newEducation])
-    setEditingEducation(newEducation.id)
-  }
-
-  const updateEducation = (id: string, updates: Partial<Education>) => {
-    const updated = data.education.map((edu) => (edu.id === id ? { ...edu, ...updates } : edu))
-    updateData("education", updated)
-  }
-
-  const removeEducation = (id: string) => {
-    updateData(
-      "education",
-      data.education.filter((edu) => edu.id !== id),
-    )
-    toast.success("Educación eliminada")
-  }
-
-  const addSkill = (category: "technical" | "soft") => {
-    const newSkill: Skill = {
-      name: "",
-      level: "Básico",
-      category,
-    }
-    updateData("skills", {
-      ...data.skills,
-      [category]: [...data.skills[category], newSkill],
-    })
-  }
-
-  const updateSkill = (category: "technical" | "soft", index: number, updates: Partial<Skill>) => {
-    const updated = data.skills[category].map((skill, i) => (i === index ? { ...skill, ...updates } : skill))
-    updateData("skills", {
-      ...data.skills,
-      [category]: updated,
-    })
-  }
-
-  const removeSkill = (category: "technical" | "soft", index: number) => {
-    const updated = data.skills[category].filter((_, i) => i !== index)
-    updateData("skills", {
-      ...data.skills,
-      [category]: updated,
-    })
-  }
-
-  const addLanguage = () => {
-    const newLanguage: Language = {
-      name: "",
-      level: "Básico",
-      certifications: [],
-    }
-    updateData("skills", {
-      ...data.skills,
-      languages: [...data.skills.languages, newLanguage],
-    })
-  }
-
-  const updateLanguage = (index: number, updates: Partial<Language>) => {
-    const updated = data.skills.languages.map((lang, i) => (i === index ? { ...lang, ...updates } : lang))
-    updateData("skills", {
-      ...data.skills,
-      languages: updated,
-    })
-  }
-
-  const removeLanguage = (index: number) => {
-    updateData("skills", {
-      ...data.skills,
-      languages: data.skills.languages.filter((_, i) => i !== index),
-    })
-  }
-
-  const addProject = () => {
-    const newProject: Project = {
-      id: generateId(),
-      name: "",
-      description: "",
-      technologies: [],
-      startDate: "",
-      endDate: "",
-      current: false,
-      url: "",
-      github: "",
-      role: "",
-      teamSize: undefined,
-      achievements: [],
-    }
-    updateData("projects", [...data.projects, newProject])
-    setEditingProject(newProject.id)
-  }
-
-  const updateProject = (id: string, updates: Partial<Project>) => {
-    const updated = data.projects.map((proj) => (proj.id === id ? { ...proj, ...updates } : proj))
-    updateData("projects", updated)
-  }
-
-  const removeProject = (id: string) => {
-    updateData(
-      "projects",
-      data.projects.filter((proj) => proj.id !== id),
-    )
-    toast.success("Proyecto eliminado")
-  }
-
-  const addCertification = () => {
-    const newCertification: Certification = {
-      id: generateId(),
-      name: "",
-      issuer: "",
-      date: "",
-      expiryDate: "",
-      credentialId: "",
-      url: "",
-      skills: [],
-    }
-    updateData("certifications", [...data.certifications, newCertification])
-    setEditingCertification(newCertification.id)
-  }
-
-  const updateCertification = (id: string, updates: Partial<Certification>) => {
-    const updated = data.certifications.map((cert) => (cert.id === id ? { ...cert, ...updates } : cert))
-    updateData("certifications", updated)
-  }
-
-  const removeCertification = (id: string) => {
-    updateData(
-      "certifications",
-      data.certifications.filter((cert) => cert.id !== id),
-    )
-    toast.success("Certificación eliminada")
+  const onSubmit = (data: CVData) => {
+    handleSave(data)
   }
 
   return (
-    <div className="space-y-6">
-      <Accordion type="single" collapsible value={activeSection} onValueChange={setActiveSection} className="space-y-4">
-        {/* Personal Information */}
-        <AccordionItem value="personal">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <User className="h-5 w-5" />
-              <span>Información Personal</span>
-              <Badge variant="outline">Requerido</Badge>
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Header con progreso */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Constructor de CV
+          </CardTitle>
+          <CardDescription>Completa tu información profesional para generar un CV impactante</CardDescription>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Progreso de completitud</span>
+              <span>{completionPercentage}%</span>
             </div>
-          </AccordionTrigger>
-          <AccordionContent>
+            <Progress value={completionPercentage} className="w-full" />
+          </div>
+        </CardHeader>
+      </Card>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Información Personal */}
+          <Collapsible open={openSections.personal} onOpenChange={() => toggleSection("personal")}>
             <Card>
-              <CardContent className="pt-6">
-                <Form {...personalForm}>
-                  <form className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={personalForm.control}
-                        name="fullName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <User className="h-4 w-4" />
-                              <span>Nombre Completo *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Ej: Juan Carlos Pérez González"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, fullName: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Mail className="h-4 w-4" />
-                              <span>Email *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="juan.perez@email.com"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, email: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Phone className="h-4 w-4" />
-                              <span>Teléfono *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="+56 9 1234 5678"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, phone: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormDescription>Formato chileno: +56 9 XXXX XXXX</FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="location"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <MapPin className="h-4 w-4" />
-                              <span>Ubicación *</span>
-                            </FormLabel>
-                            <Select
-                              value={field.value}
-                              onValueChange={(value) => {
-                                field.onChange(value)
-                                updateData("personalInfo", { ...data.personalInfo, location: value })
-                              }}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecciona tu ciudad" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {chileanCities.map((city) => (
-                                  <SelectItem key={city} value={city}>
-                                    {city}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="linkedIn"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Linkedin className="h-4 w-4" />
-                              <span>LinkedIn</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="https://linkedin.com/in/tu-perfil"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, linkedIn: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="website"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Globe className="h-4 w-4" />
-                              <span>Sitio Web</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="https://tu-portafolio.com"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, website: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <User className="h-5 w-5" />
+                      Información Personal
                     </div>
-
+                    {openSections.personal ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
-                      control={personalForm.control}
-                      name="summary"
+                      control={form.control}
+                      name="personalInfo.firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Resumen Profesional *</FormLabel>
+                          <FormLabel>Nombre *</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Describe tu experiencia, habilidades clave y objetivos profesionales. Ejemplo: Ingeniero en Informática con 5 años de experiencia en desarrollo web full-stack, especializado en React y Node.js. Apasionado por crear soluciones innovadoras que mejoren la experiencia del usuario..."
-                              rows={4}
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e)
-                                updateData("personalInfo", { ...data.personalInfo, summary: e.target.value })
-                              }}
-                            />
+                            <Input placeholder="Juan" {...field} />
                           </FormControl>
-                          <FormDescription>
-                            Mínimo 50 caracteres, máximo 500. Destaca tu experiencia y objetivos.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </AccordionContent>
-        </AccordionItem>
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Apellido *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Pérez" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-        {/* Experience */}
-        <AccordionItem value="experience">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <Briefcase className="h-5 w-5" />
-              <span>Experiencia Laboral</span>
-              <Badge variant="secondary">{data.experience.length}</Badge>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              {data.experience.map((exp, index) => (
-                <Card key={exp.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{exp.company || "Nueva Empresa"}</CardTitle>
-                        <CardDescription>{exp.position || "Nuevo Cargo"}</CardDescription>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingExperience(editingExperience === exp.id ? null : exp.id)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeExperience(exp.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  {editingExperience === exp.id && (
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Empresa *</Label>
-                          <Input
-                            placeholder="Ej: Banco de Chile"
-                            value={exp.company}
-                            onChange={(e) => updateExperience(exp.id, { company: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Cargo *</Label>
-                          <Input
-                            placeholder="Ej: Desarrollador Full Stack"
-                            value={exp.position}
-                            onChange={(e) => updateExperience(exp.id, { position: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Inicio *</Label>
-                          <Input
-                            type="month"
-                            value={exp.startDate}
-                            onChange={(e) => updateExperience(exp.id, { startDate: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Término</Label>
-                          <Input
-                            type="month"
-                            value={exp.endDate}
-                            disabled={exp.current}
-                            onChange={(e) => updateExperience(exp.id, { endDate: e.target.value })}
-                          />
-                          <div className="flex items-center space-x-2 mt-2">
-                            <Checkbox
-                              id={`current-${exp.id}`}
-                              checked={exp.current}
-                              onCheckedChange={(checked) => updateExperience(exp.id, { current: !!checked })}
-                            />
-                            <Label htmlFor={`current-${exp.id}`}>Trabajo actual</Label>
-                          </div>
-                        </div>
-                        <div className="md:col-span-2">
-                          <Label>Ubicación</Label>
-                          <Input
-                            placeholder="Ej: Santiago, Chile"
-                            value={exp.location}
-                            onChange={(e) => updateExperience(exp.id, { location: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Descripción *</Label>
-                        <Textarea
-                          placeholder="Describe tus responsabilidades principales, logros y tecnologías utilizadas..."
-                          rows={4}
-                          value={exp.description}
-                          onChange={(e) => updateExperience(exp.id, { description: e.target.value })}
-                        />
-                      </div>
-                      <Button onClick={() => setEditingExperience(null)} className="w-full">
-                        <Save className="h-4 w-4 mr-2" />
-                        Guardar Experiencia
-                      </Button>
-                    </CardContent>
-                  )}
-                </Card>
-              ))}
-              <Button onClick={addExperience} variant="outline" className="w-full bg-transparent">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Experiencia
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email *</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder="juan.perez@email.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Teléfono *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="+56 9 1234 5678" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-        {/* Education */}
-        <AccordionItem value="education">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <GraduationCap className="h-5 w-5" />
-              <span>Educación</span>
-              <Badge variant="secondary">{data.education.length}</Badge>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              {data.education.map((edu, index) => (
-                <Card key={edu.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{edu.institution || "Nueva Institución"}</CardTitle>
-                        <CardDescription>
-                          {edu.degree || "Nuevo Título"} en {edu.field || "Campo de Estudio"}
-                        </CardDescription>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingEducation(editingEducation === edu.id ? null : edu.id)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeEducation(edu.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  {editingEducation === edu.id && (
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Institución *</Label>
-                          <Select
-                            value={edu.institution}
-                            onValueChange={(value) => updateEducation(edu.id, { institution: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona universidad" />
-                            </SelectTrigger>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ciudad *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecciona tu ciudad" />
+                              </SelectTrigger>
+                            </FormControl>
                             <SelectContent>
-                              {chileanUniversities.map((uni) => (
-                                <SelectItem key={uni} value={uni}>
-                                  {uni}
+                              {CHILEAN_CITIES.map((city) => (
+                                <SelectItem key={city} value={city}>
+                                  {city}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                        </div>
-                        <div>
-                          <Label>Título *</Label>
-                          <Input
-                            placeholder="Ej: Ingeniería Civil Industrial"
-                            value={edu.degree}
-                            onChange={(e) => updateEducation(edu.id, { degree: e.target.value })}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Dirección</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Av. Providencia 123" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.linkedIn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>LinkedIn</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://linkedin.com/in/usuario" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.github"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>GitHub</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://github.com/usuario" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="personalInfo.portfolio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Portafolio</FormLabel>
+                          <FormControl>
+                            <Input placeholder="https://miportafolio.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="personalInfo.summary"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Resumen Profesional *</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Describe tu experiencia, habilidades y objetivos profesionales en 2-3 párrafos..."
+                            className="min-h-[100px]"
+                            {...field}
                           />
-                        </div>
-                        <div>
-                          <Label>Campo de Estudio *</Label>
-                          <Input
-                            placeholder="Ej: Ingeniería y Tecnología"
-                            value={edu.field}
-                            onChange={(e) => updateEducation(edu.id, { field: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Promedio (Opcional)</Label>
-                          <Input
-                            placeholder="Ej: 6.2"
-                            value={edu.gpa}
-                            onChange={(e) => updateEducation(edu.id, { gpa: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Inicio *</Label>
-                          <Input
-                            type="month"
-                            value={edu.startDate}
-                            onChange={(e) => updateEducation(edu.id, { startDate: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Graduación</Label>
-                          <Input
-                            type="month"
-                            value={edu.endDate}
-                            disabled={edu.current}
-                            onChange={(e) => updateEducation(edu.id, { endDate: e.target.value })}
-                          />
-                          <div className="flex items-center space-x-2 mt-2">
-                            <Checkbox
-                              id={`current-edu-${edu.id}`}
-                              checked={edu.current}
-                              onCheckedChange={(checked) => updateEducation(edu.id, { current: !!checked })}
-                            />
-                            <Label htmlFor={`current-edu-${edu.id}`}>Estudiando actualmente</Label>
-                          </div>
-                        </div>
+                        </FormControl>
+                        <FormDescription>Mínimo 50 caracteres. Este será el primer impacto en tu CV.</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+
+          {/* Experiencia Laboral */}
+          <Collapsible open={openSections.experience} onOpenChange={() => toggleSection("experience")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="h-5 w-5" />
+                      Experiencia Laboral
+                      <Badge variant="secondary">{experienceFields.length}</Badge>
+                    </div>
+                    {openSections.experience ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4">
+                  {experienceFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Experiencia {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeExperience(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
                       </div>
-                      <div>
-                        <Label>Distinciones</Label>
-                        <Input
-                          placeholder="Ej: Magna Cum Laude, Mejor Alumno"
-                          value={edu.honors}
-                          onChange={(e) => updateEducation(edu.id, { honors: e.target.value })}
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.company`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Empresa *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Nombre de la empresa" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.position`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Cargo *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Desarrollador Full Stack" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                       </div>
-                      <Button onClick={() => setEditingEducation(null)} className="w-full">
-                        <Save className="h-4 w-4 mr-2" />
-                        Guardar Educación
-                      </Button>
-                    </CardContent>
-                  )}
-                </Card>
-              ))}
-              <Button onClick={addEducation} variant="outline" className="w-full bg-transparent">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Educación
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
 
-        {/* Skills */}
-        <AccordionItem value="skills">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <Code className="h-5 w-5" />
-              <span>Habilidades</span>
-              <Badge variant="secondary">{data.skills.technical.length + data.skills.soft.length}</Badge>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-6">
-              {/* Technical Skills */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Code className="h-5 w-5" />
-                    <span>Habilidades Técnicas</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {data.skills.technical.map((skill, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Input
-                        placeholder="Ej: JavaScript"
-                        value={skill.name}
-                        onChange={(e) => updateSkill("technical", index, { name: e.target.value })}
-                        className="flex-1"
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.startDate`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Fecha de Inicio *</FormLabel>
+                              <FormControl>
+                                <Input type="month" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.endDate`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Fecha de Fin</FormLabel>
+                              <FormControl>
+                                <Input type="month" disabled={form.watch(`experience.${index}.current`)} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`experience.${index}.current`}
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                              <FormControl>
+                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Trabajo actual</FormLabel>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name={`experience.${index}.description`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Descripción *</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Describe tus responsabilidades y logros en este puesto..."
+                                className="min-h-[80px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                      <Select
-                        value={skill.level}
-                        onValueChange={(value: any) => updateSkill("technical", index, { level: value })}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Básico">Básico</SelectItem>
-                          <SelectItem value="Intermedio">Intermedio</SelectItem>
-                          <SelectItem value="Avanzado">Avanzado</SelectItem>
-                          <SelectItem value="Experto">Experto</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button variant="ghost" size="sm" onClick={() => removeSkill("technical", index)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    </Card>
                   ))}
-                  <Button onClick={() => addSkill("technical")} variant="outline" className="w-full">
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendExperience({
+                        id: generateId(),
+                        company: "",
+                        position: "",
+                        startDate: "",
+                        endDate: "",
+                        current: false,
+                        description: "",
+                        achievements: [],
+                        location: "",
+                      })
+                    }
+                    className="w-full"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
-                    Agregar Habilidad Técnica
+                    Agregar Experiencia
                   </Button>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-sm text-muted-foreground">Sugerencias:</span>
-                    {commonSkillsChile.slice(0, 10).map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="cursor-pointer hover:bg-accent"
-                        onClick={() => {
-                          if (!data.skills.technical.find((s) => s.name === skill)) {
-                            addSkill("technical")
-                            const newIndex = data.skills.technical.length
-                            updateSkill("technical", newIndex, { name: skill, level: "Intermedio" })
-                          }
-                        }}
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
                 </CardContent>
-              </Card>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-              {/* Soft Skills */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Star className="h-5 w-5" />
-                    <span>Habilidades Blandas</span>
+          {/* Educación */}
+          <Collapsible open={openSections.education} onOpenChange={() => toggleSection("education")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5" />
+                      Educación
+                      <Badge variant="secondary">{educationFields.length}</Badge>
+                    </div>
+                    {openSections.education ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                   </CardTitle>
                 </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
                 <CardContent className="space-y-4">
-                  {data.skills.soft.map((skill, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Input
-                        placeholder="Ej: Liderazgo"
-                        value={skill.name}
-                        onChange={(e) => updateSkill("soft", index, { name: e.target.value })}
-                        className="flex-1"
-                      />
-                      <Select
-                        value={skill.level}
-                        onValueChange={(value: any) => updateSkill("soft", index, { level: value })}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Básico">Básico</SelectItem>
-                          <SelectItem value="Intermedio">Intermedio</SelectItem>
-                          <SelectItem value="Avanzado">Avanzado</SelectItem>
-                          <SelectItem value="Experto">Experto</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button variant="ghost" size="sm" onClick={() => removeSkill("soft", index)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  {educationFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Educación {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeEducation(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.institution`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Institución *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona la institución" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {CHILEAN_UNIVERSITIES.map((university) => (
+                                    <SelectItem key={university} value={university}>
+                                      {university}
+                                    </SelectItem>
+                                  ))}
+                                  <SelectItem value="other">Otra institución</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.degree`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Título *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Ingeniería en Informática" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.field`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Campo de Estudio *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Ciencias de la Computación" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.startDate`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Año de Inicio *</FormLabel>
+                              <FormControl>
+                                <Input type="month" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`education.${index}.endDate`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Año de Fin</FormLabel>
+                              <FormControl>
+                                <Input type="month" disabled={form.watch(`education.${index}.current`)} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </Card>
                   ))}
-                  <Button onClick={() => addSkill("soft")} variant="outline" className="w-full">
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendEducation({
+                        id: generateId(),
+                        institution: "",
+                        degree: "",
+                        field: "",
+                        startDate: "",
+                        endDate: "",
+                        current: false,
+                        gpa: "",
+                        honors: "",
+                        description: "",
+                      })
+                    }
+                    className="w-full"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
-                    Agregar Habilidad Blanda
+                    Agregar Educación
                   </Button>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-sm text-muted-foreground">Sugerencias:</span>
-                    {commonSkillsChile.slice(10, 20).map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="cursor-pointer hover:bg-accent"
-                        onClick={() => {
-                          if (!data.skills.soft.find((s) => s.name === skill)) {
-                            addSkill("soft")
-                            const newIndex = data.skills.soft.length
-                            updateSkill("soft", newIndex, { name: skill, level: "Intermedio" })
-                          }
-                        }}
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
                 </CardContent>
-              </Card>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-              {/* Languages */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Languages className="h-5 w-5" />
-                    <span>Idiomas</span>
+          {/* Habilidades */}
+          <Collapsible open={openSections.skills} onOpenChange={() => toggleSection("skills")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Code className="h-5 w-5" />
+                      Habilidades
+                      <Badge variant="secondary">{skillFields.length}</Badge>
+                    </div>
+                    {openSections.skills ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                   </CardTitle>
                 </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
                 <CardContent className="space-y-4">
-                  {data.skills.languages.map((language, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Input
-                        placeholder="Ej: Inglés"
-                        value={language.name}
-                        onChange={(e) => updateLanguage(index, { name: e.target.value })}
-                        className="flex-1"
-                      />
-                      <Select
-                        value={language.level}
-                        onValueChange={(value: any) => updateLanguage(index, { level: value })}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Básico">Básico</SelectItem>
-                          <SelectItem value="Intermedio">Intermedio</SelectItem>
-                          <SelectItem value="Avanzado">Avanzado</SelectItem>
-                          <SelectItem value="Nativo">Nativo</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button variant="ghost" size="sm" onClick={() => removeLanguage(index)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                  {skillFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Habilidad {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeSkill(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name={`skills.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Habilidad *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="React, Python, Liderazgo..." {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`skills.${index}.level`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nivel *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona el nivel" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="Básico">Básico</SelectItem>
+                                  <SelectItem value="Intermedio">Intermedio</SelectItem>
+                                  <SelectItem value="Avanzado">Avanzado</SelectItem>
+                                  <SelectItem value="Experto">Experto</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`skills.${index}.category`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Categoría *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona la categoría" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {SKILL_CATEGORIES.map((category) => (
+                                    <SelectItem key={category} value={category}>
+                                      {category}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </Card>
                   ))}
-                  <Button onClick={addLanguage} variant="outline" className="w-full bg-transparent">
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendSkill({
+                        id: generateId(),
+                        name: "",
+                        level: "Básico",
+                        category: "",
+                        yearsOfExperience: 0,
+                      })
+                    }
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Habilidad
+                  </Button>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+
+          {/* Proyectos */}
+          <Collapsible open={openSections.projects} onOpenChange={() => toggleSection("projects")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FolderOpen className="h-5 w-5" />
+                      Proyectos
+                      <Badge variant="secondary">{projectFields.length}</Badge>
+                    </div>
+                    {openSections.projects ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4">
+                  {projectFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Proyecto {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeProject(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <FormField
+                          control={form.control}
+                          name={`projects.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nombre del Proyecto *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="E-commerce Platform" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`projects.${index}.url`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>URL del Proyecto</FormLabel>
+                              <FormControl>
+                                <Input placeholder="https://miproyecto.com" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name={`projects.${index}.description`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Descripción *</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Describe el proyecto, tu rol y los resultados obtenidos..."
+                                className="min-h-[80px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </Card>
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendProject({
+                        id: generateId(),
+                        name: "",
+                        description: "",
+                        technologies: [],
+                        startDate: "",
+                        endDate: "",
+                        current: false,
+                        url: "",
+                        github: "",
+                        role: "",
+                        teamSize: 1,
+                      })
+                    }
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Proyecto
+                  </Button>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+
+          {/* Certificaciones */}
+          <Collapsible open={openSections.certifications} onOpenChange={() => toggleSection("certifications")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Award className="h-5 w-5" />
+                      Certificaciones
+                      <Badge variant="secondary">{certificationFields.length}</Badge>
+                    </div>
+                    {openSections.certifications ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4">
+                  {certificationFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Certificación {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeCertification(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name={`certifications.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nombre de la Certificación *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="AWS Solutions Architect" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`certifications.${index}.issuer`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Emisor *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Amazon Web Services" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </Card>
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendCertification({
+                        id: generateId(),
+                        name: "",
+                        issuer: "",
+                        date: "",
+                        expiryDate: "",
+                        credentialId: "",
+                        url: "",
+                      })
+                    }
+                    className="w-full"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Certificación
+                  </Button>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+
+          {/* Idiomas */}
+          <Collapsible open={openSections.languages} onOpenChange={() => toggleSection("languages")}>
+            <Card>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Languages className="h-5 w-5" />
+                      Idiomas
+                      <Badge variant="secondary">{languageFields.length}</Badge>
+                    </div>
+                    {openSections.languages ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4">
+                  {languageFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-medium">Idioma {index + 1}</h4>
+                        <Button type="button" variant="outline" size="sm" onClick={() => removeLanguage(index)}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name={`languages.${index}.language`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Idioma *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Inglés, Francés, Alemán..." {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`languages.${index}.level`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nivel *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona el nivel" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="Básico">Básico</SelectItem>
+                                  <SelectItem value="Intermedio">Intermedio</SelectItem>
+                                  <SelectItem value="Avanzado">Avanzado</SelectItem>
+                                  <SelectItem value="Nativo">Nativo</SelectItem>
+                                  <SelectItem value="Bilingüe">Bilingüe</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </Card>
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendLanguage({
+                        id: generateId(),
+                        language: "",
+                        level: "Básico",
+                        certification: "",
+                      })
+                    }
+                    className="w-full"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
                     Agregar Idioma
                   </Button>
                 </CardContent>
-              </Card>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-        {/* Projects */}
-        <AccordionItem value="projects">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <FolderOpen className="h-5 w-5" />
-              <span>Proyectos</span>
-              <Badge variant="secondary">{data.projects.length}</Badge>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              {data.projects.map((project, index) => (
-                <Card key={project.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{project.name || "Nuevo Proyecto"}</CardTitle>
-                        <CardDescription className="line-clamp-2">
-                          {project.description || "Descripción del proyecto"}
-                        </CardDescription>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingProject(editingProject === project.id ? null : project.id)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeProject(project.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  {editingProject === project.id && (
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Nombre del Proyecto *</Label>
-                          <Input
-                            placeholder="Ej: Sistema de Gestión Empresarial"
-                            value={project.name}
-                            onChange={(e) => updateProject(project.id, { name: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Tu Rol</Label>
-                          <Input
-                            placeholder="Ej: Desarrollador Full Stack"
-                            value={project.role}
-                            onChange={(e) => updateProject(project.id, { role: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Inicio *</Label>
-                          <Input
-                            type="month"
-                            value={project.startDate}
-                            onChange={(e) => updateProject(project.id, { startDate: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Finalización</Label>
-                          <Input
-                            type="month"
-                            value={project.endDate}
-                            disabled={project.current}
-                            onChange={(e) => updateProject(project.id, { endDate: e.target.value })}
-                          />
-                          <div className="flex items-center space-x-2 mt-2">
-                            <Checkbox
-                              id={`current-project-${project.id}`}
-                              checked={project.current}
-                              onCheckedChange={(checked) => updateProject(project.id, { current: !!checked })}
-                            />
-                            <Label htmlFor={`current-project-${project.id}`}>En desarrollo</Label>
-                          </div>
-                        </div>
-                        <div>
-                          <Label className="flex items-center space-x-1">
-                            <Link className="h-4 w-4" />
-                            <span>URL del Proyecto</span>
-                          </Label>
-                          <Input
-                            placeholder="https://mi-proyecto.com"
-                            value={project.url}
-                            onChange={(e) => updateProject(project.id, { url: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label className="flex items-center space-x-1">
-                            <Github className="h-4 w-4" />
-                            <span>GitHub</span>
-                          </Label>
-                          <Input
-                            placeholder="https://github.com/usuario/proyecto"
-                            value={project.github}
-                            onChange={(e) => updateProject(project.id, { github: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Descripción *</Label>
-                        <Textarea
-                          placeholder="Describe el proyecto, su propósito, tu contribución y los resultados obtenidos..."
-                          rows={4}
-                          value={project.description}
-                          onChange={(e) => updateProject(project.id, { description: e.target.value })}
-                        />
-                      </div>
-                      <Button onClick={() => setEditingProject(null)} className="w-full">
-                        <Save className="h-4 w-4 mr-2" />
-                        Guardar Proyecto
-                      </Button>
-                    </CardContent>
-                  )}
-                </Card>
-              ))}
-              <Button onClick={addProject} variant="outline" className="w-full bg-transparent">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Proyecto
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        {/* Certifications */}
-        <AccordionItem value="certifications">
-          <AccordionTrigger className="text-lg font-semibold">
-            <div className="flex items-center space-x-2">
-              <Award className="h-5 w-5" />
-              <span>Certificaciones</span>
-              <Badge variant="secondary">{data.certifications.length}</Badge>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              {data.certifications.map((cert, index) => (
-                <Card key={cert.id}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{cert.name || "Nueva Certificación"}</CardTitle>
-                        <CardDescription>{cert.issuer || "Emisor"}</CardDescription>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingCertification(editingCertification === cert.id ? null : cert.id)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeCertification(cert.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  {editingCertification === cert.id && (
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Nombre de la Certificación *</Label>
-                          <Input
-                            placeholder="Ej: AWS Certified Solutions Architect"
-                            value={cert.name}
-                            onChange={(e) => updateCertification(cert.id, { name: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Emisor *</Label>
-                          <Input
-                            placeholder="Ej: Amazon Web Services"
-                            value={cert.issuer}
-                            onChange={(e) => updateCertification(cert.id, { issuer: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Obtención *</Label>
-                          <Input
-                            type="month"
-                            value={cert.date}
-                            onChange={(e) => updateCertification(cert.id, { date: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>Fecha de Expiración</Label>
-                          <Input
-                            type="month"
-                            value={cert.expiryDate}
-                            onChange={(e) => updateCertification(cert.id, { expiryDate: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>ID de Credencial</Label>
-                          <Input
-                            placeholder="Ej: ABC123456"
-                            value={cert.credentialId}
-                            onChange={(e) => updateCertification(cert.id, { credentialId: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label>URL de Verificación</Label>
-                          <Input
-                            placeholder="https://verify.certification.com"
-                            value={cert.url}
-                            onChange={(e) => updateCertification(cert.id, { url: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <Button onClick={() => setEditingCertification(null)} className="w-full">
-                        <Save className="h-4 w-4 mr-2" />
-                        Guardar Certificación
-                      </Button>
-                    </CardContent>
-                  )}
-                </Card>
-              ))}
-              <Button onClick={addCertification} variant="outline" className="w-full bg-transparent">
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Certificación
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+          {/* Botones de acción */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button type="submit" disabled={isLoading} className="flex-1">
+                  <Save className="h-4 w-4 mr-2" />
+                  {isLoading ? "Guardando..." : "Guardar CV"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onPreview?.(form.getValues())}
+                  className="flex-1"
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Vista Previa
+                </Button>
+                <Button type="button" variant="outline" onClick={() => onExport?.(form.getValues())} className="flex-1">
+                  <Download className="h-4 w-4 mr-2" />
+                  Exportar PDF
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </form>
+      </Form>
     </div>
   )
 }
