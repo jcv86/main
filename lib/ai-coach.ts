@@ -54,6 +54,15 @@ export interface SuggestionResponse {
   categories: string[]
 }
 
+// Generate a proper UUID v4
+function generateUUID(): string {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 // Validate UUID format
 function isValidUUID(uuid: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -477,8 +486,8 @@ export async function searchConversations(
       .order("created_at", { ascending: false })
       .limit(limit)
 
-    // Filter by session if provided
-    if (sessionId) {
+    // Filter by session if provided and it's a valid UUID
+    if (sessionId && isValidUUID(sessionId)) {
       searchQuery = searchQuery.eq("session_id", sessionId)
     }
 
@@ -602,6 +611,12 @@ export async function getConversationHistory(userId?: string, sessionId?: string
 
     let finalSessionId = sessionId
 
+    // If sessionId provided, validate it's a UUID
+    if (finalSessionId && !isValidUUID(finalSessionId)) {
+      console.warn("Invalid sessionId format, creating new session")
+      finalSessionId = undefined
+    }
+
     // If no sessionId provided, get the most recent session for this user
     if (!finalSessionId) {
       const { data: sessionData, error: sessionError } = await supabaseAdmin
@@ -620,7 +635,7 @@ export async function getConversationHistory(userId?: string, sessionId?: string
         finalSessionId = sessionData[0].session_id
       } else {
         // Create new session ID if none exists
-        finalSessionId = `session-${userId}-${Date.now()}`
+        finalSessionId = generateUUID()
       }
     }
 
@@ -678,7 +693,7 @@ export async function getConversationHistory(userId?: string, sessionId?: string
 
 function getDemoConversation(): ConversationHistory {
   return {
-    sessionId: "demo-session",
+    sessionId: generateUUID(),
     messages: [
       {
         id: "1",
@@ -713,7 +728,12 @@ export async function saveMessage(
       return
     }
 
-    const finalSessionId = sessionId || `session-${userId}-${Date.now()}`
+    let finalSessionId = sessionId || generateUUID()
+
+    // Validate session ID is a UUID
+    if (!isValidUUID(finalSessionId)) {
+      finalSessionId = generateUUID()
+    }
 
     const { error } = await supabaseAdmin.from("coaching_conversations").insert({
       user_id: userId,
@@ -833,7 +853,7 @@ Responde de manera estructurada y útil (máximo 300 palabras).`
 }
 
 export async function startNewSession(userId: string): Promise<string> {
-  const newSessionId = `session-${userId}-${Date.now()}`
+  const newSessionId = generateUUID()
 
   // Save a session start marker
   await saveMessage(userId, "assistant", "Nueva sesión iniciada", newSessionId)

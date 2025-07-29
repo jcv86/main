@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     if (action === "new_session" || action === "new-session") {
       if (!currentUserId) {
         // For demo mode, return a demo session ID
-        const demoSessionId = `demo-session-${Date.now()}`
+        const demoSessionId = crypto.randomUUID()
         return NextResponse.json({
           sessionId: demoSessionId,
           response:
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
       // Generate demo session ID if none provided
       if (!finalSessionId) {
-        finalSessionId = `demo-session-${Date.now()}`
+        finalSessionId = crypto.randomUUID()
       }
     } else {
       // Use AI to generate response
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       if (!finalSessionId && currentUserId) {
         finalSessionId = await startNewSession(currentUserId)
       } else if (!finalSessionId) {
-        finalSessionId = `demo-session-${Date.now()}`
+        finalSessionId = crypto.randomUUID()
       }
     }
 
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
       response: fallbackResponse,
       isDemo: true,
       error: "Temporary service unavailable",
-      sessionId: `demo-session-${Date.now()}`,
+      sessionId: crypto.randomUUID(),
       timestamp: new Date().toISOString(),
     })
   }
@@ -225,7 +225,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(conversationHistory)
     } else {
       // Return demo welcome message for non-authenticated users
-      const demoSessionId = `demo-session-${Date.now()}`
+      const demoSessionId = crypto.randomUUID()
       return NextResponse.json({
         messages: [
           {
@@ -244,7 +244,7 @@ export async function GET(request: NextRequest) {
     console.error("Error in GET career coach API:", error)
 
     // Return default welcome message
-    const demoSessionId = `demo-session-${Date.now()}`
+    const demoSessionId = crypto.randomUUID()
     const welcomeMessage = {
       messages: [
         {

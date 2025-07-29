@@ -1,106 +1,139 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { VoiceSearchButton } from "@/components/voice-search-button"
-import { Search, MessageSquare, Clock, Mic, Loader2, AlertCircle } from "lucide-react"
+import { Search, Clock, MessageSquare, User, Bot, Loader2, AlertCircle } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { toast } from "sonner"
 
 interface SearchResult {
   id: string
-  content: string
   role: "user" | "assistant"
-  timestamp: string
-  sessionId: string
+  content: string
+  timestamp: Date
+  session_id: string
   snippet: string
-  relevanceScore?: number
+  relevanceScore: number
 }
 
 interface SearchResponse {
   results: SearchResult[]
   totalCount: number
   query: string
-  searchType?: "text" | "voice"
+  searchType?: "voice" | "text"
   voiceQuery?: string
+}
+
+interface SearchSuggestion {
+  text: string
+  type: "keyword" | "topic" | "recent" | "popular"
+  frequency: number
+  category?: string
+}
+
+interface SuggestionResponse {
+  suggestions: SearchSuggestion[]
+  categories: string[]
 }
 
 interface SearchDialogProps {
   userId: string | null
   currentSessionId: string
-  onResultClick: (sessionId: string, messageId: string) => void
+  onResultClick?: (sessionId: string, messageId: string) => void
 }
 
 export function SearchDialog({ userId, currentSessionId, onResultClick }: SearchDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<SearchResult[]>([])
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
   const [isSearching, setIsSearching] = useState(false)
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
-  const [searchType, setSearchType] = useState<"text" | "voice">("text")
-  const [voiceQuery, setVoiceQuery] = useState("")
-  const [isVoiceActive, setIsVoiceActive] = useState(false)
+  const [searchType, setSearchType] = useState<"voice" | "text">("text")
+  const [isVoiceInput, setIsVoiceInput] = useState(false)
 
-  // Reset state when dialog opens/closes
+  // Load suggestions when dialog opens
   useEffect(() => {
-    if (!isOpen) {
-      setQuery("")
+    if (isOpen && userId) {
+      loadSuggestions()
+    }
+  }, [isOpen, userId])
+
+  // Search when query changes (debounced)
+  useEffect(() => {
+    if (query.trim().length >= 2) {
+      const timeoutId = setTimeout(() => {
+        performSearch(query)
+      }, 300)
+      return () => clearTimeout(timeoutId)
+    } else {
       setResults([])
       setTotalCount(0)
-      setSearchType("text")
-      setVoiceQuery("")
-      setIsVoiceActive(false)
     }
-  }, [isOpen])
+  }, [query])
 
-  const performSearch = async (searchQuery: string, type: "text" | "voice" = "text") => {
+  const loadSuggestions = async () => {
+    if (!userId) return
+
+    setIsLoadingSuggestions(true)
+    try {
+      const response = await fetch(`/api/search-suggestions?userId=${userId}&query=${encodeURIComponent(query)}`)
+      if (response.ok) {
+        const data: SuggestionResponse = await response.json()
+        setSuggestions(data.suggestions.slice(0, 8)) // Limit to 8 suggestions
+      }
+    } catch (error) {
+      console.error("Error loading suggestions:", error)
+    } finally {
+      setIsLoadingSuggestions(false)
+    }
+  }
+
+  const performSearch = async (searchQuery: string, type: "voice" | "text" = "text") => {
     if (!searchQuery.trim() || !userId) return
 
     setIsSearching(true)
     setSearchType(type)
 
     try {
-      const params = new URLSearchParams({
-        action: "search",
-        query: searchQuery.trim(),
-        limit: "20",
+      const response = await fetch("/api/career-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: type === "voice" ? "voice-search" : "search",
+          query: searchQuery.trim(),
+          userId,
+          searchSessionId: currentSessionId,
+          limit: 20,
+        }),
       })
-
-      if (currentSessionId) {
-        params.append("sessionId", currentSessionId)
-      }
-
-      const response = await fetch(`/api/career-coach?${params}`)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const data: SearchResponse = await response.json()
-
       setResults(data.results || [])
       setTotalCount(data.totalCount || 0)
-
-      if (type === "voice" && data.voiceQuery) {
-        setVoiceQuery(data.voiceQuery)
-      }
 
       if (data.results.length === 0) {
         toast.info(`No se encontraron resultados para "${searchQuery}"`)
       } else {
-        toast.success(`Se encontraron ${data.results.length} resultado${data.results.length !== 1 ? "s" : ""}`)
+        toast.success(`Se encontraron ${data.totalCount} resultado${data.totalCount !== 1 ? "s" : ""}`)
       }
     } catch (error) {
-      console.error("Error searching conversations:", error)
-      toast.error("Error al buscar en las conversaciones")
+      console.error("Error searching:", error)
+      toast.error("Error al realizar la búsqueda")
       setResults([])
       setTotalCount(0)
     } finally {
@@ -108,61 +141,56 @@ export function SearchDialog({ userId, currentSessionId, onResultClick }: Search
     }
   }
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    performSearch(query, "text")
+  const handleSuggestionClick = (suggestion: SearchSuggestion) => {
+    setQuery(suggestion.text)
+    performSearch(suggestion.text)
+  }
+
+  const handleResultClick = (result: SearchResult) => {
+    onResultClick?.(result.session_id, result.id)
+    setIsOpen(false)
+    toast.success("Navegando al mensaje encontrado")
   }
 
   const handleVoiceTranscript = (transcript: string) => {
     setQuery(transcript)
-    setIsVoiceActive(false)
-    // Auto-search after voice input
+    setIsVoiceInput(false)
+    // Auto-search with voice transcript
     setTimeout(() => {
       performSearch(transcript, "voice")
     }, 100)
   }
 
   const handleVoiceStart = () => {
-    setIsVoiceActive(true)
+    setIsVoiceInput(true)
   }
 
   const handleVoiceEnd = () => {
-    setIsVoiceActive(false)
+    setIsVoiceInput(false)
   }
 
-  const handleResultClick = (result: SearchResult) => {
-    onResultClick(result.sessionId, result.id)
-    setIsOpen(false)
-    toast.success("Navegando al mensaje encontrado")
+  const handleVoiceError = (error: string) => {
+    setIsVoiceInput(false)
+    toast.error(error)
   }
 
-  const highlightQuery = (text: string, searchQuery: string) => {
-    if (!searchQuery.trim()) return text
+  const formatSnippet = (snippet: string, query: string) => {
+    if (!query) return snippet
 
-    const regex = new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi")
-    const parts = text.split(regex)
-
-    return parts.map((part, index) =>
-      regex.test(part) ? (
-        <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">
-          {part}
-        </mark>
-      ) : (
-        part
-      ),
-    )
-  }
-
-  const formatResultTime = (timestamp: string) => {
-    return format(new Date(timestamp), "dd MMM, HH:mm", { locale: es })
+    const regex = new RegExp(`(${query})`, "gi")
+    return snippet.replace(regex, "**$1**")
   }
 
   const getRoleIcon = (role: "user" | "assistant") => {
-    return role === "user" ? "👤" : "🤖"
+    return role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />
   }
 
-  const getRoleBadgeVariant = (role: "user" | "assistant") => {
-    return role === "user" ? "secondary" : "outline"
+  const getRoleBadge = (role: "user" | "assistant") => {
+    return (
+      <Badge variant={role === "user" ? "default" : "secondary"} className="text-xs">
+        {role === "user" ? "Tú" : "AI Coach"}
+      </Badge>
+    )
   }
 
   return (
@@ -173,187 +201,191 @@ export function SearchDialog({ userId, currentSessionId, onResultClick }: Search
           Buscar
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
+      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Search className="h-5 w-5" />
             Buscar en Conversaciones
-            {totalCount > 0 && (
-              <Badge variant="secondary" className="ml-2">
-                {totalCount} resultado{totalCount !== 1 ? "s" : ""}
+            {searchType === "voice" && (
+              <Badge variant="outline" className="text-xs">
+                Búsqueda por Voz
               </Badge>
             )}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Search Form */}
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <div className="flex-1 relative">
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={
-                  isVoiceActive ? "Escuchando... Habla claramente" : "Buscar mensajes, temas, o palabras clave..."
-                }
-                disabled={isSearching || isVoiceActive}
-                className="pr-12"
-              />
-              {query && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                  onClick={() => setQuery("")}
-                >
-                  ×
-                </Button>
-              )}
-            </div>
-
-            {/* Voice Search Button */}
-            <VoiceSearchButton
-              onTranscript={handleVoiceTranscript}
-              onStart={handleVoiceStart}
-              onEnd={handleVoiceEnd}
-              disabled={isSearching || !userId}
-              size="default"
+        {/* Search Input */}
+        <div className="flex gap-2">
+          <div className="flex-1 relative">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={isVoiceInput ? "Escuchando... Habla claramente" : "Buscar mensajes, temas, consejos..."}
+              disabled={isVoiceInput}
+              className="pr-10"
             />
+            {isSearching && (
+              <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            )}
+          </div>
 
-            {/* Search Button */}
-            <Button type="submit" disabled={!query.trim() || isSearching || isVoiceActive}>
-              {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-            </Button>
-          </form>
+          <VoiceSearchButton
+            onTranscript={handleVoiceTranscript}
+            onStart={handleVoiceStart}
+            onEnd={handleVoiceEnd}
+            onError={handleVoiceError}
+            disabled={isSearching}
+            size="default"
+          />
+        </div>
 
-          {/* Voice Input Status */}
-          {isVoiceActive && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-center gap-2 text-sm text-blue-700">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <Mic className="h-4 w-4" />
-                Escuchando... Habla claramente para buscar
-              </div>
+        {/* Voice Input Status */}
+        {isVoiceInput && (
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center gap-2 text-sm text-blue-700">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span>Escuchando... Habla claramente para buscar</span>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Search Type Indicator */}
-          {searchType === "voice" && voiceQuery && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Mic className="h-4 w-4" />
-              <span>Búsqueda por voz:</span>
-              <Badge variant="outline">"{voiceQuery}"</Badge>
+        {/* Content */}
+        <div className="flex-1 min-h-0">
+          {!userId ? (
+            <div className="text-center py-8">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">Inicia sesión para buscar en tu historial de conversaciones</p>
             </div>
-          )}
-
-          {/* No User Warning */}
-          {!userId && (
-            <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="flex items-center gap-2 text-sm text-yellow-700">
-                <AlertCircle className="h-4 w-4" />
-                Inicia sesión para buscar en tu historial de conversaciones
-              </div>
-            </div>
-          )}
-
-          <Separator />
-
-          {/* Search Results */}
-          <ScrollArea className="h-96">
-            {isSearching ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                <span className="text-sm text-muted-foreground">Buscando...</span>
-              </div>
-            ) : results.length > 0 ? (
-              <div className="space-y-3">
-                {results.map((result) => (
-                  <div
-                    key={result.id}
-                    className="p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => handleResultClick(result)}
-                  >
-                    <div className="flex items-start justify-between mb-2">
+          ) : query.trim().length === 0 ? (
+            <div>
+              <h3 className="text-sm font-medium mb-3">Sugerencias de Búsqueda</h3>
+              {isLoadingSuggestions ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  <span className="text-sm text-muted-foreground">Cargando sugerencias...</span>
+                </div>
+              ) : suggestions.length > 0 ? (
+                <div className="space-y-2">
+                  {suggestions.map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">{getRoleIcon(result.role)}</span>
-                        <Badge variant={getRoleBadgeVariant(result.role)} className="text-xs">
-                          {result.role === "user" ? "Tú" : "AI Coach"}
-                        </Badge>
-                        {result.sessionId === currentSessionId && (
-                          <Badge variant="secondary" className="text-xs">
-                            Sesión actual
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm">{suggestion.text}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {suggestion.category && (
+                          <Badge variant="outline" className="text-xs">
+                            {suggestion.category}
                           </Badge>
                         )}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        {formatResultTime(result.timestamp)}
+                        <Badge variant="secondary" className="text-xs">
+                          {suggestion.type === "popular"
+                            ? "Popular"
+                            : suggestion.type === "recent"
+                              ? "Reciente"
+                              : suggestion.type === "topic"
+                                ? "Tema"
+                                : "Palabra clave"}
+                        </Badge>
                       </div>
                     </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">No hay sugerencias disponibles</p>
+              )}
+            </div>
+          ) : (
+            <div>
+              {/* Results Header */}
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium">
+                  Resultados de búsqueda
+                  {totalCount > 0 && <span className="text-muted-foreground ml-1">({totalCount})</span>}
+                </h3>
+                {query && (
+                  <Badge variant="outline" className="text-xs">
+                    "{query}"
+                  </Badge>
+                )}
+              </div>
 
-                    <p className="text-sm leading-relaxed">{highlightQuery(result.snippet || result.content, query)}</p>
+              {/* Results */}
+              <ScrollArea className="h-[400px]">
+                {isSearching ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                    <span className="text-sm text-muted-foreground">Buscando...</span>
+                  </div>
+                ) : results.length > 0 ? (
+                  <div className="space-y-3">
+                    {results.map((result) => (
+                      <div
+                        key={result.id}
+                        className="p-3 rounded-lg border hover:bg-muted cursor-pointer transition-colors"
+                        onClick={() => handleResultClick(result)}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            {getRoleIcon(result.role)}
+                            {getRoleBadge(result.role)}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {format(result.timestamp, "dd MMM, HH:mm", { locale: es })}
+                          </div>
+                        </div>
 
-                    {result.relevanceScore && (
-                      <div className="mt-2 flex items-center gap-1">
-                        <span className="text-xs text-muted-foreground">Relevancia:</span>
-                        <div className="w-16 h-1 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-primary transition-all"
-                            style={{ width: `${result.relevanceScore * 100}%` }}
-                          />
+                        <p className="text-sm leading-relaxed mb-2">
+                          {formatSnippet(result.snippet, query)
+                            .split("**")
+                            .map((part, index) =>
+                              index % 2 === 1 ? (
+                                <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">
+                                  {part}
+                                </mark>
+                              ) : (
+                                part
+                              ),
+                            )}
+                        </p>
+
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-xs">
+                            <MessageSquare className="h-3 w-3 mr-1" />
+                            Sesión {result.session_id.split("-").pop()?.slice(0, 8)}
+                          </Badge>
+                          <div className="text-xs text-muted-foreground">
+                            Relevancia: {Math.round(result.relevanceScore)}%
+                          </div>
                         </div>
                       </div>
-                    )}
+                    ))}
                   </div>
-                ))}
-              </div>
-            ) : query && !isSearching ? (
-              <div className="text-center py-8">
-                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-2">No se encontraron resultados</p>
-                <p className="text-xs text-muted-foreground">
-                  Intenta con diferentes palabras clave o usa la búsqueda por voz
-                </p>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-2">Busca en tu historial de conversaciones</p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <Badge
-                    variant="outline"
-                    className="cursor-pointer text-xs"
-                    onClick={() => setQuery("desarrollo profesional")}
-                  >
-                    desarrollo profesional
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="cursor-pointer text-xs"
-                    onClick={() => setQuery("entrevista trabajo")}
-                  >
-                    entrevista trabajo
-                  </Badge>
-                  <Badge variant="outline" className="cursor-pointer text-xs" onClick={() => setQuery("salario Chile")}>
-                    salario Chile
-                  </Badge>
-                </div>
-              </div>
-            )}
-          </ScrollArea>
+                ) : query.trim().length >= 2 ? (
+                  <div className="text-center py-8">
+                    <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                    <p className="text-muted-foreground mb-2">No se encontraron resultados</p>
+                    <p className="text-sm text-muted-foreground">Intenta con términos diferentes o más generales</p>
+                  </div>
+                ) : null}
+              </ScrollArea>
+            </div>
+          )}
+        </div>
 
-          {/* Search Tips */}
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p>
-              💡 <strong>Consejos de búsqueda:</strong>
-            </p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Usa palabras clave específicas como "CV", "entrevista", "salario"</li>
-              <li>Prueba la búsqueda por voz haciendo clic en el micrófono</li>
-              <li>Los resultados se ordenan por relevancia y fecha</li>
-            </ul>
+        <Separator />
+
+        {/* Footer */}
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center gap-4">
+            <span>Busca en tu historial de conversaciones</span>
+            <span>Usa el micrófono para búsqueda por voz</span>
           </div>
+          {currentSessionId && <span>Sesión actual: {currentSessionId.split("-").pop()?.slice(0, 8)}</span>}
         </div>
       </DialogContent>
     </Dialog>
