@@ -1,9 +1,25 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase-server"
+import { createServerClient } from "@supabase/ssr"
+
+function createClient(request: NextRequest) {
+  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      get(name: string) {
+        return request.cookies.get(name)?.value
+      },
+      set(name: string, value: string, options: any) {
+        // No podemos establecer cookies en una API route GET
+      },
+      remove(name: string, options: any) {
+        // No podemos remover cookies en una API route GET
+      },
+    },
+  })
+}
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = createClient(request)
     const {
       data: { user },
       error: authError,
@@ -58,7 +74,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = createClient(request)
     const {
       data: { user },
       error: authError,
@@ -127,7 +143,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = createClient(request)
     const {
       data: { user },
       error: authError,
@@ -182,7 +198,7 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = createClient(request)
     const {
       data: { user },
       error: authError,

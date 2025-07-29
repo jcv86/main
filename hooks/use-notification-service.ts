@@ -1,159 +1,208 @@
 "use client"
 
-import { useState } from "react"
-import { notificationService, type NotificationData } from "@/lib/notification-service"
-import { useAuth } from "@/contexts/auth-context"
+import { useState, useEffect, useCallback } from "react"
+import { notificationService, type NotificacionEspanol, type NotificationStats } from "@/lib/notification-service"
 
 export function useNotificationService() {
-  const { user } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const [notifications, setNotifications] = useState<NotificacionEspanol[]>([])
+  const [stats, setStats] = useState<NotificationStats | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const crearNotificacion = async (data: NotificationData) => {
-    if (!user?.id) return null
-
-    setLoading(true)
-    setError(null)
-
+  // Cargar notificaciones
+  const cargarNotificaciones = useCallback(async () => {
     try {
-      const result = await notificationService.crearNotificacion(user.id, data)
-      return result
+      setLoading(true)
+      setError(null)
+      const notificaciones = await notificationService.obtenerNotificaciones()
+      setNotifications(notificaciones)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al crear notificación")
-      return null
+      setError(err instanceof Error ? err.message : "Error desconocido")
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const marcarComoLeida = async (notificationId: string) => {
-    setLoading(true)
-    setError(null)
-
+  // Cargar estadísticas
+  const cargarEstadisticas = useCallback(async () => {
     try {
-      const result = await notificationService.marcarComoLeida(notificationId)
-      return result
+      const estadisticas = await notificationService.obtenerEstadisticas()
+      setStats(estadisticas)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al marcar como leída")
-      return false
-    } finally {
-      setLoading(false)
+      console.error("Error al cargar estadísticas:", err)
     }
-  }
+  }, [])
 
-  const marcarTodasComoLeidas = async () => {
-    setLoading(true)
-    setError(null)
+  // Crear notificación
+  const crearNotificacion = useCallback(
+    async (
+      titulo: string,
+      mensaje: string,
+      tipo?: NotificacionEspanol["tipo"],
+      categoria?: NotificacionEspanol["categoria"],
+      prioridad?: NotificacionEspanol["prioridad"],
+      icono?: string,
+      urlAccion?: string,
+    ) => {
+      try {
+        const nuevaNotificacion = await notificationService.crearNotificacion(
+          titulo,
+          mensaje,
+          tipo,
+          categoria,
+          prioridad,
+          icono,
+          urlAccion,
+        )
+        setNotifications((prev) => [nuevaNotificacion, ...prev])
+        await cargarEstadisticas()
+        return nuevaNotificacion
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al crear notificación")
+        throw err
+      }
+    },
+    [cargarEstadisticas],
+  )
 
+  // Marcar como leída
+  const marcarComoLeida = useCallback(
+    async (id: string) => {
+      try {
+        await notificationService.marcarComoLeida(id)
+        setNotifications((prev) => prev.map((notif) => (notif.id === id ? { ...notif, leida: true } : notif)))
+        await cargarEstadisticas()
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al marcar como leída")
+        throw err
+      }
+    },
+    [cargarEstadisticas],
+  )
+
+  // Marcar todas como leídas
+  const marcarTodasComoLeidas = useCallback(async () => {
     try {
-      const result = await notificationService.marcarTodasComoLeidas()
-      return result
+      await notificationService.marcarTodasComoLeidas()
+      setNotifications((prev) => prev.map((notif) => ({ ...notif, leida: true })))
+      await cargarEstadisticas()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al marcar todas como leídas")
-      return 0
-    } finally {
-      setLoading(false)
+      throw err
     }
-  }
+  }, [cargarEstadisticas])
 
-  const obtenerNotificaciones = async (filtros?: {
-    categoria?: string
-    prioridad?: string
-    soloNoLeidas?: boolean
-    limite?: number
-  }) => {
-    if (!user?.id) return []
+  // Eliminar notificación
+  const eliminarNotificacion = useCallback(
+    async (id: string) => {
+      try {
+        await notificationService.eliminarNotificacion(id)
+        setNotifications((prev) => prev.filter((notif) => notif.id !== id))
+        await cargarEstadisticas()
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al eliminar notificación")
+        throw err
+      }
+    },
+    [cargarEstadisticas],
+  )
 
-    setLoading(true)
-    setError(null)
-
+  // Limpiar todas las notificaciones
+  const limpiarTodas = useCallback(async () => {
     try {
-      const result = await notificationService.obtenerNotificaciones(user.id, filtros)
-      return result
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al obtener notificaciones")
-      return []
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const eliminarNotificacion = async (notificationId: string) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const result = await notificationService.eliminarNotificacion(notificationId)
-      return result
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al eliminar notificación")
-      return false
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const limpiarTodas = async () => {
-    if (!user?.id) return false
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const result = await notificationService.limpiarTodasLasNotificaciones(user.id)
-      return result
+      await notificationService.limpiarTodasLasNotificaciones()
+      setNotifications([])
+      await cargarEstadisticas()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al limpiar notificaciones")
-      return false
-    } finally {
-      setLoading(false)
+      throw err
     }
-  }
+  }, [cargarEstadisticas])
 
-  // Métodos de conveniencia para notificaciones predefinidas
-  const notificarEvaluacionCompletada = async (tipoEvaluacion: string) => {
-    if (!user?.id) return null
-    return notificationService.notificarEvaluacionCompletada(user.id, tipoEvaluacion)
-  }
+  // Métodos de conveniencia
+  const notificarEvaluacionCompletada = useCallback(
+    async (tipoEvaluacion: string) => {
+      return notificationService.notificarEvaluacionCompletada(tipoEvaluacion).then((notif) => {
+        setNotifications((prev) => [notif, ...prev])
+        cargarEstadisticas()
+        return notif
+      })
+    },
+    [cargarEstadisticas],
+  )
 
-  const notificarNuevaOfertaTrabajo = async (empresa: string, puesto: string, urlTrabajo?: string) => {
-    if (!user?.id) return null
-    return notificationService.notificarNuevaOfertaTrabajo(user.id, empresa, puesto, urlTrabajo)
-  }
+  const notificarNuevaOportunidadLaboral = useCallback(
+    async (empresa: string, puesto: string) => {
+      return notificationService.notificarNuevaOportunidadLaboral(empresa, puesto).then((notif) => {
+        setNotifications((prev) => [notif, ...prev])
+        cargarEstadisticas()
+        return notif
+      })
+    },
+    [cargarEstadisticas],
+  )
 
-  const notificarLibroRecomendado = async (tituloLibro: string, autor?: string) => {
-    if (!user?.id) return null
-    return notificationService.notificarLibroRecomendado(user.id, tituloLibro, autor)
-  }
+  const notificarLibroRecomendado = useCallback(
+    async (titulo: string) => {
+      return notificationService.notificarLibroRecomendado(titulo).then((notif) => {
+        setNotifications((prev) => [notif, ...prev])
+        cargarEstadisticas()
+        return notif
+      })
+    },
+    [cargarEstadisticas],
+  )
 
-  const notificarLogroDesbloqueado = async (nombreLogro: string, descripcion: string) => {
-    if (!user?.id) return null
-    return notificationService.notificarLogroDesbloqueado(user.id, nombreLogro, descripcion)
-  }
+  const notificarLogroDesbloqueado = useCallback(
+    async (logro: string) => {
+      return notificationService.notificarLogroDesbloqueado(logro).then((notif) => {
+        setNotifications((prev) => [notif, ...prev])
+        cargarEstadisticas()
+        return notif
+      })
+    },
+    [cargarEstadisticas],
+  )
 
-  const crearRecordatorio = async (titulo: string, mensaje: string, urlAccion?: string) => {
-    if (!user?.id) return null
-    return notificationService.crearRecordatorio(user.id, titulo, mensaje, urlAccion)
-  }
+  const notificarRecordatorioCV = useCallback(async () => {
+    return notificationService.notificarRecordatorioCV().then((notif) => {
+      setNotifications((prev) => [notif, ...prev])
+      cargarEstadisticas()
+      return notif
+    })
+  }, [cargarEstadisticas])
+
+  // Cargar datos al montar el componente
+  useEffect(() => {
+    cargarNotificaciones()
+    cargarEstadisticas()
+  }, [cargarNotificaciones, cargarEstadisticas])
 
   return {
-    // Estados
+    // Estado
+    notifications,
+    stats,
     loading,
     error,
 
-    // Métodos principales
+    // Acciones básicas
+    cargarNotificaciones,
+    cargarEstadisticas,
     crearNotificacion,
     marcarComoLeida,
     marcarTodasComoLeidas,
-    obtenerNotificaciones,
     eliminarNotificacion,
     limpiarTodas,
 
     // Métodos de conveniencia
     notificarEvaluacionCompletada,
-    notificarNuevaOfertaTrabajo,
+    notificarNuevaOportunidadLaboral,
     notificarLibroRecomendado,
     notificarLogroDesbloqueado,
-    crearRecordatorio,
+    notificarRecordatorioCV,
+
+    // Utilidades
+    notificacionesNoLeidas: notifications.filter((n) => !n.leida),
+    totalNoLeidas: notifications.filter((n) => !n.leida).length,
   }
 }

@@ -1,323 +1,329 @@
-import { createClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase"
 
-export interface NotificationData {
+export interface NotificacionEspanol {
+  id: string
   titulo: string
   mensaje: string
-  tipo: "info" | "success" | "warning" | "error"
-  categoria: "evaluacion" | "trabajo" | "biblioteca" | "coach" | "logro" | "sistema"
+  tipo: "success" | "info" | "warning" | "error"
+  categoria: "evaluacion" | "trabajo" | "biblioteca" | "coach" | "logros" | "sistema" | "recordatorio"
   prioridad: "baja" | "media" | "alta" | "urgente"
-  icono?: string
+  icono: string
   urlAccion?: string
+  leida: boolean
+  fechaCreacion: string
+  fechaActualizacion: string
+}
+
+export interface NotificationStats {
+  total: number
+  noLeidas: number
+  leidas: number
+  porCategoria: Record<string, number>
+  porPrioridad: Record<string, number>
 }
 
 export class NotificationService {
   private supabase = createClient()
 
-  /**
-   * Crear una nueva notificación para un usuario
-   */
-  async crearNotificacion(userId: string, data: NotificationData): Promise<string | null> {
+  // Obtener todas las notificaciones del usuario
+  async obtenerNotificaciones(limite = 50): Promise<NotificacionEspanol[]> {
     try {
-      const { data: result, error } = await this.supabase.rpc("create_notification", {
-        p_user_id: userId,
-        p_title: data.titulo,
-        p_message: data.mensaje,
-        p_type: data.tipo,
-        p_category: data.categoria,
-        p_priority: data.prioridad,
-        p_icon: data.icono || this.getDefaultIcon(data.tipo),
-        p_action_url: data.urlAccion,
-      })
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
 
-      if (error) {
-        console.error("Error al crear notificación:", error)
-        return null
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
       }
 
-      return result
-    } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return null
-    }
-  }
-
-  /**
-   * Marcar una notificación como leída
-   */
-  async marcarComoLeida(notificationId: string): Promise<boolean> {
-    try {
-      const { data, error } = await this.supabase.rpc("mark_notification_as_read", {
-        notification_id: notificationId,
-      })
-
-      if (error) {
-        console.error("Error al marcar notificación como leída:", error)
-        return false
-      }
-
-      return data
-    } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return false
-    }
-  }
-
-  /**
-   * Marcar todas las notificaciones como leídas
-   */
-  async marcarTodasComoLeidas(): Promise<number> {
-    try {
-      const { data, error } = await this.supabase.rpc("mark_all_notifications_as_read")
-
-      if (error) {
-        console.error("Error al marcar todas las notificaciones como leídas:", error)
-        return 0
-      }
-
-      return data || 0
-    } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return 0
-    }
-  }
-
-  /**
-   * Obtener estadísticas de notificaciones
-   */
-  async obtenerEstadisticas(userId: string): Promise<any> {
-    try {
-      const { data, error } = await this.supabase.rpc("get_notification_stats", {
-        p_user_id: userId,
-      })
-
-      if (error) {
-        console.error("Error al obtener estadísticas:", error)
-        return {}
-      }
-
-      return data || {}
-    } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return {}
-    }
-  }
-
-  /**
-   * Obtener notificaciones de un usuario
-   */
-  async obtenerNotificaciones(
-    userId: string,
-    filtros?: {
-      categoria?: string
-      prioridad?: string
-      soloNoLeidas?: boolean
-      limite?: number
-    },
-  ): Promise<any[]> {
-    try {
-      let query = this.supabase
+      const { data: notifications, error } = await this.supabase
         .from("notifications")
         .select("*")
-        .eq("user_id", userId)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false })
-
-      if (filtros?.categoria && filtros.categoria !== "todas") {
-        query = query.eq("category", filtros.categoria)
-      }
-
-      if (filtros?.prioridad && filtros.prioridad !== "todas") {
-        query = query.eq("priority", filtros.prioridad)
-      }
-
-      if (filtros?.soloNoLeidas) {
-        query = query.eq("read", false)
-      }
-
-      if (filtros?.limite) {
-        query = query.limit(filtros.limite)
-      }
-
-      const { data, error } = await query
+        .limit(limite)
 
       if (error) {
-        console.error("Error al obtener notificaciones:", error)
-        return []
+        throw new Error(`Error al obtener notificaciones: ${error.message}`)
       }
 
-      // Transformar al formato español
-      return (
-        data?.map((notif) => ({
-          id: notif.id,
-          titulo: notif.title,
-          mensaje: notif.message,
-          tipo: notif.type,
-          categoria: notif.category,
-          prioridad: notif.priority,
-          icono: notif.icon,
-          urlAccion: notif.action_url,
-          leida: notif.read,
-          fechaCreacion: notif.created_at,
-          fechaActualizacion: notif.updated_at,
-          // Mantener compatibilidad
-          title: notif.title,
-          message: notif.message,
-          read: notif.read,
-          created_at: notif.created_at,
-        })) || []
-      )
+      return this.transformarNotificaciones(notifications || [])
     } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return []
+      console.error("Error en obtenerNotificaciones:", error)
+      throw error
     }
   }
 
-  /**
-   * Eliminar una notificación
-   */
-  async eliminarNotificacion(notificationId: string): Promise<boolean> {
+  // Crear una nueva notificación
+  async crearNotificacion(
+    titulo: string,
+    mensaje: string,
+    tipo: NotificacionEspanol["tipo"] = "info",
+    categoria: NotificacionEspanol["categoria"] = "sistema",
+    prioridad: NotificacionEspanol["prioridad"] = "media",
+    icono = "📢",
+    urlAccion?: string,
+  ): Promise<NotificacionEspanol> {
     try {
-      const { error } = await this.supabase.from("notifications").delete().eq("id", notificationId)
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
 
-      if (error) {
-        console.error("Error al eliminar notificación:", error)
-        return false
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
       }
 
-      return true
+      const { data: notification, error } = await this.supabase
+        .from("notifications")
+        .insert({
+          user_id: user.id,
+          title: titulo,
+          message: mensaje,
+          type: tipo,
+          category: categoria,
+          priority: prioridad,
+          icon: icono,
+          action_url: urlAccion,
+          read: false,
+        })
+        .select()
+        .single()
+
+      if (error) {
+        throw new Error(`Error al crear notificación: ${error.message}`)
+      }
+
+      return this.transformarNotificacion(notification)
     } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return false
+      console.error("Error en crearNotificacion:", error)
+      throw error
     }
   }
 
-  /**
-   * Limpiar todas las notificaciones de un usuario
-   */
-  async limpiarTodasLasNotificaciones(userId: string): Promise<boolean> {
+  // Marcar notificación como leída
+  async marcarComoLeida(id: string): Promise<void> {
     try {
-      const { error } = await this.supabase.from("notifications").delete().eq("user_id", userId)
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
 
-      if (error) {
-        console.error("Error al limpiar notificaciones:", error)
-        return false
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
       }
 
-      return true
+      const { error } = await this.supabase
+        .from("notifications")
+        .update({ read: true })
+        .eq("id", id)
+        .eq("user_id", user.id)
+
+      if (error) {
+        throw new Error(`Error al marcar como leída: ${error.message}`)
+      }
     } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return false
+      console.error("Error en marcarComoLeida:", error)
+      throw error
     }
   }
 
-  /**
-   * Notificaciones predefinidas
-   */
-  async notificarEvaluacionCompletada(userId: string, tipoEvaluacion: string): Promise<string | null> {
-    return this.crearNotificacion(userId, {
-      titulo: "¡Evaluación completada exitosamente!",
-      mensaje: `Has completado la evaluación de ${tipoEvaluacion}. Revisa tus resultados y recomendaciones personalizadas.`,
-      tipo: "success",
-      categoria: "evaluacion",
-      prioridad: "media",
-      icono: "✅",
-      urlAccion: "/profile",
-    })
-  }
-
-  async notificarNuevaOfertaTrabajo(
-    userId: string,
-    empresa: string,
-    puesto: string,
-    urlTrabajo?: string,
-  ): Promise<string | null> {
-    return this.crearNotificacion(userId, {
-      titulo: "Nueva oportunidad laboral disponible",
-      mensaje: `${empresa} está buscando un ${puesto}. Esta oferta coincide con tu perfil profesional.`,
-      tipo: "info",
-      categoria: "trabajo",
-      prioridad: "alta",
-      icono: "💼",
-      urlAccion: urlTrabajo || "/job-search",
-    })
-  }
-
-  async notificarLibroRecomendado(userId: string, tituloLibro: string, autor?: string): Promise<string | null> {
-    const mensaje = autor
-      ? `Te recomendamos leer "${tituloLibro}" de ${autor} para tu desarrollo profesional.`
-      : `Te recomendamos leer "${tituloLibro}" para tu desarrollo profesional.`
-
-    return this.crearNotificacion(userId, {
-      titulo: "Nuevo libro recomendado",
-      mensaje,
-      tipo: "info",
-      categoria: "biblioteca",
-      prioridad: "baja",
-      icono: "📚",
-      urlAccion: "/library",
-    })
-  }
-
-  async notificarLogroDesbloqueado(userId: string, nombreLogro: string, descripcion: string): Promise<string | null> {
-    return this.crearNotificacion(userId, {
-      titulo: `¡Logro desbloqueado: ${nombreLogro}!`,
-      mensaje: descripcion,
-      tipo: "success",
-      categoria: "logro",
-      prioridad: "media",
-      icono: "🏆",
-      urlAccion: "/profile",
-    })
-  }
-
-  async crearRecordatorio(userId: string, titulo: string, mensaje: string, urlAccion?: string): Promise<string | null> {
-    return this.crearNotificacion(userId, {
-      titulo,
-      mensaje,
-      tipo: "warning",
-      categoria: "sistema",
-      prioridad: "media",
-      icono: "⏰",
-      urlAccion,
-    })
-  }
-
-  /**
-   * Obtener icono por defecto según el tipo
-   */
-  private getDefaultIcon(tipo: string): string {
-    const iconos = {
-      info: "ℹ️",
-      success: "✅",
-      warning: "⚠️",
-      error: "❌",
-    }
-    return iconos[tipo as keyof typeof iconos] || "📢"
-  }
-
-  /**
-   * Limpiar notificaciones antiguas
-   */
-  async limpiarNotificacionesAntiguas(): Promise<number> {
+  // Marcar todas las notificaciones como leídas
+  async marcarTodasComoLeidas(): Promise<void> {
     try {
-      const { data, error } = await this.supabase.rpc("cleanup_old_notifications")
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
 
-      if (error) {
-        console.error("Error al limpiar notificaciones antiguas:", error)
-        return 0
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
       }
 
-      return data || 0
+      const { error } = await this.supabase
+        .from("notifications")
+        .update({ read: true })
+        .eq("user_id", user.id)
+        .eq("read", false)
+
+      if (error) {
+        throw new Error(`Error al marcar todas como leídas: ${error.message}`)
+      }
     } catch (error) {
-      console.error("Error en servicio de notificaciones:", error)
-      return 0
+      console.error("Error en marcarTodasComoLeidas:", error)
+      throw error
+    }
+  }
+
+  // Eliminar notificación
+  async eliminarNotificacion(id: string): Promise<void> {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
+
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
+      }
+
+      const { error } = await this.supabase.from("notifications").delete().eq("id", id).eq("user_id", user.id)
+
+      if (error) {
+        throw new Error(`Error al eliminar notificación: ${error.message}`)
+      }
+    } catch (error) {
+      console.error("Error en eliminarNotificacion:", error)
+      throw error
+    }
+  }
+
+  // Limpiar todas las notificaciones
+  async limpiarTodasLasNotificaciones(): Promise<void> {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
+
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
+      }
+
+      const { error } = await this.supabase.from("notifications").delete().eq("user_id", user.id)
+
+      if (error) {
+        throw new Error(`Error al limpiar notificaciones: ${error.message}`)
+      }
+    } catch (error) {
+      console.error("Error en limpiarTodasLasNotificaciones:", error)
+      throw error
+    }
+  }
+
+  // Obtener estadísticas de notificaciones
+  async obtenerEstadisticas(): Promise<NotificationStats> {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser()
+
+      if (authError || !user) {
+        throw new Error("Usuario no autenticado")
+      }
+
+      const { data: notifications, error } = await this.supabase
+        .from("notifications")
+        .select("read, category, priority")
+        .eq("user_id", user.id)
+
+      if (error) {
+        throw new Error(`Error al obtener estadísticas: ${error.message}`)
+      }
+
+      const stats: NotificationStats = {
+        total: notifications?.length || 0,
+        noLeidas: notifications?.filter((n) => !n.read).length || 0,
+        leidas: notifications?.filter((n) => n.read).length || 0,
+        porCategoria: {},
+        porPrioridad: {},
+      }
+
+      // Contar por categoría
+      notifications?.forEach((n) => {
+        stats.porCategoria[n.category] = (stats.porCategoria[n.category] || 0) + 1
+        stats.porPrioridad[n.priority] = (stats.porPrioridad[n.priority] || 0) + 1
+      })
+
+      return stats
+    } catch (error) {
+      console.error("Error en obtenerEstadisticas:", error)
+      throw error
+    }
+  }
+
+  // Métodos de conveniencia para tipos específicos de notificaciones
+  async notificarEvaluacionCompletada(tipoEvaluacion: string): Promise<NotificacionEspanol> {
+    return this.crearNotificacion(
+      "Evaluación completada",
+      `Has completado exitosamente la evaluación de ${tipoEvaluacion}. Revisa tus resultados.`,
+      "success",
+      "evaluacion",
+      "media",
+      "✅",
+    )
+  }
+
+  async notificarNuevaOportunidadLaboral(empresa: string, puesto: string): Promise<NotificacionEspanol> {
+    return this.crearNotificacion(
+      "Nueva oportunidad laboral",
+      `${empresa} está buscando un ${puesto}. ¡Podría ser perfecto para ti!`,
+      "info",
+      "trabajo",
+      "alta",
+      "💼",
+      "/job-search",
+    )
+  }
+
+  async notificarLibroRecomendado(titulo: string): Promise<NotificacionEspanol> {
+    return this.crearNotificacion(
+      "Libro recomendado",
+      `Te recomendamos leer "${titulo}" basado en tu perfil profesional.`,
+      "info",
+      "biblioteca",
+      "baja",
+      "📚",
+      "/library",
+    )
+  }
+
+  async notificarLogroDesbloqueado(logro: string): Promise<NotificacionEspanol> {
+    return this.crearNotificacion(
+      "¡Logro desbloqueado!",
+      `Has desbloqueado el logro: ${logro}`,
+      "success",
+      "logros",
+      "alta",
+      "🏆",
+    )
+  }
+
+  async notificarRecordatorioCV(): Promise<NotificacionEspanol> {
+    return this.crearNotificacion(
+      "Actualiza tu CV",
+      "Es recomendable actualizar tu CV cada 3 meses. ¡Hazlo ahora!",
+      "warning",
+      "recordatorio",
+      "media",
+      "📄",
+      "/cv-builder",
+    )
+  }
+
+  // Transformar datos de la base de datos al formato español
+  private transformarNotificaciones(notifications: any[]): NotificacionEspanol[] {
+    return notifications.map(this.transformarNotificacion)
+  }
+
+  private transformarNotificacion(notification: any): NotificacionEspanol {
+    return {
+      id: notification.id,
+      titulo: notification.title,
+      mensaje: notification.message,
+      tipo: notification.type,
+      categoria: notification.category,
+      prioridad: notification.priority,
+      icono: notification.icon,
+      urlAccion: notification.action_url,
+      leida: notification.read,
+      fechaCreacion: notification.created_at,
+      fechaActualizacion: notification.updated_at,
     }
   }
 }
 
 // Instancia singleton del servicio
 export const notificationService = new NotificationService()
-
-// Hook para usar el servicio en componentes
-export function useNotificationService() {
-  return notificationService
-}
