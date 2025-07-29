@@ -1,11 +1,27 @@
-export const siteConfig = {
-  name: "Career Development Platform",
-  description: "Comprehensive career development platform for Chilean professionals",
-  url: "https://career-platform.vercel.app",
-  ogImage: "https://career-platform.vercel.app/og.jpg",
+export type SiteConfig = {
+  name: string
+  description: string
+  url: string
+  ogImage: string
   links: {
-    twitter: "https://twitter.com/careerplatform",
-    github: "https://github.com/careerplatform",
+    twitter: string
+    github: string
+  }
+  mainNav: {
+    title: string
+    href: string
+  }[]
+}
+
+export const siteConfig: SiteConfig = {
+  name: "DTC Career Platform",
+  description:
+    "Plataforma integral de desarrollo profesional con evaluaciones de personalidad, construcción de CV y búsqueda de empleo.",
+  url: "https://dtc-career.vercel.app",
+  ogImage: "https://dtc-career.vercel.app/og.jpg",
+  links: {
+    twitter: "https://twitter.com/dtccareer",
+    github: "https://github.com/dtc-career/platform",
   },
   mainNav: [
     {
@@ -13,7 +29,7 @@ export const siteConfig = {
       href: "/dashboard",
     },
     {
-      title: "Assessments",
+      title: "Evaluaciones",
       href: "/assessments",
     },
     {
@@ -21,18 +37,16 @@ export const siteConfig = {
       href: "/cv-builder",
     },
     {
-      title: "Career Coach",
-      href: "/career-coach",
-    },
-    {
-      title: "Job Search",
+      title: "Búsqueda de Empleo",
       href: "/job-search",
     },
     {
-      title: "Library",
+      title: "Coach de Carrera",
+      href: "/career-coach",
+    },
+    {
+      title: "Biblioteca",
       href: "/library",
     },
   ],
 }
-
-export type SiteConfig = typeof siteConfig

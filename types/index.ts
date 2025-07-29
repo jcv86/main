@@ -4,74 +4,76 @@ export interface User {
   name: string
   avatar?: string
   role: "user" | "admin"
+  created_at: string
+  updated_at: string
 }
 
 export interface Assessment {
   id: string
   title: string
   description: string
-  type: "personality" | "technical" | "soft-skills" | "career"
+  type: "personality" | "skills" | "technical" | "soft-skills"
   duration: number
-  questions: number
+  questions_count: number
   completed: boolean
   score?: number
-  completedAt?: string
+  completed_at?: string
+  created_at: string
 }
 
 export interface CVData {
-  personalInfo: {
-    fullName: string
+  id: string
+  user_id: string
+  personal_info: {
+    name: string
     email: string
     phone: string
     location: string
-    website?: string
-    linkedin?: string
-    github?: string
+    summary: string
   }
-  summary: string
   experience: Array<{
-    title: string
+    id: string
     company: string
-    location: string
-    startDate: string
-    endDate: string
+    position: string
+    start_date: string
+    end_date?: string
     description: string
-    current?: boolean
   }>
   education: Array<{
+    id: string
+    institution: string
     degree: string
-    school: string
-    location: string
-    startDate: string
-    endDate: string
-    gpa?: string
-    current?: boolean
+    field: string
+    start_date: string
+    end_date?: string
   }>
   skills: string[]
-  languages?: string[]
-  certifications?: string[]
-  projects?: Array<{
+  languages: Array<{
     name: string
-    description: string
-    technologies: string[]
-    url?: string
+    level: string
   }>
+  created_at: string
+  updated_at: string
 }
 
-export interface CVTemplate {
+export interface Job {
   id: string
-  name: string
+  title: string
+  company: string
+  location: string
+  type: "full-time" | "part-time" | "contract" | "remote"
+  salary_range?: string
   description: string
-  colors: {
-    primary: string
-    secondary: string
-    accent: string
-    text: string
-    background: string
-  }
-  fonts: {
-    heading: string
-    body: string
-  }
-  layout: "single-column" | "two-column" | "sidebar"
+  requirements: string[]
+  posted_at: string
+  expires_at?: string
+}
+
+export interface Notification {
+  id: string
+  title: string
+  message: string
+  type: "info" | "success" | "warning" | "error"
+  read: boolean
+  created_at: string
 }

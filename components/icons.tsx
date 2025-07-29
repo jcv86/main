@@ -1,3 +1,4 @@
+import type React from "react"
 import {
   AlertTriangle,
   ArrowRight,
@@ -9,10 +10,9 @@ import {
   File,
   FileText,
   HelpCircle,
-  ImageIcon,
+  Image,
   Laptop,
   Loader2,
-  type LightbulbIcon as LucideProps,
   Moon,
   MoreVertical,
   Pizza,
@@ -37,7 +37,7 @@ export const Icons = {
   trash: Trash,
   post: FileText,
   page: File,
-  media: ImageIcon,
+  media: Image,
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
@@ -51,7 +51,7 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   check: Check,
-  gitHub: (props: LucideProps) => (
+  gitHub: (props: React.ComponentProps<"svg">) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
         fill="currentColor"
