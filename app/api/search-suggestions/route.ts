@@ -8,7 +8,37 @@ interface SearchSuggestion {
   frequency?: number
 }
 
+const suggestions = [
+  "Test de personalidad DISC",
+  "Test Big Five",
+  "Habilidades blandas",
+  "Habilidades técnicas",
+  "CV Builder",
+  "Búsqueda de empleo",
+  "Coach de carrera",
+  "Simulador de entrevistas",
+  "Biblioteca de libros",
+  "Calendario de actividades",
+  "Metas profesionales",
+  "Carreras UDD",
+  "Bachillerato",
+  "Sistema Mirix",
+  "Evaluación de habilidades",
+  "Test adaptativo",
+  "Coach de personalidad",
+  "Generador CV IA",
+]
+
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const query = searchParams.get("q")?.toLowerCase() || ""
+
+  if (!query || query.length < 2) {
+    return NextResponse.json({ suggestions: [] })
+  }
+
+  const filteredSuggestions = suggestions.filter((suggestion) => suggestion.toLowerCase().includes(query)).slice(0, 5)
+
   try {
     const supabase = createClient()
 
@@ -18,7 +48,7 @@ export async function GET(request: NextRequest) {
       error: authError,
     } = await supabase.auth.getUser()
 
-    const suggestions: SearchSuggestion[] = []
+    const userSuggestions: SearchSuggestion[] = []
 
     if (user && !authError) {
       // Usuario autenticado: obtener sugerencias personalizadas
@@ -75,7 +105,7 @@ export async function GET(request: NextRequest) {
           })
 
           // Convertir a sugerencias ordenadas por frecuencia
-          const userSuggestions = Array.from(wordFrequency.entries())
+          const recentSuggestions = Array.from(wordFrequency.entries())
             .sort(([, a], [, b]) => b - a)
             .slice(0, 8)
             .map(([text, frequency], index) => ({
@@ -85,46 +115,15 @@ export async function GET(request: NextRequest) {
               frequency,
             }))
 
-          suggestions.push(...userSuggestions)
+          userSuggestions.push(...recentSuggestions)
         }
       } catch (error) {
         console.error("Error obteniendo sugerencias personalizadas:", error)
       }
     }
 
-    // Agregar sugerencias por defecto si no hay suficientes personalizadas
-    const defaultSuggestions: SearchSuggestion[] = [
-      // Sugerencias populares
-      { id: "pop-1", text: "desarrollo profesional", category: "popular", frequency: 45 },
-      { id: "pop-2", text: "cambio de carrera", category: "popular", frequency: 38 },
-      { id: "pop-3", text: "entrevista de trabajo", category: "popular", frequency: 32 },
-      { id: "pop-4", text: "networking profesional", category: "popular", frequency: 28 },
-      { id: "pop-5", text: "equilibrio vida-trabajo", category: "popular", frequency: 25 },
-
-      // Sugerencias de carrera
-      { id: "car-1", text: "objetivos profesionales", category: "career" },
-      { id: "car-2", text: "promoción laboral", category: "career" },
-      { id: "car-3", text: "negociación salarial", category: "career" },
-      { id: "car-4", text: "liderazgo", category: "career" },
-      { id: "car-5", text: "emprendimiento", category: "career" },
-
-      // Sugerencias de habilidades
-      { id: "ski-1", text: "habilidades técnicas", category: "skills" },
-      { id: "ski-2", text: "habilidades blandas", category: "skills" },
-      { id: "ski-3", text: "comunicación efectiva", category: "skills" },
-      { id: "ski-4", text: "gestión del tiempo", category: "skills" },
-      { id: "ski-5", text: "resolución de problemas", category: "skills" },
-    ]
-
     // Combinar sugerencias personalizadas con las por defecto
-    const allSuggestions = [...suggestions]
-
-    // Agregar sugerencias por defecto que no estén ya incluidas
-    defaultSuggestions.forEach((defaultSugg) => {
-      if (!allSuggestions.some((s) => s.text === defaultSugg.text)) {
-        allSuggestions.push(defaultSugg)
-      }
-    })
+    const allSuggestions = [...userSuggestions, ...filteredSuggestions]
 
     // Limitar a 15 sugerencias máximo
     const finalSuggestions = allSuggestions.slice(0, 15)
