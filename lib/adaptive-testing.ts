@@ -1,5 +1,69 @@
-// Adaptive Testing Engine for Soft Skills Assessment
-// Implements Item Response Theory (IRT) principles for efficient evaluation
+export type MemoryType = "conversation" | "preference" | "insight" | "goal" | "context"
+export type ImportanceLevel = "low" | "medium" | "high" | "critical"
+
+export interface MirixMemory {
+  id: string
+  user_id: string
+  agent_id: string
+  session_id?: string
+  memory_type: MemoryType
+  title: string
+  content: string
+  metadata?: Record<string, any>
+  importance: ImportanceLevel
+  tags: string[]
+  access_count: number
+  last_accessed_at?: string
+  expires_at?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface MemoryConnection {
+  id: string
+  source_memory_id: string
+  target_memory_id: string
+  connection_type: string
+  strength: number
+  created_at: string
+}
+
+export interface MirixSession {
+  id: string
+  user_id: string
+  agent_id: string
+  session_data: Record<string, any>
+  started_at: string
+  ended_at?: string
+  total_interactions: number
+  created_at: string
+}
+
+// Helper function to handle Supabase errors and retries
+async function withRetry<T>(operation: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  let lastError: any
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await operation()
+    } catch (error: any) {
+      lastError = error
+
+      // Check if it's a rate limiting error
+      if (error.message && error.message.includes("Too Many")) {
+        const delay = baseDelay * Math.pow(2, attempt) // Exponential backoff
+        console.warn(`Rate limited, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`)
+        await new Promise((resolve) => setTimeout(resolve, delay))
+        continue
+      }
+
+      // For other errors, don't retry
+      throw error
+    }
+  }
+
+  throw lastError
+}
 
 export interface TestQuestion {
   id: string
@@ -453,6 +517,100 @@ export const SOFT_SKILL_TESTS: Record<string, SoftSkillTest> = {
       },
     ],
   },
+
+  project_management: {
+    id: "project_management",
+    name: "Gestión de Proyectos",
+    description:
+      "Evalúa tu capacidad para planificar, ejecutar y controlar proyectos, gestionando recursos y riesgos de manera efectiva.",
+    skills: ["planning", "execution", "risk_management", "communication", "leadership"],
+    duration: "10-15 min",
+    minQuestions: 12,
+    maxQuestions: 25,
+    questions: [
+      {
+        id: "pm_1",
+        type: "scenario",
+        category: "Planificación",
+        skill: "planning",
+        difficulty: 3,
+        text: "Estás a cargo de un proyecto con un presupuesto limitado y un plazo ajustado. ¿Cómo priorizas las tareas y asignas los recursos?",
+        scenario:
+          "Tienes un proyecto de desarrollo de software con un presupuesto reducido y una fecha de entrega en 3 meses. El equipo es pequeño y tiene habilidades variadas.",
+        options: [
+          { id: "a", text: "Me enfoco en las funcionalidades esenciales y dejo de lado las secundarias", value: 5 },
+          { id: "b", text: "Asigno tareas según la disponibilidad de cada miembro del equipo", value: 3 },
+          { id: "c", text: "Busco financiamiento adicional para contratar más personal", value: 2 },
+          { id: "d", text: "Reduzco la calidad del producto para cumplir con el plazo", value: 1 },
+          { id: "e", text: "Divido el proyecto en fases y priorizo las más críticas", value: 4 },
+        ],
+        expectedResponseTime: 18000,
+      },
+      {
+        id: "pm_2",
+        type: "scale",
+        category: "Gestión de Riesgos",
+        skill: "risk_management",
+        difficulty: 4,
+        text: "¿Con qué frecuencia identificas y evalúas los riesgos potenciales en tus proyectos?",
+        options: [
+          { id: "1", text: "Nunca, confío en que todo saldrá bien", value: 1 },
+          { id: "2", text: "Solo al inicio del proyecto", value: 2 },
+          { id: "3", text: "Regularmente, durante todo el ciclo de vida", value: 5 },
+          { id: "4", text: "Cuando surgen problemas", value: 3 },
+          { id: "5", text: "Constantemente, para anticipar posibles obstáculos", value: 4 },
+        ],
+        expectedResponseTime: 12000,
+      },
+    ],
+  },
+
+  sales: {
+    id: "sales",
+    name: "Habilidades de Venta",
+    description:
+      "Evalúa tu capacidad para persuadir, negociar y cerrar acuerdos, construyendo relaciones duraderas con los clientes.",
+    skills: ["persuasion", "negotiation", "relationship_building", "closing_techniques"],
+    duration: "10-15 min",
+    minQuestions: 12,
+    maxQuestions: 25,
+    questions: [
+      {
+        id: "sales_1",
+        type: "scenario",
+        category: "Persuasión",
+        skill: "persuasion",
+        difficulty: 3,
+        text: "Un cliente potencial muestra escepticismo sobre los beneficios de tu producto. ¿Cómo lo convences de que es la mejor opción?",
+        scenario:
+          "Estás presentando un software a un cliente que ya utiliza una solución similar. El cliente duda de que tu producto ofrezca ventajas significativas.",
+        options: [
+          { id: "a", text: "Le aseguro que mi producto es superior sin dar detalles", value: 2 },
+          { id: "b", text: "Le ofrezco un descuento para cerrar la venta rápidamente", value: 3 },
+          { id: "c", text: "Le pregunto sobre sus necesidades y le muestro cómo mi producto las satisface", value: 5 },
+          { id: "d", text: "Le digo que mi producto es el más popular del mercado", value: 2 },
+          { id: "e", text: "Le invito a probar el producto gratuitamente durante un tiempo limitado", value: 4 },
+        ],
+        expectedResponseTime: 18000,
+      },
+      {
+        id: "sales_2",
+        type: "scale",
+        category: "Negociación",
+        skill: "negotiation",
+        difficulty: 4,
+        text: "¿Qué tan cómodo te sientes negociando precios y condiciones con clientes difíciles?",
+        options: [
+          { id: "1", text: "Me incomoda mucho negociar", value: 1 },
+          { id: "2", text: "Prefiero evitar la negociación", value: 2 },
+          { id: "3", text: "Puedo negociar en situaciones sencillas", value: 3 },
+          { id: "4", text: "Me siento cómodo negociando", value: 4 },
+          { id: "5", text: "Disfruto negociando y buscando acuerdos beneficiosos", value: 5 },
+        ],
+        expectedResponseTime: 12000,
+      },
+    ],
+  },
 }
 
 // Adaptive Testing Engine
@@ -743,6 +901,51 @@ class AdaptiveTestEngine {
         medium: "Buenas habilidades sociales con espacio para crecimiento.",
         low: "Las habilidades interpersonales son un área importante de desarrollo.",
       },
+      planning: {
+        high: "Eres un excelente planificador, anticipas los problemas y tienes planes de contingencia.",
+        medium: "Planificas tus proyectos, pero a veces te cuesta adaptarte a los cambios.",
+        low: "Te cuesta planificar y prefieres improvisar.",
+      },
+      execution: {
+        high: "Eres muy bueno ejecutando tus planes y cumpliendo tus objetivos.",
+        medium: "Generalmente cumples tus objetivos, pero a veces te cuesta mantener el foco.",
+        low: "Te cuesta llevar a cabo tus planes y a menudo te desvías del camino.",
+      },
+      risk_management: {
+        high: "Eres excelente identificando y gestionando riesgos.",
+        medium: "Identificas algunos riesgos, pero podrías mejorar tu capacidad de mitigarlos.",
+        low: "Te cuesta identificar riesgos y a menudo te tomas por sorpresa.",
+      },
+      communication: {
+        high: "Eres un excelente comunicador, tanto verbal como escrito.",
+        medium: "Te comunicas bien, pero podrías mejorar tu capacidad de persuasión.",
+        low: "Te cuesta comunicarte de manera clara y efectiva.",
+      },
+      leadership: {
+        high: "Eres un líder nato, inspiras y motivas a tu equipo.",
+        medium: "Tienes potencial de liderazgo, pero podrías mejorar tu capacidad de delegar.",
+        low: "Te cuesta liderar y prefieres trabajar de manera individual.",
+      },
+      persuasion: {
+        high: "Eres muy persuasivo y logras convencer a los demás de tus ideas.",
+        medium: "Tienes buenas habilidades de persuasión, pero podrías mejorar tu capacidad de negociación.",
+        low: "Te cuesta persuadir a los demás y a menudo cedes ante la presión.",
+      },
+      negotiation: {
+        high: "Eres un excelente negociador, siempre encuentras soluciones beneficiosas para ambas partes.",
+        medium: "Negocias bien, pero a veces te cuesta defender tus intereses.",
+        low: "Te cuesta negociar y a menudo te sientes intimidado.",
+      },
+      relationship_building: {
+        high: "Eres muy bueno construyendo relaciones duraderas con tus clientes.",
+        medium: "Tienes buenas relaciones con tus clientes, pero podrías mejorar tu capacidad de fidelización.",
+        low: "Te cuesta construir relaciones con tus clientes y a menudo tienes problemas de comunicación.",
+      },
+      closing_techniques: {
+        high: "Eres un maestro cerrando ventas, siempre encuentras la manera de concretar el negocio.",
+        medium: "Cierras ventas con frecuencia, pero a veces te cuesta superar las objeciones.",
+        low: "Te cuesta cerrar ventas y a menudo pierdes oportunidades.",
+      },
     }
 
     const skillDesc = descriptions[skill as keyof typeof descriptions]
@@ -777,6 +980,43 @@ class AdaptiveTestEngine {
         "Resuelves conflictos constructivamente",
         "Influyes positivamente en el equipo",
       ],
+      planning: [
+        "Eres organizado y metódico",
+        "Defines objetivos claros y realistas",
+        "Anticipas los posibles problemas",
+      ],
+      execution: ["Eres eficiente y productivo", "Cumples con los plazos establecidos", "Te enfocas en los resultados"],
+      risk_management: [
+        "Identificas los riesgos potenciales",
+        "Evalúas la probabilidad y el impacto de los riesgos",
+        "Implementas planes de mitigación",
+      ],
+      communication: ["Eres claro y conciso", "Escuchas activamente a los demás", "Adaptas tu mensaje a la audiencia"],
+      leadership: [
+        "Inspiras y motivas a tu equipo",
+        "Delegas tareas de manera efectiva",
+        "Fomentas la colaboración y el trabajo en equipo",
+      ],
+      persuasion: [
+        "Presentas tus ideas de manera convincente",
+        "Manejas las objeciones con facilidad",
+        "Influyes en las decisiones de los demás",
+      ],
+      negotiation: [
+        "Buscas soluciones beneficiosas para ambas partes",
+        "Manejas situaciones de conflicto con diplomacia",
+        "Cierras acuerdos de manera efectiva",
+      ],
+      relationship_building: [
+        "Construyes relaciones duraderas con tus clientes",
+        "Generas confianza y lealtad",
+        "Comprendes las necesidades de tus clientes",
+      ],
+      closing_techniques: [
+        "Identificas las señales de compra",
+        "Superas las objeciones finales",
+        "Concretas la venta de manera efectiva",
+      ],
     }
 
     return strengths[skill as keyof typeof strengths] || []
@@ -805,6 +1045,47 @@ class AdaptiveTestEngine {
         "Practica la comunicación asertiva",
         "Desarrolla habilidades de negociación",
         "Busca oportunidades de liderazgo",
+      ],
+      planning: ["Utiliza herramientas de gestión de proyectos", "Define objetivos SMART", "Crea diagramas de Gantt"],
+      execution: [
+        "Prioriza las tareas importantes",
+        "Elimina las distracciones",
+        "Utiliza técnicas de gestión del tiempo",
+      ],
+      risk_management: [
+        "Realiza análisis FODA",
+        "Crea planes de contingencia",
+        "Monitorea los riesgos de manera continua",
+      ],
+      communication: [
+        "Practica la claridad y concisión",
+        "Adapta tu mensaje a la audiencia",
+        "Utiliza ejemplos y analogías",
+      ],
+      leadership: [
+        "Delega tareas de manera efectiva",
+        "Fomenta la autonomía y la responsabilidad",
+        "Reconoce y recompensa el buen desempeño",
+      ],
+      persuasion: [
+        "Investiga las necesidades de tu audiencia",
+        "Presenta tus argumentos de manera lógica y convincente",
+        "Utiliza datos y testimonios para respaldar tus afirmaciones",
+      ],
+      negotiation: [
+        "Define tus objetivos y límites",
+        "Escucha atentamente a la otra parte",
+        "Busca soluciones creativas que satisfagan a ambas partes",
+      ],
+      relationship_building: [
+        "Muestra interés genuino por tus clientes",
+        "Comunícate de manera regular y personalizada",
+        "Ofrece soluciones a sus problemas",
+      ],
+      closing_techniques: [
+        "Identifica las señales de compra",
+        "Supera las objeciones finales",
+        "Crea un sentido de urgencia",
       ],
     }
 
@@ -898,6 +1179,15 @@ class AdaptiveTestEngine {
       adaptability: "Mindset - Carol Dweck",
       team_motivation: "Los 7 Hábitos de la Gente Altamente Efectiva - Stephen Covey",
       decision_making: "Pensar Rápido, Pensar Despacio - Daniel Kahneman",
+      planning: "Los 7 Hábitos de la Gente Altamente Efectiva - Stephen Covey",
+      execution: "Getting Things Done - David Allen",
+      risk_management: "The Black Swan - Nassim Nicholas Taleb",
+      communication: "Cómo Ganar Amigos e Influir sobre las Personas - Dale Carnegie",
+      leadership: "Start with Why - Simon Sinek",
+      persuasion: "Influence: The Psychology of Persuasion - Robert Cialdini",
+      negotiation: "Never Split the Difference - Chris Voss",
+      relationship_building: "How to Win Friends and Influence People - Dale Carnegie",
+      closing_techniques: "The Sales Magnet - Kendra Lee",
     }
 
     return bookMap[skill as keyof typeof bookMap] || "Desarrollo Personal y Profesional"

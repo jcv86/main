@@ -25,173 +25,224 @@ import {
   Award,
 } from "lucide-react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 interface TechnicalSkill {
   id: string
   name: string
   category: string
-  difficulty: "beginner" | "intermediate" | "advanced" | "expert"
   description: string
-  marketDemand: number
-  averageSalary: string
-  relatedJobs: string[]
-  learningResources: string[]
-  certifications: string[]
+  difficulty: "beginner" | "intermediate" | "advanced" | "expert"
+  estimatedTime: number // in minutes
+  prerequisites?: string[]
+  careerRelevance: string[]
+  tools: string[]
   userLevel?: number
   isRecommended?: boolean
   icon: string
+  marketDemand?: number
+  averageSalary?: string
+  relatedJobs?: string[]
+  learningResources?: string[]
+  certifications?: string[]
 }
 
 const technicalSkills: TechnicalSkill[] = [
   {
-    id: "javascript",
-    name: "JavaScript",
-    category: "Frontend",
-    difficulty: "intermediate",
-    description: "Lenguaje de programación esencial para desarrollo web moderno",
-    marketDemand: 95,
-    averageSalary: "$2.500.000 - $4.000.000 CLP",
-    relatedJobs: ["Frontend Developer", "Full Stack Developer", "Web Developer"],
-    learningResources: ["MDN Web Docs", "JavaScript.info", "FreeCodeCamp"],
-    certifications: ["JavaScript Institute Certification", "Microsoft JavaScript Certification"],
+    id: "excel_advanced",
+    name: "Excel Avanzado",
+    category: "Análisis de Datos",
+    description: "Dominio de funciones avanzadas, tablas dinámicas, macros y análisis de datos en Excel",
+    difficulty: "advanced",
+    estimatedTime: 45,
+    prerequisites: ["excel_intermediate"],
+    careerRelevance: ["Analista de Datos", "Finanzas", "Marketing", "Operaciones"],
+    tools: ["Microsoft Excel", "Google Sheets"],
     userLevel: 75,
     isRecommended: true,
-    icon: "code",
+    icon: "chart",
+    marketDemand: 85,
+    averageSalary: "$500 - $1000",
+    relatedJobs: ["Analista de Datos", "Finanzas"],
+    learningResources: ["Curso de Excel Avanzado en Udemy", "Libro de Excel de Microsoft"],
+    certifications: ["Certificado de Excel Avanzado de Microsoft"],
   },
   {
-    id: "react",
-    name: "React",
-    category: "Frontend",
+    id: "python_programming",
+    name: "Programación en Python",
+    category: "Desarrollo de Software",
+    description: "Capacidad para escribir código Python eficiente y resolver problemas algorítmicos",
     difficulty: "intermediate",
-    description: "Biblioteca de JavaScript para construir interfaces de usuario",
-    marketDemand: 90,
-    averageSalary: "$2.800.000 - $4.500.000 CLP",
-    relatedJobs: ["React Developer", "Frontend Developer", "Full Stack Developer"],
-    learningResources: ["React Documentation", "React Tutorial", "Scrimba React Course"],
-    certifications: ["Meta React Developer Certificate", "React Professional Certificate"],
+    estimatedTime: 60,
+    prerequisites: ["programming_basics"],
+    careerRelevance: ["Desarrollador de Software", "Data Scientist", "Analista de Datos"],
+    tools: ["Python", "IDE"],
     userLevel: 60,
     isRecommended: true,
     icon: "code",
+    marketDemand: 90,
+    averageSalary: "$600 - $1200",
+    relatedJobs: ["Desarrollador de Software", "Data Scientist"],
+    learningResources: ["Curso de Python en Coursera", "Libro de Python de Zed Shaw"],
+    certifications: ["Certificado de Python de Codecademy"],
   },
   {
-    id: "python",
-    name: "Python",
-    category: "Backend",
-    difficulty: "beginner",
-    description: "Lenguaje de programación versátil para backend, data science y automatización",
-    marketDemand: 88,
-    averageSalary: "$2.200.000 - $3.800.000 CLP",
-    relatedJobs: ["Python Developer", "Data Scientist", "Backend Developer", "DevOps Engineer"],
-    learningResources: ["Python.org Tutorial", "Automate the Boring Stuff", "Real Python"],
-    certifications: ["Python Institute PCAP", "Microsoft Python Certification"],
-    userLevel: 45,
-    isRecommended: true,
-    icon: "code",
-  },
-  {
-    id: "nodejs",
-    name: "Node.js",
-    category: "Backend",
+    id: "sql_queries",
+    name: "Consultas SQL",
+    category: "Base de Datos",
+    description: "Escritura de consultas SQL complejas para análisis y manipulación de datos",
     difficulty: "intermediate",
-    description: "Runtime de JavaScript para desarrollo de aplicaciones del lado del servidor",
-    marketDemand: 85,
-    averageSalary: "$2.600.000 - $4.200.000 CLP",
-    relatedJobs: ["Backend Developer", "Full Stack Developer", "API Developer"],
-    learningResources: ["Node.js Documentation", "NodeSchool", "Express.js Guide"],
-    certifications: ["Node.js Certified Developer", "OpenJS Node.js Services Developer"],
-    userLevel: 55,
-    isRecommended: false,
-    icon: "code",
-  },
-  {
-    id: "sql",
-    name: "SQL",
-    category: "Database",
-    difficulty: "beginner",
-    description: "Lenguaje estándar para gestión y consulta de bases de datos relacionales",
-    marketDemand: 92,
-    averageSalary: "$2.000.000 - $3.500.000 CLP",
-    relatedJobs: ["Database Administrator", "Data Analyst", "Backend Developer", "Data Engineer"],
-    learningResources: ["W3Schools SQL", "SQLBolt", "PostgreSQL Tutorial"],
-    certifications: ["Oracle SQL Certification", "Microsoft SQL Server Certification"],
+    estimatedTime: 40,
+    prerequisites: ["database_basics"],
+    careerRelevance: ["Analista de Datos", "Desarrollador Backend", "Data Scientist"],
+    tools: ["SQL", "PostgreSQL", "MySQL"],
     userLevel: 70,
     isRecommended: true,
     icon: "database",
+    marketDemand: 80,
+    averageSalary: "$550 - $1100",
+    relatedJobs: ["Analista de Datos", "Desarrollador Backend"],
+    learningResources: ["Curso de SQL en edX", "Libro de SQL de Joe Celko"],
+    certifications: ["Certificado de SQL de Oracle"],
+  },
+  {
+    id: "powerpoint_design",
+    name: "Diseño de Presentaciones",
+    category: "Comunicación",
+    description: "Creación de presentaciones profesionales y efectivas",
+    difficulty: "intermediate",
+    estimatedTime: 30,
+    prerequisites: [],
+    careerRelevance: ["Marketing", "Consultoría", "Ventas", "Gestión"],
+    tools: ["PowerPoint", "Google Slides", "Canva"],
+    userLevel: 80,
+    isRecommended: false,
+    icon: "globe",
+    marketDemand: 75,
+    averageSalary: "$400 - $800",
+    relatedJobs: ["Marketing", "Consultoría"],
+    learningResources: ["Curso de PowerPoint en LinkedIn Learning", "Libro de PowerPoint de Nancy Duarte"],
+    certifications: ["Certificado de PowerPoint de Microsoft"],
   },
   {
     id: "aws",
     name: "Amazon Web Services",
     category: "Cloud",
-    difficulty: "advanced",
     description: "Plataforma de servicios en la nube más utilizada en la industria",
-    marketDemand: 87,
-    averageSalary: "$3.000.000 - $5.000.000 CLP",
-    relatedJobs: ["Cloud Engineer", "DevOps Engineer", "Solutions Architect"],
-    learningResources: ["AWS Training", "A Cloud Guru", "AWS Documentation"],
-    certifications: ["AWS Solutions Architect", "AWS Developer Associate", "AWS SysOps Administrator"],
+    difficulty: "advanced",
+    estimatedTime: 60,
+    prerequisites: [],
+    careerRelevance: ["Cloud Engineer", "DevOps Engineer", "Solutions Architect"],
+    tools: ["AWS Management Console", "AWS CLI", "Terraform"],
     userLevel: 30,
     isRecommended: true,
     icon: "globe",
+    marketDemand: 95,
+    averageSalary: "$700 - $1400",
+    relatedJobs: ["Cloud Engineer", "DevOps Engineer"],
+    learningResources: ["Curso de AWS en Udacity", "Libro de AWS de James S. Bucanek"],
+    certifications: ["Certificado de AWS Certified Solutions Architect"],
   },
   {
-    id: "docker",
-    name: "Docker",
-    category: "DevOps",
+    id: "project_management",
+    name: "Gestión de Proyectos",
+    category: "Gestión",
+    description: "Planificación, ejecución y control de proyectos",
     difficulty: "intermediate",
-    description: "Plataforma de contenedores para desarrollo y despliegue de aplicaciones",
-    marketDemand: 82,
-    averageSalary: "$2.800.000 - $4.500.000 CLP",
-    relatedJobs: ["DevOps Engineer", "Backend Developer", "Cloud Engineer"],
-    learningResources: ["Docker Documentation", "Docker Mastery Course", "Play with Docker"],
-    certifications: ["Docker Certified Associate", "Kubernetes and Docker Certification"],
-    userLevel: 40,
-    isRecommended: false,
-    icon: "shield",
-  },
-  {
-    id: "typescript",
-    name: "TypeScript",
-    category: "Frontend",
-    difficulty: "intermediate",
-    description: "Superset de JavaScript que añade tipado estático",
-    marketDemand: 78,
-    averageSalary: "$2.800.000 - $4.200.000 CLP",
-    relatedJobs: ["Frontend Developer", "Full Stack Developer", "Angular Developer"],
-    learningResources: ["TypeScript Handbook", "TypeScript Deep Dive", "Execute Program"],
-    certifications: ["Microsoft TypeScript Certification"],
-    userLevel: 35,
+    estimatedTime: 45,
+    prerequisites: [],
+    careerRelevance: ["Project Manager", "Scrum Master", "Product Owner"],
+    tools: ["Jira", "Asana", "Trello"],
+    userLevel: 45,
     isRecommended: true,
-    icon: "code",
+    icon: "chart",
+    marketDemand: 88,
+    averageSalary: "$500 - $1000",
+    relatedJobs: ["Project Manager", "Scrum Master"],
+    learningResources: [
+      "Curso de Gestión de Proyectos en PMI",
+      "Libro de Gestión de Proyectos de A Guide to the Project Management Body of Knowledge",
+    ],
+    certifications: ["Certificado PMP de PMI"],
   },
   {
-    id: "mongodb",
-    name: "MongoDB",
-    category: "Database",
+    id: "digital_marketing",
+    name: "Marketing Digital",
+    category: "Marketing",
+    description: "Estrategias de marketing online",
     difficulty: "intermediate",
-    description: "Base de datos NoSQL orientada a documentos",
-    marketDemand: 75,
-    averageSalary: "$2.400.000 - $3.800.000 CLP",
-    relatedJobs: ["Backend Developer", "Full Stack Developer", "Database Developer"],
-    learningResources: ["MongoDB University", "MongoDB Documentation", "The Net Ninja MongoDB"],
-    certifications: ["MongoDB Certified Developer", "MongoDB Certified DBA"],
-    userLevel: 25,
-    isRecommended: false,
-    icon: "database",
+    estimatedTime: 40,
+    prerequisites: [],
+    careerRelevance: ["Marketing Manager", "Social Media Manager", "SEO Specialist"],
+    tools: ["Google Analytics", "Google Ads", "Facebook Ads"],
+    userLevel: 50,
+    isRecommended: true,
+    icon: "globe",
+    marketDemand: 92,
+    averageSalary: "$450 - $900",
+    relatedJobs: ["Marketing Manager", "Social Media Manager"],
+    learningResources: ["Curso de Marketing Digital en HubSpot", "Libro de Marketing Digital de Gary Vaynerchuk"],
+    certifications: ["Certificado de Google Analytics"],
   },
   {
-    id: "kubernetes",
-    name: "Kubernetes",
-    category: "DevOps",
+    id: "financial_analysis",
+    name: "Análisis Financiero",
+    category: "Finanzas",
+    description: "Análisis de estados financieros y toma de decisiones de inversión",
     difficulty: "advanced",
-    description: "Sistema de orquestación de contenedores para automatizar despliegues",
+    estimatedTime: 60,
+    prerequisites: [],
+    careerRelevance: ["Financial Analyst", "Investment Banker", "Portfolio Manager"],
+    tools: ["Bloomberg Terminal", "FactSet", "Excel"],
+    userLevel: 65,
+    isRecommended: true,
+    icon: "chart",
+    marketDemand: 90,
+    averageSalary: "$650 - $1300",
+    relatedJobs: ["Financial Analyst", "Investment Banker"],
+    learningResources: ["Curso de Análisis Financiero en Coursera", "Libro de Análisis Financiero de John C. Hull"],
+    certifications: ["Certificado de CFA de CFA Institute"],
+  },
+  {
+    id: "clinical_research",
+    name: "Investigación Clínica",
+    category: "Salud",
+    description: "Diseño y ejecución de estudios clínicos",
+    difficulty: "advanced",
+    estimatedTime: 90,
+    prerequisites: [],
+    careerRelevance: ["Clinical Research Associate", "Clinical Trial Manager", "Medical Science Liaison"],
+    tools: ["SPSS", "SAS", "R"],
+    userLevel: 40,
+    isRecommended: true,
+    icon: "chart",
+    marketDemand: 85,
+    averageSalary: "$700 - $1400",
+    relatedJobs: ["Clinical Research Associate", "Clinical Trial Manager"],
+    learningResources: [
+      "Curso de Investigación Clínica en Coursera",
+      "Libro de Investigación Clínica de Michael J. Pencina",
+    ],
+    certifications: ["Certificado de Investigador Clínico de ACRP"],
+  },
+  {
+    id: "graphic_design",
+    name: "Diseño Gráfico",
+    category: "Diseño",
+    description: "Creación de diseños visuales para medios impresos y digitales",
+    difficulty: "intermediate",
+    estimatedTime: 45,
+    prerequisites: [],
+    careerRelevance: ["Graphic Designer", "Web Designer", "UI/UX Designer"],
+    tools: ["Adobe Photoshop", "Adobe Illustrator", "Figma"],
+    userLevel: 55,
+    isRecommended: true,
+    icon: "chart",
     marketDemand: 80,
-    averageSalary: "$3.200.000 - $5.500.000 CLP",
-    relatedJobs: ["DevOps Engineer", "Cloud Engineer", "Site Reliability Engineer"],
-    learningResources: ["Kubernetes Documentation", "Kubernetes the Hard Way", "KodeKloud"],
-    certifications: ["Certified Kubernetes Administrator", "Certified Kubernetes Application Developer"],
-    userLevel: 15,
-    isRecommended: false,
-    icon: "shield",
+    averageSalary: "$450 - $900",
+    relatedJobs: ["Graphic Designer", "Web Designer"],
+    learningResources: ["Curso de Diseño Gráfico en Canva", "Libro de Diseño Gráfico de Robin Williams"],
+    certifications: ["Certificado de Adobe Certified Expert"],
   },
 ]
 
@@ -224,9 +275,38 @@ const careerPaths = [
     requiredSkills: ["docker", "kubernetes", "aws"],
     recommendedSkills: ["python", "linux", "terraform"],
   },
+  {
+    id: "project_manager",
+    name: "Project Manager",
+    description: "Planificación, ejecución y control de proyectos",
+    requiredSkills: ["project_management", "communication"],
+    recommendedSkills: ["excel_advanced", "leadership"],
+  },
+  {
+    id: "financial_analyst",
+    name: "Financial Analyst",
+    description: "Análisis de estados financieros y toma de decisiones de inversión",
+    requiredSkills: ["financial_analysis", "excel_advanced"],
+    recommendedSkills: ["sql_queries", "data_visualization"],
+  },
+  {
+    id: "clinical_research_associate",
+    name: "Clinical Research Associate",
+    description: "Diseño y ejecución de estudios clínicos",
+    requiredSkills: ["clinical_research", "data_analysis"],
+    recommendedSkills: ["excel_advanced", "sql_queries"],
+  },
+  {
+    id: "graphic_designer",
+    name: "Graphic Designer",
+    description: "Creación de diseños visuales para medios impresos y digitales",
+    requiredSkills: ["graphic_design", "communication"],
+    recommendedSkills: ["photoshop", "illustrator"],
+  },
 ]
 
 export default function TechnicalSkillsPage() {
+  const router = useRouter()
   const [skills, setSkills] = useState<TechnicalSkill[]>(technicalSkills)
   const [filteredSkills, setFilteredSkills] = useState<TechnicalSkill[]>(technicalSkills)
   const [searchTerm, setSearchTerm] = useState("")
@@ -314,6 +394,11 @@ export default function TechnicalSkillsPage() {
       Cloud: "bg-orange-100 text-orange-800",
       DevOps: "bg-red-100 text-red-800",
       Mobile: "bg-pink-100 text-pink-800",
+      Gestión: "bg-teal-100 text-teal-800",
+      Marketing: "bg-yellow-100 text-yellow-800",
+      Finanzas: "bg-indigo-100 text-indigo-800",
+      Salud: "bg-lime-100 text-lime-800",
+      Diseño: "bg-fuchsia-100 text-fuchsia-800",
     }
     return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800"
   }
@@ -325,7 +410,7 @@ export default function TechnicalSkillsPage() {
 
   const startSkillTest = (skill: TechnicalSkill) => {
     toast.success(`Iniciando test de ${skill.name}`)
-    // In a real app, this would navigate to the test page
+    router.push(`/technical-skills-test?testId=${skill.id}`)
   }
 
   const categories = Array.from(new Set(skills.map((skill) => skill.category)))
@@ -636,7 +721,7 @@ export default function TechnicalSkillsPage() {
                       <div key={skill.id} className="flex items-center justify-between">
                         <div>
                           <p className="font-medium text-sm">{skill.name}</p>
-                          <p className="text-xs text-muted-foreground">{skill.category}</p>
+                          <p className="text-sm text-muted-foreground">{skill.category}</p>
                         </div>
                         <Button size="sm" onClick={() => startSkillTest(skill)}>
                           Test
@@ -733,7 +818,7 @@ export default function TechnicalSkillsPage() {
                 <div>
                   <h4 className="font-medium mb-2">Trabajos relacionados</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedSkill.relatedJobs.map((job) => (
+                    {selectedSkill.relatedJobs?.map((job) => (
                       <Badge key={job} variant="outline">
                         {job}
                       </Badge>
@@ -745,7 +830,7 @@ export default function TechnicalSkillsPage() {
               <div>
                 <h4 className="font-medium mb-2">Recursos de aprendizaje</h4>
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  {selectedSkill.learningResources.map((resource) => (
+                  {selectedSkill.learningResources?.map((resource) => (
                     <li key={resource}>{resource}</li>
                   ))}
                 </ul>
@@ -754,7 +839,7 @@ export default function TechnicalSkillsPage() {
               <div>
                 <h4 className="font-medium mb-2">Certificaciones disponibles</h4>
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  {selectedSkill.certifications.map((cert) => (
+                  {selectedSkill.certifications?.map((cert) => (
                     <li key={cert}>{cert}</li>
                   ))}
                 </ul>

@@ -24,7 +24,7 @@ export interface TechnicalTest {
   title: string
   description: string
   instructions: string
-  type: "code" | "excel" | "presentation" | "data_analysis" | "design" | "sql"
+  type: "code" | "excel" | "presentation" | "data_analysis" | "sql"
   difficulty: "beginner" | "intermediate" | "advanced" | "expert"
   timeLimit: number // in minutes
   maxScore: number
@@ -174,6 +174,135 @@ export const TECHNICAL_SKILLS: TechnicalSkill[] = [
     prerequisites: ["excel_intermediate"],
     careerRelevance: ["Analista de Datos", "Marketing", "Finanzas"],
     tools: ["Excel", "Tableau", "Power BI"],
+  },
+  {
+    id: "aws",
+    name: "Amazon Web Services",
+    category: "Cloud",
+    difficulty: "advanced",
+    description: "Plataforma de servicios en la nube más utilizada en la industria",
+    estimatedTime: 60,
+    prerequisites: [],
+    careerRelevance: ["Cloud Engineer", "DevOps Engineer", "Solutions Architect"],
+    tools: ["AWS Management Console", "AWS CLI", "Terraform"],
+  },
+  {
+    id: "project_management",
+    name: "Gestión de Proyectos",
+    category: "Gestión",
+    description: "Planificación, ejecución y control de proyectos",
+    difficulty: "intermediate",
+    estimatedTime: 45,
+    prerequisites: [],
+    careerRelevance: ["Project Manager", "Scrum Master", "Product Owner"],
+    tools: ["Jira", "Asana", "Trello"],
+  },
+  {
+    id: "digital_marketing",
+    name: "Marketing Digital",
+    category: "Marketing",
+    description: "Estrategias de marketing online",
+    difficulty: "intermediate",
+    estimatedTime: 40,
+    prerequisites: [],
+    careerRelevance: ["Marketing Manager", "Social Media Manager", "SEO Specialist"],
+    tools: ["Google Analytics", "Google Ads", "Facebook Ads"],
+  },
+  {
+    id: "financial_analysis",
+    name: "Análisis Financiero",
+    category: "Finanzas",
+    description: "Análisis de estados financieros y toma de decisiones de inversión",
+    difficulty: "advanced",
+    estimatedTime: 60,
+    prerequisites: [],
+    careerRelevance: ["Financial Analyst", "Investment Banker", "Portfolio Manager"],
+    tools: ["Bloomberg Terminal", "FactSet", "Excel"],
+  },
+  {
+    id: "clinical_research",
+    name: "Investigación Clínica",
+    category: "Salud",
+    description: "Diseño y ejecución de estudios clínicos",
+    difficulty: "advanced",
+    estimatedTime: 90,
+    prerequisites: [],
+    careerRelevance: ["Clinical Research Associate", "Clinical Trial Manager", "Medical Science Liaison"],
+    tools: ["SPSS", "SAS", "R"],
+  },
+  {
+    id: "graphic_design",
+    name: "Diseño Gráfico",
+    category: "Diseño",
+    description: "Creación de diseños visuales para medios impresos y digitales",
+    difficulty: "intermediate",
+    estimatedTime: 45,
+    prerequisites: [],
+    careerRelevance: ["Graphic Designer", "Web Designer", "UI/UX Designer"],
+    tools: ["Adobe Photoshop", "Adobe Illustrator", "Figma"],
+  },
+]
+
+// Career-Skill Mapping
+export const CAREER_SKILL_MAPS: CareerSkillMap[] = [
+  {
+    career: "Analista de Datos",
+    requiredSkills: [
+      { skillId: "excel_advanced", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "sql_queries", importance: "critical", minimumLevel: "intermediate" },
+      { skillId: "python_programming", importance: "important", minimumLevel: "intermediate" },
+      { skillId: "data_visualization", importance: "critical", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["excel_advanced", "sql_queries", "data_visualization", "python_programming"],
+  },
+  {
+    career: "Desarrollador de Software",
+    requiredSkills: [
+      { skillId: "python_programming", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "sql_queries", importance: "important", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["python_programming", "sql_queries"],
+  },
+  {
+    career: "Marketing Digital",
+    requiredSkills: [
+      { skillId: "excel_advanced", importance: "important", minimumLevel: "intermediate" },
+      { skillId: "data_visualization", importance: "important", minimumLevel: "intermediate" },
+      { skillId: "powerpoint_design", importance: "critical", minimumLevel: "advanced" },
+    ],
+    recommendedTestOrder: ["powerpoint_design", "excel_advanced", "data_visualization"],
+  },
+  {
+    career: "Project Manager",
+    requiredSkills: [
+      { skillId: "project_management", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "communication", importance: "important", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["project_management", "communication"],
+  },
+  {
+    career: "Financial Analyst",
+    requiredSkills: [
+      { skillId: "financial_analysis", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "excel_advanced", importance: "important", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["financial_analysis", "excel_advanced"],
+  },
+  {
+    career: "Clinical Research Associate",
+    requiredSkills: [
+      { skillId: "clinical_research", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "data_analysis", importance: "important", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["clinical_research", "data_analysis"],
+  },
+  {
+    career: "Graphic Designer",
+    requiredSkills: [
+      { skillId: "graphic_design", importance: "critical", minimumLevel: "advanced" },
+      { skillId: "communication", importance: "important", minimumLevel: "intermediate" },
+    ],
+    recommendedTestOrder: ["graphic_design", "communication"],
   },
 ]
 
@@ -366,37 +495,6 @@ def second_largest(numbers):
       "Considera usar CTEs para consultas complejas",
       "No olvides manejar valores NULL apropiadamente",
     ],
-  },
-]
-
-// Career-Skill Mapping
-export const CAREER_SKILL_MAPS: CareerSkillMap[] = [
-  {
-    career: "Analista de Datos",
-    requiredSkills: [
-      { skillId: "excel_advanced", importance: "critical", minimumLevel: "advanced" },
-      { skillId: "sql_queries", importance: "critical", minimumLevel: "intermediate" },
-      { skillId: "python_programming", importance: "important", minimumLevel: "intermediate" },
-      { skillId: "data_visualization", importance: "critical", minimumLevel: "intermediate" },
-    ],
-    recommendedTestOrder: ["excel_advanced", "sql_queries", "data_visualization", "python_programming"],
-  },
-  {
-    career: "Desarrollador de Software",
-    requiredSkills: [
-      { skillId: "python_programming", importance: "critical", minimumLevel: "advanced" },
-      { skillId: "sql_queries", importance: "important", minimumLevel: "intermediate" },
-    ],
-    recommendedTestOrder: ["python_programming", "sql_queries"],
-  },
-  {
-    career: "Marketing Digital",
-    requiredSkills: [
-      { skillId: "excel_advanced", importance: "important", minimumLevel: "intermediate" },
-      { skillId: "data_visualization", importance: "important", minimumLevel: "intermediate" },
-      { skillId: "powerpoint_design", importance: "critical", minimumLevel: "advanced" },
-    ],
-    recommendedTestOrder: ["powerpoint_design", "excel_advanced", "data_visualization"],
   },
 ]
 
