@@ -18,6 +18,8 @@ import type { CVData, CVTemplate } from "@/lib/cv-types"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { InfoIcon } from "lucide-react"
 
 const templates: { id: CVTemplate; name: string; description: string }[] = [
   { id: "modern", name: "Moderno", description: "Diseño limpio y contemporáneo" },
@@ -35,6 +37,10 @@ const initialCVData: CVData = {
     linkedIn: "",
     website: "",
     summary: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
   },
   experience: [],
   education: [],
@@ -47,13 +53,11 @@ const initialCVData: CVData = {
   certifications: [],
 }
 
-// Demo mode - works without Supabase credentials
-const DEMO_MODE = !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// Initialize Supabase client with fallback for demo mode
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Supabase client (only if credentials are available)
-const supabase = DEMO_MODE
-  ? null
-  : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
 export default function CVBuilderPage() {
   const [cvData, setCVData] = useState<CVData>(initialCVData)
@@ -66,40 +70,65 @@ export default function CVBuilderPage() {
   const router = useRouter()
   const [initialData, setInitialData] = useState<Partial<CVData> | undefined>()
   const [isLoading, setIsLoading] = useState(true)
+  const [isDemoMode, setIsDemoMode] = useState(!supabase)
 
   useEffect(() => {
-    loadInitialData()
+    loadExistingCV()
   }, [])
 
-  const loadInitialData = async () => {
+  const loadExistingCV = async () => {
+    setIsLoading(true)
+
     try {
-      if (DEMO_MODE) {
-        // Load from localStorage in demo mode
-        const savedData = localStorage.getItem("cv-data")
-        if (savedData) {
-          setInitialData(JSON.parse(savedData))
-        }
-      } else {
-        // Load from Supabase
+      if (supabase) {
+        // Try to load from Supabase
         const {
           data: { user },
-        } = await supabase!.auth.getUser()
-        if (user) {
-          const { data, error } = await supabase!.from("cv_data").select("*").eq("user_id", user.id).single()
+        } = await supabase.auth.getUser()
 
-          if (error && error.code !== "PGRST116") {
-            console.error("Error loading CV data:", error)
-            toast.error("Error al cargar los datos del CV")
-          } else if (data) {
-            setInitialData(data.data)
+        if (user) {
+          const { data: cvData, error } = await supabase
+            .from("cv_data")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("updated_at", { ascending: false })
+            .limit(1)
+            .single()
+
+          if (cvData && !error) {
+            setInitialData(cvData.data)
+            setIsDemoMode(false)
+          } else {
+            // No CV found, start fresh
+            setInitialData(undefined)
           }
+        } else {
+          // Not authenticated, use demo mode
+          setIsDemoMode(true)
+          loadFromLocalStorage()
         }
+      } else {
+        // No Supabase configuration, use demo mode
+        setIsDemoMode(true)
+        loadFromLocalStorage()
       }
     } catch (error) {
-      console.error("Error loading initial data:", error)
-      toast.error("Error al cargar los datos")
+      console.error("Error loading CV:", error)
+      setIsDemoMode(true)
+      loadFromLocalStorage()
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const loadFromLocalStorage = () => {
+    try {
+      const savedCV = localStorage.getItem("cv-builder-data")
+      if (savedCV) {
+        setInitialData(JSON.parse(savedCV))
+      }
+    } catch (error) {
+      console.error("Error loading from localStorage:", error)
     }
   }
 
@@ -153,91 +182,91 @@ export default function CVBuilderPage() {
 
   const feedback = getCompletionFeedback()
 
-  const handleSave = async (data: CVData) => {
+  const handleSave = async (cvData: CVData) => {
     try {
-      if (DEMO_MODE) {
-        // Save to localStorage in demo mode
-        localStorage.setItem("cv-data", JSON.stringify(data))
-        toast.success("CV guardado localmente (modo demo)")
-        return
+      if (supabase && !isDemoMode) {
+        // Save to Supabase
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        if (user) {
+          const { error } = await supabase.from("cv_data").upsert({
+            user_id: user.id,
+            data: cvData,
+            updated_at: new Date().toISOString(),
+          })
+
+          if (error) {
+            throw error
+          }
+
+          setLastSaved(new Date())
+          toast.success("CV guardado en la nube exitosamente")
+        } else {
+          throw new Error("Usuario no autenticado")
+        }
+      } else {
+        // Save to localStorage (demo mode)
+        localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
+        setLastSaved(new Date())
+        toast.success("CV guardado localmente")
       }
-
-      const {
-        data: { user },
-      } = await supabase!.auth.getUser()
-      if (!user) {
-        toast.error("Debes iniciar sesión para guardar")
-        return
-      }
-
-      const { error } = await supabase!.from("cv_data").upsert({
-        user_id: user.id,
-        data: data,
-        template: selectedTemplate,
-        updated_at: new Date().toISOString(),
-      })
-
-      if (error) {
-        throw error
-      }
-
-      setLastSaved(new Date())
-      toast.success("CV guardado exitosamente")
     } catch (error) {
       console.error("Error saving CV:", error)
-      toast.error("Error al guardar el CV")
+
+      // Fallback to localStorage
+      try {
+        localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
+        setLastSaved(new Date())
+        toast.success("CV guardado localmente como respaldo")
+      } catch (localError) {
+        toast.error("Error al guardar el CV")
+        throw localError
+      }
     }
   }
 
-  const handlePreview = (data: CVData) => {
+  const handlePreview = (cvData: CVData) => {
     // Open preview in new tab/window
-    const previewData = encodeURIComponent(JSON.stringify(data))
-    router.push(`/cv-preview?data=${previewData}`)
+    const previewData = encodeURIComponent(JSON.stringify(cvData))
+    const previewUrl = `/cv-preview?data=${previewData}`
+    window.open(previewUrl, "_blank")
   }
 
-  const handleExport = (data: CVData) => {
-    // Export as PDF
-    import("jspdf").then(({ jsPDF }) => {
+  const handleExport = async (cvData: CVData) => {
+    try {
+      // Dynamic import to avoid SSR issues
+      const { jsPDF } = await import("jspdf")
+
       const doc = new jsPDF()
 
       // Add content to PDF
       doc.setFontSize(20)
-      doc.text(`${data.personalInfo.firstName} ${data.personalInfo.lastName}`, 20, 30)
+      doc.text(`${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}`, 20, 30)
 
       doc.setFontSize(12)
-      doc.text(`Email: ${data.personalInfo.email}`, 20, 50)
-      doc.text(`Teléfono: ${data.personalInfo.phone}`, 20, 60)
-      doc.text(`Ciudad: ${data.personalInfo.city}`, 20, 70)
+      doc.text(`Email: ${cvData.personalInfo.email}`, 20, 45)
+      doc.text(`Teléfono: ${cvData.personalInfo.phone}`, 20, 55)
+      doc.text(`Dirección: ${cvData.personalInfo.address}, ${cvData.personalInfo.city}`, 20, 65)
 
-      if (data.personalInfo.summary) {
-        doc.text("Resumen Profesional:", 20, 90)
-        const splitSummary = doc.splitTextToSize(data.personalInfo.summary, 170)
-        doc.text(splitSummary, 20, 100)
+      if (cvData.personalInfo.summary) {
+        doc.setFontSize(14)
+        doc.text("Resumen Profesional", 20, 85)
+        doc.setFontSize(10)
+        const summaryLines = doc.splitTextToSize(cvData.personalInfo.summary, 170)
+        doc.text(summaryLines, 20, 95)
       }
 
-      // Add work experience
-      if (data.experience.length > 0) {
-        let yPosition = 130
-        doc.setFontSize(16)
-        doc.text("Experiencia Laboral", 20, yPosition)
-        yPosition += 10
-
-        data.experience.forEach((exp) => {
-          doc.setFontSize(12)
-          doc.text(`${exp.position} - ${exp.company}`, 20, yPosition)
-          yPosition += 10
-          doc.text(`${exp.startDate} - ${exp.current ? "Presente" : exp.endDate}`, 20, yPosition)
-          yPosition += 10
-          const splitDesc = doc.splitTextToSize(exp.description, 170)
-          doc.text(splitDesc, 20, yPosition)
-          yPosition += splitDesc.length * 5 + 10
-        })
-      }
+      // Add more sections as needed...
 
       // Save the PDF
-      doc.save(`CV_${data.personalInfo.firstName}_${data.personalInfo.lastName}.pdf`)
+      doc.save(`CV_${cvData.personalInfo.firstName}_${cvData.personalInfo.lastName}.pdf`)
       toast.success("CV exportado como PDF")
-    })
+    } catch (error) {
+      console.error("Error exporting PDF:", error)
+      toast.error("Error al exportar el PDF")
+    }
   }
 
   useEffect(() => {
@@ -246,24 +275,32 @@ export default function CVBuilderPage() {
 
       setIsSaving(true)
       try {
-        if (DEMO_MODE) {
-          // Save to localStorage in demo mode
-          localStorage.setItem("cv-data", JSON.stringify(cvData))
-          toast.success("CV guardado localmente (modo demo)")
-          return
+        if (supabase && !isDemoMode) {
+          // Save to Supabase
+          const {
+            data: { user },
+          } = await supabase.auth.getUser()
+
+          if (user) {
+            const { error } = await supabase.from("cv_data").upsert({
+              user_id: user.id,
+              data: cvData,
+              updated_at: new Date().toISOString(),
+            })
+
+            if (error) throw error
+
+            setLastSaved(new Date())
+            toast.success("CV guardado automáticamente")
+          } else {
+            throw new Error("Usuario no autenticado")
+          }
+        } else {
+          // Save to localStorage (demo mode)
+          localStorage.setItem("cv-builder-data", JSON.stringify(cvData))
+          setLastSaved(new Date())
+          toast.success("CV guardado localmente como respaldo")
         }
-
-        const { error } = await supabase!.from("cv_data").upsert({
-          user_id: user.id,
-          data: cvData,
-          template: selectedTemplate,
-          updated_at: new Date().toISOString(),
-        })
-
-        if (error) throw error
-
-        setLastSaved(new Date())
-        toast.success("CV guardado automáticamente")
       } catch (error) {
         console.error("Error saving CV:", error)
         toast.error("Error al guardar el CV")
@@ -274,7 +311,7 @@ export default function CVBuilderPage() {
 
     const timer = setTimeout(autoSave, 2000)
     return () => clearTimeout(timer)
-  }, [cvData, selectedTemplate, user])
+  }, [cvData, user])
 
   useEffect(() => {
     const calculateProgress = () => {
@@ -332,6 +369,16 @@ export default function CVBuilderPage() {
           )}
         </div>
       </div>
+
+      {isDemoMode && (
+        <Alert className="mb-6">
+          <InfoIcon className="h-4 w-4" />
+          <AlertDescription>
+            Estás usando el modo demo. Los datos se guardarán localmente en tu navegador. Para guardar en la nube,
+            inicia sesión con tu cuenta.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Progress Card */}
       <Card>
