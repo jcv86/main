@@ -1,295 +1,374 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { CVForm } from "@/components/cv-form/cv-form"
-import { type CVData, getEmptyCV, formatDate } from "@/lib/cv-types"
-import { createClient } from "@supabase/supabase-js"
+import { Card, CardContent } from "@/components/ui/card"
+import { FileText, Eye, Lightbulb, CheckCircle } from "lucide-react"
+import CVForm from "@/components/cv-form/cv-form"
+import { type CVData, formatDate } from "@/lib/cv-types"
 import { toast } from "sonner"
 import jsPDF from "jspdf"
+import { Skeleton } from "@/components/ui/skeleton"
+import { createClient } from "@supabase/supabase-js"
+import { Suspense } from "react"
 
-// Initialize Supabase client (will work even without env vars)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
-)
+function CVBuilderLoading() {
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <div className="mb-8">
+        <Skeleton className="h-8 w-64 mb-2" />
+        <Skeleton className="h-4 w-96" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <Card>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <Skeleton className="h-10 w-full" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <Skeleton className="h-20 w-full" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="p-6">
+              <Skeleton className="h-6 w-20 mb-4" />
+              <div className="space-y-3">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function CVBuilderPage() {
-  const [cvData, setCvData] = useState<CVData>(getEmptyCV())
-  const [isLoading, setIsLoading] = useState(false)
+  const [cvData, setCvData] = useState<Partial<CVData>>({})
+  const [isLoading, setIsLoading] = useState(true)
+  const [isOnline, setIsOnline] = useState(true)
   const [hasSupabase, setHasSupabase] = useState(false)
+  const [savedCV, setSavedCV] = useState<CVData | null>(null)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabase = createClient(supabaseUrl!, supabaseKey!)
 
   useEffect(() => {
-    // Check if Supabase is properly configured
-    const checkSupabase = async () => {
+    // Check if Supabase is configured
+    setHasSupabase(!!(supabaseUrl && supabaseKey))
+
+    // Load saved data from localStorage
+    const loadData = () => {
       try {
-        const { data, error } = await supabase.from("profiles").select("id").limit(1)
-        setHasSupabase(!error)
-      } catch {
-        setHasSupabase(false)
+        const savedData = localStorage.getItem("cv-data")
+        const draftData = localStorage.getItem("cv-draft")
+
+        if (savedData) {
+          setCvData(JSON.parse(savedData))
+        } else if (draftData) {
+          setCvData(JSON.parse(draftData))
+        }
+      } catch (error) {
+        console.error("Error loading CV data:", error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    checkSupabase()
-    loadCVData()
+    loadData()
+
+    // Monitor online status
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener("online", handleOnline)
+    window.addEventListener("offline", handleOffline)
+
+    return () => {
+      window.removeEventListener("online", handleOnline)
+      window.removeEventListener("offline", handleOffline)
+    }
   }, [])
 
-  const loadCVData = async () => {
-    try {
-      // Try to load from Supabase first
-      if (hasSupabase) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (user) {
-          const { data, error } = await supabase.from("cv_data").select("*").eq("user_id", user.id).single()
-
-          if (data && !error) {
-            setCvData(data.cv_data)
-            return
-          }
-        }
-      }
-
-      // Fallback to localStorage
-      const savedData = localStorage.getItem("cv-data")
-      if (savedData) {
-        setCvData(JSON.parse(savedData))
-      }
-    } catch (error) {
-      console.error("Error loading CV data:", error)
-      // Load from localStorage as fallback
-      const savedData = localStorage.getItem("cv-data")
-      if (savedData) {
-        setCvData(JSON.parse(savedData))
-      }
-    }
-  }
-
-  const saveCVData = async (data: CVData) => {
+  const handleSave = (data: CVData) => {
+    setSavedCV(data)
+    // Here you could also save to a database
     setIsLoading(true)
     try {
       // Always save to localStorage first
       localStorage.setItem("cv-data", JSON.stringify(data))
-      setCvData(data)
+      localStorage.setItem("cv-draft", JSON.stringify(data))
 
-      // Try to save to Supabase if available
-      if (hasSupabase) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (user) {
-          const { error } = await supabase.from("cv_data").upsert({
-            user_id: user.id,
-            cv_data: data,
-            updated_at: new Date().toISOString(),
-          })
+      // Try to save to Supabase if available and online
+      if (hasSupabase && isOnline) {
+        const { error } = supabase.from("user_cvs").upsert({
+          user_id: "demo-user", // Replace with actual user ID
+          cv_data: data,
+          updated_at: new Date().toISOString(),
+        })
 
-          if (!error) {
-            toast.success("CV guardado en la nube")
-          } else {
-            toast.success("CV guardado localmente")
-          }
-        } else {
-          toast.success("CV guardado localmente")
-        }
+        if (error) throw error
+        toast.success("CV guardado en la nube")
       } else {
         toast.success("CV guardado localmente")
       }
+
+      setCvData(data)
     } catch (error) {
       console.error("Error saving CV:", error)
-      toast.success("CV guardado localmente")
+      toast.error("Error al guardar el CV")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const exportToPDF = (data: CVData) => {
-    try {
-      const pdf = new jsPDF()
-      const pageWidth = pdf.internal.pageSize.width
-      const margin = 20
-      let yPosition = margin
+  const generatePDF = () => {
+    if (!cvData.personalInfo?.fullName) {
+      toast.error("Completa al menos la información personal para generar el PDF")
+      return
+    }
 
-      // Helper function to add text with word wrap
-      const addText = (text: string, x: number, y: number, maxWidth: number, fontSize = 10) => {
-        pdf.setFontSize(fontSize)
-        const lines = pdf.splitTextToSize(text, maxWidth)
-        pdf.text(lines, x, y)
-        return y + lines.length * fontSize * 0.4
+    try {
+      const doc = new jsPDF()
+      let yPosition = 20
+
+      // Helper function to add text with word wrapping
+      const addText = (text: string, x: number, y: number, maxWidth = 180) => {
+        const lines = doc.splitTextToSize(text, maxWidth)
+        doc.text(lines, x, y)
+        return y + lines.length * 7
       }
 
       // Header
-      pdf.setFontSize(20)
-      pdf.setFont("helvetica", "bold")
-      pdf.text(data.personalInfo.fullName, margin, yPosition)
-      yPosition += 10
+      doc.setFontSize(24)
+      doc.setFont("helvetica", "bold")
+      yPosition = addText(cvData.personalInfo.fullName, 20, yPosition)
 
-      pdf.setFontSize(12)
-      pdf.setFont("helvetica", "normal")
-      pdf.text(data.personalInfo.email, margin, yPosition)
-      yPosition += 6
-      pdf.text(data.personalInfo.phone, margin, yPosition)
-      yPosition += 6
-      pdf.text(`${data.personalInfo.city}, Chile`, margin, yPosition)
+      doc.setFontSize(12)
+      doc.setFont("helvetica", "normal")
+      yPosition = addText(`${cvData.personalInfo.email} | ${cvData.personalInfo.phone}`, 20, yPosition + 5)
+
+      if (cvData.personalInfo.city) {
+        yPosition = addText(cvData.personalInfo.city, 20, yPosition + 3)
+      }
+
+      if (cvData.personalInfo.linkedin || cvData.personalInfo.github) {
+        const links = [cvData.personalInfo.linkedin, cvData.personalInfo.github].filter(Boolean).join(" | ")
+        yPosition = addText(links, 20, yPosition + 3)
+      }
+
       yPosition += 10
 
       // Summary
-      if (data.personalInfo.summary) {
-        pdf.setFontSize(14)
-        pdf.setFont("helvetica", "bold")
-        pdf.text("RESUMEN PROFESIONAL", margin, yPosition)
-        yPosition += 8
-        pdf.setFont("helvetica", "normal")
-        yPosition = addText(data.personalInfo.summary, margin, yPosition, pageWidth - 2 * margin, 10)
-        yPosition += 10
+      if (cvData.personalInfo.summary) {
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("RESUMEN PROFESIONAL", 20, yPosition)
+
+        doc.setFontSize(11)
+        doc.setFont("helvetica", "normal")
+        yPosition = addText(cvData.personalInfo.summary, 20, yPosition + 5) + 10
       }
 
       // Experience
-      if (data.experience.length > 0) {
-        pdf.setFontSize(14)
-        pdf.setFont("helvetica", "bold")
-        pdf.text("EXPERIENCIA LABORAL", margin, yPosition)
-        yPosition += 8
+      if (cvData.experience && cvData.experience.length > 0) {
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("EXPERIENCIA LABORAL", 20, yPosition)
 
-        data.experience.forEach((exp) => {
+        cvData.experience.forEach((exp) => {
           if (yPosition > 250) {
-            pdf.addPage()
-            yPosition = margin
+            doc.addPage()
+            yPosition = 20
           }
 
-          pdf.setFontSize(12)
-          pdf.setFont("helvetica", "bold")
-          pdf.text(exp.position, margin, yPosition)
-          yPosition += 6
+          doc.setFontSize(12)
+          doc.setFont("helvetica", "bold")
+          yPosition = addText(`${exp.position} - ${exp.company}`, 20, yPosition + 8)
 
-          pdf.setFont("helvetica", "normal")
-          pdf.text(exp.company, margin, yPosition)
-          yPosition += 6
-
-          const startDate = formatDate(exp.startDate)
-          const endDate = exp.current ? "Presente" : formatDate(exp.endDate || "")
-          pdf.text(`${startDate} - ${endDate}`, margin, yPosition)
-          yPosition += 6
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          const dates = `${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate || "")}`
+          yPosition = addText(dates, 20, yPosition + 3)
 
           if (exp.description) {
-            yPosition = addText(exp.description, margin, yPosition, pageWidth - 2 * margin, 10)
+            yPosition = addText(exp.description, 20, yPosition + 3) + 5
           }
-          yPosition += 8
         })
+        yPosition += 5
       }
 
       // Education
-      if (data.education.length > 0) {
+      if (cvData.education && cvData.education.length > 0) {
         if (yPosition > 200) {
-          pdf.addPage()
-          yPosition = margin
+          doc.addPage()
+          yPosition = 20
         }
 
-        pdf.setFontSize(14)
-        pdf.setFont("helvetica", "bold")
-        pdf.text("EDUCACIÓN", margin, yPosition)
-        yPosition += 8
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("EDUCACIÓN", 20, yPosition)
 
-        data.education.forEach((edu) => {
-          pdf.setFontSize(12)
-          pdf.setFont("helvetica", "bold")
-          pdf.text(edu.degree, margin, yPosition)
-          yPosition += 6
+        cvData.education.forEach((edu) => {
+          doc.setFontSize(12)
+          doc.setFont("helvetica", "bold")
+          yPosition = addText(`${edu.degree} - ${edu.institution}`, 20, yPosition + 8)
 
-          pdf.setFont("helvetica", "normal")
-          pdf.text(edu.institution, margin, yPosition)
-          yPosition += 6
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          const dates = `${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate || "")}`
+          yPosition = addText(dates, 20, yPosition + 3)
 
-          const startDate = formatDate(edu.startDate)
-          const endDate = edu.current ? "Presente" : formatDate(edu.endDate || "")
-          pdf.text(`${startDate} - ${endDate}`, margin, yPosition)
-          yPosition += 8
+          if (edu.field) {
+            yPosition = addText(`Campo: ${edu.field}`, 20, yPosition + 3)
+          }
+
+          if (edu.description) {
+            yPosition = addText(edu.description, 20, yPosition + 3) + 5
+          }
         })
+        yPosition += 5
       }
 
       // Skills
-      if (data.skills.length > 0) {
+      if (cvData.skills && cvData.skills.length > 0) {
         if (yPosition > 220) {
-          pdf.addPage()
-          yPosition = margin
+          doc.addPage()
+          yPosition = 20
         }
 
-        pdf.setFontSize(14)
-        pdf.setFont("helvetica", "bold")
-        pdf.text("HABILIDADES", margin, yPosition)
-        yPosition += 8
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("HABILIDADES", 20, yPosition)
 
-        const skillsByCategory = data.skills.reduce(
+        const skillsByCategory = cvData.skills.reduce(
           (acc, skill) => {
             if (!acc[skill.category]) acc[skill.category] = []
-            acc[skill.category].push(skill)
+            acc[skill.category].push(`${skill.name} (${skill.level})`)
             return acc
           },
-          {} as Record<string, typeof data.skills>,
+          {} as Record<string, string[]>,
         )
 
         Object.entries(skillsByCategory).forEach(([category, skills]) => {
-          pdf.setFontSize(11)
-          pdf.setFont("helvetica", "bold")
-          pdf.text(category + ":", margin, yPosition)
-          yPosition += 5
+          doc.setFontSize(12)
+          doc.setFont("helvetica", "bold")
+          yPosition = addText(category, 20, yPosition + 8)
 
-          pdf.setFont("helvetica", "normal")
-          const skillsText = skills.map((s) => `${s.name} (${s.level})`).join(", ")
-          yPosition = addText(skillsText, margin + 5, yPosition, pageWidth - 2 * margin - 5, 10)
-          yPosition += 5
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          yPosition = addText(skills.join(", "), 20, yPosition + 3) + 3
         })
+        yPosition += 5
       }
 
       // Projects
-      if (data.projects.length > 0) {
+      if (cvData.projects && cvData.projects.length > 0) {
         if (yPosition > 200) {
-          pdf.addPage()
-          yPosition = margin
+          doc.addPage()
+          yPosition = 20
         }
 
-        pdf.setFontSize(14)
-        pdf.setFont("helvetica", "bold")
-        pdf.text("PROYECTOS", margin, yPosition)
-        yPosition += 8
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("PROYECTOS", 20, yPosition)
 
-        data.projects.forEach((project) => {
-          if (yPosition > 240) {
-            pdf.addPage()
-            yPosition = margin
+        cvData.projects.forEach((project) => {
+          if (yPosition > 250) {
+            doc.addPage()
+            yPosition = 20
           }
 
-          pdf.setFontSize(12)
-          pdf.setFont("helvetica", "bold")
-          pdf.text(project.name, margin, yPosition)
-          yPosition += 6
+          doc.setFontSize(12)
+          doc.setFont("helvetica", "bold")
+          yPosition = addText(project.name, 20, yPosition + 8)
 
-          pdf.setFont("helvetica", "normal")
-          yPosition = addText(project.description, margin, yPosition, pageWidth - 2 * margin, 10)
-          yPosition += 8
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          if (project.technologies.length > 0) {
+            yPosition = addText(`Tecnologías: ${project.technologies.join(", ")}`, 20, yPosition + 3)
+          }
+
+          if (project.description) {
+            yPosition = addText(project.description, 20, yPosition + 3) + 5
+          }
+        })
+      }
+
+      // Languages
+      if (cvData.languages && cvData.languages.length > 0) {
+        if (yPosition > 240) {
+          doc.addPage()
+          yPosition = 20
+        }
+
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("IDIOMAS", 20, yPosition)
+
+        doc.setFontSize(11)
+        doc.setFont("helvetica", "normal")
+        const languageList = cvData.languages.map((lang) => `${lang.name}: ${lang.level}`).join(", ")
+        yPosition = addText(languageList, 20, yPosition + 8)
+      }
+
+      // Certifications
+      if (cvData.certifications && cvData.certifications.length > 0) {
+        if (yPosition > 220) {
+          doc.addPage()
+          yPosition = 20
+        }
+
+        doc.setFontSize(16)
+        doc.setFont("helvetica", "bold")
+        yPosition = addText("CERTIFICACIONES", 20, yPosition)
+
+        cvData.certifications.forEach((cert) => {
+          doc.setFontSize(12)
+          doc.setFont("helvetica", "bold")
+          yPosition = addText(`${cert.name} - ${cert.issuer}`, 20, yPosition + 8)
+
+          doc.setFontSize(10)
+          doc.setFont("helvetica", "normal")
+          yPosition = addText(`Fecha: ${formatDate(cert.date)}`, 20, yPosition + 3) + 3
         })
       }
 
       // Save the PDF
-      pdf.save(`CV_${data.personalInfo.fullName.replace(/\s+/g, "_")}.pdf`)
-      toast.success("PDF exportado exitosamente")
+      const fileName = `CV_${cvData.personalInfo.fullName.replace(/\s+/g, "_")}.pdf`
+      doc.save(fileName)
+      toast.success("PDF generado exitosamente")
     } catch (error) {
-      console.error("Error exporting PDF:", error)
-      toast.error("Error al exportar PDF")
+      console.error("Error generating PDF:", error)
+      toast.error("Error al generar el PDF")
     }
   }
 
-  const previewCV = (data: CVData) => {
+  const previewCV = () => {
+    if (!cvData.personalInfo?.fullName) {
+      toast.error("Completa al menos la información personal para ver la vista previa")
+      return
+    }
+
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="es">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CV - ${data.personalInfo.fullName}</title>
+        <title>CV - ${cvData.personalInfo.fullName}</title>
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 800px;
@@ -299,44 +378,39 @@ export default function CVBuilderPage() {
           }
           .header {
             text-align: center;
-            border-bottom: 2px solid #333;
+            border-bottom: 3px solid #2563eb;
             padding-bottom: 20px;
             margin-bottom: 30px;
           }
           .header h1 {
             margin: 0;
+            color: #1e40af;
             font-size: 2.5em;
-            color: #2c3e50;
           }
           .contact-info {
             margin: 10px 0;
-            font-size: 1.1em;
+            color: #666;
           }
           .section {
             margin-bottom: 30px;
           }
           .section h2 {
-            color: #2c3e50;
-            border-bottom: 1px solid #bdc3c7;
+            color: #1e40af;
+            border-bottom: 2px solid #e5e7eb;
             padding-bottom: 5px;
             margin-bottom: 15px;
-            font-size: 1.5em;
           }
           .item {
             margin-bottom: 20px;
           }
           .item h3 {
             margin: 0 0 5px 0;
-            color: #34495e;
+            color: #374151;
           }
-          .item .company {
-            font-weight: bold;
-            color: #7f8c8d;
-          }
-          .item .date {
-            font-style: italic;
-            color: #95a5a6;
-            margin-bottom: 10px;
+          .item-meta {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-bottom: 8px;
           }
           .skills-grid {
             display: grid;
@@ -344,63 +418,85 @@ export default function CVBuilderPage() {
             gap: 15px;
           }
           .skill-category {
-            background: #f8f9fa;
+            background: #f9fafb;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
           }
           .skill-category h4 {
             margin: 0 0 10px 0;
-            color: #2c3e50;
+            color: #1f2937;
           }
-          .skill-list {
+          .skills-list {
             list-style: none;
             padding: 0;
             margin: 0;
           }
-          .skill-list li {
+          .skills-list li {
             padding: 2px 0;
+            font-size: 0.9em;
+          }
+          .languages-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+          }
+          .language-item {
+            background: #eff6ff;
+            padding: 8px 12px;
+            border-radius: 20px;
             font-size: 0.9em;
           }
           @media print {
             body { padding: 0; }
+            .header { page-break-after: avoid; }
             .section { page-break-inside: avoid; }
           }
         </style>
       </head>
       <body>
         <div class="header">
-          <h1>${data.personalInfo.fullName}</h1>
+          <h1>${cvData.personalInfo.fullName}</h1>
           <div class="contact-info">
-            <div>${data.personalInfo.email} | ${data.personalInfo.phone}</div>
-            <div>${data.personalInfo.city}, Chile</div>
-            ${data.personalInfo.linkedin ? `<div><a href="${data.personalInfo.linkedin}">LinkedIn</a></div>` : ""}
-            ${data.personalInfo.github ? `<div><a href="${data.personalInfo.github}">GitHub</a></div>` : ""}
+            ${cvData.personalInfo.email} | ${cvData.personalInfo.phone}
+            ${cvData.personalInfo.city ? ` | ${cvData.personalInfo.city}` : ""}
           </div>
+          ${
+            cvData.personalInfo.linkedin || cvData.personalInfo.github
+              ? `
+            <div class="contact-info">
+              ${cvData.personalInfo.linkedin ? `<a href="${cvData.personalInfo.linkedin}">LinkedIn</a>` : ""}
+              ${cvData.personalInfo.linkedin && cvData.personalInfo.github ? " | " : ""}
+              ${cvData.personalInfo.github ? `<a href="${cvData.personalInfo.github}">GitHub</a>` : ""}
+            </div>
+          `
+              : ""
+          }
         </div>
 
         ${
-          data.personalInfo.summary
+          cvData.personalInfo.summary
             ? `
           <div class="section">
             <h2>Resumen Profesional</h2>
-            <p>${data.personalInfo.summary}</p>
+            <p>${cvData.personalInfo.summary}</p>
           </div>
         `
             : ""
         }
 
         ${
-          data.experience.length > 0
+          cvData.experience && cvData.experience.length > 0
             ? `
           <div class="section">
             <h2>Experiencia Laboral</h2>
-            ${data.experience
+            ${cvData.experience
               .map(
                 (exp) => `
               <div class="item">
-                <h3>${exp.position}</h3>
-                <div class="company">${exp.company}</div>
-                <div class="date">${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate || "")}</div>
+                <h3>${exp.position} - ${exp.company}</h3>
+                <div class="item-meta">
+                  ${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate || "")}
+                </div>
                 ${exp.description ? `<p>${exp.description}</p>` : ""}
               </div>
             `,
@@ -412,17 +508,19 @@ export default function CVBuilderPage() {
         }
 
         ${
-          data.education.length > 0
+          cvData.education && cvData.education.length > 0
             ? `
           <div class="section">
             <h2>Educación</h2>
-            ${data.education
+            ${cvData.education
               .map(
                 (edu) => `
               <div class="item">
-                <h3>${edu.degree}</h3>
-                <div class="company">${edu.institution}</div>
-                <div class="date">${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate || "")}</div>
+                <h3>${edu.degree} - ${edu.institution}</h3>
+                <div class="item-meta">
+                  ${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate || "")}
+                  ${edu.field ? ` | ${edu.field}` : ""}
+                </div>
                 ${edu.description ? `<p>${edu.description}</p>` : ""}
               </div>
             `,
@@ -434,27 +532,24 @@ export default function CVBuilderPage() {
         }
 
         ${
-          data.skills.length > 0
+          cvData.skills && cvData.skills.length > 0
             ? `
           <div class="section">
             <h2>Habilidades</h2>
             <div class="skills-grid">
               ${Object.entries(
-                data.skills.reduce(
-                  (acc, skill) => {
-                    if (!acc[skill.category]) acc[skill.category] = []
-                    acc[skill.category].push(skill)
-                    return acc
-                  },
-                  {} as Record<string, typeof data.skills>,
-                ),
+                cvData.skills.reduce((acc, skill) => {
+                  if (!acc[skill.category]) acc[skill.category] = []
+                  acc[skill.category].push(`${skill.name} (${skill.level})`)
+                  return acc
+                }, {}),
               )
                 .map(
                   ([category, skills]) => `
                 <div class="skill-category">
                   <h4>${category}</h4>
-                  <ul class="skill-list">
-                    ${skills.map((skill) => `<li>${skill.name} - ${skill.level}</li>`).join("")}
+                  <ul class="skills-list">
+                    ${skills.map((skill) => `<li>${skill}</li>`).join("")}
                   </ul>
                 </div>
               `,
@@ -467,18 +562,34 @@ export default function CVBuilderPage() {
         }
 
         ${
-          data.projects.length > 0
+          cvData.projects && cvData.projects.length > 0
             ? `
           <div class="section">
             <h2>Proyectos</h2>
-            ${data.projects
+            ${cvData.projects
               .map(
                 (project) => `
               <div class="item">
                 <h3>${project.name}</h3>
-                ${project.url ? `<div><a href="${project.url}" target="_blank">Ver Proyecto</a></div>` : ""}
-                ${project.github ? `<div><a href="${project.github}" target="_blank">Ver Código</a></div>` : ""}
-                <p>${project.description}</p>
+                ${
+                  project.technologies.length > 0
+                    ? `
+                  <div class="item-meta">Tecnologías: ${project.technologies.join(", ")}</div>
+                `
+                    : ""
+                }
+                ${project.description ? `<p>${project.description}</p>` : ""}
+                ${
+                  project.url || project.github
+                    ? `
+                  <div class="item-meta">
+                    ${project.url ? `<a href="${project.url}">Ver Proyecto</a>` : ""}
+                    ${project.url && project.github ? " | " : ""}
+                    ${project.github ? `<a href="${project.github}">GitHub</a>` : ""}
+                  </div>
+                `
+                    : ""
+                }
               </div>
             `,
               )
@@ -489,37 +600,39 @@ export default function CVBuilderPage() {
         }
 
         ${
-          data.certifications.length > 0
-            ? `
-          <div class="section">
-            <h2>Certificaciones</h2>
-            ${data.certifications
-              .map(
-                (cert) => `
-              <div class="item">
-                <h3>${cert.name}</h3>
-                <div class="company">${cert.issuer}</div>
-                <div class="date">${formatDate(cert.date)}</div>
-                ${cert.description ? `<p>${cert.description}</p>` : ""}
-              </div>
-            `,
-              )
-              .join("")}
-          </div>
-        `
-            : ""
-        }
-
-        ${
-          data.languages.length > 0
+          cvData.languages && cvData.languages.length > 0
             ? `
           <div class="section">
             <h2>Idiomas</h2>
-            ${data.languages
+            <div class="languages-list">
+              ${cvData.languages
+                .map(
+                  (lang) => `
+                <div class="language-item">${lang.name}: ${lang.level}</div>
+              `,
+                )
+                .join("")}
+            </div>
+          </div>
+        `
+            : ""
+        }
+
+        ${
+          cvData.certifications && cvData.certifications.length > 0
+            ? `
+          <div class="section">
+            <h2>Certificaciones</h2>
+            ${cvData.certifications
               .map(
-                (lang) => `
+                (cert) => `
               <div class="item">
-                <h3>${lang.name} - ${lang.level}</h3>
+                <h3>${cert.name} - ${cert.issuer}</h3>
+                <div class="item-meta">
+                  Fecha: ${formatDate(cert.date)}
+                  ${cert.expiryDate ? ` | Expira: ${formatDate(cert.expiryDate)}` : ""}
+                </div>
+                ${cert.url ? `<div class="item-meta"><a href="${cert.url}">Ver Certificación</a></div>` : ""}
               </div>
             `,
               )
@@ -536,18 +649,49 @@ export default function CVBuilderPage() {
     if (newWindow) {
       newWindow.document.write(htmlContent)
       newWindow.document.close()
+      toast.success("Vista previa abierta en nueva ventana")
+    } else {
+      toast.error("No se pudo abrir la vista previa. Verifica que los pop-ups estén habilitados.")
     }
   }
 
+  const clearData = () => {
+    if (confirm("¿Estás seguro de que quieres borrar todos los datos del CV?")) {
+      localStorage.removeItem("cv-data")
+      localStorage.removeItem("cv-draft")
+      window.location.reload()
+    }
+  }
+
+  const tips = [
+    {
+      title: "Resumen Profesional",
+      description:
+        "Escribe un resumen de 2-3 líneas que destaque tu experiencia más relevante y objetivos profesionales.",
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      title: "Experiencia Laboral",
+      description:
+        "Usa verbos de acción y cuantifica tus logros cuando sea posible (ej: 'Aumenté las ventas en un 25%').",
+      icon: <CheckCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Habilidades",
+      description: "Incluye tanto habilidades técnicas como blandas relevantes para el puesto que buscas.",
+      icon: <Lightbulb className="w-4 h-4" />,
+    },
+    {
+      title: "Formato",
+      description:
+        "Mantén un diseño limpio y profesional. Usa viñetas y espacios en blanco para mejorar la legibilidad.",
+      icon: <Eye className="w-4 h-4" />,
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-background">
-      <CVForm
-        initialData={cvData}
-        onSave={saveCVData}
-        onExportPDF={exportToPDF}
-        onPreview={previewCV}
-        isLoading={isLoading}
-      />
-    </div>
+    <Suspense fallback={<CVBuilderLoading />}>
+      <CVForm initialData={cvData} onSave={handleSave} isLoading={isLoading} />
+    </Suspense>
   )
 }

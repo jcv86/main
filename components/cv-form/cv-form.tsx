@@ -1,103 +1,129 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Progress } from "@/components/ui/progress"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Plus,
-  Minus,
-  ChevronDown,
-  ChevronUp,
+  Trash2,
+  Download,
+  Eye,
+  Save,
   User,
-  GraduationCap,
   Briefcase,
+  GraduationCap,
   Code,
-  FolderOpen,
   Award,
   Languages,
+  FileText,
 } from "lucide-react"
+import { toast } from "sonner"
+import jsPDF from "jspdf"
 import {
   type CVData,
-  CVDataSchema,
-  getCompletionPercentage,
-  CHILEAN_CITIES,
-  CHILEAN_UNIVERSITIES,
-  SKILL_CATEGORIES,
-  SKILL_LEVELS,
-  LANGUAGE_LEVELS,
-  getEmptyCV,
+  type PersonalInfo,
+  type Experience,
+  type Education,
+  type Project,
+  type Skill,
+  type Language,
+  type Certification,
+  chileanCities,
+  chileanUniversities,
+  formatDate,
 } from "@/lib/cv-types"
 
-interface CVFormProps {
-  initialData?: Partial<CVData>
-  onSave: (data: CVData) => void
-  onExportPDF: (data: CVData) => void
-  onPreview: (data: CVData) => void
-  isLoading?: boolean
+const initialCVData: CVData = {
+  personal: {
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    linkedIn: "",
+    website: "",
+    summary: "",
+  },
+  experience: [],
+  education: [],
+  projects: [],
+  skills: [],
+  languages: [],
+  certifications: [],
 }
 
-export function CVForm({ initialData, onSave, onExportPDF, onPreview, isLoading }: CVFormProps) {
-  const [openSections, setOpenSections] = useState({
-    personal: true,
-    education: false,
-    experience: false,
-    skills: false,
-    projects: false,
-    certifications: false,
-    languages: false,
-  })
+export default function CVForm() {
+  const [cvData, setCVData] = useState<CVData>(initialCVData)
+  const [activeTab, setActiveTab] = useState("personal")
+  const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<CVData>({
-    resolver: zodResolver(CVDataSchema),
-    defaultValues: initialData || getEmptyCV(),
-    mode: "onChange",
-  })
-
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isValid },
-  } = form
-
-  const watchedData = watch()
-  const completionPercentage = getCompletionPercentage(watchedData)
-
-  // Field arrays
-  const educationFields = useFieldArray({ control, name: "education" })
-  const experienceFields = useFieldArray({ control, name: "experience" })
-  const skillsFields = useFieldArray({ control, name: "skills" })
-  const projectsFields = useFieldArray({ control, name: "projects" })
-  const certificationsFields = useFieldArray({ control, name: "certifications" })
-  const languagesFields = useFieldArray({ control, name: "languages" })
-
-  // Auto-save effect
+  // Auto-save to localStorage
   useEffect(() => {
-    const subscription = watch((data) => {
-      if (isValid) {
-        onSave(data as CVData)
+    const savedData = localStorage.getItem("cv-draft")
+    if (savedData) {
+      try {
+        setCVData(JSON.parse(savedData))
+      } catch (error) {
+        console.error("Error loading saved CV data:", error)
       }
-    })
-    return () => subscription.unsubscribe()
-  }, [watch, onSave, isValid])
+    }
+  }, [])
 
-  const toggleSection = (section: keyof typeof openSections) => {
-    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }))
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem("cv-draft", JSON.stringify(cvData))
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [cvData])
+
+  const updatePersonal = (field: keyof PersonalInfo, value: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      personal: { ...prev.personal, [field]: value },
+    }))
+  }
+
+  const addExperience = () => {
+    const newExp: Experience = {
+      id: Date.now().toString(),
+      company: "",
+      position: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      description: "",
+      location: "",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      experience: [...prev.experience, newExp],
+    }))
+  }
+
+  const updateExperience = (id: string, field: keyof Experience, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      experience: prev.experience.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp)),
+    }))
+  }
+
+  const removeExperience = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      experience: prev.experience.filter((exp) => exp.id !== id),
+    }))
   }
 
   const addEducation = () => {
-    educationFields.append({
+    const newEdu: Education = {
       id: Date.now().toString(),
       institution: "",
       degree: "",
@@ -107,694 +133,1150 @@ export function CVForm({ initialData, onSave, onExportPDF, onPreview, isLoading 
       current: false,
       gpa: "",
       description: "",
-    })
-    setOpenSections((prev) => ({ ...prev, education: true }))
+    }
+    setCVData((prev) => ({
+      ...prev,
+      education: [...prev.education, newEdu],
+    }))
   }
 
-  const addExperience = () => {
-    experienceFields.append({
-      id: Date.now().toString(),
-      company: "",
-      position: "",
-      startDate: "",
-      endDate: "",
-      current: false,
-      description: "",
-      achievements: [],
-    })
-    setOpenSections((prev) => ({ ...prev, experience: true }))
+  const updateEducation = (id: string, field: keyof Education, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      education: prev.education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
+    }))
   }
 
-  const addSkill = () => {
-    skillsFields.append({
-      id: Date.now().toString(),
-      name: "",
-      category: "Programación",
-      level: "Básico",
-    })
-    setOpenSections((prev) => ({ ...prev, skills: true }))
+  const removeEducation = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      education: prev.education.filter((edu) => edu.id !== id),
+    }))
   }
 
   const addProject = () => {
-    projectsFields.append({
+    const newProject: Project = {
       id: Date.now().toString(),
       name: "",
       description: "",
       technologies: [],
-      url: "",
-      github: "",
       startDate: "",
       endDate: "",
-    })
-    setOpenSections((prev) => ({ ...prev, projects: true }))
+      current: false,
+      url: "",
+      github: "",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      projects: [...prev.projects, newProject],
+    }))
+  }
+
+  const updateProject = (id: string, field: keyof Project, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      projects: prev.projects.map((proj) => (proj.id === id ? { ...proj, [field]: value } : proj)),
+    }))
+  }
+
+  const removeProject = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((proj) => proj.id !== id),
+    }))
+  }
+
+  const addSkill = () => {
+    const newSkill: Skill = {
+      id: Date.now().toString(),
+      name: "",
+      level: "Intermedio",
+      category: "Técnica",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      skills: [...prev.skills, newSkill],
+    }))
+  }
+
+  const updateSkill = (id: string, field: keyof Skill, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      skills: prev.skills.map((skill) => (skill.id === id ? { ...skill, [field]: value } : skill)),
+    }))
+  }
+
+  const removeSkill = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((skill) => skill.id !== id),
+    }))
+  }
+
+  const addLanguage = () => {
+    const newLang: Language = {
+      id: Date.now().toString(),
+      name: "",
+      level: "Intermedio",
+      certification: "",
+    }
+    setCVData((prev) => ({
+      ...prev,
+      languages: [...prev.languages, newLang],
+    }))
+  }
+
+  const updateLanguage = (id: string, field: keyof Language, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      languages: prev.languages.map((lang) => (lang.id === id ? { ...lang, [field]: value } : lang)),
+    }))
+  }
+
+  const removeLanguage = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      languages: prev.languages.filter((lang) => lang.id !== id),
+    }))
   }
 
   const addCertification = () => {
-    certificationsFields.append({
+    const newCert: Certification = {
       id: Date.now().toString(),
       name: "",
       issuer: "",
       date: "",
+      expiryDate: "",
+      credentialId: "",
       url: "",
-      description: "",
-    })
-    setOpenSections((prev) => ({ ...prev, certifications: true }))
+    }
+    setCVData((prev) => ({
+      ...prev,
+      certifications: [...prev.certifications, newCert],
+    }))
   }
 
-  const addLanguage = () => {
-    languagesFields.append({
-      id: Date.now().toString(),
-      name: "",
-      level: "Básico",
-    })
-    setOpenSections((prev) => ({ ...prev, languages: true }))
+  const updateCertification = (id: string, field: keyof Certification, value: any) => {
+    setCVData((prev) => ({
+      ...prev,
+      certifications: prev.certifications.map((cert) => (cert.id === id ? { ...cert, [field]: value } : cert)),
+    }))
   }
 
-  const onSubmit = (data: CVData) => {
-    onSave(data)
+  const removeCertification = (id: string) => {
+    setCVData((prev) => ({
+      ...prev,
+      certifications: prev.certifications.filter((cert) => cert.id !== id),
+    }))
+  }
+
+  const generatePDF = () => {
+    setIsLoading(true)
+    try {
+      const doc = new jsPDF()
+      let yPosition = 20
+
+      // Header
+      doc.setFontSize(20)
+      doc.text(cvData.personal.fullName || "Nombre Completo", 20, yPosition)
+      yPosition += 10
+
+      doc.setFontSize(12)
+      if (cvData.personal.email) {
+        doc.text(`Email: ${cvData.personal.email}`, 20, yPosition)
+        yPosition += 7
+      }
+      if (cvData.personal.phone) {
+        doc.text(`Teléfono: ${cvData.personal.phone}`, 20, yPosition)
+        yPosition += 7
+      }
+      if (cvData.personal.address) {
+        doc.text(`Dirección: ${cvData.personal.address}, ${cvData.personal.city}`, 20, yPosition)
+        yPosition += 7
+      }
+
+      yPosition += 10
+
+      // Summary
+      if (cvData.personal.summary) {
+        doc.setFontSize(16)
+        doc.text("Resumen Profesional", 20, yPosition)
+        yPosition += 10
+        doc.setFontSize(11)
+        const summaryLines = doc.splitTextToSize(cvData.personal.summary, 170)
+        doc.text(summaryLines, 20, yPosition)
+        yPosition += summaryLines.length * 5 + 10
+      }
+
+      // Experience
+      if (cvData.experience.length > 0) {
+        doc.setFontSize(16)
+        doc.text("Experiencia Laboral", 20, yPosition)
+        yPosition += 10
+
+        cvData.experience.forEach((exp) => {
+          if (yPosition > 250) {
+            doc.addPage()
+            yPosition = 20
+          }
+
+          doc.setFontSize(12)
+          doc.text(`${exp.position} - ${exp.company}`, 20, yPosition)
+          yPosition += 7
+          doc.setFontSize(10)
+          doc.text(
+            `${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate)}`,
+            20,
+            yPosition,
+          )
+          yPosition += 7
+          if (exp.description) {
+            const descLines = doc.splitTextToSize(exp.description, 170)
+            doc.text(descLines, 20, yPosition)
+            yPosition += descLines.length * 4 + 5
+          }
+          yPosition += 5
+        })
+      }
+
+      // Education
+      if (cvData.education.length > 0) {
+        if (yPosition > 200) {
+          doc.addPage()
+          yPosition = 20
+        }
+
+        doc.setFontSize(16)
+        doc.text("Educación", 20, yPosition)
+        yPosition += 10
+
+        cvData.education.forEach((edu) => {
+          doc.setFontSize(12)
+          doc.text(`${edu.degree} en ${edu.field}`, 20, yPosition)
+          yPosition += 7
+          doc.setFontSize(10)
+          doc.text(`${edu.institution}`, 20, yPosition)
+          yPosition += 5
+          doc.text(
+            `${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate)}`,
+            20,
+            yPosition,
+          )
+          yPosition += 10
+        })
+      }
+
+      // Skills
+      if (cvData.skills.length > 0) {
+        if (yPosition > 220) {
+          doc.addPage()
+          yPosition = 20
+        }
+
+        doc.setFontSize(16)
+        doc.text("Habilidades", 20, yPosition)
+        yPosition += 10
+
+        const skillsByCategory = cvData.skills.reduce(
+          (acc, skill) => {
+            if (!acc[skill.category]) acc[skill.category] = []
+            acc[skill.category].push(skill)
+            return acc
+          },
+          {} as Record<string, Skill[]>,
+        )
+
+        Object.entries(skillsByCategory).forEach(([category, skills]) => {
+          doc.setFontSize(12)
+          doc.text(category, 20, yPosition)
+          yPosition += 7
+          doc.setFontSize(10)
+          const skillsText = skills.map((s) => `${s.name} (${s.level})`).join(", ")
+          const skillsLines = doc.splitTextToSize(skillsText, 170)
+          doc.text(skillsLines, 20, yPosition)
+          yPosition += skillsLines.length * 4 + 5
+        })
+      }
+
+      doc.save(`CV_${cvData.personal.fullName.replace(/\s+/g, "_")}.pdf`)
+      toast.success("CV descargado exitosamente")
+    } catch (error) {
+      console.error("Error generating PDF:", error)
+      toast.error("Error al generar el PDF")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const previewCV = () => {
+    const previewWindow = window.open("", "_blank")
+    if (!previewWindow) return
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Vista Previa CV - ${cvData.personal.fullName}</title>
+          <style>
+            body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+            .section { margin-bottom: 30px; }
+            .section-title { font-size: 18px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+            .item { margin-bottom: 15px; }
+            .item-title { font-weight: bold; }
+            .item-subtitle { color: #666; font-style: italic; }
+            .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>${cvData.personal.fullName}</h1>
+            <p>${cvData.personal.email} | ${cvData.personal.phone}</p>
+            <p>${cvData.personal.address}, ${cvData.personal.city}</p>
+            ${cvData.personal.linkedIn ? `<p>LinkedIn: ${cvData.personal.linkedIn}</p>` : ""}
+          </div>
+          
+          ${
+            cvData.personal.summary
+              ? `
+            <div class="section">
+              <h2 class="section-title">Resumen Profesional</h2>
+              <p>${cvData.personal.summary}</p>
+            </div>
+          `
+              : ""
+          }
+          
+          ${
+            cvData.experience.length > 0
+              ? `
+            <div class="section">
+              <h2 class="section-title">Experiencia Laboral</h2>
+              ${cvData.experience
+                .map(
+                  (exp) => `
+                <div class="item">
+                  <div class="item-title">${exp.position} - ${exp.company}</div>
+                  <div class="item-subtitle">${formatDate(exp.startDate)} - ${exp.current ? "Presente" : formatDate(exp.endDate)} | ${exp.location}</div>
+                  <p>${exp.description}</p>
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+          `
+              : ""
+          }
+          
+          ${
+            cvData.education.length > 0
+              ? `
+            <div class="section">
+              <h2 class="section-title">Educación</h2>
+              ${cvData.education
+                .map(
+                  (edu) => `
+                <div class="item">
+                  <div class="item-title">${edu.degree} en ${edu.field}</div>
+                  <div class="item-subtitle">${edu.institution}</div>
+                  <div class="item-subtitle">${formatDate(edu.startDate)} - ${edu.current ? "Presente" : formatDate(edu.endDate)}</div>
+                  ${edu.gpa ? `<p>GPA: ${edu.gpa}</p>` : ""}
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+          `
+              : ""
+          }
+          
+          ${
+            cvData.skills.length > 0
+              ? `
+            <div class="section">
+              <h2 class="section-title">Habilidades</h2>
+              <div class="skills-grid">
+                ${Object.entries(
+                  cvData.skills.reduce(
+                    (acc, skill) => {
+                      if (!acc[skill.category]) acc[skill.category] = []
+                      acc[skill.category].push(skill)
+                      return acc
+                    },
+                    {} as Record<string, Skill[]>,
+                  ),
+                )
+                  .map(
+                    ([category, skills]) => `
+                  <div>
+                    <h4>${category}</h4>
+                    <ul>
+                      ${skills.map((skill) => `<li>${skill.name} (${skill.level})</li>`).join("")}
+                    </ul>
+                  </div>
+                `,
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `
+              : ""
+          }
+        </body>
+      </html>
+    `
+
+    previewWindow.document.write(html)
+    previewWindow.document.close()
+  }
+
+  const saveDraft = () => {
+    localStorage.setItem("cv-draft", JSON.stringify(cvData))
+    toast.success("Borrador guardado")
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Progress Header */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Constructor de CV</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">Completa tu información profesional</p>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-primary">{completionPercentage}%</div>
-              <p className="text-xs text-muted-foreground">Completado</p>
-            </div>
-          </div>
-          <Progress value={completionPercentage} className="mt-4" />
-        </CardHeader>
-      </Card>
+    <div className="container mx-auto py-8 px-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Constructor de CV</h1>
+        <p className="text-muted-foreground">Crea tu currículum vitae profesional paso a paso</p>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Personal Information */}
-        <Card>
-          <Collapsible open={openSections.personal} onOpenChange={() => toggleSection("personal")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="h-5 w-5" />
-                    <CardTitle>Información Personal</CardTitle>
-                    <Badge variant="secondary">Requerido</Badge>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-7">
+              <TabsTrigger value="personal" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Personal
+              </TabsTrigger>
+              <TabsTrigger value="experience" className="flex items-center gap-2">
+                <Briefcase className="h-4 w-4" />
+                Experiencia
+              </TabsTrigger>
+              <TabsTrigger value="education" className="flex items-center gap-2">
+                <GraduationCap className="h-4 w-4" />
+                Educación
+              </TabsTrigger>
+              <TabsTrigger value="projects" className="flex items-center gap-2">
+                <Code className="h-4 w-4" />
+                Proyectos
+              </TabsTrigger>
+              <TabsTrigger value="skills" className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                Habilidades
+              </TabsTrigger>
+              <TabsTrigger value="languages" className="flex items-center gap-2">
+                <Languages className="h-4 w-4" />
+                Idiomas
+              </TabsTrigger>
+              <TabsTrigger value="certifications" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Certificaciones
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="personal" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Información Personal</CardTitle>
+                  <CardDescription>Completa tu información básica y resumen profesional</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="fullName">Nombre Completo *</Label>
+                      <Input
+                        id="fullName"
+                        value={cvData.personal.fullName}
+                        onChange={(e) => updatePersonal("fullName", e.target.value)}
+                        placeholder="Juan Pérez González"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={cvData.personal.email}
+                        onChange={(e) => updatePersonal("email", e.target.value)}
+                        placeholder="juan.perez@email.com"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Teléfono *</Label>
+                      <Input
+                        id="phone"
+                        value={cvData.personal.phone}
+                        onChange={(e) => updatePersonal("phone", e.target.value)}
+                        placeholder="+56 9 1234 5678"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="city">Ciudad *</Label>
+                      <Select value={cvData.personal.city} onValueChange={(value) => updatePersonal("city", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona tu ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {chileanCities.map((city) => (
+                            <SelectItem key={city} value={city}>
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  {openSections.personal ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="fullName">Nombre Completo *</Label>
-                    <Input
-                      id="fullName"
-                      {...form.register("personalInfo.fullName")}
-                      placeholder="Juan Pérez González"
-                    />
-                    {errors.personalInfo?.fullName && (
-                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.fullName.message}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...form.register("personalInfo.email")}
-                      placeholder="juan@ejemplo.com"
-                    />
-                    {errors.personalInfo?.email && (
-                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.email.message}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Teléfono *</Label>
-                    <Input id="phone" {...form.register("personalInfo.phone")} placeholder="+56 9 1234 5678" />
-                    {errors.personalInfo?.phone && (
-                      <p className="text-sm text-destructive mt-1">{errors.personalInfo.phone.message}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="city">Ciudad *</Label>
-                    <Select
-                      value={watchedData.personalInfo?.city}
-                      onValueChange={(value) => setValue("personalInfo.city", value as any)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona una ciudad" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CHILEAN_CITIES.map((city) => (
-                          <SelectItem key={city} value={city}>
-                            {city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+
                   <div>
                     <Label htmlFor="address">Dirección</Label>
                     <Input
                       id="address"
-                      {...form.register("personalInfo.address")}
-                      placeholder="Av. Providencia 123, Santiago"
+                      value={cvData.personal.address}
+                      onChange={(e) => updatePersonal("address", e.target.value)}
+                      placeholder="Av. Providencia 1234, Providencia"
                     />
                   </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="linkedIn">LinkedIn</Label>
+                      <Input
+                        id="linkedIn"
+                        value={cvData.personal.linkedIn}
+                        onChange={(e) => updatePersonal("linkedIn", e.target.value)}
+                        placeholder="linkedin.com/in/tu-perfil"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="website">Sitio Web</Label>
+                      <Input
+                        id="website"
+                        value={cvData.personal.website}
+                        onChange={(e) => updatePersonal("website", e.target.value)}
+                        placeholder="www.tu-sitio.com"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <Label htmlFor="linkedin">LinkedIn</Label>
-                    <Input
-                      id="linkedin"
-                      {...form.register("personalInfo.linkedin")}
-                      placeholder="https://linkedin.com/in/tu-perfil"
+                    <Label htmlFor="summary">Resumen Profesional *</Label>
+                    <Textarea
+                      id="summary"
+                      value={cvData.personal.summary}
+                      onChange={(e) => updatePersonal("summary", e.target.value)}
+                      placeholder="Describe brevemente tu experiencia, habilidades y objetivos profesionales..."
+                      rows={4}
                     />
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Tip: Mantén el resumen entre 3-4 líneas, enfócate en tus fortalezas principales
+                    </p>
                   </div>
-                  <div>
-                    <Label htmlFor="github">GitHub</Label>
-                    <Input
-                      id="github"
-                      {...form.register("personalInfo.github")}
-                      placeholder="https://github.com/tu-usuario"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="website">Sitio Web</Label>
-                    <Input id="website" {...form.register("personalInfo.website")} placeholder="https://tu-sitio.com" />
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="summary">Resumen Profesional</Label>
-                  <Textarea
-                    id="summary"
-                    {...form.register("personalInfo.summary")}
-                    placeholder="Breve descripción de tu perfil profesional..."
-                    rows={4}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {watchedData.personalInfo?.summary?.length || 0}/500 caracteres
-                  </p>
-                </div>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-        {/* Education */}
-        <Card>
-          <Collapsible open={openSections.education} onOpenChange={() => toggleSection("education")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5" />
-                    <CardTitle>Educación</CardTitle>
-                    <Badge variant="outline">{educationFields.fields.length} entradas</Badge>
-                  </div>
-                  {openSections.education ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                {educationFields.fields.map((field, index) => (
-                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Educación #{index + 1}</h4>
-                      <Button type="button" variant="outline" size="sm" onClick={() => educationFields.remove(index)}>
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Institución *</Label>
-                        <Select
-                          value={watchedData.education?.[index]?.institution}
-                          onValueChange={(value) => setValue(`education.${index}.institution`, value)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona una institución" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {CHILEAN_UNIVERSITIES.map((uni) => (
-                              <SelectItem key={uni} value={uni}>
-                                {uni}
-                              </SelectItem>
-                            ))}
-                            <SelectItem value="Otra">Otra institución</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Título *</Label>
-                        <Input
-                          {...form.register(`education.${index}.degree`)}
-                          placeholder="Ingeniería en Informática"
-                        />
-                      </div>
-                      <div>
-                        <Label>Campo de Estudio *</Label>
-                        <Input
-                          {...form.register(`education.${index}.field`)}
-                          placeholder="Ciencias de la Computación"
-                        />
-                      </div>
-                      <div>
-                        <Label>Promedio (Opcional)</Label>
-                        <Input {...form.register(`education.${index}.gpa`)} placeholder="6.5" />
-                      </div>
-                      <div>
-                        <Label>Fecha de Inicio *</Label>
-                        <Input type="month" {...form.register(`education.${index}.startDate`)} />
-                      </div>
-                      <div>
-                        <Label>Fecha de Fin</Label>
-                        <Input
-                          type="month"
-                          {...form.register(`education.${index}.endDate`)}
-                          disabled={watchedData.education?.[index]?.current}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`current-education-${index}`}
-                        checked={watchedData.education?.[index]?.current}
-                        onCheckedChange={(checked) => setValue(`education.${index}.current`, !!checked)}
-                      />
-                      <Label htmlFor={`current-education-${index}`}>Actualmente estudiando</Label>
-                    </div>
-                    <div>
-                      <Label>Descripción</Label>
-                      <Textarea
-                        {...form.register(`education.${index}.description`)}
-                        placeholder="Descripción adicional, logros académicos..."
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addEducation} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Educación
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+            <TabsContent value="experience" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Experiencia Laboral</CardTitle>
+                  <CardDescription>Agrega tu experiencia profesional, comenzando por la más reciente</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addExperience} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Experiencia
+                  </Button>
 
-        {/* Experience */}
-        <Card>
-          <Collapsible open={openSections.experience} onOpenChange={() => toggleSection("experience")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5" />
-                    <CardTitle>Experiencia Laboral</CardTitle>
-                    <Badge variant="outline">{experienceFields.fields.length} entradas</Badge>
-                  </div>
-                  {openSections.experience ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                {experienceFields.fields.map((field, index) => (
-                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Experiencia #{index + 1}</h4>
-                      <Button type="button" variant="outline" size="sm" onClick={() => experienceFields.remove(index)}>
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Empresa *</Label>
-                        <Input {...form.register(`experience.${index}.company`)} placeholder="Nombre de la empresa" />
-                      </div>
-                      <div>
-                        <Label>Cargo *</Label>
-                        <Input
-                          {...form.register(`experience.${index}.position`)}
-                          placeholder="Desarrollador Full Stack"
-                        />
-                      </div>
-                      <div>
-                        <Label>Fecha de Inicio *</Label>
-                        <Input type="month" {...form.register(`experience.${index}.startDate`)} />
-                      </div>
-                      <div>
-                        <Label>Fecha de Fin</Label>
-                        <Input
-                          type="month"
-                          {...form.register(`experience.${index}.endDate`)}
-                          disabled={watchedData.experience?.[index]?.current}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`current-job-${index}`}
-                        checked={watchedData.experience?.[index]?.current}
-                        onCheckedChange={(checked) => setValue(`experience.${index}.current`, !!checked)}
-                      />
-                      <Label htmlFor={`current-job-${index}`}>Trabajo actual</Label>
-                    </div>
-                    <div>
-                      <Label>Descripción</Label>
-                      <Textarea
-                        {...form.register(`experience.${index}.description`)}
-                        placeholder="Describe tus responsabilidades y logros..."
-                        rows={4}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addExperience} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Experiencia
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+                  <div className="space-y-6">
+                    {cvData.experience.map((exp, index) => (
+                      <Card key={exp.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Experiencia {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeExperience(exp.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
 
-        {/* Skills */}
-        <Card>
-          <Collapsible open={openSections.skills} onOpenChange={() => toggleSection("skills")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Code className="h-5 w-5" />
-                    <CardTitle>Habilidades</CardTitle>
-                    <Badge variant="outline">{skillsFields.fields.length} habilidades</Badge>
-                  </div>
-                  {openSections.skills ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {skillsFields.fields.map((field, index) => (
-                    <div key={field.id} className="border rounded-lg p-4 space-y-3">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-medium">Habilidad #{index + 1}</h4>
-                        <Button type="button" variant="outline" size="sm" onClick={() => skillsFields.remove(index)}>
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div>
-                        <Label>Nombre *</Label>
-                        <Input {...form.register(`skills.${index}.name`)} placeholder="JavaScript, React, etc." />
-                      </div>
-                      <div>
-                        <Label>Categoría</Label>
-                        <Select
-                          value={watchedData.skills?.[index]?.category}
-                          onValueChange={(value) => setValue(`skills.${index}.category`, value as any)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {SKILL_CATEGORIES.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Nivel</Label>
-                        <Select
-                          value={watchedData.skills?.[index]?.level}
-                          onValueChange={(value) => setValue(`skills.${index}.level`, value as any)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {SKILL_LEVELS.map((level) => (
-                              <SelectItem key={level} value={level}>
-                                {level}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Button type="button" variant="outline" onClick={addSkill} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Habilidad
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <Label>Empresa *</Label>
+                            <Input
+                              value={exp.company}
+                              onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
+                              placeholder="Nombre de la empresa"
+                            />
+                          </div>
+                          <div>
+                            <Label>Cargo *</Label>
+                            <Input
+                              value={exp.position}
+                              onChange={(e) => updateExperience(exp.id, "position", e.target.value)}
+                              placeholder="Tu posición en la empresa"
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Inicio *</Label>
+                            <Input
+                              type="month"
+                              value={exp.startDate}
+                              onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Término</Label>
+                            <Input
+                              type="month"
+                              value={exp.endDate}
+                              onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)}
+                              disabled={exp.current}
+                            />
+                          </div>
+                          <div>
+                            <Label>Ubicación</Label>
+                            <Input
+                              value={exp.location}
+                              onChange={(e) => updateExperience(exp.id, "location", e.target.value)}
+                              placeholder="Santiago, Chile"
+                            />
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`current-${exp.id}`}
+                              checked={exp.current}
+                              onCheckedChange={(checked) => updateExperience(exp.id, "current", checked)}
+                            />
+                            <Label htmlFor={`current-${exp.id}`}>Trabajo actual</Label>
+                          </div>
+                        </div>
 
-        {/* Projects */}
-        <Card>
-          <Collapsible open={openSections.projects} onOpenChange={() => toggleSection("projects")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <FolderOpen className="h-5 w-5" />
-                    <CardTitle>Proyectos</CardTitle>
-                    <Badge variant="outline">{projectsFields.fields.length} proyectos</Badge>
+                        <div>
+                          <Label>Descripción de Responsabilidades *</Label>
+                          <Textarea
+                            value={exp.description}
+                            onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
+                            placeholder="Describe tus principales responsabilidades y logros..."
+                            rows={3}
+                          />
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Tip: Usa viñetas y cuantifica tus logros cuando sea posible
+                          </p>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
-                  {openSections.projects ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                {projectsFields.fields.map((field, index) => (
-                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Proyecto #{index + 1}</h4>
-                      <Button type="button" variant="outline" size="sm" onClick={() => projectsFields.remove(index)}>
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Nombre del Proyecto *</Label>
-                        <Input {...form.register(`projects.${index}.name`)} placeholder="Mi Aplicación Web" />
-                      </div>
-                      <div>
-                        <Label>URL del Proyecto</Label>
-                        <Input {...form.register(`projects.${index}.url`)} placeholder="https://mi-proyecto.com" />
-                      </div>
-                      <div>
-                        <Label>GitHub</Label>
-                        <Input
-                          {...form.register(`projects.${index}.github`)}
-                          placeholder="https://github.com/usuario/proyecto"
-                        />
-                      </div>
-                      <div>
-                        <Label>Fecha de Inicio</Label>
-                        <Input type="month" {...form.register(`projects.${index}.startDate`)} />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Descripción *</Label>
-                      <Textarea
-                        {...form.register(`projects.${index}.description`)}
-                        placeholder="Describe el proyecto, su propósito y tu rol..."
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addProject} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Proyecto
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-        {/* Certifications */}
-        <Card>
-          <Collapsible open={openSections.certifications} onOpenChange={() => toggleSection("certifications")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Award className="h-5 w-5" />
-                    <CardTitle>Certificaciones</CardTitle>
-                    <Badge variant="outline">{certificationsFields.fields.length} certificaciones</Badge>
-                  </div>
-                  {openSections.certifications ? (
-                    <ChevronUp className="h-4 w-4" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4" />
-                  )}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                {certificationsFields.fields.map((field, index) => (
-                  <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Certificación #{index + 1}</h4>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => certificationsFields.remove(index)}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Nombre *</Label>
-                        <Input
-                          {...form.register(`certifications.${index}.name`)}
-                          placeholder="AWS Certified Developer"
-                        />
-                      </div>
-                      <div>
-                        <Label>Emisor *</Label>
-                        <Input {...form.register(`certifications.${index}.issuer`)} placeholder="Amazon Web Services" />
-                      </div>
-                      <div>
-                        <Label>Fecha *</Label>
-                        <Input type="month" {...form.register(`certifications.${index}.date`)} />
-                      </div>
-                      <div>
-                        <Label>URL de Verificación</Label>
-                        <Input
-                          {...form.register(`certifications.${index}.url`)}
-                          placeholder="https://certificado.com/verify"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Descripción</Label>
-                      <Textarea
-                        {...form.register(`certifications.${index}.description`)}
-                        placeholder="Descripción de la certificación..."
-                        rows={2}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addCertification} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Certificación
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+            <TabsContent value="education" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Educación</CardTitle>
+                  <CardDescription>Agrega tu formación académica, comenzando por la más reciente</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addEducation} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Educación
+                  </Button>
 
-        {/* Languages */}
-        <Card>
-          <Collapsible open={openSections.languages} onOpenChange={() => toggleSection("languages")}>
-            <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Languages className="h-5 w-5" />
-                    <CardTitle>Idiomas</CardTitle>
-                    <Badge variant="outline">{languagesFields.fields.length} idiomas</Badge>
-                  </div>
-                  {openSections.languages ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {languagesFields.fields.map((field, index) => (
-                    <div key={field.id} className="border rounded-lg p-4 space-y-3">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-medium">Idioma #{index + 1}</h4>
-                        <Button type="button" variant="outline" size="sm" onClick={() => languagesFields.remove(index)}>
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div>
-                        <Label>Idioma *</Label>
-                        <Input {...form.register(`languages.${index}.name`)} placeholder="Inglés, Francés, etc." />
-                      </div>
-                      <div>
-                        <Label>Nivel</Label>
-                        <Select
-                          value={watchedData.languages?.[index]?.level}
-                          onValueChange={(value) => setValue(`languages.${index}.level`, value as any)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {LANGUAGE_LEVELS.map((level) => (
-                              <SelectItem key={level} value={level}>
-                                {level}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Button type="button" variant="outline" onClick={addLanguage} className="w-full bg-transparent">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar Idioma
-                </Button>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </Card>
+                  <div className="space-y-6">
+                    {cvData.education.map((edu, index) => (
+                      <Card key={edu.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Educación {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeEducation(edu.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
 
-        {/* Action Buttons */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onPreview(watchedData as CVData)}
-                disabled={!isValid || isLoading}
-                className="flex-1"
-              >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <Label>Institución *</Label>
+                            <Select
+                              value={edu.institution}
+                              onValueChange={(value) => updateEducation(edu.id, "institution", value)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecciona la institución" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {chileanUniversities.map((uni) => (
+                                  <SelectItem key={uni} value={uni}>
+                                    {uni}
+                                  </SelectItem>
+                                ))}
+                                <SelectItem value="other">Otra institución</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Título/Grado *</Label>
+                            <Input
+                              value={edu.degree}
+                              onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
+                              placeholder="Ej: Ingeniería Civil Industrial"
+                            />
+                          </div>
+                          <div>
+                            <Label>Campo de Estudio *</Label>
+                            <Input
+                              value={edu.field}
+                              onChange={(e) => updateEducation(edu.id, "field", e.target.value)}
+                              placeholder="Ej: Ingeniería, Administración"
+                            />
+                          </div>
+                          <div>
+                            <Label>Promedio (Opcional)</Label>
+                            <Input
+                              value={edu.gpa}
+                              onChange={(e) => updateEducation(edu.id, "gpa", e.target.value)}
+                              placeholder="Ej: 6.5"
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Inicio *</Label>
+                            <Input
+                              type="month"
+                              value={edu.startDate}
+                              onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Graduación</Label>
+                            <Input
+                              type="month"
+                              value={edu.endDate}
+                              onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
+                              disabled={edu.current}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 mb-4">
+                          <Checkbox
+                            id={`current-edu-${edu.id}`}
+                            checked={edu.current}
+                            onCheckedChange={(checked) => updateEducation(edu.id, "current", checked)}
+                          />
+                          <Label htmlFor={`current-edu-${edu.id}`}>Estudiando actualmente</Label>
+                        </div>
+
+                        <div>
+                          <Label>Descripción (Opcional)</Label>
+                          <Textarea
+                            value={edu.description}
+                            onChange={(e) => updateEducation(edu.id, "description", e.target.value)}
+                            placeholder="Menciona logros académicos, proyectos destacados, etc."
+                            rows={2}
+                          />
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="projects" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Proyectos</CardTitle>
+                  <CardDescription>Muestra tus proyectos más relevantes y destacados</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addProject} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Proyecto
+                  </Button>
+
+                  <div className="space-y-6">
+                    {cvData.projects.map((project, index) => (
+                      <Card key={project.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Proyecto {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeProject(project.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <Label>Nombre del Proyecto *</Label>
+                            <Input
+                              value={project.name}
+                              onChange={(e) => updateProject(project.id, "name", e.target.value)}
+                              placeholder="Nombre del proyecto"
+                            />
+                          </div>
+                          <div>
+                            <Label>URL del Proyecto</Label>
+                            <Input
+                              value={project.url}
+                              onChange={(e) => updateProject(project.id, "url", e.target.value)}
+                              placeholder="https://mi-proyecto.com"
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Inicio *</Label>
+                            <Input
+                              type="month"
+                              value={project.startDate}
+                              onChange={(e) => updateProject(project.id, "startDate", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Finalización</Label>
+                            <Input
+                              type="month"
+                              value={project.endDate}
+                              onChange={(e) => updateProject(project.id, "endDate", e.target.value)}
+                              disabled={project.current}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 mb-4">
+                          <Checkbox
+                            id={`current-project-${project.id}`}
+                            checked={project.current}
+                            onCheckedChange={(checked) => updateProject(project.id, "current", checked)}
+                          />
+                          <Label htmlFor={`current-project-${project.id}`}>Proyecto en curso</Label>
+                        </div>
+
+                        <div className="mb-4">
+                          <Label>GitHub Repository</Label>
+                          <Input
+                            value={project.github}
+                            onChange={(e) => updateProject(project.id, "github", e.target.value)}
+                            placeholder="https://github.com/usuario/proyecto"
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <Label>Tecnologías Utilizadas</Label>
+                          <Input
+                            value={project.technologies.join(", ")}
+                            onChange={(e) =>
+                              updateProject(
+                                project.id,
+                                "technologies",
+                                e.target.value.split(", ").filter((t) => t.trim()),
+                              )
+                            }
+                            placeholder="React, Node.js, PostgreSQL, etc."
+                          />
+                          <p className="text-sm text-muted-foreground mt-1">Separa las tecnologías con comas</p>
+                        </div>
+
+                        <div>
+                          <Label>Descripción del Proyecto *</Label>
+                          <Textarea
+                            value={project.description}
+                            onChange={(e) => updateProject(project.id, "description", e.target.value)}
+                            placeholder="Describe el proyecto, su propósito y tus contribuciones..."
+                            rows={3}
+                          />
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="skills" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Habilidades</CardTitle>
+                  <CardDescription>Agrega tus habilidades técnicas y blandas</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addSkill} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Habilidad
+                  </Button>
+
+                  <div className="space-y-4">
+                    {cvData.skills.map((skill, index) => (
+                      <Card key={skill.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Habilidad {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeSkill(skill.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <Label>Nombre de la Habilidad *</Label>
+                            <Input
+                              value={skill.name}
+                              onChange={(e) => updateSkill(skill.id, "name", e.target.value)}
+                              placeholder="Ej: JavaScript, Liderazgo"
+                            />
+                          </div>
+                          <div>
+                            <Label>Categoría *</Label>
+                            <Select
+                              value={skill.category}
+                              onValueChange={(value) => updateSkill(skill.id, "category", value)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Técnica">Técnica</SelectItem>
+                                <SelectItem value="Blanda">Blanda</SelectItem>
+                                <SelectItem value="Idioma">Idioma</SelectItem>
+                                <SelectItem value="Herramienta">Herramienta</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Nivel *</Label>
+                            <Select
+                              value={skill.level}
+                              onValueChange={(value) => updateSkill(skill.id, "level", value)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Básico">Básico</SelectItem>
+                                <SelectItem value="Intermedio">Intermedio</SelectItem>
+                                <SelectItem value="Avanzado">Avanzado</SelectItem>
+                                <SelectItem value="Experto">Experto</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="languages" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Idiomas</CardTitle>
+                  <CardDescription>Especifica los idiomas que dominas y tu nivel</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addLanguage} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Idioma
+                  </Button>
+
+                  <div className="space-y-4">
+                    {cvData.languages.map((lang, index) => (
+                      <Card key={lang.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Idioma {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeLanguage(lang.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <Label>Idioma *</Label>
+                            <Input
+                              value={lang.name}
+                              onChange={(e) => updateLanguage(lang.id, "name", e.target.value)}
+                              placeholder="Ej: Inglés, Francés"
+                            />
+                          </div>
+                          <div>
+                            <Label>Nivel *</Label>
+                            <Select
+                              value={lang.level}
+                              onValueChange={(value) => updateLanguage(lang.id, "level", value)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Básico">Básico</SelectItem>
+                                <SelectItem value="Intermedio">Intermedio</SelectItem>
+                                <SelectItem value="Avanzado">Avanzado</SelectItem>
+                                <SelectItem value="Nativo">Nativo</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Certificación (Opcional)</Label>
+                            <Input
+                              value={lang.certification}
+                              onChange={(e) => updateLanguage(lang.id, "certification", e.target.value)}
+                              placeholder="Ej: TOEFL, IELTS"
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="certifications" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Certificaciones</CardTitle>
+                  <CardDescription>Agrega tus certificaciones profesionales y cursos relevantes</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={addCertification} className="mb-4">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar Certificación
+                  </Button>
+
+                  <div className="space-y-6">
+                    {cvData.certifications.map((cert, index) => (
+                      <Card key={cert.id} className="p-4">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-semibold">Certificación {index + 1}</h4>
+                          <Button variant="outline" size="sm" onClick={() => removeCertification(cert.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <Label>Nombre de la Certificación *</Label>
+                            <Input
+                              value={cert.name}
+                              onChange={(e) => updateCertification(cert.id, "name", e.target.value)}
+                              placeholder="Ej: AWS Solutions Architect"
+                            />
+                          </div>
+                          <div>
+                            <Label>Organización Emisora *</Label>
+                            <Input
+                              value={cert.issuer}
+                              onChange={(e) => updateCertification(cert.id, "issuer", e.target.value)}
+                              placeholder="Ej: Amazon Web Services"
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Obtención *</Label>
+                            <Input
+                              type="month"
+                              value={cert.date}
+                              onChange={(e) => updateCertification(cert.id, "date", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>Fecha de Expiración</Label>
+                            <Input
+                              type="month"
+                              value={cert.expiryDate}
+                              onChange={(e) => updateCertification(cert.id, "expiryDate", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>ID de Credencial</Label>
+                            <Input
+                              value={cert.credentialId}
+                              onChange={(e) => updateCertification(cert.id, "credentialId", e.target.value)}
+                              placeholder="ID único de la certificación"
+                            />
+                          </div>
+                          <div>
+                            <Label>URL de Verificación</Label>
+                            <Input
+                              value={cert.url}
+                              onChange={(e) => updateCertification(cert.id, "url", e.target.value)}
+                              placeholder="https://verify.certification.com"
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Acciones</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button onClick={saveDraft} variant="outline" className="w-full bg-transparent">
+                <Save className="h-4 w-4 mr-2" />
+                Guardar Borrador
+              </Button>
+              <Button onClick={previewCV} variant="outline" className="w-full bg-transparent">
+                <Eye className="h-4 w-4 mr-2" />
                 Vista Previa
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onExportPDF(watchedData as CVData)}
-                disabled={!isValid || isLoading}
-                className="flex-1"
-              >
-                Exportar PDF
+              <Button onClick={generatePDF} className="w-full" disabled={isLoading}>
+                <Download className="h-4 w-4 mr-2" />
+                {isLoading ? "Generando..." : "Descargar PDF"}
               </Button>
-              <Button type="submit" disabled={!isValid || isLoading} className="flex-1">
-                {isLoading ? "Guardando..." : "Guardar CV"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Progreso</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Personal</span>
+                  <Badge variant={cvData.personal.fullName && cvData.personal.email ? "default" : "secondary"}>
+                    {cvData.personal.fullName && cvData.personal.email ? "Completo" : "Pendiente"}
+                  </Badge>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Experiencia</span>
+                  <Badge variant={cvData.experience.length > 0 ? "default" : "secondary"}>
+                    {cvData.experience.length} items
+                  </Badge>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Educación</span>
+                  <Badge variant={cvData.education.length > 0 ? "default" : "secondary"}>
+                    {cvData.education.length} items
+                  </Badge>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Habilidades</span>
+                  <Badge variant={cvData.skills.length > 0 ? "default" : "secondary"}>
+                    {cvData.skills.length} items
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Consejos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-sm space-y-2 text-muted-foreground">
+                <p>• Mantén tu CV en máximo 2 páginas</p>
+                <p>• Usa verbos de acción para describir logros</p>
+                <p>• Cuantifica tus resultados cuando sea posible</p>
+                <p>• Adapta tu CV para cada aplicación</p>
+                <p>• Revisa la ortografía antes de enviar</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }
