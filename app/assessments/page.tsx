@@ -1,30 +1,25 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Icons } from "@/components/icons"
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Icons } from "@/components/icons"
 import { cn } from "@/lib/utils"
 
 interface Assessment {
   id: string
   title: string
   description: string
-  type: "personality" | "skills" | "technical" | "cognitive"
-  duration: number
-  questions: number
-  difficulty: "beginner" | "intermediate" | "advanced"
-  category: string
-  tags: string[]
-  isCompleted: boolean
-  completedAt?: Date
+  category: "personality" | "technical" | "soft-skills" | "career"
+  duration: string
+  difficulty: "Básico" | "Intermedio" | "Avanzado"
+  status: "completed" | "in-progress" | "not-started"
   score?: number
+  completedAt?: Date
   href: string
   icon: keyof typeof Icons
 }
@@ -32,392 +27,278 @@ interface Assessment {
 const assessments: Assessment[] = [
   {
     id: "personality-test",
-    title: "Comprehensive Personality Assessment",
-    description:
-      "Discover your personality traits, strengths, and work preferences through our comprehensive assessment.",
-    type: "personality",
-    duration: 25,
-    questions: 120,
-    difficulty: "beginner",
-    category: "Self-Discovery",
-    tags: ["personality", "traits", "self-awareness"],
-    isCompleted: true,
-    completedAt: new Date("2024-01-15"),
+    title: "Test de Personalidad DISC",
+    description: "Descubre tu tipo de personalidad y cómo interactúas con otros",
+    category: "personality",
+    duration: "15 min",
+    difficulty: "Básico",
+    status: "completed",
     score: 85,
+    completedAt: new Date("2024-01-15"),
     href: "/personality-test",
-    icon: "brain",
+    icon: "user",
   },
   {
-    id: "disc-test",
-    title: "DISC Behavioral Assessment",
-    description: "Understand your behavioral style and communication preferences with the DISC assessment.",
-    type: "personality",
-    duration: 15,
-    questions: 60,
-    difficulty: "beginner",
-    category: "Behavioral Analysis",
-    tags: ["disc", "behavior", "communication"],
-    isCompleted: true,
-    completedAt: new Date("2024-01-20"),
-    score: 92,
-    href: "/disc-test",
-    icon: "users",
-  },
-  {
-    id: "big-five-test",
-    title: "Big Five Personality Test",
-    description:
-      "Explore the five major dimensions of personality: Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism.",
-    type: "personality",
-    duration: 20,
-    questions: 100,
-    difficulty: "intermediate",
-    category: "Personality Psychology",
-    tags: ["big-five", "psychology", "traits"],
-    isCompleted: false,
+    id: "big-five",
+    title: "Big Five Personality",
+    description: "Evaluación completa de los cinco grandes factores de personalidad",
+    category: "personality",
+    duration: "20 min",
+    difficulty: "Intermedio",
+    status: "completed",
+    score: 78,
+    completedAt: new Date("2024-01-10"),
     href: "/big-five-test",
-    icon: "target",
+    icon: "user",
   },
   {
-    id: "skills-assessment",
-    title: "Professional Skills Assessment",
-    description:
-      "Evaluate your professional skills across various domains including leadership, communication, and problem-solving.",
-    type: "skills",
-    duration: 30,
-    questions: 80,
-    difficulty: "intermediate",
-    category: "Professional Development",
-    tags: ["skills", "professional", "competencies"],
-    isCompleted: false,
-    href: "/skills-assessment",
-    icon: "award",
-  },
-  {
-    id: "technical-skills-test",
-    title: "Technical Skills Evaluation",
-    description: "Assess your technical competencies in programming, data analysis, and digital tools.",
-    type: "technical",
-    duration: 45,
-    questions: 50,
-    difficulty: "advanced",
-    category: "Technical Competency",
-    tags: ["technical", "programming", "digital"],
-    isCompleted: false,
+    id: "technical-skills",
+    title: "Habilidades Técnicas",
+    description: "Evalúa tus competencias técnicas en diferentes áreas",
+    category: "technical",
+    duration: "30 min",
+    difficulty: "Avanzado",
+    status: "in-progress",
     href: "/technical-skills-test",
     icon: "laptop",
   },
   {
-    id: "soft-skills-test",
-    title: "Soft Skills Assessment",
-    description: "Evaluate your interpersonal skills, emotional intelligence, and workplace collaboration abilities.",
-    type: "skills",
-    duration: 25,
-    questions: 70,
-    difficulty: "intermediate",
-    category: "Interpersonal Skills",
-    tags: ["soft-skills", "emotional-intelligence", "collaboration"],
-    isCompleted: true,
-    completedAt: new Date("2024-01-10"),
-    score: 78,
+    id: "soft-skills",
+    title: "Habilidades Blandas",
+    description: "Mide tus competencias interpersonales y de comunicación",
+    category: "soft-skills",
+    duration: "25 min",
+    difficulty: "Intermedio",
+    status: "not-started",
     href: "/soft-skills-test",
-    icon: "heart",
+    icon: "user",
   },
   {
-    id: "adaptive-skills-test",
-    title: "Adaptive Skills Assessment",
-    description: "Measure your ability to adapt to change, learn new skills, and handle uncertainty in the workplace.",
-    type: "cognitive",
-    duration: 35,
-    questions: 90,
-    difficulty: "advanced",
-    category: "Adaptability",
-    tags: ["adaptability", "learning", "resilience"],
-    isCompleted: false,
-    href: "/adaptive-skills-test",
-    icon: "zap",
-  },
-  {
-    id: "personality-coach-test",
-    title: "AI Personality Coach Assessment",
-    description: "Get personalized insights and coaching recommendations based on your personality profile.",
-    type: "personality",
-    duration: 30,
-    questions: 85,
-    difficulty: "intermediate",
-    category: "AI Coaching",
-    tags: ["ai", "coaching", "personalized"],
-    isCompleted: false,
-    href: "/personality-coach-test",
-    icon: "lightbulb",
+    id: "career-assessment",
+    title: "Evaluación de Carrera",
+    description: "Identifica las mejores opciones profesionales para ti",
+    category: "career",
+    duration: "35 min",
+    difficulty: "Intermedio",
+    status: "not-started",
+    href: "/career-assessment",
+    icon: "user",
   },
 ]
 
-const difficultyColors = {
-  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+const categoryLabels = {
+  personality: "Personalidad",
+  technical: "Técnicas",
+  "soft-skills": "Habilidades Blandas",
+  career: "Carrera",
 }
 
-const typeColors = {
-  personality: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-  skills: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-  technical: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-  cognitive: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-300",
+const statusLabels = {
+  completed: "Completado",
+  "in-progress": "En Progreso",
+  "not-started": "No Iniciado",
+}
+
+const statusColors = {
+  completed: "bg-green-500",
+  "in-progress": "bg-yellow-500",
+  "not-started": "bg-gray-500",
 }
 
 export default function AssessmentsPage() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedType, setSelectedType] = useState<string>("all")
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all")
-  const [activeTab, setActiveTab] = useState("all")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [filteredAssessments, setFilteredAssessments] = useState(assessments)
 
-  const filteredAssessments = useMemo(() => {
-    return assessments.filter((assessment) => {
-      const matchesSearch =
-        assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        assessment.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        assessment.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  useEffect(() => {
+    if (selectedCategory === "all") {
+      setFilteredAssessments(assessments)
+    } else {
+      setFilteredAssessments(assessments.filter((a) => a.category === selectedCategory))
+    }
+  }, [selectedCategory])
 
-      const matchesType = selectedType === "all" || assessment.type === selectedType
-      const matchesDifficulty = selectedDifficulty === "all" || assessment.difficulty === selectedDifficulty
-
-      const matchesTab =
-        activeTab === "all" ||
-        (activeTab === "completed" && assessment.isCompleted) ||
-        (activeTab === "pending" && !assessment.isCompleted)
-
-      return matchesSearch && matchesType && matchesDifficulty && matchesTab
-    })
-  }, [searchTerm, selectedType, selectedDifficulty, activeTab])
-
-  const completedCount = assessments.filter((a) => a.isCompleted).length
+  const completedCount = assessments.filter((a) => a.status === "completed").length
   const totalCount = assessments.length
-  const completionPercentage = Math.round((completedCount / totalCount) * 100)
-
   const averageScore =
-    assessments.filter((a) => a.isCompleted && a.score).reduce((sum, a) => sum + (a.score || 0), 0) / completedCount ||
-    0
+    assessments.filter((a) => a.score).reduce((acc, a) => acc + (a.score || 0), 0) /
+    assessments.filter((a) => a.score).length
+
+  const getStatusIcon = (status: Assessment["status"]) => {
+    switch (status) {
+      case "completed":
+        return <Icons.check className="h-4 w-4 text-green-600" />
+      case "in-progress":
+        return <Icons.spinner className="h-4 w-4 text-yellow-600" />
+      case "not-started":
+        return <Icons.plus className="h-4 w-4 text-gray-600" />
+    }
+  }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Career Assessments</h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Discover your strengths, identify growth areas, and unlock your career potential with our comprehensive
-          assessment suite.
+    <div className="container mx-auto py-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Hub de Evaluaciones</h1>
+        <p className="text-muted-foreground">
+          Descubre tus fortalezas y áreas de mejora a través de nuestras evaluaciones especializadas
         </p>
       </div>
 
       {/* Progress Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid gap-6 md:grid-cols-3 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completion Progress</CardTitle>
-            <Icons.target className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Progreso General</CardTitle>
+            <Icons.user className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{completionPercentage}%</div>
-            <p className="text-xs text-muted-foreground">
-              {completedCount} of {totalCount} assessments completed
+            <div className="text-2xl font-bold">
+              {completedCount}/{totalCount}
+            </div>
+            <Progress value={(completedCount / totalCount) * 100} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">
+              {Math.round((completedCount / totalCount) * 100)}% completado
             </p>
-            <Progress value={completionPercentage} className="mt-2" />
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Score</CardTitle>
-            <Icons.award className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Puntuación Promedio</CardTitle>
+            <Icons.user className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{Math.round(averageScore)}%</div>
-            <p className="text-xs text-muted-foreground">Based on {completedCount} completed assessments</p>
+            <div className="text-2xl font-bold">
+              {isNaN(averageScore) ? "--" : Math.round(averageScore)}
+              {!isNaN(averageScore) && <span className="text-sm font-normal">/100</span>}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Basado en {assessments.filter((a) => a.score).length} evaluaciones
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Next Recommendation</CardTitle>
-            <Icons.lightbulb className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Próxima Recomendación</CardTitle>
+            <Icons.user className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-sm font-medium">Skills Assessment</div>
-            <p className="text-xs text-muted-foreground">Complete your professional skills evaluation</p>
+            <div className="text-sm font-medium">Habilidades Blandas</div>
+            <p className="text-xs text-muted-foreground mt-1">Complementa tu perfil técnico</p>
             <Button size="sm" className="mt-2" asChild>
-              <Link href="/skills-assessment">Start Now</Link>
+              <Link href="/soft-skills-test">Comenzar</Link>
             </Button>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Find Assessments</CardTitle>
-          <CardDescription>Filter and search through available assessments</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Input
-                placeholder="Search assessments..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Assessment Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="personality">Personality</SelectItem>
-                <SelectItem value="skills">Skills</SelectItem>
-                <SelectItem value="technical">Technical</SelectItem>
-                <SelectItem value="cognitive">Cognitive</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Assessment Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">All Assessments</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({totalCount - completedCount})</TabsTrigger>
-          <TabsTrigger value="completed">Completed ({completedCount})</TabsTrigger>
+      {/* Assessments List */}
+      <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="all">Todas</TabsTrigger>
+          <TabsTrigger value="personality">Personalidad</TabsTrigger>
+          <TabsTrigger value="technical">Técnicas</TabsTrigger>
+          <TabsTrigger value="soft-skills">Blandas</TabsTrigger>
+          <TabsTrigger value="career">Carrera</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="space-y-6">
-          <AssessmentGrid assessments={filteredAssessments} />
-        </TabsContent>
+        <TabsContent value={selectedCategory} className="mt-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredAssessments.map((assessment) => (
+              <Card key={assessment.id} className="relative overflow-hidden">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={cn("h-2 w-2 rounded-full", statusColors[assessment.status])} />
+                      <Badge variant="outline" className="text-xs">
+                        {categoryLabels[assessment.category]}
+                      </Badge>
+                    </div>
+                    {getStatusIcon(assessment.status)}
+                  </div>
+                  <CardTitle className="text-lg">{assessment.title}</CardTitle>
+                  <CardDescription>{assessment.description}</CardDescription>
+                </CardHeader>
 
-        <TabsContent value="pending" className="space-y-6">
-          <AssessmentGrid assessments={filteredAssessments} />
-        </TabsContent>
+                <CardContent>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <span>⏱️ {assessment.duration}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {assessment.difficulty}
+                    </Badge>
+                  </div>
 
-        <TabsContent value="completed" className="space-y-6">
-          <AssessmentGrid assessments={filteredAssessments} />
+                  {assessment.status === "completed" && assessment.score && (
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-sm mb-1">
+                        <span>Puntuación</span>
+                        <span className="font-medium">{assessment.score}/100</span>
+                      </div>
+                      <Progress value={assessment.score} className="h-2" />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">{statusLabels[assessment.status]}</span>
+                    <Button size="sm" asChild>
+                      <Link href={assessment.href}>
+                        {assessment.status === "completed"
+                          ? "Ver Resultados"
+                          : assessment.status === "in-progress"
+                            ? "Continuar"
+                            : "Comenzar"}
+                      </Link>
+                    </Button>
+                  </div>
+
+                  {assessment.completedAt && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Completado el {assessment.completedAt.toLocaleDateString()}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
-    </div>
-  )
-}
 
-function AssessmentGrid({ assessments }: { assessments: Assessment[] }) {
-  if (assessments.length === 0) {
-    return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <Icons.search className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No assessments found</h3>
-          <p className="text-muted-foreground text-center">
-            Try adjusting your filters or search terms to find more assessments.
-          </p>
+      {/* Recommendations */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Recomendaciones Personalizadas</CardTitle>
+          <CardDescription>Basado en tus evaluaciones completadas, te sugerimos estos próximos pasos</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="flex items-start gap-3 p-4 border rounded-lg">
+              <Icons.user className="h-5 w-5 text-blue-600 mt-0.5" />
+              <div>
+                <h4 className="font-medium">Desarrolla Habilidades Blandas</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Complementa tu perfil técnico con habilidades de comunicación y liderazgo
+                </p>
+                <Button size="sm" variant="outline" className="mt-2 bg-transparent" asChild>
+                  <Link href="/soft-skills-test">Evaluar Ahora</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 p-4 border rounded-lg">
+              <Icons.user className="h-5 w-5 text-green-600 mt-0.5" />
+              <div>
+                <h4 className="font-medium">Explora Opciones de Carrera</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Descubre nuevas oportunidades profesionales alineadas con tu perfil
+                </p>
+                <Button size="sm" variant="outline" className="mt-2 bg-transparent" asChild>
+                  <Link href="/career-assessment">Comenzar</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
-    )
-  }
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {assessments.map((assessment) => (
-        <AssessmentCard key={assessment.id} assessment={assessment} />
-      ))}
     </div>
-  )
-}
-
-function AssessmentCard({ assessment }: { assessment: Assessment }) {
-  const Icon = Icons[assessment.icon]
-
-  return (
-    <Card
-      className={cn(
-        "transition-all hover:shadow-lg",
-        assessment.isCompleted && "border-green-200 dark:border-green-800",
-      )}
-    >
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Icon className="h-5 w-5 text-primary" />
-            </div>
-            {assessment.isCompleted && <Icons.checkCircle className="h-5 w-5 text-green-600" />}
-          </div>
-          <div className="flex flex-col gap-1">
-            <Badge className={cn("text-xs", typeColors[assessment.type])}>{assessment.type}</Badge>
-            <Badge className={cn("text-xs", difficultyColors[assessment.difficulty])}>{assessment.difficulty}</Badge>
-          </div>
-        </div>
-        <CardTitle className="text-lg">{assessment.title}</CardTitle>
-        <CardDescription className="text-sm">{assessment.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center space-x-1">
-            <Icons.clock className="h-4 w-4" />
-            <span>{assessment.duration} min</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Icons.help className="h-4 w-4" />
-            <span>{assessment.questions} questions</span>
-          </div>
-        </div>
-
-        {assessment.isCompleted && assessment.score && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Score</span>
-              <span className="font-medium">{assessment.score}%</span>
-            </div>
-            <Progress value={assessment.score} className="h-2" />
-            <p className="text-xs text-muted-foreground">Completed on {assessment.completedAt?.toLocaleDateString()}</p>
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-1">
-          {assessment.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="outline" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
-          {assessment.tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{assessment.tags.length - 3} more
-            </Badge>
-          )}
-        </div>
-
-        <div className="flex gap-2">
-          <Button asChild className="flex-1">
-            <Link href={assessment.href}>{assessment.isCompleted ? "View Results" : "Start Assessment"}</Link>
-          </Button>
-          {assessment.isCompleted && (
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`${assessment.href}/results`}>
-                <Icons.eye className="h-4 w-4" />
-              </Link>
-            </Button>
-          )}
-        </div>
-      </CardContent>
-    </Card>
   )
 }
