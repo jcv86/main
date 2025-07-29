@@ -7,21 +7,50 @@ export type SiteConfig = {
     twitter: string
     github: string
   }
-  mainNav: {
-    title: string
-    href: string
-  }[]
+  mainNav: MainNavItem[]
+  sidebarNav: SidebarNavItem[]
 }
 
+export type NavItem = {
+  title: string
+  href: string
+  disabled?: boolean
+}
+
+export type MainNavItem = NavItem
+
+export type SidebarNavItem = {
+  title: string
+  disabled?: boolean
+  external?: boolean
+  icon?: keyof typeof Icons
+} & (
+  | {
+      href: string
+      items?: never
+    }
+  | {
+      href?: string
+      items: NavLink[]
+    }
+)
+
+export type NavLink = {
+  title: string
+  href: string
+  disabled?: boolean
+}
+
+import type { Icons } from "@/components/icons"
+
 export const siteConfig: SiteConfig = {
-  name: "DTC Career Platform",
-  description:
-    "Plataforma integral de desarrollo profesional con evaluaciones de personalidad, construcción de CV y búsqueda de empleo.",
-  url: "https://dtc-career.vercel.app",
-  ogImage: "https://dtc-career.vercel.app/og.jpg",
+  name: "Career Development Platform",
+  description: "Comprehensive career development platform for Chilean professionals",
+  url: "https://career-platform.vercel.app",
+  ogImage: "https://career-platform.vercel.app/og.jpg",
   links: {
-    twitter: "https://twitter.com/dtccareer",
-    github: "https://github.com/dtc-career/platform",
+    twitter: "https://twitter.com/careerplatform",
+    github: "https://github.com/career-platform",
   },
   mainNav: [
     {
@@ -29,7 +58,7 @@ export const siteConfig: SiteConfig = {
       href: "/dashboard",
     },
     {
-      title: "Evaluaciones",
+      title: "Assessments",
       href: "/assessments",
     },
     {
@@ -37,16 +66,94 @@ export const siteConfig: SiteConfig = {
       href: "/cv-builder",
     },
     {
-      title: "Búsqueda de Empleo",
+      title: "Job Search",
       href: "/job-search",
     },
     {
-      title: "Coach de Carrera",
+      title: "Career Coach",
       href: "/career-coach",
     },
     {
-      title: "Biblioteca",
+      title: "Library",
       href: "/library",
+    },
+  ],
+  sidebarNav: [
+    {
+      title: "Getting Started",
+      items: [
+        {
+          title: "Dashboard",
+          href: "/dashboard",
+        },
+        {
+          title: "Profile Setup",
+          href: "/profile",
+        },
+      ],
+    },
+    {
+      title: "Assessments",
+      items: [
+        {
+          title: "All Assessments",
+          href: "/assessments",
+        },
+        {
+          title: "Personality Test",
+          href: "/personality-test",
+        },
+        {
+          title: "Skills Assessment",
+          href: "/skills-assessment",
+        },
+        {
+          title: "DISC Test",
+          href: "/disc-test",
+        },
+        {
+          title: "Big Five Test",
+          href: "/big-five-test",
+        },
+      ],
+    },
+    {
+      title: "Career Tools",
+      items: [
+        {
+          title: "CV Builder",
+          href: "/cv-builder",
+        },
+        {
+          title: "Job Search",
+          href: "/job-search",
+        },
+        {
+          title: "Career Coach",
+          href: "/career-coach",
+        },
+        {
+          title: "Interview Simulator",
+          href: "/interview-simulator",
+        },
+      ],
+    },
+    {
+      title: "Learning",
+      items: [
+        {
+          title: "Library",
+          href: "/library",
+        },
+        {
+          title: "UDD Careers",
+          href: "/udd-careers",
+        },
+        {
+          title: "Bachillerato",
+          href: "/bachillerato",
+        },
+      ],
     },
   ],
 }

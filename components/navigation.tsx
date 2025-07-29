@@ -5,178 +5,74 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { siteConfig } from "@/config/site"
-import { ThemeToggle } from "./theme-toggle"
-import { LanguageToggle } from "./language-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { NotificationsBell } from "@/components/notifications-bell"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/contexts/auth-context"
 
-interface NavItem {
-  title: string
-  href: string
-  icon?: keyof typeof Icons
-  description?: string
+interface MainNavProps {
+  items?: {
+    title: string
+    href: string
+    disabled?: boolean
+  }[]
 }
 
-const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: "user",
-    description: "Vista general de tu progreso",
-  },
-  {
-    title: "Evaluaciones",
-    href: "/assessments",
-    icon: "user",
-    description: "Tests de personalidad y habilidades",
-  },
-  {
-    title: "CV Builder",
-    href: "/cv-builder",
-    icon: "page",
-    description: "Crea tu currículum profesional",
-  },
-  {
-    title: "Coach de Carrera",
-    href: "/career-coach",
-    icon: "user",
-    description: "Orientación personalizada",
-  },
-  {
-    title: "Búsqueda de Empleo",
-    href: "/job-search",
-    icon: "user",
-    description: "Encuentra oportunidades laborales",
-  },
-  {
-    title: "Biblioteca",
-    href: "/library",
-    icon: "post",
-    description: "Recursos de desarrollo profesional",
-  },
-]
-
-export function Navigation() {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = React.useState(false)
-
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Icons.logo className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">{siteConfig.name}</span>
-          </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navItems.slice(0, 4).map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "transition-colors hover:text-foreground/80",
-                  pathname === item.href ? "text-foreground" : "text-foreground/60",
-                )}
-              >
-                {item.title}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
-            >
-              <Icons.ellipsis className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
-            <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-              <Icons.logo className="mr-2 h-4 w-4" />
-              <span className="font-bold">{siteConfig.name}</span>
-            </Link>
-            <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-              <div className="flex flex-col space-y-3">
-                {navItems.map((item) => {
-                  const Icon = Icons[item.icon || "user"]
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={cn(
-                        "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-foreground/80",
-                        pathname === item.href ? "text-foreground" : "text-foreground/60",
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
-
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <Link href="/" className="flex items-center space-x-2 md:hidden">
-              <Icons.logo className="h-6 w-6" />
-              <span className="font-bold">{siteConfig.name}</span>
-            </Link>
-          </div>
-          <nav className="flex items-center space-x-2">
-            <ThemeToggle />
-            <LanguageToggle />
-            <Button variant="ghost" size="sm">
-              <Icons.user className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Icons.settings className="h-4 w-4" />
-            </Button>
-          </nav>
-        </div>
-      </div>
-    </header>
-  )
-}
-
-// Also export MainNav and MobileNav for backward compatibility
-export function MainNav({ className }: { className?: string }) {
+export function MainNav({ items }: MainNavProps) {
   const pathname = usePathname()
 
   return (
-    <div className={cn("mr-4 hidden md:flex", className)}>
-      <Link href="/" className="mr-6 flex items-center space-x-2">
+    <div className="flex gap-6 md:gap-10">
+      <Link href="/" className="flex items-center space-x-2">
         <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold sm:inline-block">{siteConfig.name}</span>
+        <span className="inline-block font-bold">{siteConfig.name}</span>
       </Link>
-      <nav className="flex items-center space-x-6 text-sm font-medium">
-        {navItems.slice(0, 4).map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "transition-colors hover:text-foreground/80",
-              pathname === item.href ? "text-foreground" : "text-foreground/60",
-            )}
-          >
-            {item.title}
-          </Link>
-        ))}
-      </nav>
+      {items?.length ? (
+        <nav className="hidden gap-6 md:flex">
+          {items?.map(
+            (item, index) =>
+              item.href && (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center text-sm font-medium text-muted-foreground",
+                    item.disabled && "cursor-not-allowed opacity-80",
+                    pathname === item.href && "text-foreground",
+                  )}
+                >
+                  {item.title}
+                </Link>
+              ),
+          )}
+        </nav>
+      ) : null}
     </div>
   )
 }
 
-export function MobileNav({ className }: { className?: string }) {
+interface MobileNavProps {
+  items?: {
+    title: string
+    href: string
+    disabled?: boolean
+  }[]
+}
+
+export function MobileNav({ items }: MobileNavProps) {
   const [open, setOpen] = React.useState(false)
   const pathname = usePathname()
 
@@ -185,42 +81,147 @@ export function MobileNav({ className }: { className?: string }) {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className={cn(
-            "mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden",
-            className,
-          )}
+          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <Icons.ellipsis className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+        <MobileLink href="/" className="flex items-center" onOpenChange={setOpen}>
           <Icons.logo className="mr-2 h-4 w-4" />
           <span className="font-bold">{siteConfig.name}</span>
-        </Link>
+        </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
-            {navItems.map((item) => {
-              const Icon = Icons[item.icon || "user"]
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-foreground/80",
-                    pathname === item.href ? "text-foreground" : "text-foreground/60",
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              )
-            })}
+            {items?.map(
+              (item, index) =>
+                item.href && (
+                  <MobileLink
+                    key={index}
+                    href={item.href}
+                    onOpenChange={setOpen}
+                    className={cn("text-muted-foreground", pathname === item.href && "text-foreground")}
+                  >
+                    {item.title}
+                  </MobileLink>
+                ),
+            )}
           </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
+  )
+}
+
+interface MobileLinkProps {
+  href: string
+  onOpenChange?: (open: boolean) => void
+  children: React.ReactNode
+  className?: string
+}
+
+function MobileLink({ href, onOpenChange, className, children, ...props }: MobileLinkProps) {
+  const pathname = usePathname()
+  return (
+    <Link
+      href={href}
+      onClick={() => {
+        onOpenChange?.(false)
+      }}
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </Link>
+  )
+}
+
+interface UserNavProps {
+  user?: {
+    name?: string | null
+    email?: string | null
+    image?: string | null
+  }
+}
+
+export function UserNav({ user }: UserNavProps) {
+  const { signOut } = useAuth()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={user?.image ?? ""} alt={user?.name ?? ""} />
+            <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{user?.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/profile">
+            <Icons.user className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/settings">
+            <Icons.settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onSelect={(event) => {
+            event.preventDefault()
+            signOut()
+          }}
+        >
+          <Icons.arrowRight className="mr-2 h-4 w-4" />
+          <span>Sign out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export function Navigation() {
+  const { user } = useAuth()
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b bg-background">
+      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+        <MainNav items={siteConfig.mainNav} />
+        <MobileNav items={siteConfig.mainNav} />
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <nav className="flex items-center space-x-1">
+            <NotificationsBell />
+            <ThemeToggle />
+            <LanguageToggle />
+            {user ? (
+              <UserNav user={user} />
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/auth/login">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/auth/register">Sign Up</Link>
+                </Button>
+              </div>
+            )}
+          </nav>
+        </div>
+      </div>
+    </header>
   )
 }
