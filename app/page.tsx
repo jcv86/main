@@ -1,244 +1,359 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, BookOpen, Target, Users, TrendingUp, Award, Star, ChevronRight } from "lucide-react"
-import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
+import { Brain, FileText, Users, TrendingUp, BookOpen, Target, ArrowRight, Star, Award } from "lucide-react"
 
 export default function HomePage() {
-  const { user, loading } = useAuth()
-  const [mounted, setMounted] = useState(false)
+  const { user } = useAuth()
+  const { t } = useLanguage()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const features = [
+    {
+      icon: Brain,
+      title: "Evaluación de Personalidad",
+      description: "Descubre tu tipo de personalidad con tests científicamente validados",
+      href: "/personality-test",
+      badge: "MBTI & Big Five",
+    },
+    {
+      icon: Target,
+      title: "Habilidades Blandas",
+      description: "Evalúa y mejora tus habilidades interpersonales y de liderazgo",
+      href: "/soft-skills-test",
+      badge: "Adaptativo",
+    },
+    {
+      icon: FileText,
+      title: "Constructor de CV",
+      description: "Crea CVs profesionales optimizados para ATS con IA",
+      href: "/cv-builder",
+      badge: "IA Integrada",
+    },
+    {
+      icon: Users,
+      title: "Simulador de Entrevistas",
+      description: "Practica entrevistas con feedback personalizado",
+      href: "/interview-simulator",
+      badge: "Tiempo Real",
+    },
+    {
+      icon: BookOpen,
+      title: "Biblioteca Personalizada",
+      description: "Recursos de desarrollo profesional curados para ti",
+      href: "/library",
+      badge: "Personalizado",
+    },
+    {
+      icon: TrendingUp,
+      title: "Búsqueda de Empleos",
+      description: "Encuentra oportunidades laborales en Chile",
+      href: "/job-search",
+      badge: "Chile",
+    },
+    {
+      icon: Award,
+      title: "Coaching Profesional",
+      description: "Recibe orientación personalizada para tu carrera",
+      href: "/career-coach",
+      badge: "Personalizado",
+    },
+  ]
 
-  if (!mounted || loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="container mx-auto px-4 py-16">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-8"></div>
-              <div className="h-10 bg-gray-200 rounded w-32 mx-auto"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // If user is authenticated, redirect to dashboard
-  if (user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="container mx-auto px-4 py-16">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">¡Bienvenido de vuelta!</h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Continúa tu desarrollo profesional en el mercado chileno
-            </p>
-            <Link href="/dashboard">
-              <Button size="lg" className="text-lg px-8 py-3">
-                Ir al Dashboard
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const testimonials = [
+    {
+      name: "María González",
+      role: "Ingeniera de Software",
+      content: "La plataforma me ayudó a identificar mis fortalezas y conseguir mi trabajo ideal en tech.",
+      rating: 5,
+    },
+    {
+      name: "Carlos Rodríguez",
+      role: "Gerente de Marketing",
+      content: "El constructor de CV con IA es increíble. Mi CV ahora pasa todos los filtros ATS.",
+      rating: 5,
+    },
+    {
+      name: "Ana Silva",
+      role: "Consultora",
+      content: "Los tests de personalidad me dieron insights valiosos sobre mi estilo de trabajo.",
+      rating: 5,
+    },
+  ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4 text-sm px-3 py-1">
-            🇨🇱 Especializado en el mercado chileno
+      <section className="relative py-20 px-4 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+        <div className="container mx-auto text-center">
+          <Badge variant="secondary" className="mb-4">
+            🚀 Plataforma de Desarrollo Profesional
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Impulsa tu carrera en
-            <span className="text-blue-600"> Chile</span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Impulsa tu Carrera Profesional
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Plataforma integral de desarrollo profesional diseñada específicamente para el mercado laboral chileno.
-            Descubre oportunidades, desarrolla habilidades y conecta con las mejores empresas del país.
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Descubre tus fortalezas, desarrolla habilidades clave y encuentra el trabajo de tus sueños con nuestra
+            plataforma integral de desarrollo profesional.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/register">
-              <Button size="lg" className="text-lg px-8 py-3">
-                Comenzar Gratis
-                <ArrowRight className="ml-2 h-5 w-5" />
+
+          {user ? (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/dashboard">
+                  Ir al Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
-            </Link>
-            <Link href="/auth/login">
-              <Button variant="outline" size="lg" className="text-lg px-8 py-3 bg-transparent">
-                Iniciar Sesión
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/skills-assessment">Evaluar Habilidades</Link>
               </Button>
-            </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/auth/register">
+                  Comenzar Gratis <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/auth/login">Iniciar Sesión</Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Herramientas Profesionales</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Todo lo que necesitas para acelerar tu desarrollo profesional en una sola plataforma
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <Card
+                key={index}
+                className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <feature.icon className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+                    <Badge variant="secondary">{feature.badge}</Badge>
+                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">{feature.title}</CardTitle>
+                  <CardDescription>{feature.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    variant="ghost"
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground"
+                    asChild
+                  >
+                    <Link href={feature.href}>
+                      Explorar <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <Target className="h-12 w-12 text-blue-600 mb-4" />
-              <CardTitle>Tests de Personalidad</CardTitle>
-              <CardDescription>
-                Descubre tu perfil profesional con evaluaciones adaptadas al contexto laboral chileno
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Test DISC personalizado</li>
-                <li>• Evaluación de habilidades blandas</li>
-                <li>• Análisis de compatibilidad laboral</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <Users className="h-12 w-12 text-green-600 mb-4" />
-              <CardTitle>Coach IA Especializado</CardTitle>
-              <CardDescription>
-                Recibe orientación personalizada de un coach que conoce el mercado chileno
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Consejos sobre empresas chilenas</li>
-                <li>• Estrategias de negociación salarial</li>
-                <li>• Preparación para entrevistas</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <BookOpen className="h-12 w-12 text-purple-600 mb-4" />
-              <CardTitle>Biblioteca Digital</CardTitle>
-              <CardDescription>
-                Accede a libros especializados en desarrollo profesional y crecimiento personal
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Libros de liderazgo y productividad</li>
-                <li>• Contenido interactivo</li>
-                <li>• Seguimiento de progreso</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <TrendingUp className="h-12 w-12 text-orange-600 mb-4" />
-              <CardTitle>Búsqueda de Empleo</CardTitle>
-              <CardDescription>
-                Encuentra oportunidades en las mejores empresas chilenas con IA personalizada
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Integración con portales chilenos</li>
-                <li>• Matching inteligente</li>
-                <li>• Alertas personalizadas</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <Award className="h-12 w-12 text-red-600 mb-4" />
-              <CardTitle>Simulador de Entrevistas</CardTitle>
-              <CardDescription>Practica entrevistas con IA adaptada a la cultura empresarial chilena</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Preguntas típicas del mercado</li>
-                <li>• Feedback en tiempo real</li>
-                <li>• Análisis de desempeño</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-            <CardHeader>
-              <Star className="h-12 w-12 text-yellow-600 mb-4" />
-              <CardTitle>Constructor de CV</CardTitle>
-              <CardDescription>
-                Crea CVs optimizados para el mercado laboral chileno con plantillas profesionales
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>• Plantillas adaptadas a Chile</li>
-                <li>• Optimización ATS</li>
-                <li>• Exportación PDF</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Companies Section */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Conecta con las mejores empresas de Chile</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center opacity-60">
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">NotCo</span>
-              </div>
+      {/* Stats Section */}
+      <section className="py-16 px-4 bg-muted/50">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-3xl font-bold text-primary mb-2">10,000+</div>
+              <div className="text-muted-foreground">Usuarios Activos</div>
             </div>
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">Fintual</span>
-              </div>
+            <div>
+              <div className="text-3xl font-bold text-primary mb-2">95%</div>
+              <div className="text-muted-foreground">Tasa de Éxito</div>
             </div>
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">Cornershop</span>
-              </div>
+            <div>
+              <div className="text-3xl font-bold text-primary mb-2">500+</div>
+              <div className="text-muted-foreground">Empresas Partner</div>
             </div>
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">Banco de Chile</span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">Falabella</span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-gray-100 rounded-lg p-4 mb-2">
-                <span className="font-bold text-gray-700">Buk</span>
-              </div>
+            <div>
+              <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+              <div className="text-muted-foreground">Soporte IA</div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white">
+      {/* Testimonials Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Lo que dicen nuestros usuarios</h2>
+            <p className="text-xl text-muted-foreground">
+              Historias reales de profesionales que transformaron sus carreras
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="text-center">
+                <CardHeader>
+                  <div className="flex justify-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <CardDescription className="text-base italic">"{testimonial.content}"</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="font-semibold">{testimonial.name}</div>
+                  <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 bg-primary text-primary-foreground">
+        <div className="container mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Listo para impulsar tu carrera?</h2>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Únete a miles de profesionales que ya están desarrollando sus carreras con nuestra plataforma
+            Únete a miles de profesionales que ya están transformando sus carreras con nuestra plataforma
           </p>
-          <Link href="/auth/register">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-3">
-              Comenzar Ahora
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+
+          {!user && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary" asChild>
+                <Link href="/auth/register">
+                  Comenzar Ahora <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent"
+                asChild
+              >
+                <Link href="/demo">Ver Demo</Link>
+              </Button>
+            </div>
+          )}
         </div>
-      </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 border-t">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="h-6 w-6 bg-primary rounded" />
+                <span className="font-bold">Career Platform</span>
+              </div>
+              <p className="text-muted-foreground">
+                Transformando carreras profesionales a través de la tecnología y la inteligencia artificial.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Herramientas</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>
+                  <Link href="/personality-test" className="hover:text-foreground">
+                    Tests de Personalidad
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/skills-assessment" className="hover:text-foreground">
+                    Evaluación de Habilidades
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/cv-builder" className="hover:text-foreground">
+                    Constructor de CV
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/interview-simulator" className="hover:text-foreground">
+                    Simulador de Entrevistas
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/career-coach" className="hover:text-foreground">
+                    Coaching Profesional
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Recursos</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>
+                  <Link href="/library" className="hover:text-foreground">
+                    Biblioteca
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/job-search" className="hover:text-foreground">
+                    Búsqueda de Empleos
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/career-coach" className="hover:text-foreground">
+                    Coach de Carrera
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/blog" className="hover:text-foreground">
+                    Blog
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Soporte</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>
+                  <Link href="/help" className="hover:text-foreground">
+                    Centro de Ayuda
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-foreground">
+                    Contacto
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="hover:text-foreground">
+                    Privacidad
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-foreground">
+                    Términos
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
+            <p>&copy; 2024 Career Development Platform. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

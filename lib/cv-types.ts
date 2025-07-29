@@ -3,11 +3,11 @@ export interface PersonalInfo {
   email: string
   phone: string
   city: string
-  address: string
   country: string
-  linkedIn: string
-  website: string
-  summary: string
+  address?: string
+  linkedIn?: string
+  website?: string
+  summary?: string
 }
 
 export interface WorkExperience {
@@ -15,9 +15,9 @@ export interface WorkExperience {
   company: string
   position: string
   startDate: string
-  endDate: string
+  endDate?: string
   current: boolean
-  description: string
+  description?: string
   achievements: string[]
 }
 
@@ -25,23 +25,12 @@ export interface Education {
   id: string
   institution: string
   degree: string
-  field: string
+  field?: string
   startDate: string
-  endDate: string
+  endDate?: string
   current: boolean
-  gpa: string
-  description: string
-}
-
-export interface Project {
-  id: string
-  name: string
-  description: string
-  technologies: string[]
-  startDate: string
-  endDate: string
-  url: string
-  github: string
+  gpa?: string
+  description?: string
 }
 
 export interface Skill {
@@ -49,6 +38,17 @@ export interface Skill {
   name: string
   level: string
   category: string
+}
+
+export interface Project {
+  id: string
+  name: string
+  description: string
+  technologies: string[]
+  startDate?: string
+  endDate?: string
+  url?: string
+  github?: string
 }
 
 export interface Language {
@@ -62,17 +62,17 @@ export interface Certification {
   name: string
   issuer: string
   date: string
-  expiryDate: string
-  credentialId: string
-  url: string
+  expiryDate?: string
+  credentialId?: string
+  url?: string
 }
 
 export interface CVData {
   personal: PersonalInfo
   experience: WorkExperience[]
   education: Education[]
-  projects: Project[]
   skills: Skill[]
+  projects: Project[]
   languages: Language[]
   certifications: Certification[]
 }
@@ -93,8 +93,8 @@ export interface CVTemplate {
 export const CV_TEMPLATES: CVTemplate[] = [
   {
     id: "modern",
-    name: "Modern",
-    description: "Clean and contemporary design with gradient accents",
+    name: "Moderno",
+    description: "Diseño limpio y contemporáneo perfecto para profesionales tech",
     colors: {
       primary: "#3B82F6",
       secondary: "#1E40AF",
@@ -105,8 +105,8 @@ export const CV_TEMPLATES: CVTemplate[] = [
   },
   {
     id: "classic",
-    name: "Classic",
-    description: "Traditional professional layout with elegant typography",
+    name: "Clásico",
+    description: "Formato tradicional ideal para industrias conservadoras",
     colors: {
       primary: "#1F2937",
       secondary: "#374151",
@@ -117,8 +117,8 @@ export const CV_TEMPLATES: CVTemplate[] = [
   },
   {
     id: "creative",
-    name: "Creative",
-    description: "Vibrant design with sidebar layout and visual elements",
+    name: "Creativo",
+    description: "Diseño innovador para profesionales creativos y diseñadores",
     colors: {
       primary: "#7C3AED",
       secondary: "#5B21B6",
@@ -129,8 +129,8 @@ export const CV_TEMPLATES: CVTemplate[] = [
   },
   {
     id: "minimal",
-    name: "Minimal",
-    description: "Clean typography-focused design with subtle accents",
+    name: "Minimalista",
+    description: "Enfoque en el contenido con diseño ultra limpio",
     colors: {
       primary: "#059669",
       secondary: "#047857",
@@ -162,30 +162,27 @@ export const CHILEAN_CITIES = [
   "Iquique",
   "Los Ángeles",
   "Puerto Montt",
-  "Calama",
-  "Copiapó",
-  "Osorno",
-  "Quillota",
   "Valdivia",
-  "Punta Arenas",
+  "Osorno",
+  "Copiapó",
+  "Quillota",
+  "Curicó",
+  "Ovalle",
 ]
 
 export const COMMON_SKILLS = [
   "JavaScript",
+  "TypeScript",
   "Python",
+  "Java",
   "React",
   "Node.js",
-  "HTML/CSS",
+  "HTML",
+  "CSS",
   "SQL",
   "Git",
   "AWS",
   "Docker",
-  "TypeScript",
-  "Java",
-  "C#",
-  "PHP",
-  "MongoDB",
-  "PostgreSQL",
   "Leadership",
   "Communication",
   "Problem Solving",
@@ -193,9 +190,7 @@ export const COMMON_SKILLS = [
   "Project Management",
   "Agile",
   "Scrum",
-  "Data Analysis",
-  "Machine Learning",
-  "UI/UX Design",
+  "English",
 ]
 
 export function generateId(): string {
@@ -209,17 +204,61 @@ export function getDefaultCVData(): CVData {
       email: "",
       phone: "",
       city: "",
-      address: "",
       country: "Chile",
+      address: "",
       linkedIn: "",
       website: "",
       summary: "",
     },
     experience: [],
     education: [],
-    projects: [],
     skills: [],
+    projects: [],
     languages: [],
     certifications: [],
+  }
+}
+
+export function calculateCompletionPercentage(cvData: CVData): number {
+  let completedSections = 0
+  const totalSections = 7
+
+  // Check personal info completion
+  if (
+    cvData.personal.fullName &&
+    cvData.personal.email &&
+    cvData.personal.phone &&
+    cvData.personal.city &&
+    cvData.personal.summary
+  ) {
+    completedSections++
+  }
+
+  // Check other sections
+  if (cvData.experience.length > 0) completedSections++
+  if (cvData.education.length > 0) completedSections++
+  if (cvData.skills.length > 0) completedSections++
+  if (cvData.projects.length > 0) completedSections++
+  if (cvData.languages.length > 0) completedSections++
+  if (cvData.certifications.length > 0) completedSections++
+
+  return Math.round((completedSections / totalSections) * 100)
+}
+
+export function validateCVData(cvData: CVData): { isValid: boolean; errors: string[] } {
+  const errors: string[] = []
+
+  if (!cvData.personal.fullName) errors.push("Full name is required")
+  if (!cvData.personal.email) errors.push("Email is required")
+  if (!cvData.personal.phone) errors.push("Phone is required")
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (cvData.personal.email && !emailRegex.test(cvData.personal.email)) {
+    errors.push("Invalid email format")
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
   }
 }

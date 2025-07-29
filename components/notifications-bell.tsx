@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,67 +12,65 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { Bell, Check, X } from "lucide-react"
 import { useNotifications } from "@/contexts/notifications-context"
-import { formatDistanceToNow } from "date-fns"
 
 export function NotificationsBell() {
-  const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotifications } = useNotifications()
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleNotificationClick = async (id: string) => {
+    await markAsRead(id)
+  }
+
+  const handleMarkAllAsRead = async () => {
+    await markAllAsRead()
+    setIsOpen(false)
+  }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="relative">
+        <Button variant="ghost" size="sm" className="relative h-8 w-8 px-0">
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
-            <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs">
-              {unreadCount}
+            <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs">
+              {unreadCount > 9 ? "9+" : unreadCount}
             </Badge>
           )}
           <span className="sr-only">Notifications</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent className="w-80" align="end" forceMount>
         <DropdownMenuLabel className="flex items-center justify-between">
-          Notifications
+          <span>Notifications</span>
           {unreadCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={markAllAsRead}>
-              <Check className="h-3 w-3" />
-              Mark all read
+            <Button variant="ghost" size="sm" onClick={handleMarkAllAsRead} className="h-auto p-0 text-xs">
+              Mark all as read
             </Button>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
-          <DropdownMenuItem disabled>No notifications</DropdownMenuItem>
+          <DropdownMenuItem disabled>
+            <span className="text-muted-foreground">No notifications</span>
+          </DropdownMenuItem>
         ) : (
-          <>
-            {notifications.slice(0, 5).map((notification) => (
-              <DropdownMenuItem
-                key={notification.id}
-                className="flex flex-col items-start p-3 cursor-pointer"
-                onClick={() => markAsRead(notification.id)}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span className="font-medium text-sm">{notification.title}</span>
-                  {!notification.read && <div className="h-2 w-2 bg-blue-500 rounded-full" />}
-                </div>
-                <span className="text-xs text-muted-foreground mt-1">{notification.message}</span>
-                <span className="text-xs text-muted-foreground mt-1">
-                  {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
-                </span>
-              </DropdownMenuItem>
-            ))}
-            {notifications.length > 0 && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={clearNotifications} className="text-center">
-                  <X className="h-3 w-3 mr-1" />
-                  Clear all
-                </DropdownMenuItem>
-              </>
-            )}
-          </>
+          notifications.slice(0, 5).map((notification) => (
+            <DropdownMenuItem
+              key={notification.id}
+              onClick={() => handleNotificationClick(notification.id)}
+              className={`flex flex-col items-start space-y-1 ${!notification.read ? "bg-muted/50" : ""}`}
+            >
+              <div className="flex w-full items-center justify-between">
+                <span className="font-medium">{notification.title}</span>
+                {!notification.read && <div className="h-2 w-2 rounded-full bg-blue-600" />}
+              </div>
+              <span className="text-sm text-muted-foreground">{notification.message}</span>
+              <span className="text-xs text-muted-foreground">
+                {new Date(notification.created_at).toLocaleDateString()}
+              </span>
+            </DropdownMenuItem>
+          ))
         )}
       </DropdownMenuContent>
     </DropdownMenu>

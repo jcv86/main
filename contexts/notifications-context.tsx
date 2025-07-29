@@ -1,86 +1,103 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
-interface Notification {
+export interface Notification {
   id: string
   title: string
   message: string
   type: "info" | "success" | "warning" | "error"
-  timestamp: Date
   read: boolean
+  createdAt: string
+  actionUrl?: string
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
   unreadCount: number
-  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
+  addNotification: (notification: Omit<Notification, "id" | "createdAt" | "read">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
-  clearNotifications: () => void
+  removeNotification: (id: string) => void
+  clearAll: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
-export function NotificationsProvider({ children }: { children: React.ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: "1",
-      title: "Welcome!",
-      message: "Welcome to the Career Development Platform",
-      type: "info",
-      timestamp: new Date(),
-      read: false,
-    },
-    {
-      id: "2",
-      title: "Profile Updated",
-      message: "Your profile has been successfully updated",
-      type: "success",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30),
-      read: false,
-    },
-  ])
+export function NotificationsProvider({ children }: { children: ReactNode }) {
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
-  const unreadCount = notifications.filter((n) => !n.read).length
+  // Load notifications from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("notifications")
+    if (stored) {
+      try {
+        setNotifications(JSON.parse(stored))
+      } catch (error) {
+        console.error("Error loading notifications:", error)
+      }
+    }
 
-  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
+    // Add welcome notification if no notifications exist
+    if (!stored) {
+      const welcomeNotification: Notification = {
+        id: "welcome",
+        title: "¡Bienvenido!",
+        message: "Bienvenido a tu plataforma de desarrollo profesional",
+        type: "info",
+        read: false,
+        createdAt: new Date().toISOString(),
+      }
+      setNotifications([welcomeNotification])
+    }
+  }, [])
+
+  // Save notifications to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("notifications", JSON.stringify(notifications))
+  }, [notifications])
+
+  const addNotification = (notification: Omit<Notification, "id" | "createdAt" | "read">) => {
     const newNotification: Notification = {
       ...notification,
-      id: Date.now().toString(),
-      timestamp: new Date(),
+      id: Math.random().toString(36).substr(2, 9),
+      createdAt: new Date().toISOString(),
       read: false,
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+    setNotifications((prev) =>
+      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
+    )
   }
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
   }
 
-  const clearNotifications = () => {
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
+  }
+
+  const clearAll = () => {
     setNotifications([])
   }
 
-  return (
-    <NotificationsContext.Provider
-      value={{
-        notifications,
-        unreadCount,
-        addNotification,
-        markAsRead,
-        markAllAsRead,
-        clearNotifications,
-      }}
-    >
-      {children}
-    </NotificationsContext.Provider>
-  )
+  const unreadCount = notifications.filter((n) => !n.read).length
+
+  const value: NotificationsContextType = {
+    notifications,
+    unreadCount,
+    addNotification,
+    markAsRead,
+    markAllAsRead,
+    removeNotification,
+    clearAll,
+  }
+
+  return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>
 }
 
 export function useNotifications() {
