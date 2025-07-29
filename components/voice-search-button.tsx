@@ -1,9 +1,10 @@
 "use client"
 
-import { Mic, MicOff } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useSpeechRecognition } from "@/hooks/use-speech-recognition"
 import { useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Mic, MicOff } from "lucide-react"
+import { useSpeechRecognition } from "@/hooks/use-speech-recognition"
+import { toast } from "sonner"
 
 interface VoiceSearchButtonProps {
   onTranscript: (transcript: string) => void
@@ -11,7 +12,7 @@ interface VoiceSearchButtonProps {
 }
 
 export function VoiceSearchButton({ onTranscript, disabled }: VoiceSearchButtonProps) {
-  const { isListening, transcript, error, isSupported, startListening, stopListening, resetTranscript } =
+  const { isListening, transcript, isSupported, error, startListening, stopListening, resetTranscript } =
     useSpeechRecognition()
 
   useEffect(() => {
@@ -21,18 +22,31 @@ export function VoiceSearchButton({ onTranscript, disabled }: VoiceSearchButtonP
     }
   }, [transcript, onTranscript, resetTranscript])
 
+  useEffect(() => {
+    if (error) {
+      toast.error(`Error de reconocimiento de voz: ${error}`)
+    }
+  }, [error])
+
+  const handleClick = () => {
+    if (isListening) {
+      stopListening()
+    } else {
+      startListening()
+    }
+  }
+
   if (!isSupported) {
     return null
   }
 
   return (
     <Button
-      type="button"
       variant="ghost"
       size="sm"
+      onClick={handleClick}
       disabled={disabled}
-      onClick={isListening ? stopListening : startListening}
-      className={isListening ? "text-red-500" : ""}
+      className={`${isListening ? "text-red-500 animate-pulse" : ""}`}
     >
       {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
       <span className="sr-only">{isListening ? "Detener búsqueda por voz" : "Iniciar búsqueda por voz"}</span>

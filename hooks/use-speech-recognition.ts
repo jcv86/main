@@ -12,23 +12,35 @@ interface SpeechRecognitionErrorEvent {
   message: string
 }
 
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  abort(): void
+  onstart: ((this: SpeechRecognition, ev: Event) => any) | null
+  onend: ((this: SpeechRecognition, ev: Event) => any) | null
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null
+}
+
 declare global {
   interface Window {
-    SpeechRecognition: any
-    webkitSpeechRecognition: any
+    SpeechRecognition: new () => SpeechRecognition
+    webkitSpeechRecognition: new () => SpeechRecognition
   }
 }
 
 export function useSpeechRecognition() {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
-  const [error, setError] = useState<string | null>(null)
   const [isSupported, setIsSupported] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      setIsSupported(!!SpeechRecognition)
+      setIsSupported(!!(window.SpeechRecognition || window.webkitSpeechRecognition))
     }
   }, [])
 
@@ -79,8 +91,8 @@ export function useSpeechRecognition() {
   return {
     isListening,
     transcript,
-    error,
     isSupported,
+    error,
     startListening,
     stopListening,
     resetTranscript,

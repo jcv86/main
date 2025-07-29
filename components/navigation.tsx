@@ -4,39 +4,86 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { SearchDialog } from "@/components/search-dialog"
+import { NotificationsBell } from "@/components/notifications-bell"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useAuth } from "@/contexts/auth-context"
+import { cn } from "@/lib/utils"
 import {
   Menu,
   Home,
   User,
   FileText,
-  Search,
+  Briefcase,
+  MessageSquare,
   BookOpen,
   Calendar,
   Target,
-  Settings,
-  Brain,
-  Code,
-  MessageSquare,
-  BarChart3,
-  Users,
   GraduationCap,
-  Building2,
-  TestTube,
-  ChevronDown,
+  Brain,
+  Sparkles,
+  Settings,
+  LogOut,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
-import { NotificationsBell } from "@/components/notifications-bell"
-import { SearchDialog } from "@/components/search-dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
+
+const testItems = [
+  {
+    title: "Tests Psicométricos",
+    items: [
+      {
+        title: "Test de Personalidad",
+        href: "/personality-test",
+        description: "Descubre tu tipo de personalidad",
+        icon: Brain,
+      },
+      {
+        title: "Test DISC",
+        href: "/disc-test",
+        description: "Evalúa tu estilo de comportamiento",
+        icon: User,
+      },
+      {
+        title: "Big Five",
+        href: "/big-five-test",
+        description: "Los cinco grandes factores de personalidad",
+        icon: Brain,
+      },
+      {
+        title: "Habilidades Blandas",
+        href: "/soft-skills-test",
+        description: "Evalúa tus competencias interpersonales",
+        icon: MessageSquare,
+      },
+    ],
+  },
+  {
+    title: "Tests Técnicos",
+    items: [
+      {
+        title: "Habilidades Técnicas",
+        href: "/technical-skills-test",
+        description: "Evalúa tus competencias técnicas",
+        icon: Settings,
+      },
+      {
+        title: "Test Adaptativo",
+        href: "/adaptive-skills-test",
+        description: "Evaluación que se adapta a tu nivel",
+        icon: Sparkles,
+      },
+    ],
+  },
+]
 
 const navigationItems = [
   {
@@ -45,65 +92,14 @@ const navigationItems = [
     icon: Home,
   },
   {
-    title: "Perfil",
-    href: "/profile",
-    icon: User,
-  },
-  {
-    title: "Tests y Evaluaciones",
-    icon: TestTube,
-    children: [
-      {
-        title: "Test de Personalidad DISC",
-        href: "/disc-test",
-        icon: Brain,
-      },
-      {
-        title: "Test Big Five",
-        href: "/big-five-test",
-        icon: Brain,
-      },
-      {
-        title: "Test de Habilidades Blandas",
-        href: "/soft-skills-test",
-        icon: Users,
-      },
-      {
-        title: "Test de Habilidades Técnicas",
-        href: "/technical-skills-test",
-        icon: Code,
-      },
-      {
-        title: "Evaluación de Habilidades",
-        href: "/skills-assessment",
-        icon: BarChart3,
-      },
-      {
-        title: "Test Adaptativo",
-        href: "/adaptive-skills-test",
-        icon: Brain,
-      },
-      {
-        title: "Coach de Personalidad",
-        href: "/personality-coach-test",
-        icon: MessageSquare,
-      },
-    ],
-  },
-  {
     title: "CV Builder",
     href: "/cv-builder",
     icon: FileText,
   },
   {
-    title: "Generador CV IA",
-    href: "/cv-ai-generator",
-    icon: Brain,
-  },
-  {
     title: "Búsqueda de Empleo",
     href: "/job-search",
-    icon: Search,
+    icon: Briefcase,
   },
   {
     title: "Coach de Carrera",
@@ -113,7 +109,7 @@ const navigationItems = [
   {
     title: "Simulador de Entrevistas",
     href: "/interview-simulator",
-    icon: Users,
+    icon: User,
   },
   {
     title: "Biblioteca",
@@ -130,182 +126,265 @@ const navigationItems = [
     href: "/goals",
     icon: Target,
   },
+]
+
+const educationItems = [
   {
     title: "Carreras UDD",
     href: "/udd-careers",
+    description: "Explora las carreras de la Universidad del Desarrollo",
     icon: GraduationCap,
   },
   {
     title: "Bachillerato",
     href: "/bachillerato",
-    icon: Building2,
-  },
-  {
-    title: "Sistema Mirix",
-    href: "/mirix",
-    icon: Brain,
+    description: "Información sobre programas de bachillerato",
+    icon: BookOpen,
   },
 ]
 
 export function Navigation() {
-  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+  const { user, signOut } = useAuth()
 
-  const NavItem = ({ item, mobile = false }: { item: any; mobile?: boolean }) => {
-    if (item.children) {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className={cn(
-                "justify-start gap-2",
-                mobile ? "w-full" : "",
-                pathname.startsWith(item.href) && "bg-accent text-accent-foreground",
-              )}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.title}
-              <ChevronDown className="h-4 w-4 ml-auto" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            {item.children.map((child: any) => (
-              <DropdownMenuItem key={child.href} asChild>
-                <Link
-                  href={child.href}
-                  className={cn(
-                    "flex items-center gap-2 w-full",
-                    pathname === child.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => mobile && setIsOpen(false)}
-                >
-                  <child.icon className="h-4 w-4" />
-                  {child.title}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    }
-
-    return (
-      <Button
-        variant="ghost"
-        className={cn(
-          "justify-start gap-2",
-          mobile ? "w-full" : "",
-          pathname === item.href && "bg-accent text-accent-foreground",
-        )}
-        asChild
-      >
-        <Link href={item.href} onClick={() => mobile && setIsOpen(false)}>
-          <item.icon className="h-4 w-4" />
-          {item.title}
-        </Link>
-      </Button>
-    )
-  }
+  const isActive = (href: string) => pathname === href
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-16 items-center">
+        {/* Logo */}
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="hidden font-bold sm:inline-block">Desarrollo Profesional</span>
+            <Brain className="h-6 w-6 text-primary" />
+            <span className="hidden font-bold sm:inline-block">CareerDev</span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-medium">
-            {navigationItems.slice(0, 4).map((item) => (
-              <NavItem key={item.href || item.title} item={item} />
-            ))}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2">
-                  Más
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                {navigationItems.slice(4).map((item) => (
-                  <div key={item.href || item.title}>
-                    {item.children ? (
-                      <div>
-                        <div className="px-2 py-1.5 text-sm font-semibold">{item.title}</div>
-                        {item.children.map((child: any) => (
-                          <DropdownMenuItem key={child.href} asChild>
-                            <Link
-                              href={child.href}
-                              className={cn(
-                                "flex items-center gap-2 w-full pl-4",
-                                pathname === child.href && "bg-accent text-accent-foreground",
-                              )}
-                            >
-                              <child.icon className="h-4 w-4" />
-                              {child.title}
-                            </Link>
-                          </DropdownMenuItem>
+        </div>
+
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden md:flex">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/dashboard" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/dashboard") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Dashboard
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <Brain className="mr-2 h-4 w-4" />
+                Tests
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
+                  {testItems.map((category) => (
+                    <div key={category.title} className="space-y-3">
+                      <h4 className="text-sm font-medium leading-none text-muted-foreground">{category.title}</h4>
+                      <div className="space-y-2">
+                        {category.items.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <item.icon className="h-4 w-4" />
+                              <div className="text-sm font-medium leading-none">{item.title}</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
                         ))}
-                        <DropdownMenuSeparator />
                       </div>
-                    ) : (
-                      <DropdownMenuItem asChild>
-                        <Link
-                          href={item.href}
-                          className={cn(
-                            "flex items-center gap-2 w-full",
-                            pathname === item.href && "bg-accent text-accent-foreground",
-                          )}
-                        >
-                          <item.icon className="h-4 w-4" />
-                          {item.title}
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                  </div>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    </div>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/cv-builder" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/cv-builder") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <FileText className="mr-2 h-4 w-4" />
+                  CV Builder
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/job-search" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/job-search") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Briefcase className="mr-2 h-4 w-4" />
+                  Empleos
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <GraduationCap className="mr-2 h-4 w-4" />
+                Educación
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid gap-3 p-6 md:w-[400px]">
+                  {educationItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <item.icon className="h-4 w-4" />
+                        <div className="text-sm font-medium leading-none">{item.title}</div>
+                      </div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
+                    </Link>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {/* Right side items */}
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            <SearchDialog />
+          </div>
+          <nav className="flex items-center space-x-2">
+            {user && <NotificationsBell />}
+            <ThemeToggle />
+            <LanguageToggle />
+
+            {user ? (
+              <Button variant="ghost" size="sm" onClick={() => signOut()} className="hidden md:flex">
+                <LogOut className="h-4 w-4 mr-2" />
+                Salir
+              </Button>
+            ) : (
+              <Button asChild size="sm" className="hidden md:flex">
+                <Link href="/auth/login">Iniciar Sesión</Link>
+              </Button>
+            )}
           </nav>
         </div>
+
+        {/* Mobile menu */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
               className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="pr-0">
-            <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-              <span className="font-bold">Desarrollo Profesional</span>
-            </Link>
+            <SheetHeader>
+              <SheetTitle className="flex items-center space-x-2">
+                <Brain className="h-6 w-6 text-primary" />
+                <span>CareerDev</span>
+              </SheetTitle>
+              <SheetDescription>Tu plataforma de desarrollo profesional</SheetDescription>
+            </SheetHeader>
             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-3">
                 {navigationItems.map((item) => (
-                  <NavItem key={item.href || item.title} item={item} mobile />
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary",
+                      isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                    )}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </Link>
                 ))}
+
+                <div className="pt-4">
+                  <h4 className="mb-2 text-sm font-semibold">Tests</h4>
+                  {testItems.map((category) => (
+                    <div key={category.title} className="mb-4">
+                      <h5 className="mb-2 text-xs font-medium text-muted-foreground">{category.title}</h5>
+                      {category.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
+                            isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                          )}
+                        >
+                          <item.icon className="h-3 w-3" />
+                          <span>{item.title}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4">
+                  <h4 className="mb-2 text-sm font-semibold">Educación</h4>
+                  {educationItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
+                        isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                      )}
+                    >
+                      <item.icon className="h-3 w-3" />
+                      <span>{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                {user && (
+                  <div className="pt-4 border-t">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        signOut()
+                        setIsOpen(false)
+                      }}
+                      className="w-full justify-start"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Salir
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </SheetContent>
         </Sheet>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <SearchDialog />
-          </div>
-          <nav className="flex items-center space-x-2">
-            <NotificationsBell />
-            <ThemeToggle />
-            <LanguageToggle />
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/settings">
-                <Settings className="h-4 w-4" />
-              </Link>
-            </Button>
-          </nav>
-        </div>
       </div>
     </header>
   )
