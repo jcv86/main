@@ -13,7 +13,7 @@ import { ModernTemplate } from "@/components/cv-templates/modern-template"
 import { ClassicTemplate } from "@/components/cv-templates/classic-template"
 import { CreativeTemplate } from "@/components/cv-templates/creative-template"
 import { MinimalTemplate } from "@/components/cv-templates/minimal-template"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase"
 import { type CVData, type CVTemplate, CV_TEMPLATES, getDefaultCVData } from "@/lib/cv-types"
 import { toast } from "@/hooks/use-toast"
 
@@ -38,6 +38,7 @@ export default function CVBuilderPage() {
   const loadCVData = async () => {
     try {
       setIsLoading(true)
+      const supabase = createClient()
 
       // Get current user
       const {
@@ -128,6 +129,7 @@ export default function CVBuilderPage() {
   const handleSaveCV = async () => {
     try {
       setIsSaving(true)
+      const supabase = createClient()
 
       // Get current user
       const {
@@ -291,7 +293,7 @@ export default function CVBuilderPage() {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <Badge variant="secondary" className="text-xs">
-                    {template.category}
+                    {template.id}
                   </Badge>
                 </CardContent>
               </Card>

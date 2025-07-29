@@ -272,7 +272,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="fullName">Full Name *</Label>
                   <Input
                     id="fullName"
-                    value={data.personal.fullName}
+                    value={data.personal.fullName || ""}
                     onChange={(e) => updatePersonal("fullName", e.target.value)}
                     placeholder="Juan Pérez González"
                   />
@@ -282,7 +282,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Input
                     id="email"
                     type="email"
-                    value={data.personal.email}
+                    value={data.personal.email || ""}
                     onChange={(e) => updatePersonal("email", e.target.value)}
                     placeholder="juan.perez@email.com"
                   />
@@ -291,14 +291,14 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="phone">Phone *</Label>
                   <Input
                     id="phone"
-                    value={data.personal.phone}
+                    value={data.personal.phone || ""}
                     onChange={(e) => updatePersonal("phone", e.target.value)}
                     placeholder="+56 9 1234 5678"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="city">City</Label>
-                  <Select value={data.personal.city} onValueChange={(value) => updatePersonal("city", value)}>
+                  <Select value={data.personal.city || ""} onValueChange={(value) => updatePersonal("city", value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select city" />
                     </SelectTrigger>
@@ -315,7 +315,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="address">Address</Label>
                   <Input
                     id="address"
-                    value={data.personal.address}
+                    value={data.personal.address || ""}
                     onChange={(e) => updatePersonal("address", e.target.value)}
                     placeholder="Av. Providencia 1234"
                   />
@@ -324,7 +324,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="country">Country</Label>
                   <Input
                     id="country"
-                    value={data.personal.country}
+                    value={data.personal.country || ""}
                     onChange={(e) => updatePersonal("country", e.target.value)}
                     placeholder="Chile"
                   />
@@ -333,7 +333,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="linkedIn">LinkedIn</Label>
                   <Input
                     id="linkedIn"
-                    value={data.personal.linkedIn}
+                    value={data.personal.linkedIn || ""}
                     onChange={(e) => updatePersonal("linkedIn", e.target.value)}
                     placeholder="linkedin.com/in/juanperez"
                   />
@@ -342,7 +342,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <Label htmlFor="website">Website</Label>
                   <Input
                     id="website"
-                    value={data.personal.website}
+                    value={data.personal.website || ""}
                     onChange={(e) => updatePersonal("website", e.target.value)}
                     placeholder="juanperez.dev"
                   />
@@ -352,7 +352,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 <Label htmlFor="summary">Professional Summary</Label>
                 <Textarea
                   id="summary"
-                  value={data.personal.summary}
+                  value={data.personal.summary || ""}
                   onChange={(e) => updatePersonal("summary", e.target.value)}
                   placeholder="Brief description of your professional background and career objectives..."
                   rows={4}
@@ -390,7 +390,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Company *</Label>
                     <Input
-                      value={exp.company}
+                      value={exp.company || ""}
                       onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
                       placeholder="Company name"
                     />
@@ -398,7 +398,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Position *</Label>
                     <Input
-                      value={exp.position}
+                      value={exp.position || ""}
                       onChange={(e) => updateExperience(exp.id, "position", e.target.value)}
                       placeholder="Job title"
                     />
@@ -407,7 +407,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>Start Date *</Label>
                     <Input
                       type="month"
-                      value={exp.startDate}
+                      value={exp.startDate || ""}
                       onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)}
                     />
                   </div>
@@ -415,7 +415,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>End Date</Label>
                     <Input
                       type="month"
-                      value={exp.endDate}
+                      value={exp.endDate || ""}
                       onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)}
                       disabled={exp.current}
                     />
@@ -424,7 +424,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id={`current-${exp.id}`}
-                    checked={exp.current}
+                    checked={exp.current || false}
                     onCheckedChange={(checked) => updateExperience(exp.id, "current", checked)}
                   />
                   <Label htmlFor={`current-${exp.id}`}>Currently working here</Label>
@@ -432,7 +432,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 <div className="space-y-2">
                   <Label>Description</Label>
                   <Textarea
-                    value={exp.description}
+                    value={exp.description || ""}
                     onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
                     placeholder="Describe your role and responsibilities..."
                     rows={3}
@@ -440,12 +440,12 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label>Key Achievements</Label>
-                  {exp.achievements.map((achievement, achIndex) => (
+                  {(exp.achievements || [""]).map((achievement, achIndex) => (
                     <div key={achIndex} className="flex gap-2">
                       <Input
-                        value={achievement}
+                        value={achievement || ""}
                         onChange={(e) => {
-                          const newAchievements = [...exp.achievements]
+                          const newAchievements = [...(exp.achievements || [])]
                           newAchievements[achIndex] = e.target.value
                           updateExperience(exp.id, "achievements", newAchievements)
                         }}
@@ -455,7 +455,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                         variant="outline"
                         size="sm"
                         onClick={() => {
-                          const newAchievements = exp.achievements.filter((_, i) => i !== achIndex)
+                          const newAchievements = (exp.achievements || []).filter((_, i) => i !== achIndex)
                           updateExperience(exp.id, "achievements", newAchievements)
                         }}
                       >
@@ -467,7 +467,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      const newAchievements = [...exp.achievements, ""]
+                      const newAchievements = [...(exp.achievements || []), ""]
                       updateExperience(exp.id, "achievements", newAchievements)
                     }}
                   >
@@ -521,7 +521,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Institution *</Label>
                     <Input
-                      value={edu.institution}
+                      value={edu.institution || ""}
                       onChange={(e) => updateEducation(edu.id, "institution", e.target.value)}
                       placeholder="University or school name"
                     />
@@ -529,7 +529,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Degree *</Label>
                     <Input
-                      value={edu.degree}
+                      value={edu.degree || ""}
                       onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
                       placeholder="Bachelor's, Master's, etc."
                     />
@@ -537,7 +537,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Field of Study</Label>
                     <Input
-                      value={edu.field}
+                      value={edu.field || ""}
                       onChange={(e) => updateEducation(edu.id, "field", e.target.value)}
                       placeholder="Computer Science, Business, etc."
                     />
@@ -554,7 +554,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>Start Date</Label>
                     <Input
                       type="month"
-                      value={edu.startDate}
+                      value={edu.startDate || ""}
                       onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)}
                     />
                   </div>
@@ -562,7 +562,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>End Date</Label>
                     <Input
                       type="month"
-                      value={edu.endDate}
+                      value={edu.endDate || ""}
                       onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)}
                       disabled={edu.current}
                     />
@@ -571,7 +571,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id={`current-edu-${edu.id}`}
-                    checked={edu.current}
+                    checked={edu.current || false}
                     onCheckedChange={(checked) => updateEducation(edu.id, "current", checked)}
                   />
                   <Label htmlFor={`current-edu-${edu.id}`}>Currently studying</Label>
@@ -631,7 +631,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Project Name *</Label>
                     <Input
-                      value={project.name}
+                      value={project.name || ""}
                       onChange={(e) => updateProject(project.id, "name", e.target.value)}
                       placeholder="Project name"
                     />
@@ -639,7 +639,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Technologies</Label>
                     <Input
-                      value={project.technologies.join(", ")}
+                      value={(project.technologies || []).join(", ")}
                       onChange={(e) =>
                         updateProject(
                           project.id,
@@ -654,7 +654,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>Start Date</Label>
                     <Input
                       type="month"
-                      value={project.startDate}
+                      value={project.startDate || ""}
                       onChange={(e) => updateProject(project.id, "startDate", e.target.value)}
                     />
                   </div>
@@ -662,7 +662,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>End Date</Label>
                     <Input
                       type="month"
-                      value={project.endDate}
+                      value={project.endDate || ""}
                       onChange={(e) => updateProject(project.id, "endDate", e.target.value)}
                     />
                   </div>
@@ -686,7 +686,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                 <div className="space-y-2">
                   <Label>Description *</Label>
                   <Textarea
-                    value={project.description}
+                    value={project.description || ""}
                     onChange={(e) => updateProject(project.id, "description", e.target.value)}
                     placeholder="Describe the project, your role, and key features..."
                     rows={4}
@@ -736,14 +736,17 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Skill Name</Label>
                     <Input
-                      value={skill.name}
+                      value={skill.name || ""}
                       onChange={(e) => updateSkill(skill.id, "name", e.target.value)}
                       placeholder="JavaScript, Leadership, etc."
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Level</Label>
-                    <Select value={skill.level} onValueChange={(value) => updateSkill(skill.id, "level", value)}>
+                    <Select
+                      value={skill.level || "Intermediate"}
+                      onValueChange={(value) => updateSkill(skill.id, "level", value)}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -758,7 +761,10 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label>Category</Label>
-                    <Select value={skill.category} onValueChange={(value) => updateSkill(skill.id, "category", value)}>
+                    <Select
+                      value={skill.category || "Technical"}
+                      onValueChange={(value) => updateSkill(skill.id, "category", value)}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -850,7 +856,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Language</Label>
                     <Input
-                      value={language.name}
+                      value={language.name || ""}
                       onChange={(e) => updateLanguage(language.id, "name", e.target.value)}
                       placeholder="Spanish, English, etc."
                     />
@@ -858,7 +864,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Proficiency Level</Label>
                     <Select
-                      value={language.level}
+                      value={language.level || "Conversational"}
                       onValueChange={(value) => updateLanguage(language.id, "level", value)}
                     >
                       <SelectTrigger>
@@ -920,7 +926,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Certification Name *</Label>
                     <Input
-                      value={cert.name}
+                      value={cert.name || ""}
                       onChange={(e) => updateCertification(cert.id, "name", e.target.value)}
                       placeholder="AWS Certified Solutions Architect"
                     />
@@ -928,7 +934,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                   <div className="space-y-2">
                     <Label>Issuing Organization *</Label>
                     <Input
-                      value={cert.issuer}
+                      value={cert.issuer || ""}
                       onChange={(e) => updateCertification(cert.id, "issuer", e.target.value)}
                       placeholder="Amazon Web Services"
                     />
@@ -937,7 +943,7 @@ export function CVForm({ data, onChange }: CVFormProps) {
                     <Label>Issue Date *</Label>
                     <Input
                       type="month"
-                      value={cert.date}
+                      value={cert.date || ""}
                       onChange={(e) => updateCertification(cert.id, "date", e.target.value)}
                     />
                   </div>
