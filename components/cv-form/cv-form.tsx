@@ -1,8 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,7 +10,6 @@ import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import {
   User,
@@ -37,7 +34,6 @@ import {
 } from "lucide-react"
 import {
   type CVData,
-  personalInfoSchema,
   chileanCities,
   chileanUniversities,
   commonSkillsChile,
@@ -62,21 +58,17 @@ export function CVForm({ data, onChange }: CVFormProps) {
   const [editingProject, setEditingProject] = useState<string | null>(null)
   const [editingCertification, setEditingCertification] = useState<string | null>(null)
 
-  const personalForm = useForm({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: data.personalInfo,
-    mode: "onChange",
-  })
-
-  // Update form when data changes
-  useState(() => {
-    personalForm.reset(data.personalInfo)
-  })
-
   const updateData = (section: keyof CVData, newData: any) => {
     onChange({
       ...data,
       [section]: newData,
+    })
+  }
+
+  const updatePersonalInfo = (field: keyof typeof data.personalInfo, value: string) => {
+    updateData("personalInfo", {
+      ...data.personalInfo,
+      [field]: value,
     })
   }
 
@@ -269,192 +261,105 @@ export function CVForm({ data, onChange }: CVFormProps) {
           <AccordionContent>
             <Card>
               <CardContent className="pt-6">
-                <Form {...personalForm}>
-                  <form className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={personalForm.control}
-                        name="fullName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <User className="h-4 w-4" />
-                              <span>Nombre Completo *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Ej: Juan Carlos Pérez González"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, fullName: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Mail className="h-4 w-4" />
-                              <span>Email *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="juan.perez@email.com"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, email: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Phone className="h-4 w-4" />
-                              <span>Teléfono *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="+56 9 1234 5678"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, phone: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormDescription>Formato chileno: +56 9 XXXX XXXX</FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="location"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <MapPin className="h-4 w-4" />
-                              <span>Ubicación *</span>
-                            </FormLabel>
-                            <Select
-                              value={field.value}
-                              onValueChange={(value) => {
-                                field.onChange(value)
-                                updateData("personalInfo", { ...data.personalInfo, location: value })
-                              }}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecciona tu ciudad" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {chileanCities.map((city) => (
-                                  <SelectItem key={city} value={city}>
-                                    {city}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="linkedIn"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Linkedin className="h-4 w-4" />
-                              <span>LinkedIn</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="https://linkedin.com/in/tu-perfil"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, linkedIn: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={personalForm.control}
-                        name="website"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center space-x-1">
-                              <Globe className="h-4 w-4" />
-                              <span>Sitio Web</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="https://tu-portafolio.com"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e)
-                                  updateData("personalInfo", { ...data.personalInfo, website: e.target.value })
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <User className="h-4 w-4" />
+                        <span>Nombre Completo *</span>
+                      </Label>
+                      <Input
+                        placeholder="Ej: Juan Carlos Pérez González"
+                        value={data.personalInfo.fullName}
+                        onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
                       />
                     </div>
 
-                    <FormField
-                      control={personalForm.control}
-                      name="summary"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Resumen Profesional *</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Describe tu experiencia, habilidades clave y objetivos profesionales. Ejemplo: Ingeniero en Informática con 5 años de experiencia en desarrollo web full-stack, especializado en React y Node.js. Apasionado por crear soluciones innovadoras que mejoren la experiencia del usuario..."
-                              rows={4}
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e)
-                                updateData("personalInfo", { ...data.personalInfo, summary: e.target.value })
-                              }}
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            Mínimo 50 caracteres, máximo 500. Destaca tu experiencia y objetivos.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <Mail className="h-4 w-4" />
+                        <span>Email *</span>
+                      </Label>
+                      <Input
+                        type="email"
+                        placeholder="juan.perez@email.com"
+                        value={data.personalInfo.email}
+                        onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <Phone className="h-4 w-4" />
+                        <span>Teléfono *</span>
+                      </Label>
+                      <Input
+                        placeholder="+56 9 1234 5678"
+                        value={data.personalInfo.phone}
+                        onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <MapPin className="h-4 w-4" />
+                        <span>Ubicación *</span>
+                      </Label>
+                      <Select
+                        value={data.personalInfo.location}
+                        onValueChange={(value) => updatePersonalInfo("location", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona tu ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {chileanCities.map((city) => (
+                            <SelectItem key={city} value={city}>
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <Linkedin className="h-4 w-4" />
+                        <span>LinkedIn</span>
+                      </Label>
+                      <Input
+                        placeholder="https://linkedin.com/in/tu-perfil"
+                        value={data.personalInfo.linkedIn}
+                        onChange={(e) => updatePersonalInfo("linkedIn", e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="flex items-center space-x-1">
+                        <Globe className="h-4 w-4" />
+                        <span>Sitio Web</span>
+                      </Label>
+                      <Input
+                        placeholder="https://tu-portafolio.com"
+                        value={data.personalInfo.website}
+                        onChange={(e) => updatePersonalInfo("website", e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Resumen Profesional *</Label>
+                    <Textarea
+                      placeholder="Describe tu experiencia, habilidades clave y objetivos profesionales..."
+                      rows={4}
+                      value={data.personalInfo.summary}
+                      onChange={(e) => updatePersonalInfo("summary", e.target.value)}
                     />
-                  </form>
-                </Form>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Mínimo 50 caracteres, máximo 500. Destaca tu experiencia y objetivos.
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </AccordionContent>
