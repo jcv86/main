@@ -2,9 +2,9 @@ export interface PersonalInfo {
   fullName: string
   email: string
   phone: string
-  address: string
   city: string
   linkedIn?: string
+  github?: string
   website?: string
   summary: string
 }
@@ -17,7 +17,7 @@ export interface Experience {
   endDate: string
   current: boolean
   description: string
-  location: string
+  achievements: string[]
 }
 
 export interface Education {
@@ -29,7 +29,7 @@ export interface Education {
   endDate: string
   current: boolean
   gpa?: string
-  description?: string
+  honors?: string
 }
 
 export interface Project {
@@ -42,6 +42,7 @@ export interface Project {
   current: boolean
   url?: string
   github?: string
+  achievements: string[]
 }
 
 export interface Skill {
@@ -69,7 +70,7 @@ export interface Certification {
 }
 
 export interface CVData {
-  personal: PersonalInfo
+  personalInfo: PersonalInfo
   experience: Experience[]
   education: Education[]
   projects: Project[]
@@ -80,16 +81,11 @@ export interface CVData {
 
 export const formatDate = (dateString: string): string => {
   if (!dateString) return ""
-
-  try {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("es-CL", {
-      year: "numeric",
-      month: "long",
-    })
-  } catch (error) {
-    return dateString
-  }
+  const date = new Date(dateString)
+  return date.toLocaleDateString("es-CL", {
+    year: "numeric",
+    month: "long",
+  })
 }
 
 export const chileanCities = [
@@ -107,12 +103,12 @@ export const chileanCities = [
   "Iquique",
   "Los Ángeles",
   "Puerto Montt",
-  "Valdivia",
-  "Osorno",
+  "Calama",
   "Copiapó",
+  "Osorno",
   "Quillota",
-  "Curicó",
-  "Ovalle",
+  "Valdivia",
+  "Punta Arenas",
 ]
 
 export const chileanUniversities = [

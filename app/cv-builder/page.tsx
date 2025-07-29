@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { FileText, Eye, Lightbulb, CheckCircle } from "lucide-react"
 import CVForm from "@/components/cv-form/cv-form"
 import { type CVData, formatDate } from "@/lib/cv-types"
@@ -13,40 +13,39 @@ import { Suspense } from "react"
 
 function CVBuilderLoading() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-8">
-        <Skeleton className="h-8 w-64 mb-2" />
-        <Skeleton className="h-4 w-96" />
-      </div>
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-2 w-full" />
+          </div>
+        </CardHeader>
+      </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <Skeleton className="h-10 w-full" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                </div>
-                <Skeleton className="h-20 w-full" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
-          <Card>
-            <CardContent className="p-6">
-              <Skeleton className="h-6 w-20 mb-4" />
-              <div className="space-y-3">
-                <Skeleton className="h-10 w-full" />
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="h-4 w-72" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="grid grid-cols-2 gap-4">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <Skeleton className="h-24 w-full" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
@@ -690,8 +689,44 @@ export default function CVBuilderPage() {
   ]
 
   return (
-    <Suspense fallback={<CVBuilderLoading />}>
-      <CVForm initialData={cvData} onSave={handleSave} isLoading={isLoading} />
-    </Suspense>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto py-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Constructor de CV Profesional</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Crea tu currículum vitae profesional con nuestra herramienta intuitiva. Incluye todas las secciones
+            importantes y genera un PDF listo para enviar.
+          </p>
+        </div>
+
+        <Suspense fallback={<CVBuilderLoading />}>
+          <CVForm initialData={cvData} onSave={handleSave} isLoading={isLoading} />
+        </Suspense>
+
+        <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-2xl font-semibold mb-4">Consejos para un CV exitoso</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-lg mb-2">📝 Contenido</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Mantén tu CV en máximo 2 páginas</li>
+                <li>• Usa verbos de acción para describir logros</li>
+                <li>• Incluye números y métricas cuando sea posible</li>
+                <li>• Adapta tu CV para cada posición</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">🎨 Formato</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Usa un diseño limpio y profesional</li>
+                <li>• Mantén consistencia en fuentes y espaciado</li>
+                <li>• Revisa ortografía y gramática</li>
+                <li>• Guarda en formato PDF para enviar</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
