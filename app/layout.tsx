@@ -7,13 +7,13 @@ import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/auth-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
 import { LanguageProvider } from "@/contexts/language-context"
-import Header from "@/components/header"
+import { Navigation } from "@/components/navigation"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Plataforma de Desarrollo Profesional",
-  description: "Tu compañero integral para el crecimiento profesional en Chile",
+  description: "Tu plataforma integral para el desarrollo de carrera profesional",
     generator: 'v0.dev'
 }
 
@@ -30,8 +30,8 @@ export default function RootLayout({
             <AuthProvider>
               <NotificationsProvider>
                 <div className="min-h-screen bg-background">
-                  <Header />
-                  <main className="flex-1">{children}</main>
+                  <Navigation />
+                  <main className="pt-16">{children}</main>
                 </div>
                 <Toaster />
               </NotificationsProvider>

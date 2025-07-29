@@ -1,11 +1,9 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,30 +11,29 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { SearchDialog } from "@/components/search-dialog"
+import { NotificationsBell } from "@/components/notifications-bell"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useAuth } from "@/contexts/auth-context"
+import { cn } from "@/lib/utils"
 import {
   Menu,
   Home,
   User,
   FileText,
-  Search,
-  BookOpen,
-  Target,
-  Calendar,
-  Brain,
-  Code,
-  MessageSquare,
-  GraduationCap,
-  Building,
-  Users,
-  Trophy,
-  Zap,
-  Heart,
-  Lightbulb,
-  BarChart3,
-  UserCheck,
   Briefcase,
+  MessageSquare,
+  BookOpen,
+  Calendar,
+  Target,
+  GraduationCap,
+  Brain,
+  Sparkles,
+  Settings,
+  LogOut,
 } from "lucide-react"
 
 const testItems = [
@@ -46,26 +43,26 @@ const testItems = [
       {
         title: "Test de Personalidad",
         href: "/personality-test",
-        description: "Descubre tu tipo de personalidad y características",
+        description: "Descubre tu tipo de personalidad",
         icon: Brain,
       },
       {
         title: "Test DISC",
         href: "/disc-test",
-        description: "Evalúa tu estilo de comportamiento y comunicación",
-        icon: Users,
+        description: "Evalúa tu estilo de comportamiento",
+        icon: User,
       },
       {
-        title: "Test Big Five",
+        title: "Big Five",
         href: "/big-five-test",
-        description: "Análisis completo de los cinco grandes factores de personalidad",
-        icon: Trophy,
+        description: "Los cinco grandes factores de personalidad",
+        icon: Brain,
       },
       {
         title: "Habilidades Blandas",
         href: "/soft-skills-test",
         description: "Evalúa tus competencias interpersonales",
-        icon: Heart,
+        icon: MessageSquare,
       },
     ],
   },
@@ -75,60 +72,44 @@ const testItems = [
       {
         title: "Habilidades Técnicas",
         href: "/technical-skills-test",
-        description: "Evalúa tus competencias técnicas específicas",
-        icon: Code,
+        description: "Evalúa tus competencias técnicas",
+        icon: Settings,
       },
       {
         title: "Test Adaptativo",
         href: "/adaptive-skills-test",
-        description: "Evaluación que se adapta a tu nivel de conocimiento",
-        icon: Zap,
-      },
-      {
-        title: "Evaluación de Habilidades",
-        href: "/skills-assessment",
-        description: "Análisis integral de tus capacidades profesionales",
-        icon: BarChart3,
+        description: "Evaluación que se adapta a tu nivel",
+        icon: Sparkles,
       },
     ],
   },
 ]
 
-const educationItems = [
-  {
-    title: "Carreras UDD",
-    href: "/udd-careers",
-    description: "Explora las carreras disponibles en la Universidad del Desarrollo",
-    icon: GraduationCap,
-  },
-  {
-    title: "Bachillerato",
-    href: "/bachillerato",
-    description: "Información sobre el programa de Bachillerato",
-    icon: Building,
-  },
-]
-
-const mainNavItems = [
+const navigationItems = [
   {
     title: "Dashboard",
     href: "/dashboard",
     icon: Home,
   },
   {
-    title: "Perfil",
-    href: "/profile",
-    icon: User,
-  },
-  {
-    title: "Constructor CV",
+    title: "CV Builder",
     href: "/cv-builder",
     icon: FileText,
   },
   {
     title: "Búsqueda de Empleo",
     href: "/job-search",
-    icon: Search,
+    icon: Briefcase,
+  },
+  {
+    title: "Coach de Carrera",
+    href: "/career-coach",
+    icon: MessageSquare,
+  },
+  {
+    title: "Simulador de Entrevistas",
+    href: "/interview-simulator",
+    icon: User,
   },
   {
     title: "Biblioteca",
@@ -136,98 +117,140 @@ const mainNavItems = [
     icon: BookOpen,
   },
   {
-    title: "Metas",
-    href: "/goals",
-    icon: Target,
-  },
-  {
     title: "Calendario",
     href: "/calendar",
     icon: Calendar,
   },
   {
-    title: "Coach Profesional",
-    href: "/career-coach",
-    icon: MessageSquare,
+    title: "Metas",
+    href: "/goals",
+    icon: Target,
+  },
+]
+
+const educationItems = [
+  {
+    title: "Carreras UDD",
+    href: "/udd-careers",
+    description: "Explora las carreras de la Universidad del Desarrollo",
+    icon: GraduationCap,
   },
   {
-    title: "Simulador de Entrevistas",
-    href: "/interview-simulator",
-    icon: UserCheck,
-  },
-  {
-    title: "Sistema Mirix",
-    href: "/mirix",
-    icon: Lightbulb,
+    title: "Bachillerato",
+    href: "/bachillerato",
+    description: "Información sobre programas de bachillerato",
+    icon: BookOpen,
   },
 ]
 
 export function Navigation() {
+  const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
-  const [isOpen, setIsOpen] = React.useState(false)
+  const { user, signOut } = useAuth()
+
+  const isActive = (href: string) => pathname === href
 
   return (
-    <div className="flex items-center space-x-4">
-      {/* Desktop Navigation */}
-      <NavigationMenu className="hidden md:flex">
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="/dashboard" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Home className="mr-2 h-4 w-4" />
-                Dashboard
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center">
+        {/* Logo */}
+        <div className="mr-4 hidden md:flex">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <Brain className="h-6 w-6 text-primary" />
+            <span className="hidden font-bold sm:inline-block">CareerDev</span>
+          </Link>
+        </div>
 
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              <Brain className="mr-2 h-4 w-4" />
-              Tests
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="grid w-[600px] gap-3 p-4 md:grid-cols-2">
-                {testItems.map((category) => (
-                  <div key={category.title} className="space-y-3">
-                    <h4 className="text-sm font-medium leading-none">{category.title}</h4>
-                    {category.items.map((item) => (
-                      <NavigationMenuLink key={item.href} asChild>
-                        <Link
-                          href={item.href}
-                          className={cn(
-                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                            pathname === item.href && "bg-accent text-accent-foreground",
-                          )}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <item.icon className="h-4 w-4" />
-                            <div className="text-sm font-medium leading-none">{item.title}</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
-                        </Link>
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden md:flex">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/dashboard" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/dashboard") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Dashboard
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              <GraduationCap className="mr-2 h-4 w-4" />
-              Educación
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="grid w-[400px] gap-3 p-4">
-                {educationItems.map((item) => (
-                  <NavigationMenuLink key={item.href} asChild>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <Brain className="mr-2 h-4 w-4" />
+                Tests
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
+                  {testItems.map((category) => (
+                    <div key={category.title} className="space-y-3">
+                      <h4 className="text-sm font-medium leading-none text-muted-foreground">{category.title}</h4>
+                      <div className="space-y-2">
+                        {category.items.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <item.icon className="h-4 w-4" />
+                              <div className="text-sm font-medium leading-none">{item.title}</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/cv-builder" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/cv-builder") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <FileText className="mr-2 h-4 w-4" />
+                  CV Builder
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/job-search" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/job-search") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Briefcase className="mr-2 h-4 w-4" />
+                  Empleos
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <GraduationCap className="mr-2 h-4 w-4" />
+                Educación
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid gap-3 p-6 md:w-[400px]">
+                  {educationItems.map((item) => (
                     <Link
+                      key={item.href}
                       href={item.href}
-                      className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        pathname === item.href && "bg-accent text-accent-foreground",
-                      )}
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                     >
                       <div className="flex items-center space-x-2">
                         <item.icon className="h-4 w-4" />
@@ -235,143 +258,134 @@ export function Navigation() {
                       </div>
                       <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
                     </Link>
-                  </NavigationMenuLink>
-                ))}
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
-          <NavigationMenuItem>
-            <Link href="/cv-builder" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <FileText className="mr-2 h-4 w-4" />
-                CV Builder
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+        {/* Right side items */}
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            <SearchDialog />
+          </div>
+          <nav className="flex items-center space-x-2">
+            {user && <NotificationsBell />}
+            <ThemeToggle />
+            <LanguageToggle />
 
-          <NavigationMenuItem>
-            <Link href="/job-search" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Briefcase className="mr-2 h-4 w-4" />
-                Empleos
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/career-coach" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Coach
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-
-      {/* Mobile Navigation */}
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-          <nav className="flex flex-col space-y-4">
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">Principal</h4>
-              {mainNavItems.slice(0, 4).map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">Tests Psicométricos</h4>
-              {testItems[0].items.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">Tests Técnicos</h4>
-              {testItems[1].items.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">Educación</h4>
-              {educationItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">Herramientas</h4>
-              {mainNavItems.slice(4).map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </Link>
-              ))}
-            </div>
+            {user ? (
+              <Button variant="ghost" size="sm" onClick={() => signOut()} className="hidden md:flex">
+                <LogOut className="h-4 w-4 mr-2" />
+                Salir
+              </Button>
+            ) : (
+              <Button asChild size="sm" className="hidden md:flex">
+                <Link href="/auth/login">Iniciar Sesión</Link>
+              </Button>
+            )}
           </nav>
-        </SheetContent>
-      </Sheet>
-    </div>
+        </div>
+
+        {/* Mobile menu */}
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+            >
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <SheetHeader>
+              <SheetTitle className="flex items-center space-x-2">
+                <Brain className="h-6 w-6 text-primary" />
+                <span>CareerDev</span>
+              </SheetTitle>
+              <SheetDescription>Tu plataforma de desarrollo profesional</SheetDescription>
+            </SheetHeader>
+            <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+              <div className="flex flex-col space-y-3">
+                {navigationItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary",
+                      isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                    )}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </Link>
+                ))}
+
+                <div className="pt-4">
+                  <h4 className="mb-2 text-sm font-semibold">Tests</h4>
+                  {testItems.map((category) => (
+                    <div key={category.title} className="mb-4">
+                      <h5 className="mb-2 text-xs font-medium text-muted-foreground">{category.title}</h5>
+                      {category.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
+                            isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                          )}
+                        >
+                          <item.icon className="h-3 w-3" />
+                          <span>{item.title}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4">
+                  <h4 className="mb-2 text-sm font-semibold">Educación</h4>
+                  {educationItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
+                        isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                      )}
+                    >
+                      <item.icon className="h-3 w-3" />
+                      <span>{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                {user && (
+                  <div className="pt-4 border-t">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        signOut()
+                        setIsOpen(false)
+                      }}
+                      className="w-full justify-start"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Salir
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </header>
   )
 }
