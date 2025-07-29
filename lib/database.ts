@@ -814,11 +814,42 @@ export async function searchJobs(query: string, filters: any) {
 }
 
 export async function getUserCV(userId: string) {
-  return { data: demoCVData, error: null }
+  try {
+    const { data, error } = await supabase
+      .from("cv_data")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("is_active", true)
+      .single()
+
+    if (error && error.code !== "PGRST116") {
+      return { data: null, error }
+    }
+
+    return { data: data?.content || demoCVData, error: null }
+  } catch (error) {
+    return { data: demoCVData, error: null }
+  }
 }
 
 export async function saveUserCV(userId: string, cvData: any) {
-  return { data: cvData, error: null }
+  try {
+    const { data, error } = await supabase
+      .from("cv_data")
+      .upsert({
+        user_id: userId,
+        title: "Mi CV Profesional",
+        template: "modern",
+        content: cvData,
+        is_active: true,
+      })
+      .select()
+      .single()
+
+    return { data: data?.content || cvData, error }
+  } catch (error) {
+    return { data: cvData, error }
+  }
 }
 
 // Library functions

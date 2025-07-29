@@ -2,36 +2,35 @@ export interface PersonalInfo {
   fullName: string
   email: string
   phone: string
-  location: string
-  jobTitle?: string
-  linkedin?: string
-  github?: string
+  address: string
+  city: string
+  country: string
+  linkedIn?: string
   website?: string
-  summary?: string
+  summary: string
+}
+
+export interface WorkExperience {
+  id: string
+  company: string
+  position: string
+  startDate: string
+  endDate: string
+  current: boolean
+  description: string
+  achievements: string[]
 }
 
 export interface Education {
   id: string
-  degree: string
   institution: string
-  location: string
+  degree: string
+  field: string
   startDate: string
   endDate: string
+  current: boolean
   gpa?: string
   description?: string
-  achievements?: string[]
-}
-
-export interface Experience {
-  id: string
-  jobTitle: string
-  company: string
-  location: string
-  startDate: string
-  endDate?: string
-  description: string
-  achievements?: string[]
-  technologies?: string[]
 }
 
 export interface Project {
@@ -39,41 +38,38 @@ export interface Project {
   name: string
   description: string
   technologies: string[]
+  startDate: string
+  endDate: string
   url?: string
-  githubUrl?: string
-  role?: string
-  duration?: number
+  github?: string
 }
 
 export interface Skill {
   id: string
   name: string
-  level: number // 0-100
-  category: string
-  yearsOfExperience?: number
-  certified?: boolean
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert"
+  category: "Technical" | "Soft" | "Language" | "Tool"
 }
 
 export interface Language {
   id: string
   name: string
-  proficiency: string // 'Básico', 'Intermedio', 'Avanzado', 'Profesional', 'Nativo'
-  certified?: boolean
+  level: "Basic" | "Conversational" | "Fluent" | "Native"
 }
 
 export interface Certification {
   id: string
   name: string
   issuer: string
-  issueDate: string
+  date: string
   expiryDate?: string
   credentialId?: string
   url?: string
 }
 
 export interface CVData {
-  personalInfo: PersonalInfo
-  experience: Experience[]
+  personal: PersonalInfo
+  experience: WorkExperience[]
   education: Education[]
   projects: Project[]
   skills: Skill[]
@@ -87,173 +83,229 @@ export interface CVTemplate {
   description: string
   preview: string
   category: "modern" | "classic" | "creative" | "minimal"
-}
-
-// Utility functions
-export const generateId = (): string => {
-  return Math.random().toString(36).substr(2, 9)
-}
-
-export const calculateCompletionPercentage = (cvData: CVData): number => {
-  let totalFields = 0
-  let completedFields = 0
-
-  // Personal Info (required fields)
-  const requiredPersonalFields = ["fullName", "email", "phone", "location"]
-  requiredPersonalFields.forEach((field) => {
-    totalFields++
-    if (cvData.personalInfo[field as keyof PersonalInfo]) {
-      completedFields++
-    }
-  })
-
-  // Optional personal fields
-  const optionalPersonalFields = ["jobTitle", "summary", "linkedin", "github", "website"]
-  optionalPersonalFields.forEach((field) => {
-    totalFields++
-    if (cvData.personalInfo[field as keyof PersonalInfo]) {
-      completedFields++
-    }
-  })
-
-  // Experience (at least 1)
-  totalFields += 2
-  if (cvData.experience.length > 0) {
-    completedFields++
-    if (cvData.experience.some((exp) => exp.jobTitle && exp.company && exp.description)) {
-      completedFields++
-    }
-  }
-
-  // Education (at least 1)
-  totalFields += 2
-  if (cvData.education.length > 0) {
-    completedFields++
-    if (cvData.education.some((edu) => edu.degree && edu.institution)) {
-      completedFields++
-    }
-  }
-
-  // Skills (at least 3)
-  totalFields++
-  if (cvData.skills.length >= 3) {
-    completedFields++
-  }
-
-  // Languages (at least 1)
-  totalFields++
-  if (cvData.languages.length > 0) {
-    completedFields++
-  }
-
-  return Math.round((completedFields / totalFields) * 100)
-}
-
-export const validateCVData = (cvData: CVData): { isValid: boolean; errors: string[] } => {
-  const errors: string[] = []
-
-  // Validate required personal info
-  if (!cvData.personalInfo.fullName) errors.push("Nombre completo es requerido")
-  if (!cvData.personalInfo.email) errors.push("Email es requerido")
-  if (!cvData.personalInfo.phone) errors.push("Teléfono es requerido")
-  if (!cvData.personalInfo.location) errors.push("Ubicación es requerida")
-
-  // Validate email format
-  if (cvData.personalInfo.email && !/\S+@\S+\.\S+/.test(cvData.personalInfo.email)) {
-    errors.push("Email debe tener un formato válido")
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors,
+  colors: {
+    primary: string
+    secondary: string
+    accent: string
+    text: string
+    background: string
   }
 }
 
-export const getDefaultCVData = (): CVData => ({
-  personalInfo: {
-    fullName: "",
-    email: "",
-    phone: "",
-    location: "",
-    jobTitle: "",
-    linkedin: "",
-    github: "",
-    website: "",
-    summary: "",
-  },
-  experience: [],
-  education: [],
-  projects: [],
-  skills: [],
-  languages: [],
-  certifications: [],
-})
-
-// CV Templates
 export const CV_TEMPLATES: CVTemplate[] = [
   {
     id: "modern",
-    name: "Moderno",
-    description: "Diseño limpio y profesional con acentos de color",
-    preview: "/cv-templates/modern-preview.png",
+    name: "Modern Professional",
+    description: "Clean and contemporary design perfect for tech and business roles",
+    preview: "/templates/modern-preview.png",
     category: "modern",
+    colors: {
+      primary: "#2563eb",
+      secondary: "#64748b",
+      accent: "#0ea5e9",
+      text: "#1e293b",
+      background: "#ffffff",
+    },
   },
   {
     id: "classic",
-    name: "Clásico",
-    description: "Formato tradicional y conservador",
-    preview: "/cv-templates/classic-preview.png",
+    name: "Classic Traditional",
+    description: "Timeless design suitable for conservative industries",
+    preview: "/templates/classic-preview.png",
     category: "classic",
+    colors: {
+      primary: "#1f2937",
+      secondary: "#6b7280",
+      accent: "#374151",
+      text: "#111827",
+      background: "#ffffff",
+    },
   },
   {
     id: "creative",
-    name: "Creativo",
-    description: "Diseño innovador para profesionales creativos",
-    preview: "/cv-templates/creative-preview.png",
+    name: "Creative Bold",
+    description: "Eye-catching design for creative professionals",
+    preview: "/templates/creative-preview.png",
     category: "creative",
+    colors: {
+      primary: "#7c3aed",
+      secondary: "#a855f7",
+      accent: "#c084fc",
+      text: "#1f2937",
+      background: "#ffffff",
+    },
   },
   {
     id: "minimal",
-    name: "Minimalista",
-    description: "Diseño simple y elegante",
-    preview: "/cv-templates/minimal-preview.png",
+    name: "Minimal Clean",
+    description: "Simple and elegant design focusing on content",
+    preview: "/templates/minimal-preview.png",
     category: "minimal",
+    colors: {
+      primary: "#059669",
+      secondary: "#6b7280",
+      accent: "#10b981",
+      text: "#374151",
+      background: "#ffffff",
+    },
   },
 ]
 
-// Personality Test Types
-export interface PersonalityTestResult {
-  id: string
-  userId: string
-  testType: "big_five" | "disc" | "mbti" | "values"
-  results: any
-  rawAnswers: any
-  aiAnalysis?: string
-  completedAt: string
-  createdAt: string
+export const SKILL_LEVELS = ["Beginner", "Intermediate", "Advanced", "Expert"] as const
+export const LANGUAGE_LEVELS = ["Basic", "Conversational", "Fluent", "Native"] as const
+export const SKILL_CATEGORIES = ["Technical", "Soft", "Language", "Tool"] as const
+
+export const CHILEAN_CITIES = [
+  "Santiago",
+  "Valparaíso",
+  "Concepción",
+  "La Serena",
+  "Antofagasta",
+  "Temuco",
+  "Rancagua",
+  "Talca",
+  "Arica",
+  "Chillán",
+  "Iquique",
+  "Los Ángeles",
+  "Puerto Montt",
+  "Calama",
+  "Copiapó",
+  "Osorno",
+  "Quillota",
+  "Valdivia",
+  "Punta Arenas",
+  "San Antonio",
+]
+
+export const COMMON_SKILLS = [
+  // Technical Skills
+  "JavaScript",
+  "Python",
+  "Java",
+  "React",
+  "Node.js",
+  "SQL",
+  "HTML/CSS",
+  "TypeScript",
+  "Angular",
+  "Vue.js",
+  "PHP",
+  "C#",
+  "Ruby",
+  "Go",
+  "Swift",
+  "Kotlin",
+  "Flutter",
+  "React Native",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "Azure",
+  "Google Cloud",
+  "Git",
+  "Jenkins",
+  "MongoDB",
+  "PostgreSQL",
+  "MySQL",
+  "Redis",
+  "Elasticsearch",
+  "GraphQL",
+  "REST APIs",
+  "Microservices",
+
+  // Soft Skills
+  "Leadership",
+  "Communication",
+  "Problem Solving",
+  "Team Collaboration",
+  "Project Management",
+  "Time Management",
+  "Critical Thinking",
+  "Adaptability",
+  "Creativity",
+  "Analytical Thinking",
+  "Negotiation",
+  "Presentation Skills",
+  "Customer Service",
+  "Conflict Resolution",
+  "Strategic Planning",
+
+  // Tools
+  "Microsoft Office",
+  "Google Workspace",
+  "Slack",
+  "Trello",
+  "Jira",
+  "Confluence",
+  "Figma",
+  "Adobe Creative Suite",
+  "Sketch",
+  "InVision",
+  "Tableau",
+  "Power BI",
+  "Salesforce",
+  "HubSpot",
+  "Zoom",
+  "Teams",
+]
+
+export function generateId(): string {
+  return Math.random().toString(36).substr(2, 9)
 }
 
-export interface CoachMemory {
-  id: string
-  userId: string
-  memoryType: "personality" | "preferences" | "goals" | "history"
-  key: string
-  value: any
-  context?: string
-  createdAt: string
-  updatedAt: string
+export function formatDate(date: string): string {
+  if (!date) return ""
+  const d = new Date(date)
+  return d.toLocaleDateString("es-CL", { year: "numeric", month: "long" })
 }
 
-export interface TestRecommendation {
-  id: string
-  userId: string
-  testResultId: string
-  recommendationType: "book" | "course" | "skill" | "career"
-  itemId?: string
-  title: string
-  description?: string
-  reason?: string
-  priority: 1 | 2 | 3
-  status: "pending" | "viewed" | "completed" | "dismissed"
-  createdAt: string
+export function calculateExperience(experiences: WorkExperience[]): number {
+  let totalMonths = 0
+
+  experiences.forEach((exp) => {
+    const start = new Date(exp.startDate)
+    const end = exp.current ? new Date() : new Date(exp.endDate)
+    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
+    totalMonths += Math.max(0, months)
+  })
+
+  return Math.round((totalMonths / 12) * 10) / 10 // Round to 1 decimal place
+}
+
+export function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+export function validatePhone(phone: string): boolean {
+  // Chilean phone number validation (basic)
+  const phoneRegex = /^(\+56|56)?[2-9]\d{8}$/
+  return phoneRegex.test(phone.replace(/\s/g, ""))
+}
+
+export function getTemplateById(id: string): CVTemplate | undefined {
+  return CV_TEMPLATES.find((template) => template.id === id)
+}
+
+export function getDefaultCVData(): CVData {
+  return {
+    personal: {
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      country: "Chile",
+      linkedIn: "",
+      website: "",
+      summary: "",
+    },
+    experience: [],
+    education: [],
+    projects: [],
+    skills: [],
+    languages: [],
+    certifications: [],
+  }
 }
