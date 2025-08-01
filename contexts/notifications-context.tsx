@@ -23,7 +23,16 @@ interface NotificationsContextType {
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: "1",
+      title: "¡Bienvenido!",
+      message: "Bienvenido a la plataforma Despega tu Carrera",
+      type: "info",
+      timestamp: new Date(),
+      read: false,
+    },
+  ])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 

@@ -1,5 +1,3 @@
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -759,49 +757,8 @@ export async function generateCoachResponse(
   conversationHistory: CoachingMessage[],
 ): Promise<string> {
   try {
-    // Check if we have OpenAI API key
-    if (!process.env.OPENAI_API_KEY) {
-      return getDemoResponse(userMessage)
-    }
-
-    const systemPrompt = `Eres un AI Career Coach especializado en el mercado laboral chileno. Tu objetivo es ayudar a profesionales a desarrollar sus carreras, encontrar empleo y crecer profesionalmente en Chile.
-
-Contexto del mercado chileno:
-- Principales ciudades: Santiago, Valparaíso, Concepción
-- Sectores en crecimiento: Tecnología, Minería, Servicios Financieros, Retail
-- Empresas tech destacadas: NotCo, Fintual, Cornershop, Buk, Betterfly, Chiper
-- Salarios típicos en tech: $2.000.000 - $5.000.000 CLP
-- Cultura laboral: Formal pero en transición hacia más flexibilidad
-- Portales de empleo: Trabajando.com, GetOnBoard, Laborum
-
-Instrucciones:
-1. Responde en español chileno natural
-2. Proporciona consejos específicos para el mercado chileno
-3. Menciona empresas, salarios y oportunidades reales de Chile
-4. Sé empático y motivacional
-5. Ofrece pasos concretos y accionables
-6. Mantén un tono profesional pero cercano
-7. Considera el contexto de la conversación previa
-
-Responde de manera concisa pero útil (máximo 250 palabras).`
-
-    const messages = [
-      { role: "system" as const, content: systemPrompt },
-      ...conversationHistory.slice(-10).map((msg) => ({
-        role: msg.role as "user" | "assistant",
-        content: msg.content,
-      })),
-      { role: "user" as const, content: userMessage },
-    ]
-
-    const { text } = await generateText({
-      model: openai("gpt-4o-mini"),
-      messages,
-      maxTokens: 350,
-      temperature: 0.7,
-    })
-
-    return text
+    // Since we removed AI SDK, return demo responses
+    return getDemoResponse(userMessage)
   } catch (error) {
     console.error("Error generating coach response:", error)
     return getDemoResponse(userMessage)
@@ -810,42 +767,8 @@ Responde de manera concisa pero útil (máximo 250 palabras).`
 
 export async function generateCareerAdvice(userMessage: string, userId?: string): Promise<string> {
   try {
-    // Check if we have OpenAI API key
-    if (!process.env.OPENAI_API_KEY) {
-      return getDemoResponse(userMessage)
-    }
-
-    const systemPrompt = `Eres un AI Career Coach especializado en el mercado laboral chileno. Proporciona consejos de carrera personalizados.
-
-Contexto del mercado chileno:
-- Principales ciudades: Santiago, Valparaíso, Concepción
-- Sectores en crecimiento: Tecnología, Minería, Servicios Financieros, Retail
-- Empresas tech destacadas: NotCo, Fintual, Cornershop, Buk, Betterfly, Chiper
-- Salarios típicos en tech: $2.000.000 - $5.000.000 CLP
-- Cultura laboral: Formal pero en transición hacia más flexibilidad
-- Portales de empleo: Trabajando.com, GetOnBoard, Laborum
-
-Instrucciones:
-1. Responde en español chileno natural
-2. Proporciona consejos específicos para el mercado chileno
-3. Menciona empresas, salarios y oportunidades reales de Chile
-4. Sé empático y motivacional
-5. Ofrece pasos concretos y accionables
-6. Mantén un tono profesional pero cercano
-
-Responde de manera estructurada y útil (máximo 300 palabras).`
-
-    const { text } = await generateText({
-      model: openai("gpt-4o-mini"),
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userMessage },
-      ],
-      maxTokens: 400,
-      temperature: 0.7,
-    })
-
-    return text
+    // Since we removed AI SDK, return demo responses
+    return getDemoResponse(userMessage)
   } catch (error) {
     console.error("Error generating career advice:", error)
     return getDemoResponse(userMessage)

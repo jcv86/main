@@ -2,13 +2,11 @@ import { type NextRequest, NextResponse } from "next/server"
 import {
   getConversationHistory,
   saveMessage,
-  generateCoachResponse,
   startNewSession,
   getUserSessions,
   searchConversations,
 } from "@/lib/ai-coach"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase"
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +22,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Create Supabase client for auth
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = createServerClient()
 
     // Get current user from auth (but don't require it for demo mode)
     let currentUserId = userId
@@ -103,32 +101,19 @@ export async function POST(request: NextRequest) {
     let response: string
     let finalSessionId = sessionId
 
-    // Check if OpenAI API key is available
-    if (!process.env.OPENAI_API_KEY) {
-      // Return a demo response when API key is not available
-      const demoResponses = [
-        "¡Hola! Soy tu AI Career Coach. Aunque estoy en modo demo, puedo ayudarte con consejos generales sobre desarrollo profesional en Chile. ¿En qué área te gustaría enfocar tu carrera?",
-        "Entiendo que buscas orientación profesional. Para el mercado chileno, te recomiendo enfocarte en desarrollar habilidades técnicas como JavaScript, Python o AWS. Empresas como NotCo y Fintual están creciendo rápidamente.",
-        "Para el mercado laboral chileno, es importante mantenerse actualizado con las tendencias tecnológicas. Te sugiero explorar oportunidades en startups como Buk, Betterfly o Chiper. ¿Te gustaría que hablemos sobre estrategias específicas?",
-        "El networking es fundamental en Chile. Te sugiero participar en eventos como 9punto5, mantener un perfil activo en LinkedIn, y considerar portales especializados como GetOnBoard. ¿Necesitas ayuda con algún aspecto específico?",
-      ]
+    // Return a demo response since AI SDK is removed
+    const demoResponses = [
+      "¡Hola! Soy tu AI Career Coach. Aunque estoy en modo demo, puedo ayudarte con consejos generales sobre desarrollo profesional en Chile. ¿En qué área te gustaría enfocar tu carrera?",
+      "Entiendo que buscas orientación profesional. Para el mercado chileno, te recomiendo enfocarte en desarrollar habilidades técnicas como JavaScript, Python o AWS. Empresas como NotCo y Fintual están creciendo rápidamente.",
+      "Para el mercado laboral chileno, es importante mantenerse actualizado con las tendencias tecnológicas. Te sugiero explorar oportunidades en startups como Buk, Betterfly o Chiper. ¿Te gustaría que hablemos sobre estrategias específicas?",
+      "El networking es fundamental en Chile. Te sugiero participar en eventos como 9punto5, mantener un perfil activo en LinkedIn, y considerar portales especializados como GetOnBoard. ¿Necesitas ayuda con algún aspecto específico?",
+    ]
 
-      response = demoResponses[Math.floor(Math.random() * demoResponses.length)]
+    response = demoResponses[Math.floor(Math.random() * demoResponses.length)]
 
-      // Generate demo session ID if none provided
-      if (!finalSessionId) {
-        finalSessionId = crypto.randomUUID()
-      }
-    } else {
-      // Use AI to generate response
-      response = await generateCoachResponse(message, conversationHistory)
-
-      // Generate session ID if none provided
-      if (!finalSessionId && currentUserId) {
-        finalSessionId = await startNewSession(currentUserId)
-      } else if (!finalSessionId) {
-        finalSessionId = crypto.randomUUID()
-      }
+    // Generate demo session ID if none provided
+    if (!finalSessionId) {
+      finalSessionId = crypto.randomUUID()
     }
 
     // Save messages if we have a userId and sessionId
@@ -144,7 +129,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       response,
-      isDemo: !process.env.OPENAI_API_KEY || !currentUserId,
+      isDemo: true,
       sessionId: finalSessionId,
       timestamp: new Date().toISOString(),
     })
@@ -177,7 +162,7 @@ export async function GET(request: NextRequest) {
     console.log("GET request received:", { action, userId, query, sessionId })
 
     // Create Supabase client for auth
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = createServerClient()
 
     // Get current user from auth (but don't require it)
     let currentUserId = userId

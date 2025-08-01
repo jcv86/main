@@ -50,6 +50,28 @@ const getCuratedRecommendations = (userLevel: number, booksRead: number): AIReco
       cover_url: "/books/7-habits.jpg",
       is_recommended: true,
     },
+    {
+      id: "4",
+      title: "De Buena a Grandiosa",
+      author: "Jim Collins",
+      category: "Negocios",
+      difficulty: "Avanzado",
+      rating: 4.7,
+      reading_time: "4h 50min",
+      cover_url: "/books/good-to-great.jpg",
+      is_recommended: true,
+    },
+    {
+      id: "5",
+      title: "Conversaciones Cruciales",
+      author: "Kerry Patterson, Joseph Grenny, Ron McMillan, Al Switzler",
+      category: "Habilidades Blandas",
+      difficulty: "Intermedio",
+      rating: 4.6,
+      reading_time: "3h 40min",
+      cover_url: "/books/crucial-conversations.jpg",
+      is_recommended: true,
+    },
   ]
 
   const recommendations: AIRecommendation[] = []
@@ -69,6 +91,13 @@ const getCuratedRecommendations = (userLevel: number, booksRead: number): AIReco
       priority: "high",
       expectedBenefit: "Desarrollarás una mentalidad proactiva esencial para el mercado laboral chileno",
     })
+
+    recommendations.push({
+      book: allBooks[4], // Conversaciones Cruciales
+      reason: "Habilidades de comunicación críticas para el ambiente laboral chileno",
+      priority: "medium",
+      expectedBenefit: "Mejorarás tu capacidad de comunicación en contextos profesionales chilenos",
+    })
   }
   // Intermediate recommendations (Level 3-4, 3-5 books read)
   else if (userLevel <= 4 || booksRead <= 5) {
@@ -77,6 +106,13 @@ const getCuratedRecommendations = (userLevel: number, booksRead: number): AIReco
       reason: "Esencial para destacar en el competitivo mercado tech chileno",
       priority: "high",
       expectedBenefit: "Desarrollarás la capacidad de concentración valorada en startups chilenas",
+    })
+
+    recommendations.push({
+      book: allBooks[3], // De Buena a Grandiosa
+      reason: "Principios de liderazgo aplicables en empresas chilenas en crecimiento",
+      priority: "medium",
+      expectedBenefit: "Comprenderás cómo las empresas chilenas exitosas logran la excelencia",
     })
 
     recommendations.push({
@@ -89,10 +125,24 @@ const getCuratedRecommendations = (userLevel: number, booksRead: number): AIReco
   // Advanced recommendations (Level 5+, 6+ books read)
   else {
     recommendations.push({
+      book: allBooks[3], // De Buena a Grandiosa
+      reason: "Momento ideal para enfocarte en liderazgo y gestión empresarial",
+      priority: "high",
+      expectedBenefit: "Desarrollarás habilidades de liderazgo para roles senior en Chile",
+    })
+
+    recommendations.push({
       book: allBooks[1], // Trabajo Profundo
       reason: "Perfecciona tu capacidad de trabajo de alto valor en la economía del conocimiento",
       priority: "medium",
       expectedBenefit: "Maximizarás tu impacto profesional en roles de alta responsabilidad",
+    })
+
+    recommendations.push({
+      book: allBooks[4], // Conversaciones Cruciales
+      reason: "Habilidades avanzadas de comunicación para liderazgo efectivo",
+      priority: "medium",
+      expectedBenefit: "Liderarás equipos y proyectos complejos con comunicación efectiva",
     })
   }
 
