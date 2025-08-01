@@ -94,6 +94,11 @@ export function createServerClient() {
     : (createMockClient() as any)
 }
 
+// Server-side client for admin operations
+export const createAdminClient = () => {
+  return createSupabaseClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+}
+
 // Database types
 export interface Database {
   public: {

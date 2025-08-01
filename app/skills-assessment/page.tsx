@@ -107,7 +107,6 @@ const mockQuestions: Question[] = [
     options: [
       "Advanced Computer Information Database",
       "Atomicity, Consistency, Isolation, Durability",
-      "Atomicity, Consistency, Isolation, Durability",
       "Automatic Code Integration Development",
       "Application Control Interface Design",
     ],
@@ -171,7 +170,7 @@ export default function SkillsAssessmentPage() {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
   const [showResults, setShowResults] = useState(false)
   const [results, setResults] = useState<AssessmentResult[]>([])
-  const [timeRemaining, setTimeRemaining] = useState(30 * 60) // 30 minutos
+  const [timeRemaining, setTimeRemaining] = useState(30 * 60) // 30 minutes
   const [isActive, setIsActive] = useState(false)
   const [showExplanation, setShowExplanation] = useState(false)
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)

@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Slider } from "@/components/ui/slider"
 import {
   Brain,
   Heart,
@@ -17,8 +19,17 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckCircle,
+  Mic,
+  MicOff,
+  Trash2,
+  Volume2,
+  AlertCircle,
+  Settings,
+  Keyboard,
+  Pause,
+  RotateCcw,
+  Info,
   HelpCircle,
-  Lightbulb,
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -510,151 +521,152 @@ const useTextToSpeech = () => {
   return { speak, stop, isSpeaking, isSupported }
 }
 
-interface Question {
-  id: number
-  text: string
-  trait: "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism"
-  reverse?: boolean
-}
-
-const questions: Question[] = [
-  // Openness (Apertura)
-  { id: 1, text: "Me gusta explorar nuevas ideas y conceptos en mi trabajo", trait: "openness" },
-  { id: 2, text: "Prefiero seguir métodos tradicionales y probados", trait: "openness", reverse: true },
-  { id: 3, text: "Disfruto de los desafíos creativos en mi carrera", trait: "openness" },
-  { id: 4, text: "Me siento cómodo con la rutina y la predictibilidad", trait: "openness", reverse: true },
-  { id: 5, text: "Me interesa aprender sobre diferentes culturas y perspectivas", trait: "openness" },
-  { id: 6, text: "Prefiero trabajos con tareas claras y definidas", trait: "openness", reverse: true },
-  { id: 7, text: "Me emociona la posibilidad de innovar en mi campo", trait: "openness" },
-  { id: 8, text: "Evito situaciones ambiguas o poco estructuradas", trait: "openness", reverse: true },
-
-  // Conscientiousness (Responsabilidad)
-  { id: 9, text: "Siempre cumplo con mis compromisos laborales", trait: "conscientiousness" },
-  { id: 10, text: "A veces dejo las tareas para el último momento", trait: "conscientiousness", reverse: true },
-  { id: 11, text: "Soy muy organizado con mis proyectos y documentos", trait: "conscientiousness" },
-  { id: 12, text: "Me cuesta mantener el orden en mi espacio de trabajo", trait: "conscientiousness", reverse: true },
-  { id: 13, text: "Planifico cuidadosamente antes de actuar", trait: "conscientiousness" },
-  { id: 14, text: "Prefiero improvisar sobre la marcha", trait: "conscientiousness", reverse: true },
-  { id: 15, text: "Soy persistente hasta completar mis objetivos", trait: "conscientiousness" },
-  { id: 16, text: "Me distraigo fácilmente de mis metas principales", trait: "conscientiousness", reverse: true },
-
-  // Extraversion (Extraversión)
-  { id: 17, text: "Me energizo trabajando con otras personas", trait: "extraversion" },
-  { id: 18, text: "Prefiero trabajar solo la mayor parte del tiempo", trait: "extraversion", reverse: true },
-  { id: 19, text: "Me siento cómodo liderando reuniones o presentaciones", trait: "extraversion" },
-  { id: 20, text: "Evito ser el centro de atención en el trabajo", trait: "extraversion", reverse: true },
-  { id: 21, text: "Disfruto del networking y conocer nuevos colegas", trait: "extraversion" },
-  { id: 22, text: "Me siento agotado después de eventos sociales laborales", trait: "extraversion", reverse: true },
-  { id: 23, text: "Hablo con facilidad en grupos grandes", trait: "extraversion" },
-  { id: 24, text: "Necesito tiempo a solas para recargar energías", trait: "extraversion", reverse: true },
-
-  // Agreeableness (Amabilidad)
-  { id: 25, text: "Busco el consenso antes de tomar decisiones importantes", trait: "agreeableness" },
-  {
-    id: 26,
-    text: "No me importa tomar decisiones impopulares si son correctas",
-    trait: "agreeableness",
-    reverse: true,
-  },
-  { id: 27, text: "Me preocupo por el bienestar de mis compañeros", trait: "agreeableness" },
-  { id: 28, text: "Priorizo los resultados por encima de las relaciones", trait: "agreeableness", reverse: true },
-  { id: 29, text: "Trato de evitar conflictos en el trabajo", trait: "agreeableness" },
-  { id: 30, text: "No tengo problema en confrontar cuando es necesario", trait: "agreeableness", reverse: true },
-  { id: 31, text: "Soy empático con las dificultades de otros", trait: "agreeableness" },
-  { id: 32, text: "Me enfoco en mis propios objetivos sin distraerme", trait: "agreeableness", reverse: true },
-
-  // Neuroticism (Neuroticismo)
-  { id: 33, text: "Me estreso fácilmente bajo presión", trait: "neuroticism" },
-  { id: 34, text: "Mantengo la calma en situaciones difíciles", trait: "neuroticism", reverse: true },
-  { id: 35, text: "Me preocupo mucho por cometer errores", trait: "neuroticism" },
-  { id: 36, text: "Confío en mi capacidad para manejar desafíos", trait: "neuroticism", reverse: true },
-  { id: 37, text: "Los cambios inesperados me generan ansiedad", trait: "neuroticism" },
-  { id: 38, text: "Me adapto fácilmente a nuevas situaciones", trait: "neuroticism", reverse: true },
-  { id: 39, text: "Tiendo a ver el lado negativo de las situaciones", trait: "neuroticism" },
-  { id: 40, text: "Generalmente mantengo una actitud positiva", trait: "neuroticism", reverse: true },
-]
-
-const traitInfo = {
-  openness: {
-    name: "Apertura",
-    description: "Creatividad, curiosidad intelectual y apertura a nuevas experiencias",
-    icon: "🎨",
-    color: "bg-purple-100 text-purple-800",
-  },
-  conscientiousness: {
-    name: "Responsabilidad",
-    description: "Organización, disciplina y orientación hacia objetivos",
-    icon: "📋",
-    color: "bg-blue-100 text-blue-800",
-  },
-  extraversion: {
-    name: "Extraversión",
-    description: "Sociabilidad, asertividad y búsqueda de estimulación",
-    icon: "👥",
-    color: "bg-green-100 text-green-800",
-  },
-  agreeableness: {
-    name: "Amabilidad",
-    description: "Cooperación, confianza y orientación hacia otros",
-    icon: "🤝",
-    color: "bg-yellow-100 text-yellow-800",
-  },
-  neuroticism: {
-    name: "Neuroticismo",
-    description: "Estabilidad emocional y manejo del estrés",
-    icon: "🧘",
-    color: "bg-red-100 text-red-800",
-  },
-}
-
-const insights = [
-  "La personalidad Big Five es el modelo más respaldado científicamente para evaluar rasgos de personalidad.",
-  "Cada rasgo se mide en un continuum, no hay respuestas 'correctas' o 'incorrectas'.",
-  "Tus resultados pueden ayudarte a entender mejor tus fortalezas y áreas de desarrollo profesional.",
-  "Este test complementa perfectamente tu evaluación DISC para un perfil más completo.",
-  "Los empleadores chilenos valoran cada vez más la autoconciencia y el desarrollo personal.",
-  "Conocer tu personalidad te ayuda a elegir roles y ambientes laborales más compatibles.",
-  "El Big Five predice mejor el desempeño laboral que otros tests de personalidad.",
-  "Tus rasgos pueden cambiar ligeramente con el tiempo y las experiencias de vida.",
-]
-
-export default function BigFiveTestPage() {
+export default function PersonalityTestPage() {
   const router = useRouter()
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, number>>({})
-  const [showInsight, setShowInsight] = useState(false)
-  const [currentInsight, setCurrentInsight] = useState(0)
   const { t } = useLanguage()
 
+  // Mode selection
+  const [inputMode, setInputMode] = useState<InputMode>("mixed")
+  const [showModeSelection, setShowModeSelection] = useState(true)
+
+  // Traditional mode states
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, any>>({})
+  const [isStarted, setIsStarted] = useState(false)
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [showHelp, setShowHelp] = useState<number | null>(null)
+
+  // Conversational mode states
+  const [currentStep, setCurrentStep] = useState(0)
+  const [conversationAnswers, setConversationAnswers] = useState<Record<string, string>>({})
+  const [isConversationActive, setIsConversationActive] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const [showCountdown, setShowCountdown] = useState(false)
+
+  // Speech recognition and synthesis
+  const {
+    isListening,
+    transcript,
+    interimTranscript,
+    isSupported: speechRecognitionSupported,
+    error: speechError,
+    isInitializing,
+    startListening,
+    stopListening,
+    clearTranscript,
+  } = useSpeechRecognition()
+
+  const { speak, stop: stopSpeaking, isSpeaking, isSupported: textToSpeechSupported } = useTextToSpeech()
+
+  // Auto-start conversation when step changes in voice-complete mode
   useEffect(() => {
-    // Show insight every 5 questions
-    if (currentQuestion > 0 && currentQuestion % 5 === 0) {
-      setShowInsight(true)
-      setCurrentInsight(Math.floor(Math.random() * insights.length))
-      const timer = setTimeout(() => setShowInsight(false), 4000)
+    if (inputMode === "voice-complete" && isConversationActive && !isSpeaking && !isListening) {
+      const currentStepData = PERSONALITY_CONVERSATION_FLOW[currentStep]
+      if (currentStepData && currentStepData.systemMessage) {
+        // Start countdown before speaking
+        setShowCountdown(true)
+        setCountdown(3)
+
+        const countdownInterval = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(countdownInterval)
+              setShowCountdown(false)
+              // Start speaking after countdown
+              setTimeout(() => {
+                speak(currentStepData.systemMessage)
+              }, 500)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+      }
+    }
+  }, [currentStep, inputMode, isConversationActive, isSpeaking, isListening, speak])
+
+  // Auto-start listening after system finishes speaking
+  useEffect(() => {
+    if (inputMode === "voice-complete" && !isSpeaking && isConversationActive && speechRecognitionSupported) {
+      const timer = setTimeout(() => {
+        if (!isListening && !isInitializing) {
+          startListening()
+        }
+      }, 1000)
       return () => clearTimeout(timer)
     }
-  }, [currentQuestion])
+  }, [
+    isSpeaking,
+    isConversationActive,
+    inputMode,
+    speechRecognitionSupported,
+    isListening,
+    isInitializing,
+    startListening,
+  ])
 
-  const handleAnswer = (value: string) => {
-    const newAnswers = { ...answers, [questions[currentQuestion].id]: Number.parseInt(value) }
-    setAnswers(newAnswers)
-  }
+  // Save conversation answer when transcript changes
+  useEffect(() => {
+    if (inputMode === "voice-complete" && transcript) {
+      const currentStepData = PERSONALITY_CONVERSATION_FLOW[currentStep]
+      if (currentStepData) {
+        setConversationAnswers((prev) => ({
+          ...prev,
+          [currentStepData.id]: transcript.trim(),
+        }))
+      }
+    }
+  }, [transcript, currentStep, inputMode])
 
-  const goToNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
+  const handleStartTest = (mode: InputMode) => {
+    setInputMode(mode)
+    setShowModeSelection(false)
+
+    if (mode === "voice-complete") {
+      setIsConversationActive(true)
+      setCurrentStep(0)
+    } else {
+      setIsStarted(true)
     }
   }
 
-  const goToPrevious = () => {
+  const handleAnswerChange = (questionId: number, value: any) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }))
+  }
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < PERSONALITY_QUESTIONS.length - 1) {
+      setCurrentQuestion((prev) => prev + 1)
+      setShowHelp(null)
+    } else {
+      handleCompleteTraditionalTest()
+    }
+  }
+
+  const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1)
+      setCurrentQuestion((prev) => prev - 1)
+      setShowHelp(null)
     }
   }
 
-  const calculateResults = () => {
-    const scores = {
+  const handleCompleteTraditionalTest = async () => {
+    setIsCompleting(true)
+
+    // Process traditional answers
+    const results = processTraditionalAnswers(answers)
+
+    localStorage.setItem("personalityResults", JSON.stringify(results))
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    router.push("/personality-results")
+  }
+
+  const processTraditionalAnswers = (answers: Record<number, any>) => {
+    const traitScores = {
       openness: 0,
       conscientiousness: 0,
       extraversion: 0,
@@ -662,7 +674,7 @@ export default function BigFiveTestPage() {
       neuroticism: 0,
     }
 
-    const counts = {
+    const traitCounts = {
       openness: 0,
       conscientiousness: 0,
       extraversion: 0,
@@ -670,179 +682,900 @@ export default function BigFiveTestPage() {
       neuroticism: 0,
     }
 
-    questions.forEach((question) => {
-      const answer = answers[question.id]
-      if (answer !== undefined) {
-        const score = question.reverse ? 6 - answer : answer
-        scores[question.trait] += score
-        counts[question.trait]++
+    // Process each answer
+    Object.entries(answers).forEach(([questionId, answer]) => {
+      const question = PERSONALITY_QUESTIONS.find((q) => q.id === Number.parseInt(questionId))
+      if (!question || answer === undefined) return
+
+      let score = 0
+
+      // Convert answer to score based on question type
+      switch (question.type) {
+        case "likert":
+          score = Number.parseInt(answer) // 1-5 scale
+          break
+        case "slider":
+          score = (Number.parseInt(answer) / (question.max || 10)) * 5 // Convert to 1-5 scale
+          break
+        case "multiple":
+          // Score based on option selected (simplified)
+          score =
+            question.trait === "extraversion"
+              ? answer === "0"
+                ? 5
+                : answer === "1"
+                  ? 2
+                  : answer === "2"
+                    ? 3.5
+                    : 3
+              : 3.5 // Default neutral score for other traits
+          break
+        case "binary":
+          score = answer === "true" ? 5 : 1
+          break
+        default:
+          score = 3 // Neutral
+      }
+
+      // Apply reverse scoring if needed
+      if (question.reverse) {
+        score = 6 - score
+      }
+
+      // Convert to 0-100 scale and add to trait
+      const normalizedScore = ((score - 1) / 4) * 100
+      traitScores[question.trait] += normalizedScore
+      traitCounts[question.trait]++
+    })
+
+    // Calculate averages
+    Object.keys(traitScores).forEach((trait) => {
+      const traitKey = trait as keyof typeof traitScores
+      if (traitCounts[traitKey] > 0) {
+        traitScores[traitKey] = Math.round(traitScores[traitKey] / traitCounts[traitKey])
+      } else {
+        traitScores[traitKey] = 60 // Default neutral score
       }
     })
 
-    // Convert to percentiles (0-100)
-    const results = Object.keys(scores).reduce(
-      (acc, trait) => {
-        const rawScore = scores[trait as keyof typeof scores]
-        const questionCount = counts[trait as keyof typeof counts]
-        const maxScore = questionCount * 5
-        const percentage = Math.round((rawScore / maxScore) * 100)
-        acc[trait as keyof typeof scores] = Math.max(0, Math.min(100, percentage))
-        return acc
-      },
-      {} as Record<keyof typeof scores, number>,
-    )
+    const overallScore = Math.round(Object.values(traitScores).reduce((sum, score) => sum + score, 0) / 5)
 
-    return results
+    return {
+      ...traitScores,
+      overallScore,
+      completedAt: new Date().toISOString(),
+      totalQuestions: PERSONALITY_QUESTIONS.length,
+      answeredQuestions: Object.keys(answers).length,
+      type: "personality",
+      inputMode,
+    }
   }
 
-  const finishTest = () => {
-    const results = calculateResults()
-    // Save results to localStorage for now
-    localStorage.setItem(
-      "bigFiveResults",
-      JSON.stringify({
-        results,
-        completedAt: new Date().toISOString(),
-      }),
-    )
-    router.push("/big-five-results")
+  const handleNextConversationStep = () => {
+    if (currentStep < PERSONALITY_CONVERSATION_FLOW.length - 1) {
+      setCurrentStep((prev) => prev + 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    } else {
+      handleCompleteConversation()
+    }
   }
 
-  const progress = ((currentQuestion + 1) / questions.length) * 100
-  const currentQuestionData = questions[currentQuestion]
-  const currentAnswer = answers[currentQuestionData?.id]
+  const handlePreviousConversationStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
+      clearTranscript()
+      if (isListening) {
+        stopListening()
+      }
+      if (isSpeaking) {
+        stopSpeaking()
+      }
+    }
+  }
 
-  return (
-    <TooltipProvider>
-      <div className="container mx-auto p-6 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Brain className="w-8 h-8 text-blue-600" />
-            <div>
-              <h1 className="text-3xl font-bold">Test Big Five (OCEAN)</h1>
-              <p className="text-muted-foreground">Evaluación científica de personalidad</p>
+  const handleRestartCurrentStep = () => {
+    clearTranscript()
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Restart the current step
+    const currentStepData = PERSONALITY_CONVERSATION_FLOW[currentStep]
+    if (currentStepData) {
+      setTimeout(() => {
+        speak(currentStepData.systemMessage)
+      }, 500)
+    }
+  }
+
+  const handleCompleteConversation = async () => {
+    setIsCompleting(true)
+
+    if (isListening) {
+      stopListening()
+    }
+    if (isSpeaking) {
+      stopSpeaking()
+    }
+
+    // Process conversational answers
+    const results = processConversationalAnswers(conversationAnswers)
+
+    localStorage.setItem("personalityResults", JSON.stringify(results))
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    router.push("/personality-results")
+  }
+
+  // Process conversational answers into personality scores
+  const processConversationalAnswers = (answers: Record<string, string>) => {
+    const traitScores = {
+      openness: 0,
+      conscientiousness: 0,
+      extraversion: 0,
+      agreeableness: 0,
+      neuroticism: 0,
+    }
+
+    // Analyze each answer for personality trait indicators
+    Object.entries(answers).forEach(([stepId, answer]) => {
+      const step = PERSONALITY_CONVERSATION_FLOW.find((s) => s.id === stepId)
+      if (!step || !answer) return
+
+      const text = answer.toLowerCase()
+      const words = text.split(/\s+/).filter((word) => word.length > 2)
+      const wordCount = words.length
+
+      // Base score from response length and detail
+      const baseScore = Math.min(85, Math.max(35, (wordCount / 20) * 60 + 25))
+
+      // Trait-specific keyword analysis
+      step.traits.forEach((trait) => {
+        const keywords = getPersonalityKeywords(trait)
+        const keywordMatches = keywords.filter((keyword) => text.includes(keyword)).length
+        const keywordBonus = Math.min(15, keywordMatches * 3)
+
+        traitScores[trait as keyof typeof traitScores] = Math.min(100, baseScore + keywordBonus)
+      })
+    })
+
+    // Ensure all traits have at least a base score
+    Object.keys(traitScores).forEach((trait) => {
+      if (traitScores[trait as keyof typeof traitScores] === 0) {
+        traitScores[trait as keyof typeof traitScores] = 60 // Default neutral score
+      }
+    })
+
+    const overallScore = Math.round(Object.values(traitScores).reduce((sum, score) => sum + score, 0) / 5)
+
+    return {
+      ...traitScores,
+      overallScore,
+      completedAt: new Date().toISOString(),
+      totalQuestions: PERSONALITY_CONVERSATION_FLOW.length,
+      answeredQuestions: Object.keys(answers).length,
+      type: "personality",
+      inputMode,
+    }
+  }
+
+  const getPersonalityKeywords = (trait: string): string[] => {
+    const keywordMap: Record<string, string[]> = {
+      openness: [
+        "creativo",
+        "curioso",
+        "imaginativo",
+        "artístico",
+        "innovador",
+        "original",
+        "abstracto",
+        "nuevo",
+        "diferente",
+        "explorar",
+        "experimentar",
+        "aventura",
+        "cambio",
+        "ideas",
+      ],
+      conscientiousness: [
+        "organizado",
+        "responsable",
+        "planificar",
+        "disciplina",
+        "orden",
+        "meticuloso",
+        "puntual",
+        "compromiso",
+        "objetivo",
+        "meta",
+        "estructura",
+        "sistema",
+        "eficiente",
+        "productivo",
+      ],
+      extraversion: [
+        "social",
+        "extrovertido",
+        "energético",
+        "hablador",
+        "grupo",
+        "gente",
+        "fiesta",
+        "líder",
+        "activo",
+        "entusiasta",
+        "optimista",
+        "confiado",
+        "asertivo",
+        "dominante",
+      ],
+      agreeableness: [
+        "amable",
+        "cooperativo",
+        "empático",
+        "comprensivo",
+        "ayudar",
+        "generoso",
+        "confianza",
+        "armonía",
+        "paz",
+        "colaborar",
+        "apoyo",
+        "bondadoso",
+        "considerado",
+        "tolerante",
+      ],
+      neuroticism: [
+        "estrés",
+        "ansiedad",
+        "preocupar",
+        "nervioso",
+        "emocional",
+        "sensible",
+        "inestable",
+        "tensión",
+        "presión",
+        "miedo",
+        "inseguro",
+        "vulnerable",
+        "irritable",
+        "melancólico",
+      ],
+    }
+
+    return keywordMap[trait] || []
+  }
+
+  const renderQuestionInput = (question: PersonalityQuestion) => {
+    const currentAnswer = answers[question.id]
+
+    switch (question.type) {
+      case "likert":
+        return (
+          <RadioGroup
+            value={currentAnswer?.toString()}
+            onValueChange={(value) => handleAnswerChange(question.id, Number.parseInt(value))}
+            className="space-y-3"
+          >
+            {[
+              { value: "1", label: "Totalmente en desacuerdo" },
+              { value: "2", label: "En desacuerdo" },
+              { value: "3", label: "Neutral" },
+              { value: "4", label: "De acuerdo" },
+              { value: "5", label: "Totalmente de acuerdo" },
+            ].map((option) => (
+              <div key={option.value} className="flex items-center space-x-2">
+                <RadioGroupItem value={option.value} id={`q${question.id}-${option.value}`} />
+                <Label htmlFor={`q${question.id}-${option.value}`} className="cursor-pointer">
+                  {option.label}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        )
+
+      case "slider":
+        return (
+          <div className="space-y-4">
+            <div className="px-3">
+              <Slider
+                value={[currentAnswer || (question.max || 10) / 2]}
+                onValueChange={(value) => handleAnswerChange(question.id, value[0])}
+                max={question.max || 10}
+                min={question.min || 1}
+                step={1}
+                className="w-full"
+              />
             </div>
+            <div className="flex justify-between text-sm text-gray-500 px-3">
+              <span>Muy bajo ({question.min || 1})</span>
+              <span className="font-medium">Valor: {currentAnswer || Math.floor((question.max || 10) / 2)}</span>
+              <span>Muy alto ({question.max || 10})</span>
+            </div>
+          </div>
+        )
+
+      case "multiple":
+        return (
+          <RadioGroup
+            value={currentAnswer?.toString()}
+            onValueChange={(value) => handleAnswerChange(question.id, Number.parseInt(value))}
+            className="space-y-3"
+          >
+            {question.options?.map((option, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <RadioGroupItem value={index.toString()} id={`q${question.id}-${index}`} />
+                <Label htmlFor={`q${question.id}-${index}`} className="cursor-pointer">
+                  {option}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        )
+
+      case "binary":
+        return (
+          <RadioGroup
+            value={currentAnswer?.toString()}
+            onValueChange={(value) => handleAnswerChange(question.id, value === "true")}
+            className="space-y-3"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="true" id={`q${question.id}-true`} />
+              <Label htmlFor={`q${question.id}-true`} className="cursor-pointer">
+                Sí
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="false" id={`q${question.id}-false`} />
+              <Label htmlFor={`q${question.id}-false`} className="cursor-pointer">
+                No
+              </Label>
+            </div>
+          </RadioGroup>
+        )
+
+      default:
+        return null
+    }
+  }
+
+  // Mode Selection Screen
+  if (showModeSelection) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Test de Personalidad</h1>
+            <p className="text-xl text-gray-600 mb-8">Elige tu método de evaluación de personalidad preferido</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Mixed Mode */}
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-purple-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Settings className="w-6 h-6 text-purple-600" />
+                  </div>
+                  Cuestionario Estructurado
+                </CardTitle>
+                <CardDescription>20 preguntas específicas sobre rasgos de personalidad</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Basado en el modelo Big Five
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Preguntas validadas científicamente
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Evaluación precisa y detallada
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Control total sobre el ritmo
+                  </div>
+                </div>
+                <Button onClick={() => handleStartTest("mixed")} className="w-full" variant="outline">
+                  <Keyboard className="w-4 h-4 mr-2" />
+                  Elegir Cuestionario
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Voice Complete Mode */}
+            <Card
+              className={`cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-pink-300 ${
+                !speechRecognitionSupported || !textToSpeechSupported ? "opacity-50" : ""
+              }`}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                    <Volume2 className="w-6 h-6 text-pink-600" />
+                  </div>
+                  Conversación de Personalidad
+                </CardTitle>
+                <CardDescription>Conversación natural sobre tu forma de ser y personalidad</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Conversación completamente natural
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    El sistema habla automáticamente
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Evaluación más humana y personal
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    Basado en los Cinco Grandes factores
+                  </div>
+                </div>
+                <Button
+                  onClick={() => handleStartTest("voice-complete")}
+                  className="w-full"
+                  disabled={!speechRecognitionSupported || !textToSpeechSupported}
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Elegir Conversación
+                </Button>
+                {(!speechRecognitionSupported || !textToSpeechSupported) && (
+                  <p className="text-xs text-amber-600 text-center">
+                    Funciones de voz no disponibles en este navegador
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Button variant="ghost" onClick={() => router.back()}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Loading/Completing State
+  if (isCompleting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="flex flex-col items-center justify-center p-8 space-y-4">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-purple-200 rounded-full animate-spin">
+                <div className="w-4 h-4 bg-purple-600 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+              </div>
+              <Brain className="w-8 h-8 text-purple-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-2">Analizando tu personalidad...</h3>
+              <p className="text-muted-foreground">
+                {inputMode === "voice-complete"
+                  ? "Procesando tu conversación y generando tu perfil de personalidad"
+                  : "Procesando tus respuestas y calculando tu perfil de personalidad"}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Traditional Mode Interface
+  if (inputMode === "mixed" && isStarted) {
+    const currentQuestionData = PERSONALITY_QUESTIONS[currentQuestion]
+    const progress = ((currentQuestion + 1) / PERSONALITY_QUESTIONS.length) * 100
+    const TraitIcon = PERSONALITY_TRAITS[currentQuestionData.trait].icon
+    const isAnswered = answers[currentQuestionData.id] !== undefined
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">Cuestionario de Personalidad</h1>
+              <Badge variant="outline" className="bg-purple-50 text-purple-700">
+                <Settings className="w-3 h-3 mr-1" />
+                Estructurado
+              </Badge>
+            </div>
+            <p className="text-gray-600">
+              Pregunta {currentQuestion + 1} de {PERSONALITY_QUESTIONS.length} •{" "}
+              {PERSONALITY_TRAITS[currentQuestionData.trait].name}
+            </p>
           </div>
 
           {/* Progress */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Progreso General</span>
-              <span className="text-sm text-muted-foreground">
-                {currentQuestion + 1} de {questions.length}
-              </span>
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700">Progreso del cuestionario</span>
+              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
             </div>
             <Progress value={progress} className="h-2" />
           </div>
-        </div>
 
-        {/* Insight Modal */}
-        {showInsight && (
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <Lightbulb className="w-5 h-5 text-blue-600 mt-0.5" />
+          {/* Question Card */}
+          <Card className="mb-8 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className={`w-12 h-12 ${PERSONALITY_TRAITS[currentQuestionData.trait].color} rounded-full flex items-center justify-center`}
+                >
+                  <TraitIcon className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-xl">{currentQuestionData.text}</CardTitle>
+                  <CardDescription>Evaluando: {PERSONALITY_TRAITS[currentQuestionData.trait].name}</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowHelp(showHelp === currentQuestionData.id ? null : currentQuestionData.id)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                  </Button>
+                  {isAnswered && (
+                    <Badge variant="secondary" className="bg-green-50 text-green-700">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Respondida
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* Help Text */}
+              {showHelp === currentQuestionData.id && currentQuestionData.help && (
+                <Alert className="border-blue-200 bg-blue-50">
+                  <Info className="h-4 w-4" />
+                  <AlertDescription className="text-blue-800">{currentQuestionData.help}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Question Input */}
+              <div className="bg-white rounded-lg p-6 border">{renderQuestionInput(currentQuestionData)}</div>
+
+              {/* Navigation */}
+              <div className="flex justify-between pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousQuestion}
+                  disabled={currentQuestion === 0}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Anterior
+                </Button>
+
+                <Button onClick={handleNextQuestion} disabled={!isAnswered} className="flex items-center gap-2">
+                  {currentQuestion === PERSONALITY_QUESTIONS.length - 1 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Finalizar Test
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Question Overview */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                Progreso por rasgo de personalidad
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {Object.entries(PERSONALITY_TRAITS).map(([trait, info]) => {
+                  const traitQuestions = PERSONALITY_QUESTIONS.filter((q) => q.trait === trait)
+                  const answeredCount = traitQuestions.filter((q) => answers[q.id] !== undefined).length
+                  const TraitIcon = info.icon
+
+                  return (
+                    <div key={trait} className="text-center">
+                      <div
+                        className={`w-10 h-10 ${info.color} rounded-full flex items-center justify-center mx-auto mb-2`}
+                      >
+                        <TraitIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <h4 className="font-medium text-sm mb-1">{info.name}</h4>
+                      <p className="text-xs text-gray-600">
+                        {answeredCount}/{traitQuestions.length} respondidas
+                      </p>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                        <div
+                          className={`${info.color} h-1.5 rounded-full transition-all duration-300`}
+                          style={{ width: `${(answeredCount / traitQuestions.length) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  // Conversational Mode Interface
+  if (inputMode === "voice-complete") {
+    const currentStepData = PERSONALITY_CONVERSATION_FLOW[currentStep]
+    const progress = ((currentStep + 1) / PERSONALITY_CONVERSATION_FLOW.length) * 100
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">Conversación de Personalidad</h1>
+              <Badge variant="outline" className="bg-pink-50 text-pink-700">
+                <Volume2 className="w-3 h-3 mr-1" />
+                Conversación Natural
+              </Badge>
+            </div>
+            <p className="text-gray-600">
+              Paso {currentStep + 1} de {PERSONALITY_CONVERSATION_FLOW.length} • {currentStepData?.category}
+            </p>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700">Progreso de la conversación</span>
+              <span className="text-sm font-medium text-gray-700">{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          {/* Countdown */}
+          {showCountdown && countdown > 0 && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <Card className="p-8">
+                <CardContent className="text-center">
+                  <div className="text-6xl font-bold text-pink-600 mb-4">{countdown}</div>
+                  <p className="text-lg text-gray-600">El asistente de personalidad hablará en...</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Main Conversation Card */}
+          <Card className="mb-8 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-xl">{currentStepData?.category}</CardTitle>
+                  <CardDescription>Exploración de tu personalidad</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  {isSpeaking && (
+                    <Badge variant="secondary" className="bg-pink-50 text-pink-700">
+                      <Volume2 className="w-3 h-3 mr-1 animate-pulse" />
+                      Hablando
+                    </Badge>
+                  )}
+                  {isListening && (
+                    <Badge variant="secondary" className="bg-purple-50 text-purple-700">
+                      <Mic className="w-3 h-3 mr-1 animate-pulse" />
+                      Escuchando
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* System Message */}
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Volume2 className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-purple-900 mb-2">Asistente de Personalidad:</h4>
+                    <p className="text-purple-800 leading-relaxed">{currentStepData?.systemMessage}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Response Area */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mic className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-blue-900 mb-2">Tu respuesta personal:</h4>
+                    <div className="min-h-[100px] bg-white rounded-lg p-3 border">
+                      {transcript && <p className="text-gray-900 mb-2">{transcript}</p>}
+                      {interimTranscript && <p className="text-gray-600 italic">{interimTranscript}</p>}
+                      {!transcript && !interimTranscript && !isListening && (
+                        <p className="text-gray-500 italic">
+                          {isSpeaking
+                            ? "Escucha la pregunta y luego comparte sobre tu personalidad..."
+                            : "Tu respuesta personal aparecerá aquí cuando hables..."}
+                        </p>
+                      )}
+                      {isListening && !transcript && !interimTranscript && (
+                        <p className="text-blue-600 italic flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          Escuchando... Comparte sobre tu personalidad
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Speech Error */}
+              {speechError && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-red-800">{speechError}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Controls */}
+              <div className="flex flex-wrap gap-3 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRestartCurrentStep}
+                  disabled={isInitializing}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Repetir pregunta
+                </Button>
+
+                {isListening && (
+                  <Button variant="destructive" size="sm" onClick={stopListening} className="flex items-center gap-2">
+                    <MicOff className="w-4 h-4" />
+                    Detener grabación
+                  </Button>
+                )}
+
+                {isSpeaking && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={stopSpeaking}
+                    className="flex items-center gap-2 bg-transparent"
+                  >
+                    <Pause className="w-4 h-4" />
+                    Pausar asistente
+                  </Button>
+                )}
+
+                {transcript && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearTranscript}
+                    className="flex items-center gap-2 text-gray-600"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Limpiar respuesta
+                  </Button>
+                )}
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousConversationStep}
+                  disabled={currentStep === 0}
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Anterior
+                </Button>
+
+                <Button onClick={handleNextConversationStep} className="flex items-center gap-2">
+                  {currentStep === PERSONALITY_CONVERSATION_FLOW.length - 1 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Finalizar Conversación
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Personality Conversation Tips */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                Consejos para la conversación de personalidad
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
                 <div>
-                  <h3 className="font-semibold text-blue-900 mb-1">💡 Insight Profesional</h3>
-                  <p className="text-blue-800 text-sm">{insights[currentInsight]}</p>
+                  <h4 className="font-semibold mb-2">Durante la conversación:</h4>
+                  <ul className="space-y-1">
+                    <li>• Sé honesto y auténtico sobre tu forma de ser</li>
+                    <li>• Comparte ejemplos específicos de tu comportamiento</li>
+                    <li>• No hay respuestas correctas o incorrectas</li>
+                    <li>• Reflexiona sobre cómo realmente te comportas</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Aspectos a considerar:</h4>
+                  <ul className="space-y-1">
+                    <li>• Piensa en situaciones cotidianas y laborales</li>
+                    <li>• Considera tanto tus fortalezas como áreas de mejora</li>
+                    <li>• Reflexiona sobre cómo otros te perciben</li>
+                    <li>• Comparte tanto preferencias como comportamientos</li>
+                  </ul>
                 </div>
               </div>
             </CardContent>
           </Card>
-        )}
-
-        {/* Question Card */}
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-xl mb-2">Pregunta {currentQuestion + 1}</CardTitle>
-                <CardDescription className="text-lg">{currentQuestionData?.text}</CardDescription>
-              </div>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <HelpCircle className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <div className="space-y-2">
-                    <p className="font-semibold">{traitInfo[currentQuestionData?.trait]?.name}</p>
-                    <p className="text-sm">{traitInfo[currentQuestionData?.trait]?.description}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <RadioGroup value={currentAnswer?.toString() || ""} onValueChange={handleAnswer} className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="1" id="r1" />
-                <Label htmlFor="r1" className="cursor-pointer">
-                  Totalmente en desacuerdo
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="2" id="r2" />
-                <Label htmlFor="r2" className="cursor-pointer">
-                  En desacuerdo
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="3" id="r3" />
-                <Label htmlFor="r3" className="cursor-pointer">
-                  Neutral
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="4" id="r4" />
-                <Label htmlFor="r4" className="cursor-pointer">
-                  De acuerdo
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="5" id="r5" />
-                <Label htmlFor="r5" className="cursor-pointer">
-                  Totalmente de acuerdo
-                </Label>
-              </div>
-            </RadioGroup>
-          </CardContent>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={goToPrevious}
-            disabled={currentQuestion === 0}
-            className="flex items-center gap-2 bg-transparent"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Anterior
-          </Button>
-
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            {currentAnswer && <CheckCircle className="w-4 h-4 text-green-600" />}
-            {currentAnswer ? "Respondida" : "Selecciona una respuesta"}
-          </div>
-
-          <Button onClick={finishTest} disabled={!currentAnswer} className="flex items-center gap-2">
-            {currentQuestion === questions.length - 1 ? (
-              <>
-                <CheckCircle className="w-4 h-4" />
-                Finalizar Test
-              </>
-            ) : (
-              <>
-                Siguiente
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </Button>
         </div>
       </div>
-    </TooltipProvider>
+    )
+  }
+
+  // Fallback - should not reach here
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardContent className="p-8 text-center">
+          <p className="text-gray-600 mb-4">Error: Estado de test no válido</p>
+          <Button onClick={() => setShowModeSelection(true)}>Volver a selección de modo</Button>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

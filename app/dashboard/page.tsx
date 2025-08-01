@@ -1,373 +1,739 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  Brain,
-  Target,
-  MessageSquare,
-  Search,
-  FileText,
+  BarChart3,
   BookOpen,
-  Clock,
-  CheckCircle,
-  Star,
+  Brain,
   Briefcase,
+  Clock,
+  FileText,
+  MessageSquare,
+  Play,
+  Star,
+  Target,
+  TrendingUp,
+  Trophy,
+  User,
+  Users,
+  School,
 } from "lucide-react"
 import Link from "next/link"
-import { useAuth } from "@/contexts/auth-context"
-import { supabase } from "@/lib/supabase"
+import { UDDCareerRecommendations } from "@/components/udd-career-recommendations"
+import {
+  getUserStats,
+  getUserProgress,
+  getUserAchievements,
+  getUserCareerGoals,
+  getLibraryBooks,
+  type UserStats,
+  type UserProgress,
+  type Achievement,
+  type CareerGoal,
+} from "@/lib/database"
 
-interface DashboardStats {
-  testsCompleted: number
-  skillsAssessed: number
-  jobsApplied: number
-  booksRead: number
-  profileCompletion: number
+// Mock data for UDD career recommendations
+const mockPersonalityResults = {
+  openness: 0.7,
+  conscientiousness: 0.8,
+  extraversion: 0.6,
+  agreeableness: 0.7,
+  neuroticism: 0.3,
 }
 
-interface RecentActivity {
-  id: string
-  type: string
-  title: string
-  description: string
-  timestamp: string
-  icon: any
-}
+const mockUserSkills = ["Programación", "Análisis", "Comunicación", "Liderazgo", "Resolución de Problemas"]
+
+const mockJobInterests = ["Tecnología", "Innovación", "Consultoría", "Educación"]
 
 export default function DashboardPage() {
-  const { user } = useAuth()
-  const [stats, setStats] = useState<DashboardStats>({
-    testsCompleted: 0,
-    skillsAssessed: 0,
-    jobsApplied: 0,
-    booksRead: 0,
-    profileCompletion: 0,
-  })
-  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
+  const [stats, setStats] = useState<UserStats | null>(null)
+  const [progress, setProgress] = useState<UserProgress | null>(null)
+  const [achievements, setAchievements] = useState<Achievement[]>([])
+  const [goals, setGoals] = useState<CareerGoal[]>([])
+  const [recentBooks, setRecentBooks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
+  const userId = "demo-user-id" // In a real app, this would come from auth context
+
   useEffect(() => {
-    if (user) {
-      loadDashboardData()
-    }
-  }, [user])
+    const loadDashboardData = async () => {
+      try {
+        const [statsData, progressData, achievementsData, goalsData, booksData] = await Promise.all([
+          getUserStats(userId),
+          getUserProgress(userId),
+          getUserAchievements(userId),
+          getUserCareerGoals(userId),
+          getLibraryBooks(),
+        ])
 
-  const loadDashboardData = async () => {
-    try {
-      // Cargar estadísticas del usuario
-      const [testsResult, skillsResult, jobsResult, booksResult, profileResult] = await Promise.all([
-        supabase.from("personality_results").select("id").eq("user_id", user?.id),
-        supabase.from("skills_assessments").select("id").eq("user_id", user?.id),
-        supabase.from("job_applications").select("id").eq("user_id", user?.id),
-        supabase.from("reading_progress").select("id").eq("user_id", user?.id),
-        supabase.from("profiles").select("*").eq("id", user?.id).single(),
-      ])
-
-      // Calcular completitud del perfil
-      let completionScore = 0
-      if (profileResult.data) {
-        const profile = profileResult.data
-        if (profile.full_name) completionScore += 20
-        if (profile.bio) completionScore += 20
-        if (profile.location) completionScore += 15
-        if (profile.phone) completionScore += 15
-        if (profile.linkedin_url) completionScore += 15
-        if (profile.skills && profile.skills.length > 0) completionScore += 15
+        setStats(statsData)
+        setProgress(progressData)
+        setAchievements(achievementsData)
+        setGoals(goalsData)
+        setRecentBooks(booksData.data?.slice(0, 3) || [])
+      } catch (error) {
+        console.error("Error loading dashboard data:", error)
+      } finally {
+        setLoading(false)
       }
-
-      setStats({
-        testsCompleted: testsResult.data?.length || 0,
-        skillsAssessed: skillsResult.data?.length || 0,
-        jobsApplied: jobsResult.data?.length || 0,
-        booksRead: booksResult.data?.length || 0,
-        profileCompletion: completionScore,
-      })
-
-      // Actividad reciente simulada
-      setRecentActivity([
-        {
-          id: "1",
-          type: "test",
-          title: "Test de Personalidad Completado",
-          description: "Has completado el test Big Five",
-          timestamp: "2 horas",
-          icon: Brain,
-        },
-        {
-          id: "2",
-          type: "skill",
-          title: "Evaluación de Habilidades",
-          description: "Evaluaste tus habilidades técnicas",
-          timestamp: "1 día",
-          icon: Target,
-        },
-        {
-          id: "3",
-          type: "job",
-          title: "Postulación Enviada",
-          description: "Postulaste a Desarrollador Frontend en Falabella",
-          timestamp: "2 días",
-          icon: Briefcase,
-        },
-      ])
-    } catch (error) {
-      console.error("Error cargando datos del dashboard:", error)
-    } finally {
-      setLoading(false)
     }
-  }
 
-  const quickActions = [
-    {
-      title: "Hacer Test de Personalidad",
-      description: "Descubre tu perfil profesional",
-      href: "/personality-test",
-      icon: Brain,
-      color: "bg-blue-500",
-    },
-    {
-      title: "Evaluar Habilidades",
-      description: "Identifica tus fortalezas",
-      href: "/skills-assessment",
-      icon: Target,
-      color: "bg-green-500",
-    },
-    {
-      title: "Hablar con Coach IA",
-      description: "Recibe orientación personalizada",
-      href: "/career-coach",
-      icon: MessageSquare,
-      color: "bg-purple-500",
-    },
-    {
-      title: "Buscar Empleos",
-      description: "Encuentra oportunidades",
-      href: "/job-search",
-      icon: Search,
-      color: "bg-orange-500",
-    },
-    {
-      title: "Crear CV",
-      description: "Construye tu currículum",
-      href: "/cv-builder",
-      icon: FileText,
-      color: "bg-red-500",
-    },
-    {
-      title: "Explorar Biblioteca",
-      description: "Lee libros de desarrollo",
-      href: "/library",
-      icon: BookOpen,
-      color: "bg-indigo-500",
-    },
-  ]
-
-  const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Usuario"
-  const currentHour = new Date().getHours()
-  let greeting = "Buenos días"
-  if (currentHour >= 12 && currentHour < 18) greeting = "Buenas tardes"
-  if (currentHour >= 18) greeting = "Buenas noches"
+    loadDashboardData()
+  }, [userId])
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Cargando tu panel...</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      {/* Header */}
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            {greeting}, {userName}! 👋
-          </h2>
-          <p className="text-muted-foreground">Aquí tienes un resumen de tu progreso profesional</p>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+        <p className="text-gray-600">Bienvenido a tu plataforma de desarrollo profesional</p>
+
+        {/* Mirix System Status */}
+        <div className="mt-4">
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Brain className="h-3 w-3 mr-1" />
+            Sistema Mirix Activo
+          </Badge>
+          <Link href="/mirix" className="ml-2">
+            <Button variant="outline" size="sm">
+              <Brain className="h-4 w-4 mr-2" />
+              Acceder a Mirix
+            </Button>
+          </Link>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tests Completados</CardTitle>
-            <Brain className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.testsCompleted}</div>
-            <p className="text-xs text-muted-foreground">+2 desde la semana pasada</p>
-          </CardContent>
-        </Card>
+      {/* Stats Overview */}
+      {stats && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Evaluaciones Completadas</CardTitle>
+              <Brain className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.total_assessments}</div>
+              <p className="text-xs text-muted-foreground">+1 desde la semana pasada</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Metas Completadas</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.completed_goals}</div>
+              <p className="text-xs text-muted-foreground">de {stats.active_goals} metas activas</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Nivel Promedio de Habilidades</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.avg_skill_level}/10</div>
+              <p className="text-xs text-muted-foreground">+0.5 desde el mes pasado</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Logros Obtenidos</CardTitle>
+              <Trophy className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.achievements_count}</div>
+              <p className="text-xs text-muted-foreground">¡Sigue así!</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Habilidades Evaluadas</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.skillsAssessed}</div>
-            <p className="text-xs text-muted-foreground">+5 desde el mes pasado</p>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="tests">Tests</TabsTrigger>
+          <TabsTrigger value="goals">Metas</TabsTrigger>
+          <TabsTrigger value="library">Biblioteca</TabsTrigger>
+          <TabsTrigger value="bachilleratos">Bachilleratos</TabsTrigger>
+          <TabsTrigger value="udd-careers">Carreras UDD</TabsTrigger>
+        </TabsList>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Postulaciones</CardTitle>
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.jobsApplied}</div>
-            <p className="text-xs text-muted-foreground">+1 esta semana</p>
-          </CardContent>
-        </Card>
+        <TabsContent value="overview" className="space-y-6">
+          {/* Progress Overview */}
+          {progress && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Tu Progreso General</CardTitle>
+                <CardDescription>Resumen de tu desarrollo profesional</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Progreso General</span>
+                    <span>{progress.overall_progress}%</span>
+                  </div>
+                  <Progress value={progress.overall_progress} className="h-2" />
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Personalidad</span>
+                      <span>{progress.personality_progress}%</span>
+                    </div>
+                    <Progress value={progress.personality_progress} className="h-1" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Habilidades</span>
+                      <span>{progress.skills_progress}%</span>
+                    </div>
+                    <Progress value={progress.skills_progress} className="h-1" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Coaching</span>
+                      <span>{progress.coaching_progress}%</span>
+                    </div>
+                    <Progress value={progress.coaching_progress} className="h-1" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Libros Leídos</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.booksRead}</div>
-            <p className="text-xs text-muted-foreground">+3 este mes</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        {/* Profile Completion */}
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Completitud del Perfil</CardTitle>
-            <CardDescription>Completa tu perfil para obtener mejores recomendaciones</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Progreso del perfil</span>
-                <span className="text-sm text-muted-foreground">{stats.profileCompletion}%</span>
+          {/* Recent Achievements */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Logros Recientes</CardTitle>
+              <CardDescription>Tus últimos logros y reconocimientos</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {achievements.slice(0, 3).map((achievement) => (
+                  <div key={achievement.id} className="flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                      <Trophy className="h-5 w-5 text-yellow-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium">{achievement.title}</h4>
+                      <p className="text-sm text-gray-600">{achievement.description}</p>
+                    </div>
+                    <div className="text-xs text-gray-500">{new Date(achievement.earned_at).toLocaleDateString()}</div>
+                  </div>
+                ))}
               </div>
-              <Progress value={stats.profileCompletion} className="w-full" />
-            </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm">Información básica completada</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm">Email verificado</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-yellow-500" />
-                <span className="text-sm">Agrega tu experiencia laboral</span>
-              </div>
-            </div>
+        <TabsContent value="tests" className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-blue-600" />
+                  Test de Personalidad
+                </CardTitle>
+                <CardDescription>Descubre tu tipo de personalidad y fortalezas</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/personality-test">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
 
-            <Button asChild className="w-full">
-              <Link href="/profile">Completar Perfil</Link>
-            </Button>
-          </CardContent>
-        </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-purple-600" />
+                  Test DISC
+                </CardTitle>
+                <CardDescription>Evalúa tu estilo de comportamiento</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/disc-test">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Recent Activity */}
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Actividad Reciente</CardTitle>
-            <CardDescription>Tus últimas acciones en la plataforma</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => {
-                const Icon = activity.icon
-                return (
-                  <div key={activity.id} className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
-                        <Icon className="h-4 w-4 text-primary" />
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-green-600" />
+                  Habilidades Técnicas
+                </CardTitle>
+                <CardDescription>Evalúa tus competencias técnicas</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/technical-skills-test">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-pink-600" />
+                  Habilidades Blandas
+                </CardTitle>
+                <CardDescription>Mide tus habilidades interpersonales</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/soft-skills-test">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-orange-600" />
+                  Simulador de Entrevistas
+                </CardTitle>
+                <CardDescription>Practica tus habilidades de entrevista</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/interview-simulator">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-indigo-600" />
+                  Evaluación General
+                </CardTitle>
+                <CardDescription>Evaluación completa de habilidades</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline">Disponible</Badge>
+                  <Link href="/skills-assessment">
+                    <Button size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Comenzar Test
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="goals" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Metas de Carrera</CardTitle>
+              <CardDescription>Tus objetivos profesionales y su progreso</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {goals.map((goal) => (
+                  <div key={goal.id} className="border rounded-lg p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-medium">{goal.title}</h4>
+                        <p className="text-sm text-gray-600 mt-1">{goal.description}</p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <Badge
+                            variant={goal.priority === "alta" ? "destructive" : "secondary"}
+                            className={
+                              goal.priority === "alta"
+                                ? "bg-red-100 text-red-800"
+                                : goal.priority === "media"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-gray-100 text-gray-800"
+                            }
+                          >
+                            {goal.priority}
+                          </Badge>
+                          <span className="text-xs text-gray-500">
+                            Fecha objetivo: {new Date(goal.target_date).toLocaleDateString()}
+                          </span>
+                        </div>
                       </div>
+                      <Badge variant={goal.status === "activa" ? "default" : "secondary"}>{goal.status}</Badge>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{activity.title}</p>
-                      <p className="text-sm text-gray-500 truncate">{activity.description}</p>
-                    </div>
-                    <div className="flex-shrink-0 text-sm text-gray-400">hace {activity.timestamp}</div>
                   </div>
-                )
-              })}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      {/* Quick Actions */}
-      <div>
-        <h3 className="text-lg font-medium mb-4">Acciones Rápidas</h3>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {quickActions.map((action, index) => {
-            const Icon = action.icon
-            return (
-              <Card key={index} className="group hover:shadow-md transition-all duration-200 cursor-pointer">
+        <TabsContent value="library" className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {recentBooks.map((book) => (
+              <Card key={book.id} className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                 <CardHeader className="pb-3">
-                  <div className="flex items-center space-x-3">
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${action.color}`}>
-                      <Icon className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">{action.title}</CardTitle>
-                      <CardDescription className="text-sm">{action.description}</CardDescription>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge variant="secondary" className="text-xs">
+                      {book.category}
+                    </Badge>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="text-sm font-medium">{book.rating}</span>
                     </div>
                   </div>
+                  <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
+                  <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Button variant="ghost" className="w-full justify-start p-0 h-auto font-normal" asChild>
-                    <Link href={action.href}>Comenzar →</Link>
-                  </Button>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">{book.description}</p>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-blue-500" />
+                      <span className="text-sm text-gray-600">{book.readingTime}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-green-500" />
+                      <span className="text-sm text-gray-600">{book.difficulty}</span>
+                    </div>
+                  </div>
+                  <Link href={`/library/reader/${book.id}`}>
+                    <Button className="w-full">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Comenzar a Leer
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Recommendations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Star className="h-5 w-5 text-yellow-500" />
-            <span>Recomendaciones Personalizadas</span>
-          </CardTitle>
-          <CardDescription>Basado en tu perfil y actividad reciente</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <h4 className="font-medium">📚 Libro Recomendado</h4>
-              <p className="text-sm text-muted-foreground">"Hábitos Atómicos" - Perfecto para tu desarrollo personal</p>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/library">Ver en Biblioteca</Link>
-              </Button>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-medium">💼 Oportunidad Laboral</h4>
-              <p className="text-sm text-muted-foreground">
-                Desarrollador Frontend en Falabella - 95% de compatibilidad
-              </p>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/job-search">Ver Empleos</Link>
-              </Button>
-            </div>
+            ))}
           </div>
-        </CardContent>
-      </Card>
+          <div className="text-center">
+            <Link href="/library">
+              <Button variant="outline" size="lg">
+                Ver Toda la Biblioteca
+              </Button>
+            </Link>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bachilleratos" className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <School className="h-5 w-5 text-blue-600" />
+                  Científico-Humanista
+                </CardTitle>
+                <CardDescription>Preparación integral para la universidad</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">75%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">85%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <School className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Briefcase className="h-5 w-5 text-green-600" />
+                  Técnico en Administración
+                </CardTitle>
+                <CardDescription>Gestión empresarial y comercial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">88%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">65%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Briefcase className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-purple-600" />
+                  Técnico en Informática
+                </CardTitle>
+                <CardDescription>Tecnologías de la información</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">92%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">70%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Brain className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-orange-600" />
+                  Bachillerato Artístico
+                </CardTitle>
+                <CardDescription>Artes visuales, música y teatro</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">70%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">80%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Star className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-red-600" />
+                  Técnico en Enfermería
+                </CardTitle>
+                <CardDescription>Cuidados de salud y asistencia sanitaria</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">95%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">60%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Users className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-yellow-600" />
+                  Técnico en Gastronomía
+                </CardTitle>
+                <CardDescription>Artes culinarias y gestión gastronómica</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Empleabilidad:</span>
+                    <span className="font-medium">85%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Continuidad:</span>
+                    <span className="font-medium">55%</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Duración:</span>
+                    <span className="font-medium">4 años</span>
+                  </div>
+                </div>
+                <Link href="/bachillerato">
+                  <Button className="w-full mt-4">
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Ver Detalles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Link href="/bachillerato">
+              <Button size="lg">
+                <School className="h-4 w-4 mr-2" />
+                Ver Todos los Bachilleratos
+              </Button>
+            </Link>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="udd-careers" className="space-y-6">
+          <UDDCareerRecommendations
+            personalityResults={mockPersonalityResults}
+            userSkills={mockUserSkills}
+            jobInterests={mockJobInterests}
+          />
+        </TabsContent>
+      </Tabs>
+
+      {/* Quick Actions */}
+      <div className="mt-12">
+        <Card>
+          <CardHeader>
+            <CardTitle>Acciones Rápidas</CardTitle>
+            <CardDescription>Continúa tu desarrollo profesional</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Link href="/career-coach">
+                <Button
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2 bg-transparent"
+                >
+                  <MessageSquare className="h-6 w-6" />
+                  <span className="text-sm">Coach IA</span>
+                </Button>
+              </Link>
+              <Link href="/cv-builder">
+                <Button
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2 bg-transparent"
+                >
+                  <FileText className="h-6 w-6" />
+                  <span className="text-sm">CV Builder</span>
+                </Button>
+              </Link>
+              <Link href="/job-search">
+                <Button
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2 bg-transparent"
+                >
+                  <Briefcase className="h-6 w-6" />
+                  <span className="text-sm">Buscar Empleo</span>
+                </Button>
+              </Link>
+              <Link href="/library">
+                <Button
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2 bg-transparent"
+                >
+                  <BookOpen className="h-6 w-6" />
+                  <span className="text-sm">Biblioteca</span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -1,22 +1,25 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useState, useEffect } from "react"
 
 type Language = "es" | "en"
 
 interface LanguageContextType {
   language: Language
-  setLanguage: (lang: Language) => void
+  setLanguage: (language: Language) => void
   t: (key: string) => string
 }
 
 const translations = {
   es: {
     // Navegación
-    "nav.dashboard": "Panel Principal",
-    "nav.profile": "Mi Perfil",
+    "nav.dashboard": "Panel",
+    "nav.profile": "Perfil",
+    "nav.skills": "Habilidades",
+    "nav.career": "Carrera",
+    "nav.jobs": "Empleos",
+    "nav.library": "Biblioteca",
     "nav.settings": "Configuración",
     "nav.logout": "Cerrar Sesión",
     "nav.careerCoach": "Coach Profesional",
@@ -24,13 +27,16 @@ const translations = {
     "nav.personalityTest": "Test de Personalidad",
     "nav.jobSearch": "Búsqueda de Empleo",
     "nav.cvBuilder": "Constructor de CV",
-    "nav.library": "Biblioteca",
     "nav.calendar": "Calendario",
     "nav.goals": "Metas",
+    "nav.cv-builder": "Constructor CV",
+    "nav.assessments": "Evaluaciones",
+    "nav.career-coach": "Coach de Carrera",
+    "nav.job-search": "Búsqueda de Empleos",
 
     // Saludos y mensajes generales
-    welcome: "Bienvenido/a",
-    welcomeBack: "¡Bienvenido/a de vuelta!",
+    welcome: "Bienvenido",
+    welcomeBack: "¡Bienvenido de vuelta!",
     hello: "Hola",
     goodMorning: "Buenos días",
     goodAfternoon: "Buenas tardes",
@@ -98,7 +104,6 @@ const translations = {
     "cv.personalInfo": "Información Personal",
     "cv.experience": "Experiencia Laboral",
     "cv.education": "Educación",
-    "cv.skills": "Habilidades",
     "cv.languages": "Idiomas",
     "cv.projects": "Proyectos",
     "cv.certifications": "Certificaciones",
@@ -153,6 +158,10 @@ const translations = {
     // Mantener traducciones en inglés para usuarios internacionales
     "nav.dashboard": "Dashboard",
     "nav.profile": "Profile",
+    "nav.skills": "Skills",
+    "nav.career": "Career",
+    "nav.jobs": "Jobs",
+    "nav.library": "Library",
     "nav.settings": "Settings",
     "nav.logout": "Logout",
     "nav.careerCoach": "Career Coach",
@@ -160,9 +169,12 @@ const translations = {
     "nav.personalityTest": "Personality Test",
     "nav.jobSearch": "Job Search",
     "nav.cvBuilder": "CV Builder",
-    "nav.library": "Library",
     "nav.calendar": "Calendar",
     "nav.goals": "Goals",
+    "nav.cv-builder": "CV Builder",
+    "nav.assessments": "Assessments",
+    "nav.career-coach": "Career Coach",
+    "nav.job-search": "Job Search",
 
     welcome: "Welcome",
     welcomeBack: "Welcome back!",
@@ -226,7 +238,6 @@ const translations = {
     "cv.personalInfo": "Personal Information",
     "cv.experience": "Work Experience",
     "cv.education": "Education",
-    "cv.skills": "Skills",
     "cv.languages": "Languages",
     "cv.projects": "Projects",
     "cv.certifications": "Certifications",
@@ -274,7 +285,11 @@ const translations = {
   },
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+const LanguageContext = createContext<LanguageContextType>({
+  language: "es",
+  setLanguage: () => {},
+  t: (key: string) => key,
+})
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
@@ -286,31 +301,27 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const handleSetLanguage = (lang: Language) => {
-    setLanguage(lang)
-    localStorage.setItem("language", lang)
+  const handleSetLanguage = (newLanguage: Language) => {
+    setLanguage(newLanguage)
+    localStorage.setItem("language", newLanguage)
   }
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations.es] || key
   }
 
-  return (
-    <LanguageContext.Provider
-      value={{
-        language,
-        setLanguage: handleSetLanguage,
-        t,
-      }}
-    >
-      {children}
-    </LanguageContext.Provider>
-  )
+  const value = {
+    language,
+    setLanguage: handleSetLanguage,
+    t,
+  }
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {
   const context = useContext(LanguageContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useLanguage must be used within a LanguageProvider")
   }
   return context
