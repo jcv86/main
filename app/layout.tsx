@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
-  description: "Plataforma integral de desarrollo profesional con IA para el mercado chileno",
+  description: "Tu plataforma integral para el desarrollo profesional en Chile",
     generator: 'v0.dev'
 }
 
@@ -27,15 +27,15 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
-            <AuthProvider>
-              <NotificationsProvider>
+            <NotificationsProvider>
+              <AuthProvider>
                 <div className="relative flex min-h-screen flex-col">
                   <Header />
                   <main className="flex-1">{children}</main>
                 </div>
                 <Toaster />
-              </NotificationsProvider>
-            </AuthProvider>
+              </AuthProvider>
+            </NotificationsProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

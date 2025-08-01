@@ -45,14 +45,12 @@ export function NotificationsBell() {
           notifications.slice(0, 5).map((notification) => (
             <DropdownMenuItem
               key={notification.id}
-              className="flex flex-col items-start p-3"
+              className={`flex flex-col items-start p-3 ${!notification.read ? "bg-muted/50" : ""}`}
               onClick={() => markAsRead(notification.id)}
             >
-              <div className="flex items-center justify-between w-full">
-                <span className="font-medium">{notification.title}</span>
-                {!notification.read && <div className="h-2 w-2 bg-blue-500 rounded-full" />}
-              </div>
-              <span className="text-sm text-muted-foreground">{notification.message}</span>
+              <div className="font-medium">{notification.title}</div>
+              <div className="text-sm text-muted-foreground">{notification.message}</div>
+              <div className="text-xs text-muted-foreground">{notification.timestamp.toLocaleString()}</div>
             </DropdownMenuItem>
           ))
         )}

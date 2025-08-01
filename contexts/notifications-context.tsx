@@ -1,104 +1,76 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface Notification {
   id: string
   title: string
   message: string
   type: "info" | "success" | "warning" | "error"
+  timestamp: Date
   read: boolean
-  createdAt: Date
 }
 
 interface NotificationsContextType {
   notifications: Notification[]
   unreadCount: number
+  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
-  addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
   removeNotification: (id: string) => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
-export const useNotifications = () => {
-  const context = useContext(NotificationsContext)
-  if (context === undefined) {
-    throw new Error("useNotifications must be used within a NotificationsProvider")
-  }
-  return context
-}
-
-export function NotificationsProvider({ children }: { children: React.ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: "1",
-      title: "¡Bienvenido!",
-      message: "Bienvenido a la plataforma Despega tu Carrera",
-      type: "info",
-      read: false,
-      createdAt: new Date(),
-    },
-  ])
+export function NotificationsProvider({ children }: { children: ReactNode }) {
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
-  const markAsRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
-  }
-
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
-  }
-
-  const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
+  const addNotification = (notification: Omit<Notification, "id" | "timestamp" | "read">) => {
     const newNotification: Notification = {
       ...notification,
-      id: crypto.randomUUID(),
+      id: Math.random().toString(36).substr(2, 9),
+      timestamp: new Date(),
       read: false,
-      createdAt: new Date(),
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
 
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id))
+  const markAsRead = (id: string) => {
+    setNotifications((prev) =>
+      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
+    )
   }
 
-  // Add some demo notifications
-  useEffect(() => {
-    const demoNotifications = [
-      {
-        title: "Bienvenido a Despega Tu Carrera",
-        message: "Completa tu perfil para obtener recomendaciones personalizadas",
-        type: "info" as const,
-      },
-      {
-        title: "Nueva oportunidad laboral",
-        message: "Hay 5 nuevas ofertas que coinciden con tu perfil",
-        type: "success" as const,
-      },
-    ]
+  const markAllAsRead = () => {
+    setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
+  }
 
-    demoNotifications.forEach((notification) => {
-      setTimeout(() => addNotification(notification), 1000)
-    })
-  }, [])
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
+  }
 
   return (
     <NotificationsContext.Provider
       value={{
         notifications,
         unreadCount,
+        addNotification,
         markAsRead,
         markAllAsRead,
-        addNotification,
         removeNotification,
       }}
     >
       {children}
     </NotificationsContext.Provider>
   )
+}
+
+export function useNotifications() {
+  const context = useContext(NotificationsContext)
+  if (context === undefined) {
+    throw new Error("useNotifications must be used within a NotificationsProvider")
+  }
+  return context
 }

@@ -1,7 +1,5 @@
 "use client"
-
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 type Language = "es" | "en"
 
@@ -15,7 +13,6 @@ const translations = {
   es: {
     // Navegación
     "nav.dashboard": "Panel",
-    "nav.tests": "Tests",
     "nav.profile": "Perfil",
     "nav.skills": "Habilidades",
     "nav.career": "Carrera",
@@ -35,6 +32,7 @@ const translations = {
     "nav.career-coach": "Coach de Carrera",
     "nav.job-search": "Búsqueda de Empleos",
     "nav.coach": "Coach IA",
+    "nav.cv": "CV",
 
     // Saludos y mensajes generales
     welcome: "Bienvenido",
@@ -43,6 +41,8 @@ const translations = {
     goodMorning: "Buenos días",
     goodAfternoon: "Buenas tardes",
     goodEvening: "Buenas noches",
+    "welcome.title": "Bienvenido a Despega Tu Carrera",
+    "welcome.subtitle": "Tu plataforma integral para el desarrollo profesional",
 
     // Autenticación
     login: "Iniciar Sesión",
@@ -53,6 +53,9 @@ const translations = {
     confirmPassword: "Confirmar Contraseña",
     forgotPassword: "¿Olvidaste tu contraseña?",
     resetPassword: "Restablecer Contraseña",
+    "auth.login": "Iniciar Sesión",
+    "auth.register": "Registrarse",
+    "auth.logout": "Cerrar Sesión",
 
     // Formularios
     save: "Guardar",
@@ -175,7 +178,6 @@ const translations = {
   en: {
     // Mantener traducciones en inglés para usuarios internacionales
     "nav.dashboard": "Dashboard",
-    "nav.tests": "Tests",
     "nav.profile": "Profile",
     "nav.skills": "Skills",
     "nav.career": "Career",
@@ -195,6 +197,7 @@ const translations = {
     "nav.career-coach": "Career Coach",
     "nav.job-search": "Job Search",
     "nav.coach": "AI Coach",
+    "nav.cv": "CV",
 
     welcome: "Welcome",
     welcomeBack: "Welcome back!",
@@ -202,15 +205,11 @@ const translations = {
     goodMorning: "Good morning",
     goodAfternoon: "Good afternoon",
     goodEvening: "Good evening",
-
-    login: "Login",
-    register: "Register",
-    logout: "Logout",
-    email: "Email",
-    password: "Password",
-    confirmPassword: "Confirm Password",
-    forgotPassword: "Forgot your password?",
-    resetPassword: "Reset Password",
+    "welcome.title": "Welcome to Launch Your Career",
+    "welcome.subtitle": "Your comprehensive platform for professional development",
+    "auth.login": "Login",
+    "auth.register": "Register",
+    "auth.logout": "Logout",
 
     save: "Save",
     cancel: "Cancel",
@@ -323,7 +322,7 @@ const translations = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")
 
   useEffect(() => {

@@ -77,7 +77,7 @@ export const supabase = hasSupabaseCredentials
   ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!)
   : (createMockClient() as any)
 
-// Export createClient function - this was missing!
+// Export createClient function
 export function createClient() {
   return hasSupabaseCredentials ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!) : (createMockClient() as any)
 }
@@ -92,11 +92,6 @@ export function createServerClient() {
         },
       })
     : (createMockClient() as any)
-}
-
-// Server-side client for admin operations
-export const createAdminClient = () => {
-  return createSupabaseClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 }
 
 // Database types
@@ -159,70 +154,6 @@ export interface Database {
           updated_at?: string
         }
       }
-      cv_data: {
-        Row: {
-          id: string
-          user_id: string
-          data: any
-          template_id: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          data: any
-          template_id: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          data?: any
-          template_id?: string
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      soft_skills_assessments: {
-        Row: {
-          id: string
-          user_id: string
-          test_type: string
-          questions_answered: number
-          total_questions: number
-          results: any
-          ai_feedback: string
-          recommendations: any
-          completed_at: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          test_type: string
-          questions_answered: number
-          total_questions: number
-          results: any
-          ai_feedback: string
-          recommendations: any
-          completed_at: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          test_type?: string
-          questions_answered?: number
-          total_questions?: number
-          results?: any
-          ai_feedback?: string
-          recommendations?: any
-          completed_at?: string
-          created_at?: string
-        }
-      }
     }
   }
 }
@@ -230,5 +161,3 @@ export interface Database {
 export type Tables<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"]
 export type Inserts<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Insert"]
 export type Updates<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Update"]
-
-export default supabase
