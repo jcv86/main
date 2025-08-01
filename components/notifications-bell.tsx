@@ -1,7 +1,6 @@
 "use client"
-import { Bell } from "lucide-react"
-import { useNotifications } from "@/contexts/notifications-context"
 
+import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { useNotifications } from "@/contexts/notifications-context"
 
 export function NotificationsBell() {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
@@ -19,13 +19,10 @@ export function NotificationsBell() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="relative bg-transparent">
+        <Button variant="ghost" size="sm" className="relative">
           <Bell className="h-[1.2rem] w-[1.2rem]" />
           {unreadCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
-            >
+            <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs">
               {unreadCount}
             </Badge>
           )}
@@ -48,12 +45,14 @@ export function NotificationsBell() {
           notifications.slice(0, 5).map((notification) => (
             <DropdownMenuItem
               key={notification.id}
-              className={`flex flex-col items-start p-3 ${!notification.read ? "bg-muted/50" : ""}`}
+              className="flex flex-col items-start p-3"
               onClick={() => markAsRead(notification.id)}
             >
-              <div className="font-medium">{notification.title}</div>
-              <div className="text-sm text-muted-foreground">{notification.message}</div>
-              <div className="text-xs text-muted-foreground mt-1">{notification.createdAt.toLocaleDateString()}</div>
+              <div className="flex items-center justify-between w-full">
+                <span className="font-medium">{notification.title}</span>
+                {!notification.read && <div className="h-2 w-2 bg-blue-500 rounded-full" />}
+              </div>
+              <span className="text-sm text-muted-foreground">{notification.message}</span>
             </DropdownMenuItem>
           ))
         )}

@@ -15,6 +15,7 @@ const translations = {
   es: {
     // Navegación
     "nav.dashboard": "Panel",
+    "nav.tests": "Tests",
     "nav.profile": "Perfil",
     "nav.skills": "Habilidades",
     "nav.career": "Carrera",
@@ -33,6 +34,7 @@ const translations = {
     "nav.assessments": "Evaluaciones",
     "nav.career-coach": "Coach de Carrera",
     "nav.job-search": "Búsqueda de Empleos",
+    "nav.coach": "Coach IA",
 
     // Saludos y mensajes generales
     welcome: "Bienvenido",
@@ -91,6 +93,7 @@ const translations = {
     "coach.newSession": "Nueva Sesión",
     "coach.previousSessions": "Sesiones Anteriores",
     "coach.voiceSearch": "Búsqueda por voz",
+    "nav.coach": "Coach IA",
 
     // Tests y evaluaciones
     "test.start": "Comenzar Test",
@@ -152,11 +155,27 @@ const translations = {
     october: "Octubre",
     november: "Noviembre",
     december: "Diciembre",
+
+    // Hero Section
+    "hero.title": "Despega Tu Carrera Profesional",
+    "hero.subtitle": "Plataforma integral de desarrollo profesional con IA para el mercado chileno",
+    "hero.cta": "Comenzar Ahora",
+
+    // Features Section
+    "features.tests": "Tests de Personalidad",
+    "features.tests.desc": "Descubre tu perfil profesional con tests validados",
+    "features.jobs": "Búsqueda de Empleos",
+    "features.jobs.desc": "Encuentra oportunidades laborales en Chile",
+    "features.coach": "Coach con IA",
+    "features.coach.desc": "Recibe orientación personalizada 24/7",
+    "features.library": "Biblioteca Digital",
+    "features.library.desc": "Accede a recursos de desarrollo profesional",
   },
 
   en: {
     // Mantener traducciones en inglés para usuarios internacionales
     "nav.dashboard": "Dashboard",
+    "nav.tests": "Tests",
     "nav.profile": "Profile",
     "nav.skills": "Skills",
     "nav.career": "Career",
@@ -175,6 +194,7 @@ const translations = {
     "nav.assessments": "Assessments",
     "nav.career-coach": "Career Coach",
     "nav.job-search": "Job Search",
+    "nav.coach": "AI Coach",
 
     welcome: "Welcome",
     welcomeBack: "Welcome back!",
@@ -227,6 +247,7 @@ const translations = {
     "coach.newSession": "New Session",
     "coach.previousSessions": "Previous Sessions",
     "coach.voiceSearch": "Voice search",
+    "nav.coach": "AI Coach",
 
     "test.start": "Start Test",
     "test.continue": "Continue",
@@ -282,14 +303,25 @@ const translations = {
     october: "October",
     november: "November",
     december: "December",
+
+    // Hero Section
+    "hero.title": "Launch Your Professional Career",
+    "hero.subtitle": "Comprehensive professional development platform with AI for the Chilean market",
+    "hero.cta": "Get Started",
+
+    // Features Section
+    "features.tests": "Personality Tests",
+    "features.tests.desc": "Discover your professional profile with validated tests",
+    "features.jobs": "Job Search",
+    "features.jobs.desc": "Find job opportunities in Chile",
+    "features.coach": "AI Coach",
+    "features.coach.desc": "Get personalized guidance 24/7",
+    "features.library": "Digital Library",
+    "features.library.desc": "Access professional development resources",
   },
 }
 
-const LanguageContext = createContext<LanguageContextType>({
-  language: "es",
-  setLanguage: () => {},
-  t: (key: string) => key,
-})
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("es")

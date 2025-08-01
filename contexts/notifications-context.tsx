@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, useEffect } from "react"
 
 interface Notification {
   id: string
@@ -18,19 +18,14 @@ interface NotificationsContextType {
   markAsRead: (id: string) => void
   markAllAsRead: () => void
   addNotification: (notification: Omit<Notification, "id" | "read" | "createdAt">) => void
+  removeNotification: (id: string) => void
 }
 
-const NotificationsContext = createContext<NotificationsContextType>({
-  notifications: [],
-  unreadCount: 0,
-  markAsRead: () => {},
-  markAllAsRead: () => {},
-  addNotification: () => {},
-})
+const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export const useNotifications = () => {
   const context = useContext(NotificationsContext)
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useNotifications must be used within a NotificationsProvider")
   }
   return context
@@ -61,12 +56,36 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const addNotification = (notification: Omit<Notification, "id" | "read" | "createdAt">) => {
     const newNotification: Notification = {
       ...notification,
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       read: false,
       createdAt: new Date(),
     }
     setNotifications((prev) => [newNotification, ...prev])
   }
+
+  const removeNotification = (id: string) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
+  }
+
+  // Add some demo notifications
+  useEffect(() => {
+    const demoNotifications = [
+      {
+        title: "Bienvenido a Despega Tu Carrera",
+        message: "Completa tu perfil para obtener recomendaciones personalizadas",
+        type: "info" as const,
+      },
+      {
+        title: "Nueva oportunidad laboral",
+        message: "Hay 5 nuevas ofertas que coinciden con tu perfil",
+        type: "success" as const,
+      },
+    ]
+
+    demoNotifications.forEach((notification) => {
+      setTimeout(() => addNotification(notification), 1000)
+    })
+  }, [])
 
   return (
     <NotificationsContext.Provider
@@ -76,6 +95,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         markAsRead,
         markAllAsRead,
         addNotification,
+        removeNotification,
       }}
     >
       {children}

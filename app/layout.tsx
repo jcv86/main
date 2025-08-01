@@ -6,14 +6,14 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/contexts/auth-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
 import { LanguageProvider } from "@/contexts/language-context"
+import { Header } from "@/components/header"
 import { Toaster } from "@/components/ui/sonner"
-import Header from "@/components/header"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Despega tu Carrera - Plataforma de Desarrollo Profesional",
-  description: "Plataforma integral de desarrollo profesional para el mercado laboral chileno",
+  title: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
+  description: "Plataforma integral de desarrollo profesional con IA para el mercado chileno",
     generator: 'v0.dev'
 }
 
@@ -29,9 +29,9 @@ export default function RootLayout({
           <LanguageProvider>
             <AuthProvider>
               <NotificationsProvider>
-                <div className="min-h-screen bg-background">
+                <div className="relative flex min-h-screen flex-col">
                   <Header />
-                  <main>{children}</main>
+                  <main className="flex-1">{children}</main>
                 </div>
                 <Toaster />
               </NotificationsProvider>
