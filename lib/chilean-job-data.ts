@@ -536,6 +536,32 @@ class ChileanJobService {
     }
   }
 
+  getTopCompanies() {
+    const companyCounts: Record<string, number> = {}
+    this.jobs.forEach((job) => {
+      companyCounts[job.company] = (companyCounts[job.company] || 0) + 1
+    })
+
+    return Object.entries(companyCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 10)
+      .map(([company, count]) => ({ company, count }))
+  }
+
+  getTopSkills() {
+    const skillCounts: Record<string, number> = {}
+    this.jobs.forEach((job) => {
+      job.skills.forEach((skill) => {
+        skillCounts[skill] = (skillCounts[skill] || 0) + 1
+      })
+    })
+
+    return Object.entries(skillCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 20)
+      .map(([skill, count]) => ({ skill, count }))
+  }
+
   // Job Alerts functionality
   async createAlert(alert: Omit<JobAlert, "id" | "createdAt" | "lastChecked" | "matchCount">): Promise<JobAlert> {
     const newAlert: JobAlert = {
