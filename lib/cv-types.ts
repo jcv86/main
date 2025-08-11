@@ -1,20 +1,3 @@
-import { z } from "zod"
-
-// Validation schemas
-export const personalInfoSchema = z.object({
-  fullName: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(8, "Teléfono debe tener al menos 8 dígitos"),
-  location: z.string().min(2, "Ubicación requerida"),
-  linkedIn: z.string().url("URL de LinkedIn inválida").optional().or(z.literal("")),
-  website: z.string().url("URL del sitio web inválida").optional().or(z.literal("")),
-  summary: z
-    .string()
-    .min(50, "El resumen debe tener al menos 50 caracteres")
-    .max(500, "El resumen no puede exceder 500 caracteres"),
-})
-
-// Types
 export interface PersonalInfo {
   fullName: string
   email: string
@@ -25,16 +8,16 @@ export interface PersonalInfo {
   summary: string
 }
 
-export interface Experience {
+export interface WorkExperience {
   id: string
   company: string
   position: string
   startDate: string
-  endDate: string
+  endDate?: string
   current: boolean
   description: string
-  location: string
   achievements: string[]
+  technologies?: string[]
 }
 
 export interface Education {
@@ -43,23 +26,18 @@ export interface Education {
   degree: string
   field: string
   startDate: string
-  endDate: string
+  endDate?: string
   current: boolean
   gpa?: string
-  honors?: string
-  relevantCourses: string[]
+  honors?: string[]
 }
 
 export interface Skill {
+  id: string
   name: string
   level: "Básico" | "Intermedio" | "Avanzado" | "Experto"
-  category: "technical" | "soft"
-}
-
-export interface Language {
-  name: string
-  level: "Básico" | "Intermedio" | "Avanzado" | "Nativo"
-  certifications: string[]
+  category: "technical" | "soft" | "language"
+  yearsOfExperience?: number
 }
 
 export interface Project {
@@ -67,43 +45,59 @@ export interface Project {
   name: string
   description: string
   technologies: string[]
-  startDate: string
-  endDate: string
-  current: boolean
   url?: string
   github?: string
-  role: string
-  teamSize?: number
-  achievements: string[]
+  startDate: string
+  endDate?: string
+  current: boolean
+  highlights: string[]
 }
 
 export interface Certification {
   id: string
   name: string
   issuer: string
-  date: string
+  issueDate: string
   expiryDate?: string
   credentialId?: string
   url?: string
-  skills: string[]
+}
+
+export interface Language {
+  id: string
+  name: string
+  level: "Básico" | "Intermedio" | "Avanzado" | "Nativo"
+  certifications?: string[]
 }
 
 export interface CVData {
   personalInfo: PersonalInfo
-  experience: Experience[]
+  workExperience: WorkExperience[]
   education: Education[]
-  skills: {
-    technical: Skill[]
-    soft: Skill[]
-    languages: Language[]
-  }
+  skills: Skill[]
   projects: Project[]
   certifications: Certification[]
+  languages: Language[]
+  template: string
+  createdAt: string
+  updatedAt: string
 }
 
-export type CVTemplate = "modern" | "classic" | "creative" | "minimal"
+export interface CVTemplate {
+  id: string
+  name: string
+  description: string
+  preview: string
+  category: "modern" | "classic" | "creative" | "minimal"
+  isPremium: boolean
+}
 
-// Constants
+// Utility function to generate unique IDs
+export function generateId(): string {
+  return Math.random().toString(36).substr(2, 9) + Date.now().toString(36)
+}
+
+// Chilean cities for location selection
 export const chileanCities = [
   "Santiago",
   "Valparaíso",
@@ -125,106 +119,373 @@ export const chileanCities = [
   "Quillota",
   "Valdivia",
   "Punta Arenas",
+  "Coquimbo",
+  "Ovalle",
+  "Linares",
+  "Curicó",
+  "Melipilla",
+  "San Antonio",
+  "Tarapacá",
+  "Cauquenes",
+  "Angol",
+  "Castro",
 ]
 
+// Chilean universities for education section
 export const chileanUniversities = [
+  // Traditional Universities (CRUCH)
   "Universidad de Chile",
   "Pontificia Universidad Católica de Chile",
-  "Universidad de Santiago de Chile",
-  "Universidad de Concepción",
+  "Universidad de Santiago de Chile (USACH)",
   "Universidad Técnica Federico Santa María",
-  "Universidad del Desarrollo",
-  "Universidad Diego Portales",
-  "Universidad Adolfo Ibáñez",
-  "Universidad de los Andes",
-  "Universidad Mayor",
-  "Universidad Central de Chile",
-  "Universidad de Talca",
-  "Universidad de La Frontera",
+  "Universidad de Concepción",
+  "Pontificia Universidad Católica de Valparaíso",
+  "Universidad Austral de Chile",
   "Universidad Católica del Norte",
-  "Universidad de Valparaíso",
-  "Universidad de Antofagasta",
+  "Universidad de La Serena",
+  "Universidad del Bío-Bío",
+  "Universidad de La Frontera",
   "Universidad de Magallanes",
   "Universidad de Tarapacá",
+  "Universidad de Atacama",
+  "Universidad Arturo Prat",
+  "Universidad Católica del Maule",
   "Universidad Católica de Temuco",
   "Universidad Católica de la Santísima Concepción",
+  "Universidad de Los Lagos",
+  "Universidad Metropolitana de Ciencias de la Educación",
+  "Universidad de Playa Ancha",
+  "Universidad Tecnológica Metropolitana",
+  "Universidad de Valparaíso",
+  "Universidad Academia de Humanismo Cristiano",
+  "Universidad Alberto Hurtado",
+
+  // Private Universities
+  "Universidad Adolfo Ibáñez",
+  "Universidad del Desarrollo",
+  "Universidad Diego Portales",
+  "Universidad Finis Terrae",
+  "Universidad Mayor",
+  "Universidad San Sebastián",
+  "Universidad Central de Chile",
+  "Universidad de Las Américas",
+  "Universidad Andrés Bello",
+  "Universidad Santo Tomás",
+  "Universidad de Viña del Mar",
+  "Universidad Bernardo O'Higgins",
+  "Universidad Pedro de Valdivia",
+  "Universidad ARCIS",
+  "Universidad Bolivariana",
+  "Universidad de Artes, Ciencias y Comunicación (UNIACC)",
+  "Universidad Internacional SEK",
+  "Universidad La República",
+  "Universidad Miguel de Cervantes",
+  "Universidad Nacional Andrés Bello",
+
+  // Professional Institutes and Technical Centers
+  "Instituto Profesional AIEP",
+  "Instituto Profesional DUOC UC",
+  "Instituto Profesional INACAP",
+  "Instituto Profesional La Araucana",
+  "Instituto Profesional Santo Tomás",
+  "Centro de Formación Técnica INACAP",
+  "Centro de Formación Técnica Santo Tomás",
+  "Centro de Formación Técnica DUOC UC",
+
+  // International Universities with presence in Chile
+  "Universidad de Barcelona (Programa Chile)",
+  "Universidad Complutense de Madrid (Programa Chile)",
+  "Universidad de Salamanca (Programa Chile)",
 ]
 
-export const commonSkillsChile = [
-  // Technical Skills
-  "JavaScript",
-  "Python",
-  "Java",
-  "React",
-  "Node.js",
-  "SQL",
-  "HTML/CSS",
-  "Git",
-  "Docker",
-  "AWS",
-  "Excel Avanzado",
-  "Power BI",
-  "Tableau",
-  "SAP",
-  "Salesforce",
+// Common skills for the Chilean market
+export const commonSkillsChile = {
+  technical: [
+    // Programming Languages
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Java",
+    "C#",
+    "PHP",
+    "Go",
+    "Rust",
+    "Swift",
+    "Kotlin",
 
-  // Soft Skills
-  "Liderazgo",
-  "Trabajo en Equipo",
-  "Comunicación Efectiva",
-  "Resolución de Problemas",
-  "Pensamiento Crítico",
-  "Adaptabilidad",
-  "Gestión del Tiempo",
-  "Negociación",
-  "Presentaciones",
-  "Servicio al Cliente",
-  "Gestión de Proyectos",
-  "Análisis de Datos",
-  "Planificación Estratégica",
-  "Innovación",
-  "Mentoring",
-]
+    // Frontend Technologies
+    "React",
+    "Vue.js",
+    "Angular",
+    "Next.js",
+    "Nuxt.js",
+    "HTML5",
+    "CSS3",
+    "Sass/SCSS",
+    "Tailwind CSS",
+    "Bootstrap",
 
-// Utility functions
-export const generateId = () => Math.random().toString(36).substr(2, 9)
+    // Backend Technologies
+    "Node.js",
+    "Express.js",
+    "Django",
+    "Flask",
+    "Spring Boot",
+    "ASP.NET",
+    "Laravel",
+    "Ruby on Rails",
+    "FastAPI",
 
-export const formatDate = (dateString: string) => {
-  if (!dateString) return ""
-  const [year, month] = dateString.split("-")
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ]
-  return `${monthNames[Number.parseInt(month) - 1]} ${year}`
+    // Databases
+    "PostgreSQL",
+    "MySQL",
+    "MongoDB",
+    "Redis",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "Elasticsearch",
+
+    // Cloud & DevOps
+    "AWS",
+    "Google Cloud",
+    "Microsoft Azure",
+    "Docker",
+    "Kubernetes",
+    "Jenkins",
+    "GitLab CI/CD",
+    "GitHub Actions",
+    "Terraform",
+    "Ansible",
+
+    // Tools & Platforms
+    "Git",
+    "Linux",
+    "Jira",
+    "Confluence",
+    "Slack",
+    "Figma",
+    "Adobe Creative Suite",
+    "Postman",
+    "VS Code",
+    "IntelliJ IDEA",
+
+    // Data & Analytics
+    "Power BI",
+    "Tableau",
+    "Excel Avanzado",
+    "Google Analytics",
+    "SQL",
+    "R",
+    "Pandas",
+    "NumPy",
+    "Jupyter",
+
+    // Mobile Development
+    "React Native",
+    "Flutter",
+    "iOS Development",
+    "Android Development",
+    "Xamarin",
+
+    // Testing
+    "Jest",
+    "Cypress",
+    "Selenium",
+    "JUnit",
+    "PyTest",
+    "Postman",
+
+    // Project Management
+    "Scrum",
+    "Kanban",
+    "Agile",
+    "Waterfall",
+    "PMP",
+    "PRINCE2",
+
+    // Security
+    "OWASP",
+    "Penetration Testing",
+    "Cybersecurity",
+    "ISO 27001",
+    "GDPR Compliance",
+
+    // Industry Specific (Chile)
+    "SAP",
+    "Salesforce",
+    "Microsoft Dynamics",
+    "Oracle ERP",
+    "Banco de Chile APIs",
+    "Transbank Integration",
+    "SII Integration",
+    "Previred",
+  ],
+
+  soft: [
+    // Communication
+    "Comunicación Efectiva",
+    "Presentaciones Públicas",
+    "Escritura Técnica",
+    "Comunicación Intercultural",
+    "Negociación",
+    "Persuasión",
+
+    // Leadership
+    "Liderazgo de Equipos",
+    "Mentoring",
+    "Coaching",
+    "Gestión de Conflictos",
+    "Toma de Decisiones",
+    "Delegación",
+    "Motivación de Equipos",
+
+    // Problem Solving
+    "Resolución de Problemas",
+    "Pensamiento Crítico",
+    "Análisis de Datos",
+    "Creatividad",
+    "Innovación",
+    "Pensamiento Estratégico",
+
+    // Collaboration
+    "Trabajo en Equipo",
+    "Colaboración Remota",
+    "Facilitación de Reuniones",
+    "Construcción de Consenso",
+    "Networking",
+    "Relaciones Interpersonales",
+
+    // Adaptability
+    "Adaptabilidad",
+    "Flexibilidad",
+    "Gestión del Cambio",
+    "Aprendizaje Continuo",
+    "Resiliencia",
+    "Tolerancia al Estrés",
+
+    // Organization
+    "Gestión del Tiempo",
+    "Organización",
+    "Planificación Estratégica",
+    "Multitasking",
+    "Priorización",
+    "Gestión de Proyectos",
+
+    // Customer Focus
+    "Orientación al Cliente",
+    "Servicio al Cliente",
+    "Empatía",
+    "Escucha Activa",
+    "Gestión de Expectativas",
+
+    // Business Skills
+    "Análisis de Negocios",
+    "Comprensión del Mercado Chileno",
+    "Conocimiento Regulatorio",
+    "Gestión Financiera",
+    "ROI Analysis",
+    "Gestión de Stakeholders",
+
+    // Cultural (Chile specific)
+    "Conocimiento del Mercado Local",
+    "Comprensión Cultural Chilena",
+    "Networking Profesional Chile",
+    "Protocolo Empresarial",
+    "Ética Profesional",
+  ],
 }
 
-export const calculateExperience = (experiences: Experience[]) => {
-  let totalMonths = 0
+// Chilean industry sectors
+export const chileanIndustries = [
+  "Minería",
+  "Banca y Servicios Financieros",
+  "Retail y Comercio",
+  "Tecnología e Innovación",
+  "Telecomunicaciones",
+  "Energía y Utilities",
+  "Construcción e Inmobiliaria",
+  "Agricultura y Agroindustria",
+  "Manufactura",
+  "Logística y Transporte",
+  "Turismo y Hospitalidad",
+  "Salud y Farmacéutica",
+  "Educación",
+  "Consultoría",
+  "Gobierno y Sector Público",
+  "Startups y Emprendimiento",
+  "E-commerce",
+  "Medios y Comunicaciones",
+  "Seguros",
+  "Forestal y Celulosa",
+]
 
-  experiences.forEach((exp) => {
-    const startDate = new Date(exp.startDate + "-01")
-    const endDate = exp.current ? new Date() : new Date(exp.endDate + "-01")
+// Common job titles in Chile
+export const commonJobTitlesChile = [
+  // Technology
+  "Desarrollador Full Stack",
+  "Ingeniero de Software",
+  "Arquitecto de Software",
+  "DevOps Engineer",
+  "Data Scientist",
+  "Product Manager",
+  "UX/UI Designer",
+  "Scrum Master",
+  "Tech Lead",
+  "CTO",
 
-    const months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth())
+  // Business
+  "Gerente General",
+  "Gerente de Ventas",
+  "Gerente de Marketing",
+  "Gerente de Operaciones",
+  "Analista de Negocios",
+  "Consultor Senior",
+  "Director Comercial",
+  "Jefe de Producto",
 
-    totalMonths += months
-  })
+  // Finance
+  "Contador",
+  "Auditor",
+  "Analista Financiero",
+  "Controller",
+  "Gerente de Finanzas",
+  "Risk Manager",
 
-  const years = Math.floor(totalMonths / 12)
-  const months = totalMonths % 12
+  // Human Resources
+  "Gerente de RRHH",
+  "Especialista en Compensaciones",
+  "Recruiter",
+  "HRBP",
+  "Especialista en Desarrollo Organizacional",
 
-  if (years === 0) return `${months} meses`
-  if (months === 0) return `${years} años`
-  return `${years} años, ${months} meses`
+  // Operations
+  "Jefe de Operaciones",
+  "Supervisor de Producción",
+  "Analista de Procesos",
+  "Especialista en Calidad",
+  "Coordinador Logístico",
+
+  // Sales & Marketing
+  "Ejecutivo de Ventas",
+  "Key Account Manager",
+  "Digital Marketing Manager",
+  "Community Manager",
+  "Brand Manager",
+  "Trade Marketing",
+
+  // Legal & Compliance
+  "Abogado Corporativo",
+  "Compliance Officer",
+  "Legal Counsel",
+  "Especialista Regulatorio",
+]
+
+export default {
+  generateId,
+  commonSkillsChile,
+  chileanIndustries,
+  commonJobTitlesChile,
+  chileanCities,
+  chileanUniversities,
 }

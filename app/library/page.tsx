@@ -8,8 +8,23 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, Clock, Star, Search, TrendingUp, Award, Zap, Users, BookMarked, Library, Flame } from "lucide-react"
+import {
+  BookOpen,
+  Clock,
+  Star,
+  Search,
+  TrendingUp,
+  Award,
+  Zap,
+  Users,
+  BookMarked,
+  Library,
+  Flame,
+  Brain,
+  Lightbulb,
+} from "lucide-react"
 import Link from "next/link"
+import { LibraryService } from "@/lib/supabase-library"
 
 interface Book {
   id: string
@@ -53,157 +68,40 @@ export default function LibraryPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all")
   const [activeTab, setActiveTab] = useState("all")
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Mock data matching the database structure
+  // Fetch books from database
   useEffect(() => {
-    const mockBooks: Book[] = [
-      {
-        id: "1",
-        title: "Hábitos Atómicos",
-        author: "James Clear",
-        description:
-          "Un método sencillo y comprobado para desarrollar buenos hábitos y eliminar los malos. James Clear nos brinda estrategias prácticas que nos enseñarán exactamente cómo formar buenos hábitos, romper los malos, y dominar los pequeños comportamientos que llevan a resultados notables.",
-        category: "Productividad",
-        rating: 4.8,
-        reading_time: "5h 20min",
-        pages: 320,
-        published_year: 2018,
-        cover_url: "/placeholder.svg?height=300&width=200&text=Hábitos+Atómicos",
-        tags: ["hábitos", "productividad", "autoayuda", "psicología", "cambio", "comportamiento"],
-        is_recommended: true,
-        difficulty: "Fácil",
-        key_topics: [
-          "Formación de hábitos",
-          "Cambio de comportamiento",
-          "Mejora continua",
-          "Sistemas vs objetivos",
-          "Identidad y hábitos",
-        ],
-      },
-      {
-        id: "2",
-        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-        author: "Stephen R. Covey",
-        description:
-          "Un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales. Covey revela un proceso paso a paso para vivir con equidad, integridad, honestidad y dignidad humana.",
-        category: "Liderazgo",
-        rating: 4.7,
-        reading_time: "7h 12min",
-        pages: 432,
-        published_year: 1989,
-        cover_url: "/placeholder.svg?height=300&width=200&text=7+Hábitos",
-        tags: ["liderazgo", "efectividad", "principios", "carácter", "desarrollo personal"],
-        is_recommended: true,
-        difficulty: "Intermedio",
-        key_topics: [
-          "Proactividad",
-          "Liderazgo personal",
-          "Gestión personal",
-          "Beneficio mutuo",
-          "Comunicación empática",
-        ],
-      },
-      {
-        id: "3",
-        title: "Trabajo Profundo",
-        author: "Cal Newport",
-        description:
-          "Reglas para el éxito enfocado en un mundo distraído. Newport argumenta que la capacidad de concentrarse sin distracciones en una tarea cognitivamente exigente es una habilidad que se está volviendo cada vez más valiosa en nuestra economía.",
-        category: "Productividad",
-        rating: 4.6,
-        reading_time: "5h 4min",
-        pages: 304,
-        published_year: 2016,
-        cover_url: "/placeholder.svg?height=300&width=200&text=Trabajo+Profundo",
-        tags: ["concentración", "productividad", "tecnología", "enfoque", "distracción"],
-        is_recommended: false,
-        difficulty: "Avanzado",
-        key_topics: [
-          "Concentración profunda",
-          "Distracción digital",
-          "Valor del trabajo",
-          "Filosofías de trabajo profundo",
-        ],
-      },
-      {
-        id: "4",
-        title: "Inteligencia Emocional",
-        author: "Daniel Goleman",
-        description:
-          "Por qué es más importante que el cociente intelectual. Goleman explica cómo la inteligencia emocional puede ser fomentada y fortalecida en todos nosotros, y cómo esta habilidad determina nuestro éxito en las relaciones, el trabajo y hasta nuestro bienestar físico.",
-        category: "Desarrollo Personal",
-        rating: 4.5,
-        reading_time: "6h 24min",
-        pages: 384,
-        published_year: 1995,
-        cover_url: "/placeholder.svg?height=300&width=200&text=Inteligencia+Emocional",
-        tags: ["emociones", "psicología", "relaciones", "autoconciencia", "empatía"],
-        is_recommended: true,
-        difficulty: "Intermedio",
-        key_topics: ["Autoconciencia emocional", "Autorregulación", "Empatía", "Habilidades sociales", "Motivación"],
-      },
-      {
-        id: "5",
-        title: "Lean In",
-        author: "Sheryl Sandberg",
-        description:
-          "Las mujeres, el trabajo y la voluntad de liderar. Sandberg examina por qué el progreso de las mujeres en el logro de roles de liderazgo se ha estancado, explica las causas fundamentales, y ofrece soluciones convincentes y prácticas.",
-        category: "Liderazgo",
-        rating: 4.4,
-        reading_time: "4h 0min",
-        pages: 240,
-        published_year: 2013,
-        cover_url: "/placeholder.svg?height=300&width=200&text=Lean+In",
-        tags: ["liderazgo", "mujeres", "carrera", "igualdad", "trabajo", "género"],
-        is_recommended: false,
-        difficulty: "Fácil",
-        key_topics: ["Liderazgo femenino", "Equilibrio trabajo-vida", "Negociación", "Confianza", "Ambición"],
-      },
-    ]
+    const fetchLibraryData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
 
-    const mockProgress: UserProgress[] = [
-      {
-        book_id: "1",
-        percentage: 25,
-        current_page: 80,
-        total_pages: 320,
-        last_read_at: "2024-01-15",
-      },
-      {
-        book_id: "2",
-        percentage: 100,
-        current_page: 432,
-        total_pages: 432,
-        last_read_at: "2024-01-10",
-      },
-      {
-        book_id: "4",
-        percentage: 75,
-        current_page: 288,
-        total_pages: 384,
-        last_read_at: "2024-01-12",
-      },
-      {
-        book_id: "5",
-        percentage: 40,
-        current_page: 96,
-        total_pages: 240,
-        last_read_at: "2024-01-13",
-      },
-    ]
+        // Fetch books from database
+        const booksData = await LibraryService.getBooks()
+        setBooks(booksData)
 
-    const mockStats: UserStats = {
-      books_read: 12,
-      total_reading_time: 2880, // 48 hours in minutes
-      reading_streak: 15,
-      points: 2450,
-      level: 3,
+        // Mock user progress and stats for now (would come from user session)
+        const mockProgress: UserProgress[] = []
+        const mockStats: UserStats = {
+          books_read: 0,
+          total_reading_time: 0,
+          reading_streak: 0,
+          points: 0,
+          level: 1,
+        }
+
+        setUserProgress(mockProgress)
+        setUserStats(mockStats)
+      } catch (err) {
+        console.error("Error fetching library data:", err)
+        setError("Error al cargar la biblioteca. Por favor, intenta de nuevo.")
+      } finally {
+        setLoading(false)
+      }
     }
 
-    setBooks(mockBooks)
-    setUserProgress(mockProgress)
-    setUserStats(mockStats)
-    setLoading(false)
+    fetchLibraryData()
   }, [])
 
   const getProgressForBook = (bookId: string) => {
@@ -254,6 +152,12 @@ export default function LibraryPage() {
         return "bg-purple-100 text-purple-800 border-purple-200"
       case "Desarrollo Personal":
         return "bg-pink-100 text-pink-800 border-pink-200"
+      case "Comunicación":
+        return "bg-indigo-100 text-indigo-800 border-indigo-200"
+      case "Emprendimiento":
+        return "bg-orange-100 text-orange-800 border-orange-200"
+      case "Habilidades Blandas":
+        return "bg-teal-100 text-teal-800 border-teal-200"
       default:
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
@@ -343,6 +247,27 @@ export default function LibraryPage() {
     )
   }
 
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card className="shadow-sm border-0">
+          <CardContent className="p-12 text-center">
+            <BookOpen className="h-16 w-16 text-red-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-red-900 mb-2">Error al cargar la biblioteca</h3>
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              className="border-red-200 hover:bg-red-50"
+            >
+              Intentar de nuevo
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Header */}
@@ -358,6 +283,16 @@ export default function LibraryPage() {
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Descubre libros cuidadosamente seleccionados para impulsar tu carrera y desarrollo personal
         </p>
+        <div className="flex items-center justify-center gap-4 mt-6">
+          <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2">
+            <Brain className="w-4 h-4 mr-2" />
+            Integrado con Mirix Memory
+          </Badge>
+          <Badge variant="outline" className="px-4 py-2">
+            <Lightbulb className="w-4 h-4 mr-2" />
+            Captura insights mientras lees
+          </Badge>
+        </div>
       </div>
 
       {/* User Stats */}
@@ -443,6 +378,9 @@ export default function LibraryPage() {
                 <SelectItem value="Productividad">📈 Productividad</SelectItem>
                 <SelectItem value="Liderazgo">👑 Liderazgo</SelectItem>
                 <SelectItem value="Desarrollo Personal">🌱 Desarrollo Personal</SelectItem>
+                <SelectItem value="Comunicación">💬 Comunicación</SelectItem>
+                <SelectItem value="Emprendimiento">🚀 Emprendimiento</SelectItem>
+                <SelectItem value="Habilidades Blandas">🤝 Habilidades Blandas</SelectItem>
               </SelectContent>
             </Select>
             <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
@@ -494,10 +432,297 @@ export default function LibraryPage() {
         </TabsList>
 
         <TabsContent value="all">
+          {filteredBooks.length === 0 ? (
+            <Card className="shadow-sm border-0">
+              <CardContent className="p-12 text-center">
+                <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros disponibles</h3>
+                <p className="text-gray-600 mb-4">La biblioteca está vacía. Los libros se añadirán próximamente.</p>
+                <Button
+                  onClick={() => {
+                    setSearchTerm("")
+                    setSelectedCategory("all")
+                    setSelectedDifficulty("all")
+                  }}
+                  variant="outline"
+                  className="border-gray-200 hover:bg-gray-50"
+                >
+                  Limpiar filtros
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredBooks.map((book) => {
+                const progress = getProgressForBook(book.id)
+                return (
+                  <Card
+                    key={book.id}
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md bg-white"
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex gap-2">
+                          <Badge className={getCategoryColor(book.category)}>{book.category}</Badge>
+                          <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
+                        </div>
+                        {book.is_recommended && (
+                          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
+                            <Star className="w-3 h-3 mr-1 fill-current" />
+                            Top
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-gray-600">
+                        por {book.author} • {book.published_year}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">{book.description}</p>
+
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">{book.rating}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{book.reading_time}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>{book.pages}p</span>
+                        </div>
+                      </div>
+
+                      {progress && progress.percentage > 0 && (
+                        <div className="space-y-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600 font-medium">Progreso de lectura</span>
+                            <span className="font-bold text-blue-600">{progress.percentage}%</span>
+                          </div>
+                          <Progress value={progress.percentage} className="h-2 bg-blue-100" />
+                          <div className="flex justify-between text-xs text-gray-500">
+                            <span>
+                              Página {progress.current_page} de {progress.total_pages}
+                            </span>
+                            <span>Última lectura: {new Date(progress.last_read_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <p className="text-xs font-medium text-gray-700">Temas clave:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {book.key_topics.slice(0, 3).map((topic) => (
+                            <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
+                              {topic}
+                            </Badge>
+                          ))}
+                          {book.key_topics.length > 3 && (
+                            <Badge variant="outline" className="text-xs bg-gray-50">
+                              +{book.key_topics.length - 3} más
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">{getActionButton(book)}</div>
+
+                      <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
+                        {getStatusBadge(book)}
+                        <div className="flex gap-1">
+                          {book.tags.slice(0, 2).map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
+                              #{tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="reading">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredBooks.map((book) => {
-              const progress = getProgressForBook(book.id)
-              return (
+            {getBooksByStatus("reading").length === 0 ? (
+              <div className="col-span-full">
+                <Card className="shadow-sm border-0">
+                  <CardContent className="p-12 text-center">
+                    <TrendingUp className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros en progreso</h3>
+                    <p className="text-gray-600">Comienza a leer un libro para verlo aquí.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              getBooksByStatus("reading").map((book) => {
+                const progress = getProgressForBook(book.id)!
+                return (
+                  <Card
+                    key={book.id}
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-blue-200 bg-gradient-to-br from-blue-50/50 to-white"
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+                          <BookOpen className="w-3 h-3 mr-1" />
+                          En Progreso
+                        </Badge>
+                        <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
+                      </div>
+                      <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600 font-medium">Progreso de lectura</span>
+                          <span className="font-bold text-blue-600">{progress.percentage}%</span>
+                        </div>
+                        <Progress value={progress.percentage} className="h-3 bg-blue-100" />
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>
+                            Página {progress.current_page} de {progress.total_pages}
+                          </span>
+                          <span>Última lectura: {new Date(progress.last_read_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">{book.rating}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{book.reading_time}</span>
+                        </div>
+                      </div>
+
+                      <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 shadow-md">
+                        <Link href={`/library/reader/${book.id}`}>
+                          <TrendingUp className="w-4 h-4 mr-2" />
+                          Continuar Leyendo
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )
+              })
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="completed">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {getBooksByStatus("completed").length === 0 ? (
+              <div className="col-span-full">
+                <Card className="shadow-sm border-0">
+                  <CardContent className="p-12 text-center">
+                    <Award className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros completados</h3>
+                    <p className="text-gray-600">Completa la lectura de un libro para verlo aquí.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              getBooksByStatus("completed").map((book) => {
+                const progress = getProgressForBook(book.id)!
+                return (
+                  <Card
+                    key={book.id}
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-green-200 bg-gradient-to-br from-green-50/50 to-white"
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <Badge className="bg-green-100 text-green-800 border-green-200">
+                          <Award className="w-3 h-3 mr-1" />
+                          Completado
+                        </Badge>
+                        <div className="flex items-center gap-1 text-yellow-500">
+                          <Star className="h-4 w-4 fill-current" />
+                          <span className="text-sm font-medium">{book.rating}</span>
+                        </div>
+                      </div>
+                      <CardTitle className="text-lg line-clamp-2 group-hover:text-green-600 transition-colors">
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-100">
+                        <div className="text-sm text-green-800 space-y-1">
+                          <p className="font-medium flex items-center gap-2">
+                            <Award className="w-4 h-4" />
+                            Lectura completada
+                          </p>
+                          <p>Finalizado: {new Date(progress.last_read_at).toLocaleDateString()}</p>
+                          <p>Páginas leídas: {progress.total_pages}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-xs font-medium text-gray-700">Temas dominados:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {book.key_topics.slice(0, 4).map((topic) => (
+                            <Badge key={topic} variant="outline" className="text-xs bg-green-50 border-green-200">
+                              {topic}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          asChild
+                          variant="outline"
+                          className="flex-1 bg-transparent border-green-200 hover:bg-green-50"
+                        >
+                          <Link href={`/library/reader/${book.id}`}>
+                            <BookMarked className="w-4 h-4 mr-2" />
+                            Releer
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="px-3 bg-transparent border-green-200 hover:bg-green-50"
+                        >
+                          <Star className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="not-started">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {getBooksByStatus("not-started").length === 0 ? (
+              <div className="col-span-full">
+                <Card className="shadow-sm border-0">
+                  <CardContent className="p-12 text-center">
+                    <Zap className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros por leer</h3>
+                    <p className="text-gray-600">Todos los libros disponibles ya han sido iniciados.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              getBooksByStatus("not-started").map((book) => (
                 <Card
                   key={book.id}
                   className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md bg-white"
@@ -511,7 +736,7 @@ export default function LibraryPage() {
                       {book.is_recommended && (
                         <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
                           <Star className="w-3 h-3 mr-1 fill-current" />
-                          Top
+                          Recomendado
                         </Badge>
                       )}
                     </div>
@@ -534,30 +759,11 @@ export default function LibraryPage() {
                         <Clock className="h-4 w-4" />
                         <span>{book.reading_time}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4" />
-                        <span>{book.pages}p</span>
-                      </div>
+                      <span>{book.pages} páginas</span>
                     </div>
 
-                    {progress && progress.percentage > 0 && (
-                      <div className="space-y-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 font-medium">Progreso de lectura</span>
-                          <span className="font-bold text-blue-600">{progress.percentage}%</span>
-                        </div>
-                        <Progress value={progress.percentage} className="h-2 bg-blue-100" />
-                        <div className="flex justify-between text-xs text-gray-500">
-                          <span>
-                            Página {progress.current_page} de {progress.total_pages}
-                          </span>
-                          <span>Última lectura: {new Date(progress.last_read_at).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                    )}
-
                     <div className="space-y-2">
-                      <p className="text-xs font-medium text-gray-700">Temas clave:</p>
+                      <p className="text-xs font-medium text-gray-700">Aprenderás sobre:</p>
                       <div className="flex flex-wrap gap-1">
                         {book.key_topics.slice(0, 3).map((topic) => (
                           <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
@@ -572,10 +778,18 @@ export default function LibraryPage() {
                       </div>
                     </div>
 
-                    <div className="flex gap-2">{getActionButton(book)}</div>
+                    <Button asChild className="w-full shadow-md">
+                      <Link href={`/library/reader/${book.id}`}>
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        Comenzar a Leer
+                      </Link>
+                    </Button>
 
                     <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
-                      {getStatusBadge(book)}
+                      <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
+                        <Zap className="w-3 h-3 mr-1" />
+                        Listo para comenzar
+                      </Badge>
                       <div className="flex gap-1">
                         {book.tags.slice(0, 2).map((tag) => (
                           <Badge key={tag} variant="secondary" className="text-xs">
@@ -586,251 +800,11 @@ export default function LibraryPage() {
                     </div>
                   </CardContent>
                 </Card>
-              )
-            })}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="reading">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getBooksByStatus("reading").map((book) => {
-              const progress = getProgressForBook(book.id)!
-              return (
-                <Card
-                  key={book.id}
-                  className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-blue-200 bg-gradient-to-br from-blue-50/50 to-white"
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge className="bg-blue-100 text-blue-800 border-blue-200">
-                        <BookOpen className="w-3 h-3 mr-1" />
-                        En Progreso
-                      </Badge>
-                      <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
-                    </div>
-                    <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
-                      {book.title}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 font-medium">Progreso de lectura</span>
-                        <span className="font-bold text-blue-600">{progress.percentage}%</span>
-                      </div>
-                      <Progress value={progress.percentage} className="h-3 bg-blue-100" />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>
-                          Página {progress.current_page} de {progress.total_pages}
-                        </span>
-                        <span>Última lectura: {new Date(progress.last_read_at).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{book.rating}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{book.reading_time}</span>
-                      </div>
-                    </div>
-
-                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 shadow-md">
-                      <Link href={`/library/reader/${book.id}`}>
-                        <TrendingUp className="w-4 h-4 mr-2" />
-                        Continuar Leyendo
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="completed">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getBooksByStatus("completed").map((book) => {
-              const progress = getProgressForBook(book.id)!
-              return (
-                <Card
-                  key={book.id}
-                  className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-green-200 bg-gradient-to-br from-green-50/50 to-white"
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
-                        <Award className="w-3 h-3 mr-1" />
-                        Completado
-                      </Badge>
-                      <div className="flex items-center gap-1 text-yellow-500">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="text-sm font-medium">{book.rating}</span>
-                      </div>
-                    </div>
-                    <CardTitle className="text-lg line-clamp-2 group-hover:text-green-600 transition-colors">
-                      {book.title}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-600">por {book.author}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-100">
-                      <div className="text-sm text-green-800 space-y-1">
-                        <p className="font-medium flex items-center gap-2">
-                          <Award className="w-4 h-4" />
-                          Lectura completada
-                        </p>
-                        <p>Finalizado: {new Date(progress.last_read_at).toLocaleDateString()}</p>
-                        <p>Páginas leídas: {progress.total_pages}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <p className="text-xs font-medium text-gray-700">Temas dominados:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {book.key_topics.slice(0, 4).map((topic) => (
-                          <Badge key={topic} variant="outline" className="text-xs bg-green-50 border-green-200">
-                            {topic}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="flex-1 bg-transparent border-green-200 hover:bg-green-50"
-                      >
-                        <Link href={`/library/reader/${book.id}`}>
-                          <BookMarked className="w-4 h-4 mr-2" />
-                          Releer
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="px-3 bg-transparent border-green-200 hover:bg-green-50"
-                      >
-                        <Star className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="not-started">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getBooksByStatus("not-started").map((book) => (
-              <Card
-                key={book.id}
-                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md bg-white"
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex gap-2">
-                      <Badge className={getCategoryColor(book.category)}>{book.category}</Badge>
-                      <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
-                    </div>
-                    {book.is_recommended && (
-                      <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
-                        <Star className="w-3 h-3 mr-1 fill-current" />
-                        Recomendado
-                      </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
-                    {book.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm text-gray-600">
-                    por {book.author} • {book.published_year}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">{book.description}</p>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{book.rating}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      <span>{book.reading_time}</span>
-                    </div>
-                    <span>{book.pages} páginas</span>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-xs font-medium text-gray-700">Aprenderás sobre:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {book.key_topics.slice(0, 3).map((topic) => (
-                        <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
-                          {topic}
-                        </Badge>
-                      ))}
-                      {book.key_topics.length > 3 && (
-                        <Badge variant="outline" className="text-xs bg-gray-50">
-                          +{book.key_topics.length - 3} más
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-
-                  <Button asChild className="w-full shadow-md">
-                    <Link href={`/library/reader/${book.id}`}>
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Comenzar a Leer
-                    </Link>
-                  </Button>
-
-                  <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
-                    <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
-                      <Zap className="w-3 h-3 mr-1" />
-                      Listo para comenzar
-                    </Badge>
-                    <div className="flex gap-1">
-                      {book.tags.slice(0, 2).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
-                          #{tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+              ))
+            )}
           </div>
         </TabsContent>
       </Tabs>
-
-      {filteredBooks.length === 0 && (
-        <Card className="shadow-sm border-0">
-          <CardContent className="p-12 text-center">
-            <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron libros</h3>
-            <p className="text-gray-600 mb-4">Intenta ajustar tus filtros de búsqueda para encontrar más libros.</p>
-            <Button
-              onClick={() => {
-                setSearchTerm("")
-                setSelectedCategory("all")
-                setSelectedDifficulty("all")
-              }}
-              variant="outline"
-              className="border-gray-200 hover:bg-gray-50"
-            >
-              Limpiar filtros
-            </Button>
-          </CardContent>
-        </Card>
-      )}
     </div>
   )
 }

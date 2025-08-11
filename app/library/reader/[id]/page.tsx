@@ -1,1813 +1,763 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Separator } from "@/components/ui/separator"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  BookmarkPlus,
-  StickyNote,
-  Plus,
-  Edit,
-  Trash2,
-  Menu,
-  Clock,
-  Target,
-  Moon,
-  Sun,
-  Minus,
-  Calendar,
-  MapPin,
-  Play,
-  Pause,
-  Square,
-  Volume2,
-  VolumeX,
-  Settings,
-  SkipForward,
-  SkipBack,
-  Headphones,
+  ArrowRight,
+  BookOpen,
+  Bookmark,
+  BookmarkCheck,
   Highlighter,
   MessageSquare,
-  Eye,
-  EyeOff,
+  Play,
+  Pause,
+  Settings,
+  Sun,
+  Moon,
+  Type,
+  Palette,
 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-
-interface Chapter {
-  id: string
-  title: string
-  content: string
-  page_start: number
-  page_end: number
-  reading_time: number
-}
-
-interface Bookmarks {
-  id: string
-  chapter_id: string
-  chapter_title: string
-  position: number
-  selected_text: string
-  note?: string
-  created_at: string
-  page_number: number
-}
-
-interface Note {
-  id: string
-  chapter_id: string
-  chapter_title: string
-  title: string
-  content: string
-  selected_text?: string
-  position?: number
-  created_at: string
-  updated_at: string
-  page_number: number
-}
-
-interface Highlight {
-  id: string
-  chapter_id: string
-  chapter_title: string
-  selected_text: string
-  start_position: number
-  end_position: number
-  color: string
-  annotation?: string
-  created_at: string
-  updated_at: string
-  page_number: number
-}
-
-interface ReadingProgress {
-  current_chapter: number
-  current_position: number
-  progress_percentage: number
-  time_spent: number
-  last_read: string
-  bookmarks_count: number
-  notes_count: number
-  highlights_count: number
-}
+import { LibraryService } from "@/lib/supabase-library"
+import { BookContentService } from "@/lib/book-content"
 
 interface Book {
   id: string
   title: string
   author: string
   description: string
-  cover_url: string
+  cover_image: string
+  category: string
+  difficulty: string
+  estimated_reading_time: number
   total_pages: number
-  total_chapters: number
+  isbn?: string
+  publication_year?: number
+  language: string
+  rating: number
+  total_ratings: number
+}
+
+interface Chapter {
+  id: string
+  book_id: string
+  chapter_number: number
+  title: string
+  content: string
+  word_count: number
   estimated_reading_time: number
 }
 
-interface TTSSettings {
-  voice: string
-  rate: number
-  pitch: number
-  volume: number
-  enabled: boolean
+interface ReadingSettings {
+  fontSize: number
+  fontFamily: string
+  theme: "light" | "dark" | "sepia"
+  lineHeight: number
 }
 
-const HIGHLIGHT_COLORS = [
-  { name: "Amarillo", value: "#fef08a", class: "bg-yellow-200" },
-  { name: "Verde", value: "#bbf7d0", class: "bg-green-200" },
-  { name: "Azul", value: "#bfdbfe", class: "bg-blue-200" },
-  { name: "Rosa", value: "#fce7f3", class: "bg-pink-200" },
-  { name: "Púrpura", value: "#e9d5ff", class: "bg-purple-200" },
-  { name: "Naranja", value: "#fed7aa", class: "bg-orange-200" },
-]
+interface Note {
+  id: string
+  text: string
+  position: number
+  timestamp: Date
+}
 
-export default function BookReaderPage() {
+interface Highlight {
+  id: string
+  text: string
+  color: string
+  position: number
+  timestamp: Date
+}
+
+export default function BookReader() {
   const params = useParams()
   const router = useRouter()
-  const { toast } = useToast()
   const bookId = params.id as string
 
-  // Book and content state
+  // State
   const [book, setBook] = useState<Book | null>(null)
   const [chapters, setChapters] = useState<Chapter[]>([])
-  const [currentChapter, setCurrentChapter] = useState(0)
-  const [readingProgress, setReadingProgress] = useState<ReadingProgress | null>(null)
-
-  // Bookmarks and notes state
-  const [bookmarks, setBookmarks] = useState<Bookmarks[]>([])
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [readingProgress, setReadingProgress] = useState(0)
+  const [isBookmarked, setIsBookmarked] = useState(false)
   const [notes, setNotes] = useState<Note[]>([])
   const [highlights, setHighlights] = useState<Highlight[]>([])
-  const [selectedText, setSelectedText] = useState("")
-  const [selectionRange, setSelectionRange] = useState<{ start: number; end: number } | null>(null)
-
-  // UI state
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [showBookmarkDialog, setShowBookmarkDialog] = useState(false)
-  const [showNoteDialog, setShowNoteDialog] = useState(false)
-  const [showHighlightDialog, setShowHighlightDialog] = useState(false)
-  const [showAnnotationDialog, setShowAnnotationDialog] = useState(false)
-  const [showTTSSettings, setShowTTSSettings] = useState(false)
-  const [editingNote, setEditingNote] = useState<Note | null>(null)
-  const [editingHighlight, setEditingHighlight] = useState<Highlight | null>(null)
-  const [newNoteTitle, setNewNoteTitle] = useState("")
-  const [newNoteContent, setNewNoteContent] = useState("")
-  const [bookmarkNote, setBookmarkNote] = useState("")
-  const [selectedHighlightColor, setSelectedHighlightColor] = useState(HIGHLIGHT_COLORS[0].value)
-  const [highlightAnnotation, setHighlightAnnotation] = useState("")
-  const [showHighlights, setShowHighlights] = useState(true)
-
-  // Reading settings
-  const [fontSize, setFontSize] = useState(16)
-  const [darkMode, setDarkMode] = useState(false)
-  const [lineHeight, setLineHeight] = useState(1.6)
-
-  // Text-to-Speech state
+  const [newNote, setNewNote] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0)
-  const [sentences, setSentences] = useState<string[]>([])
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
-  const [ttsSettings, setTTSSettings] = useState<TTSSettings>({
-    voice: "",
-    rate: 1,
-    pitch: 1,
-    volume: 0.8,
-    enabled: true,
+  const [settings, setSettings] = useState<ReadingSettings>({
+    fontSize: 16,
+    fontFamily: "serif",
+    theme: "light",
+    lineHeight: 1.6,
   })
-  const [ttsSupported, setTTSSupported] = useState(true)
 
-  // Refs
-  const contentRef = useRef<HTMLDivElement>(null)
-  const readingTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const speechSynthesisRef = useRef<SpeechSynthesis | null>(null)
-  const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
-  const isStoppingRef = useRef(false)
-
+  // Load book data
   useEffect(() => {
-    loadBookData()
-    startReadingTimer()
-    initializeTTS()
+    async function loadBook() {
+      try {
+        setLoading(true)
 
-    return () => {
-      if (readingTimerRef.current) {
-        clearInterval(readingTimerRef.current)
-      }
-      cleanupTTS()
-    }
-  }, [bookId])
-
-  useEffect(() => {
-    updateReadingProgress()
-  }, [currentChapter])
-
-  useEffect(() => {
-    if (chapters[currentChapter]) {
-      prepareTTSContent()
-    }
-  }, [currentChapter, chapters])
-
-  const initializeTTS = () => {
-    try {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        speechSynthesisRef.current = window.speechSynthesis
-
-        // Load voices
-        const loadVoices = () => {
-          try {
-            const voices = speechSynthesisRef.current?.getVoices() || []
-            setAvailableVoices(voices)
-
-            // Set default voice (prefer Spanish voices)
-            const spanishVoice = voices.find((voice) => voice.lang.startsWith("es"))
-            const englishVoice = voices.find((voice) => voice.lang.startsWith("en"))
-            const defaultVoice = spanishVoice || englishVoice || voices[0]
-
-            if (defaultVoice && !ttsSettings.voice) {
-              setTTSSettings((prev) => ({ ...prev, voice: defaultVoice.name }))
-            }
-          } catch (error) {
-            console.error("Error loading voices:", error)
-            setTTSSupported(false)
-          }
+        // Get book details
+        const bookData = await LibraryService.getBookById(bookId)
+        if (!bookData) {
+          setError("Libro no encontrado")
+          return
         }
+        setBook(bookData)
 
-        loadVoices()
+        // Get chapters
+        const chaptersData = await LibraryService.getBookChapters(bookId)
 
-        // Some browsers need this event to load voices
-        if (speechSynthesisRef.current.onvoiceschanged !== undefined) {
-          speechSynthesisRef.current.onvoiceschanged = loadVoices
-        }
-      } else {
-        setTTSSupported(false)
-      }
-    } catch (error) {
-      console.error("Error initializing TTS:", error)
-      setTTSSupported(false)
-    }
-  }
+        // If no chapters in database, use hardcoded content for Atomic Habits
+        if (chaptersData.length === 0 && bookId === "550e8400-e29b-41d4-a716-446655440001") {
+          const atomicHabitsChapters = [
+            {
+              id: "intro",
+              book_id: bookId,
+              chapter_number: 0,
+              title: "Introducción",
+              content: `Mi historia comienza en el segundo año de preparatoria. Era un día de octubre normal cuando me dirigía al entrenamiento de béisbol. Mientras caminaba hacia el campo, un compañero de clase accidentalmente me golpeó en la cara con un bate de béisbol. No recuerdo el momento del impacto. El bate me golpeó directamente entre los ojos y me fracturó la nariz en dos lugares. El hueso de mi nariz se desplazó tanto que tuvieron que realinear mi tabique nasal. Para cuando llegué al hospital, mi cara se había hinchado como un globo. Pasé esa noche en el hospital y no regresé a la escuela durante una semana.
 
-  const prepareTTSContent = () => {
-    if (!chapters[currentChapter]) return
+Fue el comienzo de un viaje que cambiaría mi vida. Durante los siguientes meses, mientras me recuperaba, comencé a desarrollar pequeños hábitos que eventualmente transformarían mi salud, mi trabajo y mi vida. Este libro es sobre el poder de los pequeños hábitos.
 
-    const content = chapters[currentChapter].content
-    // Split content into sentences for better TTS control
-    const sentenceArray = content
-      .split(/[.!?]+/)
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0)
-      .map((s) => s + ".")
+Los hábitos son el interés compuesto del auto-mejoramiento. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican mientras los repites. Parecen hacer poca diferencia en un día dado y sin embargo el impacto que entregan a lo largo de los meses y años puede ser enorme. Es solo cuando miramos hacia atrás dos, cinco o quizás diez años después que el valor de los buenos hábitos y el costo de los malos se vuelve asombrosamente aparente.
 
-    setSentences(sentenceArray)
-    setCurrentSentenceIndex(0)
-  }
+Desafortunadamente, el lento ritmo de transformación también hace que sea fácil dejar que un mal hábito se deslice. Si comes una hamburguesa poco saludable hoy, la báscula no se moverá mucho. Si trabajas hasta tarde esta noche e ignoras a tu familia, ellos te perdonarán. Si pospones tu proyecto por un día más, siempre habrá mañana. Un solo error es fácil de descartar.
 
-  const cleanupTTS = () => {
-    try {
-      isStoppingRef.current = true
-      if (speechSynthesisRef.current) {
-        speechSynthesisRef.current.cancel()
-      }
-      if (currentUtteranceRef.current) {
-        currentUtteranceRef.current.onend = null
-        currentUtteranceRef.current.onerror = null
-        currentUtteranceRef.current = null
-      }
-      setIsPlaying(false)
-      setIsPaused(false)
-      removeHighlight()
-    } catch (error) {
-      console.error("Error cleaning up TTS:", error)
-    }
-  }
+Pero cuando repetimos errores del 1 por ciento día tras día, replicando decisiones pobres, duplicando pequeños errores y racionalizando pequeñas excusas, nuestras pequeñas elecciones se combinan en resultados tóxicos. Es la acumulación de muchos pasos en falso, un 1 por ciento de declive aquí y allá, lo que eventualmente lleva a un problema.
 
-  const startTTS = () => {
-    if (!ttsSupported || !speechSynthesisRef.current || !ttsSettings.enabled || sentences.length === 0) {
-      if (!ttsSupported) {
-        toast({
-          title: "Función no disponible",
-          description: "Tu navegador no soporta síntesis de voz",
-          variant: "destructive",
-        })
-      }
-      return
-    }
+Los hábitos pueden ser un arma de doble filo. Pueden trabajar para ti o contra ti, razón por la cual entender los detalles es esencial. Los pequeños cambios a menudo parecen no hacer diferencia hasta que cruzas un umbral crítico. Los resultados más poderosos de cualquier sistema compuesto se retrasan. Necesitas ser paciente.
 
-    try {
-      // Cancel any ongoing speech first
-      cleanupTTS()
-      isStoppingRef.current = false
+Un bambú chino apenas crece en sus primeros cinco años. Durante este tiempo, todo el crecimiento ocurre bajo tierra en un extenso sistema de raíces que se extiende vertical y horizontalmente por la tierra. Luego, al final del quinto año, el bambú chino crece hasta noventa pies en seis semanas.
 
-      setIsPlaying(true)
-      setIsPaused(false)
-      speakFromSentence(currentSentenceIndex)
-    } catch (error) {
-      console.error("Error starting TTS:", error)
-      setIsPlaying(false)
-      toast({
-        title: "Error de síntesis de voz",
-        description: "No se pudo iniciar la reproducción de voz",
-        variant: "destructive",
-      })
-    }
-  }
+Muchas personas piensan que no están progresando porque no pueden ver resultados inmediatos. Pero el trabajo no se desperdicia. Simplemente se está almacenando. Todo el trabajo previo está siendo preparado para ser liberado. Los hábitos a menudo no parecen hacer diferencia hasta que cruzas un umbral crítico y desbloqueas un nuevo nivel de rendimiento. En los primeros y segundos años de cualquier búsqueda, a menudo hay un Valle de Decepción donde las personas se sienten desanimadas después de poner trabajo y no ver resultados inmediatos. Sin embargo, este trabajo no se desperdicia.
 
-  const speakFromSentence = (startIndex: number) => {
-    if (!speechSynthesisRef.current || startIndex >= sentences.length || isStoppingRef.current) {
-      setIsPlaying(false)
-      setCurrentSentenceIndex(0)
-      return
-    }
+Si quieres mejores resultados, entonces olvídate de establecer metas. Enfócate en tu sistema en su lugar.
 
-    try {
-      const utterance = new SpeechSynthesisUtterance(sentences[startIndex])
+¿Cuál es la diferencia entre sistemas y metas? Es una distinción que hago a menudo pero que vale la pena repetir: Las metas son sobre los resultados que quieres lograr. Los sistemas son sobre los procesos que llevan a esos resultados.
 
-      // Find the selected voice or use default
-      let selectedVoice = availableVoices.find((voice) => voice.name === ttsSettings.voice)
+Si eres entrenador, tu meta podría ser ganar un campeonato. Tu sistema es la forma en que reclutes jugadores, manejes a tus asistentes y conduzcas la práctica.
 
-      // Fallback to any available voice if the selected one isn't available
-      if (!selectedVoice && availableVoices.length > 0) {
-        selectedVoice = availableVoices[0]
-        setTTSSettings((prev) => ({ ...prev, voice: selectedVoice!.name }))
-      }
+Si eres emprendedor, tu meta podría ser construir un negocio de un millón de dólares. Tu sistema es cómo pruebas ideas de productos, contratas empleados y ejecutas campañas de marketing.
 
-      if (selectedVoice) {
-        utterance.voice = selectedVoice
-      }
+Si eres músico, tu meta podría ser tocar una nueva pieza. Tu sistema es la frecuencia con la que practicas, cómo desglosas y abordas piezas difíciles, y tu método para recibir retroalimentación de tu instructor.
 
-      utterance.rate = ttsSettings.rate
-      utterance.pitch = ttsSettings.pitch
-      utterance.volume = ttsSettings.volume
+Ahora por la pregunta interesante: Si ignoras completamente tus metas y te enfocas solo en tu sistema, ¿aún tendrías éxito? Creo que sí.
 
-      utterance.onstart = () => {
-        if (!isStoppingRef.current) {
-          setCurrentSentenceIndex(startIndex)
-          highlightCurrentSentence(startIndex)
-        }
-      }
+Los problemas surgen cuando pasas demasiado tiempo pensando en tus metas y no suficiente tiempo diseñando tus sistemas. ¿Cuáles son algunos de los problemas con un enfoque de metas primero?
 
-      utterance.onend = () => {
-        if (!isStoppingRef.current && isPlaying && !isPaused) {
-          const nextIndex = startIndex + 1
-          if (nextIndex < sentences.length) {
-            speakFromSentence(nextIndex)
-          } else {
-            // Chapter finished, move to next chapter if available
-            if (currentChapter < chapters.length - 1) {
-              setCurrentChapter((prev) => prev + 1)
-              toast({
-                title: "Capítulo completado",
-                description: "Continuando con el siguiente capítulo",
-              })
-            } else {
-              setIsPlaying(false)
-              setCurrentSentenceIndex(0)
-              removeHighlight()
-              toast({
-                title: "Lectura completada",
-                description: "Has terminado de escuchar el libro",
-              })
-            }
-          }
-        }
-      }
+Problema #1: Los ganadores y perdedores tienen las mismas metas.
+Problema #2: Lograr una meta es solo un cambio momentáneo.
+Problema #3: Las metas restringen tu felicidad.
+Problema #4: Las metas están en desacuerdo con el progreso a largo plazo.
 
-      utterance.onerror = (event) => {
-        // Handle different types of TTS errors more gracefully
-        console.error("TTS Error:", event.error)
+Ninguna de estas críticas pretende sugerir que las metas son inútiles. Sin embargo, he encontrado que las metas son buenas para establecer una dirección, pero los sistemas son mejores para hacer progreso real. Un puñado de problemas surgen cuando pasas demasiado tiempo pensando en tus metas y no suficiente tiempo diseñando tus sistemas.`,
+              word_count: 1200,
+              estimated_reading_time: 6,
+            },
+            {
+              id: "chapter-1",
+              book_id: bookId,
+              chapter_number: 1,
+              title: "El Sorprendente Poder de los Hábitos Atómicos",
+              content: `Es muy fácil sobrestimar la importancia de un momento definitorio y subestimar el valor de hacer pequeñas mejoras diariamente. Con demasiada frecuencia, nos convencemos de que el cambio masivo requiere acción masiva. Ya sea perdiendo peso, construyendo un negocio, escribiendo un libro, ganando un campeonato, o logrando cualquier otra meta, nos presionamos para hacer alguna mejora que capture la atención de todos.
 
-        // Don't show error toasts for common interruption errors
-        const silentErrors = ["canceled", "interrupted", "aborted", "network"]
+Mientras tanto, mejorar en un 1 por ciento no es particularmente notable, a veces ni siquiera es perceptible, pero puede ser mucho más significativo, especialmente a largo plazo. La diferencia que puede hacer una pequeña mejora con el tiempo es asombrosa. Así es como funciona la matemática: si puedes mejorar un 1 por ciento cada día durante un año, terminarás treinta y siete veces mejor al final. Por el contrario, si empeoras un 1 por ciento cada día durante un año, caerás casi a cero. Lo que comienza como una pequeña ganancia o una pérdida menor se acumula en algo mucho más.
 
-        if (!silentErrors.includes(event.error) && !isStoppingRef.current) {
-          toast({
-            title: "Error de síntesis de voz",
-            description: `Error durante la reproducción: ${event.error}`,
-            variant: "destructive",
-          })
-        }
+Los hábitos son el interés compuesto del auto-mejoramiento. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican mientras los repites. Parecen hacer poca diferencia en un día dado y sin embargo el impacto que entregan a lo largo de los meses y años puede ser enorme. Es solo cuando miramos hacia atrás dos, cinco o quizás diez años después que el valor de los buenos hábitos y el costo de los malos se vuelve asombrosamente aparente.
 
-        // Reset state only if we're not intentionally stopping
-        if (!isStoppingRef.current) {
-          setIsPlaying(false)
-          setIsPaused(false)
-          removeHighlight()
-        }
-      }
+Esto puede ser un concepto difícil de apreciar en la vida diaria. A menudo descartamos los pequeños cambios porque no parecen importar mucho en el momento. Si ahorras un poco de dinero ahora, sigues sin ser millonario. Si vas al gimnasio tres días seguidos, sigues fuera de forma. Si estudias mandarín durante una hora esta noche, aún no hablas el idioma. Hacemos algunos cambios, pero los resultados nunca parecen llegar rápidamente y así volvemos a nuestras viejas rutinas.
 
-      // Store the current utterance so we can cancel it if needed
-      currentUtteranceRef.current = utterance
+Desafortunadamente, el lento ritmo de transformación también hace que sea fácil dejar que un mal hábito se deslice. Si comes una hamburguesa poco saludable hoy, la báscula no se moverá mucho. Si trabajas hasta tarde esta noche e ignoras a tu familia, ellos te perdonarán. Si pospones tu proyecto por un día más, siempre habrá mañana. Un solo error es fácil de descartar.
 
-      // Speak the utterance
-      speechSynthesisRef.current.speak(utterance)
-    } catch (error) {
-      console.error("Error in speakFromSentence:", error)
-      setIsPlaying(false)
-      if (!isStoppingRef.current) {
-        toast({
-          title: "Error de síntesis de voz",
-          description: "No se pudo reproducir el texto seleccionado",
-          variant: "destructive",
-        })
-      }
-    }
-  }
+Pero cuando repetimos errores del 1 por ciento día tras día, replicando decisiones pobres, duplicando pequeños errores y racionalizando pequeñas excusas, nuestras pequeñas elecciones se combinan en resultados tóxicos. Es la acumulación de muchos pasos en falso, un 1 por ciento de declive aquí y allá, lo que eventualmente lleva a un problema.
 
-  const pauseTTS = () => {
-    try {
-      if (speechSynthesisRef.current && isPlaying && !isStoppingRef.current) {
-        speechSynthesisRef.current.pause()
-        setIsPaused(true)
-      }
-    } catch (error) {
-      console.error("Error pausing TTS:", error)
-      stopTTS()
-    }
-  }
+La historia del equipo de ciclismo británico ilustra perfectamente este punto. En 2003, el equipo de ciclismo de Gran Bretaña contrató a Dave Brailsford como su nuevo director de rendimiento. En ese momento, los ciclistas profesionales británicos habían sufrido casi cien años de mediocridad. Desde 1908, los ciclistas británicos habían ganado solo una medalla de oro olímpica y nunca habían ganado el Tour de Francia.
 
-  const resumeTTS = () => {
-    try {
-      if (speechSynthesisRef.current && isPaused && !isStoppingRef.current) {
-        speechSynthesisRef.current.resume()
-        setIsPaused(false)
-      }
-    } catch (error) {
-      console.error("Error resuming TTS:", error)
-      // If resume fails, try to restart from current sentence
-      stopTTS()
-      setTimeout(() => startTTS(), 100)
-    }
-  }
+Brailsford tenía un enfoque diferente. Creía en un concepto que él se refería como la agregación de ganancias marginales. Su filosofía era simple: si desglosas todo lo que puedas pensar que va en el ciclismo y luego mejoras cada elemento en solo un 1 por ciento, obtendrás un aumento significativo cuando pongas todo junto.
 
-  const stopTTS = () => {
-    cleanupTTS()
-  }
+Brailsford y su equipo comenzaron haciendo los pequeños ajustes que podrías esperar de un equipo de ciclismo de clase mundial. Optimizaron la nutrición de los ciclistas y sus programas de entrenamiento. Contrataron cirujanos para enseñar a los ciclistas la forma adecuada de lavarse las manos para reducir las posibilidades de contraer una enfermedad. Determinaron el tipo de almohada y colchón que llevaba al mejor sueño nocturno para cada ciclista.
 
-  const skipForward = () => {
-    if (currentSentenceIndex < sentences.length - 1) {
-      const nextIndex = currentSentenceIndex + 1
-      setCurrentSentenceIndex(nextIndex)
+Pero no se detuvieron ahí. Brailsford y su equipo continuaron encontrando mejoras del 1 por ciento en áreas que pasaban desapercibidas por casi todos los demás. Probaron diferentes tipos de aceites de masaje para ver cuál llevaba a la recuperación muscular más rápida. Contrataron un cirujano para enseñar a cada ciclista la mejor manera de lavarse las manos para reducir las posibilidades de contraer un resfriado. Determinaron el tipo de almohada y colchón que llevaba al mejor sueño nocturno para cada ciclista. Incluso pintaron el interior del camión del equipo de blanco, lo que les ayudó a detectar pequeñas partículas de polvo que normalmente pasarían desapercibidas pero podrían degradar el rendimiento de las bicicletas finamente ajustadas.
 
-      if (isPlaying) {
-        cleanupTTS()
-        isStoppingRef.current = false
-        setIsPlaying(true)
-        speakFromSentence(nextIndex)
-      }
-    }
-  }
+Como Brailsford puso: Había tantas cosas que pasaban por alto. Y agregando todas estas pequeñas mejoras, tuviste un efecto significativo.
 
-  const skipBackward = () => {
-    if (currentSentenceIndex > 0) {
-      const prevIndex = currentSentenceIndex - 1
-      setCurrentSentenceIndex(prevIndex)
+Solo cinco años después de que Brailsford tomara el control del equipo de ciclismo británico, dominaron los eventos de ciclismo en carretera y pista en los Juegos Olímpicos de 2008 en Beijing, donde ganaron un 60 por ciento de las medallas de oro disponibles. Cuatro años después, cuando llegaron los Juegos Olímpicos de Londres de 2012, los británicos establecieron nueve récords olímpicos y siete récords mundiales.
 
-      if (isPlaying) {
-        cleanupTTS()
-        isStoppingRef.current = false
-        setIsPlaying(true)
-        speakFromSentence(prevIndex)
-      }
-    }
-  }
+Ese mismo año, Bradley Wiggins se convirtió en el primer ciclista británico en ganar el Tour de Francia. Al año siguiente, su compañero de equipo Chris Froome ganó la carrera, y lo haría de nuevo en 2015, 2016 y 2017, dando a los ciclistas británicos cinco victorias en el Tour de Francia en seis años.
 
-  const highlightCurrentSentence = (index: number) => {
-    removeHighlight()
+Durante una década de diez años, los ciclistas británicos ganaron 178 campeonatos mundiales y sesenta y seis récords olímpicos o mundiales y capturaron cinco victorias en el Tour de Francia en lo que es la carrera más exitosa en la historia del ciclismo moderno británico.
 
-    if (contentRef.current) {
-      const textContent = contentRef.current.textContent || ""
-      const sentence = sentences[index]
-      if (sentence && textContent.includes(sentence.replace(".", ""))) {
-        contentRef.current.style.backgroundColor = darkMode ? "#1f2937" : "#fef3c7"
-      }
-    }
-  }
+¿Cómo sucede esto? ¿Cómo mejoras drásticamente en solo unos años después de décadas de mediocridad? ¿Por qué las pequeñas mejoras se acumulan en resultados notables, y cómo puedes replicar este enfoque en tu propia vida?
 
-  const removeHighlight = () => {
-    if (contentRef.current) {
-      contentRef.current.style.backgroundColor = "transparent"
-    }
-  }
+Es fácil sobrestimar la importancia de cualquier evento único y subestimar el valor de hacer mejoras pequeñas diariamente. Demasiado a menudo, nos convencemos de que el éxito masivo requiere acción masiva.
 
-  const loadBookData = async () => {
-    try {
-      // Mock book data
-      const mockBook: Book = {
-        id: bookId,
-        title: "Hábitos Atómicos",
-        author: "James Clear",
-        description: "Un método fácil y comprobado para crear buenos hábitos y eliminar los malos.",
-        cover_url: "/books/atomic-habits.jpg",
-        total_pages: 320,
-        total_chapters: 20,
-        estimated_reading_time: 270,
-      }
+Mientras tanto, mejorar en un 1 por ciento no es particularmente notable, a veces ni siquiera es perceptible, pero puede ser mucho más significativo, especialmente a largo plazo.`,
+              word_count: 1400,
+              estimated_reading_time: 7,
+            },
+            {
+              id: "chapter-2",
+              book_id: bookId,
+              chapter_number: 2,
+              title: "Cómo Tus Hábitos Moldean Tu Identidad (y Viceversa)",
+              content: `¿Por qué es tan fácil repetir malos hábitos y tan difícil formar buenos? Pocas cosas pueden tener un impacto más poderoso en tu vida que mejorar tus hábitos diarios. Y sin embargo es probable que este tiempo el próximo año estarás haciendo las mismas cosas que estás haciendo hoy.
 
-      const mockChapters: Chapter[] = [
-        {
-          id: "1",
-          title: "Los fundamentos: Por qué los pequeños cambios generan una gran diferencia",
-          content: `Los hábitos son el interés compuesto del autodesarrollo. De la misma manera que el dinero se multiplica a través del interés compuesto, los efectos de tus hábitos se multiplican conforme los repites. Parecen generar poca diferencia en un día determinado y, sin embargo, el impacto que producen a lo largo de los meses y años puede ser enorme.
+¿Por qué es tan difícil cambiar nuestros hábitos? Tratamos de cambiar las cosas equivocadas. Para entender lo que quiero decir, considera que hay tres niveles en los que puede ocurrir el cambio. Puedes imaginar estos como las capas de una cebolla.
 
-Es solo cuando miramos hacia atrás —dos, cinco o quizás diez años después— que el valor de los buenos hábitos y el costo de los malos se vuelve asombrosamente evidente.
+La primera capa es cambiar tus resultados. Este nivel se preocupa por cambiar tus resultados: perder peso, publicar un libro, ganar un campeonato. La mayoría de las metas que estableces están asociadas con este nivel de cambio.
 
-Lamentablemente, los hábitos lentos del cambio también hace que sea fácil dejar que los malos hábitos se deslicen. Si comes una hamburguesa poco saludable hoy, la báscula no se moverá mucho. Si trabajas hasta tarde esta noche e ignoras a tu familia, ellos te perdonarán. Si pospones tu proyecto por un día más, siempre habrá mañana para ponerte al día.
+La segunda capa es cambiar tu proceso. Este nivel se preocupa por cambiar tus hábitos y sistemas: implementar una nueva rutina en el gimnasio, decluttering tu escritorio para un mejor flujo de trabajo, desarrollar una práctica de meditación. La mayoría de los hábitos que construyes están asociados con este nivel.
 
-Un solo error no arruinará tu vida, de la misma manera que una sola decisión inteligente no te catapultará al éxito. Pero conforme las decisiones se acumulan, también lo hacen los resultados de tus decisiones.
+La tercera y más profunda capa es cambiar tu identidad. Este nivel se preocupa por cambiar tus creencias: tu visión del mundo, tu autoimagen, tus juicios sobre ti mismo y otros. La mayoría de las creencias, suposiciones y sesgos que tienes están asociados con este nivel.
 
-Los hábitos son una espada de doble filo. Los malos hábitos pueden reducirte tanto como los buenos hábitos pueden elevarte, razón por la cual entender los detalles es crucial.
+Los resultados son sobre lo que obtienes. Los procesos son sobre lo que haces. La identidad es sobre lo que crees. Cuando se trata de construir hábitos duraderos, estos niveles son importantes, pero no igualmente importantes. El cambio de comportamiento puede suceder en cualquiera de estos tres niveles, y aquí está el problema: la mayoría de las personas comienzan con lo que quieren lograr. Esto nos lleva naturalmente al cambio basado en resultados.
 
-Pequeños cambios a menudo parecen no generar diferencia hasta que cruzas un umbral crítico. Los resultados más poderosos de cualquier proceso de cambio compuesto se retrasan. Necesitas ser paciente.
+Oye, quiero estar en forma, entonces necesito correr un maratón.
+Oye, quiero ser mejor escritor, entonces necesito escribir un libro.
+Oye, quiero ser más relajado, entonces necesito meditar más.
 
-Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse. Un grado de diferencia, aparentemente pequeño e insignificante, ha desencadenado una transformación enorme.
+Imagina dos personas resistiendo un cigarrillo. Cuando se les ofrece un humo, la primera persona dice: No gracias. Estoy tratando de dejar de fumar. Suena como una respuesta razonable, pero esta persona aún cree que es un fumador que está tratando de ser algo más. Están esperando que su comportamiento cambie mientras se aferran a la misma creencia.
 
-Los avances a menudo son el resultado de muchas acciones previas, que construyen el potencial requerido para desencadenar un cambio mayor. Esto es similar a como los átomos se acumulan en una reacción nuclear, lentamente al principio, luego todo a la vez en una explosión masiva.
+La segunda persona declina diciendo: No gracias. No soy fumador. Es una pequeña diferencia, pero esta declaración señala un cambio en la identidad. Fumar era parte de su vida anterior, no su vida actual. Ya no se ven a sí mismos como alguien que fuma.
 
-Bambú que crece en China puede crecer hasta 90 pies en seis semanas, pero durante los primeros cinco años, apenas se ve crecimiento sobre el suelo. Durante esos cinco años, una extensa red de raíces se extiende bajo tierra. El trabajo no fue inútil, simplemente no era visible.
+La mayoría de las personas ni siquiera consideran el cambio de identidad cuando se proponen mejorar. Solo piensan: Quiero ser delgado o Quiero ser fuerte o Quiero ser inteligente. Todas estas son metas basadas en resultados. El otro enfoque es construir hábitos basados en identidad. Con este enfoque, comenzamos con quién deseamos convertirnos.
 
-Los hábitos funcionan de la misma manera. Puedes trabajar durante años para cambiar y no ver nada. Pero si te mantienes en ello, puedes lograr resultados extraordinarios.`,
-          page_start: 1,
-          page_end: 16,
-          reading_time: 12,
-        },
-        {
-          id: "2",
-          title: "Cómo tus hábitos moldean tu identidad (y viceversa)",
-          content: `¿Por qué es tan fácil repetir los malos hábitos y tan difícil formar buenos? Pocas cosas pueden tener un impacto más poderoso en tu vida que mejorar tus hábitos diarios. Y sin embargo es probable que este tiempo el próximo año estarás haciendo las mismas cosas que estás haciendo hoy.
-
-¿Por qué es tan difícil el cambio?
-
-Cambiamos a tres niveles: cambio de resultados, cambio de procesos y cambio de identidad.
-
-El primer nivel es cambiar tus resultados. Este nivel se preocupa por cambiar tus resultados: perder peso, publicar un libro, ganar un campeonato. La mayoría de las metas que te fijas están en este nivel.
-
-El segundo nivel es cambiar tu proceso. Este nivel se preocupa por cambiar tus hábitos y sistemas: implementar una nueva rutina en el gimnasio, decluttering tu escritorio para un mejor flujo de trabajo, desarrollar una práctica de meditación. La mayoría de los hábitos que construyes están en este nivel.
-
-El tercer y más profundo nivel es cambiar tu identidad. Este nivel se preocupa por cambiar tus creencias: tu visión del mundo, tu autoimagen, tus juicios sobre ti mismo y otros. La mayoría de las creencias, suposiciones y sesgos que tienes están en este nivel.
-
-Los resultados son sobre lo que obtienes. Los procesos son sobre lo que haces. La identidad es sobre lo que crees.
-
-Cuando se trata de construir hábitos que duran —cuando se trata de construir un sistema de 1 por ciento de mejoras— el problema no es que un nivel sea "mejor" o "peor" que otro. Todos los niveles de cambio son útiles a su manera. El problema es la dirección del cambio.
-
-Muchas personas comienzan el proceso de cambiar sus hábitos enfocándose en lo que quieren lograr. Esto los lleva a hábitos basados en resultados. La alternativa es construir hábitos basados en identidad. Con este enfoque, comenzamos enfocándonos en quién deseamos convertirnos.
-
-Imagina dos personas resistiendo un cigarrillo. Cuando se les ofrece un humo, la primera persona dice: "No, gracias. Estoy tratando de dejar de fumar". Suena como una respuesta razonable, pero esta persona todavía cree que es un fumador que está tratando de ser algo más. Espera que su comportamiento cambie mientras se aferra a la misma creencia.
-
-La segunda persona declina diciendo: "No, gracias. No soy fumador". Es una pequeña diferencia, pero esta declaración proviene de una identidad diferente. Ya no se ven a sí mismos como fumadores.
-
-La mayoría de las personas ni siquiera consideran el cambio de identidad cuando se proponen mejorar. Solo piensan: "Quiero ser delgado" o "Quiero ser fuerte" o "Quiero ser inteligente". Todas estas son metas basadas en resultados.
-
-Deberías estar mucho más preocupado por tu identidad actual que por tus resultados actuales. Si tienes las mismas creencias que antes, entonces es natural que vuelvas a tus viejos hábitos.
+Imagina cómo podríamos aplicar esto a nuestros hábitos:
 
 El objetivo no es leer un libro, el objetivo es convertirse en lector.
 El objetivo no es correr un maratón, el objetivo es convertirse en corredor.
 El objetivo no es aprender un instrumento, el objetivo es convertirse en músico.
 
-Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es una indicación del tipo de persona que crees que eres —ya sea consciente o inconscientemente.`,
-          page_start: 33,
-          page_end: 48,
-          reading_time: 18,
-        },
-      ]
+Tus comportamientos son usualmente un reflejo de tu identidad. Lo que haces es una indicación del tipo de persona que crees que eres, ya sea consciente o inconscientemente. La investigación ha demostrado que una vez que una persona cree en un aspecto particular de su identidad, estará motivada para actuar de maneras que sean consistentes con esa creencia. Por ejemplo, las personas que se identificaron como siendo alguien que vota tienen más probabilidades de votar que aquellos que simplemente afirman que votar es importante para ellos.
 
-      const mockProgress: ReadingProgress = {
-        current_chapter: 0,
-        current_position: 0,
-        progress_percentage: 65,
-        time_spent: 180,
-        last_read: "2024-01-15T10:30:00Z",
-        bookmarks_count: 8,
-        notes_count: 12,
-        highlights_count: 15,
-      }
+Es una simple forma de dos pasos:
 
-      const mockBookmarks: Bookmarks[] = [
-        {
-          id: "1",
-          chapter_id: "1",
-          chapter_title: "Los fundamentos",
-          position: 150,
-          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
-          note: "Concepto clave - los hábitos se acumulan con el tiempo",
-          created_at: "2024-01-10T14:20:00Z",
-          page_number: 3,
-        },
-      ]
+Decide el tipo de persona que quieres ser.
+Pruébatelo a ti mismo con pequeñas victorias.
 
-      const mockNotes: Note[] = [
-        {
-          id: "1",
-          chapter_id: "1",
-          chapter_title: "Los fundamentos",
-          title: "Reflexión sobre el interés compuesto",
-          content:
-            "Me parece fascinante cómo Clear conecta el concepto financiero del interés compuesto con el desarrollo personal. Esto me hace pensar en cómo pequeñas acciones diarias en mi carrera profesional pueden acumularse para generar grandes resultados a largo plazo.",
-          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
-          position: 150,
-          created_at: "2024-01-10T14:25:00Z",
-          updated_at: "2024-01-10T14:25:00Z",
-          page_number: 3,
-        },
-      ]
+Primero, decide quién quieres ser. Esto se mantiene en cualquier nivel, desde un solo hábito hasta un cambio de vida completo. ¿Quieres ser alguien que está en forma? ¿Quieres ser alguien que es bueno en los negocios? ¿Quieres ser alguien que es un gran padre o madre?
 
-      const mockHighlights: Highlight[] = [
-        {
-          id: "1",
-          chapter_id: "1",
-          chapter_title: "Los fundamentos",
-          selected_text: "Los hábitos son el interés compuesto del autodesarrollo",
-          start_position: 0,
-          end_position: 54,
-          color: "#fef08a",
-          annotation: "Concepto fundamental del libro",
-          created_at: "2024-01-10T14:20:00Z",
-          updated_at: "2024-01-10T14:20:00Z",
-          page_number: 3,
-        },
-        {
-          id: "2",
-          chapter_id: "1",
-          chapter_title: "Los fundamentos",
-          selected_text:
-            "Un cubo de hielo permanece como cubo de hielo a -6°C, -5°C, -4°C, -3°C, -2°C, -1°C. No es hasta que llega a 0°C que comienza a derretirse.",
-          start_position: 890,
-          end_position: 1030,
-          color: "#bbf7d0",
-          annotation: "Excelente metáfora sobre los puntos de inflexión",
-          created_at: "2024-01-11T09:15:00Z",
-          updated_at: "2024-01-11T09:15:00Z",
-          page_number: 8,
-        },
-        {
-          id: "3",
-          chapter_id: "2",
-          chapter_title: "Cómo tus hábitos moldean tu identidad",
-          selected_text: "El objetivo no es leer un libro, el objetivo es convertirse en lector",
-          start_position: 420,
-          end_position: 485,
-          color: "#bfdbfe",
-          created_at: "2024-01-12T16:45:00Z",
-          updated_at: "2024-01-12T16:45:00Z",
-          page_number: 22,
-        },
-      ]
+Una vez que tengas un control de el tipo de persona que quieres ser, puedes comenzar a dar pequeños pasos para reforzar tu identidad deseada. Tengo un amigo que perdió más de 100 libras preguntándose: ¿Qué haría una persona saludable? Durante todo el día, usaría esta pregunta como guía. ¿Tomaría una persona saludable un paseo o vería otro episodio en Netflix? ¿Ordenaría una persona saludable una hamburguesa o una ensalada? ¿Se quedaría despierta una persona saludable hasta tarde o se iría a la cama temprano? Pronto, comenzó a comer más saludable, hacer ejercicio más a menudo, y dormir mejor. Eventualmente, perdió el peso.
 
-      setBook(mockBook)
-      setChapters(mockChapters)
-      setReadingProgress(mockProgress)
-      setBookmarks(mockBookmarks)
-      setNotes(mockNotes)
-      setHighlights(mockHighlights)
-    } catch (error) {
-      console.error("Error loading book data:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo cargar el libro. Intenta nuevamente.",
-        variant: "destructive",
-      })
-    }
-  }
+Su enfoque fue simple. No se enfocó en perder peso. Se enfocó en convertirse en el tipo de persona que vive un estilo de vida saludable. Cambió su identidad primero, y sus hábitos siguieron.
 
-  const startReadingTimer = () => {
-    readingTimerRef.current = setInterval(() => {
-      setReadingProgress((prev) => {
-        if (!prev) return prev
-        return {
-          ...prev,
-          time_spent: prev.time_spent + 1,
+La mayoría de las personas no tienen claro sobre el tipo de persona que quieren ser. Como resultado, permanecen atascados en el mismo patrón durante años. Cambian sus hábitos pero no cambian las creencias subyacentes que llevaron a sus comportamientos pasados. Tienen el resultado correcto por las razones equivocadas.
+
+El cambio de identidad es el Santo Grial del cambio de hábito. La razón es simple. Es difícil cambiar tus hábitos si nunca cambias las creencias subyacentes que llevaron a tu comportamiento pasado. Tienes una nueva meta y un nuevo plan, pero no te has convertido en una nueva persona.
+
+Detrás de cada sistema de acciones hay un sistema de creencias. El sistema de una democracia está fundado en creencias como la libertad, el estado de derecho, y los derechos sociales. El sistema de una dictadura tiene un conjunto muy diferente de creencias como la autoridad absoluta y la estricta obediencia. Puedes imaginar muchos formas de tratar de hacer que una democracia actúe como una dictadura, pero tales esfuerzos no durarán mucho. Tarde o temprano, el sistema subyacente de creencias ganará.
+
+Lo mismo es cierto para los individuos. Puedes querer mejores hábitos, pero si empacas las mismas creencias sobre ti mismo, entonces es difícil cambiar. Tienes una nueva meta y un nuevo plan, pero no te has convertido en una nueva persona.
+
+El proceso de construir hábitos es en realidad el proceso de convertirse en ti mismo. Esto es una de las razones más importantes por las que es crucial vincular tus hábitos a tu identidad en lugar de enfocarte solo en los resultados.
+
+Las mejoras son solo temporales hasta que se convierten en parte de quién eres.
+
+El objetivo no es leer un libro, el objetivo es convertirse en lector.
+El objetivo no es correr un maratón, el objetivo es convertirse en corredor.
+El objetivo no es aprender un instrumento, el objetivo es convertirse en músico.
+
+Cada acción que tomas es un voto por el tipo de persona que deseas convertirte. Ninguna instancia única transformará tus creencias, pero a medida que los votos se acumulan, también lo hace la evidencia de tu nueva identidad. Esta es una de las razones por las que el cambio significativo no requiere cambios radicales. Los pequeños hábitos pueden hacer una diferencia significativa al proporcionar evidencia de una nueva identidad. Y si un cambio es significativo, en realidad no importa si es grande o pequeño. Lo que importa es que esté llevando a la persona que deseas convertirte.
+
+Esto trae una pregunta importante: Si tus creencias y visión del mundo juegan un papel tan importante en tu comportamiento, ¿de dónde vienen en primer lugar? ¿Cómo, exactamente, se forma tu identidad? Y lo más importante, ¿cómo puedes enfatizar nuevos aspectos de tu identidad que sirvan a tus objetivos?
+
+Tu identidad emerge de tus hábitos. No naces con creencias preestablecidas. Cada creencia, incluyendo aquellas sobre ti mismo, se aprende y se condiciona a través de la experiencia.
+
+Más precisamente, tus hábitos son cómo encarnas tu identidad. Cuando haces tu cama cada mañana, encarnas la identidad de una persona organizada. Cuando escribes cada día, encarnas la identidad de una persona creativa. Cuando entrenas cada día, encarnas la identidad de una persona atlética.
+
+Cuanto más repites un comportamiento, más refuerzas la identidad asociada con ese comportamiento. De hecho, la palabra identidad originalmente se derivó de las palabras latinas essentitas, que significa ser, e identidem, que significa repetidamente. Tu identidad es literalmente tus hábitos repetidos.
+
+Cualquiera que sea tu identidad ahora, solo crees en ella porque tienes prueba de ello. Si vas a la iglesia cada domingo durante veinte años, tienes evidencia de que eres religioso. Si estudias biología durante una hora cada noche, tienes evidencia de que eres estudioso. Si vas al gimnasio incluso cuando es nevado, tienes evidencia de que estás comprometido con el fitness. Cuanto más evidencia tengas para una creencia, más fuertemente la creerás.
+
+Por esta razón, el proceso de construir hábitos es en realidad el proceso de convertirse en ti mismo. Esto es una de las razones más importantes por las que es crucial vincular tus hábitos a tu identidad en lugar de enfocarte solo en los resultados.
+
+Las mejoras son solo temporales hasta que se convierten en parte de quién eres.`,
+              word_count: 1800,
+              estimated_reading_time: 9,
+            },
+            {
+              id: "chapter-3",
+              book_id: bookId,
+              chapter_number: 3,
+              title: "Cómo Construir Mejores Hábitos en 4 Simples Pasos",
+              content: `En 1898, un psicólogo llamado Edward Thorndike realizó un experimento que cambiaría la forma en que pensamos sobre cómo se forman los hábitos. Thorndike estaba interesado en estudiar el comportamiento animal, y comenzó trabajando con gatos. Colocaría cada gato dentro de un dispositivo conocido como una caja de rompecabezas. La caja estaba diseñada para que el gato pudiera escapar a través de una serie de acciones como tirar de una palanca, presionar un pedal, y tirar de una cuerda en una secuencia particular. Una vez fuera, el gato sería recompensado con un pedazo de pescado.
+
+Al principio, los gatos se movían alrededor frenéticamente, arañando y mordiendo en las barras de la caja, pegando sus patas a través de las aberturas, empujando y tirando de cualquier cosa dentro de su alcance. Después de unos minutos de lucha desesperada, accidentalmente presionarían la palanca correcta, la puerta se abriría, y escaparían para comer su recompensa.
+
+Thorndike rastreó el comportamiento de cada gato a lo largo del tiempo. En las primeras pruebas, los animales se movían alrededor de la caja al azar. Pero tan pronto como la palanca había sido presionada y la puerta se abría, el proceso de aprendizaje comenzaba. Gradualmente, cada gato aprendió a asociar la acción de presionar la palanca con la recompensa de escapar de la caja y obtener el pescado.
+
+Después de veinte a treinta intentos, este proceso se volvió automático. Los gatos podrían escapar dentro de unos pocos segundos. Por ejemplo, un gato, que Thorndike llamó Gato 12, escapó de su primera caja de rompecabezas en cinco minutos. Después de solo cuarenta intentos, Gato 12 podía escapar en menos de diez segundos. Durante el curso del experimento, cada gato aprendió a escapar más y más rápido.
+
+De sus estudios, Thorndike describió lo que él llamó la Ley del Efecto: Los comportamientos seguidos por consecuencias satisfactorias tienden a repetirse y aquellos que producen consecuencias desagradables son menos propensos a repetirse.
+
+Su trabajo proporcionó la base científica para lo que conocemos sobre cómo se forman los hábitos y por qué persisten. Creó un mapa de lo que los científicos se refieren como el bucle del hábito.
+
+El bucle del hábito es un bucle neurológico de cuatro pasos que gobierna cualquier hábito. Este bucle, que incluye una señal, un anhelo, una respuesta, y una recompensa, es la columna vertebral de cada hábito, y tu cerebro ejecuta este bucle cada vez que encuentras un hábito.
+
+La señal desencadena tu cerebro para iniciar un comportamiento. Es un poco de información que predice una recompensa. Nuestros ancestros prehistóricos prestaban atención a señales que señalaban la ubicación de recompensas primarias como comida, agua, y sexo. Hoy, pasamos la mayoría de nuestro tiempo aprendiendo señales que predicen recompensas secundarias como dinero y fama, poder y estatus, elogio y aprobación, amor y amistad, o una sensación de satisfacción personal. (Por supuesto, estas búsquedas también se conectan indirectamente a nuestros deseos primitivos.) Tu mente está continuamente analizando tu entorno interno y externo en busca de pistas sobre dónde están ubicadas las recompensas.
+
+Los anhelos son la segunda etapa del bucle del hábito, y son la fuerza motivacional detrás de cada hábito. Sin algún nivel de motivación o deseo, sin anhelar un cambio, no tenemos razón para actuar. Lo que anhelas no es el hábito en sí, sino el cambio de estado que entrega. No anhelas fumar un cigarrillo, anhelas la sensación de alivio que proporciona. No estás motivado por cepillarte los dientes, estás motivado por la sensación de una boca limpia. No quieres encender la televisión, quieres ser entretenido. Cada anhelo está vinculado a un deseo de cambiar tu estado interno. Esto es una distinción importante. Los anhelos difieren de persona a persona. En teoría, cualquier pedazo de información podría desencadenar un anhelo, pero en la práctica, las personas no están motivadas por las mismas señales. Para un jugador, el sonido de las máquinas tragamonedas puede ser un poderoso desencadenante que despierta un intenso anhelo de jugar. Para alguien que rara vez juega, los jingles y chimes del casino son solo ruido de fondo. Las señales no tienen significado hasta que son interpretadas. Los pensamientos, sentimientos, y emociones del observador son lo que transforma una señal en un anhelo.
+
+La tercera etapa es la respuesta. La respuesta es el hábito real que realizas, que puede tomar la forma de un pensamiento o una acción. Si una respuesta requiere más esfuerzo físico o mental del que estás dispuesto o capaz de expender, no sucederá. Tu respuesta también depende de tu capacidad. Suena obvio, pero un hábito solo puede ocurrir si eres capaz de hacerlo. Si quieres hacer una clavada de baloncesto pero solo mides cinco pies y seis pulgadas, bueno, buena suerte. Mientras tanto, si tu teléfono está en la otra habitación, es poco probable que revises Instagram cada pocos minutos.
+
+Finalmente, la respuesta entrega una recompensa. Las recompensas son el objetivo final de cada hábito. La señal es sobre notar la recompensa. El anhelo es sobre querer la recompensa. La respuesta es sobre obtener la recompensa. Perseguimos recompensas porque sirven dos propósitos: (1) nos satisfacen y (2) nos enseñan.
+
+El primer propósito de las recompensas es satisfacer tu anhelo. Sí, las recompensas proporcionan beneficios por sí mismas. La comida y el agua entregan la energía que necesitas para sobrevivir. Obtener una promoción trae más dinero y respeto. Ponerse en forma mejora tu salud y tus perspectivas de apareamiento. Pero el beneficio más inmediato es que las recompensas satisfacen tu anhelo de comer o ganar estatus o ganar aprobación. Al menos por un momento, las recompensas entregan satisfacción y alivio del anhelo.
+
+Segundo, las recompensas nos enseñan qué acciones vale la pena recordar en el futuro. Tu cerebro es un detector de recompensas. Mientras navegas por la vida, tu sistema nervioso está monitoreando continuamente qué acciones satisfacen tus deseos y entregan placer. Los sentimientos de placer y decepción son parte del mecanismo de retroalimentación que ayuda a tu cerebro a distinguir acciones útiles de las inútiles. Las recompensas cierran el bucle y completan el ciclo del hábito.
+
+Si un comportamiento es insuficiente en cualquiera de las cuatro etapas, no se convertirá en un hábito. Elimina la señal y tu hábito nunca comenzará. Reduce el anhelo y no tendrás suficiente motivación para actuar. Haz el comportamiento difícil y no podrás hacerlo. Y si la recompensa falla en satisfacer tu deseo, entonces no tendrás razón para hacerlo de nuevo en el futuro. Sin las primeras tres etapas, un comportamiento no ocurrirá. Sin las cuatro, un comportamiento no se repetirá.
+
+En resumen, la señal desencadena un anhelo, que motiva una respuesta, que proporciona una recompensa, que satisface el anhelo y, en última instancia, se asocia con la señal. Juntos, estos cuatro pasos forman un bucle neurológico, señal, anhelo, respuesta, recompensa; señal, anhelo, respuesta, recompensa, que en última instancia te permite crear hábitos automáticos. Este ciclo se conoce como el bucle del hábito.
+
+Podemos dividir estas cuatro etapas en dos fases: la fase del problema y la fase de la solución. La fase del problema incluye la señal y el anhelo, y es cuando te das cuenta de que algo necesita cambiar. La fase de la solución incluye la respuesta y la recompensa, y es cuando tomas acción y logras el cambio que deseas.
+
+Todas las conductas están impulsadas por el deseo de resolver un problema. A veces el problema es que notas algo bueno y quieres obtenerlo. A veces el problema es que estás experimentando dolor y quieres aliviarlo. De cualquier manera, el propósito de cada hábito es resolver los problemas que enfrentas.
+
+En los siguientes capítulos, veremos cada etapa del bucle del hábito y discutiremos cómo puedes usarlas para construir mejores hábitos. Por ahora, lo importante a entender es que cada hábito está impulsado por el mismo bucle subyacente pero cada persona tiene un conjunto diferente de hábitos. La razón es que cada individuo tiene un conjunto diferente de señales, anhelos, y recompensas que han sido condicionados por su experiencia única. Como resultado, no es la naturaleza de la señal que importa, sino cómo la interpretas. La señal para comprar una nueva televisión podría ser ver un comercial, pero también podría ser caminar por la sección de electrónicos, hablar con un amigo sobre la última tecnología, o notar que tu televisión actual no funciona bien. O considera el hábito de hacer ejercicio. La señal podría ser despertarse, terminar una llamada de trabajo, notar que es 5 p.m., o ponerse tu ropa de gimnasio. El anhelo podría ser reducir el estrés, socializar con amigos, demostrar tu disciplina, o encajar en un grupo. La respuesta podría ser levantar pesas, correr tres millas, hacer algunos estiramientos, o llamar a tu entrenador personal. La recompensa podría ser la sensación de logro que obtienes de completar el entrenamiento, la liberación de endorfinas de hacer ejercicio, la satisfacción de registrar el entrenamiento, o los elogios que recibes de otros por hacer ejercicio. La señal, anhelo, respuesta, y recompensa pueden diferir, pero los cuatro pasos siempre están presentes.
+
+Las Cuatro Leyes del Cambio de Comportamiento son un conjunto simple de reglas que podemos usar para construir mejores hábitos. Son (1) hacerlo obvio, (2) hacerlo atractivo, (3) hacerlo fácil, y (4) hacerlo satisfactorio.
+
+Cómo Crear un Buen Hábito
+La 1ª ley (Señal): Hacerlo obvio.
+La 2ª ley (Anhelo): Hacerlo atractivo.
+La 3ª ley (Respuesta): Hacerlo fácil.
+La 4ª ley (Recompensa): Hacerlo satisfactorio.
+
+Podemos invertir estas leyes para aprender cómo romper un mal hábito.
+
+Cómo Romper un Mal Hábito
+Inversión de la 1ª ley (Señal): Hacerlo invisible.
+Inversión de la 2ª ley (Anhelo): Hacerlo poco atractivo.
+Inversión de la 3ª ley (Respuesta): Hacerlo difícil.
+Inversión de la 4ª ley (Recompensa): Hacerlo insatisfactorio.
+
+Sería irresponsable afirmar que estas cuatro leyes son una solución exhaustiva para cada problema relacionado con los hábitos, pero creo que proporcionan un marco útil para pensar sobre los hábitos. Como verás a lo largo de este libro, las Cuatro Leyes del Cambio de Comportamiento se aplican a casi todos los campos, desde los deportes hasta la política, desde el arte hasta la medicina, desde la comedia hasta la gestión.
+
+Cada vez que quieras cambiar tu comportamiento, puedes simplemente preguntarte:
+
+1. ¿Cómo puedo hacerlo obvio?
+2. ¿Cómo puedo hacerlo atractivo?
+3. ¿Cómo puedo hacerlo fácil?
+4. ¿Cómo puedo hacerlo satisfactorio?
+
+Si alguna vez estás luchando para adherirte a un buen hábito o necesitas romper un mal hábito, puedes regresar a estas preguntas y encontrar una nueva solución.`,
+              word_count: 2200,
+              estimated_reading_time: 11,
+            },
+          ]
+          setChapters(atomicHabitsChapters)
+        } else {
+          setChapters(chaptersData)
         }
-      })
-    }, 60000)
-  }
-
-  const updateReadingProgress = () => {
-    if (!readingProgress) return
-
-    const newProgress = {
-      ...readingProgress,
-      current_chapter: currentChapter,
-      current_position: 0,
-      progress_percentage: Math.round(((currentChapter + 1) / chapters.length) * 100),
-      last_read: new Date().toISOString(),
-    }
-
-    setReadingProgress(newProgress)
-  }
-
-  const handleTextSelection = () => {
-    const selection = window.getSelection()
-    if (selection && selection.toString().trim()) {
-      const selectedText = selection.toString().trim()
-      setSelectedText(selectedText)
-
-      const range = selection.getRangeAt(0)
-      setSelectionRange({ start: range.startOffset, end: range.endOffset })
-    }
-  }
-
-  const createBookmark = async () => {
-    if (!selectedText) {
-      toast({
-        title: "Error",
-        description: "Selecciona texto para crear un marcador",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const newBookmark: Bookmarks = {
-      id: Date.now().toString(),
-      chapter_id: chapters[currentChapter].id,
-      chapter_title: chapters[currentChapter].title,
-      position: selectionRange?.start || 0,
-      selected_text: selectedText,
-      note: bookmarkNote,
-      created_at: new Date().toISOString(),
-      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
-    }
-
-    setBookmarks((prev) => [...prev, newBookmark])
-    setReadingProgress((prev) => (prev ? { ...prev, bookmarks_count: prev.bookmarks_count + 1 } : prev))
-
-    setShowBookmarkDialog(false)
-    setSelectedText("")
-    setBookmarkNote("")
-    setSelectionRange(null)
-
-    toast({
-      title: "Marcador creado",
-      description: "El marcador se ha guardado exitosamente",
-    })
-  }
-
-  const createNote = async () => {
-    if (!newNoteTitle.trim()) {
-      toast({
-        title: "Error",
-        description: "El título de la nota es requerido",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const newNote: Note = {
-      id: Date.now().toString(),
-      chapter_id: chapters[currentChapter].id,
-      chapter_title: chapters[currentChapter].title,
-      title: newNoteTitle,
-      content: newNoteContent,
-      selected_text: selectedText || undefined,
-      position: selectionRange?.start || undefined,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
-    }
-
-    setNotes((prev) => [...prev, newNote])
-    setReadingProgress((prev) => (prev ? { ...prev, notes_count: prev.notes_count + 1 } : prev))
-
-    setShowNoteDialog(false)
-    setNewNoteTitle("")
-    setNewNoteContent("")
-    setSelectedText("")
-    setSelectionRange(null)
-
-    toast({
-      title: "Nota creada",
-      description: "La nota se ha guardado exitosamente",
-    })
-  }
-
-  const updateNote = async () => {
-    if (!editingNote || !newNoteTitle.trim()) return
-
-    const updatedNote: Note = {
-      ...editingNote,
-      title: newNoteTitle,
-      content: newNoteContent,
-      updated_at: new Date().toISOString(),
-    }
-
-    setNotes((prev) => prev.map((note) => (note.id === editingNote.id ? updatedNote : note)))
-
-    setEditingNote(null)
-    setNewNoteTitle("")
-    setNewNoteContent("")
-    setShowNoteDialog(false)
-
-    toast({
-      title: "Nota actualizada",
-      description: "Los cambios se han guardado exitosamente",
-    })
-  }
-
-  const deleteBookmark = (bookmarkId: string) => {
-    setBookmarks((prev) => prev.filter((bookmark) => bookmark.id !== bookmarkId))
-    setReadingProgress((prev) => (prev ? { ...prev, bookmarks_count: prev.bookmarks_count - 1 } : prev))
-
-    toast({
-      title: "Marcador eliminado",
-      description: "El marcador se ha eliminado exitosamente",
-    })
-  }
-
-  const deleteNote = (noteId: string) => {
-    setNotes((prev) => prev.filter((note) => note.id !== noteId))
-    setReadingProgress((prev) => (prev ? { ...prev, notes_count: prev.notes_count - 1 } : prev))
-
-    toast({
-      title: "Nota eliminada",
-      description: "La nota se ha eliminado exitosamente",
-    })
-  }
-
-  const jumpToBookmark = (bookmark: Bookmarks) => {
-    const chapterIndex = chapters.findIndex((chapter) => chapter.id === bookmark.chapter_id)
-    if (chapterIndex !== -1) {
-      setCurrentChapter(chapterIndex)
-      setSidebarOpen(false)
-
-      toast({
-        title: "Navegando al marcador",
-        description: `Capítulo: ${bookmark.chapter_title}`,
-      })
-    }
-  }
-
-  const jumpToNote = (note: Note) => {
-    const chapterIndex = chapters.findIndex((chapter) => chapter.id === note.chapter_id)
-    if (chapterIndex !== -1) {
-      setCurrentChapter(chapterIndex)
-      setSidebarOpen(false)
-
-      toast({
-        title: "Navegando a la nota",
-        description: `Capítulo: ${note.chapter_title}`,
-      })
-    }
-  }
-
-  const jumpToHighlight = (highlight: Highlight) => {
-    const chapterIndex = chapters.findIndex((chapter) => chapter.id === highlight.chapter_id)
-    if (chapterIndex !== -1) {
-      setCurrentChapter(chapterIndex)
-      setSidebarOpen(false)
-
-      toast({
-        title: "Navegando al resaltado",
-        description: `Capítulo: ${highlight.chapter_title}`,
-      })
-    }
-  }
-
-  const nextChapter = () => {
-    if (currentChapter < chapters.length - 1) {
-      setCurrentChapter(currentChapter + 1)
-      stopTTS()
-    }
-  }
-
-  const previousChapter = () => {
-    if (currentChapter > 0) {
-      setCurrentChapter(currentChapter - 1)
-      stopTTS()
-    }
-  }
-
-  const renderHighlightedText = (text: string) => {
-    if (!showHighlights) return text
-
-    const chapterHighlights = highlights.filter((h) => h.chapter_id === chapters[currentChapter]?.id)
-    if (chapterHighlights.length === 0) return text
-
-    // Sort highlights by start position
-    const sortedHighlights = [...chapterHighlights].sort((a, b) => a.start_position - b.start_position)
-
-    const result = []
-    let lastIndex = 0
-
-    sortedHighlights.forEach((highlight) => {
-      // Add text before highlight
-      if (highlight.start_position > lastIndex) {
-        result.push(text.slice(lastIndex, highlight.start_position))
+      } catch (err) {
+        console.error("Error loading book:", err)
+        setError("Error al cargar el libro")
+      } finally {
+        setLoading(false)
       }
-
-      // Add highlighted text
-      const highlightedText = text.slice(highlight.start_position, highlight.end_position)
-      const colorClass = HIGHLIGHT_COLORS.find((c) => c.value === highlight.color)?.class || "bg-yellow-200"
-
-      result.push(
-        <Popover key={highlight.id}>
-          <PopoverTrigger asChild>
-            <span
-              className={`${colorClass} cursor-pointer rounded px-1 hover:opacity-80 transition-opacity`}
-              style={{ backgroundColor: highlight.color }}
-            >
-              {highlightedText}
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="space-y-3">
-              <div>
-                <h4 className="font-medium text-sm mb-1">Texto resaltado</h4>
-                <p className="text-xs text-gray-600 italic">"{highlight.selected_text}"</p>
-              </div>
-              {highlight.annotation && (
-                <div>
-                  <h4 className="font-medium text-sm mb-1">Anotación</h4>
-                  <p className="text-xs text-gray-700">{highlight.annotation}</p>
-                </div>
-              )}
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <span>{formatDate(highlight.created_at)}</span>
-                <div className="flex space-x-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setEditingHighlight(highlight)
-                      setHighlightAnnotation(highlight.annotation || "")
-                      setShowAnnotationDialog(true)
-                    }}
-                  >
-                    <Edit className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => deleteHighlight(highlight.id)}>
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>,
-      )
-
-      lastIndex = highlight.end_position
-    })
-
-    // Add remaining text
-    if (lastIndex < text.length) {
-      result.push(text.slice(lastIndex))
     }
 
-    return result
-  }
-
-  const formatTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
-
-  const createHighlight = async () => {
-    if (!selectedText) {
-      toast({
-        title: "Error",
-        description: "Selecciona texto para crear un resaltado",
-        variant: "destructive",
-      })
-      return
+    if (bookId) {
+      loadBook()
     }
+  }, [bookId])
 
-    const newHighlight: Highlight = {
+  // Calculate reading progress
+  useEffect(() => {
+    if (chapters.length > 0) {
+      const progress = ((currentChapterIndex + 1) / chapters.length) * 100
+      setReadingProgress(progress)
+    }
+  }, [currentChapterIndex, chapters.length])
+
+  // Text-to-speech functionality
+  const toggleTTS = () => {
+    if (isPlaying) {
+      speechSynthesis.cancel()
+      setIsPlaying(false)
+    } else {
+      const currentChapter = chapters[currentChapterIndex]
+      if (currentChapter) {
+        const utterance = new SpeechSynthesisUtterance(currentChapter.content)
+        utterance.rate = 0.8
+        utterance.onend = () => setIsPlaying(false)
+        speechSynthesis.speak(utterance)
+        setIsPlaying(true)
+      }
+    }
+  }
+
+  // Navigation functions
+  const goToPreviousChapter = () => {
+    if (currentChapterIndex > 0) {
+      setCurrentChapterIndex(currentChapterIndex - 1)
+    }
+  }
+
+  const goToNextChapter = () => {
+    if (currentChapterIndex < chapters.length - 1) {
+      setCurrentChapterIndex(currentChapterIndex + 1)
+    }
+  }
+
+  // Note and highlight functions
+  const addNote = () => {
+    if (newNote.trim()) {
+      const note: Note = {
+        id: Date.now().toString(),
+        text: newNote,
+        position: currentChapterIndex,
+        timestamp: new Date(),
+      }
+      setNotes([...notes, note])
+      setNewNote("")
+    }
+  }
+
+  const addHighlight = (text: string, color: string) => {
+    const highlight: Highlight = {
       id: Date.now().toString(),
-      chapter_id: chapters[currentChapter].id,
-      chapter_title: chapters[currentChapter].title,
-      selected_text: selectedText,
-      start_position: selectionRange?.start || 0,
-      end_position: selectionRange?.end || 0,
-      color: selectedHighlightColor,
-      annotation: highlightAnnotation,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      page_number: chapters[currentChapter].page_start + Math.floor(currentChapter * 2),
+      text,
+      color,
+      position: currentChapterIndex,
+      timestamp: new Date(),
     }
-
-    setHighlights((prev) => [...prev, newHighlight])
-    setReadingProgress((prev) => (prev ? { ...prev, highlights_count: prev.highlights_count + 1 } : prev))
-
-    setShowHighlightDialog(false)
-    setSelectedText("")
-    setHighlightAnnotation("")
-    setSelectionRange(null)
-
-    toast({
-      title: "Resaltado creado",
-      description: "El resaltado se ha guardado exitosamente",
-    })
+    setHighlights([...highlights, highlight])
   }
 
-  const updateHighlightAnnotation = async () => {
-    if (!editingHighlight) return
-
-    const updatedHighlight: Highlight = {
-      ...editingHighlight,
-      annotation: highlightAnnotation,
-      updated_at: new Date().toISOString(),
-    }
-
-    setHighlights((prev) =>
-      prev.map((highlight) => (highlight.id === editingHighlight.id ? updatedHighlight : highlight)),
-    )
-
-    setEditingHighlight(null)
-    setHighlightAnnotation("")
-    setShowAnnotationDialog(false)
-
-    toast({
-      title: "Anotación actualizada",
-      description: "La anotación se ha guardado exitosamente",
-    })
+  const toggleBookmark = () => {
+    setIsBookmarked(!isBookmarked)
   }
 
-  const deleteHighlight = (highlightId: string) => {
-    setHighlights((prev) => prev.filter((highlight) => highlight.id !== highlightId))
-    setReadingProgress((prev) => (prev ? { ...prev, highlights_count: prev.highlights_count - 1 } : prev))
-
-    toast({
-      title: "Resaltado eliminado",
-      description: "El resaltado se ha eliminado exitosamente",
-    })
-  }
-
-  if (!book || chapters.length === 0) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">Cargando libro...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-lg text-muted-foreground">Cargando libro...</p>
         </div>
       </div>
     )
   }
 
+  if (error || !book) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Error</h1>
+          <p className="text-muted-foreground mb-4">{error || "Libro no encontrado"}</p>
+          <Button onClick={() => router.push("/library")}>Volver a la Biblioteca</Button>
+        </div>
+      </div>
+    )
+  }
+
+  const currentChapter = chapters[currentChapterIndex]
+  const readingTime = currentChapter ? BookContentService.calculateReadingTime(currentChapter.content) : 0
+
   return (
-    <div className={`min-h-screen ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}>
+    <div
+      className={`min-h-screen transition-colors duration-300 ${
+        settings.theme === "dark"
+          ? "bg-gray-900 text-white"
+          : settings.theme === "sepia"
+            ? "bg-amber-50 text-amber-900"
+            : "bg-white text-gray-900"
+      }`}
+    >
       {/* Header */}
-      <div
-        className={`sticky top-0 z-40 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b`}
-      >
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => router.back()}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-              <h1 className={`font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>{book.title}</h1>
-              <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>por {book.author}</p>
+      <div className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="sm" onClick={() => router.push("/library")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Biblioteca
+              </Button>
+              <div>
+                <h1 className="font-semibold text-lg">{book.title}</h1>
+                <p className="text-sm text-muted-foreground">por {book.author}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Reading Settings */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Configuración de Lectura</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="text-sm font-medium">Tamaño de Fuente</label>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Type className="h-4 w-4" />
+                        <input
+                          type="range"
+                          min="12"
+                          max="24"
+                          value={settings.fontSize}
+                          onChange={(e) => setSettings({ ...settings, fontSize: Number.parseInt(e.target.value) })}
+                          className="flex-1"
+                        />
+                        <span className="text-sm w-8">{settings.fontSize}px</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium">Tema</label>
+                      <div className="flex gap-2 mt-2">
+                        <Button
+                          variant={settings.theme === "light" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSettings({ ...settings, theme: "light" })}
+                        >
+                          <Sun className="h-4 w-4 mr-1" />
+                          Claro
+                        </Button>
+                        <Button
+                          variant={settings.theme === "dark" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSettings({ ...settings, theme: "dark" })}
+                        >
+                          <Moon className="h-4 w-4 mr-1" />
+                          Oscuro
+                        </Button>
+                        <Button
+                          variant={settings.theme === "sepia" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSettings({ ...settings, theme: "sepia" })}
+                        >
+                          <Palette className="h-4 w-4 mr-1" />
+                          Sepia
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium">Familia de Fuente</label>
+                      <select
+                        value={settings.fontFamily}
+                        onChange={(e) => setSettings({ ...settings, fontFamily: e.target.value })}
+                        className="w-full mt-2 p-2 border rounded"
+                      >
+                        <option value="serif">Serif</option>
+                        <option value="sans-serif">Sans Serif</option>
+                        <option value="monospace">Monospace</option>
+                      </select>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* TTS Controls */}
+              <Button variant="ghost" size="sm" onClick={toggleTTS}>
+                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </Button>
+
+              {/* Bookmark */}
+              <Button variant="ghost" size="sm" onClick={toggleBookmark}>
+                {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+              </Button>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            {/* Text-to-Speech Controls */}
-            <div className="flex items-center space-x-1 mr-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={skipBackward}
-                disabled={!ttsSupported || !ttsSettings.enabled || currentSentenceIndex === 0}
-                title="Retroceder oración"
-              >
-                <SkipBack className="h-4 w-4" />
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={isPlaying ? (isPaused ? resumeTTS : pauseTTS) : startTTS}
-                disabled={!ttsSupported || !ttsSettings.enabled}
-                title={isPlaying ? (isPaused ? "Reanudar" : "Pausar") : "Reproducir"}
-              >
-                {isPlaying && !isPaused ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={stopTTS}
-                disabled={!ttsSupported || (!isPlaying && !isPaused)}
-                title="Detener"
-              >
-                <Square className="h-4 w-4" />
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={skipForward}
-                disabled={!ttsSupported || !ttsSettings.enabled || currentSentenceIndex >= sentences.length - 1}
-                title="Avanzar oración"
-              >
-                <SkipForward className="h-4 w-4" />
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowTTSSettings(true)}
-                disabled={!ttsSupported}
-                title="Configuración de voz"
-              >
-                <Settings className="h-4 w-4" />
-              </Button>
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+              <span>Progreso de Lectura</span>
+              <span>{Math.round(readingProgress)}%</span>
             </div>
+            <Progress value={readingProgress} className="h-2" />
+          </div>
+        </div>
+      </div>
 
-            <Separator orientation="vertical" className="h-6" />
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Chapter Navigation Sidebar */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Capítulos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-96">
+                  <div className="space-y-2">
+                    {chapters.map((chapter, index) => (
+                      <Button
+                        key={chapter.id}
+                        variant={index === currentChapterIndex ? "default" : "ghost"}
+                        className="w-full justify-start text-left h-auto p-3"
+                        onClick={() => setCurrentChapterIndex(index)}
+                      >
+                        <div>
+                          <div className="font-medium">
+                            {chapter.chapter_number === 0 ? "Introducción" : `Capítulo ${chapter.chapter_number}`}
+                          </div>
+                          <div className="text-sm text-muted-foreground truncate">{chapter.title}</div>
+                          <div className="text-xs text-muted-foreground mt-1">{chapter.estimated_reading_time} min</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
 
-            {/* Highlight Controls */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowHighlights(!showHighlights)}
-              title={showHighlights ? "Ocultar resaltados" : "Mostrar resaltados"}
-            >
-              {showHighlights ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-            </Button>
-
-            <Separator orientation="vertical" className="h-6" />
-
-            {/* Reading Controls */}
-            <Button variant="ghost" size="sm" onClick={() => setFontSize(Math.max(12, fontSize - 2))}>
-              <Minus className="h-4 w-4" />
-            </Button>
-            <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>{fontSize}px</span>
-            <Button variant="ghost" size="sm" onClick={() => setFontSize(Math.min(24, fontSize + 2))}>
-              <Plus className="h-4 w-4" />
-            </Button>
-
-            <Button variant="ghost" size="sm" onClick={() => setDarkMode(!darkMode)}>
-              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-
-            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="sm">
-                  <Menu className="h-4 w-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80">
-                <SheetHeader>
-                  <SheetTitle>Navegación y Notas</SheetTitle>
-                  <SheetDescription>Capítulos, marcadores, notas y resaltados</SheetDescription>
-                </SheetHeader>
-
-                <Tabs defaultValue="chapters" className="mt-6">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="chapters">Capítulos</TabsTrigger>
-                    <TabsTrigger value="highlights">Resaltados</TabsTrigger>
-                    <TabsTrigger value="bookmarks">Marcadores</TabsTrigger>
+            {/* Notes and Highlights */}
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Notas y Destacados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="notes">
+                  <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="notes">Notas</TabsTrigger>
+                    <TabsTrigger value="highlights">Destacados</TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="chapters" className="mt-4">
-                    <ScrollArea className="h-[500px]">
+                  <TabsContent value="notes" className="space-y-4">
+                    <div>
+                      <Textarea
+                        placeholder="Agregar una nota..."
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                        className="mb-2"
+                      />
+                      <Button onClick={addNote} size="sm" className="w-full">
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Agregar Nota
+                      </Button>
+                    </div>
+                    <ScrollArea className="h-48">
                       <div className="space-y-2">
-                        {chapters.map((chapter, index) => (
-                          <Card
-                            key={chapter.id}
-                            className={`p-3 cursor-pointer transition-colors ${
-                              index === currentChapter ? "bg-blue-50 border-blue-200" : "hover:bg-gray-50"
-                            }`}
-                            onClick={() => {
-                              setCurrentChapter(index)
-                              setSidebarOpen(false)
-                              stopTTS()
-                            }}
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h4 className="font-medium text-sm mb-1">Capítulo {index + 1}</h4>
-                                <p className="text-xs text-gray-600 line-clamp-2">{chapter.title}</p>
-                                <div className="flex items-center space-x-3 mt-2 text-xs text-gray-500">
-                                  <span className="flex items-center">
-                                    <Clock className="h-3 w-3 mr-1" />
-                                    {chapter.reading_time}m
-                                  </span>
-                                  <span>
-                                    Págs. {chapter.page_start}-{chapter.page_end}
-                                  </span>
-                                </div>
-                              </div>
-                              {index === currentChapter && (
-                                <Badge variant="secondary" className="ml-2">
-                                  Actual
-                                </Badge>
-                              )}
-                            </div>
-                          </Card>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-
-                  <TabsContent value="highlights" className="mt-4">
-                    <ScrollArea className="h-[500px]">
-                      <div className="space-y-3">
-                        {highlights.map((highlight) => (
-                          <Card key={highlight.id} className="p-3">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <div className="flex items-center space-x-2 mb-1">
-                                  <div className="w-3 h-3 rounded" style={{ backgroundColor: highlight.color }}></div>
-                                  <p className="text-sm font-medium text-blue-600">{highlight.chapter_title}</p>
-                                </div>
-                                <p className="text-xs text-gray-600 italic mb-2">"{highlight.selected_text}"</p>
-                                {highlight.annotation && (
-                                  <p className="text-xs text-gray-700 mb-2">{highlight.annotation}</p>
-                                )}
-                                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                                  <Calendar className="h-3 w-3" />
-                                  <span>{formatDate(highlight.created_at)}</span>
-                                  <MapPin className="h-3 w-3 ml-2" />
-                                  <span>Pág. {highlight.page_number}</span>
-                                </div>
-                              </div>
-                              <div className="flex space-x-1 ml-2">
-                                <Button variant="ghost" size="sm" onClick={() => jumpToHighlight(highlight)}>
-                                  <Target className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => {
-                                    setEditingHighlight(highlight)
-                                    setHighlightAnnotation(highlight.annotation || "")
-                                    setShowAnnotationDialog(true)
-                                  }}
-                                >
-                                  <MessageSquare className="h-3 w-3" />
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => deleteHighlight(highlight.id)}>
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                        {highlights.length === 0 && (
-                          <p className="text-center text-gray-500 text-sm py-8">
-                            No hay resaltados aún. Selecciona texto y crea tu primer resaltado.
-                          </p>
-                        )}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-
-                  <TabsContent value="bookmarks" className="mt-4">
-                    <ScrollArea className="h-[500px]">
-                      <div className="space-y-3">
-                        {bookmarks.map((bookmark) => (
-                          <Card key={bookmark.id} className="p-3">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <p className="text-sm font-medium text-blue-600 mb-1">{bookmark.chapter_title}</p>
-                                <p className="text-xs text-gray-600 italic mb-2">"{bookmark.selected_text}"</p>
-                                {bookmark.note && <p className="text-xs text-gray-700 mb-2">{bookmark.note}</p>}
-                                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                                  <Calendar className="h-3 w-3" />
-                                  <span>{formatDate(bookmark.created_at)}</span>
-                                  <MapPin className="h-3 w-3 ml-2" />
-                                  <span>Pág. {bookmark.page_number}</span>
-                                </div>
-                              </div>
-                              <div className="flex space-x-1 ml-2">
-                                <Button variant="ghost" size="sm" onClick={() => jumpToBookmark(bookmark)}>
-                                  <Target className="h-3 w-3" />
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => deleteBookmark(bookmark.id)}>
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                        {bookmarks.length === 0 && (
-                          <p className="text-center text-gray-500 text-sm py-8">
-                            No hay marcadores aún. Selecciona texto y crea tu primer marcador.
-                          </p>
-                        )}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-
-                  <TabsContent value="notes" className="mt-4">
-                    <ScrollArea className="h-[500px]">
-                      <div className="space-y-3">
                         {notes.map((note) => (
-                          <Card key={note.id} className="p-3">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <h4 className="font-medium text-sm mb-1">{note.title}</h4>
-                                <p className="text-xs text-blue-600 mb-2">{note.chapter_title}</p>
-                                {note.selected_text && (
-                                  <p className="text-xs text-gray-600 italic mb-2">"{note.selected_text}"</p>
-                                )}
-                                <p className="text-xs text-gray-700 mb-2 line-clamp-3">{note.content}</p>
-                                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                                  <Calendar className="h-3 w-3" />
-                                  <span>{formatDate(note.updated_at)}</span>
-                                  <MapPin className="h-3 w-3 ml-2" />
-                                  <span>Pág. {note.page_number}</span>
-                                </div>
-                              </div>
-                              <div className="flex space-x-1 ml-2">
-                                <Button variant="ghost" size="sm" onClick={() => jumpToNote(note)}>
-                                  <Target className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => {
-                                    setEditingNote(note)
-                                    setNewNoteTitle(note.title)
-                                    setNewNoteContent(note.content)
-                                    setShowNoteDialog(true)
-                                  }}
-                                >
-                                  <Edit className="h-3 w-3" />
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => deleteNote(note.id)}>
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          </Card>
+                          <div key={note.id} className="p-2 bg-muted rounded text-sm">
+                            <p>{note.text}</p>
+                            <p className="text-xs text-muted-foreground mt-1">Capítulo {note.position + 1}</p>
+                          </div>
                         ))}
-                        {notes.length === 0 && (
-                          <p className="text-center text-gray-500 text-sm py-8">
-                            No hay notas aún. Crea tu primera nota para guardar tus reflexiones.
-                          </p>
-                        )}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="highlights" className="space-y-4">
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => addHighlight("Texto seleccionado", "yellow")} className="flex-1">
+                        <Highlighter className="h-4 w-4 mr-1" />
+                        Amarillo
+                      </Button>
+                      <Button size="sm" onClick={() => addHighlight("Texto seleccionado", "blue")} className="flex-1">
+                        <Highlighter className="h-4 w-4 mr-1" />
+                        Azul
+                      </Button>
+                    </div>
+                    <ScrollArea className="h-48">
+                      <div className="space-y-2">
+                        {highlights.map((highlight) => (
+                          <div key={highlight.id} className="p-2 bg-muted rounded text-sm">
+                            <p
+                              className={`p-1 rounded ${
+                                highlight.color === "yellow" ? "bg-yellow-200" : "bg-blue-200"
+                              }`}
+                            >
+                              {highlight.text}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">Capítulo {highlight.position + 1}</p>
+                          </div>
+                        ))}
                       </div>
                     </ScrollArea>
                   </TabsContent>
                 </Tabs>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        {readingProgress && (
-          <div className="px-4 pb-3">
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-              <span>
-                Capítulo {currentChapter + 1} de {chapters.length}
-              </span>
-              <span>{readingProgress.progress_percentage}% completado</span>
-            </div>
-            <Progress value={readingProgress.progress_percentage} className="h-1" />
-          </div>
-        )}
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-              Capítulo {currentChapter + 1}: {chapters[currentChapter].title}
-            </h2>
-            <div className="flex items-center space-x-4 text-sm text-gray-500">
-              <span className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
-                {chapters[currentChapter].reading_time} min de lectura
-              </span>
-              <span>
-                Páginas {chapters[currentChapter].page_start}-{chapters[currentChapter].page_end}
-              </span>
-              {readingProgress && (
-                <span className="flex items-center">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {formatTime(readingProgress.time_spent)} leído
-                </span>
-              )}
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (selectedText) {
-                  setShowHighlightDialog(true)
-                } else {
-                  toast({
-                    title: "Selecciona texto",
-                    description: "Selecciona texto para crear un resaltado",
-                    variant: "destructive",
-                  })
-                }
-              }}
-            >
-              <Highlighter className="h-4 w-4 mr-2" />
-              Resaltar
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (selectedText) {
-                  setShowBookmarkDialog(true)
-                } else {
-                  toast({
-                    title: "Selecciona texto",
-                    description: "Selecciona texto para crear un marcador",
-                    variant: "destructive",
-                  })
-                }
-              }}
-            >
-              <BookmarkPlus className="h-4 w-4 mr-2" />
-              Marcador
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setEditingNote(null)
-                setNewNoteTitle("")
-                setNewNoteContent("")
-                setShowNoteDialog(true)
-              }}
-            >
-              <StickyNote className="h-4 w-4 mr-2" />
-              Nota
-            </Button>
-          </div>
-        </div>
-
-        {/* TTS Status */}
-        {isPlaying && ttsSupported && (
-          <div
-            className={`mb-4 p-3 rounded-lg ${darkMode ? "bg-blue-900/20 border-blue-800" : "bg-blue-50 border-blue-200"} border`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Headphones className="h-4 w-4 text-blue-600" />
-                <span className={`text-sm ${darkMode ? "text-blue-300" : "text-blue-700"}`}>
-                  Reproduciendo: Oración {currentSentenceIndex + 1} de {sentences.length}
-                </span>
-              </div>
-              <Badge variant={isPaused ? "secondary" : "default"}>{isPaused ? "Pausado" : "Reproduciendo"}</Badge>
-            </div>
-          </div>
-        )}
-
-        {/* Reading Content */}
-        <Card className={`${darkMode ? "bg-gray-800 border-gray-700" : "bg-white"}`}>
-          <div className="p-8">
-            <div
-              ref={contentRef}
-              className={`prose max-w-none ${darkMode ? "prose-invert" : ""}`}
-              style={{
-                fontSize: `${fontSize}px`,
-                lineHeight: lineHeight,
-                color: darkMode ? "#e5e7eb" : "#374151",
-              }}
-              onMouseUp={handleTextSelection}
-            >
-              {chapters[currentChapter].content.split("\n\n").map((paragraph, index) => (
-                <p key={index} className="mb-4">
-                  {renderHighlightedText(paragraph)}
-                </p>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-8">
-          <Button
-            variant="outline"
-            onClick={previousChapter}
-            disabled={currentChapter === 0}
-            className="flex items-center space-x-2 bg-transparent"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span>Capítulo anterior</span>
-          </Button>
-
-          <div className="text-center">
-            <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-              Capítulo {currentChapter + 1} de {chapters.length}
-            </p>
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={nextChapter}
-            disabled={currentChapter === chapters.length - 1}
-            className="flex items-center space-x-2 bg-transparent"
-          >
-            <span>Siguiente capítulo</span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* TTS Settings Dialog */}
-      <Dialog open={showTTSSettings} onOpenChange={setShowTTSSettings}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Configuración de Síntesis de Voz</DialogTitle>
-            <DialogDescription>Personaliza la experiencia de lectura en voz alta</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Voz</label>
-              <Select
-                value={ttsSettings.voice}
-                onValueChange={(value) => setTTSSettings((prev) => ({ ...prev, voice: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona una voz" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableVoices.map((voice) => (
-                    <SelectItem key={voice.name} value={voice.name}>
-                      {voice.name} ({voice.lang})
-                    </SelectItem>
+          {/* Reading Area */}
+          <div className="lg:col-span-3">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-xl">
+                      {currentChapter?.chapter_number === 0
+                        ? "Introducción"
+                        : `Capítulo ${currentChapter?.chapter_number}`}
+                    </CardTitle>
+                    <p className="text-muted-foreground mt-1">{currentChapter?.title}</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <BookOpen className="h-4 w-4" />
+                    <span>{readingTime} min de lectura</span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className="prose max-w-none"
+                  style={{
+                    fontSize: `${settings.fontSize}px`,
+                    fontFamily: settings.fontFamily,
+                    lineHeight: settings.lineHeight,
+                  }}
+                >
+                  {currentChapter?.content.split("\n\n").map((paragraph, index) => (
+                    <p key={index} className="mb-4 text-justify leading-relaxed">
+                      {paragraph}
+                    </p>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Velocidad: {ttsSettings.rate.toFixed(1)}x</label>
-              <Slider
-                value={[ttsSettings.rate]}
-                onValueChange={([value]) => setTTSSettings((prev) => ({ ...prev, rate: value }))}
-                min={0.5}
-                max={2}
-                step={0.1}
-                className="w-full"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Tono: {ttsSettings.pitch.toFixed(1)}</label>
-              <Slider
-                value={[ttsSettings.pitch]}
-                onValueChange={([value]) => setTTSSettings((prev) => ({ ...prev, pitch: value }))}
-                min={0.5}
-                max={2}
-                step={0.1}
-                className="w-full"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Volumen: {Math.round(ttsSettings.volume * 100)}%</label>
-              <Slider
-                value={[ttsSettings.volume]}
-                onValueChange={([value]) => setTTSSettings((prev) => ({ ...prev, volume: value }))}
-                min={0}
-                max={1}
-                step={0.1}
-                className="w-full"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Habilitar síntesis de voz</label>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setTTSSettings((prev) => ({ ...prev, enabled: !prev.enabled }))}
-              >
-                {ttsSettings.enabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-              </Button>
-            </div>
-
-            {!ttsSupported && (
-              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">
-                  Tu navegador no soporta síntesis de voz o la función no está disponible.
-                </p>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Highlight Dialog */}
-      <Dialog open={showHighlightDialog} onOpenChange={setShowHighlightDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Crear Resaltado</DialogTitle>
-            <DialogDescription>Resalta este texto para referencia futura</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Texto seleccionado:</label>
-              <div className="p-3 bg-gray-50 rounded-lg border">
-                <p className="text-sm italic text-gray-600">"{selectedText}"</p>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Color del resaltado:</label>
-              <div className="flex space-x-2">
-                {HIGHLIGHT_COLORS.map((color) => (
-                  <button
-                    key={color.value}
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      selectedHighlightColor === color.value ? "border-gray-800" : "border-gray-300"
-                    }`}
-                    style={{ backgroundColor: color.value }}
-                    onClick={() => setSelectedHighlightColor(color.value)}
-                    title={color.name}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Anotación (opcional):</label>
-              <Textarea
-                placeholder="Añade una anotación personal sobre este resaltado..."
-                value={highlightAnnotation}
-                onChange={(e) => setHighlightAnnotation(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setShowHighlightDialog(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={createHighlight}>Crear Resaltado</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Annotation Dialog */}
-      <Dialog open={showAnnotationDialog} onOpenChange={setShowAnnotationDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Editar Anotación</DialogTitle>
-            <DialogDescription>Modifica la anotación de este resaltado</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {editingHighlight && (
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Texto resaltado:</label>
-                <div className="p-3 bg-gray-50 rounded-lg border">
-                  <p className="text-sm italic text-gray-600">"{editingHighlight.selected_text}"</p>
                 </div>
-              </div>
-            )}
 
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Anotación:</label>
-              <Textarea
-                placeholder="Añade una anotación personal sobre este resaltado..."
-                value={highlightAnnotation}
-                onChange={(e) => setHighlightAnnotation(e.target.value)}
-                rows={4}
-              />
-            </div>
+                <Separator className="my-8" />
 
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowAnnotationDialog(false)
-                  setEditingHighlight(null)
-                  setHighlightAnnotation("")
-                }}
-              >
-                Cancelar
-              </Button>
-              <Button onClick={updateHighlightAnnotation}>Guardar Anotación</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+                {/* Navigation */}
+                <div className="flex items-center justify-between">
+                  <Button variant="outline" onClick={goToPreviousChapter} disabled={currentChapterIndex === 0}>
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Anterior
+                  </Button>
 
-      {/* Bookmark Dialog */}
-      <Dialog open={showBookmarkDialog} onOpenChange={setShowBookmarkDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Crear Marcador</DialogTitle>
-            <DialogDescription>Guarda este fragmento para referencia futura</DialogDescription>
-          </DialogHeader>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {currentChapterIndex + 1} de {chapters.length}
+                    </span>
+                  </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Texto seleccionado:</label>
-              <div className="p-3 bg-gray-50 rounded-lg border">
-                <p className="text-sm italic text-gray-600">"{selectedText}"</p>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Nota (opcional):</label>
-              <Textarea
-                placeholder="Añade una nota personal sobre este marcador..."
-                value={bookmarkNote}
-                onChange={(e) => setBookmarkNote(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setShowBookmarkDialog(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={createBookmark}>Crear Marcador</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Note Dialog */}
-      <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingNote ? "Editar Nota" : "Crear Nota"}</DialogTitle>
-            <DialogDescription>
-              {editingNote ? "Modifica tu nota existente" : "Crea una nueva nota para este capítulo"}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {selectedText && (
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Texto seleccionado:</label>
-                <div className="p-3 bg-gray-50 rounded-lg border">
-                  <p className="text-sm italic text-gray-600">"{selectedText}"</p>
+                  <Button
+                    variant="outline"
+                    onClick={goToNextChapter}
+                    disabled={currentChapterIndex === chapters.length - 1}
+                  >
+                    Siguiente
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
-              </div>
-            )}
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Título:</label>
-              <Input
-                placeholder="Título de la nota..."
-                value={newNoteTitle}
-                onChange={(e) => setNewNoteTitle(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Contenido:</label>
-              <Textarea
-                placeholder="Escribe tu nota aquí..."
-                value={newNoteContent}
-                onChange={(e) => setNewNoteContent(e.target.value)}
-                rows={5}
-              />
-            </div>
-
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowNoteDialog(false)
-                  setEditingNote(null)
-                  setNewNoteTitle("")
-                  setNewNoteContent("")
-                }}
-              >
-                Cancelar
-              </Button>
-              <Button onClick={editingNote ? updateNote : createNote}>
-                {editingNote ? "Actualizar Nota" : "Crear Nota"}
-              </Button>
-            </div>
+              </CardContent>
+            </Card>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     </div>
   )
 }

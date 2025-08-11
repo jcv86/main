@@ -1,163 +1,64 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
+import { createServerClient as createSupabaseServerClient, type CookieOptions } from "@supabase/ssr"
+import { cookies } from "next/headers"
 
-// Check if we have valid Supabase credentials
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-// Check if we have the required environment variables
-const hasSupabaseCredentials = supabaseUrl && supabaseAnonKey
+// Client-side Supabase client
+export const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey)
 
-// Demo mode flag
-export const isDemoMode = !hasSupabaseCredentials
+// Named export for createClient (required by the app)
+export const createClient = () => createSupabaseClient(supabaseUrl, supabaseAnonKey)
 
-// Create a mock client for demo mode
-const createMockClient = () => ({
-  auth: {
-    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-    getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-    signInWithPassword: () =>
-      Promise.resolve({
-        data: { user: null, session: null },
-        error: { message: "Demo mode - authentication disabled" },
-      }),
-    signUp: () =>
-      Promise.resolve({
-        data: { user: null, session: null },
-        error: { message: "Demo mode - authentication disabled" },
-      }),
-    signOut: () => Promise.resolve({ error: null }),
-    onAuthStateChange: (callback: any) => {
-      // In demo mode, immediately call with demo user
-      setTimeout(() => {
-        callback("SIGNED_IN", {
-          user: {
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            email: "demo@example.com",
-            user_metadata: {
-              first_name: "Demo",
-              last_name: "User",
-            },
-          },
-        })
-      }, 100)
-      return { data: { subscription: { unsubscribe: () => {} } } }
+// Server-side Supabase client with cookie handling
+export async function createServerClient() {
+  const cookieStore = await cookies()
+
+  return createSupabaseServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value
+      },
+      set(name: string, value: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value, ...options })
+        } catch (error) {
+          // The `set` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
+        }
+      },
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value: "", ...options })
+        } catch (error) {
+          // The `delete` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing
+          // user sessions.
+        }
+      },
     },
-  },
-  from: (table: string) => ({
-    select: (columns?: string) => ({
-      eq: (column: string, value: any) => ({
-        single: () => Promise.resolve({ data: null, error: null }),
-        limit: (count: number) => Promise.resolve({ data: [], error: null }),
-        order: (column: string, options?: any) => Promise.resolve({ data: [], error: null }),
-      }),
-      limit: (count: number) => Promise.resolve({ data: [], error: null }),
-      order: (column: string, options?: any) => Promise.resolve({ data: [], error: null }),
-    }),
-    insert: (data: any) => ({
-      select: () => ({
-        single: () => Promise.resolve({ data: null, error: null }),
-      }),
-    }),
-    update: (data: any) => ({
-      eq: (column: string, value: any) => Promise.resolve({ data: [], error: null }),
-    }),
-    upsert: (data: any) => ({
-      select: () => ({
-        single: () => Promise.resolve({ data: null, error: null }),
-      }),
-    }),
-    delete: () => ({
-      eq: (column: string, value: any) => Promise.resolve({ data: [], error: null }),
-    }),
-  }),
-})
-
-// Export the appropriate client
-export const supabase = hasSupabaseCredentials
-  ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!)
-  : (createMockClient() as any)
-
-// Export createClient function
-export function createClient() {
-  return hasSupabaseCredentials ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!) : (createMockClient() as any)
+  })
 }
 
-// Server-side client for API routes
-export function createServerClient() {
-  return hasSupabaseCredentials
-    ? createSupabaseClient(supabaseUrl!, supabaseAnonKey!, {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-      })
-    : (createMockClient() as any)
-}
-
-// Database types
-export interface Database {
-  public: {
-    Tables: {
-      profiles: {
-        Row: {
-          id: string
-          user_id: string
-          first_name: string | null
-          last_name: string | null
-          phone: string | null
-          location: string | null
-          bio: string | null
-          skills: string[] | null
-          experience_level: string | null
-          industry: string | null
-          job_title: string | null
-          linkedin_url: string | null
-          github_url: string | null
-          portfolio_url: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          first_name?: string | null
-          last_name?: string | null
-          phone?: string | null
-          location?: string | null
-          bio?: string | null
-          skills?: string[] | null
-          experience_level?: string | null
-          industry?: string | null
-          job_title?: string | null
-          linkedin_url?: string | null
-          github_url?: string | null
-          portfolio_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          first_name?: string | null
-          last_name?: string | null
-          phone?: string | null
-          location?: string | null
-          bio?: string | null
-          skills?: string[] | null
-          experience_level?: string | null
-          industry?: string | null
-          job_title?: string | null
-          linkedin_url?: string | null
-          github_url?: string | null
-          portfolio_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
-    }
+// Admin client for server-side operations (only use on server)
+export function createAdminClient() {
+  if (typeof window !== "undefined") {
+    throw new Error("Admin client should only be used on the server side")
   }
+
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!serviceRoleKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set")
+  }
+
+  return createSupabaseClient(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  })
 }
 
-export type Tables<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"]
-export type Inserts<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Insert"]
-export type Updates<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Update"]
+export default supabase
