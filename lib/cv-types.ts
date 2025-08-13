@@ -1,23 +1,14 @@
+// CV Builder Types
 export interface PersonalInfo {
   fullName: string
   email: string
   phone: string
-  location: string
+  address: string
+  city: string
+  country: string
   linkedIn?: string
   website?: string
   summary: string
-}
-
-export interface WorkExperience {
-  id: string
-  company: string
-  position: string
-  startDate: string
-  endDate?: string
-  current: boolean
-  description: string
-  achievements: string[]
-  technologies?: string[]
 }
 
 export interface Education {
@@ -26,18 +17,28 @@ export interface Education {
   degree: string
   field: string
   startDate: string
-  endDate?: string
+  endDate: string
   current: boolean
   gpa?: string
-  honors?: string[]
+  description?: string
+}
+
+export interface Experience {
+  id: string
+  company: string
+  position: string
+  startDate: string
+  endDate: string
+  current: boolean
+  description: string
+  achievements: string[]
 }
 
 export interface Skill {
   id: string
   name: string
   level: "Básico" | "Intermedio" | "Avanzado" | "Experto"
-  category: "technical" | "soft" | "language"
-  yearsOfExperience?: number
+  category: "Técnica" | "Blanda" | "Idioma"
 }
 
 export interface Project {
@@ -46,18 +47,16 @@ export interface Project {
   description: string
   technologies: string[]
   url?: string
-  github?: string
   startDate: string
-  endDate?: string
+  endDate: string
   current: boolean
-  highlights: string[]
 }
 
 export interface Certification {
   id: string
   name: string
   issuer: string
-  issueDate: string
+  date: string
   expiryDate?: string
   credentialId?: string
   url?: string
@@ -67,20 +66,27 @@ export interface Language {
   id: string
   name: string
   level: "Básico" | "Intermedio" | "Avanzado" | "Nativo"
-  certifications?: string[]
+}
+
+export interface Reference {
+  id: string
+  name: string
+  position: string
+  company: string
+  email: string
+  phone: string
+  relationship: string
 }
 
 export interface CVData {
   personalInfo: PersonalInfo
-  workExperience: WorkExperience[]
   education: Education[]
+  experience: Experience[]
   skills: Skill[]
   projects: Project[]
   certifications: Certification[]
   languages: Language[]
-  template: string
-  createdAt: string
-  updatedAt: string
+  references: Reference[]
 }
 
 export interface CVTemplate {
@@ -88,16 +94,17 @@ export interface CVTemplate {
   name: string
   description: string
   preview: string
-  category: "modern" | "classic" | "creative" | "minimal"
-  isPremium: boolean
+  category: "Moderno" | "Clásico" | "Creativo" | "Minimalista"
+  colors: string[]
+  fonts: string[]
 }
 
 // Utility function to generate unique IDs
 export function generateId(): string {
-  return Math.random().toString(36).substr(2, 9) + Date.now().toString(36)
+  return Math.random().toString(36).substr(2, 9)
 }
 
-// Chilean cities for location selection
+// Chilean specific data
 export const chileanCities = [
   "Santiago",
   "Valparaíso",
@@ -119,167 +126,108 @@ export const chileanCities = [
   "Quillota",
   "Valdivia",
   "Punta Arenas",
-  "Coquimbo",
-  "Ovalle",
-  "Linares",
-  "Curicó",
-  "Melipilla",
   "San Antonio",
-  "Tarapacá",
+  "Melipilla",
+  "Curicó",
+  "Linares",
+  "Ovalle",
+  "San Fernando",
+  "Talagante",
   "Cauquenes",
-  "Angol",
-  "Castro",
+  "Parral",
+  "Illapel",
 ]
 
-// Chilean universities for education section
 export const chileanUniversities = [
-  // Traditional Universities (CRUCH)
   "Universidad de Chile",
   "Pontificia Universidad Católica de Chile",
   "Universidad de Santiago de Chile (USACH)",
-  "Universidad Técnica Federico Santa María",
   "Universidad de Concepción",
-  "Pontificia Universidad Católica de Valparaíso",
+  "Universidad Técnica Federico Santa María",
   "Universidad Austral de Chile",
-  "Universidad Católica del Norte",
+  "Universidad Católica de Valparaíso",
+  "Universidad de La Frontera",
+  "Universidad de Talca",
+  "Universidad de Antofagasta",
   "Universidad de La Serena",
   "Universidad del Bío-Bío",
-  "Universidad de La Frontera",
   "Universidad de Magallanes",
-  "Universidad de Tarapacá",
   "Universidad de Atacama",
-  "Universidad Arturo Prat",
-  "Universidad Católica del Maule",
+  "Universidad de Tarapacá",
+  "Universidad Católica del Norte",
   "Universidad Católica de Temuco",
-  "Universidad Católica de la Santísima Concepción",
+  "Universidad Católica del Maule",
   "Universidad de Los Lagos",
+  "Universidad Arturo Prat",
   "Universidad Metropolitana de Ciencias de la Educación",
-  "Universidad de Playa Ancha",
   "Universidad Tecnológica Metropolitana",
+  "Universidad de Playa Ancha",
   "Universidad de Valparaíso",
-  "Universidad Academia de Humanismo Cristiano",
   "Universidad Alberto Hurtado",
-
-  // Private Universities
+  "Universidad Diego Portales",
   "Universidad Adolfo Ibáñez",
   "Universidad del Desarrollo",
-  "Universidad Diego Portales",
+  "Universidad de los Andes",
   "Universidad Finis Terrae",
   "Universidad Mayor",
-  "Universidad San Sebastián",
   "Universidad Central de Chile",
   "Universidad de Las Américas",
+  "Universidad San Sebastián",
   "Universidad Andrés Bello",
   "Universidad Santo Tomás",
-  "Universidad de Viña del Mar",
   "Universidad Bernardo O'Higgins",
-  "Universidad Pedro de Valdivia",
+  "Universidad Academia de Humanismo Cristiano",
   "Universidad ARCIS",
   "Universidad Bolivariana",
-  "Universidad de Artes, Ciencias y Comunicación (UNIACC)",
+  "Universidad de Arte y Ciencias Sociales (UARCIS)",
+  "Universidad de Ciencias de la Informática",
+  "Universidad Gabriela Mistral",
   "Universidad Internacional SEK",
   "Universidad La República",
   "Universidad Miguel de Cervantes",
-  "Universidad Nacional Andrés Bello",
-
-  // Professional Institutes and Technical Centers
+  "Universidad Pedro de Valdivia",
+  "Universidad Tecnológica de Chile INACAP",
+  "Universidad UNIACC",
+  "Universidad Viña del Mar",
+  "Duoc UC",
   "Instituto Profesional AIEP",
-  "Instituto Profesional DUOC UC",
   "Instituto Profesional INACAP",
   "Instituto Profesional La Araucana",
   "Instituto Profesional Santo Tomás",
   "Centro de Formación Técnica INACAP",
   "Centro de Formación Técnica Santo Tomás",
-  "Centro de Formación Técnica DUOC UC",
-
-  // International Universities with presence in Chile
-  "Universidad de Barcelona (Programa Chile)",
-  "Universidad Complutense de Madrid (Programa Chile)",
-  "Universidad de Salamanca (Programa Chile)",
 ]
 
-// Common skills for the Chilean market
+// Common skills in Chile by category
 export const commonSkillsChile = {
   technical: [
     // Programming Languages
     "JavaScript",
-    "TypeScript",
     "Python",
     "Java",
     "C#",
     "PHP",
+    "TypeScript",
+    "C++",
+    "Ruby",
     "Go",
-    "Rust",
     "Swift",
     "Kotlin",
+    "Scala",
 
-    // Frontend Technologies
+    // Web Development
+    "HTML/CSS",
     "React",
-    "Vue.js",
     "Angular",
-    "Next.js",
-    "Nuxt.js",
-    "HTML5",
-    "CSS3",
-    "Sass/SCSS",
-    "Tailwind CSS",
-    "Bootstrap",
-
-    // Backend Technologies
+    "Vue.js",
     "Node.js",
     "Express.js",
+    "Next.js",
+    "Laravel",
     "Django",
     "Flask",
     "Spring Boot",
     "ASP.NET",
-    "Laravel",
-    "Ruby on Rails",
-    "FastAPI",
-
-    // Databases
-    "PostgreSQL",
-    "MySQL",
-    "MongoDB",
-    "Redis",
-    "SQLite",
-    "Oracle",
-    "SQL Server",
-    "Elasticsearch",
-
-    // Cloud & DevOps
-    "AWS",
-    "Google Cloud",
-    "Microsoft Azure",
-    "Docker",
-    "Kubernetes",
-    "Jenkins",
-    "GitLab CI/CD",
-    "GitHub Actions",
-    "Terraform",
-    "Ansible",
-
-    // Tools & Platforms
-    "Git",
-    "Linux",
-    "Jira",
-    "Confluence",
-    "Slack",
-    "Figma",
-    "Adobe Creative Suite",
-    "Postman",
-    "VS Code",
-    "IntelliJ IDEA",
-
-    // Data & Analytics
-    "Power BI",
-    "Tableau",
-    "Excel Avanzado",
-    "Google Analytics",
-    "SQL",
-    "R",
-    "Pandas",
-    "NumPy",
-    "Jupyter",
 
     // Mobile Development
     "React Native",
@@ -287,74 +235,115 @@ export const commonSkillsChile = {
     "iOS Development",
     "Android Development",
     "Xamarin",
+    "Ionic",
 
-    // Testing
-    "Jest",
-    "Cypress",
-    "Selenium",
-    "JUnit",
-    "PyTest",
-    "Postman",
+    // Databases
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "Oracle",
+    "SQL Server",
+    "Redis",
+    "Elasticsearch",
+    "Firebase",
 
-    // Project Management
-    "Scrum",
-    "Kanban",
-    "Agile",
-    "Waterfall",
-    "PMP",
-    "PRINCE2",
+    // Cloud & DevOps
+    "AWS",
+    "Azure",
+    "Google Cloud",
+    "Docker",
+    "Kubernetes",
+    "Jenkins",
+    "GitLab CI/CD",
+    "Terraform",
+    "Ansible",
 
-    // Security
-    "OWASP",
-    "Penetration Testing",
-    "Cybersecurity",
-    "ISO 27001",
-    "GDPR Compliance",
+    // Data & Analytics
+    "Power BI",
+    "Tableau",
+    "Excel Avanzado",
+    "R",
+    "SPSS",
+    "SAS",
+    "Apache Spark",
+    "Hadoop",
+    "Machine Learning",
+    "Data Science",
 
-    // Industry Specific (Chile)
+    // Design & UX
+    "Adobe Photoshop",
+    "Adobe Illustrator",
+    "Figma",
+    "Sketch",
+    "Adobe XD",
+    "InDesign",
+    "After Effects",
+    "Canva",
+    "UI/UX Design",
+
+    // Business & Finance
     "SAP",
     "Salesforce",
-    "Microsoft Dynamics",
-    "Oracle ERP",
-    "Banco de Chile APIs",
-    "Transbank Integration",
-    "SII Integration",
-    "Previred",
+    "QuickBooks",
+    "Contabilidad",
+    "Análisis Financiero",
+    "Auditoría",
+    "Gestión de Proyectos",
+    "Scrum",
+    "Agile",
+
+    // Marketing Digital
+    "Google Analytics",
+    "Google Ads",
+    "Facebook Ads",
+    "SEO",
+    "SEM",
+    "Marketing de Contenidos",
+    "Email Marketing",
+    "Social Media Management",
+
+    // Other Technical
+    "AutoCAD",
+    "SolidWorks",
+    "MATLAB",
+    "Photoshop",
+    "Premiere Pro",
+    "Final Cut Pro",
+    "Logic Pro",
+    "Pro Tools",
   ],
 
   soft: [
     // Communication
     "Comunicación Efectiva",
     "Presentaciones Públicas",
+    "Negociación",
     "Escritura Técnica",
     "Comunicación Intercultural",
-    "Negociación",
-    "Persuasión",
 
     // Leadership
-    "Liderazgo de Equipos",
+    "Liderazgo",
+    "Gestión de Equipos",
     "Mentoring",
-    "Coaching",
-    "Gestión de Conflictos",
-    "Toma de Decisiones",
     "Delegación",
-    "Motivación de Equipos",
+    "Toma de Decisiones",
+    "Resolución de Conflictos",
 
     // Problem Solving
-    "Resolución de Problemas",
     "Pensamiento Crítico",
-    "Análisis de Datos",
+    "Resolución de Problemas",
+    "Análisis",
     "Creatividad",
     "Innovación",
     "Pensamiento Estratégico",
 
     // Collaboration
     "Trabajo en Equipo",
-    "Colaboración Remota",
-    "Facilitación de Reuniones",
-    "Construcción de Consenso",
+    "Colaboración",
     "Networking",
-    "Relaciones Interpersonales",
+    "Construcción de Relaciones",
+    "Empatía",
+    "Inteligencia Emocional",
 
     // Adaptability
     "Adaptabilidad",
@@ -367,125 +356,290 @@ export const commonSkillsChile = {
     // Organization
     "Gestión del Tiempo",
     "Organización",
-    "Planificación Estratégica",
+    "Planificación",
     "Multitasking",
-    "Priorización",
-    "Gestión de Proyectos",
+    "Atención al Detalle",
+    "Orientación a Resultados",
 
-    // Customer Focus
-    "Orientación al Cliente",
-    "Servicio al Cliente",
-    "Empatía",
-    "Escucha Activa",
-    "Gestión de Expectativas",
+    // Customer Service
+    "Atención al Cliente",
+    "Orientación al Servicio",
+    "Manejo de Quejas",
+    "Ventas",
+    "Persuasión",
 
-    // Business Skills
-    "Análisis de Negocios",
-    "Comprensión del Mercado Chileno",
-    "Conocimiento Regulatorio",
-    "Gestión Financiera",
-    "ROI Analysis",
-    "Gestión de Stakeholders",
-
-    // Cultural (Chile specific)
-    "Conocimiento del Mercado Local",
-    "Comprensión Cultural Chilena",
-    "Networking Profesional Chile",
-    "Protocolo Empresarial",
+    // Personal Qualities
+    "Proactividad",
+    "Iniciativa",
+    "Responsabilidad",
+    "Confiabilidad",
     "Ética Profesional",
+    "Confidencialidad",
+  ],
+
+  languages: [
+    "Español (Nativo)",
+    "Inglés",
+    "Portugués",
+    "Francés",
+    "Alemán",
+    "Italiano",
+    "Chino Mandarín",
+    "Japonés",
+    "Coreano",
+    "Árabe",
+    "Ruso",
+    "Mapudungun",
   ],
 }
 
-// Chilean industry sectors
-export const chileanIndustries = [
-  "Minería",
-  "Banca y Servicios Financieros",
-  "Retail y Comercio",
-  "Tecnología e Innovación",
-  "Telecomunicaciones",
-  "Energía y Utilities",
-  "Construcción e Inmobiliaria",
-  "Agricultura y Agroindustria",
-  "Manufactura",
-  "Logística y Transporte",
-  "Turismo y Hospitalidad",
-  "Salud y Farmacéutica",
-  "Educación",
-  "Consultoría",
-  "Gobierno y Sector Público",
-  "Startups y Emprendimiento",
-  "E-commerce",
-  "Medios y Comunicaciones",
-  "Seguros",
-  "Forestal y Celulosa",
-]
+// Common degree fields in Chile
+export const commonDegreeFields = [
+  // Engineering
+  "Ingeniería Civil",
+  "Ingeniería Comercial",
+  "Ingeniería Industrial",
+  "Ingeniería Informática",
+  "Ingeniería en Sistemas",
+  "Ingeniería Civil Industrial",
+  "Ingeniería Civil Informática",
+  "Ingeniería Civil Electrónica",
+  "Ingeniería Civil Mecánica",
+  "Ingeniería Civil Química",
+  "Ingeniería en Construcción",
+  "Ingeniería en Minas",
+  "Ingeniería Forestal",
+  "Ingeniería Agronómica",
 
-// Common job titles in Chile
-export const commonJobTitlesChile = [
+  // Business & Economics
+  "Administración de Empresas",
+  "Contador Auditor",
+  "Economía",
+  "Marketing",
+  "Recursos Humanos",
+  "Finanzas",
+  "Comercio Internacional",
+  "Gestión de Negocios",
+
+  // Health Sciences
+  "Medicina",
+  "Enfermería",
+  "Kinesiología",
+  "Psicología",
+  "Odontología",
+  "Farmacia",
+  "Nutrición y Dietética",
+  "Fonoaudiología",
+  "Terapia Ocupacional",
+  "Medicina Veterinaria",
+
+  // Education
+  "Pedagogía en Educación Básica",
+  "Pedagogía en Educación Media",
+  "Pedagogía en Inglés",
+  "Pedagogía en Matemáticas",
+  "Pedagogía en Historia",
+  "Educación Parvularia",
+  "Educación Diferencial",
+
+  // Social Sciences
+  "Derecho",
+  "Trabajo Social",
+  "Sociología",
+  "Antropología",
+  "Ciencia Política",
+  "Relaciones Internacionales",
+  "Periodismo",
+  "Comunicación Audiovisual",
+
+  // Arts & Design
+  "Diseño Gráfico",
+  "Arquitectura",
+  "Arte",
+  "Música",
+  "Teatro",
+  "Cine",
+  "Diseño Industrial",
+  "Diseño de Interiores",
+
+  // Sciences
+  "Biología",
+  "Química",
+  "Física",
+  "Matemáticas",
+  "Geología",
+  "Geografía",
+  "Estadística",
+
   // Technology
-  "Desarrollador Full Stack",
-  "Ingeniero de Software",
-  "Arquitecto de Software",
-  "DevOps Engineer",
-  "Data Scientist",
-  "Product Manager",
-  "UX/UI Designer",
-  "Scrum Master",
-  "Tech Lead",
-  "CTO",
+  "Ingeniería en Informática",
+  "Analista Programador",
+  "Técnico en Computación",
+  "Diseño Web",
+  "Redes y Telecomunicaciones",
 
-  // Business
-  "Gerente General",
-  "Gerente de Ventas",
-  "Gerente de Marketing",
-  "Gerente de Operaciones",
-  "Analista de Negocios",
-  "Consultor Senior",
-  "Director Comercial",
-  "Jefe de Producto",
-
-  // Finance
-  "Contador",
-  "Auditor",
-  "Analista Financiero",
-  "Controller",
-  "Gerente de Finanzas",
-  "Risk Manager",
-
-  // Human Resources
-  "Gerente de RRHH",
-  "Especialista en Compensaciones",
-  "Recruiter",
-  "HRBP",
-  "Especialista en Desarrollo Organizacional",
-
-  // Operations
-  "Jefe de Operaciones",
-  "Supervisor de Producción",
-  "Analista de Procesos",
-  "Especialista en Calidad",
-  "Coordinador Logístico",
-
-  // Sales & Marketing
-  "Ejecutivo de Ventas",
-  "Key Account Manager",
-  "Digital Marketing Manager",
-  "Community Manager",
-  "Brand Manager",
-  "Trade Marketing",
-
-  // Legal & Compliance
-  "Abogado Corporativo",
-  "Compliance Officer",
-  "Legal Counsel",
-  "Especialista Regulatorio",
+  // Other Professional
+  "Turismo",
+  "Gastronomía",
+  "Hotelería",
+  "Deportes",
+  "Bibliotecología",
 ]
 
-export default {
-  generateId,
-  commonSkillsChile,
-  chileanIndustries,
-  commonJobTitlesChile,
-  chileanCities,
-  chileanUniversities,
+// Job-related types
+export interface JobPosting {
+  id: string
+  title: string
+  company: string
+  location: string
+  salary?: string
+  type: "Tiempo Completo" | "Medio Tiempo" | "Contrato" | "Freelance"
+  description: string
+  requirements: string[]
+  benefits: string[]
+  postedDate: string
+  applicationDeadline?: string
+  remote: boolean
+  experience: "Sin experiencia" | "1-2 años" | "3-5 años" | "5+ años"
+  education: "Sin requisitos" | "Técnico" | "Universitario" | "Postgrado"
 }
+
+export interface JobApplication {
+  id: string
+  jobId: string
+  userId: string
+  cvId: string
+  coverLetter: string
+  status: "Enviada" | "En revisión" | "Entrevista" | "Rechazada" | "Aceptada"
+  appliedDate: string
+  lastUpdated: string
+}
+
+// Assessment types
+export interface AssessmentResult {
+  id: string
+  userId: string
+  type: "technical" | "soft-skills" | "personality" | "disc"
+  score: number
+  maxScore: number
+  completedAt: string
+  results: Record<string, any>
+}
+
+export interface TechnicalSkillAssessment {
+  skill: string
+  level: number
+  questions: number
+  correctAnswers: number
+  timeSpent: number
+}
+
+export interface PersonalityTraits {
+  openness: number
+  conscientiousness: number
+  extraversion: number
+  agreeableness: number
+  neuroticism: number
+}
+
+export interface DISCProfile {
+  dominance: number
+  influence: number
+  steadiness: number
+  conscientiousness: number
+  primaryType: "D" | "I" | "S" | "C"
+  description: string
+}
+
+// CV Template types
+export type CVTemplateType = "modern" | "classic" | "creative" | "minimal"
+
+export interface CVTemplateConfig {
+  id: CVTemplateType
+  name: string
+  description: string
+  colors: {
+    primary: string
+    secondary: string
+    accent: string
+    text: string
+    background: string
+  }
+  fonts: {
+    heading: string
+    body: string
+  }
+  layout: "single-column" | "two-column" | "sidebar"
+}
+
+// Default CV templates
+export const cvTemplates: CVTemplateConfig[] = [
+  {
+    id: "modern",
+    name: "Moderno",
+    description: "Diseño limpio y contemporáneo con acentos de color",
+    colors: {
+      primary: "#2563eb",
+      secondary: "#64748b",
+      accent: "#0ea5e9",
+      text: "#1e293b",
+      background: "#ffffff",
+    },
+    fonts: {
+      heading: "Inter",
+      body: "Inter",
+    },
+    layout: "two-column",
+  },
+  {
+    id: "classic",
+    name: "Clásico",
+    description: "Formato tradicional y profesional",
+    colors: {
+      primary: "#1f2937",
+      secondary: "#6b7280",
+      accent: "#374151",
+      text: "#111827",
+      background: "#ffffff",
+    },
+    fonts: {
+      heading: "Times New Roman",
+      body: "Times New Roman",
+    },
+    layout: "single-column",
+  },
+  {
+    id: "creative",
+    name: "Creativo",
+    description: "Diseño innovador para profesionales creativos",
+    colors: {
+      primary: "#7c3aed",
+      secondary: "#a78bfa",
+      accent: "#8b5cf6",
+      text: "#1f2937",
+      background: "#ffffff",
+    },
+    fonts: {
+      heading: "Poppins",
+      body: "Open Sans",
+    },
+    layout: "sidebar",
+  },
+  {
+    id: "minimal",
+    name: "Minimalista",
+    description: "Enfoque simple y elegante",
+    colors: {
+      primary: "#000000",
+      secondary: "#6b7280",
+      accent: "#374151",
+      text: "#111827",
+      background: "#ffffff",
+    },
+    fonts: {
+      heading: "Helvetica",
+      body: "Helvetica",
+    },
+    layout: "single-column",
+  },
+]

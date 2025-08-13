@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
   description: "Tu plataforma integral para el desarrollo profesional en Chile",
-    generator: 'v0.dev'
+    generator: 'v0.app'
 }
 
 export default function RootLayout({

@@ -1,6 +1,5 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { createServerClient as createSupabaseServerClient, type CookieOptions } from "@supabase/ssr"
-import { cookies } from "next/headers"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -11,10 +10,8 @@ export const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey)
 // Named export for createClient (required by the app)
 export const createClient = () => createSupabaseClient(supabaseUrl, supabaseAnonKey)
 
-// Server-side Supabase client with cookie handling
-export async function createServerClient() {
-  const cookieStore = await cookies()
-
+// Server-side client creation function
+export function createServerClient(cookieStore: any) {
   return createSupabaseServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       get(name: string) {

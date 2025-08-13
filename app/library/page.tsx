@@ -32,15 +32,17 @@ interface Book {
   author: string
   description: string
   category: string
-  rating: number
-  reading_time: string
-  pages: number
-  published_year: number
-  cover_url: string
-  tags: string[]
-  is_recommended: boolean
-  difficulty: "Fácil" | "Intermedio" | "Avanzado"
-  key_topics: string[]
+  rating?: number
+  reading_time?: string
+  pages?: number
+  published_year?: number
+  cover_url?: string
+  cover_image?: string
+  tags?: string[]
+  is_recommended?: boolean
+  difficulty: "Fácil" | "Intermedio" | "Avanzado" | "Principiante"
+  key_topics?: string[]
+  estimated_reading_time?: number
 }
 
 interface UserProgress {
@@ -79,7 +81,30 @@ export default function LibraryPage() {
 
         // Fetch books from database
         const booksData = await LibraryService.getBooks()
-        setBooks(booksData)
+
+        // Normalize book data to ensure all required fields exist
+        const normalizedBooks = (booksData || []).map((book) => ({
+          ...book,
+          rating: book.rating || 4.0,
+          reading_time:
+            book.reading_time ||
+            `${Math.ceil((book.estimated_reading_time || 240) / 60)}h ${(book.estimated_reading_time || 240) % 60}min`,
+          pages: book.pages || Math.ceil((book.estimated_reading_time || 240) * 2.5),
+          published_year: book.published_year || 2020,
+          cover_url:
+            book.cover_url ||
+            book.cover_image ||
+            "/placeholder.svg?height=400&width=300&text=Book&bg=3b82f6&color=white",
+          tags: book.tags || ["Desarrollo", "Carrera"],
+          is_recommended: book.is_recommended || false,
+          key_topics: book.key_topics || ["Desarrollo Personal", "Productividad"],
+          difficulty: (book.difficulty === "Principiante" ? "Fácil" : book.difficulty) as
+            | "Fácil"
+            | "Intermedio"
+            | "Avanzado",
+        }))
+
+        setBooks(normalizedBooks)
 
         // Mock user progress and stats for now (would come from user session)
         const mockProgress: UserProgress[] = []
@@ -96,6 +121,17 @@ export default function LibraryPage() {
       } catch (err) {
         console.error("Error fetching library data:", err)
         setError("Error al cargar la biblioteca. Por favor, intenta de nuevo.")
+
+        // Set empty arrays as fallback
+        setBooks([])
+        setUserProgress([])
+        setUserStats({
+          books_read: 0,
+          total_reading_time: 0,
+          reading_streak: 0,
+          points: 0,
+          level: 1,
+        })
       } finally {
         setLoading(false)
       }
@@ -108,12 +144,14 @@ export default function LibraryPage() {
     return userProgress.find((p) => p.book_id === bookId)
   }
 
-  const filteredBooks = books.filter((book) => {
+  const filteredBooks = (books || []).filter((book) => {
+    if (!book) return false
+
     const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      book.key_topics.some((topic) => topic.toLowerCase().includes(searchTerm.toLowerCase()))
+      (book.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (book.author || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (book.tags || []).some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (book.key_topics || []).some((topic) => topic.toLowerCase().includes(searchTerm.toLowerCase()))
 
     const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
     const matchesDifficulty = selectedDifficulty === "all" || book.difficulty === selectedDifficulty
@@ -122,7 +160,9 @@ export default function LibraryPage() {
   })
 
   const getBooksByStatus = (status: "reading" | "completed" | "not-started") => {
-    return filteredBooks.filter((book) => {
+    return (filteredBooks || []).filter((book) => {
+      if (!book) return false
+
       const progress = getProgressForBook(book.id)
       if (status === "reading") return progress && progress.percentage > 0 && progress.percentage < 100
       if (status === "completed") return progress && progress.percentage >= 100
@@ -164,6 +204,7 @@ export default function LibraryPage() {
   }
 
   const formatReadingTime = (minutes: number) => {
+    if (!minutes || minutes === 0) return "0min"
     const hours = Math.floor(minutes / 60)
     const mins = minutes % 60
     return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`
@@ -406,7 +447,7 @@ export default function LibraryPage() {
             className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md"
           >
             <BookOpen className="h-4 w-4" />
-            Todos ({filteredBooks.length})
+            Todos ({(filteredBooks || []).length})
           </TabsTrigger>
           <TabsTrigger
             value="reading"
@@ -432,12 +473,16 @@ export default function LibraryPage() {
         </TabsList>
 
         <TabsContent value="all">
-          {filteredBooks.length === 0 ? (
+          {(filteredBooks || []).length === 0 ? (
             <Card className="shadow-sm border-0">
               <CardContent className="p-12 text-center">
                 <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No hay libros disponibles</h3>
-                <p className="text-gray-600 mb-4">La biblioteca está vacía. Los libros se añadirán próximamente.</p>
+                <p className="text-gray-600 mb-4">
+                  {books.length === 0
+                    ? "La biblioteca está vacía. Los libros se añadirán próximamente."
+                    : "No se encontraron libros que coincidan con los filtros seleccionados."}
+                </p>
                 <Button
                   onClick={() => {
                     setSearchTerm("")
@@ -454,6 +499,8 @@ export default function LibraryPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredBooks.map((book) => {
+                if (!book) return null
+
                 const progress = getProgressForBook(book.id)
                 return (
                   <Card
@@ -463,8 +510,12 @@ export default function LibraryPage() {
                     <CardHeader className="pb-4">
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex gap-2">
-                          <Badge className={getCategoryColor(book.category)}>{book.category}</Badge>
-                          <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
+                          <Badge className={getCategoryColor(book.category || "Desarrollo")}>
+                            {book.category || "Desarrollo"}
+                          </Badge>
+                          <Badge className={getDifficultyColor(book.difficulty || "Intermedio")}>
+                            {book.difficulty || "Intermedio"}
+                          </Badge>
                         </div>
                         {book.is_recommended && (
                           <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
@@ -477,7 +528,7 @@ export default function LibraryPage() {
                         {book.title}
                       </CardTitle>
                       <CardDescription className="text-sm text-gray-600">
-                        por {book.author} • {book.published_year}
+                        por {book.author} • {book.published_year || 2020}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -486,15 +537,15 @@ export default function LibraryPage() {
                       <div className="flex items-center justify-between text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="font-medium">{book.rating}</span>
+                          <span className="font-medium">{book.rating || 4.0}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          <span>{book.reading_time}</span>
+                          <span>{book.reading_time || "4h"}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="h-4 w-4" />
-                          <span>{book.pages}p</span>
+                          <span>{book.pages || 200}p</span>
                         </div>
                       </div>
 
@@ -517,14 +568,14 @@ export default function LibraryPage() {
                       <div className="space-y-2">
                         <p className="text-xs font-medium text-gray-700">Temas clave:</p>
                         <div className="flex flex-wrap gap-1">
-                          {book.key_topics.slice(0, 3).map((topic) => (
+                          {(book.key_topics || ["Desarrollo Personal"]).slice(0, 3).map((topic) => (
                             <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
                               {topic}
                             </Badge>
                           ))}
-                          {book.key_topics.length > 3 && (
+                          {(book.key_topics || []).length > 3 && (
                             <Badge variant="outline" className="text-xs bg-gray-50">
-                              +{book.key_topics.length - 3} más
+                              +{(book.key_topics || []).length - 3} más
                             </Badge>
                           )}
                         </div>
@@ -535,7 +586,7 @@ export default function LibraryPage() {
                       <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
                         {getStatusBadge(book)}
                         <div className="flex gap-1">
-                          {book.tags.slice(0, 2).map((tag) => (
+                          {(book.tags || ["Desarrollo"]).slice(0, 2).map((tag) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               #{tag}
                             </Badge>
@@ -564,6 +615,8 @@ export default function LibraryPage() {
               </div>
             ) : (
               getBooksByStatus("reading").map((book) => {
+                if (!book) return null
+
                 const progress = getProgressForBook(book.id)!
                 return (
                   <Card
@@ -576,7 +629,9 @@ export default function LibraryPage() {
                           <BookOpen className="w-3 h-3 mr-1" />
                           En Progreso
                         </Badge>
-                        <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
+                        <Badge className={getDifficultyColor(book.difficulty || "Intermedio")}>
+                          {book.difficulty || "Intermedio"}
+                        </Badge>
                       </div>
                       <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
                         {book.title}
@@ -601,11 +656,11 @@ export default function LibraryPage() {
                       <div className="flex items-center justify-between text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="font-medium">{book.rating}</span>
+                          <span className="font-medium">{book.rating || 4.0}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          <span>{book.reading_time}</span>
+                          <span>{book.reading_time || "4h"}</span>
                         </div>
                       </div>
 
@@ -637,6 +692,8 @@ export default function LibraryPage() {
               </div>
             ) : (
               getBooksByStatus("completed").map((book) => {
+                if (!book) return null
+
                 const progress = getProgressForBook(book.id)!
                 return (
                   <Card
@@ -651,7 +708,7 @@ export default function LibraryPage() {
                         </Badge>
                         <div className="flex items-center gap-1 text-yellow-500">
                           <Star className="h-4 w-4 fill-current" />
-                          <span className="text-sm font-medium">{book.rating}</span>
+                          <span className="text-sm font-medium">{book.rating || 4.0}</span>
                         </div>
                       </div>
                       <CardTitle className="text-lg line-clamp-2 group-hover:text-green-600 transition-colors">
@@ -674,7 +731,7 @@ export default function LibraryPage() {
                       <div className="space-y-2">
                         <p className="text-xs font-medium text-gray-700">Temas dominados:</p>
                         <div className="flex flex-wrap gap-1">
-                          {book.key_topics.slice(0, 4).map((topic) => (
+                          {(book.key_topics || ["Desarrollo Personal"]).slice(0, 4).map((topic) => (
                             <Badge key={topic} variant="outline" className="text-xs bg-green-50 border-green-200">
                               {topic}
                             </Badge>
@@ -722,85 +779,93 @@ export default function LibraryPage() {
                 </Card>
               </div>
             ) : (
-              getBooksByStatus("not-started").map((book) => (
-                <Card
-                  key={book.id}
-                  className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md bg-white"
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex gap-2">
-                        <Badge className={getCategoryColor(book.category)}>{book.category}</Badge>
-                        <Badge className={getDifficultyColor(book.difficulty)}>{book.difficulty}</Badge>
-                      </div>
-                      {book.is_recommended && (
-                        <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
-                          <Star className="w-3 h-3 mr-1 fill-current" />
-                          Recomendado
-                        </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
-                      {book.title}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-600">
-                      por {book.author} • {book.published_year}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">{book.description}</p>
+              getBooksByStatus("not-started").map((book) => {
+                if (!book) return null
 
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{book.rating}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{book.reading_time}</span>
-                      </div>
-                      <span>{book.pages} páginas</span>
-                    </div>
-
-                    <div className="space-y-2">
-                      <p className="text-xs font-medium text-gray-700">Aprenderás sobre:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {book.key_topics.slice(0, 3).map((topic) => (
-                          <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
-                            {topic}
+                return (
+                  <Card
+                    key={book.id}
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md bg-white"
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex gap-2">
+                          <Badge className={getCategoryColor(book.category || "Desarrollo")}>
+                            {book.category || "Desarrollo"}
                           </Badge>
-                        ))}
-                        {book.key_topics.length > 3 && (
-                          <Badge variant="outline" className="text-xs bg-gray-50">
-                            +{book.key_topics.length - 3} más
+                          <Badge className={getDifficultyColor(book.difficulty || "Intermedio")}>
+                            {book.difficulty || "Intermedio"}
+                          </Badge>
+                        </div>
+                        {book.is_recommended && (
+                          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
+                            <Star className="w-3 h-3 mr-1 fill-current" />
+                            Recomendado
                           </Badge>
                         )}
                       </div>
-                    </div>
+                      <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-gray-600">
+                        por {book.author} • {book.published_year || 2020}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">{book.description}</p>
 
-                    <Button asChild className="w-full shadow-md">
-                      <Link href={`/library/reader/${book.id}`}>
-                        <BookOpen className="w-4 h-4 mr-2" />
-                        Comenzar a Leer
-                      </Link>
-                    </Button>
-
-                    <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
-                      <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
-                        <Zap className="w-3 h-3 mr-1" />
-                        Listo para comenzar
-                      </Badge>
-                      <div className="flex gap-1">
-                        {book.tags.slice(0, 2).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
-                            #{tag}
-                          </Badge>
-                        ))}
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">{book.rating || 4.0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{book.reading_time || "4h"}</span>
+                        </div>
+                        <span>{book.pages || 200} páginas</span>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
+
+                      <div className="space-y-2">
+                        <p className="text-xs font-medium text-gray-700">Aprenderás sobre:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {(book.key_topics || ["Desarrollo Personal"]).slice(0, 3).map((topic) => (
+                            <Badge key={topic} variant="outline" className="text-xs bg-gray-50">
+                              {topic}
+                            </Badge>
+                          ))}
+                          {(book.key_topics || []).length > 3 && (
+                            <Badge variant="outline" className="text-xs bg-gray-50">
+                              +{(book.key_topics || []).length - 3} más
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      <Button asChild className="w-full shadow-md">
+                        <Link href={`/library/reader/${book.id}`}>
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Comenzar a Leer
+                        </Link>
+                      </Button>
+
+                      <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
+                        <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
+                          <Zap className="w-3 h-3 mr-1" />
+                          Listo para comenzar
+                        </Badge>
+                        <div className="flex gap-1">
+                          {(book.tags || ["Desarrollo"]).slice(0, 2).map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
+                              #{tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })
             )}
           </div>
         </TabsContent>
