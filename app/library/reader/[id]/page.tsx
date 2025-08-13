@@ -21,10 +21,12 @@ import {
   Play,
   Pause,
   RotateCcw,
+  Headphones,
 } from "lucide-react"
 import Link from "next/link"
 import { LibraryService, type Book, type BookChapter, type UserBookProgress } from "@/lib/supabase-library"
 import { useToast } from "@/hooks/use-toast"
+import { TTSControls } from "@/components/tts-controls"
 
 export default function BookReaderPage() {
   const params = useParams()
@@ -42,6 +44,7 @@ export default function BookReaderPage() {
   const [readingTime, setReadingTime] = useState(0)
   const [isReading, setIsReading] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
+  const [showTTS, setShowTTS] = useState(false)
 
   // Load book data
   useEffect(() => {
@@ -173,7 +176,7 @@ export default function BookReaderPage() {
           description: "Se eliminó el marcador de este capítulo.",
         })
       } else {
-        await LibraryService.addBookmark(bookId, currentChapter.id, 0, "Marcador del capítulo")
+        await LibraryService.addBookmark(bookId, currentChapter.id, currentChapter.title, "Marcador del capítulo")
         setIsBookmarked(true)
         toast({
           title: "Marcador añadido",
@@ -305,6 +308,16 @@ export default function BookReaderPage() {
                 <span className="text-sm font-medium text-gray-900">{progressPercentage}%</span>
               </div>
 
+              {/* TTS Toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowTTS(!showTTS)}
+                className={showTTS ? "text-blue-600" : "text-gray-600"}
+              >
+                <Headphones className="w-4 h-4" />
+              </Button>
+
               {/* Bookmark */}
               <Button variant="ghost" size="sm" onClick={toggleBookmark}>
                 {isBookmarked ? <BookmarkCheck className="w-4 h-4 text-blue-600" /> : <Bookmark className="w-4 h-4" />}
@@ -394,6 +407,13 @@ export default function BookReaderPage() {
         {/* Main Content */}
         <div className="flex-1 min-w-0">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* TTS Controls */}
+            {showTTS && (
+              <div className="mb-8">
+                <TTSControls text={currentChapter.content} title={`Audio: ${currentChapter.title}`} />
+              </div>
+            )}
+
             {/* Chapter Header */}
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
