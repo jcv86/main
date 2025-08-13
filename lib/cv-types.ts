@@ -1,14 +1,25 @@
-// CV Builder Types
+// CV Types and Utilities for Chilean Market
+
 export interface PersonalInfo {
   fullName: string
   email: string
   phone: string
-  address: string
   city: string
-  country: string
+  address?: string
   linkedIn?: string
   website?: string
-  summary: string
+  summary?: string
+}
+
+export interface Experience {
+  id: string
+  company: string
+  position: string
+  startDate: string
+  endDate: string
+  current: boolean
+  description: string
+  achievements?: string[]
 }
 
 export interface Education {
@@ -23,17 +34,6 @@ export interface Education {
   description?: string
 }
 
-export interface Experience {
-  id: string
-  company: string
-  position: string
-  startDate: string
-  endDate: string
-  current: boolean
-  description: string
-  achievements: string[]
-}
-
 export interface Skill {
   id: string
   name: string
@@ -45,7 +45,7 @@ export interface Project {
   id: string
   name: string
   description: string
-  technologies: string[]
+  technologies?: string[]
   url?: string
   startDate: string
   endDate: string
@@ -80,8 +80,8 @@ export interface Reference {
 
 export interface CVData {
   personalInfo: PersonalInfo
-  education: Education[]
   experience: Experience[]
+  education: Education[]
   skills: Skill[]
   projects: Project[]
   certifications: Certification[]
@@ -89,22 +89,7 @@ export interface CVData {
   references: Reference[]
 }
 
-export interface CVTemplate {
-  id: string
-  name: string
-  description: string
-  preview: string
-  category: "Moderno" | "Clásico" | "Creativo" | "Minimalista"
-  colors: string[]
-  fonts: string[]
-}
-
-// Utility function to generate unique IDs
-export function generateId(): string {
-  return Math.random().toString(36).substr(2, 9)
-}
-
-// Chilean specific data
+// Chilean-specific data
 export const chileanCities = [
   "Santiago",
   "Valparaíso",
@@ -126,22 +111,12 @@ export const chileanCities = [
   "Quillota",
   "Valdivia",
   "Punta Arenas",
-  "San Antonio",
-  "Melipilla",
-  "Curicó",
-  "Linares",
-  "Ovalle",
-  "San Fernando",
-  "Talagante",
-  "Cauquenes",
-  "Parral",
-  "Illapel",
 ]
 
 export const chileanUniversities = [
   "Universidad de Chile",
   "Pontificia Universidad Católica de Chile",
-  "Universidad de Santiago de Chile (USACH)",
+  "Universidad de Santiago de Chile",
   "Universidad de Concepción",
   "Universidad Técnica Federico Santa María",
   "Universidad Austral de Chile",
@@ -152,233 +127,108 @@ export const chileanUniversities = [
   "Universidad de La Serena",
   "Universidad del Bío-Bío",
   "Universidad de Magallanes",
-  "Universidad de Atacama",
   "Universidad de Tarapacá",
-  "Universidad Católica del Norte",
-  "Universidad Católica de Temuco",
-  "Universidad Católica del Maule",
+  "Universidad de Atacama",
+  "Universidad Metropolitana de Ciencias de la Educación",
+  "Universidad de Playa Ancha",
+  "Universidad Tecnológica Metropolitana",
   "Universidad de Los Lagos",
   "Universidad Arturo Prat",
-  "Universidad Metropolitana de Ciencias de la Educación",
-  "Universidad Tecnológica Metropolitana",
-  "Universidad de Playa Ancha",
-  "Universidad de Valparaíso",
-  "Universidad Alberto Hurtado",
-  "Universidad Diego Portales",
-  "Universidad Adolfo Ibáñez",
-  "Universidad del Desarrollo",
-  "Universidad de los Andes",
-  "Universidad Finis Terrae",
-  "Universidad Mayor",
-  "Universidad Central de Chile",
-  "Universidad de Las Américas",
-  "Universidad San Sebastián",
-  "Universidad Andrés Bello",
-  "Universidad Santo Tomás",
-  "Universidad Bernardo O'Higgins",
-  "Universidad Academia de Humanismo Cristiano",
-  "Universidad ARCIS",
-  "Universidad Bolivariana",
-  "Universidad de Arte y Ciencias Sociales (UARCIS)",
-  "Universidad de Ciencias de la Informática",
-  "Universidad Gabriela Mistral",
-  "Universidad Internacional SEK",
-  "Universidad La República",
-  "Universidad Miguel de Cervantes",
-  "Universidad Pedro de Valdivia",
-  "Universidad Tecnológica de Chile INACAP",
-  "Universidad UNIACC",
-  "Universidad Viña del Mar",
-  "Duoc UC",
-  "Instituto Profesional AIEP",
-  "Instituto Profesional INACAP",
-  "Instituto Profesional La Araucana",
-  "Instituto Profesional Santo Tomás",
-  "Centro de Formación Técnica INACAP",
-  "Centro de Formación Técnica Santo Tomás",
 ]
 
-// Common skills in Chile by category
 export const commonSkillsChile = {
   technical: [
-    // Programming Languages
     "JavaScript",
     "Python",
     "Java",
-    "C#",
-    "PHP",
-    "TypeScript",
-    "C++",
-    "Ruby",
-    "Go",
-    "Swift",
-    "Kotlin",
-    "Scala",
-
-    // Web Development
-    "HTML/CSS",
     "React",
+    "Node.js",
+    "SQL",
+    "HTML/CSS",
+    "TypeScript",
+    "PHP",
+    "C#",
     "Angular",
     "Vue.js",
-    "Node.js",
-    "Express.js",
-    "Next.js",
-    "Laravel",
-    "Django",
-    "Flask",
-    "Spring Boot",
-    "ASP.NET",
-
-    // Mobile Development
-    "React Native",
-    "Flutter",
-    "iOS Development",
-    "Android Development",
-    "Xamarin",
-    "Ionic",
-
-    // Databases
-    "MySQL",
     "PostgreSQL",
+    "MySQL",
     "MongoDB",
-    "Oracle",
-    "SQL Server",
-    "Redis",
-    "Elasticsearch",
-    "Firebase",
-
-    // Cloud & DevOps
+    "Git",
+    "Docker",
     "AWS",
     "Azure",
     "Google Cloud",
-    "Docker",
+    "Linux",
+    "Windows Server",
     "Kubernetes",
     "Jenkins",
-    "GitLab CI/CD",
     "Terraform",
     "Ansible",
-
-    // Data & Analytics
+    "Redis",
+    "Elasticsearch",
+    "GraphQL",
+    "REST APIs",
+    "Microservices",
+    "DevOps",
+    "CI/CD",
+    "Agile",
+    "Scrum",
+    "Kanban",
+    "JIRA",
+    "Confluence",
+    "Slack",
+    "Microsoft Office",
+    "Excel Avanzado",
     "Power BI",
     "Tableau",
-    "Excel Avanzado",
-    "R",
-    "SPSS",
-    "SAS",
-    "Apache Spark",
-    "Hadoop",
-    "Machine Learning",
-    "Data Science",
-
-    // Design & UX
-    "Adobe Photoshop",
-    "Adobe Illustrator",
-    "Figma",
-    "Sketch",
-    "Adobe XD",
-    "InDesign",
-    "After Effects",
-    "Canva",
-    "UI/UX Design",
-
-    // Business & Finance
     "SAP",
     "Salesforce",
-    "QuickBooks",
-    "Contabilidad",
-    "Análisis Financiero",
-    "Auditoría",
-    "Gestión de Proyectos",
-    "Scrum",
-    "Agile",
-
-    // Marketing Digital
+    "HubSpot",
     "Google Analytics",
-    "Google Ads",
-    "Facebook Ads",
-    "SEO",
-    "SEM",
-    "Marketing de Contenidos",
-    "Email Marketing",
-    "Social Media Management",
-
-    // Other Technical
+    "Adobe Creative Suite",
+    "Figma",
+    "Sketch",
     "AutoCAD",
     "SolidWorks",
     "MATLAB",
-    "Photoshop",
-    "Premiere Pro",
-    "Final Cut Pro",
-    "Logic Pro",
-    "Pro Tools",
+    "R",
+    "Stata",
+    "SPSS",
   ],
-
   soft: [
-    // Communication
-    "Comunicación Efectiva",
-    "Presentaciones Públicas",
-    "Negociación",
-    "Escritura Técnica",
-    "Comunicación Intercultural",
-
-    // Leadership
     "Liderazgo",
-    "Gestión de Equipos",
-    "Mentoring",
-    "Delegación",
-    "Toma de Decisiones",
-    "Resolución de Conflictos",
-
-    // Problem Solving
-    "Pensamiento Crítico",
+    "Trabajo en Equipo",
+    "Comunicación Efectiva",
     "Resolución de Problemas",
-    "Análisis",
+    "Pensamiento Crítico",
+    "Adaptabilidad",
+    "Gestión del Tiempo",
+    "Orientación a Resultados",
     "Creatividad",
     "Innovación",
-    "Pensamiento Estratégico",
-
-    // Collaboration
-    "Trabajo en Equipo",
-    "Colaboración",
-    "Networking",
-    "Construcción de Relaciones",
-    "Empatía",
-    "Inteligencia Emocional",
-
-    // Adaptability
-    "Adaptabilidad",
-    "Flexibilidad",
-    "Gestión del Cambio",
-    "Aprendizaje Continuo",
-    "Resiliencia",
-    "Tolerancia al Estrés",
-
-    // Organization
-    "Gestión del Tiempo",
-    "Organización",
-    "Planificación",
-    "Multitasking",
-    "Atención al Detalle",
-    "Orientación a Resultados",
-
-    // Customer Service
-    "Atención al Cliente",
-    "Orientación al Servicio",
-    "Manejo de Quejas",
+    "Negociación",
+    "Presentaciones",
+    "Servicio al Cliente",
     "Ventas",
-    "Persuasión",
-
-    // Personal Qualities
-    "Proactividad",
-    "Iniciativa",
-    "Responsabilidad",
-    "Confiabilidad",
-    "Ética Profesional",
-    "Confidencialidad",
+    "Marketing",
+    "Gestión de Proyectos",
+    "Planificación Estratégica",
+    "Análisis de Datos",
+    "Toma de Decisiones",
+    "Mentoring",
+    "Coaching",
+    "Delegación",
+    "Motivación de Equipos",
+    "Gestión del Cambio",
+    "Inteligencia Emocional",
+    "Empatía",
+    "Escucha Activa",
+    "Feedback Constructivo",
+    "Networking",
+    "Relaciones Interpersonales",
   ],
-
   languages: [
-    "Español (Nativo)",
+    "Español",
     "Inglés",
     "Portugués",
     "Francés",
@@ -393,253 +243,173 @@ export const commonSkillsChile = {
   ],
 }
 
-// Common degree fields in Chile
-export const commonDegreeFields = [
-  // Engineering
-  "Ingeniería Civil",
-  "Ingeniería Comercial",
-  "Ingeniería Industrial",
-  "Ingeniería Informática",
-  "Ingeniería en Sistemas",
-  "Ingeniería Civil Industrial",
-  "Ingeniería Civil Informática",
-  "Ingeniería Civil Electrónica",
-  "Ingeniería Civil Mecánica",
-  "Ingeniería Civil Química",
-  "Ingeniería en Construcción",
-  "Ingeniería en Minas",
-  "Ingeniería Forestal",
-  "Ingeniería Agronómica",
+// Utility functions
+export function generateId(): string {
+  return Math.random().toString(36).substr(2, 9)
+}
 
-  // Business & Economics
-  "Administración de Empresas",
-  "Contador Auditor",
-  "Economía",
-  "Marketing",
-  "Recursos Humanos",
-  "Finanzas",
-  "Comercio Internacional",
-  "Gestión de Negocios",
+export function getDefaultCVData(): CVData {
+  return {
+    personalInfo: {
+      fullName: "",
+      email: "",
+      phone: "",
+      city: "",
+      address: "",
+      linkedIn: "",
+      website: "",
+      summary: "",
+    },
+    experience: [],
+    education: [],
+    skills: [],
+    projects: [],
+    certifications: [],
+    languages: [],
+    references: [],
+  }
+}
 
-  // Health Sciences
-  "Medicina",
-  "Enfermería",
-  "Kinesiología",
-  "Psicología",
-  "Odontología",
-  "Farmacia",
-  "Nutrición y Dietética",
-  "Fonoaudiología",
-  "Terapia Ocupacional",
-  "Medicina Veterinaria",
+export function calculateCVCompletion(cvData: CVData): number {
+  let completedSections = 0
+  const totalSections = 7
+
+  // Personal Info (required fields)
+  if (
+    cvData.personalInfo.fullName &&
+    cvData.personalInfo.email &&
+    cvData.personalInfo.phone &&
+    cvData.personalInfo.city
+  ) {
+    completedSections++
+  }
+
+  // Experience
+  if (cvData.experience && cvData.experience.length > 0) {
+    completedSections++
+  }
 
   // Education
-  "Pedagogía en Educación Básica",
-  "Pedagogía en Educación Media",
-  "Pedagogía en Inglés",
-  "Pedagogía en Matemáticas",
-  "Pedagogía en Historia",
-  "Educación Parvularia",
-  "Educación Diferencial",
-
-  // Social Sciences
-  "Derecho",
-  "Trabajo Social",
-  "Sociología",
-  "Antropología",
-  "Ciencia Política",
-  "Relaciones Internacionales",
-  "Periodismo",
-  "Comunicación Audiovisual",
-
-  // Arts & Design
-  "Diseño Gráfico",
-  "Arquitectura",
-  "Arte",
-  "Música",
-  "Teatro",
-  "Cine",
-  "Diseño Industrial",
-  "Diseño de Interiores",
-
-  // Sciences
-  "Biología",
-  "Química",
-  "Física",
-  "Matemáticas",
-  "Geología",
-  "Geografía",
-  "Estadística",
-
-  // Technology
-  "Ingeniería en Informática",
-  "Analista Programador",
-  "Técnico en Computación",
-  "Diseño Web",
-  "Redes y Telecomunicaciones",
-
-  // Other Professional
-  "Turismo",
-  "Gastronomía",
-  "Hotelería",
-  "Deportes",
-  "Bibliotecología",
-]
-
-// Job-related types
-export interface JobPosting {
-  id: string
-  title: string
-  company: string
-  location: string
-  salary?: string
-  type: "Tiempo Completo" | "Medio Tiempo" | "Contrato" | "Freelance"
-  description: string
-  requirements: string[]
-  benefits: string[]
-  postedDate: string
-  applicationDeadline?: string
-  remote: boolean
-  experience: "Sin experiencia" | "1-2 años" | "3-5 años" | "5+ años"
-  education: "Sin requisitos" | "Técnico" | "Universitario" | "Postgrado"
-}
-
-export interface JobApplication {
-  id: string
-  jobId: string
-  userId: string
-  cvId: string
-  coverLetter: string
-  status: "Enviada" | "En revisión" | "Entrevista" | "Rechazada" | "Aceptada"
-  appliedDate: string
-  lastUpdated: string
-}
-
-// Assessment types
-export interface AssessmentResult {
-  id: string
-  userId: string
-  type: "technical" | "soft-skills" | "personality" | "disc"
-  score: number
-  maxScore: number
-  completedAt: string
-  results: Record<string, any>
-}
-
-export interface TechnicalSkillAssessment {
-  skill: string
-  level: number
-  questions: number
-  correctAnswers: number
-  timeSpent: number
-}
-
-export interface PersonalityTraits {
-  openness: number
-  conscientiousness: number
-  extraversion: number
-  agreeableness: number
-  neuroticism: number
-}
-
-export interface DISCProfile {
-  dominance: number
-  influence: number
-  steadiness: number
-  conscientiousness: number
-  primaryType: "D" | "I" | "S" | "C"
-  description: string
-}
-
-// CV Template types
-export type CVTemplateType = "modern" | "classic" | "creative" | "minimal"
-
-export interface CVTemplateConfig {
-  id: CVTemplateType
-  name: string
-  description: string
-  colors: {
-    primary: string
-    secondary: string
-    accent: string
-    text: string
-    background: string
+  if (cvData.education && cvData.education.length > 0) {
+    completedSections++
   }
-  fonts: {
-    heading: string
-    body: string
+
+  // Skills
+  if (cvData.skills && cvData.skills.length > 0) {
+    completedSections++
   }
-  layout: "single-column" | "two-column" | "sidebar"
+
+  // Projects (optional but adds value)
+  if (cvData.projects && cvData.projects.length > 0) {
+    completedSections++
+  }
+
+  // Certifications (optional but adds value)
+  if (cvData.certifications && cvData.certifications.length > 0) {
+    completedSections++
+  }
+
+  // Languages
+  if (cvData.languages && cvData.languages.length > 0) {
+    completedSections++
+  }
+
+  return Math.round((completedSections / totalSections) * 100)
 }
 
-// Default CV templates
-export const cvTemplates: CVTemplateConfig[] = [
-  {
-    id: "modern",
-    name: "Moderno",
-    description: "Diseño limpio y contemporáneo con acentos de color",
-    colors: {
-      primary: "#2563eb",
-      secondary: "#64748b",
-      accent: "#0ea5e9",
-      text: "#1e293b",
-      background: "#ffffff",
-    },
-    fonts: {
-      heading: "Inter",
-      body: "Inter",
-    },
-    layout: "two-column",
-  },
-  {
-    id: "classic",
-    name: "Clásico",
-    description: "Formato tradicional y profesional",
-    colors: {
-      primary: "#1f2937",
-      secondary: "#6b7280",
-      accent: "#374151",
-      text: "#111827",
-      background: "#ffffff",
-    },
-    fonts: {
-      heading: "Times New Roman",
-      body: "Times New Roman",
-    },
-    layout: "single-column",
-  },
-  {
-    id: "creative",
-    name: "Creativo",
-    description: "Diseño innovador para profesionales creativos",
-    colors: {
-      primary: "#7c3aed",
-      secondary: "#a78bfa",
-      accent: "#8b5cf6",
-      text: "#1f2937",
-      background: "#ffffff",
-    },
-    fonts: {
-      heading: "Poppins",
-      body: "Open Sans",
-    },
-    layout: "sidebar",
-  },
-  {
-    id: "minimal",
-    name: "Minimalista",
-    description: "Enfoque simple y elegante",
-    colors: {
-      primary: "#000000",
-      secondary: "#6b7280",
-      accent: "#374151",
-      text: "#111827",
-      background: "#ffffff",
-    },
-    fonts: {
-      heading: "Helvetica",
-      body: "Helvetica",
-    },
-    layout: "single-column",
-  },
-]
+// Validation functions
+export function validatePersonalInfo(personalInfo: PersonalInfo): string[] {
+  const errors: string[] = []
+
+  if (!personalInfo.fullName?.trim()) {
+    errors.push("El nombre completo es requerido")
+  }
+
+  if (!personalInfo.email?.trim()) {
+    errors.push("El email es requerido")
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalInfo.email)) {
+    errors.push("El formato del email no es válido")
+  }
+
+  if (!personalInfo.phone?.trim()) {
+    errors.push("El teléfono es requerido")
+  }
+
+  if (!personalInfo.city?.trim()) {
+    errors.push("La ciudad es requerida")
+  }
+
+  return errors
+}
+
+export function validateExperience(experience: Experience): string[] {
+  const errors: string[] = []
+
+  if (!experience.company?.trim()) {
+    errors.push("El nombre de la empresa es requerido")
+  }
+
+  if (!experience.position?.trim()) {
+    errors.push("El cargo es requerido")
+  }
+
+  if (!experience.startDate) {
+    errors.push("La fecha de inicio es requerida")
+  }
+
+  if (!experience.current && !experience.endDate) {
+    errors.push("La fecha de fin es requerida si no es el trabajo actual")
+  }
+
+  if (!experience.description?.trim()) {
+    errors.push("La descripción es requerida")
+  }
+
+  return errors
+}
+
+export function validateEducation(education: Education): string[] {
+  const errors: string[] = []
+
+  if (!education.institution?.trim()) {
+    errors.push("La institución es requerida")
+  }
+
+  if (!education.degree?.trim()) {
+    errors.push("El título es requerido")
+  }
+
+  if (!education.field?.trim()) {
+    errors.push("El área de estudio es requerida")
+  }
+
+  if (!education.startDate) {
+    errors.push("La fecha de inicio es requerida")
+  }
+
+  if (!education.current && !education.endDate) {
+    errors.push("La fecha de fin es requerida si no está estudiando actualmente")
+  }
+
+  return errors
+}
+
+export function formatSalary(amount: number, currency = "CLP"): string {
+  return new Intl.NumberFormat("es-CL", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString("es-CL", {
+    year: "numeric",
+    month: "long",
+  })
+}
+
+// Export all types and utilities
+export type { PersonalInfo, Experience, Education, Skill, Project, Certification, Language, Reference, CVData }
