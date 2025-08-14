@@ -13,6 +13,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { libraryService, type Book, type BookWithProgress } from "@/lib/supabase-library"
 
+// Demo user UUID - using a proper UUID format
+const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000"
+
 export default function LibraryPage() {
   const [books, setBooks] = useState<Book[]>([])
   const [featuredBooks, setFeaturedBooks] = useState<Book[]>([])
@@ -43,11 +46,11 @@ export default function LibraryPage() {
         setFeaturedBooks(featured)
 
         // Fetch user's recent books (using demo user)
-        const recent = await libraryService.getUserRecentBooks("demo-user-id", 5)
+        const recent = await libraryService.getUserRecentBooks(DEMO_USER_ID, 5)
         setRecentBooks(recent)
 
         // Fetch user stats (using demo user)
-        const stats = await libraryService.getUserStats("demo-user-id")
+        const stats = await libraryService.getUserStats(DEMO_USER_ID)
         setUserStats(stats)
       } catch (error) {
         console.error("Error fetching library data:", error)

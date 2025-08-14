@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -13,38 +13,67 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  Clock,
   Menu,
   Bookmark,
   BookmarkCheck,
-  ArrowLeft,
   Play,
   Pause,
-  RotateCcw,
-  Headphones,
+  Volume2,
+  VolumeX,
+  Settings,
+  Clock,
+  Eye,
+  Target,
+  ArrowLeft,
 } from "lucide-react"
-import Link from "next/link"
+import { Slider } from "@/components/ui/slider"
 import { libraryService, type Book, type BookChapter, type UserBookProgress } from "@/lib/supabase-library"
-import { useToast } from "@/hooks/use-toast"
-import { TTSControls } from "@/components/tts-controls"
+import { useTextToSpeech } from "@/hooks/use-text-to-speech"
+
+// Demo user UUID - using a proper UUID format
+const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000"
 
 export default function BookReaderPage() {
   const params = useParams()
   const router = useRouter()
-  const { toast } = useToast()
   const bookId = params.id as string
 
+  // State
   const [book, setBook] = useState<Book | null>(null)
   const [chapters, setChapters] = useState<BookChapter[]>([])
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0)
   const [progress, setProgress] = useState<UserBookProgress | null>(null)
+  const [bookmarks, setBookmarks] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isBookmarked, setIsBookmarked] = useState(false)
   const [readingTime, setReadingTime] = useState(0)
   const [isReading, setIsReading] = useState(false)
-  const [startTime, setStartTime] = useState<Date | null>(null)
-  const [showTTS, setShowTTS] = useState(false)
+  const [fontSize, setFontSize] = useState(16)
+  const [lineHeight, setLineHeight] = useState(1.6)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+
+  // Refs
+  const readingTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  // Text-to-Speech
+  const {
+    isPlaying,
+    isPaused,
+    isMuted,
+    rate,
+    pitch,
+    volume,
+    speak,
+    pause,
+    resume,
+    stop,
+    toggleMute,
+    setRate,
+    setPitch,
+    setVolume,
+  } = useTextToSpeech()
 
   // Load book data
   useEffect(() => {
@@ -66,19 +95,21 @@ export default function BookReaderPage() {
         setChapters(chaptersData)
 
         // Load user progress
-        const progressData = await libraryService.getUserBookProgress(bookId)
-        if (progressData) {
-          setProgress(progressData)
-          setCurrentChapterIndex(Math.max(0, (progressData.current_chapter || 1) - 1))
-          setReadingTime(progressData.reading_time_minutes || 0)
+        const progressData = await libraryService.getUserBookProgress(bookId, DEMO_USER_ID)
+        setProgress(progressData)
+
+        // Set current chapter based on progress
+        if (progressData && progressData.current_chapter > 0) {
+          const chapterIndex = chaptersData.findIndex((ch) => ch.chapter_number === progressData.current_chapter)
+          if (chapterIndex >= 0) {
+            setCurrentChapterIndex(chapterIndex)
+          }
         }
 
-        // Check if current chapter is bookmarked
-        const bookmarks = await libraryService.getUserBookmarks(bookId)
-        const currentChapter = chaptersData[currentChapterIndex]
-        if (currentChapter) {
-          setIsBookmarked(bookmarks.some((b) => b.chapter_id === currentChapter.id))
-        }
+        // Load bookmarks
+        const bookmarksData = await libraryService.getUserBookmarks(bookId, DEMO_USER_ID)
+        const bookmarkedChapterIds = bookmarksData.map((b) => b.chapter_id)
+        setBookmarks(bookmarkedChapterIds)
       } catch (err) {
         console.error("Error loading book data:", err)
         setError("Error al cargar el libro")
@@ -90,147 +121,151 @@ export default function BookReaderPage() {
     if (bookId) {
       loadBookData()
     }
-  }, [bookId, currentChapterIndex])
+  }, [bookId])
 
   // Reading timer
   useEffect(() => {
-    let interval: NodeJS.Timeout
-
-    if (isReading && startTime) {
-      interval = setInterval(() => {
-        const now = new Date()
-        const sessionTime = Math.floor((now.getTime() - startTime.getTime()) / 1000 / 60) // minutes
-        setReadingTime((prev) => prev + (sessionTime > 0 ? 1 : 0))
-      }, 60000) // Update every minute
+    if (isReading) {
+      readingTimerRef.current = setInterval(() => {
+        setReadingTime((prev) => prev + 1)
+      }, 1000)
+    } else {
+      if (readingTimerRef.current) {
+        clearInterval(readingTimerRef.current)
+      }
     }
 
     return () => {
-      if (interval) clearInterval(interval)
+      if (readingTimerRef.current) {
+        clearInterval(readingTimerRef.current)
+      }
     }
-  }, [isReading, startTime])
+  }, [isReading])
 
   // Auto-save progress
   useEffect(() => {
     const saveProgress = async () => {
-      if (!book || chapters.length === 0) return
+      if (book && chapters.length > 0 && currentChapterIndex >= 0) {
+        const currentChapter = chapters[currentChapterIndex]
+        const progressPercentage = Math.round(((currentChapterIndex + 1) / chapters.length) * 100)
 
-      const progressPercentage = Math.round(((currentChapterIndex + 1) / chapters.length) * 100)
-
-      try {
-        await libraryService.updateBookProgress(bookId, {
-          current_chapter: currentChapterIndex + 1,
-          progress_percentage: progressPercentage,
-          reading_time_minutes: readingTime,
-          last_read_at: new Date().toISOString(),
-          completed_at: progressPercentage >= 100 ? new Date().toISOString() : undefined,
-        })
-
-        setProgress((prev) => ({
-          ...prev,
-          id: prev?.id || "",
-          user_id: prev?.user_id || "",
-          book_id: bookId,
-          current_chapter: currentChapterIndex + 1,
-          progress_percentage: progressPercentage,
-          reading_time_minutes: readingTime,
-          last_read_at: new Date().toISOString(),
-          completed_at: progressPercentage >= 100 ? new Date().toISOString() : undefined,
-          created_at: prev?.created_at || new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }))
-      } catch (error) {
-        console.error("Error saving progress:", error)
+        await libraryService.updateBookProgress(
+          bookId,
+          {
+            current_chapter: currentChapter.chapter_number,
+            progress_percentage: progressPercentage,
+            reading_time_minutes: Math.floor(readingTime / 60),
+            last_read_at: new Date().toISOString(),
+          },
+          DEMO_USER_ID,
+        )
       }
     }
 
-    const debounceTimer = setTimeout(saveProgress, 2000)
-    return () => clearTimeout(debounceTimer)
-  }, [bookId, currentChapterIndex, readingTime, book, chapters.length])
+    // Save progress every 30 seconds while reading
+    const interval = setInterval(saveProgress, 30000)
+    return () => clearInterval(interval)
+  }, [book, chapters, currentChapterIndex, readingTime, bookId])
 
-  const toggleReading = () => {
-    if (isReading) {
-      setIsReading(false)
-      setStartTime(null)
-    } else {
-      setIsReading(true)
-      setStartTime(new Date())
+  const currentChapter = chapters[currentChapterIndex]
+
+  const handlePreviousChapter = () => {
+    if (currentChapterIndex > 0) {
+      setCurrentChapterIndex(currentChapterIndex - 1)
+      stop() // Stop TTS when changing chapters
     }
   }
 
-  const resetReadingTime = () => {
-    setReadingTime(0)
-    toast({
-      title: "Tiempo reiniciado",
-      description: "El tiempo de lectura se ha reiniciado a 0 minutos.",
-    })
+  const handleNextChapter = () => {
+    if (currentChapterIndex < chapters.length - 1) {
+      setCurrentChapterIndex(currentChapterIndex + 1)
+      stop() // Stop TTS when changing chapters
+    }
+  }
+
+  const handleChapterSelect = (index: number) => {
+    setCurrentChapterIndex(index)
+    setSidebarOpen(false)
+    stop() // Stop TTS when changing chapters
   }
 
   const toggleBookmark = async () => {
-    const currentChapter = chapters[currentChapterIndex]
     if (!currentChapter) return
 
-    try {
-      if (isBookmarked) {
-        await libraryService.removeBookmark(bookId, currentChapter.id)
-        setIsBookmarked(false)
-        toast({
-          title: "Marcador eliminado",
-          description: "Se eliminó el marcador de este capítulo.",
-        })
-      } else {
-        await libraryService.addBookmark(bookId, currentChapter.id, currentChapter.title, "Marcador del capítulo")
-        setIsBookmarked(true)
-        toast({
-          title: "Marcador añadido",
-          description: "Se añadió un marcador a este capítulo.",
-        })
+    const isBookmarked = bookmarks.includes(currentChapter.id)
+
+    if (isBookmarked) {
+      // Remove bookmark
+      const success = await libraryService.removeBookmark(bookId, currentChapter.id, DEMO_USER_ID)
+      if (success) {
+        setBookmarks(bookmarks.filter((id) => id !== currentChapter.id))
       }
-    } catch (error) {
-      console.error("Error toggling bookmark:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el marcador.",
-        variant: "destructive",
-      })
+    } else {
+      // Add bookmark
+      const bookmark = await libraryService.addBookmark(
+        bookId,
+        currentChapter.id,
+        currentChapter.title,
+        undefined,
+        DEMO_USER_ID,
+      )
+      if (bookmark) {
+        setBookmarks([...bookmarks, currentChapter.id])
+      }
     }
   }
 
-  const goToChapter = (index: number) => {
-    if (index >= 0 && index < chapters.length) {
-      setCurrentChapterIndex(index)
+  const toggleReading = () => {
+    setIsReading(!isReading)
+  }
+
+  const handleTTSPlay = () => {
+    if (currentChapter && currentChapter.content) {
+      if (isPaused) {
+        resume()
+      } else {
+        speak(currentChapter.content)
+      }
     }
   }
 
-  const formatReadingTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`
+  const handleTTSPause = () => {
+    pause()
+  }
+
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const secs = seconds % 60
+
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+    }
+    return `${minutes}:${secs.toString().padStart(2, "0")}`
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="text-center">
+          <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4 animate-pulse" />
           <p className="text-gray-600">Cargando libro...</p>
         </div>
       </div>
     )
   }
 
-  if (error || !book) {
+  if (error || !book || !currentChapter) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
+        <Card className="max-w-md">
           <CardContent className="p-8 text-center">
-            <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Error al cargar el libro</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button asChild variant="outline">
-              <Link href="/library">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver a la biblioteca
-              </Link>
+            <BookOpen className="h-16 w-16 text-red-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-red-900 mb-2">Error</h3>
+            <p className="text-red-600 mb-4">{error || "No se pudo cargar el libro"}</p>
+            <Button onClick={() => router.push("/library")} variant="outline">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver a la Biblioteca
             </Button>
           </CardContent>
         </Card>
@@ -238,54 +273,32 @@ export default function BookReaderPage() {
     )
   }
 
-  if (chapters.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
-          <CardContent className="p-8 text-center">
-            <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Contenido no disponible</h3>
-            <p className="text-gray-600 mb-4">Este libro aún no tiene capítulos disponibles.</p>
-            <Button asChild variant="outline">
-              <Link href="/library">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver a la biblioteca
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  const currentChapter = chapters[currentChapterIndex]
   const progressPercentage = Math.round(((currentChapterIndex + 1) / chapters.length) * 100)
+  const isBookmarked = bookmarks.includes(currentChapter.id)
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/library">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Biblioteca
-                </Link>
+              <Button variant="ghost" size="sm" onClick={() => router.push("/library")}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Biblioteca
               </Button>
               <Separator orientation="vertical" className="h-6" />
               <div className="hidden sm:block">
                 <h1 className="text-lg font-semibold text-gray-900 truncate max-w-xs">{book.title}</h1>
-                <p className="text-sm text-gray-500">por {book.author}</p>
+                <p className="text-sm text-gray-600">{book.author}</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               {/* Reading Timer */}
               <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
                 <Clock className="w-4 h-4" />
-                <span>{formatReadingTime(readingTime)}</span>
+                <span>{formatTime(readingTime)}</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -294,206 +307,312 @@ export default function BookReaderPage() {
                 >
                   {isReading ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={resetReadingTime}>
-                  <RotateCcw className="w-4 h-4" />
+              </div>
+
+              {/* TTS Controls */}
+              <div className="flex items-center space-x-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={isPlaying ? handleTTSPause : handleTTSPlay}
+                  disabled={!currentChapter?.content}
+                >
+                  {isPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={toggleMute}>
+                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                 </Button>
               </div>
 
-              {/* Progress */}
-              <div className="hidden sm:flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
-                  {currentChapterIndex + 1} de {chapters.length}
-                </span>
-                <div className="w-24">
-                  <Progress value={progressPercentage} className="h-2" />
-                </div>
-                <span className="text-sm font-medium text-gray-900">{progressPercentage}%</span>
-              </div>
-
-              {/* TTS Toggle */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowTTS(!showTTS)}
-                className={showTTS ? "text-blue-600" : "text-gray-600"}
-              >
-                <Headphones className="w-4 h-4" />
-              </Button>
-
-              {/* Bookmark */}
-              <Button variant="ghost" size="sm" onClick={toggleBookmark}>
-                {isBookmarked ? <BookmarkCheck className="w-4 h-4 text-blue-600" /> : <Bookmark className="w-4 h-4" />}
-              </Button>
-
-              {/* Mobile Menu */}
-              <Sheet>
+              {/* Settings */}
+              <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="sm:hidden">
+                  <Button variant="ghost" size="sm">
+                    <Settings className="w-4 h-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Configuración de Lectura</SheetTitle>
+                  </SheetHeader>
+                  <div className="space-y-6 mt-6">
+                    {/* Font Size */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Tamaño de Fuente</label>
+                      <Slider
+                        value={[fontSize]}
+                        onValueChange={(value) => setFontSize(value[0])}
+                        min={12}
+                        max={24}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500">
+                        <span>12px</span>
+                        <span>{fontSize}px</span>
+                        <span>24px</span>
+                      </div>
+                    </div>
+
+                    {/* Line Height */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Espaciado de Línea</label>
+                      <Slider
+                        value={[lineHeight]}
+                        onValueChange={(value) => setLineHeight(value[0])}
+                        min={1.2}
+                        max={2.0}
+                        step={0.1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500">
+                        <span>1.2</span>
+                        <span>{lineHeight.toFixed(1)}</span>
+                        <span>2.0</span>
+                      </div>
+                    </div>
+
+                    {/* TTS Settings */}
+                    <Separator />
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-medium">Configuración de Voz</h4>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Velocidad</label>
+                        <Slider
+                          value={[rate]}
+                          onValueChange={(value) => setRate(value[0])}
+                          min={0.5}
+                          max={2.0}
+                          step={0.1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>0.5x</span>
+                          <span>{rate.toFixed(1)}x</span>
+                          <span>2.0x</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Tono</label>
+                        <Slider
+                          value={[pitch]}
+                          onValueChange={(value) => setPitch(value[0])}
+                          min={0.5}
+                          max={2.0}
+                          step={0.1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>0.5</span>
+                          <span>{pitch.toFixed(1)}</span>
+                          <span>2.0</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Volumen</label>
+                        <Slider
+                          value={[volume]}
+                          onValueChange={(value) => setVolume(value[0])}
+                          min={0}
+                          max={1}
+                          step={0.1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>0%</span>
+                          <span>{Math.round(volume * 100)}%</span>
+                          <span>100%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              {/* Sidebar Toggle */}
+              <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm">
                     <Menu className="w-4 h-4" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-80">
+                <SheetContent side="left" className="w-80">
                   <SheetHeader>
-                    <SheetTitle>Capítulos</SheetTitle>
+                    <SheetTitle>Índice</SheetTitle>
                   </SheetHeader>
-                  <div className="mt-6">
-                    <ScrollArea className="h-[calc(100vh-120px)]">
-                      <div className="space-y-2">
-                        {chapters.map((chapter, index) => (
-                          <Button
-                            key={chapter.id}
-                            variant={index === currentChapterIndex ? "default" : "ghost"}
-                            className="w-full justify-start text-left h-auto p-3"
-                            onClick={() => goToChapter(index)}
-                          >
-                            <div>
-                              <div className="font-medium text-sm">{chapter.title}</div>
-                              <div className="text-xs text-gray-500 mt-1">Capítulo {index + 1}</div>
+                  <ScrollArea className="h-full mt-6">
+                    <div className="space-y-2">
+                      {chapters.map((chapter, index) => (
+                        <Button
+                          key={chapter.id}
+                          variant={index === currentChapterIndex ? "default" : "ghost"}
+                          className="w-full justify-start text-left h-auto p-3"
+                          onClick={() => handleChapterSelect(index)}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="flex-shrink-0">
+                              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium">
+                                {chapter.chapter_number}
+                              </div>
                             </div>
-                          </Button>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">{chapter.title}</p>
+                              {bookmarks.includes(chapter.id) && (
+                                <BookmarkCheck className="w-3 h-3 text-blue-600 mt-1" />
+                              )}
+                            </div>
+                          </div>
+                        </Button>
+                      ))}
+                    </div>
+                  </ScrollArea>
                 </SheetContent>
               </Sheet>
             </div>
           </div>
         </div>
 
-        {/* Mobile Progress Bar */}
-        <div className="sm:hidden px-4 pb-2">
-          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-            <span>
-              Capítulo {currentChapterIndex + 1} de {chapters.length}
-            </span>
-            <span>{progressPercentage}%</span>
+        {/* Progress Bar */}
+        <div className="px-4 sm:px-6 lg:px-8 pb-2">
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <Progress value={progressPercentage} className="h-2" />
+            </div>
+            <div className="text-xs text-gray-500 whitespace-nowrap">
+              {progressPercentage}% • Capítulo {currentChapter.chapter_number} de {chapters.length}
+            </div>
           </div>
-          <Progress value={progressPercentage} className="h-1" />
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto flex">
-        {/* Sidebar - Desktop */}
-        <div className="hidden lg:block w-80 border-r border-gray-200 bg-gray-50">
-          <div className="sticky top-20 h-[calc(100vh-80px)]">
-            <div className="p-6">
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Capítulos</h2>
-                <div className="text-sm text-gray-600">
-                  {chapters.length} capítulos • {formatReadingTime(book.estimated_reading_time)}
-                </div>
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          {/* Chapter Header */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <Badge variant="outline">Capítulo {currentChapter.chapter_number}</Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleBookmark}
+                  className={isBookmarked ? "text-blue-600" : "text-gray-400"}
+                >
+                  {isBookmarked ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+                </Button>
               </div>
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" size="sm" onClick={handlePreviousChapter} disabled={currentChapterIndex === 0}>
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleNextChapter}
+                  disabled={currentChapterIndex === chapters.length - 1}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">{currentChapter.title}</h1>
+          </div>
 
-              <ScrollArea className="h-[calc(100vh-200px)]">
-                <div className="space-y-2">
-                  {chapters.map((chapter, index) => (
-                    <Button
-                      key={chapter.id}
-                      variant={index === currentChapterIndex ? "default" : "ghost"}
-                      className="w-full justify-start text-left h-auto p-3"
-                      onClick={() => goToChapter(index)}
-                    >
-                      <div>
-                        <div className="font-medium text-sm line-clamp-2">{chapter.title}</div>
-                        <div className="text-xs text-gray-500 mt-1">Capítulo {index + 1}</div>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              </ScrollArea>
+          {/* Chapter Content */}
+          <div className="p-6">
+            <div
+              ref={contentRef}
+              className="prose prose-gray max-w-none"
+              style={{
+                fontSize: `${fontSize}px`,
+                lineHeight: lineHeight,
+              }}
+            >
+              {currentChapter.content.split("\n").map((paragraph, index) => (
+                <p key={index} className="mb-4 text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Main Content */}
-        <div className="flex-1 min-w-0">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* TTS Controls */}
-            {showTTS && (
-              <div className="mb-8">
-                <TTSControls text={currentChapter.content} title={`Audio: ${currentChapter.title}`} />
-              </div>
-            )}
-
-            {/* Chapter Header */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="outline" className="text-xs">
-                  Capítulo {currentChapterIndex + 1} de {chapters.length}
-                </Badge>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => goToChapter(currentChapterIndex - 1)}
-                    disabled={currentChapterIndex === 0}
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => goToChapter(currentChapterIndex + 1)}
-                    disabled={currentChapterIndex === chapters.length - 1}
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{currentChapter.title}</h1>
-            </div>
-
-            {/* Chapter Content */}
-            <div className="prose prose-lg max-w-none">
-              <div
-                className="text-gray-800 leading-relaxed whitespace-pre-wrap"
-                style={{ lineHeight: "1.8", fontSize: "18px" }}
+          {/* Chapter Navigation */}
+          <div className="p-6 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={handlePreviousChapter}
+                disabled={currentChapterIndex === 0}
+                className="flex items-center space-x-2 bg-transparent"
               >
-                {currentChapter.content}
-              </div>
-            </div>
+                <ChevronLeft className="w-4 h-4" />
+                <span>Anterior</span>
+              </Button>
 
-            {/* Navigation Footer */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  {currentChapterIndex > 0 && (
-                    <Button variant="outline" onClick={() => goToChapter(currentChapterIndex - 1)}>
-                      <ChevronLeft className="w-4 h-4 mr-2" />
-                      Capítulo anterior
-                    </Button>
-                  )}
-                </div>
-                <div>
-                  {currentChapterIndex < chapters.length - 1 && (
-                    <Button onClick={() => goToChapter(currentChapterIndex + 1)}>
-                      Siguiente capítulo
-                      <ChevronRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  )}
-                </div>
+              <div className="text-center">
+                <p className="text-sm text-gray-600">
+                  Capítulo {currentChapter.chapter_number} de {chapters.length}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {Math.round(((currentChapterIndex + 1) / chapters.length) * 100)}% completado
+                </p>
               </div>
 
-              {currentChapterIndex === chapters.length - 1 && (
-                <div className="mt-8 text-center">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-green-900 mb-2">¡Felicitaciones!</h3>
-                    <p className="text-green-700 mb-4">Has completado la lectura de "{book.title}"</p>
-                    <div className="flex items-center justify-center space-x-4">
-                      <Button asChild>
-                        <Link href="/library">Volver a la biblioteca</Link>
-                      </Button>
-                      <Button variant="outline" onClick={() => goToChapter(0)}>
-                        Releer desde el inicio
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Button
+                variant="outline"
+                onClick={handleNextChapter}
+                disabled={currentChapterIndex === chapters.length - 1}
+                className="flex items-center space-x-2 bg-transparent"
+              >
+                <span>Siguiente</span>
+                <ChevronRight className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>
+
+        {/* Reading Stats */}
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-lg">Estadísticas de Lectura</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Clock className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="text-2xl font-bold text-gray-900">{formatTime(readingTime)}</div>
+                <div className="text-sm text-gray-600">Tiempo de Lectura</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Eye className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="text-2xl font-bold text-gray-900">{currentChapter.chapter_number}</div>
+                <div className="text-sm text-gray-600">Capítulo Actual</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Target className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="text-2xl font-bold text-gray-900">{progressPercentage}%</div>
+                <div className="text-sm text-gray-600">Progreso</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <BookmarkCheck className="w-5 h-5 text-orange-600" />
+                </div>
+                <div className="text-2xl font-bold text-gray-900">{bookmarks.length}</div>
+                <div className="text-sm text-gray-600">Marcadores</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

@@ -56,10 +56,13 @@ export interface BookWithProgress extends Book {
   progress?: UserBookProgress
 }
 
+// Demo user UUID - using a proper UUID format
+const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000"
+
 export class LibraryService {
   private supabase = createClient()
 
-  async ensureUserProfile(userId: string, userEmail?: string): Promise<void> {
+  async ensureUserProfile(userId: string = DEMO_USER_ID, userEmail?: string): Promise<void> {
     try {
       // Check if profile exists
       const { data: existingProfile } = await this.supabase.from("profiles").select("id").eq("id", userId).single()
@@ -68,8 +71,8 @@ export class LibraryService {
         // Create profile if it doesn't exist
         const { error } = await this.supabase.from("profiles").insert({
           id: userId,
-          email: userEmail || `${userId}@example.com`,
-          full_name: userEmail || "User",
+          email: userEmail || `demo@example.com`,
+          full_name: userEmail || "Demo User",
           role: "user",
         })
 
@@ -175,11 +178,8 @@ export class LibraryService {
     }
   }
 
-  async getUserBookProgress(bookId: string): Promise<UserBookProgress | null> {
+  async getUserBookProgress(bookId: string, userId: string = DEMO_USER_ID): Promise<UserBookProgress | null> {
     try {
-      // For demo purposes, we'll use a demo user ID
-      const userId = "demo-user-id"
-
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
 
@@ -203,11 +203,12 @@ export class LibraryService {
     }
   }
 
-  async updateBookProgress(bookId: string, progressData: Partial<UserBookProgress>): Promise<UserBookProgress | null> {
+  async updateBookProgress(
+    bookId: string,
+    progressData: Partial<UserBookProgress>,
+    userId: string = DEMO_USER_ID,
+  ): Promise<UserBookProgress | null> {
     try {
-      // For demo purposes, we'll use a demo user ID
-      const userId = "demo-user-id"
-
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
 
@@ -234,11 +235,8 @@ export class LibraryService {
     }
   }
 
-  async getUserBookmarks(bookId: string): Promise<UserBookBookmark[]> {
+  async getUserBookmarks(bookId: string, userId: string = DEMO_USER_ID): Promise<UserBookBookmark[]> {
     try {
-      // For demo purposes, we'll use a demo user ID
-      const userId = "demo-user-id"
-
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
 
@@ -261,11 +259,14 @@ export class LibraryService {
     }
   }
 
-  async addBookmark(bookId: string, chapterId: string, title: string, note?: string): Promise<UserBookBookmark | null> {
+  async addBookmark(
+    bookId: string,
+    chapterId: string,
+    title: string,
+    note?: string,
+    userId: string = DEMO_USER_ID,
+  ): Promise<UserBookBookmark | null> {
     try {
-      // For demo purposes, we'll use a demo user ID
-      const userId = "demo-user-id"
-
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
 
@@ -293,11 +294,8 @@ export class LibraryService {
     }
   }
 
-  async removeBookmark(bookId: string, chapterId: string): Promise<boolean> {
+  async removeBookmark(bookId: string, chapterId: string, userId: string = DEMO_USER_ID): Promise<boolean> {
     try {
-      // For demo purposes, we'll use a demo user ID
-      const userId = "demo-user-id"
-
       const { error } = await this.supabase
         .from("user_book_bookmarks")
         .delete()
@@ -317,7 +315,7 @@ export class LibraryService {
     }
   }
 
-  async getUserRecentBooks(userId: string, limit = 5): Promise<BookWithProgress[]> {
+  async getUserRecentBooks(userId: string = DEMO_USER_ID, limit = 5): Promise<BookWithProgress[]> {
     try {
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
@@ -372,7 +370,7 @@ export class LibraryService {
     }
   }
 
-  async getUserStats(userId: string): Promise<{
+  async getUserStats(userId: string = DEMO_USER_ID): Promise<{
     booksStarted: number
     booksCompleted: number
     totalBookmarks: number
@@ -428,7 +426,7 @@ export class LibraryService {
     }
   }
 
-  async getRecentActivity(userId: string, limit = 10): Promise<any[]> {
+  async getRecentActivity(userId: string = DEMO_USER_ID, limit = 10): Promise<any[]> {
     try {
       // Ensure user profile exists first
       await this.ensureUserProfile(userId)
@@ -499,6 +497,7 @@ export class LibraryService {
         tags: ["hábitos", "productividad", "autoayuda"],
         key_topics: ["Formación de hábitos", "Cambio de comportamiento", "Productividad personal"],
         is_recommended: true,
+        is_featured: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
@@ -517,6 +516,7 @@ export class LibraryService {
         tags: ["inteligencia emocional", "psicología", "liderazgo"],
         key_topics: ["Autoconciencia", "Autorregulación", "Empatía", "Habilidades sociales"],
         is_recommended: true,
+        is_featured: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
@@ -535,6 +535,7 @@ export class LibraryService {
         tags: ["liderazgo femenino", "carrera profesional", "igualdad"],
         key_topics: ["Liderazgo femenino", "Desarrollo profesional", "Igualdad de género"],
         is_recommended: true,
+        is_featured: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
