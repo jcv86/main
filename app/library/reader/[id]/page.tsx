@@ -24,7 +24,7 @@ import {
   Headphones,
 } from "lucide-react"
 import Link from "next/link"
-import { LibraryService, type Book, type BookChapter, type UserBookProgress } from "@/lib/supabase-library"
+import { libraryService, type Book, type BookChapter, type UserBookProgress } from "@/lib/supabase-library"
 import { useToast } from "@/hooks/use-toast"
 import { TTSControls } from "@/components/tts-controls"
 
@@ -54,7 +54,7 @@ export default function BookReaderPage() {
         setError(null)
 
         // Load book details
-        const bookData = await LibraryService.getBookById(bookId)
+        const bookData = await libraryService.getBookById(bookId)
         if (!bookData) {
           setError("Libro no encontrado")
           return
@@ -62,11 +62,11 @@ export default function BookReaderPage() {
         setBook(bookData)
 
         // Load chapters
-        const chaptersData = await LibraryService.getBookChapters(bookId)
+        const chaptersData = await libraryService.getBookChapters(bookId)
         setChapters(chaptersData)
 
         // Load user progress
-        const progressData = await LibraryService.getUserBookProgress(bookId)
+        const progressData = await libraryService.getUserBookProgress(bookId)
         if (progressData) {
           setProgress(progressData)
           setCurrentChapterIndex(Math.max(0, (progressData.current_chapter || 1) - 1))
@@ -74,7 +74,7 @@ export default function BookReaderPage() {
         }
 
         // Check if current chapter is bookmarked
-        const bookmarks = await LibraryService.getUserBookmarks(bookId)
+        const bookmarks = await libraryService.getUserBookmarks(bookId)
         const currentChapter = chaptersData[currentChapterIndex]
         if (currentChapter) {
           setIsBookmarked(bookmarks.some((b) => b.chapter_id === currentChapter.id))
@@ -117,7 +117,7 @@ export default function BookReaderPage() {
       const progressPercentage = Math.round(((currentChapterIndex + 1) / chapters.length) * 100)
 
       try {
-        await LibraryService.updateBookProgress(bookId, {
+        await libraryService.updateBookProgress(bookId, {
           current_chapter: currentChapterIndex + 1,
           progress_percentage: progressPercentage,
           reading_time_minutes: readingTime,
@@ -135,6 +135,8 @@ export default function BookReaderPage() {
           reading_time_minutes: readingTime,
           last_read_at: new Date().toISOString(),
           completed_at: progressPercentage >= 100 ? new Date().toISOString() : undefined,
+          created_at: prev?.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         }))
       } catch (error) {
         console.error("Error saving progress:", error)
@@ -169,14 +171,14 @@ export default function BookReaderPage() {
 
     try {
       if (isBookmarked) {
-        await LibraryService.removeBookmark(bookId, currentChapter.id)
+        await libraryService.removeBookmark(bookId, currentChapter.id)
         setIsBookmarked(false)
         toast({
           title: "Marcador eliminado",
           description: "Se eliminó el marcador de este capítulo.",
         })
       } else {
-        await LibraryService.addBookmark(bookId, currentChapter.id, currentChapter.title, "Marcador del capítulo")
+        await libraryService.addBookmark(bookId, currentChapter.id, currentChapter.title, "Marcador del capítulo")
         setIsBookmarked(true)
         toast({
           title: "Marcador añadido",
@@ -445,12 +447,11 @@ export default function BookReaderPage() {
             {/* Chapter Content */}
             <div className="prose prose-lg max-w-none">
               <div
-                className="text-gray-800 leading-relaxed"
+                className="text-gray-800 leading-relaxed whitespace-pre-wrap"
                 style={{ lineHeight: "1.8", fontSize: "18px" }}
-                dangerouslySetInnerHTML={{
-                  __html: currentChapter.content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>"),
-                }}
-              />
+              >
+                {currentChapter.content}
+              </div>
             </div>
 
             {/* Navigation Footer */}

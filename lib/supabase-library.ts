@@ -1,4 +1,4 @@
-import { supabase } from "./supabase"
+import { createClient } from "@/lib/supabase"
 
 export interface Book {
   id: string
@@ -7,25 +7,26 @@ export interface Book {
   description: string
   cover_image: string
   category: string
-  difficulty: "Principiante" | "Intermedio" | "Avanzado"
-  rating: number
+  difficulty: "Fácil" | "Intermedio" | "Avanzado"
   estimated_reading_time: number
-  pages: number
+  pages?: number
+  published_year?: number
+  rating?: number
   tags: string[]
-  key_topics: string[]
+  key_topics?: string[]
   is_recommended: boolean
+  is_featured?: boolean
   created_at: string
-  updated_at?: string
+  updated_at: string
 }
 
 export interface BookChapter {
   id: string
   book_id: string
+  chapter_number: number
   title: string
   content: string
-  order: number
   created_at: string
-  updated_at?: string
 }
 
 export interface UserBookProgress {
@@ -34,7 +35,7 @@ export interface UserBookProgress {
   book_id: string
   current_chapter: number
   progress_percentage: number
-  reading_time_minutes: number
+  reading_time_minutes?: number
   last_read_at: string
   completed_at?: string
   created_at: string
@@ -46,160 +47,152 @@ export interface UserBookBookmark {
   user_id: string
   book_id: string
   chapter_id: string
-  chapter_title: string
+  position: number
   note?: string
   created_at: string
 }
 
-export interface UserBookHighlight {
-  id: string
-  user_id: string
-  book_id: string
-  chapter_id: string
-  selected_text: string
-  start_position: number
-  end_position: number
-  color: string
-  note?: string
-  created_at: string
-  updated_at?: string
-}
-
-export interface UserBookNote {
-  id: string
-  user_id: string
-  book_id: string
-  chapter_id: string
-  content: string
-  position: number
-  is_private: boolean
-  created_at: string
-  updated_at?: string
-}
-
-export interface UserBookQuote {
-  id: string
-  user_id: string
-  book_id: string
-  chapter_id: string
-  quote_text: string
-  context?: string
-  tags: string[]
-  is_favorite: boolean
-  created_at: string
-  updated_at?: string
-}
-
-export interface ReadingSession {
-  id: string
-  user_id: string
-  book_id: string
-  chapter_id: string
-  start_time: string
-  end_time?: string
-  pages_read: number
-  words_read: number
-  focus_score?: number
-  notes?: string
-  created_at: string
-}
-
-export interface BookSearchResult {
-  book_id: string
-  chapter_id: string
-  chapter_title: string
-  matched_text: string
-  context: string
-  position: number
+export interface BookWithProgress extends Book {
+  progress?: UserBookProgress
 }
 
 export class LibraryService {
-  // Get all books
-  static async getBooks(): Promise<Book[]> {
+  private supabase = createClient()
+
+  async ensureUserProfile(userId: string, userEmail?: string): Promise<void> {
     try {
-      const { data, error } = await supabase.from("library_books").select("*").order("created_at", { ascending: false })
+      // Check if profile exists
+      const { data: existingProfile } = await this.supabase.from("profiles").select("id").eq("id", userId).single()
 
-      if (error) {
-        console.error("Error fetching books:", error)
-        return this.getMockBooks()
+      if (!existingProfile) {
+        // Create profile if it doesn't exist
+        const { error } = await this.supabase.from("profiles").insert({
+          id: userId,
+          email: userEmail || `${userId}@example.com`,
+          full_name: userEmail || "User",
+          role: "user",
+        })
+
+        if (error && error.code !== "23505") {
+          // Ignore duplicate key errors
+          console.warn("Could not create user profile:", error.message)
+        }
       }
-
-      return data || []
     } catch (error) {
-      console.error("Error in getBooks:", error)
-      return this.getMockBooks()
+      console.warn("Error ensuring user profile:", error)
     }
   }
 
-  // Get book by ID with UUID validation
-  static async getBookById(id: string): Promise<Book | null> {
+  async getBooks(): Promise<Book[]> {
     try {
-      // Validate UUID format
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      if (!uuidRegex.test(id)) {
-        console.log("Invalid UUID format, using mock data for ID:", id)
-        return this.getMockBookById(id)
+      const { data, error } = await this.supabase
+        .from("library_books")
+        .select("*")
+        .order("created_at", { ascending: false })
+
+      if (error) {
+        console.error("Error fetching books:", error)
+        return this.getFallbackBooks()
       }
 
-      const { data, error } = await supabase.from("library_books").select("*").eq("id", id).single()
+      return data || this.getFallbackBooks()
+    } catch (error) {
+      console.error("Error in getBooks:", error)
+      return this.getFallbackBooks()
+    }
+  }
+
+  async getFeaturedBooks(): Promise<Book[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from("library_books")
+        .select("*")
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false })
+        .limit(6)
+
+      if (error) {
+        console.error("Error fetching featured books:", error)
+        return this.getFallbackBooks().slice(0, 3)
+      }
+
+      return data || this.getFallbackBooks().slice(0, 3)
+    } catch (error) {
+      console.error("Error in getFeaturedBooks:", error)
+      return this.getFallbackBooks().slice(0, 3)
+    }
+  }
+
+  async getBookById(id: string): Promise<Book | null> {
+    try {
+      const { data, error } = await this.supabase.from("library_books").select("*").eq("id", id).single()
 
       if (error) {
         console.error("Error fetching book:", error)
-        return this.getMockBookById(id)
+        return this.getFallbackBooks().find((book) => book.id === id) || null
       }
 
       return data
     } catch (error) {
       console.error("Error in getBookById:", error)
-      return this.getMockBookById(id)
+      return this.getFallbackBooks().find((book) => book.id === id) || null
     }
   }
 
-  // Get book chapters with UUID validation
-  static async getBookChapters(bookId: string): Promise<BookChapter[]> {
+  async getBookChapters(bookId: string): Promise<BookChapter[]> {
     try {
-      // Validate UUID format
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      if (!uuidRegex.test(bookId)) {
-        console.log("Invalid UUID format, using mock chapters for book ID:", bookId)
-        return this.getMockChapters(bookId)
-      }
-
-      const { data, error } = await supabase
-        .from("library_book_chapters")
+      const { data, error } = await this.supabase
+        .from("book_chapters")
         .select("*")
         .eq("book_id", bookId)
-        .order("order", { ascending: true })
+        .order("chapter_number", { ascending: true })
 
       if (error) {
         console.error("Error fetching chapters:", error)
-        return this.getMockChapters(bookId)
+        return this.getFallbackChapters(bookId)
       }
 
-      return data || []
+      return data || this.getFallbackChapters(bookId)
     } catch (error) {
       console.error("Error in getBookChapters:", error)
-      return this.getMockChapters(bookId)
+      return this.getFallbackChapters(bookId)
     }
   }
 
-  // Get user's reading progress
-  static async getUserBookProgress(bookId: string): Promise<UserBookProgress | null> {
+  async getChapter(chapterId: string): Promise<BookChapter | null> {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return null
+      const { data, error } = await this.supabase.from("book_chapters").select("*").eq("id", chapterId).single()
 
-      const { data, error } = await supabase
+      if (error) {
+        console.error("Error fetching chapter:", error)
+        return null
+      }
+
+      return data
+    } catch (error) {
+      console.error("Error in getChapter:", error)
+      return null
+    }
+  }
+
+  async getUserBookProgress(bookId: string): Promise<UserBookProgress | null> {
+    try {
+      // For demo purposes, we'll use a demo user ID
+      const userId = "demo-user-id"
+
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
+
+      const { data, error } = await this.supabase
         .from("user_book_progress")
         .select("*")
+        .eq("user_id", userId)
         .eq("book_id", bookId)
-        .eq("user_id", user.id)
         .single()
 
       if (error && error.code !== "PGRST116") {
-        console.error("Error fetching progress:", error)
+        // PGRST116 is "not found"
+        console.error("Error fetching user book progress:", error)
         return null
       }
 
@@ -210,151 +203,54 @@ export class LibraryService {
     }
   }
 
-  // Update reading progress with proper upsert logic
-  static async updateBookProgress(bookId: string, progress: Partial<UserBookProgress>): Promise<void> {
+  async updateBookProgress(bookId: string, progressData: Partial<UserBookProgress>): Promise<UserBookProgress | null> {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
+      // For demo purposes, we'll use a demo user ID
+      const userId = "demo-user-id"
 
-      // First, try to get existing progress
-      const { data: existingProgress } = await supabase
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
+
+      const { data, error } = await this.supabase
         .from("user_book_progress")
-        .select("*")
-        .eq("book_id", bookId)
-        .eq("user_id", user.id)
-        .single()
-
-      if (existingProgress) {
-        // Update existing record
-        const { error } = await supabase
-          .from("user_book_progress")
-          .update({
-            ...progress,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("user_id", user.id)
-          .eq("book_id", bookId)
-
-        if (error) {
-          throw error
-        }
-      } else {
-        // Insert new record
-        const { error } = await supabase.from("user_book_progress").insert({
-          user_id: user.id,
+        .upsert({
+          user_id: userId,
           book_id: bookId,
-          current_chapter: 1,
-          progress_percentage: 0,
-          reading_time_minutes: 0,
-          ...progress,
-          created_at: new Date().toISOString(),
+          ...progressData,
           updated_at: new Date().toISOString(),
         })
-
-        if (error) {
-          throw error
-        }
-      }
-    } catch (error) {
-      console.error("Database error updating progress:", error)
-      throw error
-    }
-  }
-
-  // BOOKMARK FUNCTIONS
-  static async addBookmark(bookId: string, chapterId: string, chapterTitle: string, note?: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      // Check if bookmark already exists
-      const { data: existingBookmark } = await supabase
-        .from("user_book_bookmarks")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("book_id", bookId)
-        .eq("chapter_id", chapterId)
+        .select()
         .single()
 
-      if (existingBookmark) {
-        // Update existing bookmark
-        const { error } = await supabase
-          .from("user_book_bookmarks")
-          .update({
-            chapter_title: chapterTitle,
-            note: note,
-          })
-          .eq("user_id", user.id)
-          .eq("book_id", bookId)
-          .eq("chapter_id", chapterId)
-
-        if (error) {
-          throw error
-        }
-      } else {
-        // Insert new bookmark
-        const { error } = await supabase.from("user_book_bookmarks").insert({
-          user_id: user.id,
-          book_id: bookId,
-          chapter_id: chapterId,
-          chapter_title: chapterTitle,
-          note: note,
-          created_at: new Date().toISOString(),
-        })
-
-        if (error) {
-          throw error
-        }
-      }
-    } catch (error) {
-      console.error("Error adding bookmark:", error)
-      throw error
-    }
-  }
-
-  static async removeBookmark(bookId: string, chapterId: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const { error } = await supabase
-        .from("user_book_bookmarks")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("book_id", bookId)
-        .eq("chapter_id", chapterId)
-
       if (error) {
-        throw error
+        console.error("Error updating user book progress:", error)
+        return null
       }
+
+      return data
     } catch (error) {
-      console.error("Error removing bookmark:", error)
-      throw error
+      console.error("Error in updateBookProgress:", error)
+      return null
     }
   }
 
-  static async getUserBookmarks(bookId: string): Promise<UserBookBookmark[]> {
+  async getUserBookmarks(bookId: string): Promise<UserBookBookmark[]> {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return []
+      // For demo purposes, we'll use a demo user ID
+      const userId = "demo-user-id"
 
-      const { data, error } = await supabase
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
+
+      const { data, error } = await this.supabase
         .from("user_book_bookmarks")
         .select("*")
+        .eq("user_id", userId)
         .eq("book_id", bookId)
-        .eq("user_id", user.id)
         .order("created_at", { ascending: false })
 
       if (error) {
-        console.error("Error fetching bookmarks:", error)
+        console.error("Error fetching user bookmarks:", error)
         return []
       }
 
@@ -365,566 +261,228 @@ export class LibraryService {
     }
   }
 
-  // HIGHLIGHT FUNCTIONS
-  static async addHighlight(
-    bookId: string,
-    chapterId: string,
-    selectedText: string,
-    startPosition: number,
-    endPosition: number,
-    color = "yellow",
-    note?: string,
-  ): Promise<UserBookHighlight> {
+  async addBookmark(bookId: string, chapterId: string, title: string, note?: string): Promise<UserBookBookmark | null> {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
+      // For demo purposes, we'll use a demo user ID
+      const userId = "demo-user-id"
 
-      const highlightData = {
-        user_id: user.id,
-        book_id: bookId,
-        chapter_id: chapterId,
-        selected_text: selectedText,
-        start_position: startPosition,
-        end_position: endPosition,
-        color: color,
-        note: note,
-        created_at: new Date().toISOString(),
-      }
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
 
-      // For mock data, return a mock highlight
-      if (!this.isValidUUID(bookId)) {
-        return {
-          id: `highlight-${Date.now()}`,
-          ...highlightData,
-        }
-      }
-
-      const { data, error } = await supabase.from("user_book_highlights").insert(highlightData).select().single()
-
-      if (error) {
-        throw error
-      }
-
-      return data
-    } catch (error) {
-      console.error("Error adding highlight:", error)
-      throw error
-    }
-  }
-
-  static async updateHighlight(highlightId: string, updates: Partial<UserBookHighlight>): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const { error } = await supabase
-        .from("user_book_highlights")
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString(),
+      const { data, error } = await this.supabase
+        .from("user_book_bookmarks")
+        .insert({
+          user_id: userId,
+          book_id: bookId,
+          chapter_id: chapterId,
+          position: 0,
+          note: note || title,
         })
-        .eq("id", highlightId)
-        .eq("user_id", user.id)
-
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      console.error("Error updating highlight:", error)
-      throw error
-    }
-  }
-
-  static async removeHighlight(highlightId: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const { error } = await supabase
-        .from("user_book_highlights")
-        .delete()
-        .eq("id", highlightId)
-        .eq("user_id", user.id)
-
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      console.error("Error removing highlight:", error)
-      throw error
-    }
-  }
-
-  static async getChapterHighlights(bookId: string, chapterId: string): Promise<UserBookHighlight[]> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return []
-
-      // For mock data, return empty array
-      if (!this.isValidUUID(bookId)) {
-        return []
-      }
-
-      const { data, error } = await supabase
-        .from("user_book_highlights")
-        .select("*")
-        .eq("book_id", bookId)
-        .eq("chapter_id", chapterId)
-        .eq("user_id", user.id)
-        .order("start_position", { ascending: true })
-
-      if (error) {
-        console.error("Error fetching highlights:", error)
-        return []
-      }
-
-      return data || []
-    } catch (error) {
-      console.error("Error in getChapterHighlights:", error)
-      return []
-    }
-  }
-
-  static async getAllUserHighlights(bookId: string): Promise<UserBookHighlight[]> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return []
-
-      // For mock data, return empty array
-      if (!this.isValidUUID(bookId)) {
-        return []
-      }
-
-      const { data, error } = await supabase
-        .from("user_book_highlights")
-        .select("*")
-        .eq("book_id", bookId)
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-
-      if (error) {
-        console.error("Error fetching all highlights:", error)
-        return []
-      }
-
-      return data || []
-    } catch (error) {
-      console.error("Error in getAllUserHighlights:", error)
-      return []
-    }
-  }
-
-  // NOTE FUNCTIONS
-  static async addNote(
-    bookId: string,
-    chapterId: string,
-    content: string,
-    position: number,
-    isPrivate = true,
-  ): Promise<UserBookNote> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const noteData = {
-        user_id: user.id,
-        book_id: bookId,
-        chapter_id: chapterId,
-        content: content,
-        position: position,
-        is_private: isPrivate,
-        created_at: new Date().toISOString(),
-      }
-
-      // For mock data, return a mock note
-      if (!this.isValidUUID(bookId)) {
-        return {
-          id: `note-${Date.now()}`,
-          ...noteData,
-        }
-      }
-
-      const { data, error } = await supabase.from("user_book_notes").insert(noteData).select().single()
-
-      if (error) {
-        throw error
-      }
-
-      return data
-    } catch (error) {
-      console.error("Error adding note:", error)
-      throw error
-    }
-  }
-
-  static async updateNote(noteId: string, content: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const { error } = await supabase
-        .from("user_book_notes")
-        .update({
-          content: content,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", noteId)
-        .eq("user_id", user.id)
-
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      console.error("Error updating note:", error)
-      throw error
-    }
-  }
-
-  static async removeNote(noteId: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const { error } = await supabase.from("user_book_notes").delete().eq("id", noteId).eq("user_id", user.id)
-
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      console.error("Error removing note:", error)
-      throw error
-    }
-  }
-
-  static async getChapterNotes(bookId: string, chapterId: string): Promise<UserBookNote[]> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return []
-
-      // For mock data, return empty array
-      if (!this.isValidUUID(bookId)) {
-        return []
-      }
-
-      const { data, error } = await supabase
-        .from("user_book_notes")
-        .select("*")
-        .eq("book_id", bookId)
-        .eq("chapter_id", chapterId)
-        .eq("user_id", user.id)
-        .order("position", { ascending: true })
-
-      if (error) {
-        console.error("Error fetching notes:", error)
-        return []
-      }
-
-      return data || []
-    } catch (error) {
-      console.error("Error in getChapterNotes:", error)
-      return []
-    }
-  }
-
-  // QUOTE FUNCTIONS
-  static async addQuote(
-    bookId: string,
-    chapterId: string,
-    quoteText: string,
-    context?: string,
-    tags: string[] = [],
-  ): Promise<UserBookQuote> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const quoteData = {
-        user_id: user.id,
-        book_id: bookId,
-        chapter_id: chapterId,
-        quote_text: quoteText,
-        context: context,
-        tags: tags,
-        is_favorite: false,
-        created_at: new Date().toISOString(),
-      }
-
-      // For mock data, return a mock quote
-      if (!this.isValidUUID(bookId)) {
-        return {
-          id: `quote-${Date.now()}`,
-          ...quoteData,
-        }
-      }
-
-      const { data, error } = await supabase.from("user_book_quotes").insert(quoteData).select().single()
-
-      if (error) {
-        throw error
-      }
-
-      return data
-    } catch (error) {
-      console.error("Error adding quote:", error)
-      throw error
-    }
-  }
-
-  static async toggleFavoriteQuote(quoteId: string): Promise<void> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      // First get current state
-      const { data: quote, error: fetchError } = await supabase
-        .from("user_book_quotes")
-        .select("is_favorite")
-        .eq("id", quoteId)
-        .eq("user_id", user.id)
+        .select()
         .single()
 
-      if (fetchError) {
-        throw fetchError
-      }
-
-      // Toggle favorite status
-      const { error } = await supabase
-        .from("user_book_quotes")
-        .update({
-          is_favorite: !quote.is_favorite,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", quoteId)
-        .eq("user_id", user.id)
-
       if (error) {
-        throw error
-      }
-    } catch (error) {
-      console.error("Error toggling favorite quote:", error)
-      throw error
-    }
-  }
-
-  static async getUserQuotes(bookId: string): Promise<UserBookQuote[]> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return []
-
-      // For mock data, return empty array
-      if (!this.isValidUUID(bookId)) {
-        return []
-      }
-
-      const { data, error } = await supabase
-        .from("user_book_quotes")
-        .select("*")
-        .eq("book_id", bookId)
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-
-      if (error) {
-        console.error("Error fetching quotes:", error)
-        return []
-      }
-
-      return data || []
-    } catch (error) {
-      console.error("Error in getUserQuotes:", error)
-      return []
-    }
-  }
-
-  // READING SESSION FUNCTIONS
-  static async startReadingSession(bookId: string, chapterId: string): Promise<ReadingSession> {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
-
-      const sessionData = {
-        user_id: user.id,
-        book_id: bookId,
-        chapter_id: chapterId,
-        start_time: new Date().toISOString(),
-        pages_read: 0,
-        words_read: 0,
-        created_at: new Date().toISOString(),
-      }
-
-      // For mock data, return a mock session
-      if (!this.isValidUUID(bookId)) {
-        return {
-          id: `session-${Date.now()}`,
-          ...sessionData,
-        }
-      }
-
-      const { data, error } = await supabase.from("reading_sessions").insert(sessionData).select().single()
-
-      if (error) {
-        throw error
+        console.error("Error adding bookmark:", error)
+        return null
       }
 
       return data
     } catch (error) {
-      console.error("Error starting reading session:", error)
-      throw error
+      console.error("Error in addBookmark:", error)
+      return null
     }
   }
 
-  static async endReadingSession(
-    sessionId: string,
-    pagesRead: number,
-    wordsRead: number,
-    focusScore?: number,
-    notes?: string,
-  ): Promise<void> {
+  async removeBookmark(bookId: string, chapterId: string): Promise<boolean> {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
+      // For demo purposes, we'll use a demo user ID
+      const userId = "demo-user-id"
 
-      const { error } = await supabase
-        .from("reading_sessions")
-        .update({
-          end_time: new Date().toISOString(),
-          pages_read: pagesRead,
-          words_read: wordsRead,
-          focus_score: focusScore,
-          notes: notes,
-        })
-        .eq("id", sessionId)
-        .eq("user_id", user.id)
+      const { error } = await this.supabase
+        .from("user_book_bookmarks")
+        .delete()
+        .eq("user_id", userId)
+        .eq("book_id", bookId)
+        .eq("chapter_id", chapterId)
 
       if (error) {
-        throw error
+        console.error("Error removing bookmark:", error)
+        return false
       }
+
+      return true
     } catch (error) {
-      console.error("Error ending reading session:", error)
-      throw error
+      console.error("Error in removeBookmark:", error)
+      return false
     }
   }
 
-  // SEARCH FUNCTIONS
-  static async searchInBook(bookId: string, query: string): Promise<BookSearchResult[]> {
+  async getUserRecentBooks(userId: string, limit = 5): Promise<BookWithProgress[]> {
     try {
-      const chapters = await this.getBookChapters(bookId)
-      const results: BookSearchResult[] = []
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
 
-      const normalizedQuery = query.toLowerCase().trim()
-      if (!normalizedQuery) return results
+      // First get the user's progress records
+      const { data: progressData, error: progressError } = await this.supabase
+        .from("user_book_progress")
+        .select("*")
+        .eq("user_id", userId)
+        .order("last_read_at", { ascending: false })
+        .limit(limit)
 
-      chapters.forEach((chapter) => {
-        const content = chapter.content.toLowerCase()
-        const originalContent = chapter.content
+      if (progressError) {
+        console.error("Error fetching user progress:", progressError)
+        return []
+      }
 
-        let searchIndex = 0
-        while (searchIndex < content.length) {
-          const foundIndex = content.indexOf(normalizedQuery, searchIndex)
-          if (foundIndex === -1) break
+      if (!progressData || progressData.length === 0) {
+        return []
+      }
 
-          // Get context around the match (50 characters before and after)
-          const contextStart = Math.max(0, foundIndex - 50)
-          const contextEnd = Math.min(originalContent.length, foundIndex + normalizedQuery.length + 50)
-          const context = originalContent.substring(contextStart, contextEnd)
+      // Then get the book details for each progress record
+      const bookIds = progressData.map((p) => p.book_id)
+      const { data: booksData, error: booksError } = await this.supabase
+        .from("library_books")
+        .select("*")
+        .in("id", bookIds)
 
-          // Get the exact matched text with original casing
-          const matchedText = originalContent.substring(foundIndex, foundIndex + normalizedQuery.length)
+      if (booksError) {
+        console.error("Error fetching books:", booksError)
+        return []
+      }
 
-          results.push({
-            book_id: bookId,
-            chapter_id: chapter.id,
-            chapter_title: chapter.title,
-            matched_text: matchedText,
-            context: context,
-            position: foundIndex,
-          })
-
-          searchIndex = foundIndex + 1
+      // Combine the data
+      const booksWithProgress: BookWithProgress[] = (booksData || []).map((book) => {
+        const progress = progressData.find((p) => p.book_id === book.id)
+        return {
+          ...book,
+          progress,
         }
       })
 
-      return results.slice(0, 20) // Limit to 20 results
+      // Sort by last_read_at
+      return booksWithProgress.sort((a, b) => {
+        const aTime = a.progress?.last_read_at || ""
+        const bTime = b.progress?.last_read_at || ""
+        return new Date(bTime).getTime() - new Date(aTime).getTime()
+      })
     } catch (error) {
-      console.error("Error searching in book:", error)
+      console.error("Error in getUserRecentBooks:", error)
       return []
     }
   }
 
-  // UTILITY FUNCTIONS
-  static isValidUUID(uuid: string): boolean {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-    return uuidRegex.test(uuid)
-  }
+  async getUserStats(userId: string): Promise<{
+    booksStarted: number
+    booksCompleted: number
+    totalBookmarks: number
+    averageProgress: number
+    currentlyReading: number
+  }> {
+    try {
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
 
-  static calculateReadingSpeed(wordsRead: number, timeInMinutes: number): number {
-    if (timeInMinutes === 0) return 0
-    return Math.round(wordsRead / timeInMinutes)
-  }
+      // Get reading progress stats
+      const { data: progressData, error: progressError } = await this.supabase
+        .from("user_book_progress")
+        .select("*")
+        .eq("user_id", userId)
 
-  static estimateReadingTime(text: string, wordsPerMinute = 200): number {
-    const wordCount = text.split(/\s+/).filter((word) => word.length > 0).length
-    return Math.ceil(wordCount / wordsPerMinute)
-  }
-
-  static getReadingLevel(text: string): "Fácil" | "Intermedio" | "Avanzado" {
-    const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0)
-    const words = text.split(/\s+/).filter((w) => w.length > 0)
-    const avgWordsPerSentence = words.length / sentences.length
-    const complexWords = words.filter((word) => word.length > 7).length
-    const complexWordPercentage = (complexWords / words.length) * 100
-
-    if (avgWordsPerSentence > 20 || complexWordPercentage > 30) {
-      return "Avanzado"
-    } else if (avgWordsPerSentence > 15 || complexWordPercentage > 20) {
-      return "Intermedio"
-    } else {
-      return "Fácil"
-    }
-  }
-
-  static formatReadingTime(minutes: number): string {
-    if (minutes < 60) {
-      return `${minutes} min`
-    } else {
-      const hours = Math.floor(minutes / 60)
-      const remainingMinutes = minutes % 60
-      if (remainingMinutes === 0) {
-        return `${hours}h`
+      if (progressError) {
+        console.error("Error fetching progress stats:", progressError)
       }
-      return `${hours}h ${remainingMinutes}min`
+
+      // Get bookmarks count
+      const { data: bookmarksData, error: bookmarksError } = await this.supabase
+        .from("user_book_bookmarks")
+        .select("id")
+        .eq("user_id", userId)
+
+      if (bookmarksError) {
+        console.error("Error fetching bookmarks stats:", bookmarksError)
+      }
+
+      const booksStarted = progressData?.length || 0
+      const booksCompleted = progressData?.filter((p) => p.progress_percentage >= 100).length || 0
+      const totalBookmarks = bookmarksData?.length || 0
+      const averageProgress =
+        booksStarted > 0 ? progressData?.reduce((sum, p) => sum + p.progress_percentage, 0) / booksStarted : 0
+
+      return {
+        booksStarted,
+        booksCompleted,
+        totalBookmarks,
+        averageProgress: Math.round(averageProgress * 10) / 10,
+        currentlyReading: booksStarted - booksCompleted,
+      }
+    } catch (error) {
+      console.error("Error in getUserStats:", error)
+      return {
+        booksStarted: 0,
+        booksCompleted: 0,
+        totalBookmarks: 0,
+        averageProgress: 0,
+        currentlyReading: 0,
+      }
     }
   }
 
-  // Mock data fallbacks - Updated to include all operational books including Lean In
-  private static getMockBooks(): Book[] {
+  async getRecentActivity(userId: string, limit = 10): Promise<any[]> {
+    try {
+      // Ensure user profile exists first
+      await this.ensureUserProfile(userId)
+
+      // Get recent progress updates
+      const { data: progressData, error: progressError } = await this.supabase
+        .from("user_book_progress")
+        .select("*")
+        .eq("user_id", userId)
+        .order("last_read_at", { ascending: false })
+        .limit(limit)
+
+      if (progressError) {
+        console.error("Error fetching recent progress:", progressError)
+        return []
+      }
+
+      if (!progressData || progressData.length === 0) {
+        return []
+      }
+
+      // Get book details for the progress records
+      const bookIds = progressData.map((p) => p.book_id)
+      const { data: booksData, error: booksError } = await this.supabase
+        .from("library_books")
+        .select("id, title, author, cover_image")
+        .in("id", bookIds)
+
+      if (booksError) {
+        console.error("Error fetching books for activity:", booksError)
+        return []
+      }
+
+      // Create activity records
+      const activities = progressData.map((progress) => {
+        const book = booksData?.find((b) => b.id === progress.book_id)
+        return {
+          id: progress.id,
+          type: "reading",
+          title: `Continued reading "${book?.title || "Unknown Book"}"`,
+          description: `Chapter ${progress.current_chapter} • ${Math.round(progress.progress_percentage)}% complete`,
+          timestamp: progress.last_read_at,
+          book: book,
+        }
+      })
+
+      return activities
+    } catch (error) {
+      console.error("Error in getRecentActivity:", error)
+      return []
+    }
+  }
+
+  private getFallbackBooks(): Book[] {
     return [
       {
         id: "550e8400-e29b-41d4-a716-446655440001",
@@ -934,255 +492,221 @@ export class LibraryService {
         cover_image: "/books/atomic-habits.jpg",
         category: "Desarrollo Personal",
         difficulty: "Intermedio",
-        rating: 4.8,
         estimated_reading_time: 240,
         pages: 320,
+        published_year: 2018,
+        rating: 4.8,
         tags: ["hábitos", "productividad", "autoayuda"],
-        key_topics: ["Formación de hábitos", "Cambio de comportamiento", "Productividad"],
+        key_topics: ["Formación de hábitos", "Cambio de comportamiento", "Productividad personal"],
         is_recommended: true,
         created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: "550e8400-e29b-41d4-a716-446655440002",
-        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-        author: "Stephen R. Covey",
-        description:
-          "Un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.",
-        cover_image: "/books/7-habits.jpg",
-        category: "Liderazgo",
-        difficulty: "Intermedio",
-        rating: 4.7,
-        estimated_reading_time: 300,
-        pages: 380,
-        tags: ["liderazgo", "efectividad", "principios"],
-        key_topics: ["Liderazgo personal", "Efectividad", "Principios universales"],
-        is_recommended: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440003",
-        title: "Trabajo Profundo",
-        author: "Cal Newport",
-        description: "Reglas para el éxito enfocado en un mundo distraído.",
-        cover_image: "/books/deep-work.jpg",
-        category: "Productividad",
-        difficulty: "Avanzado",
-        rating: 4.6,
-        estimated_reading_time: 280,
-        pages: 296,
-        tags: ["concentración", "productividad", "enfoque"],
-        key_topics: ["Concentración profunda", "Gestión de distracciones", "Productividad cognitiva"],
-        is_recommended: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440004",
         title: "Inteligencia Emocional",
         author: "Daniel Goleman",
         description: "Por qué es más importante que el cociente intelectual.",
         cover_image: "/books/emotional-intelligence.jpg",
         category: "Psicología",
         difficulty: "Intermedio",
+        estimated_reading_time: 300,
+        pages: 352,
+        published_year: 1995,
         rating: 4.5,
-        estimated_reading_time: 320,
-        pages: 384,
-        tags: ["inteligencia emocional", "psicología", "autoconocimiento"],
-        key_topics: ["Autoconciencia emocional", "Regulación emocional", "Habilidades sociales"],
+        tags: ["inteligencia emocional", "psicología", "liderazgo"],
+        key_topics: ["Autoconciencia", "Autorregulación", "Empatía", "Habilidades sociales"],
         is_recommended: true,
         created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
-        id: "550e8400-e29b-41d4-a716-446655440005",
-        title: "Lean In: Mujeres, Trabajo y la Voluntad de Liderar",
+        id: "550e8400-e29b-41d4-a716-446655440003",
+        title: "Lean In",
         author: "Sheryl Sandberg",
-        description:
-          "Una exploración sobre los desafíos que enfrentan las mujeres en el lugar de trabajo y cómo pueden superarlos para alcanzar posiciones de liderazgo.",
+        description: "Las mujeres, el trabajo y la voluntad de liderar.",
         cover_image: "/books/lean-in.jpg",
         category: "Liderazgo",
         difficulty: "Intermedio",
-        rating: 4.5,
-        estimated_reading_time: 280,
-        pages: 320,
-        tags: ["liderazgo femenino", "igualdad de género", "desarrollo profesional", "empoderamiento"],
-        key_topics: [
-          "Liderazgo femenino",
-          "Igualdad en el trabajo",
-          "Desarrollo de carrera",
-          "Empoderamiento personal",
-        ],
-        is_recommended: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440006",
-        title: "Mindset",
-        author: "Carol S. Dweck",
-        description: "La nueva psicología del éxito.",
-        cover_image: "/books/mindset.jpg",
-        category: "Psicología",
-        difficulty: "Principiante",
-        rating: 4.6,
-        estimated_reading_time: 220,
-        pages: 276,
-        tags: ["mentalidad", "crecimiento", "psicología"],
-        key_topics: ["Mentalidad de crecimiento", "Aprendizaje", "Resiliencia"],
-        is_recommended: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440007",
-        title: "El Poder del Ahora",
-        author: "Eckhart Tolle",
-        description: "Una guía hacia la iluminación espiritual.",
-        cover_image: "/books/power-of-now.jpg",
-        category: "Espiritualidad",
-        difficulty: "Intermedio",
-        rating: 4.3,
-        estimated_reading_time: 200,
-        pages: 236,
-        tags: ["mindfulness", "espiritualidad", "presente"],
-        key_topics: ["Mindfulness", "Conciencia presente", "Transformación personal"],
-        is_recommended: false,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440008",
-        title: "Good to Great",
-        author: "Jim Collins",
-        description: "Por qué algunas empresas dan el salto... y otras no.",
-        cover_image: "/books/good-to-great.jpg",
-        category: "Negocios",
-        difficulty: "Avanzado",
-        rating: 4.5,
-        estimated_reading_time: 350,
-        pages: 300,
-        tags: ["liderazgo empresarial", "estrategia", "excelencia"],
-        key_topics: ["Liderazgo empresarial", "Transformación organizacional", "Excelencia operativa"],
-        is_recommended: true,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440009",
-        title: "La Semana Laboral de 4 Horas",
-        author: "Timothy Ferriss",
-        description: "Escapa de la rutina de 9-5, vive en cualquier lugar y únete a los nuevos ricos.",
-        cover_image: "/books/4-hour-workweek.jpg",
-        category: "Emprendimiento",
-        difficulty: "Intermedio",
-        rating: 4.2,
-        estimated_reading_time: 280,
-        pages: 308,
-        tags: ["emprendimiento", "libertad financiera", "productividad"],
-        key_topics: ["Automatización", "Libertad geográfica", "Emprendimiento digital"],
-        is_recommended: false,
-        created_at: new Date().toISOString(),
-      },
-      {
-        id: "550e8400-e29b-41d4-a716-446655440010",
-        title: "Conversaciones Cruciales",
-        author: "Kerry Patterson",
-        description: "Herramientas para hablar cuando hay mucho en juego.",
-        cover_image: "/books/crucial-conversations.jpg",
-        category: "Comunicación",
-        difficulty: "Intermedio",
+        estimated_reading_time: 250,
+        pages: 240,
+        published_year: 2013,
         rating: 4.4,
-        estimated_reading_time: 240,
-        pages: 288,
-        tags: ["comunicación", "negociación", "conflictos"],
-        key_topics: ["Comunicación efectiva", "Resolución de conflictos", "Negociación"],
+        tags: ["liderazgo femenino", "carrera profesional", "igualdad"],
+        key_topics: ["Liderazgo femenino", "Desarrollo profesional", "Igualdad de género"],
         is_recommended: true,
         created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
     ]
   }
 
-  private static getMockBookById(id: string): Book | null {
-    const books = this.getMockBooks()
-    return books.find((book) => book.id === id) || null
-  }
+  private getFallbackChapters(bookId: string): BookChapter[] {
+    const chapters: Record<string, BookChapter[]> = {
+      "550e8400-e29b-41d4-a716-446655440001": [
+        {
+          id: "550e8400-e29b-41d4-a716-446655440101",
+          book_id: bookId,
+          chapter_number: 1,
+          title: "El Sorprendente Poder de los Hábitos Atómicos",
+          content: `Es muy fácil sobrestimar la importancia de un momento definitorio y subestimar el valor de hacer pequeñas mejoras diariamente. Con demasiada frecuencia, nos convencemos de que el cambio masivo requiere una acción masiva.
 
-  private static getMockChapters(bookId: string): BookChapter[] {
-    // Atomic Habits chapters
-    if (bookId === "550e8400-e29b-41d4-a716-446655440001") {
-      return [
-        {
-          id: "chapter-1-atomic-habits",
-          book_id: bookId,
-          title: "Introducción: Mi historia",
-          content:
-            "En el segundo año de la escuela secundaria, me golpearon en la cara con un bate de béisbol. Mi historia comienza aquí, en un momento que cambió mi vida para siempre. Los cambios que parecen pequeños e insignificantes al principio se componen en resultados notables si estás dispuesto a mantenerte en ellos durante años. Todos enfrentamos momentos de elección que definen el tipo de persona en la que nos convertiremos. Sin darnos cuenta, repetimos alrededor del 40% de nuestros comportamientos casi a diario. Esto significa que mejorar los hábitos es una de las formas más eficientes de mejorar tu vida.",
-          order: 1,
+Pero aquí está la cosa: si puedes mejorar solo un 1% cada día durante un año, terminarás siendo 37 veces mejor al final del año. Por el contrario, si empeoras un 1% cada día durante un año, caerás casi a cero.
+
+Los pequeños cambios a menudo parecen no hacer diferencia hasta que cruzas un umbral crítico. Los resultados más poderosos de cualquier sistema compuesto se retrasan. Necesitas ser paciente.
+
+Un avión que sale de Los Ángeles hacia Nueva York y ajusta su rumbo solo 3.5 grados hacia el sur terminará aterrizando en Washington D.C. en lugar de Nueva York. Un pequeño cambio en la dirección puede llevar a un destino muy diferente.
+
+De manera similar, un pequeño cambio en tus hábitos diarios puede guiar tu vida hacia un destino completamente diferente. Hacer una elección que es un 1% mejor o un 1% peor parece insignificante en el momento, pero a lo largo de los años estas elecciones determinan la diferencia entre quien eres y quien podrías ser.
+
+El éxito es el producto de los hábitos diarios, no de transformaciones de una sola vez.`,
           created_at: new Date().toISOString(),
         },
         {
-          id: "chapter-2-atomic-habits",
+          id: "550e8400-e29b-41d4-a716-446655440102",
           book_id: bookId,
-          title: "Los fundamentos: Por qué los pequeños cambios generan una gran diferencia",
-          content:
-            "Es muy fácil sobrestimar la importancia de un momento definitorio y subestimar el valor de hacer pequeñas mejoras diariamente. Con demasiada frecuencia, nos convencemos de que el cambio masivo requiere una acción masiva. Ya sea perdiendo peso, construyendo un negocio, escribiendo un libro, ganando un campeonato, o logrando cualquier otro objetivo, nos presionamos para hacer alguna mejora que capture la atención de todos. Mientras tanto, mejorar en un 1% no es particularmente notable, a veces ni siquiera es perceptible, pero puede ser mucho más significativo, especialmente a largo plazo.",
-          order: 2,
+          chapter_number: 2,
+          title: "Cómo Tus Hábitos Moldean Tu Identidad (y Viceversa)",
+          content: `¿Por qué es tan fácil repetir los malos hábitos y tan difícil formar buenos? Pocas cosas pueden tener un impacto más poderoso en tu vida que mejorar tus hábitos diarios. Y sin embargo, es probable que para mañana hagas lo mismo que hiciste hoy, la semana que viene hagas lo mismo que hiciste esta semana, y el próximo mes hagas lo mismo que hiciste este mes.
+
+¿Por qué es tan fácil repetir estos patrones cuando sabemos que deberíamos cambiar? ¿Por qué elegimos ver otro episodio cuando sabemos que deberíamos apagar la televisión? ¿Por qué comemos la dona cuando sabemos que deberíamos comer la fruta?
+
+Cambiar nuestros hábitos es desafiante por dos razones: (1) tratamos de cambiar la cosa equivocada y (2) tratamos de cambiar nuestros hábitos de la manera equivocada.
+
+En este capítulo, abordaré el primer punto. En los siguientes capítulos, abordaré el segundo.
+
+La primera capa es cambiar tus resultados. Este nivel se trata de cambiar lo que obtienes: perder peso, publicar un libro, ganar un campeonato. La mayoría de las metas que te fijas están asociadas con este nivel de cambio.
+
+La segunda capa es cambiar tu proceso. Este nivel se trata de cambiar tus hábitos y sistemas: implementar una nueva rutina en el gimnasio, despejar tu escritorio para un mejor flujo de trabajo, desarrollar una práctica de meditación. La mayoría de los hábitos que construyes están asociados con este nivel.
+
+La tercera y más profunda capa es cambiar tu identidad. Este nivel se trata de cambiar tus creencias: tu visión del mundo, tu autoimagen, tus juicios sobre ti mismo y otros. La mayoría de las creencias, suposiciones y sesgos que tienes están asociados con este nivel.`,
           created_at: new Date().toISOString(),
         },
-      ]
+        {
+          id: "550e8400-e29b-41d4-a716-446655440103",
+          book_id: bookId,
+          chapter_number: 3,
+          title: "Cómo Construir Mejores Hábitos en 4 Pasos Simples",
+          content: `En 1898, un psicólogo llamado Edward Thorndike realizó un experimento que cambiaría la forma en que pensamos sobre la formación de hábitos.
+
+Thorndike estaba interesado en estudiar el comportamiento animal, así que construyó un laberinto llamado "caja rompecabezas". Colocó un gato dentro de la caja, que estaba diseñada para que el gato pudiera escapar a través de una puerta, pero solo si presionaba una palanca en la secuencia correcta.
+
+Al principio, cada gato se movía alrededor de la caja al azar. Arañaba las paredes, mordía los barrotes, metía sus patas a través de las aberturas. Después de unos minutos de esto, presionaría accidentalmente la palanca, la puerta se abriría, y el gato escaparía.
+
+Thorndike realizó este experimento una y otra vez con muchos gatos. Y descubrió algo fascinante. Cuando un gato era colocado en la caja por segunda vez, realizaba las mismas acciones aleatorias que antes. Pero esta vez, escapaba un poco más rápido. Después de dos o tres intentos más, el gato había aprendido a escapar en unos pocos segundos.
+
+Durante cada intento, las acciones inútiles ocurrían con menos frecuencia y las acciones útiles se volvían más comunes. El gato estaba formando una asociación entre presionar la palanca y recibir la recompensa de escapar.
+
+Este experimento sentó las bases para lo que conocemos como la Ley del Efecto, que establece que "las respuestas que producen un efecto satisfactorio en una situación particular se vuelven más probables de ocurrir nuevamente en esa situación, y las respuestas que producen un efecto incómodo se vuelven menos probables de ocurrir nuevamente en esa situación."
+
+Los hábitos son bucles de retroalimentación confiables que resuelven los problemas recurrentes en nuestras vidas.`,
+          created_at: new Date().toISOString(),
+        },
+      ],
+      "550e8400-e29b-41d4-a716-446655440002": [
+        {
+          id: "550e8400-e29b-41d4-a716-446655440201",
+          book_id: bookId,
+          chapter_number: 1,
+          title: "¿Para Qué Sirven las Emociones?",
+          content: `La mente emocional es mucho más rápida que la mente racional, entrando en acción sin detenerse ni un momento a considerar lo que está haciendo. Su rapidez excluye la reflexión deliberada que es el sello distintivo de la mente pensante.
+
+En los momentos más críticos de nuestras vidas, dependemos tanto de nuestros sentimientos como de nuestros pensamientos, y a menudo más de los primeros. Hemos llegado tan lejos como especie precisamente debido a la notable eficacia de nuestras emociones para guiarnos a través de las decisiones importantes.
+
+Las emociones, entonces, importan para la racionalidad. En la danza entre el sentimiento y el pensamiento, la facultad emocional guía nuestras decisiones momento a momento, trabajando de la mano con la mente racional y capacitando o incapacitando al pensamiento mismo.
+
+De manera similar, la mente pensante desempeña un papel ejecutivo en nuestras emociones, excepto en aquellos momentos en que las emociones se salen de control y la mente emocional toma las riendas.
+
+En cierto sentido, tenemos dos mentes: una que piensa y otra que siente. Estas dos formas fundamentalmente diferentes de conocimiento interactúan para construir nuestra vida mental. Una, la mente racional, es el modo de comprensión del que somos típicamente conscientes: más prominente en la conciencia, reflexiva, capaz de ponderar y reflexionar.
+
+Pero junto a ese existe otro sistema de conocimiento: impulsivo y poderoso, aunque a veces ilógico: la mente emocional.
+
+La dicotomía emocional/racional se aproxima a la distinción popular entre "corazón" y "cabeza"; saber que algo está bien "en tu corazón" es un tipo diferente de convicción, de alguna manera un tipo más profundo de certeza, que pensar lo mismo con tu mente racional.`,
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: "550e8400-e29b-41d4-a716-446655440202",
+          book_id: bookId,
+          chapter_number: 2,
+          title: "Anatomía de un Secuestro Emocional",
+          content: `Fue un día de agosto sofocante en 1963, el mismo día en que Martin Luther King Jr. pronunció su discurso "Tengo un sueño" ante una multitud de manifestantes por los derechos civiles en Washington. Ese día, Richard Robles, un ladrón de carrera de veinte años, decidió robar un apartamento en el Upper East Side de Manhattan.
+
+Robles había elegido cuidadosamente el apartamento de las hermanas Wylie, creyendo que estarían fuera. Pero Janice Wylie, de veintiún años, estaba en casa. Robles la ató, pero luego entró en pánico al darse cuenta de que ella podría identificarlo. En un momento de terror, la mató.
+
+Luego llegó Emily Hoffert, la compañera de cuarto de Janice. Robles la mató también.
+
+Más tarde, Robles confesaría que no había tenido la intención de lastimar a nadie; había entrado en pánico. Pero en ese momento crucial, su mente emocional había tomado el control, secuestrando su racionalidad.
+
+Este es un ejemplo extremo de lo que podríamos llamar un "secuestro emocional": momentos en los que la mente emocional toma el control, abrumando a la mente racional.
+
+El término secuestro emocional proviene de la comprensión de que el centro emocional del cerebro, la amígdala, puede proclamar una emergencia antes de que los centros superiores del cerebro, la neocorteza, hayan tenido completamente la oportunidad de comprender qué está sucediendo.
+
+En un secuestro emocional, la amígdala proclama una emergencia y recluta el resto del cerebro para su agenda urgente. El secuestro ocurre en un instante, desencadenando esta reacción crucial antes de que la neocorteza, la mente pensante, haya tenido la oportunidad de vislumbrar completamente lo que está sucediendo, y mucho menos decidir si es una buena respuesta.
+
+El sello distintivo de tal secuestro es que una vez que pasa el momento, las personas no tienen idea de lo que les pasó.`,
+          created_at: new Date().toISOString(),
+        },
+      ],
+      "550e8400-e29b-41d4-a716-446655440003": [
+        {
+          id: "550e8400-e29b-41d4-a716-446655440301",
+          book_id: bookId,
+          chapter_number: 1,
+          title: "La Brecha de Ambición en el Liderazgo",
+          content: `Un mundo verdaderamente igualitario sería aquel donde las mujeres dirigieran la mitad de nuestros países y empresas, y los hombres dirigieran la mitad de nuestros hogares. Creo que este es el objetivo al que deberíamos aspirar.
+
+Pero hoy, estamos muy lejos de este objetivo. De los 195 países independientes del mundo, solo diecisiete están dirigidos por mujeres. Las mujeres ocupan solo el 20 por ciento de los escaños en los parlamentos a nivel mundial. En el sector corporativo, las mujeres ocupan solo el 21 por ciento de los puestos de alta dirección a nivel mundial.
+
+En Estados Unidos, las mujeres han obtenido el 57 por ciento de los títulos universitarios y el 53 por ciento de los doctorados durante la última década. Sin embargo, solo representan el 14 por ciento de los puestos ejecutivos, el 17 por ciento de los miembros de las juntas directivas y el 18 por ciento de los miembros del Congreso.
+
+Esta brecha de liderazgo es aún más sorprendente en el sector sin fines de lucro, donde las mujeres representan el 75 por ciento de la fuerza laboral pero solo el 23 por ciento de los presidentes de organizaciones y el 29 por ciento de los presidentes de juntas directivas.
+
+Las barreras que impiden que las mujeres alcancen posiciones de liderazgo son reales y están bien documentadas. Pero también creo que necesitamos reconocer que las mujeres mismas pueden estar contribuyendo inadvertidamente a estas estadísticas.
+
+Mi argumento es que las mujeres enfrentan barreras reales en el lugar de trabajo, pero también que debemos reconocer que a veces nosotras mismas nos frenamos. Nos subestimamos. No nos postulamos para trabajos y oportunidades. No nos sentamos a la mesa.
+
+Internalizamos los mensajes negativos que recibimos a lo largo de nuestras vidas: los mensajes que dicen que está mal ser ambiciosa, que es mejor ser querida que respetada, que lograr el éxito profesional de alguna manera nos hace menos femeninas.
+
+Necesitamos cambiar la conversación de lo que las mujeres no pueden hacer a lo que pueden hacer.`,
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: "550e8400-e29b-41d4-a716-446655440302",
+          book_id: bookId,
+          chapter_number: 2,
+          title: "Siéntate a la Mesa",
+          content: `Hace varios años, fui invitada a hablar en una conferencia junto con un hombre muy prominente en tecnología. Después de nuestras presentaciones, nos sentamos para una sesión de preguntas y respuestas. El primer estudiante que se acercó al micrófono comenzó dirigiéndose al hombre: "Esta pregunta es para ambos, pero comenzaré con usted..."
+
+Luego hizo su pregunta. El hombre respondió. Luego, en lugar de dirigirse a mí, el estudiante hizo una pregunta de seguimiento... solo al hombre. Después de que el hombre respondió, el estudiante dijo "gracias" y se alejó.
+
+Fue como si yo no estuviera allí.
+
+Después, varias personas se acercaron a mí y dijeron: "No puedo creer que ese estudiante te ignorara completamente". Pero aquí está la cosa: yo tampoco había hecho nada para insertar mi voz en la conversación.
+
+Esta experiencia me enseñó algo importante sobre la diferencia entre cómo los hombres y las mujeres se acercan a las oportunidades profesionales.
+
+Los hombres tienden a sobrestimar sus habilidades y desempeño, y las mujeres tienden a subestimarlas. Cuando los hombres tienen éxito, lo atribuyen a sus habilidades inherentes. Cuando las mujeres tienen éxito, lo atribuyen a la suerte, el trabajo duro y la ayuda de otros.
+
+Los hombres se postulan para trabajos cuando cumplen con el 60 por ciento de las calificaciones. Las mujeres se postulan solo cuando cumplen con el 100 por ciento de las calificaciones.
+
+¿Qué explica esta diferencia? Hay muchos factores, pero creo que uno de los más importantes es que las mujeres sistemáticamente subestiman sus propias habilidades.
+
+Si las mujeres fueran más agresivas al buscar oportunidades de liderazgo, más mujeres alcanzarían posiciones de liderazgo. Y el mundo sería un lugar mejor.
+
+Pero "sentarse a la mesa" no es solo sobre ser más agresiva. También se trata de tener la confianza para creer que perteneces allí.`,
+          created_at: new Date().toISOString(),
+        },
+      ],
     }
 
-    // 7 Habits chapters
-    if (bookId === "550e8400-e29b-41d4-a716-446655440002") {
-      return [
-        {
-          id: "chapter-1-7-habits",
-          book_id: bookId,
-          title: "Paradigmas y Principios",
-          content:
-            "La forma en que vemos el problema es el problema. Este libro presenta un enfoque centrado en principios, de adentro hacia afuera, para la efectividad personal e interpersonal. De adentro hacia afuera significa comenzar con uno mismo; más fundamentalmente, comenzar con las partes más internas de uno mismo: con sus paradigmas, su carácter y sus motivos. Si quieres tener un matrimonio feliz, sé el tipo de persona que genera energía positiva y evita la energía negativa en lugar de empeorar las debilidades de tu cónyuge. Si quieres tener un hijo más cooperativo y responsable, sé un padre más comprensivo, más consistente, más cariñoso.",
-          order: 1,
-          created_at: new Date().toISOString(),
-        },
-      ]
-    }
-
-    // Lean In chapters (mock fallback with complete content)
-    if (bookId === "550e8400-e29b-41d4-a716-446655440005") {
-      return [
-        {
-          id: "123e4567-e89b-12d3-a456-426614174000",
-          book_id: bookId,
-          title: "Introducción: La Conversación Interna",
-          content:
-            'En el mundo profesional actual, las mujeres enfrentan desafíos únicos que van más allá de las barreras externas. Existe una conversación interna que muchas mujeres mantienen consigo mismas, llena de dudas, cuestionamientos y limitaciones autoimpuestas.\n\nEsta conversación interna a menudo incluye preguntas como: "¿Soy lo suficientemente buena para este puesto?" o "¿Qué pensarán si hablo en esta reunión?" Estas dudas no surgen de la nada; son el resultado de años de condicionamiento social y expectativas culturales.\n\nEl primer paso para el cambio es reconocer que esta conversación existe. Muchas mujeres talentosas se limitan a sí mismas antes de que cualquier barrera externa tenga la oportunidad de hacerlo. Cambian su comportamiento, reducen sus ambiciones y se conforman con menos de lo que merecen.\n\nPero también existe otra realidad: las mujeres que han logrado romper estas barreras internas han descubierto un poder transformador. Han aprendido a confiar en sus habilidades, a hablar con autoridad y a perseguir oportunidades con determinación.\n\nEl cambio comienza con la conciencia. Cuando las mujeres reconocen los patrones de pensamiento que las limitan, pueden comenzar a desafiarlos. Pueden empezar a reescribir esa conversación interna, transformándola de una fuente de dudas en una fuente de fortaleza.\n\nEste libro explora cómo las mujeres pueden desarrollar la confianza necesaria para liderar, cómo pueden navegar los desafíos únicos del lugar de trabajo moderno, y cómo pueden crear un cambio positivo tanto para ellas mismas como para las generaciones futuras.\n\nLa igualdad de género en el lugar de trabajo no es solo un tema de justicia social; es una necesidad económica. Las organizaciones que aprovechan plenamente el talento femenino superan consistentemente a aquellas que no lo hacen. Sin embargo, para que esto suceda, las mujeres deben estar dispuestas a dar un paso adelante y reclamar su lugar en la mesa de decisiones.',
-          order: 1,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "123e4567-e89b-12d3-a456-426614174001",
-          book_id: bookId,
-          title: "Capítulo 1: Siéntate a la Mesa",
-          content:
-            'En una reunión ejecutiva de una empresa Fortune 500, había una mesa grande rodeada de sillas. Los ejecutivos masculinos se sentaron naturalmente alrededor de la mesa, mientras que las pocas mujeres presentes tomaron asiento en las sillas contra la pared. Esta escena se repite en salas de juntas de todo el mundo, y es una metáfora poderosa de un problema más amplio.\n\nLas mujeres a menudo se excluyen a sí mismas de las conversaciones importantes, literal y figurativamente. No se sientan a la mesa principal, no hablan en las reuniones, y no se postulan para los puestos de liderazgo que merecen. Esta autoexclusión tiene raíces profundas en la socialización y las expectativas culturales.\n\nDesde una edad temprana, a las niñas se les enseña a ser modestas, a no presumir, y a poner las necesidades de otros antes que las propias. Estos valores, aunque admirables en muchos contextos, pueden convertirse en obstáculos en el mundo profesional. Mientras que los hombres son alentados a ser asertivos y ambiciosos, las mujeres que muestran estas mismas cualidades a menudo son etiquetadas negativamente.\n\nEl síndrome del impostor afecta desproporcionadamente a las mujeres. Muchas mujeres exitosas sienten que no merecen sus logros, que han tenido suerte, o que pronto serán "descubiertas" como fraudes. Esta sensación las lleva a trabajar más duro para demostrar su valía, pero también las hace menos propensas a buscar nuevas oportunidades o a hablar con confianza sobre sus logros.\n\nLa investigación muestra que los hombres se postulan para trabajos cuando cumplen con el 60% de los requisitos, mientras que las mujeres esperan hasta cumplir con el 100%. Esta diferencia en la percepción de la preparación tiene consecuencias reales en las trayectorias profesionales.\n\nPara sentarse a la mesa, las mujeres deben: Primero, reconocer su propio valor. Segundo, desarrollar la confianza para hablar. Tercero, buscar activamente oportunidades de liderazgo. Cuarto, construir una red de apoyo.\n\nSentarse a la mesa no es solo sobre ocupar un asiento físico; es sobre reclamar el espacio que las mujeres merecen en las conversaciones que dan forma al futuro de las organizaciones y la sociedad.',
-          order: 2,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "123e4567-e89b-12d3-a456-426614174002",
-          book_id: bookId,
-          title: "Capítulo 2: El Éxito y la Simpatía",
-          content:
-            'Existe un dilema fundamental que enfrentan las mujeres en el lugar de trabajo: el conflicto entre el éxito y la simpatía. La investigación ha demostrado consistentemente que cuando las mujeres tienen éxito, especialmente en roles tradicionalmente masculinos, a menudo son percibidas como menos simpáticas. Este fenómeno no afecta a los hombres de la misma manera.\n\nEste dilema se manifiesta de múltiples formas en el entorno laboral. Una mujer que negocia agresivamente por un salario más alto puede ser vista como "difícil" o "demandante", mientras que un hombre que hace lo mismo es considerado "un buen negociador". Una líder femenina que toma decisiones difíciles puede ser etiquetada como "fría" o "calculadora", mientras que un líder masculino que hace lo mismo es visto como "decisivo" y "fuerte".\n\nEsta doble moral tiene consecuencias reales. Las mujeres que son percibidas como menos simpáticas pueden enfrentar resistencia de colegas, dificultades para construir coaliciones, y obstáculos en su avance profesional. Como resultado, muchas mujeres modifican su comportamiento, suavizando su enfoque o disculpándose por sus éxitos, en un intento de mantener la simpatía.\n\nEl origen de este dilema se encuentra en las expectativas sociales profundamente arraigadas sobre cómo deben comportarse las mujeres. Se espera que las mujeres sean cálidas, serviciales y modestas. Cuando violan estas expectativas al ser asertivas o ambiciosas, enfrentan una reacción negativa.',
-          order: 3,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "123e4567-e89b-12d3-a456-426614174003",
-          book_id: bookId,
-          title: "Capítulo 3: Mentores y Patrocinadores",
-          content:
-            "En el camino hacia el liderazgo, pocas cosas son tan valiosas como tener mentores y patrocinadores. Sin embargo, existe una diferencia crucial entre estos dos roles, y entender esta diferencia puede ser determinante para el éxito profesional de una mujer.\n\nUn mentor es alguien que ofrece consejos, comparte experiencias y ayuda a desarrollar habilidades. La relación de mentoría se basa en el intercambio de conocimientos y la orientación. Un patrocinador, por otro lado, es alguien que aboga activamente por tu avance profesional, que usa su influencia para crear oportunidades y que está dispuesto a apostar su reputación por tu éxito.\n\nLas mujeres a menudo tienen más mentores que patrocinadores, y esta diferencia es significativa. Mientras que los mentores pueden ofrecer valiosos consejos, son los patrocinadores quienes realmente abren puertas. Son ellos quienes mencionan tu nombre cuando se discuten promociones, quienes te recomiendan para proyectos de alto perfil, y quienes te defienden cuando no estás en la habitación.\n\nLa investigación muestra que los hombres son más propensos a tener patrocinadores, mientras que las mujeres tienden a ser 'sobre-mentoreadas y sub-patrocinadas'. Esta disparidad contribuye a la brecha de género en posiciones de liderazgo.",
-          order: 4,
-          created_at: new Date().toISOString(),
-        },
-      ]
-    }
-
-    return []
+    return chapters[bookId] || []
   }
 }
+
+// Export singleton instance
+export const libraryService = new LibraryService()
+
+// Also export the class for direct instantiation if needed
+
+// Default export
+export default libraryService
