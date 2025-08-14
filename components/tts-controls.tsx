@@ -1,44 +1,65 @@
 "use client"
 
-import { useState } from "react"
+import React from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
-import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Play, Pause, Square, SkipForward, SkipBack, Volume2, Settings, Clock, Headphones } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Badge } from "@/components/ui/badge"
+import {
+  Play,
+  Pause,
+  Square,
+  SkipForward,
+  SkipBack,
+  Volume2,
+  Settings,
+  ChevronDown,
+  ChevronUp,
+  Info,
+  Mic,
+  Clock,
+  Hash,
+  Type,
+} from "lucide-react"
 import { useTextToSpeech } from "@/hooks/use-text-to-speech"
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
 
 interface TTSControlsProps {
   text: string
-  title?: string
   className?: string
 }
 
-export function TTSControls({ text, title = "Audio", className = "" }: TTSControlsProps) {
-  const [rate, setRate] = useState(1)
-  const [pitch, setPitch] = useState(1)
-  const [volume, setVolume] = useState(1)
-  const [selectedVoiceIndex, setSelectedVoiceIndex] = useState<number>(0)
-  const [showSettings, setShowSettings] = useState(false)
+export function TTSControls({ text, className = "" }: TTSControlsProps) {
+  const tts = useTextToSpeech(text)
+  const [showAdvanced, setShowAdvanced] = React.useState(false)
+  const [showDebug, setShowDebug] = React.useState(false)
 
-  // Call the hook directly in the component body - this is the correct way
-  const tts = useTextToSpeech(text, {
-    rate,
-    pitch,
-    volume,
-    voice: null,
-    lang: "es-ES",
-  })
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
 
-  if (!tts || !tts.isSupported) {
+  const getStatusText = (): string => {
+    if (tts.isPlaying) return "Reproduciendo"
+    if (tts.isPaused) return "Pausado"
+    return "Detenido"
+  }
+
+  const getStatusColor = (): string => {
+    if (tts.isPlaying) return "bg-green-500"
+    if (tts.isPaused) return "bg-yellow-500"
+    return "bg-gray-500"
+  }
+
+  if (!tts.debugInfo.speechSynthesisSupported) {
     return (
-      <Card className={`border-orange-200 bg-orange-50 ${className}`}>
+      <Card className={className}>
         <CardContent className="p-4">
-          <div className="flex items-center space-x-2 text-orange-700">
-            <Headphones className="w-5 h-5" />
+          <div className="flex items-center gap-2 text-red-600">
+            <Volume2 className="h-4 w-4" />
             <span className="text-sm">Text-to-Speech no está disponible en este navegador</span>
           </div>
         </CardContent>
@@ -46,12 +67,12 @@ export function TTSControls({ text, title = "Audio", className = "" }: TTSContro
     )
   }
 
-  if (!text || text.trim().length === 0) {
+  if (tts.totalSegments === 0) {
     return (
-      <Card className={`border-gray-200 bg-gray-50 ${className}`}>
+      <Card className={className}>
         <CardContent className="p-4">
-          <div className="flex items-center space-x-2 text-gray-600">
-            <Headphones className="w-5 h-5" />
+          <div className="flex items-center gap-2 text-gray-600">
+            <Volume2 className="h-4 w-4" />
             <span className="text-sm">No hay texto disponible para reproducir</span>
           </div>
         </CardContent>
@@ -59,190 +80,132 @@ export function TTSControls({ text, title = "Audio", className = "" }: TTSContro
     )
   }
 
-  const progress = tts.getProgress()
-  const timeEstimate = tts.getTimeEstimate()
-
-  const handlePlayPause = () => {
-    console.log("Play/Pause clicked - Current state:", {
-      isPlaying: tts.isPlaying,
-      isPaused: tts.isPaused,
-      totalLength: tts.totalLength,
-    })
-
-    if (tts.isPlaying) {
-      tts.pause()
-    } else if (tts.isPaused) {
-      tts.resume()
-    } else {
-      tts.play()
-    }
-  }
-
-  const getSpanishVoices = () => {
-    return tts.voices.filter(
-      (voice) =>
-        voice.lang.toLowerCase().includes("es") ||
-        voice.lang.includes("Spanish") ||
-        voice.name.toLowerCase().includes("spanish") ||
-        voice.name.toLowerCase().includes("español"),
-    )
-  }
-
-  const spanishVoices = getSpanishVoices()
-
   return (
-    <Card className={`border-blue-200 bg-blue-50/50 ${className}`}>
-      <CardContent className="p-4 space-y-4">
-        {/* Header */}
+    <Card className={className}>
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Headphones className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-blue-900">{title}</span>
-            {tts.isActive && (
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700">
-                {tts.isPlaying ? "Reproduciendo" : "Pausado"}
-              </Badge>
-            )}
-            {tts.isLoading && (
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">
-                Cargando...
-              </Badge>
-            )}
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Volume2 className="h-5 w-5" />
+            Reproductor de Audio
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${getStatusColor()}`} />
+            <span className="text-sm text-gray-600">{getStatusText()}</span>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
-            <Settings className="w-4 h-4" />
-          </Button>
         </div>
+      </CardHeader>
 
-        {/* Debug Info */}
-        <div className="text-xs text-gray-500 bg-gray-100 p-2 rounded">
-          Texto: {text.length} caracteres | Segmentos: {tts.totalLength} | Voces: {tts.voices.length}
-        </div>
-
-        {/* Error Display */}
-        {tts.error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-sm text-red-700">{tts.error}</p>
-          </div>
-        )}
-
+      <CardContent className="space-y-4">
         {/* Progress Bar */}
         <div className="space-y-2">
-          <div className="flex justify-between text-xs text-gray-600">
+          <div className="flex justify-between text-sm text-gray-600">
+            <span>Progreso: {Math.round(tts.progress)}%</span>
             <span>
-              {tts.currentPosition} / {tts.totalLength} segmentos
+              Segmento {tts.currentSegment + 1} de {tts.totalSegments}
             </span>
-            <span>{Math.round(progress)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>{timeEstimate.current}</span>
-            <span>-{timeEstimate.remaining}</span>
-          </div>
+          <Progress value={tts.progress} className="h-2" />
+          {tts.estimatedTimeRemaining > 0 && (
+            <div className="flex items-center gap-1 text-xs text-gray-500">
+              <Clock className="h-3 w-3" />
+              <span>Tiempo restante: {formatTime(tts.estimatedTimeRemaining)}</span>
+            </div>
+          )}
         </div>
 
         {/* Main Controls */}
-        <div className="flex items-center justify-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={tts.skipBackward}
-            disabled={!tts.isActive && tts.currentPosition === 0}
-          >
-            <SkipBack className="w-4 h-4" />
+        <div className="flex items-center justify-center gap-2">
+          <Button variant="outline" size="sm" onClick={tts.skipBackward} disabled={tts.currentSegment === 0}>
+            <SkipBack className="h-4 w-4" />
           </Button>
 
-          <Button
-            onClick={handlePlayPause}
-            disabled={tts.isLoading || tts.totalLength === 0}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            {tts.isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : tts.isPlaying ? (
-              <Pause className="w-4 h-4" />
-            ) : (
-              <Play className="w-4 h-4" />
-            )}
-          </Button>
+          {tts.isPlaying ? (
+            <Button onClick={tts.pause} size="sm">
+              <Pause className="h-4 w-4 mr-1" />
+              Pausar
+            </Button>
+          ) : (
+            <Button onClick={tts.play} size="sm">
+              <Play className="h-4 w-4 mr-1" />
+              {tts.isPaused ? "Continuar" : "Reproducir"}
+            </Button>
+          )}
 
-          <Button variant="outline" size="sm" onClick={tts.stop} disabled={!tts.isActive}>
-            <Square className="w-4 h-4" />
+          <Button variant="outline" size="sm" onClick={tts.stop} disabled={!tts.isPlaying && !tts.isPaused}>
+            <Square className="h-4 w-4" />
           </Button>
 
           <Button
             variant="outline"
             size="sm"
             onClick={tts.skipForward}
-            disabled={tts.currentPosition >= tts.totalLength}
+            disabled={tts.currentSegment >= tts.totalSegments - 1}
           >
-            <SkipForward className="w-4 h-4" />
+            <SkipForward className="h-4 w-4" />
           </Button>
         </div>
 
+        {/* Voice Selection */}
+        {tts.availableVoices.length > 0 && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium flex items-center gap-1">
+              <Mic className="h-3 w-3" />
+              Voz
+            </label>
+            <Select
+              value={tts.selectedVoice?.name || ""}
+              onValueChange={(value) => {
+                const voice = tts.availableVoices.find((v) => v.name === value)
+                if (voice) tts.setVoice(voice)
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccionar voz" />
+              </SelectTrigger>
+              <SelectContent>
+                {tts.availableVoices.map((voice) => (
+                  <SelectItem key={voice.name} value={voice.name}>
+                    <div className="flex items-center gap-2">
+                      <span>{voice.name}</span>
+                      {voice.lang.startsWith("es") && (
+                        <Badge variant="secondary" className="text-xs">
+                          ES
+                        </Badge>
+                      )}
+                      {voice.default && (
+                        <Badge variant="outline" className="text-xs">
+                          Por defecto
+                        </Badge>
+                      )}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         {/* Advanced Settings */}
-        <Collapsible open={showSettings} onOpenChange={setShowSettings}>
-          <CollapsibleContent className="space-y-4">
-            <Separator />
-
-            {/* Voice Selection */}
-            {spanishVoices.length > 0 && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Voz ({spanishVoices.length} disponibles)</label>
-                <Select
-                  value={selectedVoiceIndex.toString()}
-                  onValueChange={(value) => setSelectedVoiceIndex(Number.parseInt(value))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Seleccionar voz" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {spanishVoices.map((voice, index) => (
-                      <SelectItem key={index} value={index.toString()}>
-                        {voice.name} ({voice.lang})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {/* All Voices (for debugging) */}
-            {tts.voices.length > 0 && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Todas las voces ({tts.voices.length})</label>
-                <Select
-                  value={selectedVoiceIndex.toString()}
-                  onValueChange={(value) => setSelectedVoiceIndex(Number.parseInt(value))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Seleccionar cualquier voz" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tts.voices.map((voice, index) => (
-                      <SelectItem key={index} value={index.toString()}>
-                        {voice.name} ({voice.lang})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
+        <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" size="sm" className="w-full justify-between">
+              <span className="flex items-center gap-1">
+                <Settings className="h-3 w-3" />
+                Configuración Avanzada
+              </span>
+              {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-2">
             {/* Speed Control */}
             <div className="space-y-2">
               <div className="flex justify-between">
-                <label className="text-sm font-medium text-gray-700">Velocidad</label>
-                <span className="text-sm text-gray-500">{rate}x</span>
+                <label className="text-sm font-medium">Velocidad</label>
+                <span className="text-sm text-gray-600">{tts.rate}x</span>
               </div>
               <Slider
-                value={[rate]}
-                onValueChange={(value) => setRate(value[0])}
+                value={[tts.rate]}
+                onValueChange={([value]) => tts.setRate(value)}
                 min={0.5}
                 max={2}
                 step={0.1}
@@ -253,12 +216,12 @@ export function TTSControls({ text, title = "Audio", className = "" }: TTSContro
             {/* Pitch Control */}
             <div className="space-y-2">
               <div className="flex justify-between">
-                <label className="text-sm font-medium text-gray-700">Tono</label>
-                <span className="text-sm text-gray-500">{pitch}</span>
+                <label className="text-sm font-medium">Tono</label>
+                <span className="text-sm text-gray-600">{tts.pitch}</span>
               </div>
               <Slider
-                value={[pitch]}
-                onValueChange={(value) => setPitch(value[0])}
+                value={[tts.pitch]}
+                onValueChange={([value]) => tts.setPitch(value)}
                 min={0.5}
                 max={2}
                 step={0.1}
@@ -269,29 +232,79 @@ export function TTSControls({ text, title = "Audio", className = "" }: TTSContro
             {/* Volume Control */}
             <div className="space-y-2">
               <div className="flex justify-between">
-                <label className="text-sm font-medium text-gray-700 flex items-center space-x-1">
-                  <Volume2 className="w-4 h-4" />
-                  <span>Volumen</span>
-                </label>
-                <span className="text-sm text-gray-500">{Math.round(volume * 100)}%</span>
+                <label className="text-sm font-medium">Volumen</label>
+                <span className="text-sm text-gray-600">{Math.round(tts.volume * 100)}%</span>
               </div>
               <Slider
-                value={[volume]}
-                onValueChange={(value) => setVolume(value[0])}
+                value={[tts.volume]}
+                onValueChange={([value]) => tts.setVolume(value)}
                 min={0}
                 max={1}
                 step={0.1}
                 className="w-full"
               />
             </div>
+          </CollapsibleContent>
+        </Collapsible>
 
-            {/* Time Information */}
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Clock className="w-4 h-4" />
-                <span>Tiempo total estimado: {timeEstimate.total}</span>
+        {/* Debug Information */}
+        <Collapsible open={showDebug} onOpenChange={setShowDebug}>
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" size="sm" className="w-full justify-between">
+              <span className="flex items-center gap-1">
+                <Info className="h-3 w-3" />
+                Información de Debug
+              </span>
+              {showDebug ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 pt-2">
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 font-medium">
+                  <Type className="h-3 w-3" />
+                  Texto
+                </div>
+                <div>Original: {tts.debugInfo.originalTextLength.toLocaleString()} chars</div>
+                <div>Limpio: {tts.debugInfo.cleanedTextLength.toLocaleString()} chars</div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 font-medium">
+                  <Hash className="h-3 w-3" />
+                  Segmentos
+                </div>
+                <div>Total: {tts.totalSegments}</div>
+                <div>Actual: {tts.currentSegment + 1}</div>
               </div>
             </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center gap-1 font-medium text-xs">
+                <Mic className="h-3 w-3" />
+                Voz Actual
+              </div>
+              <div className="text-xs text-gray-600">{tts.debugInfo.currentVoice || "Ninguna seleccionada"}</div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="font-medium text-xs">Voces Disponibles</div>
+              <div className="text-xs text-gray-600">
+                {tts.availableVoices.length} voces encontradas
+                {tts.availableVoices.filter((v) => v.lang.startsWith("es")).length > 0 &&
+                  ` (${tts.availableVoices.filter((v) => v.lang.startsWith("es")).length} en español)`}
+              </div>
+            </div>
+
+            {tts.debugInfo.segments.length > 0 && (
+              <div className="space-y-1">
+                <div className="font-medium text-xs">Segmento Actual</div>
+                <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded max-h-20 overflow-y-auto">
+                  {tts.debugInfo.segments[tts.currentSegment]?.substring(0, 200)}
+                  {tts.debugInfo.segments[tts.currentSegment]?.length > 200 && "..."}
+                </div>
+              </div>
+            )}
           </CollapsibleContent>
         </Collapsible>
       </CardContent>

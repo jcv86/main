@@ -3,17 +3,17 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+import { Header } from "@/components/header"
 import { AuthProvider } from "@/contexts/auth-context"
 import { NotificationsProvider } from "@/contexts/notifications-context"
 import { LanguageProvider } from "@/contexts/language-context"
-import { Header } from "@/components/header"
-import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral para el desarrollo profesional en Chile",
+  title: "DTC Career Development Platform",
+  description: "Plataforma integral de desarrollo profesional con IA, biblioteca digital y herramientas de carrera",
     generator: 'v0.app'
 }
 
@@ -25,18 +25,18 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <AuthProvider>
             <NotificationsProvider>
-              <AuthProvider>
-                <div className="relative flex min-h-screen flex-col">
+              <LanguageProvider>
+                <div className="min-h-screen bg-background">
                   <Header />
-                  <main className="flex-1">{children}</main>
+                  <main className="pt-16">{children}</main>
                 </div>
                 <Toaster />
-              </AuthProvider>
+              </LanguageProvider>
             </NotificationsProvider>
-          </LanguageProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

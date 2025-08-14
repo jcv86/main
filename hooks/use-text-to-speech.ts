@@ -1,427 +1,524 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 
-interface TTSOptions {
-  rate?: number
-  pitch?: number
-  volume?: number
-  voice?: SpeechSynthesisVoice | null
-  lang?: string
-}
-
-interface TTSState {
-  isSupported: boolean
+export interface TTSState {
   isPlaying: boolean
   isPaused: boolean
-  isLoading: boolean
-  currentPosition: number
-  totalLength: number
-  error: string | null
+  currentSegment: number
+  totalSegments: number
+  progress: number
+  estimatedTimeRemaining: number
+  availableVoices: SpeechSynthesisVoice[]
+  selectedVoice: SpeechSynthesisVoice | null
+  rate: number
+  pitch: number
+  volume: number
+  debugInfo: {
+    originalTextLength: number
+    cleanedTextLength: number
+    segments: string[]
+    currentVoice: string
+    speechSynthesisSupported: boolean
+  }
 }
 
-export function useTextToSpeech(text: string, options: TTSOptions = {}) {
+export function useTextToSpeech(text: string) {
   const [state, setState] = useState<TTSState>({
-    isSupported: false,
     isPlaying: false,
     isPaused: false,
-    isLoading: false,
-    currentPosition: 0,
-    totalLength: 0,
-    error: null,
+    currentSegment: 0,
+    totalSegments: 0,
+    progress: 0,
+    estimatedTimeRemaining: 0,
+    availableVoices: [],
+    selectedVoice: null,
+    rate: 1,
+    pitch: 1,
+    volume: 1,
+    debugInfo: {
+      originalTextLength: 0,
+      cleanedTextLength: 0,
+      segments: [],
+      currentVoice: "",
+      speechSynthesisSupported: false,
+    },
   })
 
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
-  const textChunksRef = useRef<string[]>([])
-  const currentChunkRef = useRef(0)
-  const positionRef = useRef(0)
+  const segmentsRef = useRef<string[]>([])
+  const startTimeRef = useRef<number>(0)
 
-  // Default options
-  const { rate = 1, pitch = 1, volume = 1, voice = null, lang = "es-ES" } = options
+  // Clean and prepare text for TTS
+  const cleanText = useCallback((rawText: string): string => {
+    console.log("🧹 Cleaning text for TTS...")
+    console.log("Original text length:", rawText.length)
 
-  // Check for browser support and load voices
-  useEffect(() => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      setState((prev) => ({ ...prev, isSupported: true }))
-
-      const loadVoices = () => {
-        const availableVoices = speechSynthesis.getVoices()
-        console.log("Available voices:", availableVoices)
-        setVoices(availableVoices)
-      }
-
-      // Load voices immediately
-      loadVoices()
-
-      // Also load when voices change (some browsers load them asynchronously)
-      speechSynthesis.onvoiceschanged = loadVoices
-
-      return () => {
-        speechSynthesis.onvoiceschanged = null
-      }
-    }
-  }, [])
-
-  // Split text into manageable chunks
-  const splitTextIntoChunks = useCallback((text: string): string[] => {
-    if (!text || text.trim().length === 0) {
-      console.log("No text provided for TTS")
-      return []
-    }
-
-    // Remove HTML tags and clean text
-    const cleanText = text
+    const cleaned = rawText
+      // Remove HTML tags
       .replace(/<[^>]*>/g, " ")
+      // Remove markdown formatting
+      .replace(/\*\*([^*]+)\*\*/g, "$1") // Bold
+      .replace(/\*([^*]+)\*/g, "$1") // Italic
+      .replace(/`([^`]+)`/g, "$1") // Code
+      .replace(/#{1,6}\s/g, "") // Headers
+      // Remove special characters that might cause issues
+      .replace(/[""'']/g, '"')
+      .replace(/[–—]/g, "-")
+      .replace(/…/g, "...")
+      // Clean up whitespace
       .replace(/\s+/g, " ")
-      .replace(/&nbsp;/g, " ")
-      .replace(/&amp;/g, "&")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
+      .replace(/\n\s*\n/g, ". ")
+      .replace(/\n/g, " ")
       .trim()
 
-    console.log("Clean text length:", cleanText.length)
-    console.log("Clean text preview:", cleanText.substring(0, 200))
+    console.log("Cleaned text length:", cleaned.length)
+    console.log("First 200 chars:", cleaned.substring(0, 200))
 
-    if (cleanText.length === 0) {
-      console.log("Text is empty after cleaning")
+    return cleaned
+  }, [])
+
+  // Split text into manageable segments
+  const createSegments = useCallback((cleanedText: string): string[] => {
+    console.log("✂️ Creating segments...")
+
+    if (!cleanedText.trim()) {
+      console.log("No text to segment")
       return []
     }
 
-    // Split by sentences, keeping punctuation
-    const sentences = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText]
-    console.log("Found sentences:", sentences.length)
-
-    const chunks: string[] = []
-    let currentChunk = ""
-    const maxChunkLength = 200 // Characters per chunk
+    const maxSegmentLength = 200
+    const sentences = cleanedText.split(/[.!?]+/).filter((s) => s.trim().length > 0)
+    const segments: string[] = []
+    let currentSegment = ""
 
     for (const sentence of sentences) {
       const trimmedSentence = sentence.trim()
       if (!trimmedSentence) continue
 
-      if (currentChunk.length + trimmedSentence.length > maxChunkLength && currentChunk.length > 0) {
-        chunks.push(currentChunk.trim())
-        currentChunk = trimmedSentence
+      const potentialSegment = currentSegment ? `${currentSegment}. ${trimmedSentence}` : trimmedSentence
+
+      if (potentialSegment.length <= maxSegmentLength) {
+        currentSegment = potentialSegment
       } else {
-        currentChunk += (currentChunk ? " " : "") + trimmedSentence
+        if (currentSegment) {
+          segments.push(currentSegment + ".")
+          currentSegment = trimmedSentence
+        } else {
+          // Handle very long sentences by splitting on commas
+          const parts = trimmedSentence.split(",")
+          let tempSegment = ""
+
+          for (const part of parts) {
+            const trimmedPart = part.trim()
+            if (!trimmedPart) continue
+
+            const potentialTemp = tempSegment ? `${tempSegment}, ${trimmedPart}` : trimmedPart
+
+            if (potentialTemp.length <= maxSegmentLength) {
+              tempSegment = potentialTemp
+            } else {
+              if (tempSegment) {
+                segments.push(tempSegment + ".")
+              }
+              tempSegment = trimmedPart
+            }
+          }
+
+          if (tempSegment) {
+            currentSegment = tempSegment
+          }
+        }
       }
     }
 
-    if (currentChunk.trim()) {
-      chunks.push(currentChunk.trim())
+    if (currentSegment) {
+      segments.push(currentSegment + ".")
     }
 
-    console.log("Created chunks:", chunks.length)
-    return chunks.filter((chunk) => chunk.length > 0)
-  }, [])
-
-  // Update text chunks when text changes
-  useEffect(() => {
-    if (text) {
-      const chunks = splitTextIntoChunks(text)
-      textChunksRef.current = chunks
-      setState((prev) => ({
-        ...prev,
-        totalLength: chunks.length,
-        currentPosition: 0,
-      }))
-      currentChunkRef.current = 0
-      positionRef.current = 0
-      console.log("Text chunks updated:", chunks.length)
-    }
-  }, [text, splitTextIntoChunks])
-
-  // Get the best Spanish voice
-  const getSpanishVoice = useCallback((): SpeechSynthesisVoice | null => {
-    if (voice) return voice
-
-    console.log("Looking for Spanish voice among:", voices.length, "voices")
-
-    // First try to find Spanish voices
-    const spanishVoices = voices.filter(
-      (v) =>
-        v.lang.toLowerCase().includes("es") ||
-        v.name.toLowerCase().includes("spanish") ||
-        v.name.toLowerCase().includes("español"),
+    console.log(`Created ${segments.length} segments`)
+    console.log(
+      "Segment lengths:",
+      segments.map((s) => s.length),
     )
 
+    return segments
+  }, [])
+
+  // Load available voices
+  const loadVoices = useCallback(() => {
+    console.log("🎤 Loading voices...")
+
+    if (!("speechSynthesis" in window)) {
+      console.log("Speech synthesis not supported")
+      return []
+    }
+
+    const voices = speechSynthesis.getVoices()
+    console.log(`Found ${voices.length} voices`)
+
+    // Prioritize Spanish voices
+    const spanishVoices = voices.filter(
+      (voice) =>
+        voice.lang.startsWith("es") ||
+        voice.name.toLowerCase().includes("spanish") ||
+        voice.name.toLowerCase().includes("español"),
+    )
+
+    const otherVoices = voices.filter(
+      (voice) =>
+        !voice.lang.startsWith("es") &&
+        !voice.name.toLowerCase().includes("spanish") &&
+        !voice.name.toLowerCase().includes("español"),
+    )
+
+    const sortedVoices = [...spanishVoices, ...otherVoices]
+
     console.log("Spanish voices found:", spanishVoices.length)
+    console.log(
+      "Voice details:",
+      sortedVoices.map((v) => ({
+        name: v.name,
+        lang: v.lang,
+        default: v.default,
+        localService: v.localService,
+      })),
+    )
 
-    if (spanishVoices.length > 0) {
-      // Prefer female voices for better listening experience
-      const femaleVoice = spanishVoices.find(
-        (v) =>
-          v.name.toLowerCase().includes("female") ||
-          v.name.toLowerCase().includes("mujer") ||
-          v.name.toLowerCase().includes("maria") ||
-          v.name.toLowerCase().includes("carmen") ||
-          v.name.toLowerCase().includes("monica") ||
-          v.name.toLowerCase().includes("paloma"),
-      )
+    return sortedVoices
+  }, [])
 
-      if (femaleVoice) {
-        console.log("Selected female Spanish voice:", femaleVoice.name)
-        return femaleVoice
-      }
+  // Initialize TTS system
+  useEffect(() => {
+    console.log("🚀 Initializing TTS system...")
 
-      console.log("Selected Spanish voice:", spanishVoices[0].name)
-      return spanishVoices[0]
+    const speechSupported = "speechSynthesis" in window
+    console.log("Speech synthesis supported:", speechSupported)
+
+    if (!speechSupported) {
+      setState((prev) => ({
+        ...prev,
+        debugInfo: {
+          ...prev.debugInfo,
+          speechSynthesisSupported: false,
+        },
+      }))
+      return
     }
 
-    // Fallback to any available voice
-    if (voices.length > 0) {
-      console.log("Fallback to default voice:", voices[0].name)
-      return voices[0]
+    const cleanedText = cleanText(text)
+    const segments = createSegments(cleanedText)
+    segmentsRef.current = segments
+
+    const voices = loadVoices()
+    const defaultVoice = voices.find((v) => v.lang.startsWith("es")) || voices[0] || null
+
+    setState((prev) => ({
+      ...prev,
+      totalSegments: segments.length,
+      availableVoices: voices,
+      selectedVoice: defaultVoice,
+      debugInfo: {
+        originalTextLength: text.length,
+        cleanedTextLength: cleanedText.length,
+        segments: segments,
+        currentVoice: defaultVoice?.name || "None",
+        speechSynthesisSupported: true,
+      },
+    }))
+
+    // Handle voices loading asynchronously
+    const handleVoicesChanged = () => {
+      console.log("🔄 Voices changed, reloading...")
+      const newVoices = loadVoices()
+      const newDefaultVoice = newVoices.find((v) => v.lang.startsWith("es")) || newVoices[0] || null
+
+      setState((prev) => ({
+        ...prev,
+        availableVoices: newVoices,
+        selectedVoice: prev.selectedVoice || newDefaultVoice,
+        debugInfo: {
+          ...prev.debugInfo,
+          currentVoice: (prev.selectedVoice || newDefaultVoice)?.name || "None",
+        },
+      }))
     }
 
-    console.log("No voices available")
-    return null
-  }, [voices, voice])
+    speechSynthesis.addEventListener("voiceschanged", handleVoicesChanged)
 
-  // Create and configure utterance
-  const createUtterance = useCallback(
-    (text: string): SpeechSynthesisUtterance => {
-      const utterance = new SpeechSynthesisUtterance(text)
+    return () => {
+      speechSynthesis.removeEventListener("voiceschanged", handleVoicesChanged)
+    }
+  }, [text, cleanText, createSegments, loadVoices])
 
-      utterance.rate = rate
-      utterance.pitch = pitch
-      utterance.volume = volume
-      utterance.lang = lang
+  // Calculate estimated time remaining
+  const calculateTimeRemaining = useCallback((currentSeg: number, totalSegs: number, rate: number): number => {
+    if (totalSegs === 0 || currentSeg >= totalSegs) return 0
 
-      const selectedVoice = getSpanishVoice()
-      if (selectedVoice) {
-        utterance.voice = selectedVoice
-        console.log("Using voice:", selectedVoice.name, "for text:", text.substring(0, 50))
-      } else {
-        console.log("No voice selected, using default")
+    const remainingSegments = totalSegs - currentSeg
+    const avgWordsPerSegment = 30 // Estimate
+    const wordsPerMinute = 150 * rate // Base WPM adjusted by rate
+    const estimatedMinutes = (remainingSegments * avgWordsPerSegment) / wordsPerMinute
+
+    return Math.ceil(estimatedMinutes * 60) // Convert to seconds
+  }, [])
+
+  // Play specific segment
+  const playSegment = useCallback(
+    (segmentIndex: number) => {
+      console.log(`🎵 Playing segment ${segmentIndex + 1}/${segmentsRef.current.length}`)
+
+      if (!("speechSynthesis" in window)) {
+        console.error("Speech synthesis not supported")
+        return
       }
 
-      return utterance
+      if (segmentIndex >= segmentsRef.current.length) {
+        console.log("✅ Reached end of segments")
+        setState((prev) => ({
+          ...prev,
+          isPlaying: false,
+          isPaused: false,
+          currentSegment: 0,
+          progress: 100,
+          estimatedTimeRemaining: 0,
+        }))
+        return
+      }
+
+      const segment = segmentsRef.current[segmentIndex]
+      console.log(`Segment text: "${segment.substring(0, 100)}..."`)
+
+      // Cancel any existing speech
+      speechSynthesis.cancel()
+
+      const utterance = new SpeechSynthesisUtterance(segment)
+      utteranceRef.current = utterance
+
+      // Apply current settings
+      setState((prev) => {
+        if (prev.selectedVoice) {
+          utterance.voice = prev.selectedVoice
+          console.log(`Using voice: ${prev.selectedVoice.name}`)
+        }
+        utterance.rate = prev.rate
+        utterance.pitch = prev.pitch
+        utterance.volume = prev.volume
+
+        console.log(`Settings - Rate: ${prev.rate}, Pitch: ${prev.pitch}, Volume: ${prev.volume}`)
+
+        return prev
+      })
+
+      utterance.onstart = () => {
+        console.log("🎤 Utterance started")
+        startTimeRef.current = Date.now()
+      }
+
+      utterance.onend = () => {
+        console.log("🏁 Utterance ended")
+        const nextSegment = segmentIndex + 1
+
+        setState((prev) => {
+          const newProgress = (nextSegment / segmentsRef.current.length) * 100
+          const timeRemaining = calculateTimeRemaining(nextSegment, segmentsRef.current.length, prev.rate)
+
+          return {
+            ...prev,
+            currentSegment: nextSegment,
+            progress: newProgress,
+            estimatedTimeRemaining: timeRemaining,
+          }
+        })
+
+        // Auto-play next segment
+        if (nextSegment < segmentsRef.current.length) {
+          setTimeout(() => playSegment(nextSegment), 100)
+        } else {
+          setState((prev) => ({
+            ...prev,
+            isPlaying: false,
+            isPaused: false,
+            currentSegment: 0,
+            progress: 100,
+            estimatedTimeRemaining: 0,
+          }))
+        }
+      }
+
+      utterance.onerror = (event) => {
+        console.error("❌ Speech synthesis error:", event.error)
+        setState((prev) => ({
+          ...prev,
+          isPlaying: false,
+          isPaused: false,
+        }))
+      }
+
+      speechSynthesis.speak(utterance)
     },
-    [rate, pitch, volume, lang, getSpanishVoice],
+    [calculateTimeRemaining],
   )
 
-  // Play next chunk
-  const playNextChunk = useCallback(() => {
-    console.log("Playing chunk", currentChunkRef.current, "of", textChunksRef.current.length)
-
-    if (currentChunkRef.current >= textChunksRef.current.length) {
-      // Finished reading
-      console.log("Finished reading all chunks")
-      setState((prev) => ({
-        ...prev,
-        isPlaying: false,
-        isPaused: false,
-        currentPosition: textChunksRef.current.length,
-      }))
-      return
-    }
-
-    const chunk = textChunksRef.current[currentChunkRef.current]
-    console.log("Current chunk text:", chunk)
-
-    if (!chunk || chunk.trim().length === 0) {
-      console.log("Empty chunk, skipping to next")
-      currentChunkRef.current += 1
-      setTimeout(() => playNextChunk(), 100)
-      return
-    }
-
-    const utterance = createUtterance(chunk)
-
-    utterance.onstart = () => {
-      console.log("Utterance started")
-      setState((prev) => ({
-        ...prev,
-        isPlaying: true,
-        isPaused: false,
-        isLoading: false,
-        error: null,
-      }))
-    }
-
-    utterance.onend = () => {
-      console.log("Utterance ended")
-      currentChunkRef.current += 1
-      positionRef.current = currentChunkRef.current
-      setState((prev) => ({
-        ...prev,
-        currentPosition: currentChunkRef.current,
-      }))
-
-      // Continue with next chunk after a short delay
-      setTimeout(() => playNextChunk(), 100)
-    }
-
-    utterance.onerror = (event) => {
-      console.error("Utterance error:", event.error)
-      setState((prev) => ({
-        ...prev,
-        isPlaying: false,
-        isPaused: false,
-        isLoading: false,
-        error: `Error de síntesis de voz: ${event.error}`,
-      }))
-    }
-
-    utteranceRef.current = utterance
-
-    try {
-      console.log("Speaking utterance...")
-      speechSynthesis.speak(utterance)
-    } catch (error) {
-      console.error("Error speaking:", error)
-      setState((prev) => ({
-        ...prev,
-        isPlaying: false,
-        isPaused: false,
-        isLoading: false,
-        error: "Error al reproducir audio",
-      }))
-    }
-  }, [createUtterance])
-
-  // Start playing
+  // Control functions
   const play = useCallback(() => {
-    console.log("Play requested")
+    console.log("▶️ Play requested")
 
-    if (!state.isSupported) {
-      const error = "Text-to-Speech no está soportado en este navegador"
-      console.log(error)
-      setState((prev) => ({ ...prev, error }))
-      return
-    }
+    setState((prev) => {
+      if (prev.isPaused) {
+        console.log("Resuming from pause")
+        speechSynthesis.resume()
+        return {
+          ...prev,
+          isPlaying: true,
+          isPaused: false,
+        }
+      } else {
+        console.log("Starting from beginning or current segment")
+        const startSegment = prev.currentSegment >= segmentsRef.current.length ? 0 : prev.currentSegment
+        playSegment(startSegment)
 
-    if (textChunksRef.current.length === 0) {
-      const error = "No hay texto para reproducir"
-      console.log(error)
-      setState((prev) => ({ ...prev, error }))
-      return
-    }
+        const timeRemaining = calculateTimeRemaining(startSegment, segmentsRef.current.length, prev.rate)
 
-    console.log("Starting playback...")
-    setState((prev) => ({ ...prev, isLoading: true, error: null }))
+        return {
+          ...prev,
+          isPlaying: true,
+          isPaused: false,
+          currentSegment: startSegment,
+          estimatedTimeRemaining: timeRemaining,
+        }
+      }
+    })
+  }, [playSegment, calculateTimeRemaining])
 
-    // Stop any current speech
-    speechSynthesis.cancel()
-
-    // Wait a bit for cancel to complete, then start
-    setTimeout(() => {
-      playNextChunk()
-    }, 100)
-  }, [state.isSupported, playNextChunk])
-
-  // Pause playback
   const pause = useCallback(() => {
-    console.log("Pause requested")
-    if (speechSynthesis.speaking && !speechSynthesis.paused) {
-      speechSynthesis.pause()
-      setState((prev) => ({ ...prev, isPaused: true, isPlaying: false }))
-    }
+    console.log("⏸️ Pause requested")
+    speechSynthesis.pause()
+    setState((prev) => ({
+      ...prev,
+      isPlaying: false,
+      isPaused: true,
+    }))
   }, [])
 
-  // Resume playback
-  const resume = useCallback(() => {
-    console.log("Resume requested")
-    if (speechSynthesis.paused) {
-      speechSynthesis.resume()
-      setState((prev) => ({ ...prev, isPaused: false, isPlaying: true }))
-    }
-  }, [])
-
-  // Stop playback
   const stop = useCallback(() => {
-    console.log("Stop requested")
+    console.log("⏹️ Stop requested")
     speechSynthesis.cancel()
-    currentChunkRef.current = 0
-    positionRef.current = 0
     setState((prev) => ({
       ...prev,
       isPlaying: false,
       isPaused: false,
-      isLoading: false,
-      currentPosition: 0,
-      error: null,
+      currentSegment: 0,
+      progress: 0,
+      estimatedTimeRemaining: calculateTimeRemaining(0, segmentsRef.current.length, prev.rate),
+    }))
+  }, [calculateTimeRemaining])
+
+  const skipForward = useCallback(() => {
+    console.log("⏭️ Skip forward requested")
+    setState((prev) => {
+      const newSegment = Math.min(prev.currentSegment + 5, segmentsRef.current.length - 1)
+      console.log(`Skipping to segment ${newSegment + 1}`)
+
+      if (prev.isPlaying) {
+        speechSynthesis.cancel()
+        setTimeout(() => playSegment(newSegment), 100)
+      }
+
+      const timeRemaining = calculateTimeRemaining(newSegment, segmentsRef.current.length, prev.rate)
+
+      return {
+        ...prev,
+        currentSegment: newSegment,
+        progress: (newSegment / segmentsRef.current.length) * 100,
+        estimatedTimeRemaining: timeRemaining,
+      }
+    })
+  }, [playSegment, calculateTimeRemaining])
+
+  const skipBackward = useCallback(() => {
+    console.log("⏮️ Skip backward requested")
+    setState((prev) => {
+      const newSegment = Math.max(prev.currentSegment - 5, 0)
+      console.log(`Skipping back to segment ${newSegment + 1}`)
+
+      if (prev.isPlaying) {
+        speechSynthesis.cancel()
+        setTimeout(() => playSegment(newSegment), 100)
+      }
+
+      const timeRemaining = calculateTimeRemaining(newSegment, segmentsRef.current.length, prev.rate)
+
+      return {
+        ...prev,
+        currentSegment: newSegment,
+        progress: (newSegment / segmentsRef.current.length) * 100,
+        estimatedTimeRemaining: timeRemaining,
+      }
+    })
+  }, [playSegment, calculateTimeRemaining])
+
+  const setVoice = useCallback((voice: SpeechSynthesisVoice) => {
+    console.log("🎤 Setting voice:", voice.name)
+    setState((prev) => ({
+      ...prev,
+      selectedVoice: voice,
+      debugInfo: {
+        ...prev.debugInfo,
+        currentVoice: voice.name,
+      },
     }))
   }, [])
 
-  // Skip to position
-  const skipTo = useCallback(
-    (position: number) => {
-      const clampedPosition = Math.max(0, Math.min(position, textChunksRef.current.length - 1))
-      console.log("Skip to position:", clampedPosition)
-
-      currentChunkRef.current = clampedPosition
-      positionRef.current = clampedPosition
-
-      setState((prev) => ({ ...prev, currentPosition: clampedPosition }))
-
-      if (state.isPlaying) {
-        speechSynthesis.cancel()
-        setTimeout(() => playNextChunk(), 100)
-      }
+  const setRate = useCallback(
+    (rate: number) => {
+      console.log("🏃 Setting rate:", rate)
+      setState((prev) => {
+        const timeRemaining = calculateTimeRemaining(prev.currentSegment, segmentsRef.current.length, rate)
+        return {
+          ...prev,
+          rate,
+          estimatedTimeRemaining: timeRemaining,
+        }
+      })
     },
-    [state.isPlaying, playNextChunk],
+    [calculateTimeRemaining],
   )
 
-  // Skip forward/backward
-  const skipForward = useCallback(() => {
-    skipTo(currentChunkRef.current + 5) // Skip 5 chunks forward
-  }, [skipTo])
+  const setPitch = useCallback((pitch: number) => {
+    console.log("🎵 Setting pitch:", pitch)
+    setState((prev) => ({
+      ...prev,
+      pitch,
+    }))
+  }, [])
 
-  const skipBackward = useCallback(() => {
-    skipTo(currentChunkRef.current - 5) // Skip 5 chunks backward
-  }, [skipTo])
-
-  // Get progress percentage
-  const getProgress = useCallback(() => {
-    if (state.totalLength === 0) return 0
-    return (state.currentPosition / state.totalLength) * 100
-  }, [state.currentPosition, state.totalLength])
-
-  // Get time estimates
-  const getTimeEstimate = useCallback(() => {
-    const wordsPerMinute = 150 * rate // Adjust for speech rate
-    const totalWords = textChunksRef.current.join(" ").split(" ").length
-    const currentWords = textChunksRef.current.slice(0, state.currentPosition).join(" ").split(" ").length
-
-    const totalMinutes = Math.ceil(totalWords / wordsPerMinute)
-    const currentMinutes = Math.ceil(currentWords / wordsPerMinute)
-    const remainingMinutes = Math.max(0, totalMinutes - currentMinutes)
-
-    const formatTime = (minutes: number) => {
-      const hrs = Math.floor(minutes / 60)
-      const mins = minutes % 60
-      return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`
-    }
-
-    return {
-      current: formatTime(currentMinutes),
-      total: formatTime(totalMinutes),
-      remaining: formatTime(remainingMinutes),
-    }
-  }, [rate, state.currentPosition])
+  const setVolume = useCallback((volume: number) => {
+    console.log("🔊 Setting volume:", volume)
+    setState((prev) => ({
+      ...prev,
+      volume,
+    }))
+  }, [])
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      console.log("🧹 Cleaning up TTS")
       speechSynthesis.cancel()
     }
   }, [])
 
   return {
     ...state,
-    voices,
     play,
     pause,
-    resume,
     stop,
-    skipTo,
     skipForward,
     skipBackward,
-    getProgress,
-    getTimeEstimate,
-    isActive: state.isPlaying || state.isPaused,
+    setVoice,
+    setRate,
+    setPitch,
+    setVolume,
   }
 }
