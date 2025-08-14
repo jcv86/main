@@ -23,7 +23,7 @@ export interface TTSState {
   }
 }
 
-export function useTextToSpeech(text: string) {
+export function useTextToSpeech(text?: string) {
   const [state, setState] = useState<TTSState>({
     isPlaying: false,
     isPaused: false,
@@ -51,6 +51,11 @@ export function useTextToSpeech(text: string) {
 
   // Clean and prepare text for TTS
   const cleanText = useCallback((rawText: string): string => {
+    if (!rawText || typeof rawText !== "string") {
+      console.log("No valid text provided for cleaning")
+      return ""
+    }
+
     console.log("🧹 Cleaning text for TTS...")
     console.log("Original text length:", rawText.length)
 
@@ -82,13 +87,13 @@ export function useTextToSpeech(text: string) {
   const createSegments = useCallback((cleanedText: string): string[] => {
     console.log("✂️ Creating segments...")
 
-    if (!cleanedText.trim()) {
+    if (!cleanedText || typeof cleanedText !== "string" || !cleanedText.trim()) {
       console.log("No text to segment")
       return []
     }
 
     const maxSegmentLength = 200
-    const sentences = cleanedText.split(/[.!?]+/).filter((s) => s.trim().length > 0)
+    const sentences = cleanedText.split(/[.!?]+/).filter((s) => s && s.trim().length > 0)
     const segments: string[] = []
     let currentSegment = ""
 
@@ -206,9 +211,15 @@ export function useTextToSpeech(text: string) {
       return
     }
 
-    const cleanedText = cleanText(text)
-    const segments = createSegments(cleanedText)
-    segmentsRef.current = segments
+    // Only process text if it exists
+    let cleanedText = ""
+    let segments: string[] = []
+
+    if (text && typeof text === "string") {
+      cleanedText = cleanText(text)
+      segments = createSegments(cleanedText)
+      segmentsRef.current = segments
+    }
 
     const voices = loadVoices()
     const defaultVoice = voices.find((v) => v.lang.startsWith("es")) || voices[0] || null
@@ -219,7 +230,7 @@ export function useTextToSpeech(text: string) {
       availableVoices: voices,
       selectedVoice: defaultVoice,
       debugInfo: {
-        originalTextLength: text.length,
+        originalTextLength: text?.length || 0,
         cleanedTextLength: cleanedText.length,
         segments: segments,
         currentVoice: defaultVoice?.name || "None",
@@ -273,8 +284,8 @@ export function useTextToSpeech(text: string) {
         return
       }
 
-      if (segmentIndex >= segmentsRef.current.length) {
-        console.log("✅ Reached end of segments")
+      if (!segmentsRef.current || segmentIndex >= segmentsRef.current.length) {
+        console.log("✅ Reached end of segments or no segments available")
         setState((prev) => ({
           ...prev,
           isPlaying: false,
@@ -287,6 +298,11 @@ export function useTextToSpeech(text: string) {
       }
 
       const segment = segmentsRef.current[segmentIndex]
+      if (!segment) {
+        console.log("No segment found at index", segmentIndex)
+        return
+      }
+
       console.log(`Segment text: "${segment.substring(0, 100)}..."`)
 
       // Cancel any existing speech
@@ -320,7 +336,7 @@ export function useTextToSpeech(text: string) {
         const nextSegment = segmentIndex + 1
 
         setState((prev) => {
-          const newProgress = (nextSegment / segmentsRef.current.length) * 100
+          const newProgress = segmentsRef.current.length > 0 ? (nextSegment / segmentsRef.current.length) * 100 : 100
           const timeRemaining = calculateTimeRemaining(nextSegment, segmentsRef.current.length, prev.rate)
 
           return {
@@ -363,6 +379,11 @@ export function useTextToSpeech(text: string) {
   // Control functions
   const play = useCallback(() => {
     console.log("▶️ Play requested")
+
+    if (!segmentsRef.current || segmentsRef.current.length === 0) {
+      console.log("No segments available to play")
+      return
+    }
 
     setState((prev) => {
       if (prev.isPaused) {
@@ -410,27 +431,49 @@ export function useTextToSpeech(text: string) {
       isPaused: false,
       currentSegment: 0,
       progress: 0,
-      estimatedTimeRemaining: calculateTimeRemaining(0, segmentsRef.current.length, prev.rate),
+      estimatedTimeRemaining: calculateTimeRemaining(0, segmentsRef.current?.length || 0, prev.rate),
     }))
   }, [calculateTimeRemaining])
+
+  const resume = useCallback(() => {
+    console.log("▶️ Resume requested")
+    speechSynthesis.resume()
+    setState((prev) => ({
+      ...prev,
+      isPlaying: true,
+      isPaused: false,
+    }))
+  }, [])
+
+  const toggleMute = useCallback(() => {
+    console.log("🔇 Toggle mute requested")
+    setState((prev) => {
+      const newVolume = prev.volume === 0 ? 1 : 0
+      return {
+        ...prev,
+        volume: newVolume,
+      }
+    })
+  }, [])
 
   const skipForward = useCallback(() => {
     console.log("⏭️ Skip forward requested")
     setState((prev) => {
-      const newSegment = Math.min(prev.currentSegment + 5, segmentsRef.current.length - 1)
+      const maxSegments = segmentsRef.current?.length || 0
+      const newSegment = Math.min(prev.currentSegment + 5, maxSegments - 1)
       console.log(`Skipping to segment ${newSegment + 1}`)
 
-      if (prev.isPlaying) {
+      if (prev.isPlaying && maxSegments > 0) {
         speechSynthesis.cancel()
         setTimeout(() => playSegment(newSegment), 100)
       }
 
-      const timeRemaining = calculateTimeRemaining(newSegment, segmentsRef.current.length, prev.rate)
+      const timeRemaining = calculateTimeRemaining(newSegment, maxSegments, prev.rate)
 
       return {
         ...prev,
         currentSegment: newSegment,
-        progress: (newSegment / segmentsRef.current.length) * 100,
+        progress: maxSegments > 0 ? (newSegment / maxSegments) * 100 : 0,
         estimatedTimeRemaining: timeRemaining,
       }
     })
@@ -442,17 +485,18 @@ export function useTextToSpeech(text: string) {
       const newSegment = Math.max(prev.currentSegment - 5, 0)
       console.log(`Skipping back to segment ${newSegment + 1}`)
 
-      if (prev.isPlaying) {
+      if (prev.isPlaying && segmentsRef.current && segmentsRef.current.length > 0) {
         speechSynthesis.cancel()
         setTimeout(() => playSegment(newSegment), 100)
       }
 
-      const timeRemaining = calculateTimeRemaining(newSegment, segmentsRef.current.length, prev.rate)
+      const timeRemaining = calculateTimeRemaining(newSegment, segmentsRef.current?.length || 0, prev.rate)
 
       return {
         ...prev,
         currentSegment: newSegment,
-        progress: (newSegment / segmentsRef.current.length) * 100,
+        progress:
+          segmentsRef.current && segmentsRef.current.length > 0 ? (newSegment / segmentsRef.current.length) * 100 : 0,
         estimatedTimeRemaining: timeRemaining,
       }
     })
@@ -474,7 +518,7 @@ export function useTextToSpeech(text: string) {
     (rate: number) => {
       console.log("🏃 Setting rate:", rate)
       setState((prev) => {
-        const timeRemaining = calculateTimeRemaining(prev.currentSegment, segmentsRef.current.length, rate)
+        const timeRemaining = calculateTimeRemaining(prev.currentSegment, segmentsRef.current?.length || 0, rate)
         return {
           ...prev,
           rate,
@@ -514,11 +558,15 @@ export function useTextToSpeech(text: string) {
     play,
     pause,
     stop,
+    resume,
+    toggleMute,
     skipForward,
     skipBackward,
     setVoice,
     setRate,
     setPitch,
     setVolume,
+    // Computed properties
+    isMuted: state.volume === 0,
   }
 }

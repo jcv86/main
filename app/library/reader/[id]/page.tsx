@@ -29,6 +29,7 @@ import {
 import { Slider } from "@/components/ui/slider"
 import { libraryService, type Book, type BookChapter, type UserBookProgress } from "@/lib/supabase-library"
 import { useTextToSpeech } from "@/hooks/use-text-to-speech"
+import { useToast } from "@/hooks/use-toast"
 
 // Demo user UUID - using a proper UUID format
 const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000"
@@ -36,6 +37,7 @@ const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000"
 export default function BookReaderPage() {
   const params = useParams()
   const router = useRouter()
+  const { toast } = useToast()
   const bookId = params.id as string
 
   // State
@@ -57,6 +59,10 @@ export default function BookReaderPage() {
   const readingTimerRef = useRef<NodeJS.Timeout | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
+  // Get current chapter content for TTS
+  const currentChapter = chapters[currentChapterIndex]
+  const currentChapterContent = currentChapter?.content || ""
+
   // Text-to-Speech
   const {
     isPlaying,
@@ -65,7 +71,7 @@ export default function BookReaderPage() {
     rate,
     pitch,
     volume,
-    speak,
+    play,
     pause,
     resume,
     stop,
@@ -73,7 +79,7 @@ export default function BookReaderPage() {
     setRate,
     setPitch,
     setVolume,
-  } = useTextToSpeech()
+  } = useTextToSpeech(currentChapterContent)
 
   // Load book data
   useEffect(() => {
@@ -167,8 +173,6 @@ export default function BookReaderPage() {
     return () => clearInterval(interval)
   }, [book, chapters, currentChapterIndex, readingTime, bookId])
 
-  const currentChapter = chapters[currentChapterIndex]
-
   const handlePreviousChapter = () => {
     if (currentChapterIndex > 0) {
       setCurrentChapterIndex(currentChapterIndex - 1)
@@ -194,24 +198,41 @@ export default function BookReaderPage() {
 
     const isBookmarked = bookmarks.includes(currentChapter.id)
 
-    if (isBookmarked) {
-      // Remove bookmark
-      const success = await libraryService.removeBookmark(bookId, currentChapter.id, DEMO_USER_ID)
-      if (success) {
-        setBookmarks(bookmarks.filter((id) => id !== currentChapter.id))
+    try {
+      if (isBookmarked) {
+        // Remove bookmark
+        const success = await libraryService.removeBookmark(bookId, currentChapter.id, DEMO_USER_ID)
+        if (success) {
+          setBookmarks(bookmarks.filter((id) => id !== currentChapter.id))
+          toast({
+            title: "Marcador eliminado",
+            description: "Se eliminó el marcador de este capítulo.",
+          })
+        }
+      } else {
+        // Add bookmark
+        const bookmark = await libraryService.addBookmark(
+          bookId,
+          currentChapter.id,
+          currentChapter.title,
+          undefined,
+          DEMO_USER_ID,
+        )
+        if (bookmark) {
+          setBookmarks([...bookmarks, currentChapter.id])
+          toast({
+            title: "Marcador añadido",
+            description: "Se añadió un marcador a este capítulo.",
+          })
+        }
       }
-    } else {
-      // Add bookmark
-      const bookmark = await libraryService.addBookmark(
-        bookId,
-        currentChapter.id,
-        currentChapter.title,
-        undefined,
-        DEMO_USER_ID,
-      )
-      if (bookmark) {
-        setBookmarks([...bookmarks, currentChapter.id])
-      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el marcador.",
+        variant: "destructive",
+      })
     }
   }
 
@@ -224,7 +245,7 @@ export default function BookReaderPage() {
       if (isPaused) {
         resume()
       } else {
-        speak(currentChapter.content)
+        play()
       }
     }
   }
@@ -316,10 +337,16 @@ export default function BookReaderPage() {
                   size="sm"
                   onClick={isPlaying ? handleTTSPause : handleTTSPlay}
                   disabled={!currentChapter?.content}
+                  className={isPlaying ? "text-blue-600" : "text-gray-600"}
                 >
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={toggleMute}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleMute}
+                  className={isMuted ? "text-red-600" : "text-gray-600"}
+                >
                   {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                 </Button>
               </div>
