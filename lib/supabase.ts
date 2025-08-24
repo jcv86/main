@@ -1,10 +1,11 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { createServerClient as createSupabaseServerClient, type CookieOptions } from "@supabase/ssr"
 
-// Environment variables with proper fallbacks and validation
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+// Client-side environment variables (these are safe to access on client)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://dcfrbwxbejtbcouionna.supabase.co"
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZnJid3hiZWp0YmNvdWlvbm5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDgzOTcsImV4cCI6MjA2NzI4NDM5N30.FfjjRuH6mtLURdv1YBbDZ9o5lz94Wfcm3KeyxeKhjOQ"
 
 // Validate required environment variables
 if (!supabaseUrl) {
@@ -67,6 +68,9 @@ export function createAdminClient() {
     throw new Error("Admin client should only be used on the server side")
   }
 
+  // This will only work on the server side where SUPABASE_SERVICE_ROLE_KEY is available
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
   if (!supabaseServiceRoleKey) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY is required for admin operations")
   }
@@ -78,16 +82,6 @@ export function createAdminClient() {
     },
   })
 }
-
-// Legacy exports for backward compatibility
-export const supabaseAdmin = supabaseServiceRoleKey
-  ? createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    })
-  : null
 
 // Database types
 export interface Database {
