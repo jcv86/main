@@ -4,409 +4,140 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { SearchDialog } from "@/components/search-dialog"
-import { NotificationsBell } from "@/components/notifications-bell"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
-import { useAuth } from "@/contexts/auth-context"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Menu, ChevronDown, FileText, BookOpen, GraduationCap, Library } from "lucide-react"
 import { cn } from "@/lib/utils"
-import {
-  Menu,
-  Home,
-  User,
-  FileText,
-  Briefcase,
-  MessageSquare,
-  BookOpen,
-  Calendar,
-  Target,
-  GraduationCap,
-  Brain,
-  Sparkles,
-  Settings,
-  LogOut,
-  FileCode,
-  Users,
-  Play,
-} from "lucide-react"
-
-const testItems = [
-  {
-    title: "Tests Psicométricos",
-    items: [
-      {
-        title: "Test de Personalidad",
-        href: "/personality-test",
-        description: "Descubre tu tipo de personalidad",
-        icon: Brain,
-      },
-      {
-        title: "Test DISC",
-        href: "/disc-test",
-        description: "Evalúa tu estilo de comportamiento",
-        icon: User,
-      },
-      {
-        title: "Big Five",
-        href: "/big-five-test",
-        description: "Los cinco grandes factores de personalidad",
-        icon: Brain,
-      },
-      {
-        title: "Habilidades Blandas",
-        href: "/soft-skills-test",
-        description: "Evalúa tus competencias interpersonales",
-        icon: MessageSquare,
-      },
-    ],
-  },
-  {
-    title: "Tests Técnicos",
-    items: [
-      {
-        title: "Habilidades Técnicas",
-        href: "/technical-skills-test",
-        description: "Evalúa tus competencias técnicas",
-        icon: Settings,
-      },
-      {
-        title: "Test Adaptativo",
-        href: "/adaptive-skills-test",
-        description: "Evaluación que se adapta a tu nivel",
-        icon: Sparkles,
-      },
-    ],
-  },
-]
 
 const navigationItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "CV Builder",
-    href: "/cv-builder",
-    icon: FileText,
-  },
-  {
-    title: "Búsqueda de Empleo",
-    href: "/job-search",
-    icon: Briefcase,
-  },
-  {
-    title: "Coach de Carrera",
-    href: "/career-coach",
-    icon: MessageSquare,
-  },
-  {
-    title: "Simulador de Entrevistas",
-    href: "/interview-simulator",
-    icon: User,
-  },
-  {
-    title: "Biblioteca",
-    href: "/library",
-    icon: BookOpen,
-  },
-  {
-    title: "Calendario",
-    href: "/calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Metas",
-    href: "/goals",
-    icon: Target,
-  },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Tests", href: "/personality-test" },
+  { name: "CV Builder", href: "/cv-builder" },
+  { name: "Búsqueda de Empleo", href: "/job-search" },
+  { name: "Coach IA", href: "/career-coach" },
+  { name: "Biblioteca", href: "/library" },
 ]
 
-const educationItems = [
+const documentosItems = [
   {
-    title: "Carreras UDD",
-    href: "/udd-careers",
-    description: "Explora las carreras de la Universidad del Desarrollo",
-    icon: GraduationCap,
-  },
-  {
-    title: "Bachillerato",
-    href: "/bachillerato",
-    description: "Información sobre programas de bachillerato",
-    icon: BookOpen,
-  },
-]
-
-const knowledgeBaseItems = [
-  {
-    title: "Base de Conocimiento",
-    href: "/knowledge-base",
-    description: "Centro de recursos y documentación completa",
-    icon: BookOpen,
-  },
-  {
-    title: "Guía de Inicio",
-    href: "/knowledge-base/getting-started",
-    description: "Aprende a usar la plataforma paso a paso",
-    icon: Play,
-  },
-  {
-    title: "Especificación Técnica DTC",
+    name: "Especificación Técnica",
     href: "/knowledge-base/dtc-technical-specification",
-    description: "Documentación técnica completa del proyecto con personalización por carreras",
-    icon: FileCode,
+    icon: FileText,
+    description: "Documentación técnica completa",
   },
   {
-    title: "Guía Completa de Carreras",
+    name: "Guía de Inicio",
+    href: "/knowledge-base/getting-started",
+    icon: BookOpen,
+    description: "Aprende a usar la plataforma",
+  },
+  {
+    name: "Guía de Carreras",
     href: "/knowledge-base/careers-guide",
-    description: "Información detallada de las 7 carreras objetivo con datos del mercado chileno",
-    icon: Users,
+    icon: GraduationCap,
+    description: "Mercado laboral chileno",
+  },
+  {
+    name: "Base de Conocimiento",
+    href: "/knowledge-base/knowledge-base",
+    icon: Library,
+    description: "Recursos generales",
   },
 ]
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
+  const [isOpen, setIsOpen] = useState(false)
 
-  const isActive = (href: string) => pathname === href
+  const isActive = (href: string) => {
+    if (href === "/dashboard") {
+      return pathname === "/" || pathname === "/dashboard"
+    }
+    return pathname.startsWith(href)
+  }
+
+  const isDocumentosActive = () => {
+    return pathname.startsWith("/knowledge-base")
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        {/* Logo */}
+      <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Brain className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">CareerDev</span>
+          <Link className="mr-6 flex items-center space-x-2" href="/">
+            <span className="hidden font-bold sm:inline-block">Despega Tu Carrera</span>
           </Link>
-        </div>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  isActive(item.href) ? "text-foreground" : "text-foreground/60",
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="/dashboard" legacyBehavior passHref>
-                <NavigationMenuLink
+            {/* Documentos Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
                   className={cn(
-                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                    isActive("/dashboard") && "bg-accent text-accent-foreground",
+                    "h-auto p-0 text-sm font-medium transition-colors hover:text-foreground/80",
+                    isDocumentosActive() ? "text-foreground" : "text-foreground/60",
                   )}
                 >
-                  <Home className="mr-2 h-4 w-4" />
-                  Dashboard
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <Brain className="mr-2 h-4 w-4" />
-                Tests
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
-                  {testItems.map((category) => (
-                    <div key={category.title} className="space-y-3">
-                      <h4 className="text-sm font-medium leading-none text-muted-foreground">{category.title}</h4>
-                      <div className="space-y-2">
-                        {category.items.map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="flex items-center space-x-2">
-                              <item.icon className="h-4 w-4" />
-                              <div className="text-sm font-medium leading-none">{item.title}</div>
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              {item.description}
-                            </p>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link href="/cv-builder" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                    isActive("/cv-builder") && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  CV Builder
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link href="/job-search" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                    isActive("/job-search") && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  <Briefcase className="mr-2 h-4 w-4" />
-                  Empleos
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <GraduationCap className="mr-2 h-4 w-4" />
-                Educación
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid gap-3 p-6 md:w-[400px]">
-                  {educationItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <item.icon className="h-4 w-4" />
-                        <div className="text-sm font-medium leading-none">{item.title}</div>
-                      </div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
-                    </Link>
-                  ))}
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            {/* Direct Access to Knowledge Base Documents */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <BookOpen className="mr-2 h-4 w-4" />
-                Documentos
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid gap-3 p-6 md:w-[500px] lg:w-[600px]">
-                  <div className="row-span-3">
-                    <NavigationMenuLink asChild>
-                      <Link
-                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        href="/knowledge-base"
-                      >
-                        <BookOpen className="h-6 w-6" />
-                        <div className="mb-2 mt-4 text-lg font-medium">Base de Conocimiento</div>
-                        <p className="text-sm leading-tight text-muted-foreground">
-                          Centro completo de recursos, guías y documentación técnica para tu desarrollo profesional.
-                        </p>
-                      </Link>
-                    </NavigationMenuLink>
-                  </div>
-                  <div className="grid gap-3">
-                    {knowledgeBaseItems.slice(1).map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <item.icon className="h-4 w-4" />
-                          <div className="text-sm font-medium leading-none">{item.title}</div>
+                  Documentos
+                  <ChevronDown className="ml-1 h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80">
+                {documentosItems.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <Link href={item.href} className="flex items-start space-x-3 p-3 hover:bg-accent">
+                        <Icon className="h-5 w-5 mt-0.5 text-muted-foreground" />
+                        <div className="flex-1 space-y-1">
+                          <p className="text-sm font-medium leading-none">{item.name}</p>
+                          <p className="text-xs text-muted-foreground">{item.description}</p>
                         </div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
                       </Link>
-                    ))}
-                  </div>
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            {/* Quick Access Buttons for Key Documents */}
-            <NavigationMenuItem>
-              <Link href="/knowledge-base/dtc-technical-specification" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                    isActive("/knowledge-base/dtc-technical-specification") && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  <FileCode className="mr-2 h-4 w-4" />
-                  DTC Spec
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link href="/knowledge-base/careers-guide" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                    isActive("/knowledge-base/careers-guide") && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Carreras
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        {/* Right side items */}
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <SearchDialog />
-          </div>
-          <nav className="flex items-center space-x-2">
-            {user && <NotificationsBell />}
-            <ThemeToggle />
-            <LanguageToggle />
-
-            {user ? (
-              <Button variant="ghost" size="sm" onClick={() => signOut()} className="hidden md:flex">
-                <LogOut className="h-4 w-4 mr-2" />
-                Salir
-              </Button>
-            ) : (
-              <Button asChild size="sm" className="hidden md:flex">
-                <Link href="/auth/login">Iniciar Sesión</Link>
-              </Button>
-            )}
+                    </DropdownMenuItem>
+                  )
+                })}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/knowledge-base"
+                    className="flex items-center justify-center p-3 text-sm font-medium text-primary hover:bg-accent"
+                  >
+                    Ver todos los documentos →
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile Navigation */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
               className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="pr-0">
-            <SheetHeader>
-              <SheetTitle className="flex items-center space-x-2">
-                <Brain className="h-6 w-6 text-primary" />
-                <span>CareerDev</span>
-              </SheetTitle>
-              <SheetDescription>Tu plataforma de desarrollo profesional</SheetDescription>
-            </SheetHeader>
+            <Link className="flex items-center" href="/" onClick={() => setIsOpen(false)}>
+              <span className="font-bold">Despega Tu Carrera</span>
+            </Link>
             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
               <div className="flex flex-col space-y-3">
                 {navigationItems.map((item) => (
@@ -415,94 +146,53 @@ export function Navigation() {
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className={cn(
-                      "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary",
-                      isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                      "transition-colors hover:text-foreground/80",
+                      isActive(item.href) ? "text-foreground" : "text-foreground/60",
                     )}
                   >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
+                    {item.name}
                   </Link>
                 ))}
 
+                {/* Mobile Documentos Section */}
                 <div className="pt-4">
-                  <h4 className="mb-2 text-sm font-semibold">Tests</h4>
-                  {testItems.map((category) => (
-                    <div key={category.title} className="mb-4">
-                      <h5 className="mb-2 text-xs font-medium text-muted-foreground">{category.title}</h5>
-                      {category.items.map((item) => (
+                  <h4 className="mb-2 text-sm font-semibold text-foreground">Documentos</h4>
+                  <div className="flex flex-col space-y-2 pl-4">
+                    {documentosItems.map((item) => {
+                      const Icon = item.icon
+                      return (
                         <Link
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
-                          className={cn(
-                            "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
-                            isActive(item.href) ? "text-primary" : "text-muted-foreground",
-                          )}
+                          className="flex items-center space-x-2 text-sm text-foreground/60 hover:text-foreground/80"
                         >
-                          <item.icon className="h-3 w-3" />
-                          <span>{item.title}</span>
+                          <Icon className="h-4 w-4" />
+                          <span>{item.name}</span>
                         </Link>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-4">
-                  <h4 className="mb-2 text-sm font-semibold">Educación</h4>
-                  {educationItems.map((item) => (
+                      )
+                    })}
                     <Link
-                      key={item.href}
-                      href={item.href}
+                      href="/knowledge-base"
                       onClick={() => setIsOpen(false)}
-                      className={cn(
-                        "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
-                        isActive(item.href) ? "text-primary" : "text-muted-foreground",
-                      )}
+                      className="text-sm font-medium text-primary hover:text-primary/80"
                     >
-                      <item.icon className="h-3 w-3" />
-                      <span>{item.title}</span>
+                      Ver todos →
                     </Link>
-                  ))}
-                </div>
-
-                <div className="pt-4">
-                  <h4 className="mb-2 text-sm font-semibold">Documentos</h4>
-                  {knowledgeBaseItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={cn(
-                        "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
-                        isActive(item.href) ? "text-primary" : "text-muted-foreground",
-                      )}
-                    >
-                      <item.icon className="h-3 w-3" />
-                      <span>{item.title}</span>
-                    </Link>
-                  ))}
-                </div>
-
-                {user && (
-                  <div className="pt-4 border-t">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        signOut()
-                        setIsOpen(false)
-                      }}
-                      className="w-full justify-start"
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Salir
-                    </Button>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </SheetContent>
         </Sheet>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            <Link className="inline-block md:hidden" href="/">
+              <span className="font-bold">DTC</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </header>
   )
