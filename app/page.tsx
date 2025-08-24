@@ -1,26 +1,11 @@
-import { createClient } from "@supabase/supabase-js"
-import { cookies } from "next/headers"
-import LandingPage from "@/components/landing-page"
-import DashboardContent from "@/components/dashboard-content"
+import SessionWrapper from "@/components/session-wrapper"
 
-export default async function HomePage() {
-  const cookieStore = await cookies()
+async function checkLocalSession() {
+  // Esta función se ejecuta en el servidor, así que no puede acceder a localStorage
+  // La verificación de sesión local se hará en el cliente
+  return null
+}
 
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: {
-      get(name: string) {
-        return cookieStore.get(name)?.value
-      },
-    },
-  })
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session) {
-    return <LandingPage />
-  }
-
-  return <DashboardContent />
+export default function HomePage() {
+  return <SessionWrapper />
 }
