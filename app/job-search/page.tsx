@@ -291,16 +291,16 @@ export default function JobSearchPage() {
             <div className="flex justify-center items-center space-x-6 mt-4 text-sm text-gray-600">
               <div className="flex items-center space-x-1">
                 <TrendingUp className="w-4 h-4" />
-                <span>{stats.totalJobs.toLocaleString()} empleos disponibles</span>
+                <span>{(stats?.totalJobs || 0).toLocaleString()} empleos disponibles</span>
               </div>
               <div className="flex items-center space-x-1">
                 <RefreshCw className="w-4 h-4" />
                 <span>Actualizado: {new Date(stats.lastUpdated).toLocaleDateString("es-CL")}</span>
               </div>
-              {stats.avgSalary > 0 && (
+              {(stats?.avgSalary || 0) > 0 && (
                 <div className="flex items-center space-x-1">
                   <Award className="w-4 h-4" />
-                  <span>Salario promedio: ${stats.avgSalary.toLocaleString()} CLP</span>
+                  <span>Salario promedio: ${(stats?.avgSalary || 0).toLocaleString()} CLP</span>
                 </div>
               )}
             </div>
@@ -479,9 +479,9 @@ export default function JobSearchPage() {
           <div className="mb-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="text-gray-600">
-                {totalJobs > 0 ? (
+                {(totalJobs || 0) > 0 ? (
                   <span>
-                    Mostrando {jobs.length} de {totalJobs.toLocaleString()} empleos encontrados
+                    Mostrando {jobs.length} de {(totalJobs || 0).toLocaleString()} empleos encontrados
                   </span>
                 ) : (
                   <span>No se encontraron empleos con los filtros seleccionados</span>
