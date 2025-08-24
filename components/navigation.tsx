@@ -34,6 +34,9 @@ import {
   Sparkles,
   Settings,
   LogOut,
+  FileCode,
+  Users,
+  Play,
 } from "lucide-react"
 
 const testItems = [
@@ -140,6 +143,33 @@ const educationItems = [
     href: "/bachillerato",
     description: "Información sobre programas de bachillerato",
     icon: BookOpen,
+  },
+]
+
+const knowledgeBaseItems = [
+  {
+    title: "Base de Conocimiento",
+    href: "/knowledge-base",
+    description: "Centro de recursos y documentación completa",
+    icon: BookOpen,
+  },
+  {
+    title: "Guía de Inicio",
+    href: "/knowledge-base/getting-started",
+    description: "Aprende a usar la plataforma paso a paso",
+    icon: Play,
+  },
+  {
+    title: "Especificación Técnica DTC",
+    href: "/knowledge-base/dtc-technical-specification",
+    description: "Documentación técnica completa del proyecto con personalización por carreras",
+    icon: FileCode,
+  },
+  {
+    title: "Guía Completa de Carreras",
+    href: "/knowledge-base/careers-guide",
+    description: "Información detallada de las 7 carreras objetivo con datos del mercado chileno",
+    icon: Users,
   },
 ]
 
@@ -262,6 +292,76 @@ export function Navigation() {
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
+
+            {/* Direct Access to Knowledge Base Documents */}
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <BookOpen className="mr-2 h-4 w-4" />
+                Documentos
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid gap-3 p-6 md:w-[500px] lg:w-[600px]">
+                  <div className="row-span-3">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        href="/knowledge-base"
+                      >
+                        <BookOpen className="h-6 w-6" />
+                        <div className="mb-2 mt-4 text-lg font-medium">Base de Conocimiento</div>
+                        <p className="text-sm leading-tight text-muted-foreground">
+                          Centro completo de recursos, guías y documentación técnica para tu desarrollo profesional.
+                        </p>
+                      </Link>
+                    </NavigationMenuLink>
+                  </div>
+                  <div className="grid gap-3">
+                    {knowledgeBaseItems.slice(1).map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <item.icon className="h-4 w-4" />
+                          <div className="text-sm font-medium leading-none">{item.title}</div>
+                        </div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{item.description}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            {/* Quick Access Buttons for Key Documents */}
+            <NavigationMenuItem>
+              <Link href="/knowledge-base/dtc-technical-specification" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/knowledge-base/dtc-technical-specification") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <FileCode className="mr-2 h-4 w-4" />
+                  DTC Spec
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/knowledge-base/careers-guide" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={cn(
+                    "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                    isActive("/knowledge-base/careers-guide") && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Carreras
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
@@ -350,6 +450,24 @@ export function Navigation() {
                 <div className="pt-4">
                   <h4 className="mb-2 text-sm font-semibold">Educación</h4>
                   {educationItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-2 text-sm transition-colors hover:text-primary pl-4 py-1",
+                        isActive(item.href) ? "text-primary" : "text-muted-foreground",
+                      )}
+                    >
+                      <item.icon className="h-3 w-3" />
+                      <span>{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="pt-4">
+                  <h4 className="mb-2 text-sm font-semibold">Documentos</h4>
+                  {knowledgeBaseItems.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
