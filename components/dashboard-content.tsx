@@ -24,7 +24,8 @@ import {
   BarChart3,
   ArrowRight,
   Play,
-  Heart,
+  Sparkles,
+  Compass,
 } from "lucide-react"
 
 interface UserProfile {
@@ -74,6 +75,12 @@ export default function DashboardContent() {
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [userEmail, setUserEmail] = useState("")
+  const [dataLoaded, setDataLoaded] = useState({
+    profile: false,
+    tests: false,
+    activities: false,
+    documents: false,
+  })
 
   const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -83,81 +90,135 @@ export default function DashboardContent() {
   }, [])
 
   const checkUserSession = async () => {
-    // Verificar sesión local primero
-    const localSession = localStorage.getItem("dtc_session")
-    if (localSession) {
-      try {
-        const sessionData = JSON.parse(localSession)
-        if (sessionData.authenticated && sessionData.user) {
-          setUserEmail(sessionData.user.email)
-          await loadUserData(sessionData.user.email)
-          return
-        }
-      } catch (error) {
-        console.log("Invalid local session")
-      }
-    }
-
-    // Verificar sesión de Supabase
     try {
+      // Check local session first (faster)
+      const localSession = localStorage.getItem("dtc_session")
+      if (localSession) {
+        try {
+          const sessionData = JSON.parse(localSession)
+          if (sessionData.authenticated && sessionData.user) {
+            setUserEmail(sessionData.user.email)
+            loadUserDataOptimized(sessionData.user.email)
+            return
+          }
+        } catch (error) {
+          console.log("Invalid local session")
+        }
+      }
+
+      // Fallback to Supabase session
       const {
         data: { user },
       } = await supabase.auth.getUser()
       if (user) {
         setUserEmail(user.email || "")
-        await loadUserData(user.email || "")
+        loadUserDataOptimized(user.email || "")
       } else {
         router.push("/auth")
       }
     } catch (error) {
+      console.error("Session check error:", error)
       router.push("/auth")
     }
   }
 
-  const loadUserData = async (email: string) => {
+  const loadUserDataOptimized = async (email: string) => {
     try {
-      setLoading(true)
+      // Load profile first (most important)
+      loadUserProfile(email)
 
-      // Cargar perfil del usuario
-      const { data: profile } = await supabase.from("user_profiles").select("*").eq("email", email).single()
+      // Load other data in parallel but don't block UI
+      Promise.all([loadTestResults(email), loadRecentActivities(email), loadDocuments()]).finally(() => {
+        setLoading(false)
+      })
+    } catch (error) {
+      console.error("Error loading user data:", error)
+      setLoading(false)
+    }
+  }
 
-      if (profile) {
+  const loadUserProfile = async (email: string) => {
+    try {
+      const { data: profile, error } = await supabase.from("user_profiles").select("*").eq("email", email).single()
+
+      if (error && error.code !== "PGRST116") {
+        console.error("Profile error:", error)
+        // Create default profile if doesn't exist
+        const defaultProfile = {
+          email,
+          full_name: email.split("@")[0],
+          current_level: 1,
+          total_xp: 0,
+          tests_completed: 0,
+          documents_read: 0,
+          skills_learned: 0,
+          created_at: new Date().toISOString(),
+        }
+        setUserProfile(defaultProfile)
+      } else if (profile) {
         setUserProfile(profile)
       }
 
-      // Cargar resultados de tests
-      const { data: tests } = await supabase
+      setDataLoaded((prev) => ({ ...prev, profile: true }))
+    } catch (error) {
+      console.error("Error loading profile:", error)
+      setDataLoaded((prev) => ({ ...prev, profile: true }))
+    }
+  }
+
+  const loadTestResults = async (email: string) => {
+    try {
+      const { data: tests, error } = await supabase
         .from("test_results")
-        .select("*")
+        .select("id, test_name, test_type, score, completed_at, duration_minutes")
         .eq("user_email", email)
         .order("completed_at", { ascending: false })
+        .limit(10) // Limit results for performance
 
-      if (tests) {
+      if (!error && tests) {
         setTestResults(tests)
       }
+      setDataLoaded((prev) => ({ ...prev, tests: true }))
+    } catch (error) {
+      console.error("Error loading test results:", error)
+      setDataLoaded((prev) => ({ ...prev, tests: true }))
+    }
+  }
 
-      // Cargar actividades recientes
-      const { data: activities } = await supabase
+  const loadRecentActivities = async (email: string) => {
+    try {
+      const { data: activities, error } = await supabase
         .from("user_activities")
-        .select("*")
+        .select("id, activity_type, activity_description, xp_earned, created_at")
         .eq("user_email", email)
         .order("created_at", { ascending: false })
-        .limit(10)
+        .limit(5) // Limit for performance
 
-      if (activities) {
+      if (!error && activities) {
         setRecentActivities(activities)
       }
+      setDataLoaded((prev) => ({ ...prev, activities: true }))
+    } catch (error) {
+      console.error("Error loading activities:", error)
+      setDataLoaded((prev) => ({ ...prev, activities: true }))
+    }
+  }
 
-      // Cargar documentos
-      const { data: docs } = await supabase.from("knowledge_base").select("*").order("created_at", { ascending: false })
+  const loadDocuments = async () => {
+    try {
+      const { data: docs, error } = await supabase
+        .from("knowledge_base")
+        .select("id, title, category, read_count, created_at")
+        .order("created_at", { ascending: false })
+        .limit(6) // Limit for performance
 
-      if (docs) {
+      if (!error && docs) {
         setDocuments(docs)
       }
+      setDataLoaded((prev) => ({ ...prev, documents: true }))
     } catch (error) {
-      console.log("Error loading user data:", error)
-    } finally {
-      setLoading(false)
+      console.error("Error loading documents:", error)
+      setDataLoaded((prev) => ({ ...prev, documents: true }))
     }
   }
 
@@ -170,7 +231,7 @@ export default function DashboardContent() {
     const xpForNextLevel = currentLevel * 100
     const currentLevelXP = totalXP - xpForCurrentLevel
     const neededXP = xpForNextLevel - xpForCurrentLevel
-    return (currentLevelXP / neededXP) * 100
+    return Math.max(0, Math.min(100, (currentLevelXP / neededXP) * 100))
   }
 
   const formatDate = (dateString: string) => {
@@ -237,40 +298,16 @@ export default function DashboardContent() {
       duration: "8-12 min",
       questions: 30,
       category: "Vocacional",
-      icon: <Target className="h-6 w-6" />,
+      icon: <Compass className="h-6 w-6" />,
       color: "bg-orange-500",
       route: "/test/riasec",
-      disabled: true,
-    },
-    {
-      id: "soft-skills",
-      name: "Habilidades Blandas",
-      description: "Evalúa tus competencias interpersonales y sociales",
-      duration: "6-10 min",
-      questions: 25,
-      category: "Competencias",
-      icon: <Heart className="h-6 w-6" />,
-      color: "bg-pink-500",
-      route: "/test/soft-skills",
-      disabled: true,
-    },
-    {
-      id: "multiple-intelligences",
-      name: "Inteligencias Múltiples",
-      description: "Identifica tus tipos de inteligencia según Gardner",
-      duration: "10-15 min",
-      questions: 35,
-      category: "Cognitivo",
-      icon: <BarChart3 className="h-6 w-6" />,
-      color: "bg-indigo-500",
-      route: "/test/multiple-intelligences",
-      disabled: true,
     },
   ]
 
-  if (loading) {
+  // Show loading only for initial load
+  if (loading && !dataLoaded.profile) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Cargando tu dashboard...</p>
@@ -328,7 +365,7 @@ export default function DashboardContent() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Tests Completados</p>
-                  <p className="text-2xl font-bold">{userProfile?.tests_completed || 0}</p>
+                  <p className="text-2xl font-bold">{testResults.length}</p>
                 </div>
                 <Brain className="h-8 w-8 text-blue-500" />
               </div>
@@ -383,64 +420,78 @@ export default function DashboardContent() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {availableTests.map((test) => (
-                    <Card
-                      key={test.id}
-                      className={`relative ${test.disabled ? "opacity-60" : "hover:shadow-lg transition-shadow"}`}
-                    >
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className={`p-3 rounded-lg ${test.color} text-white`}>{test.icon}</div>
-                          <Badge variant="outline">{test.category}</Badge>
-                        </div>
+                  {availableTests.map((test) => {
+                    const isCompleted = testResults.some((result) =>
+                      result.test_name.toLowerCase().includes(test.name.toLowerCase().split(" ")[0]),
+                    )
 
-                        <h3 className="font-semibold text-lg mb-2">{test.name}</h3>
-                        <p className="text-gray-600 text-sm mb-4">{test.description}</p>
-
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Clock className="h-4 w-4" />
-                            <span>{test.duration}</span>
+                    return (
+                      <Card
+                        key={test.id}
+                        className={`relative ${isCompleted ? "border-green-200 bg-green-50" : "hover:shadow-lg transition-shadow"}`}
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className={`p-3 rounded-lg ${test.color} text-white`}>{test.icon}</div>
+                            <div className="flex flex-col items-end gap-2">
+                              <Badge variant="outline">{test.category}</Badge>
+                              {isCompleted && <CheckCircle className="h-5 w-5 text-green-500" />}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <FileText className="h-4 w-4" />
-                            <span>{test.questions} preguntas</span>
-                          </div>
-                        </div>
 
-                        {test.disabled ? (
-                          <Button disabled className="w-full">
-                            Próximamente
-                          </Button>
-                        ) : (
-                          <Button onClick={() => router.push(test.route)} className="w-full">
-                            <Play className="h-4 w-4 mr-2" />
-                            Comenzar Test
-                          </Button>
-                        )}
+                          <h3 className="font-semibold text-lg mb-2">{test.name}</h3>
+                          <p className="text-gray-600 text-sm mb-4">{test.description}</p>
 
-                        {/* Indicador si ya se completó */}
-                        {testResults.some((result) => result.test_name === test.name) && (
-                          <div className="absolute top-2 right-2">
-                            <CheckCircle className="h-5 w-5 text-green-500" />
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                              <Clock className="h-4 w-4" />
+                              <span>{test.duration}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                              <FileText className="h-4 w-4" />
+                              <span>{test.questions} preguntas</span>
+                            </div>
                           </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
+
+                          <div className="flex gap-2">
+                            {isCompleted ? (
+                              <>
+                                <Button
+                                  onClick={() => router.push(`${test.route}/results`)}
+                                  className="flex-1"
+                                  variant="outline"
+                                >
+                                  <BarChart3 className="h-4 w-4 mr-2" />
+                                  Ver Resultados
+                                </Button>
+                                <Button onClick={() => router.push(test.route)} variant="outline" size="sm">
+                                  Repetir
+                                </Button>
+                              </>
+                            ) : (
+                              <Button onClick={() => router.push(test.route)} className="w-full">
+                                <Play className="h-4 w-4 mr-2" />
+                                Comenzar Test
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
                 </div>
 
-                {/* Botón destacado para ver demo de gráficos */}
+                {/* Demo Section */}
                 <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
                   <div className="text-center">
-                    <h3 className="text-xl font-semibold text-blue-800 mb-2">🚀 Dashboard Moderno con Gráficos</h3>
+                    <h3 className="text-xl font-semibold text-blue-800 mb-2">🚀 Dashboard con IA Integrada</h3>
                     <p className="text-blue-700 mb-4">
-                      Explora nuestros gráficos de radar interactivos, análisis con IA y visualizaciones avanzadas
+                      Explora análisis con IA, coaching personalizado y visualizaciones avanzadas
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Button onClick={() => router.push("/test/disc/results?demo=true")} size="lg">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Ver Dashboard Completo
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Ver Demo con IA
                       </Button>
                       <Button variant="outline" onClick={() => router.push("/test/disc")} size="lg">
                         <Play className="h-4 w-4 mr-2" />
@@ -460,11 +511,22 @@ export default function DashboardContent() {
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
                   Mis Resultados de Tests
+                  {!dataLoaded.tests && (
+                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
+                  )}
                 </CardTitle>
                 <CardDescription>Revisa y analiza los resultados de todos los tests que has completado</CardDescription>
               </CardHeader>
               <CardContent>
-                {testResults.length === 0 ? (
+                {!dataLoaded.tests ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="animate-pulse">
+                        <div className="h-20 bg-gray-200 rounded-lg"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : testResults.length === 0 ? (
                   <div className="text-center py-12">
                     <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay resultados aún</h3>
@@ -475,8 +537,8 @@ export default function DashboardContent() {
                         Comenzar con DISC
                       </Button>
                       <Button variant="outline" onClick={() => router.push("/test/disc/results?demo=true")}>
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Ver Demo de Gráficos
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Ver Demo con IA
                       </Button>
                     </div>
                   </div>
@@ -501,12 +563,13 @@ export default function DashboardContent() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() =>
-                                  router.push(`/test/${result.test_name.toLowerCase().replace(" ", "-")}/results`)
-                                }
+                                onClick={() => {
+                                  const testRoute = result.test_name.toLowerCase().replace(/\s+/g, "-")
+                                  router.push(`/test/${testRoute}/results`)
+                                }}
                               >
-                                <FileText className="h-4 w-4 mr-2" />
-                                Ver Dashboard
+                                <Sparkles className="h-4 w-4 mr-2" />
+                                Ver con IA
                               </Button>
                             </div>
                           </div>
@@ -526,11 +589,22 @@ export default function DashboardContent() {
                 <CardTitle className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
                   Biblioteca de Conocimiento
+                  {!dataLoaded.documents && (
+                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
+                  )}
                 </CardTitle>
                 <CardDescription>Accede a recursos, guías y documentos para tu desarrollo profesional</CardDescription>
               </CardHeader>
               <CardContent>
-                {documents.length === 0 ? (
+                {!dataLoaded.documents ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} className="animate-pulse">
+                        <div className="h-48 bg-gray-200 rounded-lg"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : documents.length === 0 ? (
                   <div className="text-center py-12">
                     <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay documentos disponibles</h3>
@@ -549,9 +623,8 @@ export default function DashboardContent() {
                           </div>
 
                           <h3 className="font-semibold text-lg mb-2">{doc.title}</h3>
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-3">{doc.content.substring(0, 150)}...</p>
 
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between mt-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
                               <Users className="h-4 w-4" />
                               <span>{doc.read_count} lecturas</span>
@@ -577,11 +650,22 @@ export default function DashboardContent() {
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
                   Actividad Reciente
+                  {!dataLoaded.activities && (
+                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
+                  )}
                 </CardTitle>
                 <CardDescription>Revisa tu progreso y actividades más recientes en la plataforma</CardDescription>
               </CardHeader>
               <CardContent>
-                {recentActivities.length === 0 ? (
+                {!dataLoaded.activities ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i} className="animate-pulse">
+                        <div className="h-16 bg-gray-200 rounded-lg"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : recentActivities.length === 0 ? (
                   <div className="text-center py-12">
                     <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay actividad reciente</h3>

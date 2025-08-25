@@ -1,22 +1,19 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@supabase/supabase-js"
-import { useRouter, useSearchParams } from "next/navigation"
-import AICoachChat from "@/components/ai-coach-chat"
-import AIInsightsPanel from "@/components/ai-insights-panel"
-import { aiCoach } from "@/lib/ai-coach"
 import {
+  Radar,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  Radar,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -24,155 +21,92 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import AICoachChat from "@/components/ai-coach-chat"
+import AIInsightsPanel from "@/components/ai-insights-panel"
+import { aiCoach } from "@/lib/ai-coach"
 import {
-  Brain,
   ArrowLeft,
-  Download,
-  Share2,
+  Brain,
+  Target,
   TrendingUp,
   Users,
-  Target,
-  Lightbulb,
-  Heart,
-  Star,
-  BookOpen,
   Award,
+  BookOpen,
+  Lightbulb,
+  Zap,
+  Shield,
   Sparkles,
+  Download,
+  Share2,
 } from "lucide-react"
 
-interface BigFiveResults {
+interface BigFiveResult {
   O: number // Openness
   C: number // Conscientiousness
   E: number // Extraversion
   A: number // Agreeableness
   N: number // Neuroticism
   primary_traits: string[]
-  detailed_analysis: {
-    openness: string
-    conscientiousness: string
-    extraversion: string
-    agreeableness: string
-    neuroticism: string
-  }
+  secondary_traits: string[]
+  personality_summary: string
+  career_recommendations: string[]
+  development_areas: string[]
+  strengths: string[]
 }
 
-const COLORS = ["#8B5CF6", "#A855F7", "#C084FC", "#DDD6FE", "#EDE9FE"]
-
-const factorDescriptions = {
-  O: {
-    name: "Apertura a la Experiencia",
-    description: "Creatividad, curiosidad intelectual y apertura a nuevas ideas",
-    icon: <Lightbulb className="h-5 w-5" />,
-    color: "#8B5CF6",
-  },
-  C: {
-    name: "Responsabilidad",
-    description: "Organización, disciplina y orientación al logro",
-    icon: <Target className="h-5 w-5" />,
-    color: "#A855F7",
-  },
-  E: {
-    name: "Extraversión",
-    description: "Sociabilidad, asertividad y búsqueda de estimulación",
-    icon: <Users className="h-5 w-5" />,
-    color: "#C084FC",
-  },
-  A: {
-    name: "Amabilidad",
-    description: "Cooperación, confianza y preocupación por otros",
-    icon: <Heart className="h-5 w-5" />,
-    color: "#DDD6FE",
-  },
-  N: {
-    name: "Neuroticismo",
-    description: "Estabilidad emocional y manejo del estrés",
-    icon: <Brain className="h-5 w-5" />,
-    color: "#EDE9FE",
-  },
-}
-
-export default function BigFiveResults() {
-  const [results, setResults] = useState<BigFiveResults | null>(null)
+function BigFiveResultsContent() {
+  const [results, setResults] = useState<BigFiveResult | null>(null)
   const [loading, setLoading] = useState(true)
   const [userEmail, setUserEmail] = useState("")
   const [aiInterpretation, setAiInterpretation] = useState("")
-  const [loadingInterpretation, setLoadingInterpretation] = useState(false)
+  const [loadingAI, setLoadingAI] = useState(false)
 
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDemo = searchParams.get("demo") === "true"
+
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   useEffect(() => {
     if (isDemo) {
-      loadDemoData()
+      loadDemoResults()
     } else {
       checkUserAndLoadResults()
     }
   }, [isDemo])
 
-  const loadDemoData = () => {
-    const demoResults: BigFiveResults = {
-      O: 78,
-      C: 65,
-      E: 82,
-      A: 71,
-      N: 35,
-      primary_traits: ["Abierto a experiencias", "Extrovertido", "Emocionalmente estable"],
-      detailed_analysis: {
-        openness: "Alto nivel de creatividad y curiosidad intelectual",
-        conscientiousness: "Moderadamente organizado y disciplinado",
-        extraversion: "Muy sociable y enérgico",
-        agreeableness: "Cooperativo y empático",
-        neuroticism: "Emocionalmente estable y resiliente",
-      },
-    }
-    setResults(demoResults)
-    setUserEmail("demo@dtcfinal.com")
-    setLoading(false)
-  }
-
   const checkUserAndLoadResults = async () => {
-    const localSession = localStorage.getItem("dtc_session")
-    let email = ""
-
-    if (localSession) {
-      try {
+    try {
+      // Check local session first
+      const localSession = localStorage.getItem("dtc_session")
+      if (localSession) {
         const sessionData = JSON.parse(localSession)
         if (sessionData.authenticated && sessionData.user) {
-          email = sessionData.user.email
-        }
-      } catch (error) {
-        console.log("Invalid local session")
-      }
-    }
-
-    if (!email) {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (user) {
-          email = user.email || ""
-        } else {
-          router.push("/auth")
+          setUserEmail(sessionData.user.email)
+          await loadUserResults(sessionData.user.email)
           return
         }
-      } catch (error) {
-        router.push("/auth")
-        return
       }
-    }
 
-    setUserEmail(email)
-    await loadResults(email)
+      // Check Supabase session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        setUserEmail(user.email || "")
+        await loadUserResults(user.email || "")
+      } else {
+        router.push("/auth")
+      }
+    } catch (error) {
+      console.error("Error checking user session:", error)
+      router.push("/auth")
+    }
   }
 
-  const loadResults = async (email: string) => {
+  const loadUserResults = async (email: string) => {
     try {
       const { data, error } = await supabase
         .from("test_results")
@@ -182,102 +116,77 @@ export default function BigFiveResults() {
         .order("completed_at", { ascending: false })
         .limit(1)
 
-      if (error) {
-        console.error("Error loading results:", error)
-        loadDemoData()
-        return
-      }
+      if (error) throw error
 
       if (data && data.length > 0) {
-        setResults(data[0].results as BigFiveResults)
+        setResults(data[0].results)
+        await generateAIInterpretation(email, data[0].results)
       } else {
-        loadDemoData()
+        // No results found, redirect to test
+        router.push("/test/big-five")
       }
     } catch (error) {
-      console.error("Error:", error)
-      loadDemoData()
+      console.error("Error loading results:", error)
+      router.push("/test/big-five")
     } finally {
       setLoading(false)
     }
   }
 
-  const generateAIInterpretation = async () => {
-    if (!results || !userEmail) return
+  const loadDemoResults = () => {
+    const demoResults: BigFiveResult = {
+      O: 85, // High Openness
+      C: 78, // High Conscientiousness
+      E: 72, // Moderate-High Extraversion
+      A: 68, // Moderate Agreeableness
+      N: 35, // Low Neuroticism
+      primary_traits: ["Creativo", "Organizado", "Sociable"],
+      secondary_traits: ["Curioso", "Responsable", "Empático"],
+      personality_summary: "Perfil de innovador organizado con alta estabilidad emocional y orientación social.",
+      career_recommendations: [
+        "Director de Innovación",
+        "Consultor de Estrategia",
+        "Product Manager",
+        "Arquitecto de Soluciones",
+        "Líder de Transformación Digital",
+      ],
+      development_areas: [
+        "Desarrollar mayor flexibilidad en situaciones imprevistas",
+        "Mejorar habilidades de negociación en conflictos",
+        "Fortalecer la paciencia con procesos lentos",
+      ],
+      strengths: [
+        "Excelente capacidad para generar ideas innovadoras",
+        "Alta disciplina y organización personal",
+        "Facilidad para conectar con diferentes tipos de personas",
+        "Estabilidad emocional en situaciones de presión",
+      ],
+    }
 
-    setLoadingInterpretation(true)
+    setResults(demoResults)
+    setUserEmail("demo@example.com")
+    setLoading(false)
+  }
+
+  const generateAIInterpretation = async (email: string, testResults: BigFiveResult) => {
     try {
-      const interpretation = await aiCoach.interpretTestResults(userEmail, "Big Five", results)
+      setLoadingAI(true)
+      const interpretation = await aiCoach.interpretTestResults(email, "Big Five", testResults)
       setAiInterpretation(interpretation)
     } catch (error) {
       console.error("Error generating AI interpretation:", error)
-      setAiInterpretation("Lo siento, no pude generar una interpretación en este momento.")
+      setAiInterpretation("No se pudo generar la interpretación con IA en este momento.")
     } finally {
-      setLoadingInterpretation(false)
+      setLoadingAI(false)
     }
-  }
-
-  const getRadarData = () => {
-    if (!results) return []
-    return [
-      { factor: "Apertura", value: results.O, fullMark: 100 },
-      { factor: "Responsabilidad", value: results.C, fullMark: 100 },
-      { factor: "Extraversión", value: results.E, fullMark: 100 },
-      { factor: "Amabilidad", value: results.A, fullMark: 100 },
-      { factor: "Estabilidad", value: 100 - results.N, fullMark: 100 }, // Inverted for better interpretation
-    ]
-  }
-
-  const getBarData = () => {
-    if (!results) return []
-    return [
-      { name: "Apertura", value: results.O, color: "#8B5CF6" },
-      { name: "Responsabilidad", value: results.C, color: "#A855F7" },
-      { name: "Extraversión", value: results.E, color: "#C084FC" },
-      { name: "Amabilidad", value: results.A, color: "#DDD6FE" },
-      { name: "Estabilidad", value: 100 - results.N, color: "#EDE9FE" },
-    ]
-  }
-
-  const getPieData = () => {
-    if (!results) return []
-    const total = results.O + results.C + results.E + results.A + (100 - results.N)
-    return [
-      { name: "Apertura", value: Math.round((results.O / total) * 100), color: "#8B5CF6" },
-      { name: "Responsabilidad", value: Math.round((results.C / total) * 100), color: "#A855F7" },
-      { name: "Extraversión", value: Math.round((results.E / total) * 100), color: "#C084FC" },
-      { name: "Amabilidad", value: Math.round((results.A / total) * 100), color: "#DDD6FE" },
-      { name: "Estabilidad", value: Math.round(((100 - results.N) / total) * 100), color: "#EDE9FE" },
-    ]
-  }
-
-  const getOverallScore = () => {
-    if (!results) return 0
-    return Math.round((results.O + results.C + results.E + results.A + (100 - results.N)) / 5)
-  }
-
-  const getCareerRecommendations = () => {
-    if (!results) return []
-    const recommendations = []
-
-    if (results.O > 70 && results.E > 70) {
-      recommendations.push("Roles creativos y de liderazgo", "Consultoría e innovación", "Emprendimiento")
-    } else if (results.C > 70 && results.A > 70) {
-      recommendations.push("Gestión de proyectos", "Recursos humanos", "Administración")
-    } else if (results.E > 70) {
-      recommendations.push("Ventas y marketing", "Relaciones públicas", "Gestión de equipos")
-    } else if (results.O > 70) {
-      recommendations.push("Investigación y desarrollo", "Diseño y creatividad", "Análisis estratégico")
-    }
-
-    return recommendations.slice(0, 3)
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando tus resultados...</p>
+          <p className="text-gray-600">Cargando tus resultados Big Five...</p>
         </div>
       </div>
     )
@@ -285,12 +194,12 @@ export default function BigFiveResults() {
 
   if (!results) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
             <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-600 mb-4">Completa el test Big Five para ver tus resultados aquí</p>
+            <p className="text-gray-600 mb-4">Completa el test Big Five para ver tus resultados</p>
             <Button onClick={() => router.push("/test/big-five")}>Realizar Test</Button>
           </CardContent>
         </Card>
@@ -298,71 +207,77 @@ export default function BigFiveResults() {
     )
   }
 
-  const initialContext = `He analizado tu perfil Big Five:
-• Apertura: ${results.O}% - ${results.detailed_analysis.openness}
-• Responsabilidad: ${results.C}% - ${results.detailed_analysis.conscientiousness}  
-• Extraversión: ${results.E}% - ${results.detailed_analysis.extraversion}
-• Amabilidad: ${results.A}% - ${results.detailed_analysis.agreeableness}
-• Neuroticismo: ${results.N}% - ${results.detailed_analysis.neuroticism}
+  const radarData = [
+    { factor: "Apertura", value: results.O, fullName: "Apertura a la Experiencia" },
+    { factor: "Responsabilidad", value: results.C, fullName: "Responsabilidad" },
+    { factor: "Extraversión", value: results.E, fullName: "Extraversión" },
+    { factor: "Amabilidad", value: results.A, fullName: "Amabilidad" },
+    { factor: "Neuroticismo", value: 100 - results.N, fullName: "Estabilidad Emocional" }, // Inverted for better visualization
+  ]
 
-Tus rasgos principales son: ${results.primary_traits.join(", ")}`
+  const barData = [
+    { name: "Apertura", value: results.O, color: "#8B5CF6" },
+    { name: "Responsabilidad", value: results.C, color: "#06B6D4" },
+    { name: "Extraversión", value: results.E, color: "#10B981" },
+    { name: "Amabilidad", value: results.A, color: "#F59E0B" },
+    { name: "Estabilidad", value: 100 - results.N, color: "#EF4444" },
+  ]
+
+  const getScoreInterpretation = (score: number) => {
+    if (score >= 80) return { label: "Muy Alto", color: "bg-green-500" }
+    if (score >= 60) return { label: "Alto", color: "bg-blue-500" }
+    if (score >= 40) return { label: "Moderado", color: "bg-yellow-500" }
+    if (score >= 20) return { label: "Bajo", color: "bg-orange-500" }
+    return { label: "Muy Bajo", color: "bg-red-500" }
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+      <div className="container mx-auto p-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
-          </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={() => router.push("/dashboard")}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Resultados Big Five</h1>
+              <p className="text-gray-600">Análisis completo de los cinco factores de personalidad</p>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
-            {isDemo && <Badge variant="secondary">Modo Demo</Badge>}
+            {isDemo && (
+              <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                <Sparkles className="h-3 w-3 mr-1" />
+                Modo Demo
+              </Badge>
+            )}
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Exportar PDF
+            </Button>
             <Button variant="outline" size="sm">
               <Share2 className="h-4 w-4 mr-2" />
               Compartir
             </Button>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Descargar PDF
-            </Button>
           </div>
         </div>
 
-        {/* Results Header */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-                <Brain className="h-8 w-8 text-purple-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-purple-800 mb-2">Resultados del Test Big Five</h1>
-              <p className="text-purple-600 mb-4">
-                Análisis completo de tu personalidad basado en los cinco grandes factores
-              </p>
-              <div className="flex items-center justify-center gap-4">
-                <Badge variant="secondary" className="text-lg px-4 py-2">
-                  <Award className="h-4 w-4 mr-2" />
-                  Puntuación General: {getOverallScore()}%
-                </Badge>
-                <Badge variant="outline" className="text-lg px-4 py-2">
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Con IA
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
-            <TabsTrigger value="radar">Gráfico Radar</TabsTrigger>
             <TabsTrigger value="detailed">Análisis Detallado</TabsTrigger>
-            <TabsTrigger value="ai-coach">Coach IA</TabsTrigger>
-            <TabsTrigger value="insights">Insights IA</TabsTrigger>
-            <TabsTrigger value="growth">Crecimiento</TabsTrigger>
+            <TabsTrigger value="ai-coach">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Coach IA
+            </TabsTrigger>
+            <TabsTrigger value="insights">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Insights IA
+            </TabsTrigger>
+            <TabsTrigger value="career">Carrera</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -372,27 +287,38 @@ Tus rasgos principales son: ${results.primary_traits.join(", ")}`
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Perfil de Personalidad
+                    <Brain className="h-5 w-5 text-purple-600" />
+                    Perfil de Personalidad Big Five
                   </CardTitle>
-                  <CardDescription>Visualización de tus cinco factores principales</CardDescription>
+                  <CardDescription>Visualización de los cinco factores principales</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <RadarChart data={getRadarData()}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="factor" />
-                      <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                      <Radar
-                        name="Puntuación"
-                        dataKey="value"
-                        stroke="#8B5CF6"
-                        fill="#8B5CF6"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                    </RadarChart>
-                  </ResponsiveContainer>
+                  <ChartContainer
+                    config={{
+                      value: {
+                        label: "Puntuación",
+                        color: "hsl(var(--chart-1))",
+                      },
+                    }}
+                    className="h-[300px]"
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={radarData}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="factor" />
+                        <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                        <Radar
+                          name="Big Five"
+                          dataKey="value"
+                          stroke="#8B5CF6"
+                          fill="#8B5CF6"
+                          fillOpacity={0.3}
+                          strokeWidth={2}
+                        />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </CardContent>
               </Card>
 
@@ -400,311 +326,336 @@ Tus rasgos principales son: ${results.primary_traits.join(", ")}`
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5" />
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
                     Puntuaciones por Factor
                   </CardTitle>
                   <CardDescription>Comparación detallada de cada dimensión</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={getBarData()}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis domain={[0, 100]} />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <ChartContainer
+                    config={{
+                      value: {
+                        label: "Puntuación",
+                        color: "hsl(var(--chart-2))",
+                      },
+                    }}
+                    className="h-[300px]"
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={barData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="#06B6D4" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Primary Traits */}
+            {/* Score Breakdown */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5" />
-                  Rasgos Principales
+                  <Award className="h-5 w-5 text-yellow-600" />
+                  Desglose de Puntuaciones
                 </CardTitle>
-                <CardDescription>Características más destacadas de tu personalidad</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  {results.primary_traits.map((trait, index) => (
-                    <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
-                      {trait}
-                    </Badge>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {radarData.map((item) => {
+                    const interpretation = getScoreInterpretation(item.value)
+                    return (
+                      <div key={item.factor} className="text-center p-4 border rounded-lg">
+                        <div
+                          className={`w-16 h-16 rounded-full ${interpretation.color} mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl`}
+                        >
+                          {item.value}
+                        </div>
+                        <h3 className="font-semibold text-sm mb-1">{item.fullName}</h3>
+                        <Badge variant="secondary" className="text-xs">
+                          {interpretation.label}
+                        </Badge>
+                        <Progress value={item.value} className="mt-2" />
+                      </div>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Summary */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-green-600" />
+                  Resumen de Personalidad
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700 mb-4">{results.personality_summary}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold text-green-700 mb-2 flex items-center gap-2">
+                      <Zap className="h-4 w-4" />
+                      Rasgos Principales
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {results.primary_traits.map((trait, index) => (
+                        <Badge key={index} variant="secondary" className="bg-green-100 text-green-700">
+                          {trait}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-blue-700 mb-2 flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      Rasgos Secundarios
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {results.secondary_traits.map((trait, index) => (
+                        <Badge key={index} variant="outline" className="border-blue-200 text-blue-700">
+                          {trait}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Detailed Analysis Tab */}
+          <TabsContent value="detailed" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="h-5 w-5 text-green-600" />
+                    Fortalezas Identificadas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {results.strengths.map((strength, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-gray-700">{strength}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-orange-600" />
+                    Áreas de Desarrollo
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {results.development_areas.map((area, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-gray-700">{area}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* AI Interpretation */}
+            {!isDemo && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-purple-600" />
+                    Interpretación con IA
+                  </CardTitle>
+                  <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingAI ? (
+                    <div className="flex items-center gap-3 py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                      <span className="text-gray-600">Generando interpretación personalizada...</span>
+                    </div>
+                  ) : (
+                    <div className="prose prose-sm max-w-none">
+                      <p className="text-gray-700 whitespace-pre-wrap">{aiInterpretation}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* AI Coach Tab */}
+          <TabsContent value="ai-coach" className="space-y-6">
+            {!isDemo ? (
+              <AICoachChat userEmail={userEmail} initialContext={JSON.stringify(results)} />
+            ) : (
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Coach IA no disponible en modo demo</h3>
+                  <p className="text-gray-600 mb-4">Completa el test real para acceder al coach personalizado</p>
+                  <Button onClick={() => router.push("/test/big-five")}>
+                    <Brain className="h-4 w-4 mr-2" />
+                    Realizar Test Real
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* AI Insights Tab */}
+          <TabsContent value="insights" className="space-y-6">
+            {!isDemo ? (
+              <AIInsightsPanel userEmail={userEmail} />
+            ) : (
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Insights IA no disponibles en modo demo</h3>
+                  <p className="text-gray-600 mb-4">Completa el test real para generar insights personalizados</p>
+                  <Button onClick={() => router.push("/test/big-five")}>
+                    <Brain className="h-4 w-4 mr-2" />
+                    Realizar Test Real
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* Career Tab */}
+          <TabsContent value="career" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-blue-600" />
+                  Recomendaciones de Carrera
+                </CardTitle>
+                <CardDescription>Roles profesionales ideales basados en tu perfil Big Five</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {results.career_recommendations.map((career, index) => (
+                    <Card key={index} className="border-l-4 border-l-blue-500">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <Target className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{career}</h3>
+                            <Badge variant="secondary" className="mt-1">
+                              Recomendado
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
-            {/* AI Interpretation Preview */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
-                  Interpretación con IA
-                </CardTitle>
-                <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {aiInterpretation ? (
-                  <div className="prose prose-sm max-w-none">
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{aiInterpretation}</p>
-                  </div>
-                ) : (
-                  <div className="text-center py-6">
-                    <Button onClick={generateAIInterpretation} disabled={loadingInterpretation}>
-                      {loadingInterpretation ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Generando interpretación...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-4 w-4 mr-2" />
-                          Generar Interpretación con IA
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Radar Tab */}
-          <TabsContent value="radar" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Gráfico Radar Interactivo</CardTitle>
-                  <CardDescription>Visualización completa de tu perfil Big Five</CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-green-600" />
+                    Compatibilidad en Equipos
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={400}>
-                    <RadarChart data={getRadarData()}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="factor" />
-                      <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                      <Radar
-                        name="Tu Perfil"
-                        dataKey="value"
-                        stroke="#8B5CF6"
-                        fill="#8B5CF6"
-                        fillOpacity={0.3}
-                        strokeWidth={3}
-                      />
-                    </RadarChart>
-                  </ResponsiveContainer>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <h4 className="font-semibold text-green-800 mb-2">Trabajas mejor con:</h4>
+                      <p className="text-green-700 text-sm">
+                        Personas organizadas y orientadas a objetivos que valoren la creatividad y la innovación.
+                      </p>
+                    </div>
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <h4 className="font-semibold text-blue-800 mb-2">Tu rol ideal en equipos:</h4>
+                      <p className="text-blue-700 text-sm">
+                        Generador de ideas, organizador de proyectos y facilitador de comunicación entre miembros del
+                        equipo.
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Distribución de Factores</CardTitle>
-                  <CardDescription>Proporción relativa de cada factor</CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-purple-600" />
+                    Plan de Desarrollo
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={400}>
-                    <PieChart>
-                      <Pie
-                        data={getPieData()}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, value }) => `${name}: ${value}%`}
-                        outerRadius={120}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {getPieData().map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-purple-600 text-xs font-bold">1</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm">Próximos 30 días</h4>
+                        <p className="text-gray-600 text-sm">
+                          Identifica oportunidades para liderar proyectos creativos
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-purple-600 text-xs font-bold">2</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm">Próximos 90 días</h4>
+                        <p className="text-gray-600 text-sm">Desarrolla habilidades de gestión de conflictos</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-purple-600 text-xs font-bold">3</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm">Próximos 6 meses</h4>
+                        <p className="text-gray-600 text-sm">Busca roles con mayor responsabilidad estratégica</p>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
-
-          {/* Detailed Analysis Tab */}
-          <TabsContent value="detailed" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(factorDescriptions).map(([key, factor]) => {
-                const score = key === "N" ? 100 - results.N : (results[key as keyof typeof results] as number)
-                const analysis = results.detailed_analysis[key.toLowerCase() as keyof typeof results.detailed_analysis]
-
-                return (
-                  <Card key={key}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2" style={{ color: factor.color }}>
-                        {factor.icon}
-                        {factor.name}
-                      </CardTitle>
-                      <CardDescription>{factor.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium">Puntuación</span>
-                            <span className="text-2xl font-bold" style={{ color: factor.color }}>
-                              {score}%
-                            </span>
-                          </div>
-                          <Progress value={score} className="h-2" />
-                        </div>
-                        <p className="text-sm text-gray-600">{analysis}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </TabsContent>
-
-          {/* AI Coach Tab */}
-          <TabsContent value="ai-coach" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <AICoachChat
-                  userEmail={userEmail}
-                  initialContext={initialContext}
-                  suggestedQuestions={[
-                    "¿Cómo puedo aprovechar mi alta apertura a la experiencia?",
-                    "¿Qué significa mi puntuación en responsabilidad?",
-                    "¿Cómo afecta mi extraversión a mi carrera?",
-                    "¿Qué roles serían ideales para mi personalidad?",
-                    "¿Cómo puedo desarrollar mis áreas más débiles?",
-                  ]}
-                />
-              </div>
-              <div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5" />
-                      Acciones Rápidas
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button
-                      onClick={generateAIInterpretation}
-                      disabled={loadingInterpretation}
-                      className="w-full bg-transparent"
-                      variant="outline"
-                    >
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Interpretación Detallada
-                    </Button>
-                    <Button onClick={() => aiCoach.getCareerGuidance(userEmail)} className="w-full" variant="outline">
-                      <Lightbulb className="h-4 w-4 mr-2" />
-                      Orientación de Carrera
-                    </Button>
-                    <Button onClick={() => aiCoach.getDevelopmentPlan(userEmail)} className="w-full" variant="outline">
-                      <TrendingUp className="h-4 w-4 mr-2" />
-                      Plan de Desarrollo
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* AI Insights Tab */}
-          <TabsContent value="insights" className="space-y-6">
-            <AIInsightsPanel userEmail={userEmail} />
-          </TabsContent>
-
-          {/* Growth Tab */}
-          <TabsContent value="growth" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Plan de Desarrollo Personal
-                </CardTitle>
-                <CardDescription>Recomendaciones específicas para tu crecimiento profesional</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="font-semibold mb-3">Recursos Recomendados</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Card className="p-4">
-                        <h5 className="font-medium mb-2">📚 Lectura Sugerida</h5>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• "Big Five: Los Cinco Grandes Factores"</li>
-                          <li>• "Desarrollo de Inteligencia Emocional"</li>
-                          <li>• "Comunicación Efectiva por Tipo de Personalidad"</li>
-                        </ul>
-                      </Card>
-                      <Card className="p-4">
-                        <h5 className="font-medium mb-2">🎯 Próximos Tests</h5>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Test DISC (Estilos de comportamiento)</li>
-                          <li>• Test MBTI (Tipos de personalidad)</li>
-                          <li>• Evaluación de Habilidades Blandas</li>
-                        </ul>
-                      </Card>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-3">Objetivos de Desarrollo</h4>
-                    <div className="space-y-3">
-                      {results.O < 50 && (
-                        <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                          <h5 className="font-medium text-orange-800">Desarrollar Apertura Mental</h5>
-                          <p className="text-sm text-orange-700">
-                            Practica la curiosidad intelectual y busca nuevas experiencias de aprendizaje
-                          </p>
-                        </div>
-                      )}
-                      {results.C < 50 && (
-                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                          <h5 className="font-medium text-blue-800">Mejorar Organización</h5>
-                          <p className="text-sm text-blue-700">
-                            Implementa sistemas de planificación y establece rutinas productivas
-                          </p>
-                        </div>
-                      )}
-                      {results.E < 50 && (
-                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <h5 className="font-medium text-green-800">Fortalecer Habilidades Sociales</h5>
-                          <p className="text-sm text-green-700">
-                            Participa en actividades grupales y practica la comunicación asertiva
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <Button onClick={() => router.push("/test/disc")} size="lg">
-            <Brain className="h-4 w-4 mr-2" />
-            Realizar Test DISC
-          </Button>
-          <Button variant="outline" onClick={() => router.push("/test/mbti")} size="lg">
-            <Lightbulb className="h-4 w-4 mr-2" />
-            Realizar Test MBTI
-          </Button>
-          <Button variant="outline" onClick={() => router.push("/dashboard")} size="lg">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
-          </Button>
-        </div>
       </div>
     </div>
+  )
+}
+
+export default function BigFiveResults() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Cargando resultados...</p>
+          </div>
+        </div>
+      }
+    >
+      <BigFiveResultsContent />
+    </Suspense>
   )
 }

@@ -1,54 +1,68 @@
--- Add AI coaching support to the database structure
-ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS ai_coach_data JSONB DEFAULT '{}';
-ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS personality_summary JSONB DEFAULT '{}';
-ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS coaching_preferences JSONB DEFAULT '{}';
+-- Add AI coaching support tables and functions
+-- This script adds comprehensive AI coaching capabilities to the platform
 
 -- Create AI coaching sessions table
 CREATE TABLE IF NOT EXISTS ai_coaching_sessions (
     id SERIAL PRIMARY KEY,
     user_email VARCHAR(255) NOT NULL,
-    session_type VARCHAR(100) NOT NULL, -- 'personality_analysis', 'career_guidance', 'skill_development'
-    prompt TEXT NOT NULL,
-    ai_response TEXT NOT NULL,
-    context_data JSONB DEFAULT '{}',
-    satisfaction_rating INTEGER, -- 1-5 rating from user
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_email) REFERENCES user_profiles(email) ON DELETE CASCADE
+    session_type VARCHAR(50) NOT NULL, -- 'chat', 'interpretation', 'guidance'
+    context_data JSONB,
+    messages JSONB NOT NULL DEFAULT '[]',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT true
 );
 
--- Create AI insights table for storing generated insights
+-- Create AI insights table
 CREATE TABLE IF NOT EXISTS ai_insights (
     id SERIAL PRIMARY KEY,
     user_email VARCHAR(255) NOT NULL,
-    insight_type VARCHAR(100) NOT NULL, -- 'personality', 'career', 'growth', 'compatibility'
+    insight_type VARCHAR(50) NOT NULL, -- 'personality', 'career', 'development', 'compatibility'
     insight_title VARCHAR(255) NOT NULL,
     insight_content TEXT NOT NULL,
-    confidence_score DECIMAL(3,2), -- 0.00 to 1.00
-    source_tests TEXT[], -- Array of test names that contributed to this insight
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_email) REFERENCES user_profiles(email) ON DELETE CASCADE
+    confidence_score INTEGER DEFAULT 0, -- 0-100
+    source_tests JSONB, -- Which tests contributed to this insight
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT true
 );
 
--- Create indexes for better performance
+-- Create AI interpretations table for test results
+CREATE TABLE IF NOT EXISTS ai_interpretations (
+    id SERIAL PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL,
+    test_name VARCHAR(100) NOT NULL,
+    test_results JSONB NOT NULL,
+    interpretation TEXT NOT NULL,
+    generated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    model_version VARCHAR(50) DEFAULT 'gpt-4',
+    tokens_used INTEGER DEFAULT 0
+);
+
+-- Add indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_ai_coaching_sessions_user_email ON ai_coaching_sessions(user_email);
-CREATE INDEX IF NOT EXISTS idx_ai_coaching_sessions_type ON ai_coaching_sessions(session_type);
+CREATE INDEX IF NOT EXISTS idx_ai_coaching_sessions_created_at ON ai_coaching_sessions(created_at);
 CREATE INDEX IF NOT EXISTS idx_ai_insights_user_email ON ai_insights(user_email);
 CREATE INDEX IF NOT EXISTS idx_ai_insights_type ON ai_insights(insight_type);
+CREATE INDEX IF NOT EXISTS idx_ai_interpretations_user_email ON ai_interpretations(user_email);
+CREATE INDEX IF NOT EXISTS idx_ai_interpretations_test ON ai_interpretations(test_name);
 
--- Function to update personality summary when test results are added
+-- Function to update personality summary when new test results are added
 CREATE OR REPLACE FUNCTION update_personality_summary()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Update the personality summary in user_profiles when a new test result is added
+    -- Update user profile with latest personality insights
     UPDATE user_profiles 
     SET personality_summary = (
-        SELECT jsonb_object_agg(test_name, results)
+        SELECT jsonb_build_object(
+            'last_updated', NOW(),
+            'tests_completed', COUNT(*),
+            'primary_traits', jsonb_agg(DISTINCT jsonb_extract_path_text(results, 'primary_traits')),
+            'career_focus', jsonb_extract_path_text(results, 'career_recommendations')
+        )
         FROM test_results 
-        WHERE user_email = NEW.user_email 
-        AND test_type = 'personality'
-    )
+        WHERE user_email = NEW.user_email
+    ),
+    updated_at = NOW()
     WHERE email = NEW.user_email;
     
     RETURN NEW;
@@ -62,4 +76,138 @@ CREATE TRIGGER trigger_update_personality_summary
     FOR EACH ROW
     EXECUTE FUNCTION update_personality_summary();
 
-SELECT 'AI coaching support tables and triggers created successfully' as status;
+-- Function to generate AI insights based on test results
+CREATE OR REPLACE FUNCTION generate_ai_insights(p_user_email VARCHAR(255))
+RETURNS VOID AS $$
+DECLARE
+    test_count INTEGER;
+    user_tests JSONB;
+BEGIN
+    -- Get count of completed tests
+    SELECT COUNT(*) INTO test_count
+    FROM test_results
+    WHERE user_email = p_user_email;
+    
+    -- Only generate insights if user has completed at least 2 tests
+    IF test_count >= 2 THEN
+        -- Get all test results for the user
+        SELECT jsonb_agg(
+            jsonb_build_object(
+                'test_name', test_name,
+                'results', results,
+                'completed_at', completed_at
+            )
+        ) INTO user_tests
+        FROM test_results
+        WHERE user_email = p_user_email
+        ORDER BY completed_at DESC;
+        
+        -- Insert placeholder insights (these will be generated by AI)
+        INSERT INTO ai_insights (user_email, insight_type, insight_title, insight_content, confidence_score, source_tests)
+        VALUES 
+        (p_user_email, 'personality', 'Perfil de Personalidad Integrado', 'Análisis pendiente de generación por IA', 0, user_tests),
+        (p_user_email, 'career', 'Recomendaciones de Carrera Personalizadas', 'Análisis pendiente de generación por IA', 0, user_tests),
+        (p_user_email, 'development', 'Plan de Desarrollo Personal', 'Análisis pendiente de generación por IA', 0, user_tests),
+        (p_user_email, 'compatibility', 'Compatibilidad en Equipos', 'Análisis pendiente de generación por IA', 0, user_tests)
+        ON CONFLICT DO NOTHING;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Add AI coaching preferences to user profiles
+ALTER TABLE user_profiles 
+ADD COLUMN IF NOT EXISTS ai_coaching_enabled BOOLEAN DEFAULT true,
+ADD COLUMN IF NOT EXISTS preferred_coaching_style VARCHAR(50) DEFAULT 'balanced', -- 'direct', 'supportive', 'balanced'
+ADD COLUMN IF NOT EXISTS ai_insights_frequency VARCHAR(50) DEFAULT 'weekly'; -- 'daily', 'weekly', 'monthly'
+
+-- Create function to get user's AI coaching context
+CREATE OR REPLACE FUNCTION get_ai_coaching_context(p_user_email VARCHAR(255))
+RETURNS JSONB AS $$
+DECLARE
+    context JSONB;
+BEGIN
+    SELECT jsonb_build_object(
+        'user_profile', (
+            SELECT jsonb_build_object(
+                'email', email,
+                'full_name', full_name,
+                'tests_completed', tests_completed,
+                'total_xp', total_xp,
+                'personality_summary', personality_summary,
+                'career_goals', career_goals,
+                'ai_coaching_enabled', ai_coaching_enabled,
+                'preferred_coaching_style', preferred_coaching_style
+            )
+            FROM user_profiles
+            WHERE email = p_user_email
+        ),
+        'test_results', (
+            SELECT jsonb_agg(
+                jsonb_build_object(
+                    'test_name', test_name,
+                    'test_type', test_type,
+                    'results', results,
+                    'score', score,
+                    'completed_at', completed_at
+                )
+                ORDER BY completed_at DESC
+            )
+            FROM test_results
+            WHERE user_email = p_user_email
+        ),
+        'recent_activities', (
+            SELECT jsonb_agg(
+                jsonb_build_object(
+                    'activity_type', activity_type,
+                    'activity_description', activity_description,
+                    'created_at', created_at
+                )
+                ORDER BY created_at DESC
+            )
+            FROM user_activities
+            WHERE user_email = p_user_email
+            LIMIT 10
+        ),
+        'ai_insights', (
+            SELECT jsonb_agg(
+                jsonb_build_object(
+                    'insight_type', insight_type,
+                    'insight_title', insight_title,
+                    'insight_content', insight_content,
+                    'confidence_score', confidence_score,
+                    'created_at', created_at
+                )
+                ORDER BY created_at DESC
+            )
+            FROM ai_insights
+            WHERE user_email = p_user_email
+            AND is_active = true
+        )
+    ) INTO context;
+    
+    RETURN context;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Insert sample AI coaching data for Travis
+INSERT INTO ai_coaching_sessions (user_email, session_type, context_data, messages) VALUES
+('travis@dtcfinal.com', 'chat', '{"test_results": ["Big Five", "MBTI", "DISC"]}', '[
+    {"role": "system", "content": "Eres un coach profesional especializado en desarrollo de carrera y personalidad."},
+    {"role": "user", "content": "¿Cómo puedo aprovechar mejor mis resultados de personalidad?"},
+    {"role": "assistant", "content": "Basándome en tus resultados, veo que tienes un perfil muy interesante que combina creatividad con liderazgo. Te recomiendo enfocarte en roles que te permitan innovar mientras diriges equipos."}
+]');
+
+INSERT INTO ai_insights (user_email, insight_type, insight_title, insight_content, confidence_score, source_tests) VALUES
+('travis@dtcfinal.com', 'personality', 'Líder Innovador', 'Tu combinación de alta apertura mental y liderazgo natural te posiciona como un innovador nato. Destacas en ambientes que requieren tanto creatividad como dirección estratégica.', 92, '["Big Five", "MBTI", "DISC"]'),
+('travis@dtcfinal.com', 'career', 'Director de Innovación', 'Tus resultados sugieren que serías excelente en roles como Director de Innovación, Consultor de Transformación Digital, o CEO de startup tecnológica.', 88, '["Big Five", "MBTI", "RIASEC"]'),
+('travis@dtcfinal.com', 'development', 'Equilibrio Analítico-Creativo', 'Para maximizar tu potencial, desarrolla más tu lado analítico para complementar tu creatividad natural. Considera cursos en análisis de datos o metodologías ágiles.', 85, '["Big Five", "MBTI"]'),
+('travis@dtcfinal.com', 'compatibility', 'Equipos Multidisciplinarios', 'Trabajas mejor con equipos diversos que incluyan tanto perfiles técnicos como creativos. Tu estilo de liderazgo inspiracional funciona especialmente bien con profesionales jóvenes.', 90, '["MBTI", "DISC"]);
+
+-- Update user profiles to enable AI coaching by default
+UPDATE user_profiles SET 
+    ai_coaching_enabled = true,
+    preferred_coaching_style = 'balanced',
+    ai_insights_frequency = 'weekly'
+WHERE ai_coaching_enabled IS NULL;
+
+COMMIT;

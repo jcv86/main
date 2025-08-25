@@ -1,76 +1,45 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, userEmail, sessionType, contextData } = await request.json()
+    const { messages, temperature = 0.7 } = await request.json()
 
-    if (!prompt || !userEmail) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    if (!messages || !Array.isArray(messages)) {
+      return NextResponse.json({ error: "Messages array is required" }, { status: 400 })
     }
 
-    // Call OpenAI API
-    const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "system",
-            content: `Eres un psicólogo organizacional y coach de desarrollo profesional experto con más de 15 años de experiencia. Tu especialidad es interpretar tests de personalidad (DISC, Big Five, MBTI) y proporcionar orientación profesional personalizada.
+    // Ensure we have the OpenAI API key
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("OpenAI API key not found")
+      return NextResponse.json({ error: "AI service temporarily unavailable" }, { status: 503 })
+    }
 
-Características de tu estilo:
-- Empático y profesional
-- Basado en evidencia científica
-- Orientado a la acción
-- Personalizado según el perfil del usuario
-- Comunicación clara y accesible
-- Enfoque en fortalezas y crecimiento
-
-Siempre proporciona respuestas en español, estructuradas y con recomendaciones específicas y accionables.`,
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        max_tokens: 1500,
-        temperature: 0.7,
-      }),
+    // Generate response using AI SDK
+    const { text } = await generateText({
+      model: openai("gpt-4o"),
+      messages: messages.map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+      temperature,
+      maxTokens: 1000,
     })
 
-    if (!openAIResponse.ok) {
-      const errorData = await openAIResponse.json()
-      console.error("OpenAI API error:", errorData)
-      return NextResponse.json({ error: "Error calling OpenAI API" }, { status: 500 })
-    }
-
-    const openAIData = await openAIResponse.json()
-    const aiResponse = openAIData.choices[0]?.message?.content || "No response generated"
-
-    // Save the coaching session to database
-    try {
-      await supabase.from("ai_coaching_sessions").insert({
-        user_email: userEmail,
-        session_type: sessionType || "general",
-        prompt: prompt,
-        ai_response: aiResponse,
-        context_data: contextData ? JSON.parse(contextData) : {},
-      })
-    } catch (dbError) {
-      console.error("Error saving coaching session:", dbError)
-      // Continue even if DB save fails
-    }
-
-    return NextResponse.json({ response: aiResponse })
+    return NextResponse.json({
+      message: text,
+      timestamp: new Date().toISOString(),
+    })
   } catch (error) {
     console.error("Error in AI coach API:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+
+    // Return a helpful fallback response
+    return NextResponse.json({
+      message:
+        "Lo siento, estoy experimentando dificultades técnicas en este momento. Como coach, te recomiendo que reflexiones sobre tus fortalezas identificadas en los tests y consideres cómo puedes aplicarlas en tu desarrollo profesional. ¿Hay algún aspecto específico de tus resultados sobre el que te gustaría reflexionar?",
+      timestamp: new Date().toISOString(),
+      fallback: true,
+    })
   }
 }
