@@ -179,6 +179,7 @@ export default function SoftSkillsTest() {
 
       const { error } = await supabase.from("test_results").insert({
         user_email: "demo@example.com",
+        test_name: "Test de Habilidades Blandas",
         test_type: "soft-skills",
         results: results,
         score: results.overall_score,
