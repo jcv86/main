@@ -1,104 +1,118 @@
 -- Optimize dashboard queries for better performance
+
 -- Add indexes for common queries
-
--- Index for user_profiles by email (most common lookup)
-CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON user_profiles(email);
-
--- Index for test_results by user_email and completed_at
 CREATE INDEX IF NOT EXISTS idx_test_results_user_email_completed ON test_results(user_email, completed_at DESC);
-
--- Index for user_activities by user_email and created_at
 CREATE INDEX IF NOT EXISTS idx_user_activities_user_email_created ON user_activities(user_email, created_at DESC);
-
--- Index for knowledge_base by created_at
-CREATE INDEX IF NOT EXISTS idx_knowledge_base_created ON knowledge_base(created_at DESC);
-
--- Index for ai_insights by user_email and is_active
+CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON user_profiles(email);
+CREATE INDEX IF NOT EXISTS idx_test_questions_test_name ON test_questions(test_name);
 CREATE INDEX IF NOT EXISTS idx_ai_insights_user_email_active ON ai_insights(user_email, is_active, created_at DESC);
 
--- Optimize user_profiles table structure
-ALTER TABLE user_profiles 
-ADD COLUMN IF NOT EXISTS last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN IF NOT EXISTS profile_completion_percentage INTEGER DEFAULT 0;
+-- Create function to increment user stats efficiently
+CREATE OR REPLACE FUNCTION increment_user_stats(
+  user_email TEXT,
+  xp_to_add INTEGER DEFAULT 0,
+  tests_to_add INTEGER DEFAULT 0,
+  docs_to_add INTEGER DEFAULT 0,
+  skills_to_add INTEGER DEFAULT 0
+)
+RETURNS VOID AS $$
+BEGIN
+  INSERT INTO user_profiles (
+    email, 
+    full_name, 
+    total_xp, 
+    tests_completed, 
+    documents_read, 
+    skills_learned,
+    current_level,
+    created_at
+  ) VALUES (
+    user_email,
+    SPLIT_PART(user_email, '@', 1),
+    xp_to_add,
+    tests_to_add,
+    docs_to_add,
+    skills_to_add,
+    GREATEST(1, xp_to_add / 100 + 1),
+    NOW()
+  )
+  ON CONFLICT (email) DO UPDATE SET
+    total_xp = user_profiles.total_xp + xp_to_add,
+    tests_completed = user_profiles.tests_completed + tests_to_add,
+    documents_read = user_profiles.documents_read + docs_to_add,
+    skills_learned = user_profiles.skills_learned + skills_to_add,
+    current_level = GREATEST(1, (user_profiles.total_xp + xp_to_add) / 100 + 1),
+    updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
 
--- Update profile completion for existing users
-UPDATE user_profiles 
-SET profile_completion_percentage = CASE 
-  WHEN full_name IS NOT NULL AND career_goal IS NOT NULL THEN 100
-  WHEN full_name IS NOT NULL THEN 75
-  ELSE 50
-END
-WHERE profile_completion_percentage = 0;
-
--- Create materialized view for dashboard stats (optional, for very high traffic)
--- This can be refreshed periodically instead of calculating on each load
-CREATE OR REPLACE VIEW dashboard_stats AS
-SELECT 
-  up.email,
-  up.full_name,
-  up.current_level,
-  up.total_xp,
-  COALESCE(test_count.count, 0) as tests_completed,
-  COALESCE(activity_count.count, 0) as total_activities,
-  up.documents_read,
-  up.skills_learned
-FROM user_profiles up
-LEFT JOIN (
-  SELECT user_email, COUNT(*) as count 
-  FROM test_results 
-  GROUP BY user_email
-) test_count ON up.email = test_count.user_email
-LEFT JOIN (
-  SELECT user_email, COUNT(*) as count 
-  FROM user_activities 
-  GROUP BY user_email
-) activity_count ON up.email = activity_count.user_email;
-
--- Add function to get dashboard data efficiently
-CREATE OR REPLACE FUNCTION get_dashboard_data(user_email_param TEXT)
+-- Create optimized dashboard data function
+CREATE OR REPLACE FUNCTION get_dashboard_data(user_email TEXT)
 RETURNS JSON AS $$
 DECLARE
   result JSON;
 BEGIN
   SELECT json_build_object(
     'profile', (
-      SELECT row_to_json(up) 
-      FROM user_profiles up 
-      WHERE up.email = user_email_param
+      SELECT row_to_json(p) FROM (
+        SELECT email, full_name, avatar_url, current_level, total_xp, 
+               tests_completed, documents_read, skills_learned, career_goal, created_at
+        FROM user_profiles 
+        WHERE email = user_email
+      ) p
     ),
-    'test_results', (
-      SELECT COALESCE(json_agg(
-        json_build_object(
-          'id', tr.id,
-          'test_name', tr.test_name,
-          'test_type', tr.test_type,
-          'score', tr.score,
-          'completed_at', tr.completed_at,
-          'duration_minutes', tr.duration_minutes
-        )
-      ), '[]'::json)
-      FROM test_results tr 
-      WHERE tr.user_email = user_email_param 
-      ORDER BY tr.completed_at DESC 
-      LIMIT 10
+    'recent_tests', (
+      SELECT COALESCE(json_agg(t ORDER BY t.completed_at DESC), '[]'::json) FROM (
+        SELECT id, test_name, test_type, score, completed_at, duration_minutes
+        FROM test_results 
+        WHERE user_email = get_dashboard_data.user_email
+        ORDER BY completed_at DESC 
+        LIMIT 10
+      ) t
     ),
     'recent_activities', (
-      SELECT COALESCE(json_agg(
-        json_build_object(
-          'id', ua.id,
-          'activity_type', ua.activity_type,
-          'activity_description', ua.activity_description,
-          'xp_earned', ua.xp_earned,
-          'created_at', ua.created_at
-        )
-      ), '[]'::json)
-      FROM user_activities ua 
-      WHERE ua.user_email = user_email_param 
-      ORDER BY ua.created_at DESC 
-      LIMIT 5
+      SELECT COALESCE(json_agg(a ORDER BY a.created_at DESC), '[]'::json) FROM (
+        SELECT id, activity_type, activity_description, xp_earned, created_at
+        FROM user_activities 
+        WHERE user_email = get_dashboard_data.user_email
+        ORDER BY created_at DESC 
+        LIMIT 5
+      ) a
+    ),
+    'documents', (
+      SELECT COALESCE(json_agg(d ORDER BY d.created_at DESC), '[]'::json) FROM (
+        SELECT id, title, category, read_count, created_at
+        FROM knowledge_base 
+        ORDER BY created_at DESC 
+        LIMIT 6
+      ) d
     )
   ) INTO result;
   
   RETURN result;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create materialized view for popular content (optional, for high traffic)
+CREATE MATERIALIZED VIEW IF NOT EXISTS popular_content AS
+SELECT 
+  'test' as content_type,
+  test_name as title,
+  COUNT(*) as usage_count,
+  AVG(score) as avg_score
+FROM test_results 
+WHERE completed_at > NOW() - INTERVAL '30 days'
+GROUP BY test_name
+UNION ALL
+SELECT 
+  'document' as content_type,
+  title,
+  read_count as usage_count,
+  NULL as avg_score
+FROM knowledge_base
+ORDER BY usage_count DESC;
+
+-- Refresh materialized view (run periodically)
+-- REFRESH MATERIALIZED VIEW popular_content;
+
+COMMIT;

@@ -9,24 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
-import {
-  Trophy,
-  Target,
-  BookOpen,
-  Brain,
-  FileText,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  Star,
-  Users,
-  Lightbulb,
-  BarChart3,
-  ArrowRight,
-  Play,
-  Sparkles,
-  Compass,
-} from "lucide-react"
+import { Trophy, Target, BookOpen, Brain, FileText, TrendingUp, Clock, CheckCircle, Star, Users, Lightbulb, BarChart3, ArrowRight, Play, Sparkles, Compass, Heart } from 'lucide-react'
 
 interface UserProfile {
   email: string
@@ -302,6 +285,18 @@ export default function DashboardContent() {
       color: "bg-orange-500",
       route: "/test/riasec",
     },
+    {
+      id: "soft-skills",
+      name: "Habilidades Blandas",
+      description: "Evalúa tus competencias interpersonales y sociales",
+      duration: "6-10 min",
+      questions: 25,
+      category: "Competencias",
+      icon: <Heart className="h-6 w-6" />,
+      color: "bg-pink-500",
+      route: "/test/soft-skills",
+      disabled: false, // Now enabled!
+    },
   ]
 
   // Show loading only for initial load
@@ -428,7 +423,13 @@ export default function DashboardContent() {
                     return (
                       <Card
                         key={test.id}
-                        className={`relative ${isCompleted ? "border-green-200 bg-green-50" : "hover:shadow-lg transition-shadow"}`}
+                        className={`relative ${
+                          test.disabled 
+                            ? "opacity-60" 
+                            : isCompleted 
+                            ? "border-green-200 bg-green-50" 
+                            : "hover:shadow-lg transition-shadow"
+                        }`}
                       >
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-4">
@@ -453,28 +454,34 @@ export default function DashboardContent() {
                             </div>
                           </div>
 
-                          <div className="flex gap-2">
-                            {isCompleted ? (
-                              <>
-                                <Button
-                                  onClick={() => router.push(`${test.route}/results`)}
-                                  className="flex-1"
-                                  variant="outline"
-                                >
-                                  <BarChart3 className="h-4 w-4 mr-2" />
-                                  Ver Resultados
+                          {test.disabled ? (
+                            <Button disabled className="w-full">
+                              Próximamente
+                            </Button>
+                          ) : (
+                            <div className="flex gap-2">
+                              {isCompleted ? (
+                                <>
+                                  <Button
+                                    onClick={() => router.push(`${test.route}/results`)}
+                                    className="flex-1"
+                                    variant="outline"
+                                  >
+                                    <BarChart3 className="h-4 w-4 mr-2" />
+                                    Ver Resultados
+                                  </Button>
+                                  <Button onClick={() => router.push(test.route)} variant="outline" size="sm">
+                                    Repetir
+                                  </Button>
+                                </>
+                              ) : (
+                                <Button onClick={() => router.push(test.route)} className="w-full">
+                                  <Play className="h-4 w-4 mr-2" />
+                                  Comenzar Test
                                 </Button>
-                                <Button onClick={() => router.push(test.route)} variant="outline" size="sm">
-                                  Repetir
-                                </Button>
-                              </>
-                            ) : (
-                              <Button onClick={() => router.push(test.route)} className="w-full">
-                                <Play className="h-4 w-4 mr-2" />
-                                Comenzar Test
-                              </Button>
-                            )}
-                          </div>
+                              )}
+                            </div>
+                          )}
                         </CardContent>
                       </Card>
                     )
@@ -493,9 +500,9 @@ export default function DashboardContent() {
                         <Sparkles className="h-4 w-4 mr-2" />
                         Ver Demo con IA
                       </Button>
-                      <Button variant="outline" onClick={() => router.push("/test/disc")} size="lg">
-                        <Play className="h-4 w-4 mr-2" />
-                        Realizar Test DISC
+                      <Button variant="outline" onClick={() => router.push("/test/soft-skills")} size="lg">
+                        <Heart className="h-4 w-4 mr-2" />
+                        Nuevo: Test Habilidades Blandas
                       </Button>
                     </div>
                   </div>
@@ -536,9 +543,9 @@ export default function DashboardContent() {
                         <Play className="h-4 w-4 mr-2" />
                         Comenzar con DISC
                       </Button>
-                      <Button variant="outline" onClick={() => router.push("/test/disc/results?demo=true")}>
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Ver Demo con IA
+                      <Button variant="outline" onClick={() => router.push("/test/soft-skills")}>
+                        <Heart className="h-4 w-4 mr-2" />
+                        Test Habilidades Blandas
                       </Button>
                     </div>
                   </div>
