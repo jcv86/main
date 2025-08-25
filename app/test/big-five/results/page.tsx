@@ -8,6 +8,9 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter, useSearchParams } from "next/navigation"
+import AICoachChat from "@/components/ai-coach-chat"
+import AIInsightsPanel from "@/components/ai-insights-panel"
+import { aiCoach } from "@/lib/ai-coach"
 import {
   RadarChart,
   PolarGrid,
@@ -38,6 +41,7 @@ import {
   Star,
   BookOpen,
   Award,
+  Sparkles,
 } from "lucide-react"
 
 interface BigFiveResults {
@@ -95,6 +99,8 @@ export default function BigFiveResults() {
   const [results, setResults] = useState<BigFiveResults | null>(null)
   const [loading, setLoading] = useState(true)
   const [userEmail, setUserEmail] = useState("")
+  const [aiInterpretation, setAiInterpretation] = useState("")
+  const [loadingInterpretation, setLoadingInterpretation] = useState(false)
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -195,6 +201,21 @@ export default function BigFiveResults() {
     }
   }
 
+  const generateAIInterpretation = async () => {
+    if (!results || !userEmail) return
+
+    setLoadingInterpretation(true)
+    try {
+      const interpretation = await aiCoach.interpretTestResults(userEmail, "Big Five", results)
+      setAiInterpretation(interpretation)
+    } catch (error) {
+      console.error("Error generating AI interpretation:", error)
+      setAiInterpretation("Lo siento, no pude generar una interpretación en este momento.")
+    } finally {
+      setLoadingInterpretation(false)
+    }
+  }
+
   const getRadarData = () => {
     if (!results) return []
     return [
@@ -277,6 +298,15 @@ export default function BigFiveResults() {
     )
   }
 
+  const initialContext = `He analizado tu perfil Big Five:
+• Apertura: ${results.O}% - ${results.detailed_analysis.openness}
+• Responsabilidad: ${results.C}% - ${results.detailed_analysis.conscientiousness}  
+• Extraversión: ${results.E}% - ${results.detailed_analysis.extraversion}
+• Amabilidad: ${results.A}% - ${results.detailed_analysis.agreeableness}
+• Neuroticismo: ${results.N}% - ${results.detailed_analysis.neuroticism}
+
+Tus rasgos principales son: ${results.primary_traits.join(", ")}`
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       <div className="container mx-auto px-4 py-8">
@@ -315,6 +345,10 @@ export default function BigFiveResults() {
                   <Award className="h-4 w-4 mr-2" />
                   Puntuación General: {getOverallScore()}%
                 </Badge>
+                <Badge variant="outline" className="text-lg px-4 py-2">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Con IA
+                </Badge>
               </div>
             </div>
           </CardContent>
@@ -322,11 +356,12 @@ export default function BigFiveResults() {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="radar">Gráfico Radar</TabsTrigger>
             <TabsTrigger value="detailed">Análisis Detallado</TabsTrigger>
-            <TabsTrigger value="career">Carrera</TabsTrigger>
+            <TabsTrigger value="ai-coach">Coach IA</TabsTrigger>
+            <TabsTrigger value="insights">Insights IA</TabsTrigger>
             <TabsTrigger value="growth">Crecimiento</TabsTrigger>
           </TabsList>
 
@@ -401,6 +436,40 @@ export default function BigFiveResults() {
                     </Badge>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Interpretation Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Interpretación con IA
+                </CardTitle>
+                <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {aiInterpretation ? (
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{aiInterpretation}</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <Button onClick={generateAIInterpretation} disabled={loadingInterpretation}>
+                      {loadingInterpretation ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Generando interpretación...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Generar Interpretación con IA
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -498,63 +567,57 @@ export default function BigFiveResults() {
             </div>
           </TabsContent>
 
-          {/* Career Tab */}
-          <TabsContent value="career" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Recomendaciones de Carrera
-                </CardTitle>
-                <CardDescription>Áreas profesionales que se alinean con tu perfil de personalidad</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {getCareerRecommendations().map((career, index) => (
-                    <Card key={index} className="p-4">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <Target className="h-6 w-6 text-purple-600" />
-                        </div>
-                        <h3 className="font-semibold text-purple-800">{career}</h3>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+          {/* AI Coach Tab */}
+          <TabsContent value="ai-coach" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <AICoachChat
+                  userEmail={userEmail}
+                  initialContext={initialContext}
+                  suggestedQuestions={[
+                    "¿Cómo puedo aprovechar mi alta apertura a la experiencia?",
+                    "¿Qué significa mi puntuación en responsabilidad?",
+                    "¿Cómo afecta mi extraversión a mi carrera?",
+                    "¿Qué roles serían ideales para mi personalidad?",
+                    "¿Cómo puedo desarrollar mis áreas más débiles?",
+                  ]}
+                />
+              </div>
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5" />
+                      Acciones Rápidas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button
+                      onClick={generateAIInterpretation}
+                      disabled={loadingInterpretation}
+                      className="w-full bg-transparent"
+                      variant="outline"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Interpretación Detallada
+                    </Button>
+                    <Button onClick={() => aiCoach.getCareerGuidance(userEmail)} className="w-full" variant="outline">
+                      <Lightbulb className="h-4 w-4 mr-2" />
+                      Orientación de Carrera
+                    </Button>
+                    <Button onClick={() => aiCoach.getDevelopmentPlan(userEmail)} className="w-full" variant="outline">
+                      <TrendingUp className="h-4 w-4 mr-2" />
+                      Plan de Desarrollo
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Compatibilidad en Equipos
-                </CardTitle>
-                <CardDescription>Cómo tu personalidad se adapta a diferentes dinámicas de equipo</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <h4 className="font-semibold text-green-800 mb-2">Fortalezas en Equipo</h4>
-                    <ul className="text-sm text-green-700 space-y-1">
-                      {results.E > 70 && <li>• Excelente comunicador y motivador del equipo</li>}
-                      {results.A > 70 && <li>• Facilita la colaboración y resuelve conflictos</li>}
-                      {results.O > 70 && <li>• Aporta ideas creativas e innovadoras</li>}
-                      {results.C > 70 && <li>• Mantiene al equipo organizado y enfocado</li>}
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-semibold text-blue-800 mb-2">Áreas de Desarrollo</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
-                      {results.E < 50 && <li>• Desarrollar habilidades de comunicación en grupo</li>}
-                      {results.A < 50 && <li>• Practicar la escucha activa y empatía</li>}
-                      {results.C < 50 && <li>• Mejorar la organización y seguimiento de tareas</li>}
-                      {results.N > 70 && <li>• Desarrollar técnicas de manejo del estrés</li>}
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          {/* AI Insights Tab */}
+          <TabsContent value="insights" className="space-y-6">
+            <AIInsightsPanel userEmail={userEmail} />
           </TabsContent>
 
           {/* Growth Tab */}

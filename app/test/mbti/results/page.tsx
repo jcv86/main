@@ -8,6 +8,9 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter, useSearchParams } from "next/navigation"
+import AICoachChat from "@/components/ai-coach-chat"
+import AIInsightsPanel from "@/components/ai-insights-panel"
+import { aiCoach } from "@/lib/ai-coach"
 import {
   RadarChart,
   PolarGrid,
@@ -35,6 +38,7 @@ import {
   BookOpen,
   Award,
   Briefcase,
+  Sparkles,
 } from "lucide-react"
 
 interface MBTIResults {
@@ -58,6 +62,8 @@ export default function MBTIResults() {
   const [results, setResults] = useState<MBTIResults | null>(null)
   const [loading, setLoading] = useState(true)
   const [userEmail, setUserEmail] = useState("")
+  const [aiInterpretation, setAiInterpretation] = useState("")
+  const [loadingInterpretation, setLoadingInterpretation] = useState(false)
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -147,6 +153,21 @@ export default function MBTIResults() {
       loadDemoData()
     } finally {
       setLoading(false)
+    }
+  }
+
+  const generateAIInterpretation = async () => {
+    if (!results || !userEmail) return
+
+    setLoadingInterpretation(true)
+    try {
+      const interpretation = await aiCoach.interpretTestResults(userEmail, "MBTI", results)
+      setAiInterpretation(interpretation)
+    } catch (error) {
+      console.error("Error generating AI interpretation:", error)
+      setAiInterpretation("Lo siento, no pude generar una interpretación en este momento.")
+    } finally {
+      setLoadingInterpretation(false)
     }
   }
 
@@ -250,6 +271,12 @@ export default function MBTIResults() {
     )
   }
 
+  const initialContext = `He analizado tu perfil MBTI:
+• Tipo: ${results.type} (${results.type_name})
+• Descripción: ${results.type_description}
+• Puntuaciones: E:${results.scores.E} I:${results.scores.I} S:${results.scores.S} N:${results.scores.N} T:${results.scores.T} F:${results.scores.F} J:${results.scores.J} P:${results.scores.P}
+• Rasgos principales: ${results.traits.join(", ")}`
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
       <div className="container mx-auto px-4 py-8">
@@ -289,6 +316,10 @@ export default function MBTIResults() {
                   <Award className="h-4 w-4 mr-2" />
                   Claridad del Tipo: {getOverallScore()}%
                 </Badge>
+                <Badge variant="outline" className="text-lg px-4 py-2">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Con IA
+                </Badge>
               </div>
             </div>
           </CardContent>
@@ -296,11 +327,12 @@ export default function MBTIResults() {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="dimensions">Dimensiones</TabsTrigger>
             <TabsTrigger value="career">Carrera</TabsTrigger>
-            <TabsTrigger value="relationships">Relaciones</TabsTrigger>
+            <TabsTrigger value="ai-coach">Coach IA</TabsTrigger>
+            <TabsTrigger value="insights">Insights IA</TabsTrigger>
             <TabsTrigger value="growth">Crecimiento</TabsTrigger>
           </TabsList>
 
@@ -385,6 +417,40 @@ export default function MBTIResults() {
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Interpretation Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Interpretación con IA
+                </CardTitle>
+                <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {aiInterpretation ? (
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{aiInterpretation}</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <Button onClick={generateAIInterpretation} disabled={loadingInterpretation}>
+                      {loadingInterpretation ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Generando interpretación...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Generar Interpretación con IA
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -547,39 +613,57 @@ export default function MBTIResults() {
             </Card>
           </TabsContent>
 
-          {/* Relationships Tab */}
-          <TabsContent value="relationships" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Compatibilidad en Relaciones
-                </CardTitle>
-                <CardDescription>Cómo tu tipo se relaciona con otros en el trabajo y la vida</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <h4 className="font-semibold text-green-800 mb-2">Fortalezas en Relaciones</h4>
-                    <ul className="text-sm text-green-700 space-y-1">
-                      {results.type.includes("E") && <li>• Sociable y fácil de conocer</li>}
-                      {results.type.includes("F") && <li>• Empático y considerado con otros</li>}
-                      {results.type.includes("J") && <li>• Confiable y cumple compromisos</li>}
-                      {results.type.includes("N") && <li>• Inspirador y visionario</li>}
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-semibold text-blue-800 mb-2">Desafíos Potenciales</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
-                      {results.type.includes("T") && <li>• Puede parecer demasiado directo o crítico</li>}
-                      {results.type.includes("J") && <li>• Puede ser inflexible con planes establecidos</li>}
-                      {results.type.includes("N") && <li>• Puede perder interés en detalles rutinarios</li>}
-                      {results.type.includes("I") && <li>• Puede necesitar más tiempo para abrirse</li>}
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          {/* AI Coach Tab */}
+          <TabsContent value="ai-coach" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <AICoachChat
+                  userEmail={userEmail}
+                  initialContext={initialContext}
+                  suggestedQuestions={[
+                    `¿Qué significa ser ${results.type}?`,
+                    "¿Cómo puedo aprovechar mis fortalezas naturales?",
+                    "¿Qué carreras son ideales para mi tipo?",
+                    "¿Cómo puedo mejorar mi comunicación?",
+                    "¿Qué desafíos enfrenta mi tipo de personalidad?",
+                  ]}
+                />
+              </div>
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5" />
+                      Acciones Rápidas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button
+                      onClick={generateAIInterpretation}
+                      disabled={loadingInterpretation}
+                      className="w-full bg-transparent"
+                      variant="outline"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Interpretación Detallada
+                    </Button>
+                    <Button onClick={() => aiCoach.getCareerGuidance(userEmail)} className="w-full" variant="outline">
+                      <Lightbulb className="h-4 w-4 mr-2" />
+                      Orientación de Carrera
+                    </Button>
+                    <Button onClick={() => aiCoach.getDevelopmentPlan(userEmail)} className="w-full" variant="outline">
+                      <TrendingUp className="h-4 w-4 mr-2" />
+                      Plan de Desarrollo
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* AI Insights Tab */}
+          <TabsContent value="insights" className="space-y-6">
+            <AIInsightsPanel userEmail={userEmail} />
           </TabsContent>
 
           {/* Growth Tab */}
