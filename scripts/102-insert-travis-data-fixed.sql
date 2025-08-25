@@ -405,6 +405,65 @@ INSERT INTO knowledge_base_documents (
 )
 ON CONFLICT (slug) DO NOTHING;
 
+-- Insertar datos corregidos para Travis
+INSERT INTO user_profiles (
+    email, 
+    full_name, 
+    current_level, 
+    total_xp, 
+    tests_completed, 
+    documents_read, 
+    skills_learned,
+    career_goal
+) VALUES (
+    'travis@example.com',
+    'Travis Johnson',
+    3,
+    275,
+    2,
+    8,
+    12,
+    'Convertirme en líder de equipo en tecnología'
+) ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    current_level = EXCLUDED.current_level,
+    total_xp = EXCLUDED.total_xp,
+    tests_completed = EXCLUDED.tests_completed,
+    documents_read = EXCLUDED.documents_read,
+    skills_learned = EXCLUDED.skills_learned,
+    career_goal = EXCLUDED.career_goal,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- Insertar resultado de test DISC de ejemplo
+INSERT INTO test_results (
+    user_email,
+    test_type,
+    test_name,
+    results,
+    score,
+    completed_at,
+    duration_minutes
+) VALUES (
+    'travis@example.com',
+    'personality',
+    'DISC',
+    '{
+        "primary_type": "Influence",
+        "secondary_type": "Dominance",
+        "scores": {"D": 75, "I": 85, "S": 45, "C": 35},
+        "strengths": ["Comunicación efectiva", "Motivación de equipos", "Adaptabilidad"],
+        "development_areas": ["Atención al detalle", "Planificación a largo plazo"],
+        "communication_style": "Expresivo y entusiasta",
+        "leadership_style": "Inspiracional y participativo",
+        "work_preferences": ["Trabajo en equipo", "Ambiente dinámico"],
+        "career_recommendations": ["Marketing", "Recursos Humanos", "Ventas"],
+        "detailed_analysis": "Tu perfil muestra una fuerte orientación hacia la influencia con elementos de dominancia."
+    }',
+    85,
+    CURRENT_TIMESTAMP - INTERVAL '2 days',
+    12
+) ON CONFLICT DO NOTHING;
+
 -- Verificar que todos los datos se insertaron correctamente
 SELECT 'User Profile' as table_name, COUNT(*) as count FROM user_profiles WHERE email = 'travis@nuanu.com'
 UNION ALL

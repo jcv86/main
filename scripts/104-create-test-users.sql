@@ -104,15 +104,48 @@ INSERT INTO user_profiles (
     interview_simulations = 2,
     updated_at = NOW();
 
+-- Crear usuarios de prueba para testing
+
+-- Usuario 1: Travis (Perfil Influence)
+INSERT INTO user_profiles (
+    email, full_name, current_level, total_xp, tests_completed, documents_read, skills_learned, career_goal
+) VALUES (
+    'travis@example.com', 'Travis Johnson', 3, 275, 2, 8, 12, 'Líder de equipo en tecnología'
+) ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    current_level = EXCLUDED.current_level,
+    total_xp = EXCLUDED.total_xp,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- Usuario 2: Demo User
+INSERT INTO user_profiles (
+    email, full_name, current_level, total_xp, tests_completed, documents_read, skills_learned, career_goal
+) VALUES (
+    'demo@example.com', 'Usuario Demo', 1, 50, 1, 3, 5, 'Explorar la plataforma'
+) ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- Usuario 3: Test User
+INSERT INTO user_profiles (
+    email, full_name, current_level, total_xp, tests_completed, documents_read, skills_learned, career_goal
+) VALUES (
+    'test@example.com', 'Usuario de Prueba', 2, 150, 1, 5, 8, 'Desarrollo profesional integral'
+) ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    updated_at = CURRENT_TIMESTAMP;
+
 -- Verificar que se creó correctamente
 SELECT 
     'Auth Users' as table_name, 
     COUNT(*) as count 
 FROM auth.users 
-WHERE email IN ('demo@despegaturcarrera.com', 'test@dtc.com')
+WHERE email IN ('demo@despegaturcarrera.com', 'test@example.com', 'travis@example.com')
 UNION ALL
 SELECT 
     'User Profiles' as table_name, 
     COUNT(*) as count 
 FROM user_profiles 
-WHERE email IN ('demo@despegaturcarrera.com', 'test@dtc.com');
+WHERE email IN ('demo@despegaturcarrera.com', 'test@example.com', 'travis@example.com');
+
+SELECT 'Usuarios de prueba creados exitosamente' as status;

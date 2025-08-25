@@ -1,14 +1,14 @@
 import type React from "react"
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
+import "./globals.css"
+import SessionWrapper from "@/components/session-wrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DespegaTuCarrera - Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral de desarrollo profesional con IA",
+  title: "DTC Final - Plataforma de Desarrollo Profesional",
+  description: "Plataforma integral para el desarrollo de carrera y habilidades profesionales",
     generator: 'v0.app'
 }
 
@@ -18,11 +18,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   )

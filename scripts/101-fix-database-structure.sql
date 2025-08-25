@@ -37,6 +37,22 @@ CREATE TABLE user_profiles (
     portfolio_url TEXT
 );
 
+-- Verificar y corregir la tabla user_profiles
+DO $$
+BEGIN
+    -- Verificar si la columna email existe
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_profiles' AND column_name = 'email'
+    ) THEN
+        ALTER TABLE user_profiles ADD COLUMN email VARCHAR(255) UNIQUE;
+    END IF;
+    
+    -- Asegurar que email no sea nulo
+    UPDATE user_profiles SET email = 'user' || id || '@example.com' WHERE email IS NULL;
+    ALTER TABLE user_profiles ALTER COLUMN email SET NOT NULL;
+END $$;
+
 -- Tabla de resultados de tests
 CREATE TABLE test_results (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -50,6 +66,35 @@ CREATE TABLE test_results (
     duration_minutes INTEGER,
     UNIQUE(user_email, test_name)
 );
+
+-- Verificar y corregir foreign keys
+DO $$
+BEGIN
+    -- Eliminar constraint existente si existe
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'test_results_user_email_fkey'
+    ) THEN
+        ALTER TABLE test_results DROP CONSTRAINT test_results_user_email_fkey;
+    END IF;
+    
+    -- Recrear foreign key
+    ALTER TABLE test_results 
+    ADD CONSTRAINT test_results_user_email_fkey 
+    FOREIGN KEY (user_email) REFERENCES user_profiles(email) ON DELETE CASCADE;
+    
+    -- Lo mismo para user_activities
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'user_activities_user_email_fkey'
+    ) THEN
+        ALTER TABLE user_activities DROP CONSTRAINT user_activities_user_email_fkey;
+    END IF;
+    
+    ALTER TABLE user_activities 
+    ADD CONSTRAINT user_activities_user_email_fkey 
+    FOREIGN KEY (user_email) REFERENCES user_profiles(email) ON DELETE CASCADE;
+END $$;
 
 -- Tabla de actividades del usuario
 CREATE TABLE user_activities (
@@ -224,3 +269,5 @@ FROM information_schema.columns
 WHERE table_name = 'user_profiles' 
     AND table_schema = 'public'
 ORDER BY ordinal_position;
+
+SELECT 'Estructura de base de datos corregida' as status;

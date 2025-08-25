@@ -36,6 +36,39 @@ INSERT INTO user_profiles (
     interview_simulations = 5,
     updated_at = NOW();
 
+-- Insertar perfil de usuario Travis
+INSERT INTO user_profiles (
+    email, 
+    full_name, 
+    current_level, 
+    total_xp, 
+    tests_completed, 
+    documents_read, 
+    skills_learned,
+    career_goal,
+    created_at,
+    updated_at
+) VALUES (
+    'travis@example.com',
+    'Travis Johnson',
+    3,
+    275,
+    2,
+    8,
+    12,
+    'Convertirme en líder de equipo en tecnología',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+) ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    current_level = EXCLUDED.current_level,
+    total_xp = EXCLUDED.total_xp,
+    tests_completed = EXCLUDED.tests_completed,
+    documents_read = EXCLUDED.documents_read,
+    skills_learned = EXCLUDED.skills_learned,
+    career_goal = EXCLUDED.career_goal,
+    updated_at = CURRENT_TIMESTAMP;
+
 -- Insertar resultados de tests para travis@nuanu.com
 INSERT INTO test_results (
     id,
@@ -82,6 +115,14 @@ ON CONFLICT (user_email, test_name) DO UPDATE SET
     score = EXCLUDED.score,
     completed_at = EXCLUDED.completed_at,
     duration_minutes = EXCLUDED.duration_minutes;
+
+-- Insertar algunas actividades de ejemplo
+INSERT INTO user_activities (user_email, activity_type, activity_description, xp_earned) VALUES
+('travis@example.com', 'test_completed', 'Completaste el test DISC', 25),
+('travis@example.com', 'document_read', 'Leíste: Guía de Liderazgo Efectivo', 10),
+('travis@example.com', 'skill_learned', 'Aprendiste: Comunicación Asertiva', 15),
+('travis@example.com', 'level_up', 'Subiste al nivel 2', 50),
+('travis@example.com', 'test_completed', 'Completaste evaluación de habilidades', 25);
 
 -- Insertar actividades recientes
 INSERT INTO user_activities (
@@ -309,9 +350,13 @@ ON CONFLICT (user_email, skill_name) DO NOTHING;
 -- Verificar que todos los datos se insertaron correctamente
 SELECT 'User Profile' as table_name, COUNT(*) as count FROM user_profiles WHERE email = 'travis@nuanu.com'
 UNION ALL
+SELECT 'User Profile' as table_name, COUNT(*) as count FROM user_profiles WHERE email = 'travis@example.com'
+UNION ALL
 SELECT 'Test Results' as table_name, COUNT(*) as count FROM test_results WHERE user_email = 'travis@nuanu.com'
 UNION ALL
 SELECT 'User Activities' as table_name, COUNT(*) as count FROM user_activities WHERE user_email = 'travis@nuanu.com'
+UNION ALL
+SELECT 'User Activities' as table_name, COUNT(*) as count FROM user_activities WHERE user_email = 'travis@example.com'
 UNION ALL
 SELECT 'Interview Simulations' as table_name, COUNT(*) as count FROM interview_simulations WHERE user_email = 'travis@nuanu.com'
 UNION ALL
@@ -319,7 +364,11 @@ SELECT 'Generated CVs' as table_name, COUNT(*) as count FROM generated_cvs WHERE
 UNION ALL
 SELECT 'User Achievements' as table_name, COUNT(*) as count FROM user_achievements WHERE user_email = 'travis@nuanu.com'
 UNION ALL
-SELECT 'User Skills' as table_name, COUNT(*) as count FROM user_skills WHERE user_email = 'travis@nuanu.com';
+SELECT 'User Achievements' as table_name, COUNT(*) as count FROM user_achievements WHERE user_email = 'travis@example.com'
+UNION ALL
+SELECT 'User Skills' as table_name, COUNT(*) as count FROM user_skills WHERE user_email = 'travis@nuanu.com'
+UNION ALL
+SELECT 'User Skills' as table_name, COUNT(*) as count FROM user_skills WHERE user_email = 'travis@example.com';
 
 -- Mostrar resumen del perfil creado
 SELECT 
@@ -338,5 +387,5 @@ FROM user_profiles up
 LEFT JOIN test_results tr ON up.email = tr.user_email
 LEFT JOIN user_activities ua ON up.email = ua.user_email
 LEFT JOIN user_achievements ach ON up.email = ach.user_email
-WHERE up.email = 'travis@nuanu.com'
+WHERE up.email = 'travis@nuanu.com' OR up.email = 'travis@example.com'
 GROUP BY up.id, up.name, up.email, up.profile_completion_percentage, up.total_xp, up.current_level, up.tests_completed, up.cv_generated, up.interview_simulations;

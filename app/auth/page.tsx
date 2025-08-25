@@ -1,9 +1,10 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
+import { useSession } from "@/components/session-wrapper"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,7 +22,29 @@ export default function AuthPage() {
   const [messageType, setMessageType] = useState<"success" | "error" | "info">("info")
 
   const router = useRouter()
+  const { user, isLoading } = useSession()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.push("/dashboard")
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando sesión...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (user) {
+    return null // Will redirect to dashboard
+  }
 
   const showMessage = (msg: string, type: "success" | "error" | "info" = "info") => {
     setMessage(msg)
@@ -390,6 +413,9 @@ export default function AuthPage() {
             </p>
           </div>
         </div>
+
+        {/* Auth Bypass Component */}
+        {/* AuthBypass is conditionally rendered based on user and isLoading */}
       </div>
     </div>
   )

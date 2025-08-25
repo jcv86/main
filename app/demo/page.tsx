@@ -1,5 +1,5 @@
-import AuthBypass from "@/components/auth-bypass"
+import { redirect } from "next/navigation"
 
 export default function DemoPage() {
-  return <AuthBypass />
+  redirect("/test/disc/results?demo=true")
 }

@@ -1,110 +1,40 @@
--- Insertar documentos de la base de conocimiento
-INSERT INTO knowledge_base_documents (
-    id,
-    title,
-    slug,
-    content,
-    category,
-    tags,
-    author,
-    created_at,
-    is_published
-) VALUES 
-(
-    uuid_generate_v4(),
-    'Especificación Técnica DTC 1.5',
-    'especificacion-tecnica-dtc-15',
-    'Documento técnico completo con la arquitectura, funcionalidades y especificaciones técnicas de la plataforma DespegaTuCarrera 1.5. Incluye detalles sobre la implementación de tests psicométricos, generación de CV con IA, simulación de entrevistas y sistema de coaching personalizado.',
-    'Técnico',
-    ARRAY['arquitectura', 'especificaciones', 'técnico', 'desarrollo'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Guía de Inicio DTC',
-    'guia-inicio-dtc',
-    'Guía completa para nuevos usuarios de DespegaTuCarrera. Incluye primeros pasos, configuración inicial, cómo completar tu perfil, realizar tests psicométricos y maximizar tu experiencia en la plataforma.',
-    'Guía',
-    ARRAY['inicio', 'tutorial', 'primeros-pasos', 'configuración'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Guía de Carreras Chile',
-    'guia-carreras-chile',
-    'Información detallada del mercado laboral chileno, incluyendo salarios promedio por industria, oportunidades de crecimiento, tendencias del mercado y consejos específicos para profesionales en Chile.',
-    'Mercado',
-    ARRAY['chile', 'mercado-laboral', 'salarios', 'carreras'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Módulos Psicométricos',
-    'modulos-psicometricos',
-    'Documentación completa sobre los tests psicométricos disponibles: DISC, Big Five, MBTI, RIASEC, Habilidades Blandas e Inteligencias Múltiples. Incluye interpretación de resultados y aplicaciones prácticas.',
-    'Psicometría',
-    ARRAY['tests', 'psicometría', 'personalidad', 'evaluación'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'CV Generator & Entrevistas',
-    'cv-generator-entrevistas',
-    'Guía completa sobre las herramientas inteligentes para generación de CV y simulación de entrevistas con IA. Incluye mejores prácticas, optimización ATS y técnicas de preparación para entrevistas.',
-    'Herramientas',
-    ARRAY['cv', 'entrevistas', 'ia', 'herramientas'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Biblioteca de Habilidades & Coach IA',
-    'biblioteca-habilidades-coach-ia',
-    'Catálogo completo de habilidades profesionales, sistema de coaching con IA y filosofías de mentores reconocidos como Bill Campbell, Carol Dweck y Naval Ravikant.',
-    'IA & Skills',
-    ARRAY['habilidades', 'coaching', 'ia', 'mentores'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Progreso, Gamificación & Integraciones',
-    'progreso-gamificacion-integraciones',
-    'Sistema completo de seguimiento de progreso, gamificación inteligente con XP y logros, e integraciones con plataformas externas como LinkedIn, GitHub y sistemas ATS.',
-    'Gamificación',
-    ARRAY['progreso', 'gamificación', 'xp', 'integraciones'],
-    'Equipo DTC',
-    NOW(),
-    true
-),
-(
-    uuid_generate_v4(),
-    'Recursos Adicionales',
-    'recursos-adicionales',
-    'Información complementaria, casos de uso, estudios de caso de usuarios exitosos, recursos de desarrollo profesional y enlaces a herramientas externas recomendadas.',
-    'Recursos',
-    ARRAY['recursos', 'casos-uso', 'desarrollo-profesional', 'herramientas'],
-    'Equipo DTC',
-    NOW(),
-    true
-)
-ON CONFLICT (slug) DO NOTHING;
+-- Insertar contenido en la base de conocimiento
 
--- Verificar que los documentos se insertaron correctamente
-SELECT 
-    title,
-    category,
-    array_length(tags, 1) as tag_count,
-    created_at
-FROM knowledge_base_documents 
-ORDER BY created_at DESC;
+INSERT INTO knowledge_base (title, category, content, author, read_count) VALUES
+(
+    'Guía Completa del Test DISC',
+    'Evaluaciones',
+    'El test DISC es una herramienta de evaluación psicométrica que mide cuatro dimensiones principales del comportamiento: Dominancia (D), Influencia (I), Estabilidad (S) y Conciencia (C). Esta guía te ayudará a entender cómo interpretar tus resultados y aplicarlos en tu desarrollo profesional.',
+    'Dr. María González',
+    45
+),
+(
+    'Desarrollo de Liderazgo en el Siglo XXI',
+    'Liderazgo',
+    'El liderazgo moderno requiere una combinación única de habilidades técnicas, emocionales y estratégicas. En esta guía exploramos las competencias clave que todo líder debe desarrollar para ser efectivo en el entorno empresarial actual.',
+    'Carlos Mendoza',
+    32
+),
+(
+    'Comunicación Efectiva en Equipos Remotos',
+    'Comunicación',
+    'La comunicación en equipos remotos presenta desafíos únicos que requieren estrategias específicas. Aprende técnicas probadas para mantener la cohesión del equipo, facilitar reuniones efectivas y construir relaciones sólidas a distancia.',
+    'Ana Rodríguez',
+    28
+),
+(
+    'Planificación de Carrera Profesional',
+    'Desarrollo',
+    'Una carrera exitosa no sucede por accidente. Requiere planificación estratégica, autoconocimiento y la capacidad de adaptarse a los cambios del mercado laboral. Esta guía te proporciona un marco estructurado para diseñar tu trayectoria profesional.',
+    'Roberto Silva',
+    51
+),
+(
+    'Inteligencia Emocional en el Trabajo',
+    'Habilidades Blandas',
+    'La inteligencia emocional es fundamental para el éxito profesional. Aprende a reconocer y gestionar tus emociones, desarrollar empatía y construir relaciones interpersonales sólidas que impulsen tu carrera.',
+    'Dra. Laura Martín',
+    39
+);
+
+SELECT 'Base de conocimiento poblada exitosamente' as status;

@@ -1,7 +1,7 @@
 -- Insertar perfil del usuario travis@nuanu.com
 INSERT INTO user_profiles (
     email,
-    name,
+    full_name,
     profile_completion_percentage,
     total_xp,
     current_level,
@@ -9,19 +9,44 @@ INSERT INTO user_profiles (
     cv_generated,
     interview_simulations,
     bio,
-    location
+    location,
+    documents_read,
+    skills_learned,
+    career_goal
 ) VALUES (
-    'travis@nuanu.com',
-    'Travis Nuanu',
+    'travis@example.com',
+    'Travis Johnson',
     65,
-    150,
+    275,
     3,
-    3,
+    2,
     1,
     5,
     'Profesional en desarrollo de carrera enfocado en tecnología',
-    'Santiago, Chile'
-);
+    'Santiago, Chile',
+    8,
+    12,
+    'Convertirme en líder de equipo en tecnología'
+)
+ON CONFLICT (email) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    profile_completion_percentage = EXCLUDED.profile_completion_percentage,
+    total_xp = EXCLUDED.total_xp,
+    current_level = EXCLUDED.current_level,
+    tests_completed = EXCLUDED.tests_completed,
+    cv_generated = EXCLUDED.cv_generated,
+    interview_simulations = EXCLUDED.interview_simulations,
+    bio = EXCLUDED.bio,
+    location = EXCLUDED.location,
+    documents_read = EXCLUDED.documents_read,
+    skills_learned = EXCLUDED.skills_learned,
+    career_goal = EXCLUDED.career_goal,
+    updated_at = CURRENT_TIMESTAMP;
+
+-- Insertar usuario demo
+INSERT INTO user_profiles (email, full_name, current_level, total_xp, tests_completed, documents_read, skills_learned, career_goal) 
+VALUES ('demo@example.com', 'Usuario Demo', 1, 50, 1, 3, 5, 'Explorar la plataforma')
+ON CONFLICT (email) DO NOTHING;
 
 -- Insertar resultados de tests
 INSERT INTO test_results (
@@ -34,7 +59,7 @@ INSERT INTO test_results (
     duration_minutes
 ) VALUES 
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'personality',
     'DISC',
     '{"primary_type": "Influencer", "scores": {"D": 65, "I": 85, "S": 45, "C": 35}, "description": "Perfil Influencer con alta capacidad de comunicación y persuasión"}',
@@ -43,7 +68,7 @@ INSERT INTO test_results (
     12
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'personality',
     'Big Five',
     '{"scores": {"openness": 78, "conscientiousness": 72, "extraversion": 82, "agreeableness": 68, "neuroticism": 35}, "description": "Alta apertura y extraversión, baja en neuroticismo"}',
@@ -52,7 +77,7 @@ INSERT INTO test_results (
     18
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'personality',
     'MBTI',
     '{"type": "ENFP", "description": "El Inspirador - Entusiasta, creativo y sociable", "preferences": {"E": 75, "N": 68, "F": 72, "P": 80}}',
@@ -70,35 +95,42 @@ INSERT INTO user_activities (
     created_at
 ) VALUES 
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'test_completed',
     'Completaste el test DISC',
-    15,
+    25,
     NOW() - INTERVAL '15 days'
 ),
 (
-    'travis@nuanu.com',
-    'test_completed',
-    'Completaste el test Big Five',
-    20,
+    'travis@example.com',
+    'document_read',
+    'Leíste: Guía de Liderazgo',
+    10,
+    NOW() - INTERVAL '14 days'
+),
+(
+    'travis@example.com',
+    'skill_learned',
+    'Aprendiste: Comunicación Asertiva',
+    15,
+    NOW() - INTERVAL '13 days'
+),
+(
+    'travis@example.com',
+    'level_up',
+    'Subiste al nivel 3',
+    50,
     NOW() - INTERVAL '12 days'
 ),
 (
-    'travis@nuanu.com',
-    'test_completed',
-    'Completaste el test MBTI',
-    25,
-    NOW() - INTERVAL '10 days'
-),
-(
-    'travis@nuanu.com',
+    'travis@example.com',
     'cv_generated',
     'Generaste tu primer CV',
     20,
     NOW() - INTERVAL '8 days'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'achievement_unlocked',
     'Desbloqueaste la insignia "Explorador"',
     10,
@@ -116,7 +148,7 @@ INSERT INTO interview_simulations (
     questions_answered
 ) VALUES 
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'general',
     8.5,
     'Excelente comunicación y confianza. Recomendación: Incluir más ejemplos específicos usando metodología STAR.',
@@ -125,7 +157,7 @@ INSERT INTO interview_simulations (
     8
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'technical',
     7.2,
     'Buen conocimiento técnico. Practicar explicaciones más claras de conceptos complejos.',
@@ -134,7 +166,7 @@ INSERT INTO interview_simulations (
     12
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'behavioral',
     8.0,
     'Muy buenas respuestas conductuales, demuestras autoconocimiento y capacidad de reflexión.',
@@ -153,9 +185,9 @@ INSERT INTO generated_cvs (
     ats_score,
     created_at
 ) VALUES (
-    'travis@nuanu.com',
-    'CV Profesional - Travis Nuanu',
-    '{"personal_info": {"name": "Travis Nuanu", "email": "travis@nuanu.com", "phone": "+56 9 1234 5678", "location": "Santiago, Chile"}, "summary": "Profesional con experiencia en desarrollo de carrera y tecnología", "experience": [], "education": [], "skills": ["Comunicación", "Liderazgo", "Análisis"], "languages": ["Español", "Inglés"]}',
+    'travis@example.com',
+    'CV Profesional - Travis Johnson',
+    '{"personal_info": {"name": "Travis Johnson", "email": "travis@example.com", "phone": "+56 9 1234 5678", "location": "Santiago, Chile"}, "summary": "Profesional con experiencia en desarrollo de carrera y tecnología", "experience": [], "education": [], "skills": ["Comunicación", "Liderazgo", "Análisis"], "languages": ["Español", "Inglés"]}',
     'professional_modern',
     95,
     88,
@@ -173,7 +205,7 @@ INSERT INTO user_achievements (
     badge_icon
 ) VALUES 
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'exploration',
     'Explorador',
     'Completaste tu primer test psicométrico',
@@ -182,7 +214,7 @@ INSERT INTO user_achievements (
     'compass'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'personality',
     'Conocedor de Sí Mismo',
     'Completaste 3 tests de personalidad',
@@ -191,7 +223,7 @@ INSERT INTO user_achievements (
     'brain'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'cv',
     'Creador de CV',
     'Generaste tu primer CV profesional',
@@ -210,7 +242,7 @@ INSERT INTO user_skills (
     added_at
 ) VALUES 
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'Comunicación',
     'soft_skills',
     4,
@@ -218,7 +250,7 @@ INSERT INTO user_skills (
     NOW() - INTERVAL '15 days'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'Liderazgo',
     'soft_skills',
     4,
@@ -226,7 +258,7 @@ INSERT INTO user_skills (
     NOW() - INTERVAL '15 days'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'Trabajo en Equipo',
     'soft_skills',
     5,
@@ -234,7 +266,7 @@ INSERT INTO user_skills (
     NOW() - INTERVAL '12 days'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'Resolución de Problemas',
     'soft_skills',
     4,
@@ -242,7 +274,7 @@ INSERT INTO user_skills (
     NOW() - INTERVAL '10 days'
 ),
 (
-    'travis@nuanu.com',
+    'travis@example.com',
     'Creatividad',
     'soft_skills',
     5,
@@ -331,6 +363,27 @@ INSERT INTO knowledge_base_documents (
     ARRAY['recursos', 'casos-uso', 'desarrollo-profesional', 'herramientas'],
     'Equipo DTC',
     true
+),
+(
+    'Guía del Test DISC',
+    'guia-del-test-disc',
+    'Guía completa sobre el test DISC y sus aplicaciones.',
+    'Dr. María González',
+    true
+),
+(
+    'Liderazgo Efectivo',
+    'liderazgo-efectivo',
+    'Principios fundamentales del liderazgo moderno.',
+    'Carlos Mendoza',
+    true
+),
+(
+    'Comunicación Asertiva',
+    'comunicacion-asertiva',
+    'Técnicas para mejorar la comunicación interpersonal.',
+    'Ana Rodríguez',
+    true
 );
 
 -- Verificar que todo se creó correctamente
@@ -350,31 +403,32 @@ WHERE table_schema = 'public'
     );
 
 -- Verificar datos insertados
-SELECT 'User Profile' as table_name, COUNT(*) as count FROM user_profiles WHERE email = 'travis@nuanu.com'
+SELECT 'User Profile' as table_name, COUNT(*) as count FROM user_profiles WHERE email = 'travis@example.com'
 UNION ALL
-SELECT 'Test Results' as table_name, COUNT(*) as count FROM test_results WHERE user_email = 'travis@nuanu.com'
+SELECT 'Test Results' as table_name, COUNT(*) as count FROM test_results WHERE user_email = 'travis@example.com'
 UNION ALL
-SELECT 'User Activities' as table_name, COUNT(*) as count FROM user_activities WHERE user_email = 'travis@nuanu.com'
+SELECT 'User Activities' as table_name, COUNT(*) as count FROM user_activities WHERE user_email = 'travis@example.com'
 UNION ALL
-SELECT 'Interview Simulations' as table_name, COUNT(*) as count FROM interview_simulations WHERE user_email = 'travis@nuanu.com'
+SELECT 'Interview Simulations' as table_name, COUNT(*) as count FROM interview_simulations WHERE user_email = 'travis@example.com'
 UNION ALL
-SELECT 'Generated CVs' as table_name, COUNT(*) as count FROM generated_cvs WHERE user_email = 'travis@nuanu.com'
+SELECT 'Generated CVs' as table_name, COUNT(*) as count FROM generated_cvs WHERE user_email = 'travis@example.com'
 UNION ALL
-SELECT 'User Achievements' as table_name, COUNT(*) as count FROM user_achievements WHERE user_email = 'travis@nuanu.com'
+SELECT 'User Achievements' as table_name, COUNT(*) as count FROM user_achievements WHERE user_email = 'travis@example.com'
 UNION ALL
-SELECT 'User Skills' as table_name, COUNT(*) as count FROM user_skills WHERE user_email = 'travis@nuanu.com'
+SELECT 'User Skills' as table_name, COUNT(*) as count FROM user_skills WHERE user_email = 'travis@example.com'
 UNION ALL
 SELECT 'Knowledge Base' as table_name, COUNT(*) as count FROM knowledge_base_documents;
 
 -- Mostrar resumen del perfil creado
 SELECT 
-    name,
+    full_name,
     email,
     profile_completion_percentage,
     total_xp,
     current_level,
     tests_completed,
     cv_generated,
-    interview_simulations
+    interview_simulations,
+    career_goal
 FROM user_profiles 
-WHERE email = 'travis@nuanu.com';
+WHERE email = 'travis@example.com';

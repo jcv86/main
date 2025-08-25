@@ -1,3 +1,27 @@
+-- Verificar y corregir datos de usuario
+SELECT 'Verificando estructura de tablas...' as status;
+
+-- Verificar si las tablas existen
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public' 
+AND table_name IN ('user_profiles', 'test_results', 'user_activities', 'knowledge_base');
+
+-- Verificar datos de usuario existentes
+SELECT 'Datos de usuario actuales:' as info;
+SELECT email, full_name, current_level, total_xp, tests_completed 
+FROM user_profiles 
+LIMIT 5;
+
+-- Verificar resultados de tests
+SELECT 'Resultados de tests:' as info;
+SELECT user_email, test_name, score, completed_at 
+FROM test_results 
+ORDER BY completed_at DESC 
+LIMIT 5;
+
+SELECT 'Verificación completada' as status;
+
 -- Verificar si el usuario travis@nuanu.com existe
 SELECT * FROM auth.users WHERE email = 'travis@nuanu.com';
 
