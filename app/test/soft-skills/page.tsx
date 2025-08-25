@@ -2,197 +2,255 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Heart, ArrowLeft, ArrowRight, CheckCircle, Clock, Users } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@supabase/supabase-js"
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Brain,
+  Users,
+  MessageSquare,
+  Target,
+  Lightbulb,
+  Shield,
+  Zap,
+  Award,
+  BookOpen,
+} from "lucide-react"
 
 interface Question {
   id: number
-  question_number: number
   question_text: string
   options: string
-  category: string
+  competency: string
+  test_name: string
+}
+
+interface CompetencyInfo {
+  name: string
+  icon: any
+  color: string
+  description: string
+}
+
+const competencyMap: Record<string, CompetencyInfo> = {
+  Comunicación: {
+    name: "Comunicación",
+    icon: MessageSquare,
+    color: "bg-blue-500",
+    description: "Capacidad para transmitir ideas de forma clara y efectiva",
+  },
+  Liderazgo: {
+    name: "Liderazgo",
+    icon: Users,
+    color: "bg-purple-500",
+    description: "Habilidad para guiar, motivar e inspirar a otros",
+  },
+  "Trabajo en Equipo": {
+    name: "Trabajo en Equipo",
+    icon: Users,
+    color: "bg-green-500",
+    description: "Colaboración efectiva con otros para lograr objetivos comunes",
+  },
+  "Resolución de Problemas": {
+    name: "Resolución de Problemas",
+    icon: Lightbulb,
+    color: "bg-yellow-500",
+    description: "Capacidad para identificar, analizar y resolver desafíos",
+  },
+  Adaptabilidad: {
+    name: "Adaptabilidad",
+    icon: Zap,
+    color: "bg-orange-500",
+    description: "Flexibilidad para ajustarse a cambios y nuevas situaciones",
+  },
+  "Pensamiento Crítico": {
+    name: "Pensamiento Crítico",
+    icon: Brain,
+    color: "bg-indigo-500",
+    description: "Análisis objetivo y evaluación de información para tomar decisiones",
+  },
+  "Gestión del Tiempo": {
+    name: "Gestión del Tiempo",
+    icon: Target,
+    color: "bg-red-500",
+    description: "Organización eficiente del tiempo y priorización de tareas",
+  },
+  "Inteligencia Emocional": {
+    name: "Inteligencia Emocional",
+    icon: Shield,
+    color: "bg-pink-500",
+    description: "Comprensión y manejo de emociones propias y ajenas",
+  },
+  "Aprendizaje Continuo": {
+    name: "Aprendizaje Continuo",
+    icon: BookOpen,
+    color: "bg-teal-500",
+    description: "Disposición constante para adquirir nuevos conocimientos",
+  },
 }
 
 export default function SoftSkillsTest() {
-  const router = useRouter()
   const [questions, setQuestions] = useState<Question[]>([])
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [userEmail, setUserEmail] = useState("")
+  const [error, setError] = useState("")
+
+  const router = useRouter()
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   useEffect(() => {
-    loadQuestions()
+    checkUserAndLoadQuestions()
   }, [])
+
+  const checkUserAndLoadQuestions = async () => {
+    try {
+      // Check local session first
+      const localSession = localStorage.getItem("dtc_session")
+      if (localSession) {
+        const sessionData = JSON.parse(localSession)
+        if (sessionData.authenticated && sessionData.user) {
+          setUserEmail(sessionData.user.email)
+          await loadQuestions()
+          return
+        }
+      }
+
+      // Check Supabase session
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        setUserEmail(user.email || "")
+        await loadQuestions()
+      } else {
+        router.push("/auth")
+      }
+    } catch (error) {
+      console.error("Error checking user session:", error)
+      setError("Error de autenticación")
+      router.push("/auth")
+    }
+  }
 
   const loadQuestions = async () => {
     try {
-      setLoading(true)
       const { data, error } = await supabase
         .from("test_questions")
         .select("*")
-        .eq("test_type", "soft-skills")
-        .order("question_number")
+        .eq("test_name", "Soft Skills")
+        .order("id")
 
       if (error) throw error
 
-      if (!data || data.length === 0) {
-        throw new Error("No se encontraron preguntas para el test de habilidades blandas")
+      if (data && data.length > 0) {
+        setQuestions(data)
+      } else {
+        setError("No se encontraron preguntas para el test")
       }
-
-      setQuestions(data)
-    } catch (err) {
-      console.error("Error loading questions:", err)
-      setError(err instanceof Error ? err.message : "Error desconocido al cargar las preguntas")
+    } catch (error) {
+      console.error("Error loading questions:", error)
+      setError("Error al cargar las preguntas")
     } finally {
       setLoading(false)
     }
   }
 
   const parseOptions = (optionsString: string): string[] => {
-    if (!optionsString) return ["Opción no disponible"]
-
-    // Handle different formats
-    if (typeof optionsString === "string") {
-      // Try pipe-separated format first
+    try {
+      // Try JSON parsing first
+      const parsed = JSON.parse(optionsString)
+      if (Array.isArray(parsed)) {
+        return parsed
+      }
+    } catch {
+      // If JSON parsing fails, try pipe-separated
       if (optionsString.includes("|")) {
-        return optionsString
-          .split("|")
-          .map((opt) => opt.trim())
-          .filter((opt) => opt.length > 0)
+        return optionsString.split("|").map((opt) => opt.trim())
       }
-
-      // Try JSON format
-      try {
-        const parsed = JSON.parse(optionsString)
-        if (Array.isArray(parsed)) {
-          return parsed
-        }
-      } catch {
-        // Not JSON, continue
-      }
-
-      // Try comma-separated format
+      // If comma-separated
       if (optionsString.includes(",")) {
-        return optionsString
-          .split(",")
-          .map((opt) => opt.trim())
-          .filter((opt) => opt.length > 0)
+        return optionsString.split(",").map((opt) => opt.trim())
       }
-
-      // Single option
-      return [optionsString]
     }
-
-    // If it's already an array
-    if (Array.isArray(optionsString)) {
-      return optionsString
-    }
-
-    // Fallback
-    return ["Opción no disponible"]
+    return [optionsString] // Fallback to single option
   }
 
   const handleAnswerChange = (value: string) => {
-    const answerIndex = Number.parseInt(value)
+    const questionId = questions[currentQuestionIndex].id
     setAnswers((prev) => ({
       ...prev,
-      [currentQuestion]: answerIndex,
+      [questionId]: Number.parseInt(value),
     }))
   }
 
-  const goToNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion((prev) => prev + 1)
+  const goToNextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const goToPrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((prev) => prev - 1)
+  const goToPreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
   }
 
   const calculateResults = () => {
-    const competencyScores: Record<string, { total: number; count: number }> = {
-      communication: { total: 0, count: 0 },
-      leadership: { total: 0, count: 0 },
-      teamwork: { total: 0, count: 0 },
-      "problem-solving": { total: 0, count: 0 },
-      adaptability: { total: 0, count: 0 },
-      "emotional-intelligence": { total: 0, count: 0 },
-      "time-management": { total: 0, count: 0 },
-      "critical-thinking": { total: 0, count: 0 },
-      creativity: { total: 0, count: 0 },
-    }
+    const competencyScores: Record<string, { total: number; count: number }> = {}
 
-    questions.forEach((question, index) => {
-      const userAnswer = answers[index]
-      if (userAnswer !== undefined) {
-        const category = question.category
-        if (competencyScores[category]) {
-          // Score based on answer quality (0-3 scale converted to 0-100)
-          const score = ((userAnswer + 1) / 4) * 100
-          competencyScores[category].total += score
-          competencyScores[category].count += 1
+    questions.forEach((question) => {
+      const answer = answers[question.id]
+      if (answer !== undefined) {
+        if (!competencyScores[question.competency]) {
+          competencyScores[question.competency] = { total: 0, count: 0 }
         }
+        competencyScores[question.competency].total += answer
+        competencyScores[question.competency].count += 1
       }
     })
 
-    // Calculate averages
-    const finalScores: Record<string, number> = {}
-    let overallTotal = 0
-    let competencyCount = 0
-
-    Object.entries(competencyScores).forEach(([competency, data]) => {
-      if (data.count > 0) {
-        finalScores[competency] = Math.round(data.total / data.count)
-        overallTotal += finalScores[competency]
-        competencyCount += 1
-      } else {
-        finalScores[competency] = 0
-      }
+    const results: Record<string, number> = {}
+    Object.keys(competencyScores).forEach((competency) => {
+      const { total, count } = competencyScores[competency]
+      results[competency] = Math.round((total / count) * 20) // Convert to 0-100 scale
     })
 
-    const overallScore = competencyCount > 0 ? Math.round(overallTotal / competencyCount) : 0
-
-    return {
-      overall_score: overallScore,
-      competency_scores: finalScores,
-      answers: answers,
-      total_questions: questions.length,
-      answered_questions: Object.keys(answers).length,
-    }
+    return results
   }
 
   const submitTest = async () => {
+    if (Object.keys(answers).length !== questions.length) {
+      setError("Por favor responde todas las preguntas")
+      return
+    }
+
+    setSubmitting(true)
     try {
-      setSubmitting(true)
       const results = calculateResults()
 
       const { error } = await supabase.from("test_results").insert({
-        user_email: "demo@example.com",
+        user_email: userEmail,
         test_name: "Test de Habilidades Blandas",
-        test_type: "soft-skills",
         results: results,
-        score: results.overall_score,
         completed_at: new Date().toISOString(),
       })
 
       if (error) throw error
 
-      // Redirect to results page
       router.push("/test/soft-skills/results")
-    } catch (err) {
-      console.error("Error submitting test:", err)
-      setError("Error al enviar el test. Por favor, inténtalo de nuevo.")
+    } catch (error) {
+      console.error("Error submitting test:", error)
+      setError("Error al enviar el test")
     } finally {
       setSubmitting(false)
     }
@@ -200,30 +258,24 @@ export default function SoftSkillsTest() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <Heart className="h-12 w-12 text-pink-500 mx-auto mb-4 animate-pulse" />
-            <h2 className="text-xl font-semibold mb-2">Cargando Test de Habilidades Blandas</h2>
-            <p className="text-gray-600 mb-4">Preparando las preguntas...</p>
-            <Progress value={50} className="h-2" />
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando test de habilidades blandas...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
             <div className="text-red-500 mb-4">⚠️</div>
-            <h2 className="text-xl font-semibold mb-2 text-red-700">Error</h2>
+            <h3 className="text-lg font-semibold mb-2">Error</h3>
             <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={loadQuestions} variant="outline">
-              Reintentar
-            </Button>
+            <Button onClick={() => router.push("/dashboard")}>Volver al Dashboard</Button>
           </CardContent>
         </Card>
       </div>
@@ -232,160 +284,166 @@ export default function SoftSkillsTest() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">No hay preguntas disponibles</h2>
-            <p className="text-gray-600 mb-4">El test de habilidades blandas no está configurado correctamente.</p>
-            <Button onClick={() => router.push("/dashboard")} variant="outline">
-              Volver al Dashboard
-            </Button>
+            <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No hay preguntas disponibles</h3>
+            <p className="text-gray-600 mb-4">El test no está configurado correctamente</p>
+            <Button onClick={() => router.push("/dashboard")}>Volver al Dashboard</Button>
           </CardContent>
         </Card>
       </div>
     )
   }
 
-  const currentQ = questions[currentQuestion]
-  const options = parseOptions(currentQ.options)
-  const progress = ((currentQuestion + 1) / questions.length) * 100
-  const answeredCount = Object.keys(answers).length
-  const isLastQuestion = currentQuestion === questions.length - 1
-  const canProceed = answers[currentQuestion] !== undefined
+  const currentQuestion = questions[currentQuestionIndex]
+  const currentAnswer = answers[currentQuestion.id]
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
+  const answeredQuestions = Object.keys(answers).length
+  const competencyInfo = competencyMap[currentQuestion.competency]
+  const options = parseOptions(currentQuestion.options)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
       <div className="container mx-auto p-6">
         {/* Header */}
-        <div className="mb-6">
-          <Button variant="ghost" onClick={() => router.push("/dashboard")} className="mb-4">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
-          </Button>
-
-          <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={() => router.push("/dashboard")}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Heart className="h-8 w-8 text-pink-500" />
-                <h1 className="text-3xl font-bold text-gray-900">Test de Habilidades Blandas</h1>
-              </div>
-              <p className="text-gray-600">Evalúa tus competencias profesionales en situaciones del mundo real</p>
-            </div>
-            <div className="text-right">
-              <Badge variant="secondary" className="mb-2">
-                {currentQuestion + 1} de {questions.length}
-              </Badge>
-              <div className="text-sm text-gray-500">{answeredCount} respondidas</div>
+              <h1 className="text-2xl font-bold text-gray-900">Test de Habilidades Blandas</h1>
+              <p className="text-gray-600">Evalúa tus competencias profesionales clave</p>
             </div>
           </div>
-
-          {/* Progress Bar */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">Progreso</span>
-              <span className="text-sm text-gray-500">{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
+          <Badge variant="secondary" className="bg-pink-100 text-pink-700">
+            {answeredQuestions}/{questions.length} completadas
+          </Badge>
         </div>
 
-        {/* Question Card */}
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Pregunta {currentQuestion + 1}</CardTitle>
-              <Badge variant="outline" className="capitalize">
-                {currentQ.category?.replace("-", " ")}
-              </Badge>
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              Pregunta {currentQuestionIndex + 1} de {questions.length}
+            </span>
+            <span className="text-sm text-gray-500">{Math.round(progress)}% completado</span>
+          </div>
+          <Progress value={progress} className="h-2" />
+        </div>
+
+        {/* Current Competency */}
+        {competencyInfo && (
+          <div className="mb-6">
+            <div className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200">
+              <div className={`p-2 ${competencyInfo.color} rounded-lg`}>
+                <competencyInfo.icon className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">{competencyInfo.name}</h3>
+                <p className="text-sm text-gray-600">{competencyInfo.description}</p>
+              </div>
             </div>
+          </div>
+        )}
+
+        {/* Question Card */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-lg">{currentQuestion.question_text}</CardTitle>
+            <CardDescription>Selecciona la opción que mejor describa tu situación</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="mb-6">
-              <p className="text-lg text-gray-800 leading-relaxed">{currentQ.question_text}</p>
-            </div>
-
-            <RadioGroup
-              value={answers[currentQuestion]?.toString() || ""}
-              onValueChange={handleAnswerChange}
-              className="space-y-3"
-            >
-              {options.map((option, index) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 text-gray-700 cursor-pointer leading-relaxed">
-                    {option}
-                  </Label>
-                </div>
-              ))}
+            <RadioGroup value={currentAnswer?.toString() || ""} onValueChange={handleAnswerChange}>
+              <div className="space-y-3">
+                {options.map((option, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50">
+                    <RadioGroupItem value={(index + 1).toString()} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </RadioGroup>
           </CardContent>
         </Card>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <Button variant="outline" onClick={goToPrevious} disabled={currentQuestion === 0}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
+        <div className="flex justify-between items-center">
+          <Button
+            variant="outline"
+            onClick={goToPreviousQuestion}
+            disabled={currentQuestionIndex === 0}
+            className="flex items-center gap-2 bg-transparent"
+          >
+            <ArrowLeft className="h-4 w-4" />
             Anterior
           </Button>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Clock className="h-4 w-4" />
-            <span>Sin límite de tiempo</span>
+          <div className="flex items-center gap-2">
+            {currentAnswer && <CheckCircle className="h-5 w-5 text-green-500" />}
+            <span className="text-sm text-gray-600">{currentAnswer ? "Respondida" : "Sin responder"}</span>
           </div>
 
-          {isLastQuestion ? (
-            <Button onClick={submitTest} disabled={!canProceed || submitting} className="bg-pink-600 hover:bg-pink-700">
+          {currentQuestionIndex === questions.length - 1 ? (
+            <Button
+              onClick={submitTest}
+              disabled={!currentAnswer || submitting}
+              className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700"
+            >
               {submitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   Enviando...
                 </>
               ) : (
                 <>
-                  <CheckCircle className="h-4 w-4 mr-2" />
+                  <Award className="h-4 w-4" />
                   Finalizar Test
                 </>
               )}
             </Button>
           ) : (
-            <Button onClick={goToNext} disabled={!canProceed} className="bg-pink-600 hover:bg-pink-700">
+            <Button onClick={goToNextQuestion} disabled={!currentAnswer} className="flex items-center gap-2">
               Siguiente
-              <ArrowRight className="h-4 w-4 ml-2" />
+              <ArrowRight className="h-4 w-4" />
             </Button>
           )}
         </div>
 
-        {/* Test Info */}
-        <Card className="mt-8">
-          <CardContent className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <div className="flex items-center justify-center gap-2">
-                <Users className="h-5 w-5 text-pink-500" />
-                <div>
-                  <div className="font-semibold">25 Preguntas</div>
-                  <div className="text-sm text-gray-500">Escenarios profesionales</div>
+        {/* Question Overview */}
+        <div className="mt-8 p-4 bg-white rounded-lg border border-gray-200">
+          <h3 className="font-semibold mb-3">Progreso por Competencia</h3>
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-2">
+            {Object.entries(competencyMap).map(([key, info]) => {
+              const competencyQuestions = questions.filter((q) => q.competency === key)
+              const answeredInCompetency = competencyQuestions.filter((q) => answers[q.id] !== undefined).length
+              const totalInCompetency = competencyQuestions.length
+              const completionRate = totalInCompetency > 0 ? (answeredInCompetency / totalInCompetency) * 100 : 0
+
+              return (
+                <div key={key} className="text-center">
+                  <div className={`w-8 h-8 ${info.color} rounded-full mx-auto mb-1 flex items-center justify-center`}>
+                    <info.icon className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {answeredInCompetency}/{totalInCompetency}
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
+                    <div
+                      className={`h-1 rounded-full ${info.color.replace("bg-", "bg-")}`}
+                      style={{ width: `${completionRate}%` }}
+                    ></div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <Heart className="h-5 w-5 text-purple-500" />
-                <div>
-                  <div className="font-semibold">9 Competencias</div>
-                  <div className="text-sm text-gray-500">Habilidades evaluadas</div>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <Clock className="h-5 w-5 text-blue-500" />
-                <div>
-                  <div className="font-semibold">Sin límite</div>
-                  <div className="text-sm text-gray-500">Tómate tu tiempo</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
