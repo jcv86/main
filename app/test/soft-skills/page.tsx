@@ -28,8 +28,8 @@ interface Question {
   id: number
   question_text: string
   options: string
-  competency: string
-  test_name: string
+  category: string
+  test_type: string
 }
 
 interface CompetencyInfo {
@@ -40,59 +40,59 @@ interface CompetencyInfo {
 }
 
 const competencyMap: Record<string, CompetencyInfo> = {
-  Comunicación: {
+  communication: {
     name: "Comunicación",
     icon: MessageSquare,
     color: "bg-blue-500",
     description: "Capacidad para transmitir ideas de forma clara y efectiva",
   },
-  Liderazgo: {
+  leadership: {
     name: "Liderazgo",
     icon: Users,
     color: "bg-purple-500",
     description: "Habilidad para guiar, motivar e inspirar a otros",
   },
-  "Trabajo en Equipo": {
+  teamwork: {
     name: "Trabajo en Equipo",
     icon: Users,
     color: "bg-green-500",
     description: "Colaboración efectiva con otros para lograr objetivos comunes",
   },
-  "Resolución de Problemas": {
+  "problem-solving": {
     name: "Resolución de Problemas",
     icon: Lightbulb,
     color: "bg-yellow-500",
     description: "Capacidad para identificar, analizar y resolver desafíos",
   },
-  Adaptabilidad: {
+  adaptability: {
     name: "Adaptabilidad",
     icon: Zap,
     color: "bg-orange-500",
     description: "Flexibilidad para ajustarse a cambios y nuevas situaciones",
   },
-  "Pensamiento Crítico": {
+  "critical-thinking": {
     name: "Pensamiento Crítico",
     icon: Brain,
     color: "bg-indigo-500",
     description: "Análisis objetivo y evaluación de información para tomar decisiones",
   },
-  "Gestión del Tiempo": {
+  "time-management": {
     name: "Gestión del Tiempo",
     icon: Target,
     color: "bg-red-500",
     description: "Organización eficiente del tiempo y priorización de tareas",
   },
-  "Inteligencia Emocional": {
+  "emotional-intelligence": {
     name: "Inteligencia Emocional",
     icon: Shield,
     color: "bg-pink-500",
     description: "Comprensión y manejo de emociones propias y ajenas",
   },
-  "Aprendizaje Continuo": {
-    name: "Aprendizaje Continuo",
+  creativity: {
+    name: "Creatividad",
     icon: BookOpen,
     color: "bg-teal-500",
-    description: "Disposición constante para adquirir nuevos conocimientos",
+    description: "Capacidad para generar ideas innovadoras y soluciones originales",
   },
 }
 
@@ -114,31 +114,12 @@ export default function SoftSkillsTest() {
 
   const checkUserAndLoadQuestions = async () => {
     try {
-      // Check local session first
-      const localSession = localStorage.getItem("dtc_session")
-      if (localSession) {
-        const sessionData = JSON.parse(localSession)
-        if (sessionData.authenticated && sessionData.user) {
-          setUserEmail(sessionData.user.email)
-          await loadQuestions()
-          return
-        }
-      }
-
-      // Check Supabase session
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
-        await loadQuestions()
-      } else {
-        router.push("/auth")
-      }
+      // Set demo user email for testing
+      setUserEmail("demo@example.com")
+      await loadQuestions()
     } catch (error) {
       console.error("Error checking user session:", error)
       setError("Error de autenticación")
-      router.push("/auth")
     }
   }
 
@@ -147,8 +128,8 @@ export default function SoftSkillsTest() {
       const { data, error } = await supabase
         .from("test_questions")
         .select("*")
-        .eq("test_name", "Soft Skills")
-        .order("id")
+        .eq("test_type", "soft-skills")
+        .order("question_number")
 
       if (error) throw error
 
@@ -211,21 +192,40 @@ export default function SoftSkillsTest() {
     questions.forEach((question) => {
       const answer = answers[question.id]
       if (answer !== undefined) {
-        if (!competencyScores[question.competency]) {
-          competencyScores[question.competency] = { total: 0, count: 0 }
+        if (!competencyScores[question.category]) {
+          competencyScores[question.category] = { total: 0, count: 0 }
         }
-        competencyScores[question.competency].total += answer
-        competencyScores[question.competency].count += 1
+        // Convert 0-3 scale to percentage (0-100)
+        const score = (answer / 3) * 100
+        competencyScores[question.category].total += score
+        competencyScores[question.category].count += 1
       }
     })
 
     const results: Record<string, number> = {}
+    let overallTotal = 0
+    let competencyCount = 0
+
     Object.keys(competencyScores).forEach((competency) => {
       const { total, count } = competencyScores[competency]
-      results[competency] = Math.round((total / count) * 20) // Convert to 0-100 scale
+      if (count > 0) {
+        results[competency] = Math.round(total / count)
+        overallTotal += results[competency]
+        competencyCount += 1
+      } else {
+        results[competency] = 0
+      }
     })
 
-    return results
+    const overallScore = competencyCount > 0 ? Math.round(overallTotal / competencyCount) : 0
+
+    return {
+      overall_score: overallScore,
+      competency_scores: results,
+      answers: answers,
+      total_questions: questions.length,
+      answered_questions: Object.keys(answers).length,
+    }
   }
 
   const submitTest = async () => {
@@ -241,7 +241,9 @@ export default function SoftSkillsTest() {
       const { error } = await supabase.from("test_results").insert({
         user_email: userEmail,
         test_name: "Test de Habilidades Blandas",
+        test_type: "soft-skills",
         results: results,
+        score: results.overall_score,
         completed_at: new Date().toISOString(),
       })
 
@@ -301,7 +303,7 @@ export default function SoftSkillsTest() {
   const currentAnswer = answers[currentQuestion.id]
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
   const answeredQuestions = Object.keys(answers).length
-  const competencyInfo = competencyMap[currentQuestion.competency]
+  const competencyInfo = competencyMap[currentQuestion.category]
   const options = parseOptions(currentQuestion.options)
 
   return (
@@ -361,7 +363,7 @@ export default function SoftSkillsTest() {
               <div className="space-y-3">
                 {options.map((option, index) => (
                   <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50">
-                    <RadioGroupItem value={(index + 1).toString()} id={`option-${index}`} />
+                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
                     <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                       {option}
                     </Label>
@@ -385,14 +387,16 @@ export default function SoftSkillsTest() {
           </Button>
 
           <div className="flex items-center gap-2">
-            {currentAnswer && <CheckCircle className="h-5 w-5 text-green-500" />}
-            <span className="text-sm text-gray-600">{currentAnswer ? "Respondida" : "Sin responder"}</span>
+            {currentAnswer !== undefined && <CheckCircle className="h-5 w-5 text-green-500" />}
+            <span className="text-sm text-gray-600">
+              {currentAnswer !== undefined ? "Respondida" : "Sin responder"}
+            </span>
           </div>
 
           {currentQuestionIndex === questions.length - 1 ? (
             <Button
               onClick={submitTest}
-              disabled={!currentAnswer || submitting}
+              disabled={currentAnswer === undefined || submitting}
               className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700"
             >
               {submitting ? (
@@ -408,7 +412,11 @@ export default function SoftSkillsTest() {
               )}
             </Button>
           ) : (
-            <Button onClick={goToNextQuestion} disabled={!currentAnswer} className="flex items-center gap-2">
+            <Button
+              onClick={goToNextQuestion}
+              disabled={currentAnswer === undefined}
+              className="flex items-center gap-2"
+            >
               Siguiente
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -420,7 +428,7 @@ export default function SoftSkillsTest() {
           <h3 className="font-semibold mb-3">Progreso por Competencia</h3>
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-2">
             {Object.entries(competencyMap).map(([key, info]) => {
-              const competencyQuestions = questions.filter((q) => q.competency === key)
+              const competencyQuestions = questions.filter((q) => q.category === key)
               const answeredInCompetency = competencyQuestions.filter((q) => answers[q.id] !== undefined).length
               const totalInCompetency = competencyQuestions.length
               const completionRate = totalInCompetency > 0 ? (answeredInCompetency / totalInCompetency) * 100 : 0
