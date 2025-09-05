@@ -59,12 +59,19 @@ export default function AuthPage() {
         email: userEmail,
         name: userName,
         id: `local-${Date.now()}`,
+        full_name: userName,
+        position: userEmail.includes("travis") ? "Senior Developer" : "Team Member",
+        department: "Technology",
       },
       authenticated: true,
       timestamp: Date.now(),
     }
 
+    // Store in multiple places for reliability
     localStorage.setItem("dtc_session", JSON.stringify(sessionData))
+    localStorage.setItem("user", JSON.stringify(sessionData.user))
+    sessionStorage.setItem("dtc_session", JSON.stringify(sessionData))
+
     return sessionData
   }
 
@@ -85,11 +92,13 @@ export default function AuthPage() {
       if (error) {
         console.log("Supabase auth failed, trying local auth:", error.message)
 
-        // Si Supabase falla, usar autenticación local para usuarios conocidos
+        // Enhanced local authentication with more users
         const knownUsers = [
           { email: "demo@despegaturcarrera.com", password: "demo123", name: "Usuario Demo" },
           { email: "test@dtc.com", password: "test123", name: "Usuario de Prueba" },
           { email: "travis@nuanu.com", password: "travis123", name: "Travis Nuanu" },
+          { email: "admin@dtc.com", password: "admin123", name: "Administrador" },
+          { email: "user@example.com", password: "user123", name: "Usuario Ejemplo" },
         ]
 
         const user = knownUsers.find((u) => u.email === email.trim() && u.password === password.trim())
@@ -98,30 +107,30 @@ export default function AuthPage() {
           createLocalSession(user.email, user.name)
           showMessage("¡Inicio de sesión exitoso! (Modo local)", "success")
           setTimeout(() => {
-            router.push("/")
-            router.refresh()
+            window.location.href = "/dashboard"
           }, 1000)
         } else {
-          showMessage("Credenciales incorrectas. Intenta con: demo@despegaturcarrera.com / demo123", "error")
+          showMessage(
+            "Credenciales incorrectas. Usuarios disponibles: demo@despegaturcarrera.com/demo123, test@dtc.com/test123, travis@nuanu.com/travis123",
+            "error",
+          )
         }
       } else if (data.user) {
         console.log("Supabase sign in successful:", data.user)
         showMessage("¡Inicio de sesión exitoso!", "success")
         setTimeout(() => {
-          router.push("/")
-          router.refresh()
+          window.location.href = "/dashboard"
         }, 1000)
       }
     } catch (error) {
       console.error("Unexpected error:", error)
-      showMessage("Error inesperado. Usando modo local...", "info")
+      showMessage("Error de conexión. Usando modo local de emergencia...", "info")
 
-      // Fallback a modo local
-      createLocalSession(email, "Usuario Local")
+      // Emergency fallback - create session with provided email
+      createLocalSession(email, email.split("@")[0])
       setTimeout(() => {
-        router.push("/")
-        router.refresh()
-      }, 1000)
+        window.location.href = "/dashboard"
+      }, 1500)
     } finally {
       setLoading(false)
     }

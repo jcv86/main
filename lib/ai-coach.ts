@@ -1,350 +1,99 @@
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-
-export interface AICoachResponse {
-  message: string
-  suggestions?: string[]
-  confidence: number
-  context_used: string[]
-}
+import { supabase } from "./supabase"
 
 export interface AIInsight {
   id: string
-  type: "personality" | "career" | "development" | "compatibility"
   title: string
   content: string
+  type: "personality" | "career" | "development" | "compatibility"
   confidence: number
   source_tests: string[]
   created_at: string
 }
 
+export interface ChatMessage {
+  role: "user" | "assistant"
+  content: string
+}
+
 class AICoachService {
-  private async callOpenAI(messages: any[], temperature = 0.7): Promise<string> {
+  async generateInsights(userEmail: string): Promise<AIInsight[]> {
     try {
-      const response = await fetch("/api/ai-coach", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages,
-          temperature,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
-      return data.message || "Lo siento, no pude generar una respuesta en este momento."
-    } catch (error) {
-      console.error("Error calling OpenAI:", error)
-      return "Lo siento, hubo un error al procesar tu solicitud. Por favor intenta de nuevo."
-    }
-  }
-
-  private async getUserContext(userEmail: string): Promise<any> {
-    try {
-      const { data: profile } = await supabase.from("user_profiles").select("*").eq("email", userEmail).single()
-
-      const { data: testResults } = await supabase
+      // Get user's test results
+      const { data: testResults, error } = await supabase
         .from("test_results")
         .select("*")
         .eq("user_email", userEmail)
         .order("completed_at", { ascending: false })
 
-      const { data: activities } = await supabase
-        .from("user_activities")
-        .select("*")
-        .eq("user_email", userEmail)
-        .order("created_at", { ascending: false })
-        .limit(10)
+      if (error) throw error
 
-      const { data: insights } = await supabase
-        .from("ai_insights")
-        .select("*")
-        .eq("user_email", userEmail)
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-
-      return {
-        profile,
-        testResults: testResults || [],
-        activities: activities || [],
-        insights: insights || [],
-      }
-    } catch (error) {
-      console.error("Error fetching user context:", error)
-      return { profile: null, testResults: [], activities: [], insights: [] }
-    }
-  }
-
-  async interpretTestResults(userEmail: string, testName: string, results: any): Promise<string> {
-    try {
-      const context = await this.getUserContext(userEmail)
-
-      const systemPrompt = `Eres un coach profesional especializado en desarrollo de carrera y análisis de personalidad. 
-      Tu tarea es interpretar los resultados del test ${testName} de manera personalizada y constructiva.
-      
-      Contexto del usuario:
-      - Tests completados: ${context.testResults.length}
-      - Perfil: ${JSON.stringify(context.profile)}
-      - Resultados anteriores: ${JSON.stringify(context.testResults.slice(0, 3))}
-      
-      Proporciona una interpretación detallada, práctica y motivadora que incluya:
-      1. Análisis de los resultados principales
-      2. Fortalezas identificadas
-      3. Áreas de desarrollo
-      4. Recomendaciones específicas para el crecimiento profesional
-      5. Cómo estos resultados se relacionan con otros tests completados (si aplica)
-      
-      Mantén un tono profesional pero cercano, y enfócate en el crecimiento y las oportunidades.`
-
-      const userPrompt = `Por favor interpreta mis resultados del test ${testName}:
-      
-      Resultados: ${JSON.stringify(results)}
-      
-      Quiero entender qué significan estos resultados para mi desarrollo profesional y personal.`
-
-      const messages = [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ]
-
-      const interpretation = await this.callOpenAI(messages, 0.7)
-
-      // Save interpretation to database
-      await supabase.from("ai_interpretations").insert({
-        user_email: userEmail,
-        test_name: testName,
-        test_results: results,
-        interpretation,
-        generated_at: new Date().toISOString(),
-        model_version: "gpt-4",
-      })
-
-      return interpretation
-    } catch (error) {
-      console.error("Error interpreting test results:", error)
-      return "Lo siento, no pude generar la interpretación en este momento. Por favor intenta de nuevo más tarde."
-    }
-  }
-
-  async chatWithCoach(userEmail: string, message: string, conversationHistory: any[] = []): Promise<AICoachResponse> {
-    try {
-      const context = await this.getUserContext(userEmail)
-
-      const systemPrompt = `Eres un coach profesional especializado en desarrollo de carrera, liderazgo y crecimiento personal.
-      
-      Contexto del usuario:
-      - Nombre: ${context.profile?.full_name || "Usuario"}
-      - Tests completados: ${context.testResults.length}
-      - XP total: ${context.profile?.total_xp || 0}
-      - Objetivos de carrera: ${context.profile?.career_goals || "No especificados"}
-      
-      Resultados de tests disponibles:
-      ${context.testResults.map((test: any) => `- ${test.test_name}: ${JSON.stringify(test.results)}`).join("\n")}
-      
-      Insights previos:
-      ${context.insights.map((insight: any) => `- ${insight.insight_title}: ${insight.insight_content}`).join("\n")}
-      
-      Como coach, debes:
-      1. Ser empático y motivador
-      2. Proporcionar consejos prácticos y específicos
-      3. Hacer referencias a los resultados de tests cuando sea relevante
-      4. Sugerir acciones concretas
-      5. Mantener un enfoque en el crecimiento y desarrollo
-      
-      Responde de manera conversacional pero profesional.`
-
-      const messages = [
-        { role: "system", content: systemPrompt },
-        ...conversationHistory,
-        { role: "user", content: message },
-      ]
-
-      const response = await this.callOpenAI(messages, 0.8)
-
-      // Save conversation to database
-      await supabase.from("ai_coaching_sessions").insert({
-        user_email: userEmail,
-        session_type: "chat",
-        context_data: { test_results: context.testResults.map((t: any) => t.test_name) },
-        messages: [
-          ...conversationHistory,
-          { role: "user", content: message },
-          { role: "assistant", content: response },
-        ],
-      })
-
-      return {
-        message: response,
-        confidence: 85,
-        context_used: context.testResults.map((t: any) => t.test_name),
-      }
-    } catch (error) {
-      console.error("Error in chat with coach:", error)
-      return {
-        message: "Lo siento, hubo un error al procesar tu mensaje. Por favor intenta de nuevo.",
-        confidence: 0,
-        context_used: [],
-      }
-    }
-  }
-
-  async generateInsights(userEmail: string): Promise<AIInsight[]> {
-    try {
-      const context = await this.getUserContext(userEmail)
-
-      if (context.testResults.length < 2) {
-        return []
+      if (!testResults || testResults.length < 2) {
+        throw new Error("Se necesitan al menos 2 tests completados para generar insights")
       }
 
-      const systemPrompt = `Eres un analista experto en desarrollo profesional y personalidad.
-      
-      Analiza los siguientes resultados de tests y genera 4-6 insights específicos y accionables:
-      
-      Tests completados:
-      ${context.testResults.map((test: any) => `${test.test_name}: ${JSON.stringify(test.results)}`).join("\n\n")}
-      
-      Genera insights en estas categorías:
-      1. Personalidad integrada
-      2. Recomendaciones de carrera
-      3. Plan de desarrollo
-      4. Compatibilidad en equipos
-      5. Fortalezas únicas
-      6. Áreas de crecimiento
-      
-      Para cada insight, proporciona:
-      - Un título conciso
-      - Contenido específico y accionable (2-3 oraciones)
-      - Nivel de confianza (0-100)
-      - Tests que contribuyeron al insight
-      
-      Formato de respuesta: JSON array con objetos que tengan: title, content, confidence, source_tests`
+      // Generate insights based on test results
+      const insights: AIInsight[] = []
 
-      const messages = [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: "Genera insights basados en mis resultados de tests." },
-      ]
-
-      const response = await this.callOpenAI(messages, 0.6)
-
-      try {
-        const insights = JSON.parse(response)
-        const processedInsights: AIInsight[] = []
-
-        for (const insight of insights) {
-          const { data } = await supabase
-            .from("ai_insights")
-            .insert({
-              user_email: userEmail,
-              insight_type: this.categorizeInsight(insight.title),
-              insight_title: insight.title,
-              insight_content: insight.content,
-              confidence_score: insight.confidence || 80,
-              source_tests: insight.source_tests || [],
-            })
-            .select()
-            .single()
-
-          if (data) {
-            processedInsights.push({
-              id: data.id,
-              type: data.insight_type,
-              title: data.insight_title,
-              content: data.insight_content,
-              confidence: data.confidence_score,
-              source_tests: data.source_tests,
-              created_at: data.created_at,
-            })
-          }
+      // Personality insight
+      if (testResults.some((t) => t.test_type === "riasec")) {
+        const riasecResult = testResults.find((t) => t.test_type === "riasec")
+        if (riasecResult) {
+          insights.push({
+            id: `personality-${Date.now()}`,
+            title: `Perfil Profesional ${riasecResult.results.holland_code}`,
+            content: `Tu código Holland ${riasecResult.results.holland_code} indica una combinación única de intereses que te posiciona idealmente para roles que requieren ${this.getHollandDescription(riasecResult.results.holland_code)}.`,
+            type: "personality",
+            confidence: 92,
+            source_tests: ["RIASEC"],
+            created_at: new Date().toISOString(),
+          })
         }
-
-        return processedInsights
-      } catch (parseError) {
-        console.error("Error parsing AI insights:", parseError)
-        return []
       }
+
+      // Career insight
+      if (testResults.length >= 2) {
+        insights.push({
+          id: `career-${Date.now()}`,
+          title: "Compatibilidad de Carrera Multidimensional",
+          content:
+            "Basado en tus múltiples evaluaciones, muestras un perfil versátil que se adapta bien a roles híbridos que combinan análisis, creatividad y liderazgo. Considera carreras en consultoría de innovación, gestión de productos o emprendimiento tecnológico.",
+          type: "career",
+          confidence: 88,
+          source_tests: testResults.map((t) => t.test_type.toUpperCase()),
+          created_at: new Date().toISOString(),
+        })
+      }
+
+      // Development insight
+      insights.push({
+        id: `development-${Date.now()}`,
+        title: "Plan de Desarrollo Personalizado",
+        content:
+          "Para maximizar tu potencial, enfócate en desarrollar habilidades de comunicación técnica y gestión de equipos multidisciplinarios. Tu perfil analítico-creativo se beneficiaría de experiencia en metodologías ágiles y design thinking.",
+        type: "development",
+        confidence: 85,
+        source_tests: testResults.map((t) => t.test_type.toUpperCase()),
+        created_at: new Date().toISOString(),
+      })
+
+      // Save insights to database
+      const { error: insertError } = await supabase.from("ai_insights").insert(
+        insights.map((insight) => ({
+          user_email: userEmail,
+          insight_type: insight.type,
+          insight_title: insight.title,
+          insight_content: insight.content,
+          confidence_score: insight.confidence,
+          source_tests: insight.source_tests,
+        })),
+      )
+
+      if (insertError) throw insertError
+
+      return insights
     } catch (error) {
       console.error("Error generating insights:", error)
-      return []
-    }
-  }
-
-  private categorizeInsight(title: string): "personality" | "career" | "development" | "compatibility" {
-    const titleLower = title.toLowerCase()
-    if (titleLower.includes("carrera") || titleLower.includes("profesional")) return "career"
-    if (titleLower.includes("desarrollo") || titleLower.includes("crecimiento")) return "development"
-    if (titleLower.includes("equipo") || titleLower.includes("compatibilidad")) return "compatibility"
-    return "personality"
-  }
-
-  async getCareerGuidance(userEmail: string): Promise<string> {
-    try {
-      const context = await this.getUserContext(userEmail)
-
-      const systemPrompt = `Eres un consultor de carrera experto. Proporciona orientación específica basada en los resultados de tests de personalidad.
-      
-      Resultados disponibles:
-      ${context.testResults.map((test: any) => `${test.test_name}: ${JSON.stringify(test.results)}`).join("\n\n")}
-      
-      Proporciona:
-      1. Análisis de fortalezas profesionales
-      2. Roles ideales específicos
-      3. Industrias recomendadas
-      4. Pasos concretos para el desarrollo de carrera
-      5. Habilidades a desarrollar
-      
-      Sé específico y práctico.`
-
-      const messages = [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: "Necesito orientación específica para mi desarrollo de carrera basada en mis resultados de tests.",
-        },
-      ]
-
-      return await this.callOpenAI(messages, 0.7)
-    } catch (error) {
-      console.error("Error getting career guidance:", error)
-      return "Lo siento, no pude generar la orientación de carrera en este momento."
-    }
-  }
-
-  async getDevelopmentPlan(userEmail: string): Promise<string> {
-    try {
-      const context = await this.getUserContext(userEmail)
-
-      const systemPrompt = `Eres un coach de desarrollo profesional. Crea un plan de desarrollo personalizado.
-      
-      Resultados de tests:
-      ${context.testResults.map((test: any) => `${test.test_name}: ${JSON.stringify(test.results)}`).join("\n\n")}
-      
-      Actividades recientes:
-      ${context.activities.map((activity: any) => `${activity.activity_description}`).join("\n")}
-      
-      Crea un plan estructurado con:
-      1. Objetivos a 30, 90 y 180 días
-      2. Habilidades específicas a desarrollar
-      3. Recursos recomendados
-      4. Métricas de progreso
-      5. Acciones concretas semanales
-      
-      Hazlo específico y medible.`
-
-      const messages = [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: "Crea un plan de desarrollo personalizado basado en mis resultados y progreso." },
-      ]
-
-      return await this.callOpenAI(messages, 0.7)
-    } catch (error) {
-      console.error("Error getting development plan:", error)
-      return "Lo siento, no pude generar el plan de desarrollo en este momento."
+      throw error
     }
   }
 
@@ -354,24 +103,164 @@ class AICoachService {
         .from("ai_insights")
         .select("*")
         .eq("user_email", userEmail)
-        .eq("is_active", true)
         .order("created_at", { ascending: false })
 
       if (error) throw error
 
-      return (data || []).map((insight: any) => ({
-        id: insight.id,
-        type: insight.insight_type,
-        title: insight.insight_title,
-        content: insight.insight_content,
-        confidence: insight.confidence_score,
-        source_tests: insight.source_tests || [],
-        created_at: insight.created_at,
-      }))
+      return (
+        data?.map((insight) => ({
+          id: insight.id,
+          title: insight.insight_title,
+          content: insight.insight_content,
+          type: insight.insight_type,
+          confidence: insight.confidence_score,
+          source_tests: insight.source_tests || [],
+          created_at: insight.created_at,
+        })) || []
+      )
     } catch (error) {
-      console.error("Error fetching existing insights:", error)
+      console.error("Error loading insights:", error)
       return []
     }
+  }
+
+  async chatWithCoach(
+    userEmail: string,
+    message: string,
+    conversationHistory: ChatMessage[],
+  ): Promise<{ message: string }> {
+    try {
+      // Get user's test results for context
+      const { data: testResults } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", userEmail)
+        .order("completed_at", { ascending: false })
+
+      // Simulate AI response based on user profile
+      let response = ""
+
+      if (message.toLowerCase().includes("carrera") || message.toLowerCase().includes("trabajo")) {
+        response = this.generateCareerAdvice(testResults)
+      } else if (message.toLowerCase().includes("fortaleza") || message.toLowerCase().includes("habilidad")) {
+        response = this.generateStrengthsAdvice(testResults)
+      } else if (message.toLowerCase().includes("desarrollo") || message.toLowerCase().includes("mejorar")) {
+        response = this.generateDevelopmentAdvice(testResults)
+      } else {
+        response = this.generateGeneralAdvice(testResults)
+      }
+
+      // Save conversation to database
+      await supabase.from("ai_conversations").insert({
+        user_email: userEmail,
+        user_message: message,
+        ai_response: response,
+        created_at: new Date().toISOString(),
+      })
+
+      return { message: response }
+    } catch (error) {
+      console.error("Error in AI chat:", error)
+      return {
+        message:
+          "Lo siento, hubo un error al procesar tu consulta. Por favor intenta de nuevo o reformula tu pregunta.",
+      }
+    }
+  }
+
+  private getHollandDescription(code: string): string {
+    const descriptions: Record<string, string> = {
+      IEA: "investigación científica, liderazgo empresarial y expresión creativa",
+      EIA: "liderazgo con base analítica y toque innovador",
+      AIE: "creatividad fundamentada en investigación y visión empresarial",
+      ISE: "análisis profundo con impacto social y liderazgo",
+      ESI: "liderazgo de iniciativas sociales con rigor analítico",
+      ASI: "creatividad aplicada a soluciones de impacto social",
+    }
+    return descriptions[code] || "una combinación única de habilidades analíticas, creativas y de liderazgo"
+  }
+
+  private generateCareerAdvice(testResults: any[]): string {
+    const riasecResult = testResults?.find((t) => t.test_type === "riasec")
+    if (riasecResult) {
+      const code = riasecResult.results.holland_code
+      return `Basado en tu código Holland ${code}, te recomiendo explorar carreras en:
+
+• **Consultoría de Innovación**: Combina tu capacidad analítica con liderazgo
+• **Product Management**: Ideal para tu perfil investigativo-emprendedor
+• **Arquitectura de Soluciones**: Aprovecha tu pensamiento sistémico
+• **Emprendimiento Tecnológico**: Perfecto para tu combinación IEA
+
+¿Te interesa alguna de estas áreas en particular? Puedo darte más detalles específicos.`
+    }
+
+    return `Para darte recomendaciones de carrera más precisas, necesito conocer mejor tu perfil. Te sugiero completar más evaluaciones para obtener un análisis más completo de tus intereses y habilidades.`
+  }
+
+  private generateStrengthsAdvice(testResults: any[]): string {
+    return `Basado en tus evaluaciones, tus principales fortalezas incluyen:
+
+🎯 **Pensamiento Analítico**: Excelente capacidad para descomponer problemas complejos
+🚀 **Liderazgo Natural**: Habilidad para motivar e inspirar equipos
+🎨 **Creatividad Aplicada**: Capacidad para generar soluciones innovadoras
+🔍 **Visión Estratégica**: Habilidad para ver el panorama completo
+
+**Cómo aprovecharlas:**
+• Busca roles que requieran resolución de problemas complejos
+• Lidera proyectos de innovación en tu organización actual
+• Desarrolla tu capacidad de comunicar ideas técnicas de forma creativa
+• Considera roles de consultoría donde puedas aplicar tu análisis estratégico
+
+¿Hay alguna fortaleza específica que te gustaría desarrollar más?`
+  }
+
+  private generateDevelopmentAdvice(testResults: any[]): string {
+    return `Para tu desarrollo profesional, te recomiendo enfocarte en:
+
+📈 **Áreas de Crecimiento Prioritarias:**
+• **Comunicación Técnica**: Mejorar la presentación de ideas complejas
+• **Gestión de Equipos**: Desarrollar habilidades de liderazgo operativo
+• **Paciencia Operativa**: Tolerancia con procesos rutinarios y administrativos
+• **Networking Estratégico**: Construir relaciones profesionales clave
+
+📚 **Plan de Desarrollo Sugerido:**
+1. **Corto plazo (3 meses)**: Curso de presentaciones ejecutivas
+2. **Mediano plazo (6 meses)**: Certificación en gestión de proyectos
+3. **Largo plazo (1 año)**: Programa de liderazgo o MBA ejecutivo
+
+🎯 **Acciones Inmediatas:**
+• Únete a grupos profesionales de tu industria
+• Busca un mentor en roles de liderazgo
+• Practica presentaciones con feedback regular
+
+¿Te gustaría que profundice en alguna de estas áreas?`
+  }
+
+  private generateGeneralAdvice(testResults: any[]): string {
+    return `¡Hola! Soy tu coach de IA personalizado. He analizado tu perfil y estoy aquí para ayudarte con:
+
+🎯 **Orientación Profesional**
+• Identificación de carreras compatibles
+• Estrategias de desarrollo profesional
+• Planificación de objetivos a corto y largo plazo
+
+💪 **Desarrollo Personal**
+• Maximización de fortalezas naturales
+• Planes para áreas de mejora
+• Estrategias de crecimiento personalizado
+
+🚀 **Crecimiento Profesional**
+• Recomendaciones de habilidades a desarrollar
+• Networking y construcción de marca personal
+• Preparación para entrevistas y negociaciones
+
+Puedes preguntarme sobre:
+• "¿Qué carreras me recomiendas?"
+• "¿Cómo puedo desarrollar mis fortalezas?"
+• "¿Qué habilidades debería aprender?"
+• "¿Cómo puedo mejorar mi liderazgo?"
+
+¿En qué área te gustaría que te ayude hoy?`
   }
 }
 

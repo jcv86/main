@@ -6,697 +6,441 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { createClient } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
-import { Trophy, Target, BookOpen, Brain, FileText, TrendingUp, Clock, CheckCircle, Star, Users, Lightbulb, BarChart3, ArrowRight, Play, Sparkles, Compass, Heart } from 'lucide-react'
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  BookOpen,
+  Brain,
+  Target,
+  Award,
+  Clock,
+  FileText,
+  BarChart3,
+  CheckCircle,
+  Play,
+  Eye,
+  RotateCcw,
+  Heart,
+  Palette,
+  Compass,
+  Zap,
+} from "lucide-react"
+import { supabase, type UserProfile, type TestResult } from "@/lib/supabase"
 
-interface UserProfile {
-  email: string
-  full_name: string
-  avatar_url?: string
-  current_level: number
-  total_xp: number
-  tests_completed: number
-  documents_read: number
-  skills_learned: number
-  career_goal?: string
-  created_at: string
-}
-
-interface TestResult {
-  id: string
-  test_name: string
-  test_type: string
-  score: number
-  results: any
-  completed_at: string
-  duration_minutes: number
-}
-
-interface Activity {
-  id: string
-  activity_type: string
-  activity_description: string
-  xp_earned: number
-  created_at: string
-}
-
-interface Document {
-  id: string
-  title: string
-  category: string
-  content: string
-  read_count: number
-  created_at: string
+// Test configurations with icons and colors
+const testConfigs = {
+  disc: {
+    name: "DISC Assessment",
+    icon: Target,
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-200",
+    description: "Evalúa tu estilo de comportamiento y comunicación",
+    duration: "10-15 min",
+  },
+  "big-five": {
+    name: "Big Five",
+    icon: Brain,
+    color: "text-purple-600",
+    bgColor: "bg-purple-50",
+    borderColor: "border-purple-200",
+    description: "Analiza los cinco grandes factores de personalidad",
+    duration: "15-20 min",
+  },
+  mbti: {
+    name: "MBTI",
+    icon: Palette,
+    color: "text-green-600",
+    bgColor: "bg-green-50",
+    borderColor: "border-green-200",
+    description: "Descubre tu tipo de personalidad Myers-Briggs",
+    duration: "20-25 min",
+  },
+  riasec: {
+    name: "RIASEC",
+    icon: Compass,
+    color: "text-orange-600",
+    bgColor: "bg-orange-50",
+    borderColor: "border-orange-200",
+    description: "Identifica tus intereses profesionales y carreras afines",
+    duration: "15-20 min",
+  },
+  "soft-skills": {
+    name: "Habilidades Blandas",
+    icon: Heart,
+    color: "text-pink-600",
+    bgColor: "bg-pink-50",
+    borderColor: "border-pink-200",
+    description: "Evalúa tus competencias interpersonales y profesionales",
+    duration: "20-30 min",
+  },
 }
 
 export default function DashboardContent() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [testResults, setTestResults] = useState<TestResult[]>([])
-  const [recentActivities, setRecentActivities] = useState<Activity[]>([])
-  const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
-  const [userEmail, setUserEmail] = useState("")
-  const [dataLoaded, setDataLoaded] = useState({
-    profile: false,
-    tests: false,
-    activities: false,
-    documents: false,
-  })
+  const [activeTab, setActiveTab] = useState("overview")
 
-  const router = useRouter()
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const userEmail = "demo@example.com" // In real app, get from auth
 
   useEffect(() => {
-    checkUserSession()
+    loadDashboardData()
   }, [])
 
-  const checkUserSession = async () => {
+  const loadDashboardData = async () => {
     try {
-      // Check local session first (faster)
-      const localSession = localStorage.getItem("dtc_session")
-      if (localSession) {
-        try {
-          const sessionData = JSON.parse(localSession)
-          if (sessionData.authenticated && sessionData.user) {
-            setUserEmail(sessionData.user.email)
-            loadUserDataOptimized(sessionData.user.email)
-            return
-          }
-        } catch (error) {
-          console.log("Invalid local session")
-        }
-      }
+      setLoading(true)
 
-      // Fallback to Supabase session
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
-        loadUserDataOptimized(user.email || "")
-      } else {
-        router.push("/auth")
-      }
+      // Load user profile
+      const { data: profile } = await supabase.from("user_profiles").select("*").eq("email", userEmail).single()
+
+      // Load test results
+      const { data: results } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", userEmail)
+        .order("completed_at", { ascending: false })
+
+      setUserProfile(profile)
+      setTestResults(results || [])
     } catch (error) {
-      console.error("Session check error:", error)
-      router.push("/auth")
-    }
-  }
-
-  const loadUserDataOptimized = async (email: string) => {
-    try {
-      // Load profile first (most important)
-      loadUserProfile(email)
-
-      // Load other data in parallel but don't block UI
-      Promise.all([loadTestResults(email), loadRecentActivities(email), loadDocuments()]).finally(() => {
-        setLoading(false)
-      })
-    } catch (error) {
-      console.error("Error loading user data:", error)
+      console.error("Error loading dashboard data:", error)
+    } finally {
       setLoading(false)
     }
   }
 
-  const loadUserProfile = async (email: string) => {
-    try {
-      const { data: profile, error } = await supabase.from("user_profiles").select("*").eq("email", email).single()
-
-      if (error && error.code !== "PGRST116") {
-        console.error("Profile error:", error)
-        // Create default profile if doesn't exist
-        const defaultProfile = {
-          email,
-          full_name: email.split("@")[0],
-          current_level: 1,
-          total_xp: 0,
-          tests_completed: 0,
-          documents_read: 0,
-          skills_learned: 0,
-          created_at: new Date().toISOString(),
-        }
-        setUserProfile(defaultProfile)
-      } else if (profile) {
-        setUserProfile(profile)
-      }
-
-      setDataLoaded((prev) => ({ ...prev, profile: true }))
-    } catch (error) {
-      console.error("Error loading profile:", error)
-      setDataLoaded((prev) => ({ ...prev, profile: true }))
-    }
+  const getTestStatus = (testType: string) => {
+    const result = testResults.find((r) => r.test_type === testType)
+    return result ? "completed" : "available"
   }
 
-  const loadTestResults = async (email: string) => {
-    try {
-      const { data: tests, error } = await supabase
-        .from("test_results")
-        .select("id, test_name, test_type, score, completed_at, duration_minutes")
-        .eq("user_email", email)
-        .order("completed_at", { ascending: false })
-        .limit(10) // Limit results for performance
-
-      if (!error && tests) {
-        setTestResults(tests)
-      }
-      setDataLoaded((prev) => ({ ...prev, tests: true }))
-    } catch (error) {
-      console.error("Error loading test results:", error)
-      setDataLoaded((prev) => ({ ...prev, tests: true }))
-    }
+  const getTestScore = (testType: string) => {
+    const result = testResults.find((r) => r.test_type === testType)
+    return result?.score || 0
   }
 
-  const loadRecentActivities = async (email: string) => {
-    try {
-      const { data: activities, error } = await supabase
-        .from("user_activities")
-        .select("id, activity_type, activity_description, xp_earned, created_at")
-        .eq("user_email", email)
-        .order("created_at", { ascending: false })
-        .limit(5) // Limit for performance
-
-      if (!error && activities) {
-        setRecentActivities(activities)
-      }
-      setDataLoaded((prev) => ({ ...prev, activities: true }))
-    } catch (error) {
-      console.error("Error loading activities:", error)
-      setDataLoaded((prev) => ({ ...prev, activities: true }))
-    }
+  const getTestDate = (testType: string) => {
+    const result = testResults.find((r) => r.test_type === testType)
+    return result?.completed_at ? new Date(result.completed_at).toLocaleDateString() : null
   }
 
-  const loadDocuments = async () => {
-    try {
-      const { data: docs, error } = await supabase
-        .from("knowledge_base")
-        .select("id, title, category, read_count, created_at")
-        .order("created_at", { ascending: false })
-        .limit(6) // Limit for performance
-
-      if (!error && docs) {
-        setDocuments(docs)
-      }
-      setDataLoaded((prev) => ({ ...prev, documents: true }))
-    } catch (error) {
-      console.error("Error loading documents:", error)
-      setDataLoaded((prev) => ({ ...prev, documents: true }))
-    }
-  }
-
-  const getXPForNextLevel = (currentLevel: number) => {
-    return currentLevel * 100
-  }
-
-  const getCurrentLevelProgress = (totalXP: number, currentLevel: number) => {
-    const xpForCurrentLevel = (currentLevel - 1) * 100
-    const xpForNextLevel = currentLevel * 100
-    const currentLevelXP = totalXP - xpForCurrentLevel
-    const neededXP = xpForNextLevel - xpForCurrentLevel
-    return Math.max(0, Math.min(100, (currentLevelXP / neededXP) * 100))
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    })
-  }
-
-  const getActivityIcon = (activityType: string) => {
-    switch (activityType) {
-      case "test_completed":
-        return <Brain className="h-4 w-4" />
-      case "document_read":
-        return <BookOpen className="h-4 w-4" />
-      case "skill_learned":
-        return <Target className="h-4 w-4" />
-      case "level_up":
-        return <Trophy className="h-4 w-4" />
+  const getQuickInsight = (testType: string, results: any) => {
+    switch (testType) {
+      case "disc":
+        return results?.primary_type ? `Estilo principal: ${results.primary_type}` : "Completa para ver tu estilo"
+      case "big-five":
+        return results?.primary_traits?.length > 0
+          ? `Rasgos principales: ${results.primary_traits.slice(0, 2).join(", ")}`
+          : "Completa para ver tus rasgos"
+      case "mbti":
+        return results?.type ? `Tipo: ${results.type} (${results.type_name})` : "Completa para ver tu tipo"
+      case "riasec":
+        return results?.holland_code ? `Código Holland: ${results.holland_code}` : "Completa para ver tus intereses"
+      case "soft-skills":
+        return results?.category_scores
+          ? `Puntuación general: ${results.overall_score}%`
+          : "Completa para ver tus competencias"
       default:
-        return <Star className="h-4 w-4" />
+        return "Test disponible"
     }
   }
 
-  const availableTests = [
-    {
-      id: "disc",
-      name: "Test DISC",
-      description: "Descubre tu estilo de comportamiento y comunicación",
-      duration: "8-12 min",
-      questions: 15,
-      category: "Personalidad",
-      icon: <Users className="h-6 w-6" />,
-      color: "bg-blue-500",
-      route: "/test/disc",
-    },
-    {
-      id: "big-five",
-      name: "Big Five",
-      description: "Evalúa las cinco dimensiones principales de la personalidad",
-      duration: "10-15 min",
-      questions: 44,
-      category: "Personalidad",
-      icon: <Brain className="h-6 w-6" />,
-      color: "bg-purple-500",
-      route: "/test/big-five",
-    },
-    {
-      id: "mbti",
-      name: "MBTI",
-      description: "Identifica tu tipo de personalidad Myers-Briggs",
-      duration: "12-18 min",
-      questions: 25,
-      category: "Personalidad",
-      icon: <Lightbulb className="h-6 w-6" />,
-      color: "bg-green-500",
-      route: "/test/mbti",
-    },
-    {
-      id: "riasec",
-      name: "RIASEC",
-      description: "Descubre tus intereses profesionales y vocacionales",
-      duration: "8-12 min",
-      questions: 30,
-      category: "Vocacional",
-      icon: <Compass className="h-6 w-6" />,
-      color: "bg-orange-500",
-      route: "/test/riasec",
-    },
-    {
-      id: "soft-skills",
-      name: "Habilidades Blandas",
-      description: "Evalúa tus competencias interpersonales y sociales",
-      duration: "6-10 min",
-      questions: 25,
-      category: "Competencias",
-      icon: <Heart className="h-6 w-6" />,
-      color: "bg-pink-500",
-      route: "/test/soft-skills",
-      disabled: false, // Now enabled!
-    },
-  ]
-
-  // Show loading only for initial load
-  if (loading && !dataLoaded.profile) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando tu dashboard...</p>
+          <p>Cargando dashboard...</p>
         </div>
       </div>
     )
   }
 
+  const completedTests = testResults.length
+  const totalTests = Object.keys(testConfigs).length
+  const completionPercentage = (completedTests / totalTests) * 100
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto p-6 space-y-6">
-        {/* Header del Dashboard */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="space-y-6">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              ¡Hola, {userProfile?.full_name || userEmail.split("@")[0]}! 👋
-            </h1>
-            <p className="text-gray-600 mt-1">Bienvenido a tu plataforma de desarrollo profesional</p>
+            <h1 className="text-2xl font-bold mb-2">¡Bienvenido, {userProfile?.full_name || "Usuario"}!</h1>
+            <p className="text-blue-100">Continúa tu desarrollo profesional con nuestras evaluaciones personalizadas</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Badge variant="secondary" className="text-sm">
-              Nivel {userProfile?.current_level || 1}
-            </Badge>
-            <Avatar>
-              <AvatarImage src={userProfile?.avatar_url || "/placeholder.svg"} />
-              <AvatarFallback>{userProfile?.full_name?.charAt(0) || userEmail.charAt(0).toUpperCase()}</AvatarFallback>
-            </Avatar>
+          <div className="text-right">
+            <div className="text-3xl font-bold">
+              {completedTests}/{totalTests}
+            </div>
+            <div className="text-sm text-blue-100">Tests completados</div>
           </div>
         </div>
-
-        {/* Estadísticas Principales */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Nivel Actual</p>
-                  <p className="text-2xl font-bold">{userProfile?.current_level || 1}</p>
-                </div>
-                <Trophy className="h-8 w-8 text-yellow-500" />
-              </div>
-              <div className="mt-4">
-                <Progress
-                  value={getCurrentLevelProgress(userProfile?.total_xp || 0, userProfile?.current_level || 1)}
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {userProfile?.total_xp || 0} / {getXPForNextLevel(userProfile?.current_level || 1)} XP
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Tests Completados</p>
-                  <p className="text-2xl font-bold">{testResults.length}</p>
-                </div>
-                <Brain className="h-8 w-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Documentos Leídos</p>
-                  <p className="text-2xl font-bold">{userProfile?.documents_read || 0}</p>
-                </div>
-                <BookOpen className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Habilidades</p>
-                  <p className="text-2xl font-bold">{userProfile?.skills_learned || 0}</p>
-                </div>
-                <Target className="h-8 w-8 text-purple-500" />
-              </div>
-            </CardContent>
-          </Card>
+        <div className="mt-4">
+          <Progress value={completionPercentage} className="h-2 bg-blue-500" />
+          <div className="text-sm text-blue-100 mt-1">{Math.round(completionPercentage)}% de progreso completado</div>
         </div>
+      </div>
 
-        {/* Contenido Principal con Tabs */}
-        <Tabs defaultValue="tests" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="tests">Tests</TabsTrigger>
-            <TabsTrigger value="results">Resultados</TabsTrigger>
-            <TabsTrigger value="documents">Documentos</TabsTrigger>
-            <TabsTrigger value="activity">Actividad</TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="tests">Tests</TabsTrigger>
+          <TabsTrigger value="results">Resultados</TabsTrigger>
+          <TabsTrigger value="documents">Documentos</TabsTrigger>
+        </TabsList>
 
-          {/* Tab de Tests */}
-          <TabsContent value="tests" className="space-y-6">
+        <TabsContent value="overview" className="space-y-6">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5" />
-                  Tests Psicométricos Disponibles
-                </CardTitle>
-                <CardDescription>
-                  Completa estos tests para conocer mejor tu personalidad, habilidades e intereses profesionales
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {availableTests.map((test) => {
-                    const isCompleted = testResults.some((result) =>
-                      result.test_name.toLowerCase().includes(test.name.toLowerCase().split(" ")[0]),
-                    )
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Nivel Actual</p>
+                    <p className="text-2xl font-bold">{userProfile?.current_level || 1}</p>
+                  </div>
+                  <Award className="h-8 w-8 text-yellow-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">XP Total</p>
+                    <p className="text-2xl font-bold">{userProfile?.total_xp || 0}</p>
+                  </div>
+                  <Zap className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Tests Completados</p>
+                    <p className="text-2xl font-bold">{userProfile?.tests_completed || 0}</p>
+                  </div>
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Documentos Leídos</p>
+                    <p className="text-2xl font-bold">{userProfile?.documents_read || 0}</p>
+                  </div>
+                  <BookOpen className="h-8 w-8 text-purple-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Actividad Reciente
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[200px]">
+                <div className="space-y-3">
+                  {testResults.slice(0, 5).map((result) => {
+                    const config = testConfigs[result.test_type as keyof typeof testConfigs]
+                    const Icon = config?.icon || Brain
 
                     return (
-                      <Card
-                        key={test.id}
-                        className={`relative ${
-                          test.disabled 
-                            ? "opacity-60" 
-                            : isCompleted 
-                            ? "border-green-200 bg-green-50" 
-                            : "hover:shadow-lg transition-shadow"
-                        }`}
-                      >
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className={`p-3 rounded-lg ${test.color} text-white`}>{test.icon}</div>
-                            <div className="flex flex-col items-end gap-2">
-                              <Badge variant="outline">{test.category}</Badge>
-                              {isCompleted && <CheckCircle className="h-5 w-5 text-green-500" />}
+                      <div key={result.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Icon className={`h-5 w-5 ${config?.color || "text-gray-600"}`} />
+                          <div>
+                            <div className="font-medium">{config?.name || result.test_type}</div>
+                            <div className="text-sm text-gray-500">
+                              {new Date(result.completed_at).toLocaleDateString()}
                             </div>
                           </div>
-
-                          <h3 className="font-semibold text-lg mb-2">{test.name}</h3>
-                          <p className="text-gray-600 text-sm mb-4">{test.description}</p>
-
-                          <div className="space-y-2 mb-4">
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <Clock className="h-4 w-4" />
-                              <span>{test.duration}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <FileText className="h-4 w-4" />
-                              <span>{test.questions} preguntas</span>
-                            </div>
-                          </div>
-
-                          {test.disabled ? (
-                            <Button disabled className="w-full">
-                              Próximamente
-                            </Button>
-                          ) : (
-                            <div className="flex gap-2">
-                              {isCompleted ? (
-                                <>
-                                  <Button
-                                    onClick={() => router.push(`${test.route}/results`)}
-                                    className="flex-1"
-                                    variant="outline"
-                                  >
-                                    <BarChart3 className="h-4 w-4 mr-2" />
-                                    Ver Resultados
-                                  </Button>
-                                  <Button onClick={() => router.push(test.route)} variant="outline" size="sm">
-                                    Repetir
-                                  </Button>
-                                </>
-                              ) : (
-                                <Button onClick={() => router.push(test.route)} className="w-full">
-                                  <Play className="h-4 w-4 mr-2" />
-                                  Comenzar Test
-                                </Button>
-                              )}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
+                        </div>
+                        <Badge variant="secondary">{result.score}%</Badge>
+                      </div>
                     )
                   })}
-                </div>
-
-                {/* Demo Section */}
-                <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
-                  <div className="text-center">
-                    <h3 className="text-xl font-semibold text-blue-800 mb-2">🚀 Dashboard con IA Integrada</h3>
-                    <p className="text-blue-700 mb-4">
-                      Explora análisis con IA, coaching personalizado y visualizaciones avanzadas
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button onClick={() => router.push("/test/disc/results?demo=true")} size="lg">
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Ver Demo con IA
-                      </Button>
-                      <Button variant="outline" onClick={() => router.push("/test/soft-skills")} size="lg">
-                        <Heart className="h-4 w-4 mr-2" />
-                        Nuevo: Test Habilidades Blandas
-                      </Button>
+                  {testResults.length === 0 && (
+                    <div className="text-center text-gray-500 py-8">
+                      No hay actividad reciente. ¡Completa tu primer test!
                     </div>
-                  </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          {/* Tab de Resultados */}
-          <TabsContent value="results" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Mis Resultados de Tests
-                  {!dataLoaded.tests && (
-                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
-                  )}
-                </CardTitle>
-                <CardDescription>Revisa y analiza los resultados de todos los tests que has completado</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!dataLoaded.tests ? (
-                  <div className="space-y-4">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-20 bg-gray-200 rounded-lg"></div>
-                      </div>
-                    ))}
-                  </div>
-                ) : testResults.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay resultados aún</h3>
-                    <p className="text-gray-500 mb-4">Completa tu primer test para ver tus resultados aquí</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button onClick={() => router.push("/test/disc")}>
-                        <Play className="h-4 w-4 mr-2" />
-                        Comenzar con DISC
-                      </Button>
-                      <Button variant="outline" onClick={() => router.push("/test/soft-skills")}>
-                        <Heart className="h-4 w-4 mr-2" />
-                        Test Habilidades Blandas
-                      </Button>
+        <TabsContent value="tests" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Object.entries(testConfigs).map(([testType, config]) => {
+              const status = getTestStatus(testType)
+              const score = getTestScore(testType)
+              const Icon = config.icon
+
+              return (
+                <Card key={testType} className={`${config.borderColor} border-2 hover:shadow-lg transition-shadow`}>
+                  <CardHeader className={config.bgColor}>
+                    <div className="flex items-center justify-between">
+                      <Icon className={`h-8 w-8 ${config.color}`} />
+                      {status === "completed" && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          Completado
+                        </Badge>
+                      )}
                     </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {testResults.map((result) => (
-                      <Card key={result.id}>
-                        <CardContent className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <div className="p-3 bg-blue-100 rounded-lg">
-                                <Brain className="h-6 w-6 text-blue-600" />
-                              </div>
-                              <div>
-                                <h3 className="font-semibold">{result.test_name}</h3>
-                                <p className="text-sm text-gray-600">Completado el {formatDate(result.completed_at)}</p>
-                                <p className="text-sm text-gray-500">Duración: {result.duration_minutes} minutos</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="secondary">Puntuación: {result.score}%</Badge>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const testRoute = result.test_name.toLowerCase().replace(/\s+/g, "-")
-                                  router.push(`/test/${testRoute}/results`)
-                                }}
-                              >
-                                <Sparkles className="h-4 w-4 mr-2" />
-                                Ver con IA
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Tab de Documentos */}
-          <TabsContent value="documents" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Biblioteca de Conocimiento
-                  {!dataLoaded.documents && (
-                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
-                  )}
-                </CardTitle>
-                <CardDescription>Accede a recursos, guías y documentos para tu desarrollo profesional</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!dataLoaded.documents ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-48 bg-gray-200 rounded-lg"></div>
+                    <CardTitle className="text-xl">{config.name}</CardTitle>
+                    <CardDescription>{config.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Duración:</span>
+                        <span className="font-medium">{config.duration}</span>
                       </div>
-                    ))}
-                  </div>
-                ) : documents.length === 0 ? (
-                  <div className="text-center py-12">
-                    <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay documentos disponibles</h3>
-                    <p className="text-gray-500">Los documentos aparecerán aquí cuando estén disponibles</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {documents.map((doc) => (
-                      <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="p-3 bg-green-100 rounded-lg">
-                              <FileText className="h-6 w-6 text-green-600" />
-                            </div>
-                            <Badge variant="outline">{doc.category}</Badge>
+
+                      {status === "completed" && (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Puntuación:</span>
+                            <span className="font-bold text-green-600">{score}%</span>
                           </div>
+                          <Progress value={score} className="h-2" />
+                        </div>
+                      )}
 
-                          <h3 className="font-semibold text-lg mb-2">{doc.title}</h3>
+                      <div className="flex gap-2">
+                        {status === "completed" ? (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 bg-transparent"
+                              onClick={() => (window.location.href = `/test/${testType}/results`)}
+                            >
+                              <Eye className="h-4 w-4 mr-1" />
+                              Ver Resultados
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 bg-transparent"
+                              onClick={() => (window.location.href = `/test/${testType}`)}
+                            >
+                              <RotateCcw className="h-4 w-4 mr-1" />
+                              Repetir Test
+                            </Button>
+                          </>
+                        ) : (
+                          <Button className="w-full" onClick={() => (window.location.href = `/test/${testType}`)}>
+                            <Play className="h-4 w-4 mr-2" />
+                            Comenzar Test
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </TabsContent>
 
-                          <div className="flex items-center justify-between mt-4">
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <Users className="h-4 w-4" />
-                              <span>{doc.read_count} lecturas</span>
-                            </div>
-                            <Button size="sm">
-                              <ArrowRight className="h-4 w-4 mr-2" />
-                              Leer
+        <TabsContent value="results" className="space-y-6">
+          <div className="grid gap-6">
+            {testResults.length > 0 ? (
+              testResults.map((result) => {
+                const config = testConfigs[result.test_type as keyof typeof testConfigs]
+                const Icon = config?.icon || Brain
+                const insight = getQuickInsight(result.test_type, result.results)
+
+                return (
+                  <Card key={result.id} className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className={`p-3 rounded-lg ${config?.bgColor || "bg-gray-50"}`}>
+                            <Icon className={`h-6 w-6 ${config?.color || "text-gray-600"}`} />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold">{config?.name || result.test_type}</h3>
+                            <p className="text-sm text-gray-600">Completado el {getTestDate(result.test_type)}</p>
+                            <p className="text-sm text-gray-500 mt-1">{insight}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-green-600 mb-1">{result.score}%</div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => (window.location.href = `/test/${result.test_type}/results`)}
+                            >
+                              <Eye className="h-4 w-4 mr-1" />
+                              Ver Detalles
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => (window.location.href = `/test/${result.test_type}`)}
+                            >
+                              <RotateCcw className="h-4 w-4 mr-1" />
+                              Repetir
                             </Button>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Tab de Actividad */}
-          <TabsContent value="activity" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Actividad Reciente
-                  {!dataLoaded.activities && (
-                    <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full ml-2" />
-                  )}
-                </CardTitle>
-                <CardDescription>Revisa tu progreso y actividades más recientes en la plataforma</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!dataLoaded.activities ? (
-                  <div className="space-y-4">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-16 bg-gray-200 rounded-lg"></div>
-                      </div>
-                    ))}
-                  </div>
-                ) : recentActivities.length === 0 ? (
-                  <div className="text-center py-12">
-                    <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">No hay actividad reciente</h3>
-                    <p className="text-gray-500">Tu actividad aparecerá aquí cuando comiences a usar la plataforma</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {recentActivities.map((activity) => (
-                      <div key={activity.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                        <div className="p-2 bg-blue-100 rounded-full">{getActivityIcon(activity.activity_type)}</div>
-                        <div className="flex-1">
-                          <p className="font-medium">{activity.activity_description}</p>
-                          <p className="text-sm text-gray-500">{formatDate(activity.created_at)}</p>
                         </div>
-                        <Badge variant="secondary">+{activity.xp_earned} XP</Badge>
                       </div>
-                    ))}
+                    </CardContent>
+                  </Card>
+                )
+              })
+            ) : (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center py-8">
+                    <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No hay resultados disponibles</h3>
+                    <p className="text-gray-600 mb-4">Completa tu primer test para ver tus resultados aquí</p>
+                    <Button onClick={() => setActiveTab("tests")}>Explorar Tests</Button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="documents" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Biblioteca de Conocimiento
+              </CardTitle>
+              <CardDescription>Recursos y documentos para tu desarrollo profesional</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Próximamente</h3>
+                <p className="text-gray-600">La biblioteca de documentos estará disponible pronto</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

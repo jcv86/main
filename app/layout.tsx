@@ -3,12 +3,13 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import SessionWrapper from "@/components/session-wrapper"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DTC Final - Plataforma de Desarrollo Profesional",
-  description: "Plataforma integral para el desarrollo de carrera y habilidades profesionales",
+  title: "DespegaTuCarrera - Plataforma de Desarrollo Profesional",
+  description: "Tu plataforma integral para el desarrollo profesional y crecimiento de carrera",
     generator: 'v0.app'
 }
 
@@ -20,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <SessionWrapper>{children}</SessionWrapper>
+        <SessionWrapper>
+          {children}
+          <Toaster />
+        </SessionWrapper>
       </body>
     </html>
   )

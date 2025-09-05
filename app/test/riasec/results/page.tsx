@@ -1,736 +1,724 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createClient } from "@supabase/supabase-js"
+import { Separator } from "@/components/ui/separator"
+import { supabase } from "@/lib/supabase"
+import { AiCoachChat } from "@/components/ai-coach-chat"
 import {
+  Target,
+  Brain,
+  Palette,
+  Users,
+  TrendingUp,
+  FileText,
+  BarChart3,
+  LucidePieChart as RechartsPieChart,
   Radar,
+  Sparkles,
+  Award,
+  BookOpen,
+  Briefcase,
+  ArrowRight,
+  CheckCircle,
+  Star,
+  TrendingDown,
+  AlertCircle,
+} from "lucide-react"
+import {
+  ResponsiveContainer,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  ResponsiveContainer,
+  Radar as RechartsRadar,
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  PieChart,
-  Pie,
   Cell,
+  Legend,
+  Pie,
 } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import AICoachChat from "@/components/ai-coach-chat"
-import AIInsightsPanel from "@/components/ai-insights-panel"
-import { aiCoach } from "@/lib/ai-coach"
-import {
-  ArrowLeft,
-  Target,
-  Compass,
-  TrendingUp,
-  Award,
-  BookOpen,
-  Lightbulb,
-  Heart,
-  Zap,
-  Shield,
-  Sparkles,
-  Download,
-  Share2,
-  Building,
-  Briefcase,
-  Star,
-} from "lucide-react"
 
-interface RIASECResult {
-  R: number // Realistic
-  I: number // Investigative
-  A: number // Artistic
-  S: number // Social
-  E: number // Enterprising
-  C: number // Conventional
-  primary_interests: string[]
-  secondary_interests: string[]
+interface RIASECResults {
+  R: number
+  I: number
+  A: number
+  S: number
+  E: number
+  C: number
+  total_score: number
+  max_score: number
+  percentage: number
   holland_code: string
-  personality_summary: string
-  career_recommendations: string[]
-  work_environments: string[]
-  development_areas: string[]
+  top_categories: string[]
+  career_matches: string[]
   strengths: string[]
-  work_values: string[]
+  development_areas: string[]
+  reflective_responses: Record<string, string>
 }
 
-function RIASECResultsContent() {
-  const [results, setResults] = useState<RIASECResult | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [userEmail, setUserEmail] = useState("")
-  const [aiInterpretation, setAiInterpretation] = useState("")
-  const [loadingAI, setLoadingAI] = useState(false)
-
+export default function RIASECResults() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const isDemo = searchParams.get("demo") === "true"
-
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const [results, setResults] = useState<RIASECResults | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("overview")
 
   useEffect(() => {
-    if (isDemo) {
-      loadDemoResults()
-    } else {
-      checkUserAndLoadResults()
-    }
-  }, [isDemo])
+    loadResults()
+  }, [])
 
-  const checkUserAndLoadResults = async () => {
-    try {
-      // Check local session first
-      const localSession = localStorage.getItem("dtc_session")
-      if (localSession) {
-        const sessionData = JSON.parse(localSession)
-        if (sessionData.authenticated && sessionData.user) {
-          setUserEmail(sessionData.user.email)
-          await loadUserResults(sessionData.user.email)
-          return
-        }
-      }
-
-      // Check Supabase session
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
-        await loadUserResults(user.email || "")
-      } else {
-        router.push("/auth")
-      }
-    } catch (error) {
-      console.error("Error checking user session:", error)
-      router.push("/auth")
-    }
-  }
-
-  const loadUserResults = async (email: string) => {
+  const loadResults = async () => {
     try {
       const { data, error } = await supabase
         .from("test_results")
         .select("*")
-        .eq("user_email", email)
-        .eq("test_name", "RIASEC")
+        .eq("user_email", "travis@example.com")
+        .eq("test_type", "riasec")
         .order("completed_at", { ascending: false })
         .limit(1)
+        .single()
 
       if (error) throw error
-
-      if (data && data.length > 0) {
-        setResults(data[0].results)
-        await generateAIInterpretation(email, data[0].results)
-      } else {
-        // No results found, redirect to test
-        router.push("/test/riasec")
-      }
+      setResults(data.results as RIASECResults)
     } catch (error) {
       console.error("Error loading results:", error)
-      router.push("/test/riasec")
     } finally {
       setLoading(false)
     }
   }
 
-  const loadDemoResults = () => {
-    const demoResults: RIASECResult = {
-      R: 65, // Realistic
-      I: 85, // Investigative
-      A: 75, // Artistic
-      S: 70, // Social
-      E: 80, // Enterprising
-      C: 60, // Conventional
-      primary_interests: ["Investigativo", "Emprendedor", "Artístico"],
-      secondary_interests: ["Social"],
-      holland_code: "IEA",
-      personality_summary:
-        "Perfil de innovador emprendedor con fuerte orientación hacia la investigación y la creatividad.",
-      career_recommendations: [
-        "Consultor de Innovación",
-        "Director de I+D",
-        "Emprendedor Tecnológico",
-        "Arquitecto de Soluciones",
-        "Product Manager",
-        "Consultor de Estrategia",
-      ],
-      work_environments: [
-        "Startups tecnológicas",
-        "Departamentos de innovación",
-        "Consultorías estratégicas",
-        "Centros de investigación aplicada",
-        "Empresas de diseño y creatividad",
-      ],
-      development_areas: [
-        "Desarrollar mayor paciencia con procesos rutinarios",
-        "Mejorar habilidades de implementación práctica",
-        "Fortalecer la atención al detalle en tareas administrativas",
-      ],
-      strengths: [
-        "Excelente capacidad para identificar oportunidades",
-        "Habilidad natural para generar ideas innovadoras",
-        "Facilidad para conectar conceptos complejos",
-        "Motivación intrínseca para resolver problemas",
-      ],
-      work_values: [
-        "Autonomía e independencia",
-        "Oportunidades de crecimiento",
-        "Impacto y significado del trabajo",
-        "Flexibilidad y variedad",
-      ],
+  const getCategoryIcon = (category: string) => {
+    const icons = {
+      R: Target,
+      I: Brain,
+      A: Palette,
+      S: Users,
+      E: TrendingUp,
+      C: FileText,
     }
-
-    setResults(demoResults)
-    setUserEmail("demo@example.com")
-    setLoading(false)
+    return icons[category as keyof typeof icons] || FileText
   }
 
-  const generateAIInterpretation = async (email: string, testResults: RIASECResult) => {
-    try {
-      setLoadingAI(true)
-      const interpretation = await aiCoach.interpretTestResults(email, "RIASEC", testResults)
-      setAiInterpretation(interpretation)
-    } catch (error) {
-      console.error("Error generating AI interpretation:", error)
-      setAiInterpretation("No se pudo generar la interpretación con IA en este momento.")
-    } finally {
-      setLoadingAI(false)
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      R: "#ef4444", // red
+      I: "#3b82f6", // blue
+      A: "#8b5cf6", // purple
+      S: "#10b981", // green
+      E: "#f59e0b", // orange
+      C: "#6b7280", // gray
     }
+    return colors[category as keyof typeof colors] || "#6b7280"
+  }
+
+  const getCategoryName = (category: string) => {
+    const names = {
+      R: "Realista",
+      I: "Investigativo",
+      A: "Artístico",
+      S: "Social",
+      E: "Emprendedor",
+      C: "Convencional",
+    }
+    return names[category as keyof typeof names] || category
+  }
+
+  const getRadarData = () => {
+    if (!results) return []
+    return [
+      { category: "Realista", value: results.R, fullMark: 15 },
+      { category: "Investigativo", value: results.I, fullMark: 15 },
+      { category: "Artístico", value: results.A, fullMark: 15 },
+      { category: "Social", value: results.S, fullMark: 15 },
+      { category: "Emprendedor", value: results.E, fullMark: 15 },
+      { category: "Convencional", value: results.C, fullMark: 15 },
+    ]
+  }
+
+  const getBarData = () => {
+    if (!results) return []
+    return [
+      { name: "R", value: results.R, color: getCategoryColor("R") },
+      { name: "I", value: results.I, color: getCategoryColor("I") },
+      { name: "A", value: results.A, color: getCategoryColor("A") },
+      { name: "S", value: results.S, color: getCategoryColor("S") },
+      { name: "E", value: results.E, color: getCategoryColor("E") },
+      { name: "C", value: results.C, color: getCategoryColor("C") },
+    ]
+  }
+
+  const getPieData = () => {
+    if (!results) return []
+    return [
+      { name: "Realista", value: results.R, color: getCategoryColor("R") },
+      { name: "Investigativo", value: results.I, color: getCategoryColor("I") },
+      { name: "Artístico", value: results.A, color: getCategoryColor("A") },
+      { name: "Social", value: results.S, color: getCategoryColor("S") },
+      { name: "Emprendedor", value: results.E, color: getCategoryColor("E") },
+      { name: "Convencional", value: results.C, color: getCategoryColor("C") },
+    ]
+  }
+
+  const getHollandCodeDescription = (code: string) => {
+    const descriptions: Record<string, string> = {
+      IEA: "Innovador Emprendedor Artístico - Combinas la investigación científica con el liderazgo empresarial y la creatividad. Eres ideal para roles que requieren innovación, análisis estratégico y visión creativa.",
+      EIA: "Emprendedor Investigativo Artístico - Lideras con base científica y toque creativo. Excelente para dirigir equipos de innovación y desarrollo de productos disruptivos.",
+      AIE: "Artístico Investigativo Emprendedor - Tu creatividad se fundamenta en investigación sólida y visión empresarial. Perfecto para industrias creativas con componente tecnológico.",
+      ISE: "Investigativo Social Emprendedor - Combinas análisis profundo con impacto social y liderazgo. Ideal para organizaciones que buscan soluciones basadas en evidencia.",
+      ESI: "Emprendedor Social Investigativo - Lideras iniciativas de impacto social con rigor analítico. Excelente para empresas B-Corp y organizaciones de cambio social.",
+      ASI: "Artístico Social Investigativo - Usas la creatividad para generar impacto social basado en investigación. Perfecto para proyectos de innovación social.",
+    }
+    return (
+      descriptions[code] ||
+      `Tu código ${code} representa una combinación única de intereses que te posiciona para roles especializados en la intersección de estas áreas.`
+    )
+  }
+
+  const getCareerPaths = (code: string) => {
+    const paths: Record<string, { immediate: string[]; medium: string[]; long: string[] }> = {
+      IEA: {
+        immediate: ["Analista de Datos", "Desarrollador Junior", "Asistente de Investigación", "Diseñador UX/UI"],
+        medium: ["Product Manager", "Consultor de Tecnología", "Líder de Proyecto", "Arquitecto de Sistemas"],
+        long: ["Director de Innovación", "CTO", "Fundador de Startup", "Consultor Senior"],
+      },
+      EIA: {
+        immediate: ["Coordinador de Proyectos", "Analista de Negocios", "Asistente de Gerencia", "Investigador Jr"],
+        medium: ["Gerente de Producto", "Consultor de Estrategia", "Director de Operaciones", "Líder de Innovación"],
+        long: ["CEO", "Director General", "Consultor Ejecutivo", "Inversionista"],
+      },
+      AIE: {
+        immediate: ["Diseñador Gráfico", "Asistente Creativo", "Desarrollador Frontend", "Content Creator"],
+        medium: ["Director de Arte", "Creative Director", "Diseñador de Productos", "Brand Manager"],
+        long: ["Director Creativo Senior", "Fundador de Agencia", "Director de Marca", "Consultor de Diseño"],
+      },
+    }
+    return (
+      paths[code] || {
+        immediate: ["Analista", "Asistente", "Coordinador", "Especialista Jr"],
+        medium: ["Gerente", "Consultor", "Líder de Equipo", "Especialista Sr"],
+        long: ["Director", "Consultor Senior", "Ejecutivo", "Fundador"],
+      }
+    )
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando tus resultados RIASEC...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+              <span>Cargando resultados RIASEC...</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <Compass className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-600 mb-4">Completa el test RIASEC para ver tus resultados</p>
-            <Button onClick={() => router.push("/test/riasec")}>Realizar Test</Button>
+            <p className="text-gray-600 mb-4">Parece que aún no has completado el test RIASEC.</p>
+            <Button onClick={() => router.push("/test/riasec")}>Realizar Test RIASEC</Button>
           </CardContent>
         </Card>
       </div>
     )
   }
 
-  const radarData = [
-    { interest: "Realista", value: results.R, fullName: "Realista (R)" },
-    { interest: "Investigativo", value: results.I, fullName: "Investigativo (I)" },
-    { interest: "Artístico", value: results.A, fullName: "Artístico (A)" },
-    { interest: "Social", value: results.S, fullName: "Social (S)" },
-    { interest: "Emprendedor", value: results.E, fullName: "Emprendedor (E)" },
-    { interest: "Convencional", value: results.C, fullName: "Convencional (C)" },
-  ]
-
-  const barData = [
-    { name: "Realista", value: results.R, color: "#8B5CF6", description: "Trabajo práctico y manual" },
-    { name: "Investigativo", value: results.I, color: "#06B6D4", description: "Análisis e investigación" },
-    { name: "Artístico", value: results.A, color: "#10B981", description: "Creatividad y expresión" },
-    { name: "Social", value: results.S, color: "#F59E0B", description: "Ayuda y servicio a otros" },
-    { name: "Emprendedor", value: results.E, color: "#EF4444", description: "Liderazgo y persuasión" },
-    { name: "Convencional", value: results.C, color: "#84CC16", description: "Organización y datos" },
-  ]
-
-  const pieData = barData.map((item) => ({
-    name: item.name,
-    value: item.value,
-    color: item.color,
-  }))
-
-  const COLORS = ["#8B5CF6", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#84CC16"]
-
-  const getInterestIcon = (interest: string) => {
-    switch (interest) {
-      case "Realista":
-        return <Zap className="h-5 w-5" />
-      case "Investigativo":
-        return <Target className="h-5 w-5" />
-      case "Artístico":
-        return <Lightbulb className="h-5 w-5" />
-      case "Social":
-        return <Heart className="h-5 w-5" />
-      case "Emprendedor":
-        return <TrendingUp className="h-5 w-5" />
-      case "Convencional":
-        return <Shield className="h-5 w-5" />
-      default:
-        return <Star className="h-5 w-5" />
-    }
-  }
-
-  const getScoreInterpretation = (score: number) => {
-    if (score >= 80) return { label: "Muy Alto", color: "bg-green-500" }
-    if (score >= 60) return { label: "Alto", color: "bg-blue-500" }
-    if (score >= 40) return { label: "Moderado", color: "bg-yellow-500" }
-    if (score >= 20) return { label: "Bajo", color: "bg-orange-500" }
-    return { label: "Muy Bajo", color: "bg-red-500" }
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
-      <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={() => router.push("/dashboard")}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Dashboard
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Resultados RIASEC</h1>
-              <p className="text-gray-600">Tu perfil de intereses vocacionales según Holland</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isDemo && (
-              <Badge variant="secondary" className="bg-orange-100 text-orange-700">
-                <Sparkles className="h-3 w-3 mr-1" />
-                Modo Demo
-              </Badge>
-            )}
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Exportar PDF
-            </Button>
-            <Button variant="outline" size="sm">
-              <Share2 className="h-4 w-4 mr-2" />
-              Compartir
-            </Button>
-          </div>
-        </div>
-
-        {/* Holland Code Overview */}
-        <Card className="border-l-4 border-l-orange-500">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                  {results.holland_code}
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Código Holland: {results.holland_code}</h2>
-                  <p className="text-gray-600">{results.personality_summary}</p>
-                </div>
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-3xl font-bold text-blue-900 mb-2">
+                  Resultados Test RIASEC
+                  <Badge className="ml-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                    Código Holland: {results.holland_code}
+                  </Badge>
+                </CardTitle>
+                <CardDescription className="text-lg">{getHollandCodeDescription(results.holland_code)}</CardDescription>
               </div>
               <div className="text-right">
-                <Badge variant="secondary" className="bg-orange-100 text-orange-700 mb-2">
-                  Intereses Vocacionales
-                </Badge>
-                <div className="flex flex-wrap gap-1 justify-end">
-                  {results.primary_interests.slice(0, 3).map((interest, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
+                <div className="text-3xl font-bold text-blue-600">{results.percentage}%</div>
+                <div className="text-sm text-gray-500">Puntuación General</div>
               </div>
             </div>
-          </CardContent>
+          </CardHeader>
         </Card>
 
         {/* Main Content */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Resumen</TabsTrigger>
-            <TabsTrigger value="detailed">Análisis Detallado</TabsTrigger>
-            <TabsTrigger value="ai-coach">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Coach IA
-            </TabsTrigger>
-            <TabsTrigger value="insights">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Insights IA
-            </TabsTrigger>
-            <TabsTrigger value="career">Carrera</TabsTrigger>
-          </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Card>
+            <CardContent className="p-6">
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <Award className="h-4 w-4" />
+                  Resumen
+                </TabsTrigger>
+                <TabsTrigger value="charts" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Gráficos
+                </TabsTrigger>
+                <TabsTrigger value="analysis" className="flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  Análisis
+                </TabsTrigger>
+                <TabsTrigger value="reflective" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Reflexiones
+                </TabsTrigger>
+                <TabsTrigger value="coach" className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  Coach IA
+                </TabsTrigger>
+                <TabsTrigger value="career" className="flex items-center gap-2">
+                  <Briefcase className="h-4 w-4" />
+                  Carrera
+                </TabsTrigger>
+              </TabsList>
+            </CardContent>
+          </Card>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Radar Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Compass className="h-5 w-5 text-orange-600" />
-                    Perfil de Intereses RIASEC
-                  </CardTitle>
-                  <CardDescription>Visualización de tus seis áreas de interés vocacional</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ChartContainer
-                    config={{
-                      value: {
-                        label: "Puntuación",
-                        color: "hsl(var(--chart-1))",
-                      },
-                    }}
-                    className="h-[300px]"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart data={radarData}>
-                        <PolarGrid />
-                        <PolarAngleAxis dataKey="interest" />
-                        <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                        <Radar
-                          name="RIASEC"
-                          dataKey="value"
-                          stroke="#F97316"
-                          fill="#F97316"
-                          fillOpacity={0.3}
-                          strokeWidth={2}
-                        />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                      </RadarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </CardContent>
-              </Card>
-
-              {/* Pie Chart */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Holland Code Breakdown */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Target className="h-5 w-5 text-blue-600" />
-                    Distribución de Intereses
+                    Tu Código Holland: {results.holland_code}
                   </CardTitle>
-                  <CardDescription>Proporción de cada área de interés</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer
-                    config={{
-                      value: {
-                        label: "Puntuación",
-                        color: "hsl(var(--chart-2))",
-                      },
-                    }}
-                    className="h-[300px]"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={pieData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {pieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
+                  <div className="space-y-4">
+                    {results.holland_code.split("").map((letter, index) => {
+                      const IconComponent = getCategoryIcon(letter)
+                      const score = results[letter as keyof typeof results] as number
+                      const percentage = Math.round((score / 15) * 100)
+                      return (
+                        <div key={letter} className="flex items-center gap-3">
+                          <div
+                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
+                            style={{ backgroundColor: getCategoryColor(letter) }}
+                          >
+                            {index + 1}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <IconComponent className="h-4 w-4" style={{ color: getCategoryColor(letter) }} />
+                              <span className="font-semibold">{getCategoryName(letter)}</span>
+                              <Badge variant="outline">{score}/15 puntos</Badge>
+                            </div>
+                            <Progress value={percentage} className="h-2" />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Top Strengths */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-yellow-600" />
+                    Fortalezas Principales
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {results.strengths.slice(0, 4).map((strength, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{strength}</span>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Interest Breakdown */}
+            {/* Career Matches */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-yellow-600" />
-                  Desglose de Intereses
+                  <Briefcase className="h-5 w-5 text-purple-600" />
+                  Carreras Compatibles
                 </CardTitle>
+                <CardDescription>
+                  Basado en tu código Holland {results.holland_code}, estas carreras son altamente compatibles con tu
+                  perfil
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {barData.map((item) => {
-                    const interpretation = getScoreInterpretation(item.value)
-                    return (
-                      <div key={item.name} className="text-center p-4 border rounded-lg">
-                        <div className="flex items-center justify-center mb-3">
-                          <div
-                            className={`w-16 h-16 rounded-full ${interpretation.color} flex items-center justify-center text-white font-bold text-xl`}
-                          >
-                            {item.value}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {results.career_matches.map((career, index) => (
+                    <div
+                      key={index}
+                      className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                          {index + 1}
+                        </div>
+                        <span className="font-medium text-blue-900">{career}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Development Areas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingDown className="h-5 w-5 text-orange-600" />
+                  Áreas de Desarrollo
+                </CardTitle>
+                <CardDescription>Aspectos en los que puedes enfocar tu crecimiento profesional</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {results.development_areas.map((area, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200"
+                    >
+                      <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-orange-800">{area}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Charts Tab */}
+          <TabsContent value="charts" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Radar Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Radar className="h-5 w-5 text-blue-600" />
+                    Perfil RIASEC - Vista Radar
+                  </CardTitle>
+                  <CardDescription>Visualización completa de tus puntuaciones en las 6 dimensiones</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={getRadarData()}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="category" />
+                        <PolarRadiusAxis angle={90} domain={[0, 15]} />
+                        <RechartsRadar
+                          name="Puntuación"
+                          dataKey="value"
+                          stroke="#3b82f6"
+                          fill="#3b82f6"
+                          fillOpacity={0.3}
+                          strokeWidth={2}
+                        />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Bar Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-green-600" />
+                    Puntuaciones por Categoría
+                  </CardTitle>
+                  <CardDescription>Comparación directa de tus puntuaciones RIASEC</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={getBarData()}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis domain={[0, 15]} />
+                        <Tooltip formatter={(value, name) => [`${value} puntos`, getCategoryName(name as string)]} />
+                        <Bar dataKey="value" fill="#8884d8">
+                          {getBarData().map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Pie Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <RechartsPieChart className="h-5 w-5 text-purple-600" />
+                  Distribución de Intereses
+                </CardTitle>
+                <CardDescription>Proporción de cada tipo de interés en tu perfil profesional</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RechartsPieChart>
+                      <Pie
+                        data={getPieData()}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {getPieData().map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </RechartsPieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Analysis Tab */}
+          <TabsContent value="analysis" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Detailed Analysis */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-purple-600" />
+                    Análisis Detallado
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">Tu Perfil {results.holland_code}</h4>
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {getHollandCodeDescription(results.holland_code)}
+                    </p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <h4 className="font-semibold mb-2">Fortalezas Clave</h4>
+                    <div className="space-y-2">
+                      {results.strengths.map((strength, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <Star className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{strength}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <Separator />
+                  <div>
+                    <h4 className="font-semibold mb-2">Oportunidades de Crecimiento</h4>
+                    <div className="space-y-2">
+                      {results.development_areas.map((area, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{area}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Score Breakdown */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-blue-600" />
+                    Desglose de Puntuaciones
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {Object.entries(results)
+                      .filter(([key]) => ["R", "I", "A", "S", "E", "C"].includes(key))
+                      .sort(([, a], [, b]) => (b as number) - (a as number))
+                      .map(([category, score], index) => {
+                        const IconComponent = getCategoryIcon(category)
+                        const percentage = Math.round(((score as number) / 15) * 100)
+                        const isTop3 = index < 3
+                        return (
+                          <div key={category} className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <IconComponent className="h-4 w-4" style={{ color: getCategoryColor(category) }} />
+                                <span className="font-medium">{getCategoryName(category)}</span>
+                                {isTop3 && (
+                                  <Badge variant="secondary" className="text-xs">
+                                    Top {index + 1}
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="text-right">
+                                <div className="font-semibold">{score}/15</div>
+                                <div className="text-xs text-gray-500">{percentage}%</div>
+                              </div>
+                            </div>
+                            <Progress value={percentage} className="h-2" />
                           </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          {getInterestIcon(item.name)}
-                          <h3 className="font-semibold text-sm">{item.name}</h3>
-                        </div>
-                        <p className="text-xs text-gray-600 mb-2">{item.description}</p>
-                        <Badge variant="secondary" className="text-xs">
-                          {interpretation.label}
-                        </Badge>
-                        <Progress value={item.value} className="mt-2" />
+                        )
+                      })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Reflective Tab */}
+          <TabsContent value="reflective" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-green-600" />
+                  Tus Respuestas Reflexivas
+                </CardTitle>
+                <CardDescription>
+                  Análisis de tus respuestas abiertas que proporcionan insights adicionales sobre tu perfil profesional
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {Object.entries(results.reflective_responses).map(([questionKey, response]) => {
+                    const questionTexts: Record<string, string> = {
+                      q31: "¿Qué tipo de actividades te motivan más en el trabajo?",
+                      q32: "¿Cómo te ves profesionalmente en 5 años?",
+                      q33: "¿Cuál ha sido tu mayor logro personal o profesional?",
+                      q34: "¿Cómo sueles enfrentar los desafíos o problemas?",
+                      q35: "¿De qué manera contribuyes mejor en un equipo de trabajo?",
+                    }
+                    return (
+                      <div key={questionKey} className="p-4 bg-gray-50 rounded-lg border">
+                        <h4 className="font-semibold text-gray-900 mb-2">{questionTexts[questionKey]}</h4>
+                        <p className="text-gray-700 text-sm leading-relaxed">{response}</p>
                       </div>
                     )
                   })}
                 </div>
               </CardContent>
             </Card>
-
-            {/* Primary Interests */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-green-600" />
-                  Tus Intereses Principales
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {results.primary_interests.map((interest, index) => (
-                    <Card key={index} className="border-l-4 border-l-green-500">
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-green-100 rounded-lg">{getInterestIcon(interest)}</div>
-                          <div>
-                            <h3 className="font-semibold text-green-800">{interest}</h3>
-                            <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700">
-                              #{index + 1} Interés
-                            </Badge>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
 
-          {/* Detailed Analysis Tab */}
-          <TabsContent value="detailed" className="space-y-6">
-            {/* Bar Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-blue-600" />
-                  Puntuaciones Detalladas
-                </CardTitle>
-                <CardDescription>Comparación de todas las áreas de interés</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer
-                  config={{
-                    value: {
-                      label: "Puntuación",
-                      color: "hsl(var(--chart-3))",
-                    },
-                  }}
-                  className="h-[400px]"
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={barData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis domain={[0, 100]} />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#F97316" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-green-600" />
-                    Fortalezas Identificadas
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {results.strengths.map((strength, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-700">{strength}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-orange-600" />
-                    Áreas de Desarrollo
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {results.development_areas.map((area, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-700">{area}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* AI Interpretation */}
-            {!isDemo && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-purple-600" />
-                    Interpretación con IA
-                  </CardTitle>
-                  <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {loadingAI ? (
-                    <div className="flex items-center gap-3 py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-                      <span className="text-gray-600">Generando interpretación personalizada...</span>
-                    </div>
-                  ) : (
-                    <div className="prose prose-sm max-w-none">
-                      <p className="text-gray-700 whitespace-pre-wrap">{aiInterpretation}</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* AI Coach Tab */}
-          <TabsContent value="ai-coach" className="space-y-6">
-            {!isDemo ? (
-              <AICoachChat userEmail={userEmail} initialContext={JSON.stringify(results)} />
-            ) : (
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Coach IA no disponible en modo demo</h3>
-                  <p className="text-gray-600 mb-4">Completa el test real para acceder al coach personalizado</p>
-                  <Button onClick={() => router.push("/test/riasec")}>
-                    <Compass className="h-4 w-4 mr-2" />
-                    Realizar Test Real
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* AI Insights Tab */}
-          <TabsContent value="insights" className="space-y-6">
-            {!isDemo ? (
-              <AIInsightsPanel userEmail={userEmail} />
-            ) : (
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Insights IA no disponibles en modo demo</h3>
-                  <p className="text-gray-600 mb-4">Completa el test real para generar insights personalizados</p>
-                  <Button onClick={() => router.push("/test/riasec")}>
-                    <Compass className="h-4 w-4 mr-2" />
-                    Realizar Test Real
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+          {/* Coach IA Tab */}
+          <TabsContent value="coach" className="space-y-6">
+            <AiCoachChat
+              userEmail="travis@example.com"
+              initialContext={`Código Holland ${results.holland_code}: ${getHollandCodeDescription(results.holland_code)}`}
+              suggestedQuestions={[
+                `¿Cómo puedo aprovechar mi perfil ${results.holland_code}?`,
+                "¿Qué carreras específicas me recomiendas?",
+                "¿Cómo puedo desarrollar mis áreas de mejora?",
+                "¿Qué habilidades debería priorizar?",
+                "¿Cómo puedo destacar en entrevistas de trabajo?",
+              ]}
+            />
           </TabsContent>
 
           {/* Career Tab */}
           <TabsContent value="career" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-blue-600" />
-                  Carreras Recomendadas
-                </CardTitle>
-                <CardDescription>Profesiones que se alinean con tu perfil de intereses</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {results.career_recommendations.map((career, index) => (
-                    <Card key={index} className="border-l-4 border-l-blue-500">
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-blue-100 rounded-lg">
-                            <Briefcase className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">{career}</h3>
-                            <Badge variant="secondary" className="mt-1">
-                              Recomendado
-                            </Badge>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* Short Term */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Building className="h-5 w-5 text-green-600" />
-                    Ambientes de Trabajo Ideales
+                    <Target className="h-5 w-5 text-green-600" />
+                    Corto Plazo (0-2 años)
                   </CardTitle>
+                  <CardDescription>Primeros pasos en tu carrera profesional</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {results.work_environments.map((environment, index) => (
+                    {getCareerPaths(results.holland_code).immediate.map((career, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg"
+                        className="flex items-center gap-2 p-2 bg-green-50 rounded border border-green-200"
                       >
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Building className="h-4 w-4 text-green-600" />
-                        </div>
-                        <span className="font-medium text-green-800">{environment}</span>
+                        <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <span className="text-sm text-green-800">{career}</span>
                       </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
 
+              {/* Medium Term */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-purple-600" />
-                    Valores Laborales
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    Mediano Plazo (2-5 años)
                   </CardTitle>
+                  <CardDescription>Roles de crecimiento y especialización</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {results.work_values.map((value, index) => (
+                    {getCareerPaths(results.holland_code).medium.map((career, index) => (
                       <div
                         key={index}
-                        className="flex items-start gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg"
+                        className="flex items-center gap-2 p-2 bg-blue-50 rounded border border-blue-200"
                       >
-                        <div className="p-2 bg-purple-100 rounded-lg">
-                          <Heart className="h-4 w-4 text-purple-600" />
-                        </div>
-                        <span className="font-medium text-purple-800">{value}</span>
+                        <ArrowRight className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                        <span className="text-sm text-blue-800">{career}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Long Term */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Award className="h-5 w-5 text-purple-600" />
+                    Largo Plazo (5+ años)
+                  </CardTitle>
+                  <CardDescription>Posiciones de liderazgo y expertise</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {getCareerPaths(results.holland_code).long.map((career, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 p-2 bg-purple-50 rounded border border-purple-200"
+                      >
+                        <Star className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                        <span className="text-sm text-purple-800">{career}</span>
                       </div>
                     ))}
                   </div>
@@ -738,47 +726,51 @@ function RIASECResultsContent() {
               </Card>
             </div>
 
+            {/* Action Plan */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-indigo-600" />
-                  Plan de Desarrollo Profesional
+                  <BookOpen className="h-5 w-5 text-orange-600" />
+                  Plan de Acción Personalizado
                 </CardTitle>
-                <CardDescription>Pasos recomendados para tu crecimiento profesional</CardDescription>
+                <CardDescription>
+                  Pasos concretos para desarrollar tu carrera según tu perfil {results.holland_code}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                    <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-indigo-600 text-xs font-bold">1</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-indigo-800 mb-1">Próximos 30 días</h4>
-                      <p className="text-indigo-700 text-sm">
-                        Explora oportunidades en tu área de interés principal ({results.primary_interests[0]})
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                    <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-indigo-600 text-xs font-bold">2</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-indigo-800 mb-1">Próximos 90 días</h4>
-                      <p className="text-indigo-700 text-sm">
-                        Desarrolla habilidades que combinen tus intereses principales
-                      </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-3">Habilidades a Desarrollar</h4>
+                    <div className="space-y-2">
+                      {[
+                        "Análisis de datos y metodologías de investigación",
+                        "Liderazgo de equipos multidisciplinarios",
+                        "Pensamiento creativo y design thinking",
+                        "Comunicación estratégica y presentaciones",
+                        "Gestión de proyectos de innovación",
+                      ].map((skill, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{skill}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                    <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-indigo-600 text-xs font-bold">3</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-indigo-800 mb-1">Próximos 6 meses</h4>
-                      <p className="text-indigo-700 text-sm">
-                        Busca roles que se alineen con tu código Holland ({results.holland_code})
-                      </p>
+                  <div>
+                    <h4 className="font-semibold mb-3">Próximos Pasos</h4>
+                    <div className="space-y-2">
+                      {[
+                        "Buscar roles que combinen análisis e innovación",
+                        "Desarrollar portfolio de proyectos creativos",
+                        "Networking en industrias tecnológicas",
+                        "Considerar certificaciones en gestión de productos",
+                        "Explorar oportunidades de liderazgo de equipos",
+                      ].map((step, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <ArrowRight className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{step}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -786,24 +778,30 @@ function RIASECResultsContent() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Action Buttons */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Button onClick={() => router.push("/dashboard")} variant="outline">
+                Volver al Dashboard
+              </Button>
+              <Button onClick={() => router.push("/test/riasec")} variant="outline">
+                Repetir Test
+              </Button>
+              <Button onClick={() => window.print()} variant="outline">
+                Imprimir Resultados
+              </Button>
+              <Button
+                onClick={() => router.push("/test/soft-skills")}
+                className="bg-gradient-to-r from-green-600 to-emerald-600"
+              >
+                Siguiente Test: Soft Skills
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
-  )
-}
-
-export default function RIASECResults() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Cargando resultados...</p>
-          </div>
-        </div>
-      }
-    >
-      <RIASECResultsContent />
-    </Suspense>
   )
 }

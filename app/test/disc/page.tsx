@@ -74,7 +74,8 @@ const discQuestions: Question[] = [
   {
     id: 5,
     type: "open_ended",
-    question: "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste?",
+    question:
+      "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste y cuál fue el resultado?",
     category: "I",
   },
   {
@@ -116,7 +117,7 @@ const discQuestions: Question[] = [
   {
     id: 9,
     type: "open_ended",
-    question: "¿Cómo defines el éxito en tu carrera profesional?",
+    question: "¿Cómo defines el éxito en tu carrera profesional? Describe tus objetivos a largo plazo.",
     category: "S",
   },
   {
@@ -158,7 +159,7 @@ const discQuestions: Question[] = [
   {
     id: 13,
     type: "open_ended",
-    question: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría?",
+    question: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría y por qué son importantes para ti?",
     category: "S",
   },
   {
@@ -262,6 +263,64 @@ export default function DISCTestPage() {
     return "Compliance"
   }
 
+  const generateAIInterpretation = async (testResults: any) => {
+    try {
+      const response = await fetch("/api/ai-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content: `Eres un coach profesional especializado en análisis DISC y desarrollo de carrera. 
+              Analiza los resultados del test DISC de manera personalizada y constructiva.
+
+              Para el test DISC, analiza:
+              - Las puntuaciones en Dominancia (D), Influencia (I), Estabilidad (S), y Cumplimiento (C)
+              - El estilo principal identificado
+              - Cómo estas características se manifiestan en el trabajo
+              - Fortalezas específicas del perfil
+              - Áreas de desarrollo y crecimiento
+              - Recomendaciones para roles y equipos
+              - Estrategias de comunicación y liderazgo
+
+              Proporciona una interpretación detallada de 400-600 palabras que incluya:
+              1. Resumen del perfil DISC principal
+              2. Análisis de las puntuaciones específicas
+              3. Fortalezas clave identificadas
+              4. Áreas de desarrollo recomendadas
+              5. Aplicaciones prácticas en el trabajo
+              6. Recomendaciones para el crecimiento profesional
+
+              Mantén un tono profesional pero cercano, y enfócate en el crecimiento y las oportunidades.`,
+            },
+            {
+              role: "user",
+              content: `Por favor interpreta mis resultados del test DISC:
+              
+              Resultados: ${JSON.stringify(testResults)}
+              
+              Quiero entender qué significan estos resultados para mi desarrollo profesional y personal.`,
+            },
+          ],
+          temperature: 0.7,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        return data.message
+      } else {
+        throw new Error("Error en la respuesta de la API")
+      }
+    } catch (error) {
+      console.error("Error generating AI interpretation:", error)
+      return "Lo siento, no pude generar la interpretación de IA en este momento. Los resultados básicos están disponibles en las otras pestañas."
+    }
+  }
+
   const submitTest = async () => {
     if (!user) return
 
@@ -280,12 +339,18 @@ export default function DISCTestPage() {
         answers: answers,
       }
 
+      console.log("Generating AI interpretation...")
+      const aiInterpretation = await generateAIInterpretation(testResults)
+
       // Save to test_results table
       const { error: testError } = await supabase.from("test_results").insert({
         user_email: user.email,
         test_type: "personality",
         test_name: "DISC Assessment",
-        results: testResults,
+        results: {
+          ...testResults,
+          ai_interpretation: aiInterpretation,
+        },
         score: Math.max(scores.D, scores.I, scores.S, scores.C),
         duration_minutes: duration,
       })
@@ -308,6 +373,19 @@ export default function DISCTestPage() {
 
       if (discError) {
         console.error("Error saving DISC results:", discError)
+      }
+
+      // Save AI interpretation separately
+      const { error: aiError } = await supabase.from("ai_interpretations").insert({
+        user_email: user.email,
+        test_name: "DISC Assessment",
+        test_results: testResults,
+        interpretation: aiInterpretation,
+        model_version: "gpt-4o",
+      })
+
+      if (aiError) {
+        console.error("Error saving AI interpretation:", aiError)
       }
 
       // Update user profile
@@ -335,6 +413,7 @@ export default function DISCTestPage() {
         console.error("Error saving activity:", activityError)
       }
 
+      console.log("Test completed successfully, redirecting to results...")
       // Redirect to results
       router.push("/test/disc/results")
     } catch (error) {
@@ -368,7 +447,9 @@ export default function DISCTestPage() {
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <CardTitle className="text-2xl">¡Test DISC Completado!</CardTitle>
-            <CardDescription>Has respondido todas las preguntas. Ahora procesaremos tus resultados.</CardDescription>
+            <CardDescription>
+              Has respondido todas las preguntas. Ahora procesaremos tus resultados con IA.
+            </CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <div className="bg-blue-50 p-4 rounded-lg">
@@ -387,11 +468,22 @@ export default function DISCTestPage() {
               </div>
             </div>
 
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2 flex items-center justify-center">
+                <Brain className="h-4 w-4 mr-2 text-purple-600" />
+                Análisis con IA
+              </h3>
+              <p className="text-sm text-gray-600">
+                Nuestro sistema de IA analizará tus respuestas para proporcionarte insights personalizados sobre tu
+                estilo DISC.
+              </p>
+            </div>
+
             <Button onClick={submitTest} disabled={isSubmitting} className="w-full" size="lg">
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Procesando resultados...
+                  Generando análisis con IA...
                 </>
               ) : (
                 <>
@@ -473,12 +565,18 @@ export default function DISCTestPage() {
             )}
 
             {(question.type === "open_ended" || question.type === "scenario") && (
-              <Textarea
-                placeholder="Escribe tu respuesta aquí..."
-                value={currentAnswer || ""}
-                onChange={(e) => handleAnswer(e.target.value)}
-                className="min-h-[120px]"
-              />
+              <div className="space-y-2">
+                <Textarea
+                  placeholder="Escribe tu respuesta aquí... Sé específico y detallado para obtener un mejor análisis de IA."
+                  value={currentAnswer || ""}
+                  onChange={(e) => handleAnswer(e.target.value)}
+                  className="min-h-[120px]"
+                />
+                <div className="flex items-center text-xs text-gray-500">
+                  <Brain className="h-3 w-3 mr-1" />
+                  Esta respuesta será analizada por IA para insights personalizados
+                </div>
+              </div>
             )}
 
             {/* Navigation */}
@@ -511,11 +609,11 @@ export default function DISCTestPage() {
             <div className="flex items-start space-x-3">
               <Brain className="h-5 w-5 text-blue-600 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-sm">Sobre el Test DISC</h3>
+                <h3 className="font-semibold text-sm">Sobre el Test DISC con IA</h3>
                 <p className="text-sm text-gray-600 mt-1">
                   El test DISC evalúa cuatro dimensiones del comportamiento: Dominancia (D), Influencia (I), Estabilidad
-                  (S) y Cumplimiento (C). Tus respuestas nos ayudarán a identificar tu estilo de personalidad
-                  predominante y cómo interactúas en entornos profesionales.
+                  (S) y Cumplimiento (C). Nuestro sistema de IA analizará tus respuestas para proporcionarte insights
+                  personalizados sobre tu estilo de personalidad y cómo aplicarlo en entornos profesionales.
                 </p>
               </div>
             </div>

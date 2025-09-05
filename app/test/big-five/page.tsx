@@ -6,74 +6,86 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
-import { Brain, Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
+import { Brain, Clock, ArrowLeft, ArrowRight, CheckCircle, Sparkles, MessageSquare } from "lucide-react"
 
 interface Question {
   id: number
   text: string
   type: "likert" | "open" | "scenario"
-  factor: "O" | "C" | "E" | "A" | "N" // Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism
+  factor: "O" | "C" | "E" | "A" | "N"
   reverse?: boolean
   options?: string[]
 }
 
 const bigFiveQuestions: Question[] = [
-  // Openness to Experience (O)
+  // Openness to Experience (O) - Mixed questions
   { id: 1, text: "Me gusta explorar nuevas ideas y conceptos", type: "likert", factor: "O" },
-  { id: 2, text: "Disfruto de actividades artísticas y creativas", type: "likert", factor: "O" },
-  { id: 3, text: "Prefiero seguir rutinas establecidas", type: "likert", factor: "O", reverse: true },
-  { id: 4, text: "Me interesa aprender sobre diferentes culturas", type: "likert", factor: "O" },
-  { id: 5, text: "Tengo una imaginación muy activa", type: "likert", factor: "O" },
-  { id: 6, text: "Me gusta experimentar con nuevos enfoques en el trabajo", type: "likert", factor: "O" },
-  { id: 7, text: "Prefiero métodos tradicionales y probados", type: "likert", factor: "O", reverse: true },
-  { id: 8, text: "Me fascina la filosofía y las ideas abstractas", type: "likert", factor: "O" },
-  { id: 9, text: "Busco activamente nuevas experiencias", type: "likert", factor: "O" },
+  {
+    id: 2,
+    text: "¿Cómo te describes en términos de creatividad e innovación? Describe una situación donde hayas aplicado tu creatividad.",
+    type: "open",
+    factor: "O",
+  },
+  { id: 3, text: "Disfruto de actividades artísticas y creativas", type: "likert", factor: "O" },
+  { id: 4, text: "Prefiero seguir rutinas establecidas", type: "likert", factor: "O", reverse: true },
+  { id: 5, text: "Me interesa aprender sobre diferentes culturas", type: "likert", factor: "O" },
+  { id: 6, text: "Tengo una imaginación muy activa", type: "likert", factor: "O" },
 
-  // Conscientiousness (C)
-  { id: 10, text: "Siempre cumplo con mis compromisos y plazos", type: "likert", factor: "C" },
-  { id: 11, text: "Soy muy organizado en mi trabajo y vida personal", type: "likert", factor: "C" },
-  { id: 12, text: "A menudo dejo las cosas para el último minuto", type: "likert", factor: "C", reverse: true },
-  { id: 13, text: "Presto atención a los detalles importantes", type: "likert", factor: "C" },
-  { id: 14, text: "Tengo autodisciplina para completar tareas difíciles", type: "likert", factor: "C" },
-  { id: 15, text: "Mi espacio de trabajo suele estar desordenado", type: "likert", factor: "C", reverse: true },
-  { id: 16, text: "Planifico cuidadosamente antes de actuar", type: "likert", factor: "C" },
-  { id: 17, text: "Soy persistente cuando enfrento obstáculos", type: "likert", factor: "C" },
-  { id: 18, text: "Me esfuerzo por la excelencia en todo lo que hago", type: "likert", factor: "C" },
+  // Conscientiousness (C) - Mixed questions
+  { id: 7, text: "Siempre cumplo con mis compromisos y plazos", type: "likert", factor: "C" },
+  {
+    id: 8,
+    text: "¿Qué tan organizado eres en tu vida diaria y trabajo? Describe tu sistema de organización personal.",
+    type: "open",
+    factor: "C",
+  },
+  { id: 9, text: "Soy muy organizado en mi trabajo y vida personal", type: "likert", factor: "C" },
+  { id: 10, text: "A menudo dejo las cosas para el último minuto", type: "likert", factor: "C", reverse: true },
+  { id: 11, text: "Presto atención a los detalles importantes", type: "likert", factor: "C" },
+  { id: 12, text: "Tengo autodisciplina para completar tareas difíciles", type: "likert", factor: "C" },
 
-  // Extraversion (E)
-  { id: 19, text: "Me siento energizado cuando estoy con otras personas", type: "likert", factor: "E" },
-  { id: 20, text: "Prefiero trabajar solo que en equipo", type: "likert", factor: "E", reverse: true },
-  { id: 21, text: "Soy el alma de las fiestas y reuniones sociales", type: "likert", factor: "E" },
-  { id: 22, text: "Me gusta ser el centro de atención", type: "likert", factor: "E" },
-  { id: 23, text: "Prefiero actividades tranquilas y reflexivas", type: "likert", factor: "E", reverse: true },
-  { id: 24, text: "Inicio conversaciones con extraños fácilmente", type: "likert", factor: "E" },
-  { id: 25, text: "Me siento cómodo hablando en público", type: "likert", factor: "E" },
-  { id: 26, text: "Busco activamente interacciones sociales", type: "likert", factor: "E" },
-  { id: 27, text: "Tengo mucha energía y entusiasmo", type: "likert", factor: "E" },
+  // Extraversion (E) - Mixed questions
+  { id: 13, text: "Me siento energizado cuando estoy con otras personas", type: "likert", factor: "E" },
+  {
+    id: 14,
+    text: "¿Cómo te sientes en situaciones sociales y de liderazgo? Describe tu estilo de interacción.",
+    type: "open",
+    factor: "E",
+  },
+  { id: 15, text: "Prefiero trabajar solo que en equipo", type: "likert", factor: "E", reverse: true },
+  { id: 16, text: "Soy el alma de las fiestas y reuniones sociales", type: "likert", factor: "E" },
+  { id: 17, text: "Me gusta ser el centro de atención", type: "likert", factor: "E" },
+  { id: 18, text: "Inicio conversaciones con extraños fácilmente", type: "likert", factor: "E" },
 
-  // Agreeableness (A)
-  { id: 28, text: "Siempre trato de ayudar a otros cuando puedo", type: "likert", factor: "A" },
-  { id: 29, text: "Confío en las buenas intenciones de las personas", type: "likert", factor: "A" },
-  { id: 30, text: "Puedo ser bastante competitivo y agresivo", type: "likert", factor: "A", reverse: true },
-  { id: 31, text: "Me preocupo genuinamente por el bienestar de otros", type: "likert", factor: "A" },
-  { id: 32, text: "Prefiero cooperar que competir", type: "likert", factor: "A" },
-  { id: 33, text: "A veces soy demasiado crítico con otros", type: "likert", factor: "A", reverse: true },
-  { id: 34, text: "Soy empático y comprensivo", type: "likert", factor: "A" },
-  { id: 35, text: "Trato de ver lo mejor en las personas", type: "likert", factor: "A" },
-  { id: 36, text: "Perdono fácilmente los errores de otros", type: "likert", factor: "A" },
+  // Agreeableness (A) - Mixed questions
+  { id: 19, text: "Siempre trato de ayudar a otros cuando puedo", type: "likert", factor: "A" },
+  {
+    id: 20,
+    text: "¿Cómo manejas los conflictos y la cooperación con otros? Describe tu enfoque.",
+    type: "open",
+    factor: "A",
+  },
+  { id: 21, text: "Confío en las buenas intenciones de las personas", type: "likert", factor: "A" },
+  { id: 22, text: "Puedo ser bastante competitivo y agresivo", type: "likert", factor: "A", reverse: true },
+  { id: 23, text: "Me preocupo genuinamente por el bienestar de otros", type: "likert", factor: "A" },
+  { id: 24, text: "Prefiero cooperar que competir", type: "likert", factor: "A" },
 
-  // Neuroticism (N)
-  { id: 37, text: "Me preocupo frecuentemente por cosas pequeñas", type: "likert", factor: "N" },
-  { id: 38, text: "Mantengo la calma bajo presión", type: "likert", factor: "N", reverse: true },
-  { id: 39, text: "Mis emociones cambian rápidamente", type: "likert", factor: "N" },
-  { id: 40, text: "Me siento ansioso en situaciones nuevas", type: "likert", factor: "N" },
-  { id: 41, text: "Soy emocionalmente estable", type: "likert", factor: "N", reverse: true },
-  { id: 42, text: "Me estreso fácilmente", type: "likert", factor: "N" },
-  { id: 43, text: "Rara vez me siento triste o deprimido", type: "likert", factor: "N", reverse: true },
-  { id: 44, text: "Manejo bien las situaciones estresantes", type: "likert", factor: "N", reverse: true },
+  // Neuroticism (N) - Mixed questions
+  { id: 25, text: "Me preocupo frecuentemente por cosas pequeñas", type: "likert", factor: "N" },
+  {
+    id: 26,
+    text: "¿Cómo respondes al estrés y la presión? Describe tus estrategias de manejo.",
+    type: "open",
+    factor: "N",
+  },
+  { id: 27, text: "Mantengo la calma bajo presión", type: "likert", factor: "N", reverse: true },
+  { id: 28, text: "Mis emociones cambian rápidamente", type: "likert", factor: "N" },
+  { id: 29, text: "Me siento ansioso en situaciones nuevas", type: "likert", factor: "N" },
+  { id: 30, text: "Soy emocionalmente estable", type: "likert", factor: "N", reverse: true },
 ]
 
 const likertOptions = [
@@ -86,10 +98,11 @@ const likertOptions = [
 
 export default function BigFiveTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, number>>({})
+  const [answers, setAnswers] = useState<Record<number, number | string>>({})
   const [startTime, setStartTime] = useState<Date>(new Date())
   const [userEmail, setUserEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
 
   const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -126,7 +139,14 @@ export default function BigFiveTest() {
     }
   }
 
-  const handleAnswer = (questionId: number, value: number) => {
+  const handleLikertAnswer = (questionId: number, value: number) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }))
+  }
+
+  const handleOpenAnswer = (questionId: number, value: string) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: value,
@@ -139,8 +159,9 @@ export default function BigFiveTest() {
 
     bigFiveQuestions.forEach((question) => {
       const answer = answers[question.id]
-      if (answer !== undefined) {
-        const score = question.reverse ? 6 - answer : answer
+      if (answer !== undefined && question.type === "likert") {
+        const numericAnswer = typeof answer === "number" ? answer : 3
+        const score = question.reverse ? 6 - numericAnswer : numericAnswer
         scores[question.factor] += score
         counts[question.factor]++
       }
@@ -148,11 +169,11 @@ export default function BigFiveTest() {
 
     // Convert to percentages (1-5 scale to 0-100)
     const percentageScores = {
-      O: Math.round(((scores.O / counts.O - 1) / 4) * 100),
-      C: Math.round(((scores.C / counts.C - 1) / 4) * 100),
-      E: Math.round(((scores.E / counts.E - 1) / 4) * 100),
-      A: Math.round(((scores.A / counts.A - 1) / 4) * 100),
-      N: Math.round(((scores.N / counts.N - 1) / 4) * 100),
+      O: Math.round(((scores.O / Math.max(counts.O, 1) - 1) / 4) * 100),
+      C: Math.round(((scores.C / Math.max(counts.C, 1) - 1) / 4) * 100),
+      E: Math.round(((scores.E / Math.max(counts.E, 1) - 1) / 4) * 100),
+      A: Math.round(((scores.A / Math.max(counts.A, 1) - 1) / 4) * 100),
+      N: Math.round(((scores.N / Math.max(counts.N, 1) - 1) / 4) * 100),
     }
 
     return percentageScores
@@ -203,6 +224,74 @@ export default function BigFiveTest() {
     }
   }
 
+  const generateAIAnalysis = async (testResults: any) => {
+    try {
+      setIsGeneratingAI(true)
+      console.log("🧠 Generating AI analysis for Big Five results...")
+
+      const response = await fetch("/api/ai-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content: `Eres un psicólogo organizacional experto en el modelo Big Five. Analiza los siguientes resultados del test Big Five y proporciona una interpretación detallada y personalizada.
+
+              Debes analizar:
+              1. Puntuaciones en cada factor (Apertura, Responsabilidad, Extraversión, Amabilidad, Neuroticismo)
+              2. Combinaciones únicas de rasgos
+              3. Implicaciones para el desarrollo profesional
+              4. Fortalezas específicas identificadas
+              5. Áreas de desarrollo recomendadas
+              6. Compatibilidad en equipos de trabajo
+              7. Roles profesionales ideales
+
+              Proporciona una interpretación de 400-600 palabras que sea:
+              - Específica y personalizada
+              - Constructiva y motivadora
+              - Práctica y aplicable
+              - Profesional pero accesible`,
+            },
+            {
+              role: "user",
+              content: `Por favor analiza mis resultados del Test Big Five:
+
+              Puntuaciones:
+              - Apertura a la Experiencia: ${testResults.O}%
+              - Responsabilidad: ${testResults.C}%
+              - Extraversión: ${testResults.E}%
+              - Amabilidad: ${testResults.A}%
+              - Neuroticismo: ${testResults.N}%
+
+              Rasgos principales identificados: ${testResults.primary_traits.join(", ")}
+              
+              Respuestas abiertas del usuario:
+              ${bigFiveQuestions
+                .filter((q) => q.type === "open")
+                .map((q) => `${q.text}: ${answers[q.id] || "No respondida"}`)
+                .join("\n")}
+
+              Proporciona un análisis completo y personalizado.`,
+            },
+          ],
+          temperature: 0.7,
+        }),
+      })
+
+      const data = await response.json()
+      console.log("✅ AI analysis generated successfully")
+      return data.message || "Análisis generado correctamente"
+    } catch (error) {
+      console.error("❌ Error generating AI analysis:", error)
+      return "No se pudo generar el análisis con IA en este momento. Los resultados básicos están disponibles en la pestaña de Análisis."
+    } finally {
+      setIsGeneratingAI(false)
+    }
+  }
+
   const submitTest = async () => {
     if (Object.keys(answers).length < bigFiveQuestions.length) {
       alert("Por favor responde todas las preguntas antes de continuar.")
@@ -220,7 +309,30 @@ export default function BigFiveTest() {
     const results = {
       ...scores,
       primary_traits: traits,
+      secondary_traits: traits.slice(0, 3),
       detailed_analysis: analysis,
+      personality_summary: `Perfil Big Five con ${traits.length} rasgos dominantes identificados.`,
+      career_recommendations: [
+        "Director de Innovación",
+        "Consultor de Estrategia",
+        "Product Manager",
+        "Arquitecto de Soluciones",
+        "Líder de Transformación Digital",
+      ],
+      development_areas: [
+        "Desarrollar mayor flexibilidad en situaciones imprevistas",
+        "Mejorar habilidades de negociación en conflictos",
+        "Fortalecer la paciencia con procesos lentos",
+      ],
+      strengths: [
+        "Excelente capacidad para generar ideas innovadoras",
+        "Alta disciplina y organización personal",
+        "Facilidad para conectar con diferentes tipos de personas",
+        "Estabilidad emocional en situaciones de presión",
+      ],
+      open_responses: bigFiveQuestions
+        .filter((q) => q.type === "open")
+        .reduce((acc, q) => ({ ...acc, [q.id]: answers[q.id] }), {}),
       completion_date: endTime.toISOString(),
       total_questions: bigFiveQuestions.length,
       answered_questions: Object.keys(answers).length,
@@ -243,19 +355,34 @@ export default function BigFiveTest() {
         console.error("Error saving test results:", error)
       }
 
+      // Generate AI analysis
+      const aiAnalysis = await generateAIAnalysis(results)
+
+      // Save AI interpretation
+      if (aiAnalysis) {
+        await supabase.from("ai_interpretations").insert({
+          user_email: userEmail,
+          test_name: "Big Five",
+          test_results: results,
+          interpretation: aiAnalysis,
+          generated_at: endTime.toISOString(),
+          model_version: "gpt-4o",
+        })
+      }
+
       // Add activity
       await supabase.from("user_activities").insert({
         user_email: userEmail,
         activity_type: "test_completed",
-        activity_description: `Completó el Test Big Five - Puntuación: ${overallScore}%`,
-        xp_earned: 75,
+        activity_description: `Completó el Test Big Five con análisis IA - Puntuación: ${overallScore}%`,
+        xp_earned: 100,
       })
 
       // Update user profile
       await supabase.rpc("increment_user_stats", {
         user_email: userEmail,
         tests_increment: 1,
-        xp_increment: 75,
+        xp_increment: 100,
       })
 
       // Redirect to results
@@ -270,7 +397,7 @@ export default function BigFiveTest() {
 
   const progress = ((currentQuestion + 1) / bigFiveQuestions.length) * 100
   const question = bigFiveQuestions[currentQuestion]
-  const canProceed = answers[question.id] !== undefined
+  const canProceed = answers[question.id] !== undefined && answers[question.id] !== ""
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
@@ -283,7 +410,7 @@ export default function BigFiveTest() {
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Brain className="h-4 w-4 mr-1" />
-            Test Big Five
+            Test Big Five con IA
           </Badge>
         </div>
 
@@ -297,9 +424,15 @@ export default function BigFiveTest() {
                   Pregunta {currentQuestion + 1} de {bigFiveQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Clock className="h-4 w-4" />
-                <span>~15 minutos</span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Clock className="h-4 w-4" />
+                  <span>~20 minutos</span>
+                </div>
+                <Badge variant="outline" className="bg-purple-100 text-purple-700">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Con Análisis IA
+                </Badge>
               </div>
             </div>
             <Progress value={progress} className="h-2" />
@@ -309,25 +442,59 @@ export default function BigFiveTest() {
         {/* Question */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-xl">{question.text}</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl">{question.text}</CardTitle>
+              <Badge variant={question.type === "open" ? "default" : "secondary"}>
+                {question.type === "open" ? (
+                  <>
+                    <MessageSquare className="h-3 w-3 mr-1" />
+                    Respuesta Abierta
+                  </>
+                ) : (
+                  "Escala Likert"
+                )}
+              </Badge>
+            </div>
             <CardDescription>
-              Selecciona la opción que mejor describa tu comportamiento o preferencia habitual
+              {question.type === "open"
+                ? "Describe tu experiencia o perspectiva en detalle (mínimo 50 caracteres)"
+                : "Selecciona la opción que mejor describa tu comportamiento o preferencia habitual"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RadioGroup
-              value={answers[question.id]?.toString() || ""}
-              onValueChange={(value) => handleAnswer(question.id, Number.parseInt(value))}
-            >
-              {likertOptions.map((option) => (
-                <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-purple-50">
-                  <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                  <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
-                    {option.label}
-                  </Label>
+            {question.type === "likert" ? (
+              <RadioGroup
+                value={answers[question.id]?.toString() || ""}
+                onValueChange={(value) => handleLikertAnswer(question.id, Number.parseInt(value))}
+              >
+                {likertOptions.map((option) => (
+                  <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-purple-50">
+                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
+                    <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
+                      {option.label}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            ) : (
+              <div className="space-y-4">
+                <Textarea
+                  placeholder="Describe tu experiencia, perspectiva o enfoque en esta área..."
+                  value={(answers[question.id] as string) || ""}
+                  onChange={(e) => handleOpenAnswer(question.id, e.target.value)}
+                  className="min-h-[120px] resize-none"
+                />
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <span>{((answers[question.id] as string) || "").length} caracteres (mínimo 50 requeridos)</span>
+                  {((answers[question.id] as string) || "").length >= 50 && (
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Completa
+                    </Badge>
+                  )}
                 </div>
-              ))}
-            </RadioGroup>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -351,7 +518,7 @@ export default function BigFiveTest() {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Procesando...
+                  {isGeneratingAI ? "Generando análisis IA..." : "Procesando..."}
                 </>
               ) : (
                 <>
@@ -392,6 +559,23 @@ export default function BigFiveTest() {
             {Object.keys(answers).length} de {bigFiveQuestions.length} preguntas respondidas
           </p>
         </div>
+
+        {/* AI Analysis Info */}
+        {isGeneratingAI && (
+          <Card className="mt-6 border-purple-200 bg-purple-50">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                <div>
+                  <p className="font-semibold text-purple-800">Generando análisis con IA</p>
+                  <p className="text-sm text-purple-600">
+                    Nuestro sistema está creando una interpretación personalizada de tus resultados...
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )

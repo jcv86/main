@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Lightbulb, BookOpen } from "lucide-react"
+import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles, MessageCircle } from "lucide-react"
 import {
   RadarChart,
   PolarGrid,
@@ -39,13 +39,22 @@ interface DISCResult {
   created_at: string
 }
 
+interface AIInterpretation {
+  interpretation: string
+  generated_at: string
+}
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 
 export default function DISCResultsPage() {
   const { user } = useSession()
   const router = useRouter()
   const [discResult, setDiscResult] = useState<DISCResult | null>(null)
+  const [aiInterpretation, setAiInterpretation] = useState<string>("")
   const [loading, setLoading] = useState(true)
+  const [chatMessages, setChatMessages] = useState<Array<{ role: string; content: string }>>([])
+  const [chatInput, setChatInput] = useState("")
+  const [chatLoading, setChatLoading] = useState(false)
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
@@ -61,7 +70,8 @@ export default function DISCResultsPage() {
     if (!user) return
 
     try {
-      const { data, error } = await supabase
+      // Load DISC results
+      const { data: discData, error: discError } = await supabase
         .from("disc_results")
         .select("*")
         .eq("user_email", user.email)
@@ -69,8 +79,41 @@ export default function DISCResultsPage() {
         .limit(1)
         .single()
 
-      if (error && error.code !== "PGRST116") {
-        console.error("Error loading DISC results:", error)
+      if (discError && discError.code !== "PGRST116") {
+        console.error("Error loading DISC results:", discError)
+      }
+
+      // Load AI interpretation
+      const { data: aiData, error: aiError } = await supabase
+        .from("ai_interpretations")
+        .select("*")
+        .eq("user_email", user.email)
+        .eq("test_name", "DISC Assessment")
+        .order("generated_at", { ascending: false })
+        .limit(1)
+        .single()
+
+      if (aiError && aiError.code !== "PGRST116") {
+        console.error("Error loading AI interpretation:", aiError)
+      }
+
+      // Load test results for additional AI interpretation
+      const { data: testData, error: testError } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", user.email)
+        .eq("test_name", "DISC Assessment")
+        .order("completed_at", { ascending: false })
+        .limit(1)
+        .single()
+
+      if (testError && testError.code !== "PGRST116") {
+        console.error("Error loading test results:", testError)
+      }
+
+      if (discData) {
+        setDiscResult(discData)
+      } else {
         // Create demo data if no results found
         setDiscResult({
           d_score: 75,
@@ -82,13 +125,75 @@ export default function DISCResultsPage() {
           recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
           created_at: new Date().toISOString(),
         })
-      } else if (data) {
-        setDiscResult(data)
+      }
+
+      // Set AI interpretation from multiple sources
+      if (aiData?.interpretation) {
+        setAiInterpretation(aiData.interpretation)
+      } else if (testData?.results?.ai_interpretation) {
+        setAiInterpretation(testData.results.ai_interpretation)
       }
     } catch (error) {
       console.error("Error loading results:", error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || !user || !discResult) return
+
+    setChatLoading(true)
+    const userMessage = chatInput.trim()
+    setChatInput("")
+
+    // Add user message to chat
+    const newMessages = [...chatMessages, { role: "user", content: userMessage }]
+    setChatMessages(newMessages)
+
+    try {
+      const response = await fetch("/api/ai-coach", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content: `Eres un coach profesional especializado en DISC. El usuario tiene estos resultados:
+              - Dominancia (D): ${discResult.d_score}%
+              - Influencia (I): ${discResult.i_score}%
+              - Estabilidad (S): ${discResult.s_score}%
+              - Cumplimiento (C): ${discResult.c_score}%
+              - Estilo principal: ${discResult.primary_type}
+              
+              Proporciona consejos específicos y prácticos basados en su perfil DISC.`,
+            },
+            ...newMessages,
+          ],
+          temperature: 0.8,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setChatMessages([...newMessages, { role: "assistant", content: data.message }])
+      } else {
+        throw new Error("Error en la respuesta")
+      }
+    } catch (error) {
+      console.error("Error sending chat message:", error)
+      setChatMessages([
+        ...newMessages,
+        {
+          role: "assistant",
+          content:
+            "Lo siento, hubo un error al procesar tu mensaje. Como coach, te recomiendo que reflexiones sobre cómo puedes aplicar tu estilo DISC en situaciones específicas de trabajo.",
+        },
+      ])
+    } finally {
+      setChatLoading(false)
     }
   }
 
@@ -235,11 +340,12 @@ export default function DISCResultsPage() {
 
         {/* Charts and Analysis */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="charts">Gráficos</TabsTrigger>
             <TabsTrigger value="analysis">Análisis</TabsTrigger>
-            <TabsTrigger value="recommendations">Recomendaciones</TabsTrigger>
+            <TabsTrigger value="ai-analysis">Análisis IA</TabsTrigger>
+            <TabsTrigger value="coach">Coach IA</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -473,82 +579,146 @@ export default function DISCResultsPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="recommendations" className="space-y-6">
+          <TabsContent value="ai-analysis" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Lightbulb className="h-5 w-5 mr-2" />
-                  Recomendaciones Personalizadas
+                  <Sparkles className="h-5 w-5 mr-2 text-purple-600" />
+                  Análisis con Inteligencia Artificial
                 </CardTitle>
-                <CardDescription>Sugerencias para tu desarrollo profesional</CardDescription>
+                <CardDescription>Interpretación avanzada de tus resultados DISC</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Recomendación Principal</h3>
-                  <p className="text-sm">{discResult.recommendations}</p>
-                </div>
+              <CardContent>
+                {aiInterpretation ? (
+                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg">
+                    <div className="prose prose-sm max-w-none">
+                      <div className="whitespace-pre-wrap text-gray-700">{aiInterpretation}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Análisis IA no disponible</h3>
+                    <p className="text-gray-600 mb-4">
+                      El análisis con IA se genera automáticamente al completar el test.
+                    </p>
+                    <Button onClick={() => router.push("/test/disc")} variant="outline">
+                      Realizar Test Nuevamente
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold mb-3">Para el Desarrollo Profesional</h4>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2 mt-2"></div>
-                        Busca roles que aprovechen tus fortalezas naturales
-                      </li>
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2 mt-2"></div>
-                        Desarrolla habilidades complementarias
-                      </li>
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2 mt-2"></div>
-                        Considera mentoring en áreas de crecimiento
-                      </li>
-                    </ul>
+          <TabsContent value="coach" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <MessageCircle className="h-5 w-5 mr-2 text-blue-600" />
+                  Coach IA - Consulta Personalizada
+                </CardTitle>
+                <CardDescription>
+                  Haz preguntas específicas sobre tu perfil DISC y recibe consejos personalizados
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Chat Messages */}
+                  <div className="h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50">
+                    {chatMessages.length === 0 ? (
+                      <div className="text-center text-gray-500 mt-8">
+                        <Brain className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                        <p className="mb-4">¡Hola! Soy tu coach IA especializado en DISC.</p>
+                        <p className="text-sm">Puedes preguntarme sobre:</p>
+                        <ul className="text-sm mt-2 space-y-1">
+                          <li>• Cómo aplicar tu estilo en el trabajo</li>
+                          <li>• Estrategias de comunicación</li>
+                          <li>• Desarrollo de liderazgo</li>
+                          <li>• Trabajo en equipo</li>
+                        </ul>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {chatMessages.map((message, index) => (
+                          <div
+                            key={index}
+                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            <div
+                              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                                message.role === "user" ? "bg-blue-600 text-white" : "bg-white text-gray-800 border"
+                              }`}
+                            >
+                              <p className="text-sm">{message.content}</p>
+                            </div>
+                          </div>
+                        ))}
+                        {chatLoading && (
+                          <div className="flex justify-start">
+                            <div className="bg-white text-gray-800 border px-4 py-2 rounded-lg">
+                              <div className="flex items-center space-x-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                                <span className="text-sm">Pensando...</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold mb-3">Para el Trabajo en Equipo</h4>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2 mt-2"></div>
-                        Comunica tu estilo de trabajo al equipo
-                      </li>
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2 mt-2"></div>
-                        Adapta tu comunicación según el estilo de otros
-                      </li>
-                      <li className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2 mt-2"></div>
-                        Busca roles que complementen tus habilidades
-                      </li>
-                    </ul>
+                  {/* Chat Input */}
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && sendChatMessage()}
+                      placeholder="Escribe tu pregunta sobre tu perfil DISC..."
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={chatLoading}
+                    />
+                    <Button onClick={sendChatMessage} disabled={chatLoading || !chatInput.trim()}>
+                      Enviar
+                    </Button>
                   </div>
-                </div>
 
-                <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-3">Próximos Pasos Sugeridos</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <Button variant="outline" className="justify-start h-auto p-4 bg-transparent">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      <div className="text-left">
-                        <div className="font-medium">Leer Recursos</div>
-                        <div className="text-xs text-gray-500">Sobre tu estilo</div>
-                      </div>
+                  {/* Suggested Questions */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setChatInput("¿Cómo puedo aprovechar mi estilo DISC en el trabajo?")}
+                      className="text-left justify-start"
+                    >
+                      ¿Cómo aprovechar mi estilo en el trabajo?
                     </Button>
-                    <Button variant="outline" className="justify-start h-auto p-4 bg-transparent">
-                      <Users className="h-4 w-4 mr-2" />
-                      <div className="text-left">
-                        <div className="font-medium">Compartir Resultados</div>
-                        <div className="text-xs text-gray-500">Con tu equipo</div>
-                      </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setChatInput("¿Qué roles profesionales se adaptan mejor a mi perfil?")}
+                      className="text-left justify-start"
+                    >
+                      ¿Qué roles me convienen más?
                     </Button>
-                    <Button variant="outline" className="justify-start h-auto p-4 bg-transparent">
-                      <Target className="h-4 w-4 mr-2" />
-                      <div className="text-left">
-                        <div className="font-medium">Plan de Desarrollo</div>
-                        <div className="text-xs text-gray-500">Personalizado</div>
-                      </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setChatInput("¿Cómo puedo mejorar mis áreas más débiles?")}
+                      className="text-left justify-start"
+                    >
+                      ¿Cómo mejorar mis áreas débiles?
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setChatInput("¿Cómo debo comunicarme con otros estilos DISC?")}
+                      className="text-left justify-start"
+                    >
+                      ¿Cómo comunicarme con otros estilos?
                     </Button>
                   </div>
                 </div>

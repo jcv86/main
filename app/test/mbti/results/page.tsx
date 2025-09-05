@@ -8,10 +8,25 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@supabase/supabase-js"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts"
 import { ChartContainer } from "@/components/ui/chart"
 import AICoachChat from "@/components/ai-coach-chat"
-import AIInsightsPanel from "@/components/ai-insights-panel"
 import { aiCoach } from "@/lib/ai-coach"
 import {
   ArrowLeft,
@@ -24,23 +39,29 @@ import {
   Sparkles,
   Download,
   Share2,
-  Eye,
   MessageCircle,
+  BarChart3,
+  PieChartIcon,
+  Activity,
+  Lightbulb,
+  Star,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react"
 
 interface MBTIResult {
-  type: string // e.g., "ENFP"
-  type_name: string // e.g., "The Campaigner"
+  type: string
+  type_name: string
   type_description: string
   scores: {
-    E: number // Extraversion
-    I: number // Introversion
-    S: number // Sensing
-    N: number // Intuition
-    T: number // Thinking
-    F: number // Feeling
-    J: number // Judging
-    P: number // Perceiving
+    E: number
+    I: number
+    S: number
+    N: number
+    T: number
+    F: number
+    J: number
+    P: number
   }
   dominant_function: string
   auxiliary_function: string
@@ -58,6 +79,7 @@ interface MBTIResult {
   development_areas: string[]
   leadership_style: string
   communication_style: string
+  open_responses?: Record<string, string>
 }
 
 function MBTIResultsContent() {
@@ -83,7 +105,6 @@ function MBTIResultsContent() {
 
   const checkUserAndLoadResults = async () => {
     try {
-      // Check local session first
       const localSession = localStorage.getItem("dtc_session")
       if (localSession) {
         const sessionData = JSON.parse(localSession)
@@ -94,7 +115,6 @@ function MBTIResultsContent() {
         }
       }
 
-      // Check Supabase session
       const {
         data: { user },
       } = await supabase.auth.getUser()
@@ -124,9 +144,8 @@ function MBTIResultsContent() {
 
       if (data && data.length > 0) {
         setResults(data[0].results)
-        await generateAIInterpretation(email, data[0].results)
+        await loadAIInterpretation(email)
       } else {
-        // No results found, redirect to test
         router.push("/test/mbti")
       }
     } catch (error) {
@@ -143,16 +162,7 @@ function MBTIResultsContent() {
       type_name: "El Activista",
       type_description:
         "Entusiasta, creativo y sociable. Siempre busca nuevas posibilidades y conexiones entre ideas y personas.",
-      scores: {
-        E: 75, // Extraversion
-        I: 25, // Introversion
-        S: 30, // Sensing
-        N: 70, // Intuition
-        T: 40, // Thinking
-        F: 60, // Feeling
-        J: 35, // Judging
-        P: 65, // Perceiving
-      },
+      scores: { E: 18, I: 9, S: 8, N: 19, T: 11, F: 16, J: 9, P: 18 },
       dominant_function: "Intuición Extrovertida (Ne)",
       auxiliary_function: "Sentimiento Introvertido (Fi)",
       tertiary_function: "Pensamiento Extrovertido (Te)",
@@ -200,11 +210,44 @@ function MBTIResultsContent() {
     setLoading(false)
   }
 
-  const generateAIInterpretation = async (email: string, testResults: MBTIResult) => {
+  const loadAIInterpretation = async (email: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("ai_interpretations")
+        .select("*")
+        .eq("user_email", email)
+        .eq("test_name", "MBTI")
+        .order("generated_at", { ascending: false })
+        .limit(1)
+
+      if (error) throw error
+
+      if (data && data.length > 0) {
+        setAiInterpretation(data[0].interpretation)
+      } else {
+        await generateAIInterpretation(email)
+      }
+    } catch (error) {
+      console.error("Error loading AI interpretation:", error)
+    }
+  }
+
+  const generateAIInterpretation = async (email: string) => {
+    if (!results) return
+
     try {
       setLoadingAI(true)
-      const interpretation = await aiCoach.interpretTestResults(email, "MBTI", testResults)
+      const interpretation = await aiCoach.interpretTestResults(email, "MBTI", results)
       setAiInterpretation(interpretation)
+
+      // Save to database
+      await supabase.from("ai_interpretations").insert({
+        user_email: email,
+        test_name: "MBTI",
+        test_results: results,
+        interpretation: interpretation,
+        model_version: "gpt-4o",
+      })
     } catch (error) {
       console.error("Error generating AI interpretation:", error)
       setAiInterpretation("No se pudo generar la interpretación con IA en este momento.")
@@ -239,6 +282,7 @@ function MBTIResultsContent() {
     )
   }
 
+  // Preparar datos para gráficos
   const dimensionData = [
     {
       name: "E vs I",
@@ -266,6 +310,24 @@ function MBTIResultsContent() {
     },
   ]
 
+  const radarData = [
+    { dimension: "Extraversión", value: results.scores.E, fullMark: 27 },
+    { dimension: "Intuición", value: results.scores.N, fullMark: 27 },
+    { dimension: "Sentimiento", value: results.scores.F, fullMark: 27 },
+    { dimension: "Percepción", value: results.scores.P, fullMark: 27 },
+  ]
+
+  const pieData = [
+    { name: "Extraversión", value: results.scores.E, color: "#10B981" },
+    { name: "Introversión", value: results.scores.I, color: "#06B6D4" },
+    { name: "Sensación", value: results.scores.S, color: "#8B5CF6" },
+    { name: "Intuición", value: results.scores.N, color: "#F59E0B" },
+    { name: "Pensamiento", value: results.scores.T, color: "#EF4444" },
+    { name: "Sentimiento", value: results.scores.F, color: "#84CC16" },
+    { name: "Juicio", value: results.scores.J, color: "#F97316" },
+    { name: "Percepción", value: results.scores.P, color: "#EC4899" },
+  ]
+
   const functionData = [
     { name: "Dominante", function: results.dominant_function, strength: 90 },
     { name: "Auxiliar", function: results.auxiliary_function, strength: 70 },
@@ -273,7 +335,7 @@ function MBTIResultsContent() {
     { name: "Inferior", function: results.inferior_function, strength: 20 },
   ]
 
-  const COLORS = ["#10B981", "#06B6D4", "#8B5CF6", "#F59E0B"]
+  const COLORS = ["#10B981", "#06B6D4", "#8B5CF6", "#F59E0B", "#EF4444", "#84CC16", "#F97316", "#EC4899"]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
@@ -339,16 +401,20 @@ function MBTIResultsContent() {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
-            <TabsTrigger value="functions">Funciones</TabsTrigger>
+            <TabsTrigger value="charts">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Gráficos
+            </TabsTrigger>
+            <TabsTrigger value="analysis">Análisis</TabsTrigger>
+            <TabsTrigger value="ai-analysis">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Análisis IA
+            </TabsTrigger>
             <TabsTrigger value="ai-coach">
               <Sparkles className="h-4 w-4 mr-2" />
               Coach IA
-            </TabsTrigger>
-            <TabsTrigger value="insights">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Insights IA
             </TabsTrigger>
             <TabsTrigger value="career">Carrera</TabsTrigger>
           </TabsList>
@@ -366,61 +432,99 @@ function MBTIResultsContent() {
                   <CardDescription>Tus tendencias en cada par de dimensiones MBTI</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer
-                    config={{
-                      E: { label: "Extraversión", color: "#10B981" },
-                      I: { label: "Introversión", color: "#06B6D4" },
-                      S: { label: "Sensación", color: "#8B5CF6" },
-                      N: { label: "Intuición", color: "#F59E0B" },
-                      T: { label: "Pensamiento", color: "#EF4444" },
-                      F: { label: "Sentimiento", color: "#84CC16" },
-                      J: { label: "Juicio", color: "#F97316" },
-                      P: { label: "Percepción", color: "#EC4899" },
-                    }}
-                    className="h-[300px]"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={dimensionData} layout="horizontal">
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" domain={[0, 100]} />
-                        <YAxis dataKey="name" type="category" width={60} />
-                        <Tooltip />
-                        <Bar dataKey="E" stackId="a" fill="#10B981" />
-                        <Bar dataKey="I" stackId="a" fill="#06B6D4" />
-                        <Bar dataKey="S" stackId="b" fill="#8B5CF6" />
-                        <Bar dataKey="N" stackId="b" fill="#F59E0B" />
-                        <Bar dataKey="T" stackId="c" fill="#EF4444" />
-                        <Bar dataKey="F" stackId="c" fill="#84CC16" />
-                        <Bar dataKey="J" stackId="d" fill="#F97316" />
-                        <Bar dataKey="P" stackId="d" fill="#EC4899" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </CardContent>
-              </Card>
-
-              {/* Preference Summary */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
-                    Resumen de Preferencias
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
                   <div className="space-y-4">
                     {dimensionData.map((dimension, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div>
-                          <h4 className="font-semibold text-sm">{dimension.name}</h4>
-                          <p className="text-xs text-gray-600">Preferencia dominante</p>
-                        </div>
-                        <div className="text-right">
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">{dimension.name}</span>
                           <Badge variant="secondary" className="bg-blue-100 text-blue-700">
                             {dimension.preference}
                           </Badge>
                         </div>
+                        <div className="flex gap-2">
+                          <div className="flex-1">
+                            <div className="flex justify-between text-xs mb-1">
+                              <span>{dimension.name.split(" vs ")[0]}</span>
+                              <span>
+                                {dimension.name === "E vs I"
+                                  ? dimension.E
+                                  : dimension.name === "S vs N"
+                                    ? dimension.S
+                                    : dimension.name === "T vs F"
+                                      ? dimension.T
+                                      : dimension.J}
+                              </span>
+                            </div>
+                            <Progress
+                              value={
+                                dimension.name === "E vs I"
+                                  ? (dimension.E / 27) * 100
+                                  : dimension.name === "S vs N"
+                                    ? (dimension.S / 27) * 100
+                                    : dimension.name === "T vs F"
+                                      ? (dimension.T / 27) * 100
+                                      : (dimension.J / 27) * 100
+                              }
+                              className="h-2"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex justify-between text-xs mb-1">
+                              <span>{dimension.name.split(" vs ")[1]}</span>
+                              <span>
+                                {dimension.name === "E vs I"
+                                  ? dimension.I
+                                  : dimension.name === "S vs N"
+                                    ? dimension.N
+                                    : dimension.name === "T vs F"
+                                      ? dimension.F
+                                      : dimension.P}
+                              </span>
+                            </div>
+                            <Progress
+                              value={
+                                dimension.name === "E vs I"
+                                  ? (dimension.I / 27) * 100
+                                  : dimension.name === "S vs N"
+                                    ? (dimension.N / 27) * 100
+                                    : dimension.name === "T vs F"
+                                      ? (dimension.F / 27) * 100
+                                      : (dimension.P / 27) * 100
+                              }
+                              className="h-2"
+                            />
+                          </div>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Functions Hierarchy */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-purple-600" />
+                    Jerarquía de Funciones
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {functionData.map((func, index) => (
+                      <Card
+                        key={index}
+                        className={`border-l-4 ${index === 0 ? "border-l-green-500" : index === 1 ? "border-l-blue-500" : index === 2 ? "border-l-yellow-500" : "border-l-red-500"}`}
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold">{func.name}</h3>
+                            <Badge variant="secondary">{func.strength}%</Badge>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{func.function}</p>
+                          <Progress value={func.strength} className="h-2" />
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
                 </CardContent>
@@ -440,7 +544,7 @@ function MBTIResultsContent() {
                   <ul className="space-y-3">
                     {results.strengths.map((strength, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
                         <span className="text-gray-700 text-sm">{strength}</span>
                       </li>
                     ))}
@@ -459,7 +563,7 @@ function MBTIResultsContent() {
                   <ul className="space-y-3">
                     {results.challenges.map((challenge, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <AlertCircle className="w-4 h-4 text-orange-500 mt-1 flex-shrink-0" />
                         <span className="text-gray-700 text-sm">{challenge}</span>
                       </li>
                     ))}
@@ -467,9 +571,105 @@ function MBTIResultsContent() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
 
-            {/* Communication and Leadership Style */}
+          {/* Charts Tab */}
+          <TabsContent value="charts" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Radar Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-blue-600" />
+                    Perfil de Personalidad (Radar)
+                  </CardTitle>
+                  <CardDescription>Visualización de tus preferencias dominantes</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{}} className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={radarData}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="dimension" />
+                        <PolarRadiusAxis angle={90} domain={[0, 27]} />
+                        <Radar name="Puntuación" dataKey="value" stroke="#10B981" fill="#10B981" fillOpacity={0.3} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+
+              {/* Bar Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-green-600" />
+                    Comparación de Dimensiones
+                  </CardTitle>
+                  <CardDescription>Puntuaciones por cada dimensión MBTI</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{}} className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={dimensionData} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" domain={[0, 27]} />
+                        <YAxis dataKey="name" type="category" width={60} />
+                        <Tooltip />
+                        <Bar dataKey="E" stackId="a" fill="#10B981" />
+                        <Bar dataKey="I" stackId="a" fill="#06B6D4" />
+                        <Bar dataKey="S" stackId="b" fill="#8B5CF6" />
+                        <Bar dataKey="N" stackId="b" fill="#F59E0B" />
+                        <Bar dataKey="T" stackId="c" fill="#EF4444" />
+                        <Bar dataKey="F" stackId="c" fill="#84CC16" />
+                        <Bar dataKey="J" stackId="d" fill="#F97316" />
+                        <Bar dataKey="P" stackId="d" fill="#EC4899" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Pie Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <PieChartIcon className="h-5 w-5 text-purple-600" />
+                  Distribución de Puntuaciones
+                </CardTitle>
+                <CardDescription>Proporción de cada característica en tu perfil</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={{}} className="h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, value }) => `${name}: ${value}`}
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Analysis Tab */}
+          <TabsContent value="analysis" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Communication and Leadership Style */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -495,96 +695,123 @@ function MBTIResultsContent() {
               </Card>
             </div>
 
-            {/* AI Interpretation */}
-            {!isDemo && (
+            {/* Open Responses */}
+            {results.open_responses && Object.keys(results.open_responses).length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-purple-600" />
-                    Interpretación con IA
+                    <Lightbulb className="h-5 w-5 text-yellow-600" />
+                    Tus Respuestas Abiertas
                   </CardTitle>
-                  <CardDescription>Análisis personalizado generado por inteligencia artificial</CardDescription>
+                  <CardDescription>Análisis de tus respuestas personalizadas</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {loadingAI ? (
-                    <div className="flex items-center gap-3 py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-                      <span className="text-gray-600">Generando interpretación personalizada...</span>
-                    </div>
-                  ) : (
-                    <div className="prose prose-sm max-w-none">
-                      <p className="text-gray-700 whitespace-pre-wrap">{aiInterpretation}</p>
-                    </div>
-                  )}
+                  <div className="space-y-4">
+                    {Object.entries(results.open_responses).map(([questionId, response], index) => {
+                      const questionTexts = {
+                        "7": "Situación energizante en el trabajo",
+                        "14": "Enfoque para proyectos nuevos",
+                        "21": "Decisión difícil que afectaba a otros",
+                        "27": "Organización y gestión del tiempo",
+                      }
+                      return (
+                        <div key={questionId} className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                          <h4 className="font-semibold text-yellow-800 mb-2">
+                            {questionTexts[questionId as keyof typeof questionTexts] || `Pregunta ${questionId}`}
+                          </h4>
+                          <p className="text-yellow-700 text-sm italic">"{response}"</p>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </CardContent>
               </Card>
             )}
-          </TabsContent>
 
-          {/* Functions Tab */}
-          <TabsContent value="functions" className="space-y-6">
+            {/* Function Details */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-purple-600" />
-                  Funciones Cognitivas
+                  Explicación de Funciones Cognitivas
                 </CardTitle>
-                <CardDescription>La jerarquía de funciones que define tu tipo MBTI</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    {functionData.map((func, index) => (
-                      <Card
-                        key={index}
-                        className={`border-l-4 ${index === 0 ? "border-l-green-500" : index === 1 ? "border-l-blue-500" : index === 2 ? "border-l-yellow-500" : "border-l-red-500"}`}
-                      >
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="font-semibold">{func.name}</h3>
-                            <Badge variant="secondary">{func.strength}%</Badge>
-                          </div>
-                          <p className="text-sm text-gray-600 mb-2">{func.function}</p>
-                          <Progress value={func.strength} className="h-2" />
-                        </CardContent>
-                      </Card>
-                    ))}
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold text-green-700">Función Dominante</h4>
+                    <p className="text-sm text-gray-600 mb-2">{results.dominant_function}</p>
+                    <p className="text-xs text-gray-500">
+                      Tu función más fuerte y desarrollada, la que usas con mayor frecuencia y confianza.
+                    </p>
                   </div>
-
-                  <div className="space-y-4">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-lg">Explicación de Funciones</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div>
-                          <h4 className="font-semibold text-green-700">Función Dominante</h4>
-                          <p className="text-sm text-gray-600">
-                            Tu función más fuerte y desarrollada, la que usas con mayor frecuencia y confianza.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-blue-700">Función Auxiliar</h4>
-                          <p className="text-sm text-gray-600">
-                            Tu función de apoyo, que equilibra y complementa tu función dominante.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-yellow-700">Función Terciaria</h4>
-                          <p className="text-sm text-gray-600">
-                            Se desarrolla en la mediana edad, puede ser fuente de crecimiento personal.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-red-700">Función Inferior</h4>
-                          <p className="text-sm text-gray-600">
-                            Tu punto débil, pero también fuente de aspiración y desarrollo.
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                  <div>
+                    <h4 className="font-semibold text-blue-700">Función Auxiliar</h4>
+                    <p className="text-sm text-gray-600 mb-2">{results.auxiliary_function}</p>
+                    <p className="text-xs text-gray-500">
+                      Tu función de apoyo, que equilibra y complementa tu función dominante.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-yellow-700">Función Terciaria</h4>
+                    <p className="text-sm text-gray-600 mb-2">{results.tertiary_function}</p>
+                    <p className="text-xs text-gray-500">
+                      Se desarrolla en la mediana edad, puede ser fuente de crecimiento personal.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-red-700">Función Inferior</h4>
+                    <p className="text-sm text-gray-600 mb-2">{results.inferior_function}</p>
+                    <p className="text-xs text-gray-500">
+                      Tu punto débil, pero también fuente de aspiración y desarrollo.
+                    </p>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* AI Analysis Tab */}
+          <TabsContent value="ai-analysis" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-purple-600" />
+                  Interpretación Personalizada con IA
+                </CardTitle>
+                <CardDescription>Análisis detallado generado por inteligencia artificial</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {!isDemo ? (
+                  loadingAI ? (
+                    <div className="flex items-center gap-3 py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                      <span className="text-gray-600">Generando interpretación personalizada con IA...</span>
+                    </div>
+                  ) : (
+                    <div className="prose prose-sm max-w-none">
+                      <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border border-purple-200">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Sparkles className="h-5 w-5 text-purple-600" />
+                          <span className="font-semibold text-purple-800">Análisis IA - GPT-4o</span>
+                        </div>
+                        <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{aiInterpretation}</p>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <div className="text-center py-8">
+                    <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Análisis IA no disponible en modo demo</h3>
+                    <p className="text-gray-600 mb-4">
+                      Completa el test real para obtener un análisis personalizado con IA
+                    </p>
+                    <Button onClick={() => router.push("/test/mbti")}>
+                      <Brain className="h-4 w-4 mr-2" />
+                      Realizar Test Real
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -599,25 +826,6 @@ function MBTIResultsContent() {
                   <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold mb-2">Coach IA no disponible en modo demo</h3>
                   <p className="text-gray-600 mb-4">Completa el test real para acceder al coach personalizado</p>
-                  <Button onClick={() => router.push("/test/mbti")}>
-                    <Brain className="h-4 w-4 mr-2" />
-                    Realizar Test Real
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* AI Insights Tab */}
-          <TabsContent value="insights" className="space-y-6">
-            {!isDemo ? (
-              <AIInsightsPanel userEmail={userEmail} />
-            ) : (
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Insights IA no disponibles en modo demo</h3>
-                  <p className="text-gray-600 mb-4">Completa el test real para generar insights personalizados</p>
                   <Button onClick={() => router.push("/test/mbti")}>
                     <Brain className="h-4 w-4 mr-2" />
                     Realizar Test Real
@@ -701,7 +909,7 @@ function MBTIResultsContent() {
                   {results.famous_people.map((person, index) => (
                     <div key={index} className="text-center p-3 bg-purple-50 border border-purple-200 rounded-lg">
                       <div className="w-12 h-12 bg-purple-100 rounded-full mx-auto mb-2 flex items-center justify-center">
-                        <Award className="h-6 w-6 text-purple-600" />
+                        <Star className="h-6 w-6 text-purple-600" />
                       </div>
                       <p className="font-medium text-purple-800 text-sm">{person}</p>
                     </div>

@@ -1,272 +1,457 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { aiCoach, type AIInsight } from "@/lib/ai-coach"
-import { Sparkles, Brain, Target, TrendingUp, Users, RefreshCw, Lightbulb, Award } from "lucide-react"
+import {
+  TrendingUp,
+  Target,
+  Lightbulb,
+  Star,
+  Award,
+  Users,
+  Briefcase,
+  Brain,
+  CheckCircle,
+  ArrowRight,
+  Sparkles,
+  BarChart3,
+  PieChart,
+  Activity,
+} from "lucide-react"
 
-interface AIInsightsPanelProps {
-  userEmail: string
+interface Insight {
+  id: string
+  type: "strength" | "opportunity" | "recommendation" | "trend"
+  title: string
+  description: string
+  confidence: number
+  priority: "high" | "medium" | "low"
+  category: string
+  actionable: boolean
+  relatedTests?: string[]
 }
 
-export default function AIInsightsPanel({ userEmail }: AIInsightsPanelProps) {
-  const [insights, setInsights] = useState<AIInsight[]>([])
-  const [loading, setLoading] = useState(true)
-  const [generating, setGenerating] = useState(false)
+interface AiInsightsPanelProps {
+  testResults?: any[]
+  userProfile?: any
+  className?: string
+}
+
+export default function AiInsightsPanel({ testResults = [], userProfile, className }: AiInsightsPanelProps) {
+  const [insights, setInsights] = useState<Insight[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
 
   useEffect(() => {
-    loadInsights()
-  }, [userEmail])
+    generateInsights()
+  }, [testResults])
 
-  const loadInsights = async () => {
+  const generateInsights = async () => {
+    setIsLoading(true)
+
     try {
-      setLoading(true)
-      const existingInsights = await aiCoach.getExistingInsights(userEmail)
-      setInsights(existingInsights)
+      // Simulate API call to generate insights
+      const response = await fetch("/api/ai-insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          testResults,
+          userProfile,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setInsights(data.insights || [])
+      } else {
+        // Fallback insights if API fails
+        setInsights(generateFallbackInsights())
+      }
     } catch (error) {
-      console.error("Error loading insights:", error)
+      console.error("Error generating insights:", error)
+      setInsights(generateFallbackInsights())
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const generateNewInsights = async () => {
-    try {
-      setGenerating(true)
-      const newInsights = await aiCoach.generateInsights(userEmail)
-      setInsights((prev) => [...newInsights, ...prev])
-    } catch (error) {
-      console.error("Error generating insights:", error)
-    } finally {
-      setGenerating(false)
+  const generateFallbackInsights = (): Insight[] => {
+    const fallbackInsights: Insight[] = []
+
+    if (testResults.length === 0) {
+      return [
+        {
+          id: "no-tests",
+          type: "recommendation",
+          title: "Completa tu primera evaluación",
+          description:
+            "Para generar insights personalizados, necesitas completar al menos una evaluación psicométrica. Te recomendamos empezar con el test DISC.",
+          confidence: 95,
+          priority: "high",
+          category: "getting-started",
+          actionable: true,
+        },
+        {
+          id: "platform-intro",
+          type: "recommendation",
+          title: "Explora las evaluaciones disponibles",
+          description:
+            "Tenemos 5 evaluaciones diferentes: DISC, Big Five, MBTI, RIASEC y Habilidades Blandas. Cada una te dará insights únicos sobre tu perfil profesional.",
+          confidence: 90,
+          priority: "medium",
+          category: "getting-started",
+          actionable: true,
+        },
+      ]
     }
+
+    // Generate insights based on test results
+    testResults.forEach((result) => {
+      const score = result.score || 0
+
+      if (score >= 80) {
+        fallbackInsights.push({
+          id: `strength-${result.test_type}`,
+          type: "strength",
+          title: `Excelente desempeño en ${result.test_type.toUpperCase()}`,
+          description: `Tu puntuación de ${score}% indica un alto nivel de autoconocimiento y competencias desarrolladas en esta área.`,
+          confidence: 90,
+          priority: "high",
+          category: "strengths",
+          actionable: true,
+          relatedTests: [result.test_type],
+        })
+      } else if (score >= 60) {
+        fallbackInsights.push({
+          id: `opportunity-${result.test_type}`,
+          type: "opportunity",
+          title: `Oportunidad de crecimiento en ${result.test_type.toUpperCase()}`,
+          description: `Con ${score}%, tienes una base sólida que puedes desarrollar aún más con práctica enfocada.`,
+          confidence: 85,
+          priority: "medium",
+          category: "development",
+          actionable: true,
+          relatedTests: [result.test_type],
+        })
+      } else {
+        fallbackInsights.push({
+          id: `development-${result.test_type}`,
+          type: "recommendation",
+          title: `Área prioritaria de desarrollo: ${result.test_type.toUpperCase()}`,
+          description: `Tu puntuación de ${score}% sugiere que esta área tiene gran potencial de mejora con el enfoque correcto.`,
+          confidence: 80,
+          priority: "high",
+          category: "development",
+          actionable: true,
+          relatedTests: [result.test_type],
+        })
+      }
+    })
+
+    // Add career recommendations
+    if (testResults.length >= 2) {
+      fallbackInsights.push({
+        id: "career-match",
+        type: "recommendation",
+        title: "Análisis de compatibilidad profesional",
+        description: `Basado en tus ${testResults.length} evaluaciones, has demostrado fortalezas que se alinean con roles de liderazgo y desarrollo estratégico.`,
+        confidence: 85,
+        priority: "high",
+        category: "career",
+        actionable: true,
+        relatedTests: testResults.map((r) => r.test_type),
+      })
+    }
+
+    return fallbackInsights
   }
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case "personality":
-        return <Brain className="h-5 w-5" />
-      case "career":
-        return <Target className="h-5 w-5" />
-      case "development":
-        return <TrendingUp className="h-5 w-5" />
-      case "compatibility":
-        return <Users className="h-5 w-5" />
+      case "strength":
+        return <Star className="h-4 w-4 text-yellow-500" />
+      case "opportunity":
+        return <TrendingUp className="h-4 w-4 text-blue-500" />
+      case "recommendation":
+        return <Lightbulb className="h-4 w-4 text-purple-500" />
+      case "trend":
+        return <BarChart3 className="h-4 w-4 text-green-500" />
       default:
-        return <Lightbulb className="h-5 w-5" />
+        return <Brain className="h-4 w-4 text-gray-500" />
     }
   }
 
-  const getInsightColor = (type: string) => {
-    switch (type) {
-      case "personality":
-        return "text-purple-600 bg-purple-100"
-      case "career":
-        return "text-blue-600 bg-blue-100"
-      case "development":
-        return "text-green-600 bg-green-100"
-      case "compatibility":
-        return "text-orange-600 bg-orange-100"
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return "text-red-600 bg-red-50 border-red-200"
+      case "medium":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200"
+      case "low":
+        return "text-green-600 bg-green-50 border-green-200"
       default:
-        return "text-gray-600 bg-gray-100"
+        return "text-gray-600 bg-gray-50 border-gray-200"
     }
   }
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 90) return "text-green-600"
-    if (confidence >= 75) return "text-blue-600"
-    if (confidence >= 60) return "text-yellow-600"
-    return "text-red-600"
+  const categories = [
+    { id: "all", label: "Todos", icon: Brain },
+    { id: "strengths", label: "Fortalezas", icon: Star },
+    { id: "development", label: "Desarrollo", icon: TrendingUp },
+    { id: "career", label: "Carrera", icon: Briefcase },
+    { id: "getting-started", label: "Primeros Pasos", icon: Target },
+  ]
+
+  const filteredInsights =
+    selectedCategory === "all" ? insights : insights.filter((i) => i.category === selectedCategory)
+
+  const getOverallScore = () => {
+    if (testResults.length === 0) return 0
+    return Math.round(testResults.reduce((sum, result) => sum + (result.score || 0), 0) / testResults.length)
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-  }
-
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-3"></div>
-            <span className="text-gray-600">Cargando insights...</span>
-          </div>
-        </CardContent>
-      </Card>
-    )
+  const getCompletionRate = () => {
+    const totalTests = 5 // DISC, Big Five, MBTI, RIASEC, Soft Skills
+    return Math.round((testResults.length / totalTests) * 100)
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
-                  <Sparkles className="h-5 w-5 text-white" />
-                </div>
-                Insights Personalizados con IA
-              </CardTitle>
-              <CardDescription>Análisis inteligente basado en todos tus resultados de tests</CardDescription>
+    <Card className={`h-[600px] flex flex-col ${className}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="bg-purple-100 text-purple-700">
-                {insights.length} Insights
-              </Badge>
-              <Button
-                onClick={generateNewInsights}
-                disabled={generating}
-                size="sm"
-                className="bg-gradient-to-r from-purple-500 to-blue-500"
-              >
-                {generating ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Generando...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Generar Nuevos
-                  </>
-                )}
-              </Button>
+            <div>
+              <CardTitle className="text-lg">AI Insights Panel</CardTitle>
+              <CardDescription className="text-sm">
+                {isLoading ? "Generando insights..." : `${insights.length} insights personalizados`}
+              </CardDescription>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+          <Badge variant="outline" className="text-xs">
+            <Activity className="h-3 w-3 mr-1" />
+            {testResults.length} Tests
+          </Badge>
+        </div>
+      </CardHeader>
 
-      {/* Insights Grid */}
-      {insights.length === 0 ? (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="h-8 w-8 text-gray-400" />
+      <Separator />
+
+      <Tabs defaultValue="insights" className="flex-1 flex flex-col">
+        <TabsList className="grid w-full grid-cols-3 mx-4 mt-2">
+          <TabsTrigger value="insights" className="text-xs">
+            <Lightbulb className="h-3 w-3 mr-1" />
+            Insights
+          </TabsTrigger>
+          <TabsTrigger value="overview" className="text-xs">
+            <PieChart className="h-3 w-3 mr-1" />
+            Resumen
+          </TabsTrigger>
+          <TabsTrigger value="recommendations" className="text-xs">
+            <Target className="h-3 w-3 mr-1" />
+            Acciones
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="insights" className="flex-1 flex flex-col m-0">
+          <div className="p-4 pb-2">
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  size="sm"
+                  className="text-xs whitespace-nowrap"
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  <category.icon className="h-3 w-3 mr-1" />
+                  {category.label}
+                </Button>
+              ))}
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No hay insights disponibles</h3>
-            <p className="text-gray-600 mb-4">Completa al menos 2 tests para generar insights personalizados con IA</p>
-            <Button onClick={generateNewInsights} disabled={generating}>
-              {generating ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Generando Insights...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Generar Insights
-                </>
-              )}
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {insights.map((insight) => (
-            <Card key={insight.id} className="border-l-4 border-l-purple-500">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${getInsightColor(insight.type)}`}>
-                      {getInsightIcon(insight.type)}
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">{insight.title}</CardTitle>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs">
-                          {insight.type}
+          </div>
+
+          <ScrollArea className="flex-1 px-4">
+            {isLoading ? (
+              <div className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="border rounded-lg p-4 animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-full mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                ))}
+              </div>
+            ) : filteredInsights.length > 0 ? (
+              <div className="space-y-3 pb-4">
+                {filteredInsights.map((insight) => (
+                  <div key={insight.id} className="border rounded-lg p-4 hover:shadow-sm transition-shadow">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div className="flex items-center gap-2">
+                        {getInsightIcon(insight.type)}
+                        <h3 className="font-medium text-sm">{insight.title}</h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className={`text-xs ${getPriorityColor(insight.priority)}`}>
+                          {insight.priority === "high" ? "Alta" : insight.priority === "medium" ? "Media" : "Baja"}
                         </Badge>
-                        <span className="text-xs text-gray-500">{formatDate(insight.created_at)}</span>
+                        <Badge variant="secondary" className="text-xs">
+                          {insight.confidence}%
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
+
+                    {insight.relatedTests && insight.relatedTests.length > 0 && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs text-gray-500">Tests relacionados:</span>
+                        {insight.relatedTests.map((test, idx) => (
+                          <Badge key={idx} variant="outline" className="text-xs">
+                            {test.toUpperCase()}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+
+                    {insight.actionable && (
+                      <Button variant="outline" size="sm" className="text-xs bg-transparent">
+                        <ArrowRight className="h-3 w-3 mr-1" />
+                        Ver detalles
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <Brain className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No hay insights para esta categoría</p>
+                <p className="text-xs mt-1">Completa más evaluaciones para obtener insights personalizados</p>
+              </div>
+            )}
+          </ScrollArea>
+        </TabsContent>
+
+        <TabsContent value="overview" className="flex-1 m-0">
+          <ScrollArea className="h-full p-4">
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="border rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Award className="h-4 w-4 text-blue-500" />
+                    <span className="text-sm font-medium">Puntuación General</span>
+                  </div>
+                  <div className="text-2xl font-bold text-blue-600">{getOverallScore()}%</div>
+                  <Progress value={getOverallScore()} className="mt-2" />
+                </div>
+
+                <div className="border rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="text-sm font-medium">Progreso</span>
+                  </div>
+                  <div className="text-2xl font-bold text-green-600">{getCompletionRate()}%</div>
+                  <Progress value={getCompletionRate()} className="mt-2" />
+                </div>
+              </div>
+
+              <div className="border rounded-lg p-4">
+                <h3 className="font-medium mb-3 flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Distribución de Insights
+                </h3>
+                <div className="space-y-2">
+                  {categories.slice(1).map((category) => {
+                    const count = insights.filter((i) => i.category === category.id).length
+                    const percentage = insights.length > 0 ? (count / insights.length) * 100 : 0
+                    return (
+                      <div key={category.id} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <category.icon className="h-3 w-3" />
+                          <span className="text-sm">{category.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Progress value={percentage} className="w-16 h-2" />
+                          <span className="text-xs text-gray-500 w-8">{count}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="border rounded-lg p-4">
+                <h3 className="font-medium mb-3 flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Tests Completados
+                </h3>
+                <div className="space-y-2">
+                  {testResults.map((result, idx) => (
+                    <div key={idx} className="flex items-center justify-between">
+                      <span className="text-sm">{result.test_type.toUpperCase()}</span>
+                      <div className="flex items-center gap-2">
+                        <Progress value={result.score || 0} className="w-16 h-2" />
+                        <span className="text-xs text-gray-500 w-8">{result.score || 0}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
+        </TabsContent>
+
+        <TabsContent value="recommendations" className="flex-1 m-0">
+          <ScrollArea className="h-full p-4">
+            <div className="space-y-3">
+              {insights
+                .filter((i) => i.actionable && i.type === "recommendation")
+                .map((insight) => (
+                  <div key={insight.id} className="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">{getInsightIcon(insight.type)}</div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-sm mb-1">{insight.title}</h3>
+                        <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
+                        <div className="flex items-center gap-2">
+                          <Button size="sm" className="text-xs">
+                            <Target className="h-3 w-3 mr-1" />
+                            Tomar acción
+                          </Button>
+                          <Badge variant="outline" className="text-xs">
+                            Prioridad {insight.priority === "high" ? "Alta" : "Media"}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-semibold ${getConfidenceColor(insight.confidence)}`}>
-                      {insight.confidence}%
-                    </div>
-                    <div className="text-xs text-gray-500">confianza</div>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">{insight.content}</p>
+                ))}
 
-                {/* Confidence Bar */}
-                <div className="mb-3">
-                  <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                    <span>Nivel de confianza</span>
-                    <span>{insight.confidence}%</span>
-                  </div>
-                  <Progress value={insight.confidence} className="h-2" />
+              {insights.filter((i) => i.actionable && i.type === "recommendation").length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <Target className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No hay recomendaciones disponibles</p>
+                  <p className="text-xs mt-1">Completa más evaluaciones para obtener recomendaciones personalizadas</p>
                 </div>
-
-                {/* Source Tests */}
-                {insight.source_tests && insight.source_tests.length > 0 && (
-                  <div>
-                    <div className="text-xs text-gray-500 mb-2">Basado en:</div>
-                    <div className="flex flex-wrap gap-1">
-                      {insight.source_tests.map((test, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {test}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {/* Summary Stats */}
-      {insights.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-yellow-600" />
-              Resumen de Insights
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600">
-                  {insights.filter((i) => i.type === "personality").length}
-                </div>
-                <div className="text-sm text-purple-700">Personalidad</div>
-              </div>
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
-                  {insights.filter((i) => i.type === "career").length}
-                </div>
-                <div className="text-sm text-blue-700">Carrera</div>
-              </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">
-                  {insights.filter((i) => i.type === "development").length}
-                </div>
-                <div className="text-sm text-green-700">Desarrollo</div>
-              </div>
-              <div className="text-center p-3 bg-orange-50 rounded-lg">
-                <div className="text-2xl font-bold text-orange-600">
-                  {Math.round(insights.reduce((acc, i) => acc + i.confidence, 0) / insights.length)}%
-                </div>
-                <div className="text-sm text-orange-700">Confianza Promedio</div>
-              </div>
+              )}
             </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+          </ScrollArea>
+        </TabsContent>
+      </Tabs>
+    </Card>
   )
 }
+
+// Export both default and named exports
+export { AiInsightsPanel }

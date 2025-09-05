@@ -1,220 +1,178 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
+import { Brain, Clock, Users, MessageSquare, Target, Heart, CheckCircle, Lightbulb } from "lucide-react"
+import { getTestQuestions, saveOpenResponse, saveTestResult, type TestQuestion } from "@/lib/supabase"
 
-interface Question {
-  id: number
-  question_text: string
-  options: string
-  category: string
-  test_type: string
+const categoryIcons = {
+  communication: MessageSquare,
+  leadership: Target,
+  teamwork: Users,
+  problem_solving: Lightbulb,
+  adaptability: Brain,
+  emotional_intelligence: Heart,
+  time_management: Clock,
+  critical_thinking: CheckCircle,
 }
 
-interface Answer {
-  questionId: number
-  answer: number
-  category: string
+const categoryColors = {
+  communication: "text-blue-600",
+  leadership: "text-purple-600",
+  teamwork: "text-green-600",
+  problem_solving: "text-orange-600",
+  adaptability: "text-teal-600",
+  emotional_intelligence: "text-pink-600",
+  time_management: "text-indigo-600",
+  critical_thinking: "text-red-600",
+}
+
+const categoryNames = {
+  communication: "Comunicación",
+  leadership: "Liderazgo",
+  teamwork: "Trabajo en Equipo",
+  problem_solving: "Resolución de Problemas",
+  adaptability: "Adaptabilidad",
+  emotional_intelligence: "Inteligencia Emocional",
+  time_management: "Gestión del Tiempo",
+  critical_thinking: "Pensamiento Crítico",
 }
 
 export default function SoftSkillsTest() {
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [answers, setAnswers] = useState<Answer[]>([])
-  const [selectedAnswer, setSelectedAnswer] = useState<string>("")
+  const router = useRouter()
+  const [questions, setQuestions] = useState<TestQuestion[]>([])
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, string>>({})
+  const [openResponses, setOpenResponses] = useState<Record<number, string>>({})
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
 
-  const userEmail = "travis@example.com" // Demo user
+  const userEmail = "demo@example.com" // In real app, get from auth
 
   useEffect(() => {
-    checkUserAndLoadQuestions()
+    loadQuestions()
   }, [])
 
-  const checkUserAndLoadQuestions = async () => {
+  const loadQuestions = async () => {
     try {
       setLoading(true)
-      setError(null)
-
-      // Check if user exists, create if not
-      const { data: existingUser } = await supabase.from("user_profiles").select("*").eq("email", userEmail).single()
-
-      if (!existingUser) {
-        const { error: createError } = await supabase.from("user_profiles").insert({
-          email: userEmail,
-          full_name: "Travis Demo User",
-          created_at: new Date().toISOString(),
-        })
-
-        if (createError) {
-          console.error("Error creating user:", createError)
-          setError("Error setting up user profile")
-          return
-        }
-      }
-
-      await loadQuestions()
+      const questionsData = await getTestQuestions("soft-skills")
+      console.log("Loaded questions:", questionsData)
+      setQuestions(questionsData)
     } catch (err) {
-      console.error("Error in setup:", err)
-      setError("Error during setup")
+      setError("Error loading questions. Please try again.")
+      console.error("Error loading questions:", err)
     } finally {
       setLoading(false)
     }
   }
 
-  const loadQuestions = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("test_questions")
-        .select("*")
-        .eq("test_type", "soft-skills")
-        .order("id")
+  const handleAnswerChange = (questionId: number, value: string) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }))
+  }
 
-      if (error) {
-        console.error("Database error:", error)
-        throw new Error(`Error loading questions: ${error.message}`)
-      }
+  const handleOpenResponseChange = (questionId: number, value: string) => {
+    setOpenResponses((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }))
+  }
 
-      if (!data || data.length === 0) {
-        throw new Error("No questions found for soft skills test")
-      }
-
-      console.log("Loaded questions:", data.length)
-      setQuestions(data)
-    } catch (err) {
-      console.error("Error loading questions:", err)
-      setError(err instanceof Error ? err.message : "Failed to load questions")
+  const nextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1)
     }
   }
 
-  const parseOptions = (optionsString: string): string[] => {
-    try {
-      // Try parsing as JSON first
-      const parsed = JSON.parse(optionsString)
-      if (Array.isArray(parsed)) {
-        return parsed
-      }
-    } catch {
-      // If JSON parsing fails, try pipe-separated format
-      if (optionsString.includes("|")) {
-        return optionsString
-          .split("|")
-          .map((opt) => opt.trim())
-          .filter((opt) => opt.length > 0)
-      }
-
-      // If comma-separated
-      if (optionsString.includes(",")) {
-        return optionsString
-          .split(",")
-          .map((opt) => opt.trim())
-          .filter((opt) => opt.length > 0)
-      }
-    }
-
-    // Fallback: return as single option
-    return [optionsString]
-  }
-
-  const handleAnswerSelect = (value: string) => {
-    setSelectedAnswer(value)
-  }
-
-  const handleNext = () => {
-    if (!selectedAnswer) return
-
-    const currentQuestion = questions[currentQuestionIndex]
-    const answerValue = Number.parseInt(selectedAnswer)
-
-    // Update answers array
-    const newAnswers = [...answers]
-    const existingAnswerIndex = newAnswers.findIndex((a) => a.questionId === currentQuestion.id)
-
-    if (existingAnswerIndex >= 0) {
-      newAnswers[existingAnswerIndex] = {
-        questionId: currentQuestion.id,
-        answer: answerValue,
-        category: currentQuestion.category,
-      }
-    } else {
-      newAnswers.push({
-        questionId: currentQuestion.id,
-        answer: answerValue,
-        category: currentQuestion.category,
-      })
-    }
-
-    setAnswers(newAnswers)
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
-      setSelectedAnswer("")
-    } else {
-      submitTest(newAnswers)
+  const previousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1)
     }
   }
 
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1)
+  const calculateResults = () => {
+    const categoryScores: Record<string, { total: number; count: number }> = {}
 
-      // Load previous answer if exists
-      const currentQuestion = questions[currentQuestionIndex - 1]
-      const previousAnswer = answers.find((a) => a.questionId === currentQuestion.id)
-      setSelectedAnswer(previousAnswer ? previousAnswer.answer.toString() : "")
+    // Initialize categories
+    Object.keys(categoryNames).forEach((category) => {
+      categoryScores[category] = { total: 0, count: 0 }
+    })
+
+    // Calculate scores for multiple choice questions
+    questions.forEach((question) => {
+      if (question.question_type === "multiple_choice" && answers[question.id]) {
+        const answerIndex = Number.parseInt(answers[question.id])
+        const score = answerIndex + 1 // Convert 0-based to 1-based scoring
+
+        if (!categoryScores[question.category!]) {
+          categoryScores[question.category!] = { total: 0, count: 0 }
+        }
+
+        categoryScores[question.category!].total += score
+        categoryScores[question.category!].count += 1
+      }
+    })
+
+    // Calculate average scores and convert to percentage
+    const results: Record<string, number> = {}
+    let totalScore = 0
+    let categoryCount = 0
+
+    Object.entries(categoryScores).forEach(([category, data]) => {
+      if (data.count > 0) {
+        const avgScore = data.total / data.count
+        results[category] = Math.round((avgScore / 4) * 100) // Convert to percentage (4 is max score)
+        totalScore += results[category]
+        categoryCount += 1
+      }
+    })
+
+    const overallScore = categoryCount > 0 ? Math.round(totalScore / categoryCount) : 0
+
+    return {
+      overall_score: overallScore,
+      category_scores: results,
+      strengths: Object.entries(results)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 3)
+        .map(([category]) => category),
+      areas_for_improvement: Object.entries(results)
+        .sort(([, a], [, b]) => a - b)
+        .slice(0, 2)
+        .map(([category]) => category),
     }
   }
 
-  const submitTest = async (finalAnswers: Answer[]) => {
+  const submitTest = async () => {
     try {
       setSubmitting(true)
 
-      // Calculate scores by category
-      const categoryScores: { [key: string]: number[] } = {}
-
-      finalAnswers.forEach((answer) => {
-        if (!categoryScores[answer.category]) {
-          categoryScores[answer.category] = []
+      // Save open-ended responses first
+      for (const question of questions) {
+        if (question.question_type === "open_ended" && openResponses[question.id]) {
+          await saveOpenResponse(userEmail, "soft-skills", question.id, openResponses[question.id])
         }
-        categoryScores[answer.category].push(answer.answer)
-      })
-
-      // Calculate average scores
-      const results: { [key: string]: number } = {}
-      Object.keys(categoryScores).forEach((category) => {
-        const scores = categoryScores[category]
-        results[category] = scores.reduce((sum, score) => sum + score, 0) / scores.length
-      })
-
-      // Save to database
-      const { error } = await supabase.from("test_results").insert({
-        user_email: userEmail,
-        test_name: "Test de Habilidades Blandas",
-        test_type: "soft-skills",
-        results: results,
-        raw_answers: finalAnswers,
-        completed_at: new Date().toISOString(),
-      })
-
-      if (error) {
-        console.error("Error saving results:", error)
-        throw new Error(`Error submitting test: ${error.message}`)
       }
+
+      // Calculate and save results
+      const results = calculateResults()
+      await saveTestResult(userEmail, "soft-skills", results, results.overall_score)
 
       // Redirect to results
       router.push("/test/soft-skills/results")
     } catch (err) {
+      setError("Error submitting test. Please try again.")
       console.error("Error submitting test:", err)
-      setError(err instanceof Error ? err.message : "Error submitting test")
     } finally {
       setSubmitting(false)
     }
@@ -222,28 +180,24 @@ export default function SoftSkillsTest() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Cargando preguntas del test...</p>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Cargando test de habilidades blandas...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <div className="text-red-500 mb-4">
-              <CheckCircle className="h-12 w-12 mx-auto" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>Intentar de nuevo</Button>
+          <CardContent className="pt-6">
+            <div className="text-center text-red-600 mb-4">{error}</div>
+            <Button onClick={loadQuestions} className="w-full">
+              Reintentar
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -252,96 +206,152 @@ export default function SoftSkillsTest() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <p className="text-gray-600">No se encontraron preguntas para este test.</p>
+          <CardContent className="pt-6">
+            <div className="text-center">No hay preguntas disponibles.</div>
           </CardContent>
         </Card>
       </div>
     )
   }
 
-  if (submitting) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Procesando tus respuestas...</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+  const question = questions[currentQuestion]
+  const progress = ((currentQuestion + 1) / questions.length) * 100
+  const isAnswered =
+    question.question_type === "multiple_choice"
+      ? answers[question.id] !== undefined
+      : openResponses[question.id]?.trim().length > 0
 
-  const currentQuestion = questions[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
-  const options = parseOptions(currentQuestion.options)
+  const CategoryIcon = categoryIcons[question.category as keyof typeof categoryIcons] || Brain
+  const categoryColor = categoryColors[question.category as keyof typeof categoryColors] || "text-gray-600"
+  const categoryName = categoryNames[question.category as keyof typeof categoryNames] || question.category
+
+  // Parse options safely
+  let parsedOptions: string[] = []
+  if (question.question_type === "multiple_choice" && question.options) {
+    try {
+      parsedOptions = JSON.parse(question.options)
+    } catch (e) {
+      console.error("Error parsing options:", e)
+      parsedOptions = []
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Test de Habilidades Blandas</h1>
-          <p className="text-gray-600">
-            Pregunta {currentQuestionIndex + 1} de {questions.length}
-          </p>
+          <p className="text-gray-600">Evalúa tus competencias profesionales clave</p>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress */}
         <div className="mb-8">
-          <Progress value={progress} className="h-2" />
-          <div className="flex justify-between text-sm text-gray-500 mt-2">
-            <span>Progreso: {Math.round(progress)}%</span>
-            <span>Categoría: {currentQuestion.category}</span>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              Pregunta {currentQuestion + 1} de {questions.length}
+            </span>
+            <span className="text-sm text-gray-500">{Math.round(progress)}% completado</span>
           </div>
+          <Progress value={progress} className="h-2" />
         </div>
 
         {/* Question Card */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-xl text-gray-900">{currentQuestion.question_text}</CardTitle>
+            <div className="flex items-center gap-3 mb-2">
+              <CategoryIcon className={`h-6 w-6 ${categoryColor}`} />
+              <span className={`text-sm font-medium ${categoryColor}`}>{categoryName}</span>
+            </div>
+            <CardTitle className="text-xl">{question.question_text}</CardTitle>
+            {question.question_type === "open_ended" && (
+              <CardDescription>
+                Responde con detalle. Tu respuesta será analizada por IA para proporcionar insights personalizados.
+              </CardDescription>
+            )}
           </CardHeader>
           <CardContent>
-            <RadioGroup value={selectedAnswer} onValueChange={handleAnswerSelect}>
-              {options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
-                  <RadioGroupItem value={(index + 1).toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-gray-700">
-                    {option}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
+            {question.question_type === "multiple_choice" ? (
+              <RadioGroup
+                value={answers[question.id] || ""}
+                onValueChange={(value) => handleAnswerChange(question.id, value)}
+              >
+                {parsedOptions.map((option: string, index: number) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            ) : (
+              <Textarea
+                placeholder="Escribe tu respuesta aquí..."
+                value={openResponses[question.id] || ""}
+                onChange={(e) => handleOpenResponseChange(question.id, e.target.value)}
+                className="min-h-[120px]"
+              />
+            )}
           </CardContent>
         </Card>
 
         {/* Navigation */}
         <div className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={currentQuestionIndex === 0}
-            className="flex items-center gap-2 bg-transparent"
-          >
-            <ArrowLeft className="h-4 w-4" />
+          <Button variant="outline" onClick={previousQuestion} disabled={currentQuestion === 0}>
             Anterior
           </Button>
 
-          <div className="text-sm text-gray-500">
-            {currentQuestionIndex + 1} / {questions.length}
+          <div className="flex gap-2">
+            {questions.map((_, index) => (
+              <div
+                key={index}
+                className={`w-3 h-3 rounded-full ${
+                  index === currentQuestion ? "bg-blue-600" : index < currentQuestion ? "bg-green-500" : "bg-gray-300"
+                }`}
+              />
+            ))}
           </div>
 
-          <Button
-            onClick={handleNext}
-            disabled={!selectedAnswer}
-            className="flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
-          >
-            {currentQuestionIndex === questions.length - 1 ? "Finalizar" : "Siguiente"}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          {currentQuestion === questions.length - 1 ? (
+            <Button onClick={submitTest} disabled={!isAnswered || submitting} className="min-w-[120px]">
+              {submitting ? "Enviando..." : "Finalizar Test"}
+            </Button>
+          ) : (
+            <Button onClick={nextQuestion} disabled={!isAnswered}>
+              Siguiente
+            </Button>
+          )}
+        </div>
+
+        {/* Question Counter */}
+        <div className="mt-8 text-center text-sm text-gray-500">
+          <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+            <div>
+              <div className="font-medium text-blue-600">
+                {questions.filter((q) => q.question_type === "multiple_choice").length}
+              </div>
+              <div>Opción múltiple</div>
+            </div>
+            <div>
+              <div className="font-medium text-green-600">
+                {questions.filter((q) => q.question_type === "open_ended").length}
+              </div>
+              <div>Respuesta abierta</div>
+            </div>
+            <div>
+              <div className="font-medium text-purple-600">{Object.keys(categoryNames).length}</div>
+              <div>Competencias</div>
+            </div>
+            <div>
+              <div className="font-medium text-orange-600">
+                {Object.values(answers).length + Object.values(openResponses).filter((r) => r.trim().length > 0).length}
+              </div>
+              <div>Respondidas</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
