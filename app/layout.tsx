@@ -8,8 +8,8 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DespegaTuCarrera - Plataforma de Desarrollo Profesional",
-  description: "Tu plataforma integral para el desarrollo profesional y crecimiento de carrera",
+  title: "DTC Final - Plataforma de Desarrollo Profesional",
+  description: "Plataforma integral para el desarrollo profesional y crecimiento de carrera",
     generator: 'v0.app'
 }
 

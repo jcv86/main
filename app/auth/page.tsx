@@ -1,430 +1,246 @@
 "use client"
 
 import type React from "react"
+
 import { useState, useEffect } from "react"
-import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
-import { useSession } from "@/components/session-wrapper"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Rocket, Mail, Lock, User, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useSession } from "@/components/session-wrapper"
+import { Eye, EyeOff, LogIn, UserPlus, Users, Info } from "lucide-react"
 
 export default function AuthPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
-  const [messageType, setMessageType] = useState<"success" | "error" | "info">("info")
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [activeTab, setActiveTab] = useState("login")
 
+  const { login, isAuthenticated } = useSession()
   const router = useRouter()
-  const { user, isLoading } = useSession()
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   useEffect(() => {
-    if (!isLoading && user) {
+    if (isAuthenticated) {
       router.push("/dashboard")
     }
-  }, [user, isLoading, router])
+  }, [isAuthenticated, router])
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Verificando sesión...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (user) {
-    return null // Will redirect to dashboard
-  }
-
-  const showMessage = (msg: string, type: "success" | "error" | "info" = "info") => {
-    setMessage(msg)
-    setMessageType(type)
-    setTimeout(() => setMessage(""), 5000)
-  }
-
-  // Función para crear sesión local (bypass)
-  const createLocalSession = (userEmail: string, userName: string) => {
-    const sessionData = {
-      user: {
-        email: userEmail,
-        name: userName,
-        id: `local-${Date.now()}`,
-        full_name: userName,
-        position: userEmail.includes("travis") ? "Senior Developer" : "Team Member",
-        department: "Technology",
-      },
-      authenticated: true,
-      timestamp: Date.now(),
-    }
-
-    // Store in multiple places for reliability
-    localStorage.setItem("dtc_session", JSON.stringify(sessionData))
-    localStorage.setItem("user", JSON.stringify(sessionData.user))
-    sessionStorage.setItem("dtc_session", JSON.stringify(sessionData))
-
-    return sessionData
-  }
-
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setMessage("")
+    setError("")
+    setIsLoading(true)
 
     try {
-      console.log("Attempting to sign in with:", email)
+      const success = await login(email, password)
 
-      // Primero intentar con Supabase
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password.trim(),
-      })
-
-      if (error) {
-        console.log("Supabase auth failed, trying local auth:", error.message)
-
-        // Enhanced local authentication with more users
-        const knownUsers = [
-          { email: "demo@despegaturcarrera.com", password: "demo123", name: "Usuario Demo" },
-          { email: "test@dtc.com", password: "test123", name: "Usuario de Prueba" },
-          { email: "travis@nuanu.com", password: "travis123", name: "Travis Nuanu" },
-          { email: "admin@dtc.com", password: "admin123", name: "Administrador" },
-          { email: "user@example.com", password: "user123", name: "Usuario Ejemplo" },
-        ]
-
-        const user = knownUsers.find((u) => u.email === email.trim() && u.password === password.trim())
-
-        if (user) {
-          createLocalSession(user.email, user.name)
-          showMessage("¡Inicio de sesión exitoso! (Modo local)", "success")
-          setTimeout(() => {
-            window.location.href = "/dashboard"
-          }, 1000)
-        } else {
-          showMessage(
-            "Credenciales incorrectas. Usuarios disponibles: demo@despegaturcarrera.com/demo123, test@dtc.com/test123, travis@nuanu.com/travis123",
-            "error",
-          )
-        }
-      } else if (data.user) {
-        console.log("Supabase sign in successful:", data.user)
-        showMessage("¡Inicio de sesión exitoso!", "success")
-        setTimeout(() => {
-          window.location.href = "/dashboard"
-        }, 1000)
+      if (success) {
+        router.push("/dashboard")
+      } else {
+        setError("Credenciales inválidas. Intenta con uno de los usuarios de prueba.")
       }
     } catch (error) {
-      console.error("Unexpected error:", error)
-      showMessage("Error de conexión. Usando modo local de emergencia...", "info")
-
-      // Emergency fallback - create session with provided email
-      createLocalSession(email, email.split("@")[0])
-      setTimeout(() => {
-        window.location.href = "/dashboard"
-      }, 1500)
+      setError("Error de conexión. Intenta de nuevo.")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setMessage("")
-
-    try {
-      console.log("Attempting to sign up with:", email)
-
-      const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password: password.trim(),
-        options: {
-          data: {
-            name: name.trim(),
-          },
-        },
-      })
-
-      if (error) {
-        console.log("Supabase signup failed, creating local account:", error.message)
-
-        // Crear cuenta local
-        createLocalSession(email.trim(), name.trim())
-        showMessage("¡Cuenta creada exitosamente! (Modo local)", "success")
-        setTimeout(() => {
-          router.push("/")
-          router.refresh()
-        }, 1000)
-      } else if (data.user) {
-        console.log("Supabase sign up successful:", data.user)
-        if (data.user.email_confirmed_at) {
-          showMessage("¡Cuenta creada y confirmada!", "success")
-          setTimeout(() => {
-            router.push("/")
-            router.refresh()
-          }, 1000)
-        } else {
-          showMessage("¡Cuenta creada! Revisa tu email para confirmar.", "info")
-        }
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error)
-
-      // Fallback a cuenta local
-      createLocalSession(email.trim(), name.trim())
-      showMessage("Cuenta creada en modo local", "success")
-      setTimeout(() => {
-        router.push("/")
-        router.refresh()
-      }, 1000)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleQuickLogin = (userEmail: string, userPassword: string, userName: string) => {
-    setLoading(true)
+  const handleQuickLogin = async (userEmail: string, userPassword: string) => {
     setEmail(userEmail)
     setPassword(userPassword)
+    setError("")
+    setIsLoading(true)
 
-    // Crear sesión local directamente
-    createLocalSession(userEmail, userName)
-    showMessage(`¡Acceso exitoso como ${userName}!`, "success")
+    try {
+      const success = await login(userEmail, userPassword)
 
-    setTimeout(() => {
-      router.push("/")
-      router.refresh()
-    }, 1000)
+      if (success) {
+        router.push("/dashboard")
+      } else {
+        setError("Error en el login rápido")
+      }
+    } catch (error) {
+      setError("Error de conexión")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
+  const testUsers = [
+    {
+      email: "travis@nuanu.com",
+      password: "travis123",
+      name: "Travis Johnson",
+      role: "Senior Developer",
+      description: "Perfil completo con todos los tests completados",
+    },
+    {
+      email: "demo@despegaturcarrera.com",
+      password: "demo123",
+      name: "Ana García",
+      role: "Marketing Analyst",
+      description: "Perfil de demostración para presentaciones",
+    },
+    {
+      email: "test@dtc.com",
+      password: "test123",
+      name: "Carlos Rodríguez",
+      role: "Project Coordinator",
+      description: "Usuario de prueba para testing básico",
+    },
+    {
+      email: "admin@dtc.com",
+      password: "admin123",
+      name: "María López",
+      role: "Platform Administrator",
+      description: "Acceso administrativo completo",
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Rocket className="h-8 w-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-gray-900">DespegaTuCarrera</h1>
-          </div>
-          <p className="text-gray-600">Tu plataforma integral de desarrollo profesional</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">DespegaTuCarrera</h1>
+          <p className="text-gray-600">Plataforma de Desarrollo Profesional</p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Accede a tu cuenta</CardTitle>
-            <CardDescription>Inicia sesión o crea una cuenta para comenzar</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="signin" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Iniciar Sesión</TabsTrigger>
-                <TabsTrigger value="signup">Crear Cuenta</TabsTrigger>
-              </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
+            <TabsTrigger value="demo">Usuarios Demo</TabsTrigger>
+          </TabsList>
 
-              <TabsContent value="signin">
-                <form onSubmit={handleSignIn} className="space-y-4">
+          <TabsContent value="login">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <LogIn className="h-5 w-5" />
+                  Iniciar Sesión
+                </CardTitle>
+                <CardDescription>Ingresa tus credenciales para acceder a la plataforma</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="tu@email.com"
+                      required
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Contraseña</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="password"
-                        type="password"
-                        placeholder="••••••••"
+                        type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Iniciando sesión...
-                      </>
-                    ) : (
-                      "Iniciar Sesión"
-                    )}
-                  </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Nombre completo</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Tu nombre"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Contraseña</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="signup-password"
-                        type="password"
                         placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="pl-10"
                         required
-                        minLength={6}
                       />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creando cuenta...
-                      </>
-                    ) : (
-                      "Crear Cuenta"
-                    )}
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
                   </Button>
                 </form>
-              </TabsContent>
-            </Tabs>
 
-            {message && (
-              <Alert
-                className={`mt-4 ${
-                  messageType === "success"
-                    ? "border-green-200 bg-green-50"
-                    : messageType === "error"
-                      ? "border-red-200 bg-red-50"
-                      : "border-blue-200 bg-blue-50"
-                }`}
-              >
-                {messageType === "success" ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                ) : (
-                  <AlertCircle className="h-4 w-4 text-blue-600" />
-                )}
-                <AlertDescription
-                  className={
-                    messageType === "success"
-                      ? "text-green-700"
-                      : messageType === "error"
-                        ? "text-red-700"
-                        : "text-blue-700"
-                  }
-                >
-                  {message}
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <Info className="h-4 w-4 text-blue-600 mt-0.5" />
+                    <div className="text-sm text-blue-800">
+                      <p className="font-medium mb-1">Modo de Producción</p>
+                      <p>
+                        La plataforma funciona con múltiples sistemas de autenticación para garantizar acceso confiable.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        {/* Quick Access */}
-        <div className="mt-6 space-y-3">
-          <div className="p-4 bg-white/50 backdrop-blur-sm border border-white/20 rounded-lg">
-            <h3 className="font-semibold text-gray-900 mb-3">🚀 Acceso Rápido</h3>
+          <TabsContent value="demo">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Usuarios de Demostración
+                </CardTitle>
+                <CardDescription>Acceso rápido con usuarios predefinidos para testing</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {testUsers.map((user, index) => (
+                  <div key={index} className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h4 className="font-medium">{user.name}</h4>
+                        <p className="text-sm text-gray-600">{user.role}</p>
+                      </div>
+                      <Badge variant="outline">{user.email.split("@")[0]}</Badge>
+                    </div>
 
-            <div className="space-y-2">
-              <Button
-                variant="outline"
-                className="w-full bg-transparent justify-start"
-                onClick={() => handleQuickLogin("demo@despegaturcarrera.com", "demo123", "Usuario Demo")}
-                disabled={loading}
-              >
-                <User className="mr-2 h-4 w-4" />
-                {loading ? "Conectando..." : "Demo - Usuario Completo"}
-              </Button>
+                    <p className="text-xs text-gray-500 mb-3">{user.description}</p>
 
-              <Button
-                variant="outline"
-                className="w-full bg-transparent justify-start"
-                onClick={() => handleQuickLogin("travis@nuanu.com", "travis123", "Travis Nuanu")}
-                disabled={loading}
-              >
-                <User className="mr-2 h-4 w-4" />
-                {loading ? "Conectando..." : "Travis - Datos Reales"}
-              </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleQuickLogin(user.email, user.password)}
+                        disabled={isLoading}
+                        className="flex-1"
+                      >
+                        <UserPlus className="h-3 w-3 mr-1" />
+                        Acceder
+                      </Button>
+                      <div className="text-xs text-gray-400">{user.password}</div>
+                    </div>
+                  </div>
+                ))}
 
-              <Button
-                variant="outline"
-                className="w-full bg-transparent justify-start"
-                onClick={() => handleQuickLogin("test@dtc.com", "test123", "Usuario de Prueba")}
-                disabled={loading}
-              >
-                <User className="mr-2 h-4 w-4" />
-                {loading ? "Conectando..." : "Test - Usuario Básico"}
-              </Button>
-            </div>
-          </div>
+                <div className="mt-4 p-3 bg-green-50 rounded-lg">
+                  <div className="text-sm text-green-800">
+                    <p className="font-medium mb-1">✅ Sistema Robusto</p>
+                    <p>Autenticación híbrida con múltiples fallbacks para garantizar acceso confiable.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
-          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <span className="font-semibold text-green-800">Sistema Híbrido Activo</span>
-            </div>
-            <p className="text-sm text-green-700">
-              La plataforma funciona con Supabase cuando está disponible, y con datos locales como respaldo. ¡Todos los
-              datos y funcionalidades están disponibles!
-            </p>
-          </div>
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>¿Problemas para acceder?</p>
+          <p>Cualquier email válido + contraseña de 3+ caracteres funciona como fallback</p>
         </div>
-
-        {/* Auth Bypass Component */}
-        {/* AuthBypass is conditionally rendered based on user and isLoading */}
       </div>
     </div>
   )
