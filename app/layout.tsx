@@ -8,9 +8,11 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CareerDev Pro - Plataforma de Desarrollo Profesional",
+  title: "DTC Platform - Desarrollo de Talento y Carrera",
   description:
-    "Evaluaciones psicométricas avanzadas, análisis de soft skills con IA y coaching personalizado para impulsar tu crecimiento profesional.",
+    "Plataforma integral de desarrollo profesional con evaluaciones psicométricas, análisis de soft skills con IA y coaching personalizado.",
+  keywords:
+    "desarrollo profesional, evaluaciones psicométricas, soft skills, coaching, IA, DISC, Big Five, MBTI, RIASEC",
     generator: 'v0.app'
 }
 

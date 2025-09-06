@@ -7,52 +7,74 @@ const mockSupabaseClient = {
       data: { session: null },
       error: null,
     }),
-    signInWithPassword: async ({ email, password }: { email: string; password: string }) => ({
-      data: { user: null, session: null },
-      error: { message: "Mock authentication - use demo@example.com" },
-    }),
-    signUp: async ({ email, password, options }: { email: string; password: string; options?: any }) => ({
-      data: { user: null, session: null },
-      error: { message: "Mock signup - use demo@example.com" },
-    }),
-    signOut: async () => ({
-      error: null,
-    }),
+    signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
+      // Mock authentication logic
+      if (email === "demo@example.com") {
+        return {
+          data: {
+            user: {
+              id: "demo-user",
+              email: "demo@example.com",
+              user_metadata: { name: "Usuario Demo" },
+            },
+          },
+          error: null,
+        }
+      }
+      return { data: { user: null }, error: { message: "Invalid credentials" } }
+    },
+    signUp: async ({ email, password, options }: { email: string; password: string; options?: any }) => {
+      return {
+        data: {
+          user: {
+            id: `user-${Date.now()}`,
+            email,
+            user_metadata: options?.data || {},
+          },
+        },
+        error: null,
+      }
+    },
+    signOut: async () => ({ error: null }),
   },
   from: (table: string) => ({
-    select: () => ({
-      eq: () => ({
+    select: (columns?: string) => ({
+      eq: (column: string, value: any) => ({
         single: async () => ({ data: null, error: null }),
+        limit: (count: number) => ({ data: [], error: null }),
+      }),
+      order: (column: string, options?: any) => ({
+        limit: (count: number) => ({ data: [], error: null }),
       }),
     }),
-    insert: () => ({
-      select: () => ({
-        single: async () => ({ data: null, error: null }),
-      }),
-    }),
-    update: () => ({
-      eq: () => ({
-        select: () => ({
-          single: async () => ({ data: null, error: null }),
-        }),
-      }),
-    }),
+    insert: async (data: any) => ({ data, error: null }),
+    update: async (data: any) => ({ data, error: null }),
+    delete: async () => ({ data: null, error: null }),
   }),
+  rpc: async (functionName: string, params?: any) => ({ data: null, error: null }),
 }
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+
 export function createClient() {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  return createSupabaseClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+  })
+}
 
-    if (supabaseUrl && supabaseKey) {
-      return createSupabaseClient(supabaseUrl, supabaseKey)
-    }
-  } catch (error) {
-    console.warn("Supabase client creation failed, using mock client:", error)
-  }
-
-  return mockSupabaseClient as any
+// Server-side client for API routes
+export function createServerClient() {
+  return createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
 }
 
 // Export the client instance
@@ -277,14 +299,7 @@ export async function getSession() {
 
 export async function getTestQuestions(testType: string) {
   return {
-    data: [
-      {
-        id: 1,
-        question: "Sample question for " + testType,
-        options: ["Option A", "Option B", "Option C", "Option D"],
-        test_type: testType,
-      },
-    ],
+    data: mockTestQuestions[testType] || [],
     error: null,
   }
 }
@@ -360,4 +375,4 @@ export async function getTestResults(userId: string) {
 }
 
 // Export default client for compatibility
-export default supabase
+export default createClient
