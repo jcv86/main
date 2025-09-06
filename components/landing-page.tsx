@@ -5,360 +5,363 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useSession } from "@/components/session-wrapper"
-import { useToast } from "@/hooks/use-toast"
 import {
   Brain,
   Target,
   Users,
-  Award,
+  TrendingUp,
   CheckCircle,
   Star,
-  ArrowRight,
-  Menu,
-  X,
+  Play,
+  Zap,
+  Shield,
+  BookOpen,
+  MessageSquare,
+  BarChart3,
+  Lightbulb,
+  Heart,
+  Palette,
+  Compass,
   User,
   Mail,
   Lock,
   Eye,
   EyeOff,
-  Sparkles,
-  TrendingUp,
-  Shield,
-  Zap,
-  BarChart3,
-  BookOpen,
-  MessageCircle,
-  Clock,
-  Globe,
-  ChevronRight,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase"
 
 export function LandingPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const router = useRouter()
   const [authMode, setAuthMode] = useState<"login" | "signup">("login")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     name: "",
   })
-  const [error, setError] = useState("")
 
-  const { signIn, signUp, demoLogin } = useSession()
-  const { toast } = useToast()
+  const handleDemoAccess = () => {
+    // Set demo session
+    const demoSession = {
+      authenticated: true,
+      user: {
+        id: "demo-user",
+        email: "demo@example.com",
+        name: "Usuario Demo",
+      },
+    }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+    localStorage.setItem("dtc_session", JSON.stringify(demoSession))
+    router.push("/dashboard")
+  }
+
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
 
     try {
-      let result
       if (authMode === "login") {
-        result = await signIn(formData.email, formData.password)
-      } else {
-        result = await signUp(formData.email, formData.password, formData.name)
-      }
-
-      if (result.success) {
-        toast({
-          title: "¡Bienvenido!",
-          description: authMode === "login" ? "Has iniciado sesión correctamente" : "Cuenta creada exitosamente",
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
         })
-        window.location.href = "/dashboard"
+
+        if (error) throw error
+
+        if (data.user) {
+          const session = {
+            authenticated: true,
+            user: {
+              id: data.user.id,
+              email: data.user.email,
+              name: data.user.user_metadata?.name || "Usuario",
+            },
+          }
+          localStorage.setItem("dtc_session", JSON.stringify(session))
+          router.push("/dashboard")
+        }
       } else {
-        setError(result.error || "Error en la autenticación")
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              name: formData.name,
+            },
+          },
+        })
+
+        if (error) throw error
+
+        if (data.user) {
+          const session = {
+            authenticated: true,
+            user: {
+              id: data.user.id,
+              email: data.user.email,
+              name: formData.name,
+            },
+          }
+          localStorage.setItem("dtc_session", JSON.stringify(session))
+          router.push("/dashboard")
+        }
       }
-    } catch (error) {
-      setError("Error inesperado. Inténtalo de nuevo.")
+    } catch (err: any) {
+      setError(err.message || "Error en la autenticación")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleDemoAccess = async () => {
-    setIsLoading(true)
-    try {
-      await demoLogin()
-      toast({
-        title: "¡Acceso Demo Activado!",
-        description: "Explora todas las funcionalidades de la plataforma",
-      })
-      window.location.href = "/dashboard"
-    } catch (error) {
-      setError("Error al acceder al demo")
-    } finally {
-      setIsLoading(false)
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
-                <Brain className="h-8 w-8 text-blue-600" />
-                <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  DTC Platform
-                </span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Brain className="h-5 w-5 text-white" />
               </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                DespegaTuCarrera
+              </span>
             </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <a
-                  href="#features"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Características
-                </a>
-                <a
-                  href="#tests"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Evaluaciones
-                </a>
-                <a
-                  href="#pricing"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Precios
-                </a>
-                <a
-                  href="#testimonials"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Testimonios
-                </a>
-              </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-700 hover:text-blue-600 p-2">
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <a href="#features" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+            <nav className="hidden md:flex items-center space-x-6">
+              <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Características
               </a>
-              <a href="#tests" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
-                Evaluaciones
+              <a href="#tests" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Tests
               </a>
-              <a href="#pricing" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+              <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Precios
               </a>
-              <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
-                Testimonios
-              </a>
-            </div>
+              <Button variant="outline" size="sm">
+                Iniciar Sesión
+              </Button>
+            </nav>
           </div>
-        )}
-      </nav>
+        </div>
+      </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Content */}
-            <div className="text-center lg:text-left">
-              <Badge variant="secondary" className="mb-4 bg-blue-100 text-blue-800 border-blue-200">
-                <Sparkles className="h-3 w-3 mr-1" />
-                Plataforma de Desarrollo Profesional
-              </Badge>
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Hero Content */}
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-blue-200">
+                  <Zap className="h-3 w-3 mr-1" />
+                  Plataforma de IA para Desarrollo Profesional
+                </Badge>
+                <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
+                  Descubre tu{" "}
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    potencial profesional
+                  </span>{" "}
+                  con IA
+                </h1>
+                <p className="text-xl text-gray-600 leading-relaxed">
+                  Evaluaciones psicométricas avanzadas, coaching personalizado con IA y recomendaciones de carrera
+                  basadas en ciencia para impulsar tu crecimiento profesional.
+                </p>
+              </div>
 
-              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Descubre tu{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  potencial profesional
-                </span>{" "}
-                con IA
-              </h1>
-
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Evaluaciones psicométricas avanzadas, análisis de soft skills con inteligencia artificial y coaching
-                personalizado para impulsar tu crecimiento profesional.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8"
                   onClick={handleDemoAccess}
-                  disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Cargando...
-                    </div>
-                  ) : (
-                    <>
-                      <User className="h-5 w-5 mr-2" />
-                      Acceso Demo
-                    </>
-                  )}
+                  <Play className="h-5 w-5 mr-2" />
+                  Acceso Demo Gratuito
                 </Button>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 text-lg font-semibold transition-all duration-300 bg-transparent"
-                  onClick={() => document.getElementById("auth-section")?.scrollIntoView({ behavior: "smooth" })}
-                >
-                  Crear Cuenta
-                  <ArrowRight className="h-5 w-5 ml-2" />
+                <Button variant="outline" size="lg" className="px-8 bg-transparent">
+                  <BookOpen className="h-5 w-5 mr-2" />
+                  Ver Demo
                 </Button>
               </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200">
-                <div className="text-center lg:text-left">
-                  <div className="text-2xl font-bold text-blue-600">5+</div>
-                  <div className="text-sm text-gray-600">Evaluaciones</div>
+              <div className="flex items-center space-x-6 text-sm text-gray-600">
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />5 Tests Psicométricos
                 </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-2xl font-bold text-blue-600">AI</div>
-                  <div className="text-sm text-gray-600">Powered</div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                  Coach IA Personalizado
                 </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-2xl font-bold text-blue-600">24/7</div>
-                  <div className="text-sm text-gray-600">Disponible</div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                  Análisis Científico
                 </div>
               </div>
             </div>
 
             {/* Right Column - Auth Panel */}
             <div className="lg:pl-8">
-              <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
+              <Card className="w-full max-w-md mx-auto shadow-xl border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-2xl font-bold text-gray-900">
-                    {authMode === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
-                  </CardTitle>
-                  <CardDescription className="text-gray-600">
-                    {authMode === "login"
-                      ? "Accede a tu plataforma de desarrollo profesional"
-                      : "Únete a nuestra plataforma de desarrollo profesional"}
-                  </CardDescription>
+                  <CardTitle className="text-2xl">Comienza Ahora</CardTitle>
+                  <CardDescription>Accede a tu plataforma de desarrollo profesional</CardDescription>
                 </CardHeader>
+                <CardContent>
+                  <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as "login" | "signup")}>
+                    <TabsList className="grid w-full grid-cols-2 mb-6">
+                      <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
+                      <TabsTrigger value="signup">Registrarse</TabsTrigger>
+                    </TabsList>
 
-                <CardContent className="space-y-4">
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
-
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    {authMode === "signup" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                          Nombre completo
-                        </Label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <Input
-                            id="name"
-                            type="text"
-                            placeholder="Tu nombre completo"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="pl-10 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                            required={authMode === "signup"}
-                          />
+                    <TabsContent value="login" className="space-y-4">
+                      <form onSubmit={handleAuth} className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="email"
+                              name="email"
+                              type="email"
+                              placeholder="tu@email.com"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              className="pl-10"
+                              required
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <Label htmlFor="password">Contraseña</Label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="password"
+                              name="password"
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              className="pl-10 pr-10"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                            >
+                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </button>
+                          </div>
+                        </div>
+                        {error && (
+                          <Alert variant="destructive">
+                            <AlertDescription>{error}</AlertDescription>
+                          </Alert>
+                        )}
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                          {isLoading ? "Iniciando..." : "Iniciar Sesión"}
+                        </Button>
+                      </form>
+                    </TabsContent>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                        Correo electrónico
-                      </Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="tu@email.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="pl-10 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                      </div>
-                    </div>
+                    <TabsContent value="signup" className="space-y-4">
+                      <form onSubmit={handleAuth} className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Nombre Completo</Label>
+                          <div className="relative">
+                            <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="name"
+                              name="name"
+                              type="text"
+                              placeholder="Tu nombre"
+                              value={formData.name}
+                              onChange={handleInputChange}
+                              className="pl-10"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="email"
+                              name="email"
+                              type="email"
+                              placeholder="tu@email.com"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              className="pl-10"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="password">Contraseña</Label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="password"
+                              name="password"
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              className="pl-10 pr-10"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                            >
+                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </button>
+                          </div>
+                        </div>
+                        {error && (
+                          <Alert variant="destructive">
+                            <AlertDescription>{error}</AlertDescription>
+                          </Alert>
+                        )}
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                          {isLoading ? "Registrando..." : "Crear Cuenta"}
+                        </Button>
+                      </form>
+                    </TabsContent>
+                  </Tabs>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                        Contraseña
-                      </Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input
-                          id="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="••••••••"
-                          value={formData.password}
-                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                          className="pl-10 pr-10 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                          required
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </button>
-                      </div>
-                    </div>
-
+                  <div className="mt-6 pt-6 border-t">
                     <Button
-                      type="submit"
-                      className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                      disabled={isLoading}
+                      variant="outline"
+                      className="w-full bg-gradient-to-r from-green-50 to-blue-50 border-green-200 hover:from-green-100 hover:to-blue-100"
+                      onClick={handleDemoAccess}
                     >
-                      {isLoading ? (
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          {authMode === "login" ? "Iniciando..." : "Creando..."}
-                        </div>
-                      ) : authMode === "login" ? (
-                        "Iniciar Sesión"
-                      ) : (
-                        "Crear Cuenta"
-                      )}
+                      <Play className="h-4 w-4 mr-2 text-green-600" />
+                      <span className="text-green-700 font-medium">Probar Demo Sin Registro</span>
                     </Button>
-                  </form>
-
-                  <div className="text-center pt-4 border-t border-gray-200">
-                    <button
-                      onClick={() => {
-                        setAuthMode(authMode === "login" ? "signup" : "login")
-                        setError("")
-                        setFormData({ email: "", password: "", name: "" })
-                      }}
-                      className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-                    >
-                      {authMode === "login" ? "¿No tienes cuenta? Crear una" : "¿Ya tienes cuenta? Iniciar sesión"}
-                    </button>
+                    <p className="text-xs text-gray-500 text-center mt-2">
+                      Acceso completo a todas las funciones • Sin compromiso
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -369,78 +372,77 @@ export function LandingPage() {
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-purple-100 text-purple-800 border-purple-200">
-              <Zap className="h-3 w-3 mr-1" />
+            <Badge variant="secondary" className="mb-4">
               Características Principales
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Todo lo que necesitas para tu{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                desarrollo profesional
-              </span>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Todo lo que necesitas para <span className="text-blue-600">impulsar tu carrera</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Una plataforma integral que combina evaluaciones científicas, inteligencia artificial y coaching
-              personalizado para acelerar tu crecimiento profesional.
+              Herramientas científicamente validadas y tecnología de IA para un desarrollo profesional integral
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 icon: Brain,
-                title: "Evaluaciones Psicométricas",
+                title: "Coach IA Personalizado",
                 description:
-                  "Tests científicamente validados: DISC, Big Five, MBTI, RIASEC y más para conocer tu perfil completo.",
-                color: "text-blue-600",
-                bgColor: "bg-blue-50",
-              },
-              {
-                icon: MessageCircle,
-                title: "Análisis de Soft Skills con IA",
-                description:
-                  "Evaluación avanzada de habilidades blandas usando inteligencia artificial para insights precisos.",
-                color: "text-green-600",
-                bgColor: "bg-green-50",
-              },
-              {
-                icon: Target,
-                title: "Coaching Personalizado",
-                description: "Recomendaciones específicas y planes de desarrollo adaptados a tu perfil único.",
+                  "Asistente inteligente que analiza tu perfil y proporciona recomendaciones específicas para tu crecimiento profesional.",
                 color: "text-purple-600",
                 bgColor: "bg-purple-50",
               },
               {
+                icon: Target,
+                title: "Tests Psicométricos Avanzados",
+                description:
+                  "5 evaluaciones científicamente validadas: DISC, Big Five, MBTI, RIASEC y Habilidades Blandas.",
+                color: "text-blue-600",
+                bgColor: "bg-blue-50",
+              },
+              {
                 icon: BarChart3,
-                title: "Dashboard Inteligente",
-                description: "Visualiza tu progreso, fortalezas y áreas de mejora con gráficos interactivos.",
+                title: "Análisis Predictivo",
+                description:
+                  "Algoritmos de IA que predicen tu compatibilidad con diferentes roles y trayectorias profesionales.",
+                color: "text-green-600",
+                bgColor: "bg-green-50",
+              },
+              {
+                icon: Users,
+                title: "Recomendaciones de Carrera",
+                description:
+                  "Sugerencias personalizadas de roles, industrias y paths de crecimiento basadas en tu perfil único.",
                 color: "text-orange-600",
                 bgColor: "bg-orange-50",
               },
               {
-                icon: BookOpen,
-                title: "Biblioteca de Recursos",
-                description: "Acceso a contenido especializado, guías y recursos para tu desarrollo continuo.",
-                color: "text-indigo-600",
-                bgColor: "bg-indigo-50",
-              },
-              {
-                icon: Shield,
-                title: "Privacidad y Seguridad",
-                description: "Tus datos están protegidos con los más altos estándares de seguridad y privacidad.",
+                icon: TrendingUp,
+                title: "Planes de Desarrollo",
+                description:
+                  "Roadmaps detallados con objetivos, recursos y métricas para acelerar tu crecimiento profesional.",
                 color: "text-red-600",
                 bgColor: "bg-red-50",
               },
+              {
+                icon: Shield,
+                title: "Datos Seguros y Privados",
+                description:
+                  "Encriptación de nivel empresarial y cumplimiento GDPR para proteger tu información personal.",
+                color: "text-indigo-600",
+                bgColor: "bg-indigo-50",
+              },
             ].map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-lg">
+              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
-                  <div className={`${feature.bgColor} w-12 h-12 rounded-lg flex items-center justify-center mb-4`}>
+                  <div className={`w-12 h-12 ${feature.bgColor} rounded-lg flex items-center justify-center mb-4`}>
                     <feature.icon className={`h-6 w-6 ${feature.color}`} />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -449,124 +451,106 @@ export function LandingPage() {
       </section>
 
       {/* Tests Section */}
-      <section id="tests" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="tests" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-blue-100 text-blue-800 border-blue-200">
-              <Award className="h-3 w-3 mr-1" />
+            <Badge variant="secondary" className="mb-4">
               Evaluaciones Disponibles
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Evaluaciones{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                científicamente validadas
-              </span>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Tests Psicométricos <span className="text-blue-600">Científicamente Validados</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Descubre tu perfil profesional completo con nuestras evaluaciones especializadas, cada una diseñada para
-              revelar aspectos únicos de tu personalidad y potencial.
+              Evaluaciones completas que analizan diferentes aspectos de tu personalidad y preferencias profesionales
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                name: "DISC Assessment",
-                description: "Evalúa tu estilo de comportamiento y comunicación en el entorno laboral.",
-                duration: "10-15 min",
-                insights: ["Estilo de liderazgo", "Comunicación", "Trabajo en equipo"],
-                color: "blue",
                 icon: Target,
+                name: "DISC Assessment",
+                description: "Evalúa tu estilo de comportamiento y comunicación en 4 dimensiones principales",
+                duration: "10-15 min",
+                color: "text-blue-600",
+                bgColor: "bg-blue-50",
+                borderColor: "border-blue-200",
               },
               {
-                name: "Big Five",
-                description: "Analiza los cinco grandes factores de personalidad reconocidos científicamente.",
-                duration: "15-20 min",
-                insights: ["Apertura", "Responsabilidad", "Extraversión"],
-                color: "purple",
                 icon: Brain,
-              },
-              {
-                name: "MBTI",
-                description: "Descubre tu tipo de personalidad Myers-Briggs y preferencias cognitivas.",
-                duration: "20-25 min",
-                insights: ["Procesamiento", "Decisiones", "Energía"],
-                color: "green",
-                icon: Users,
-              },
-              {
-                name: "RIASEC",
-                description: "Identifica tus intereses profesionales y carreras más compatibles.",
+                name: "Big Five",
+                description: "Analiza los cinco grandes factores de personalidad reconocidos científicamente",
                 duration: "15-20 min",
-                insights: ["Intereses vocacionales", "Carreras afines", "Ambiente laboral"],
-                color: "orange",
-                icon: TrendingUp,
+                color: "text-purple-600",
+                bgColor: "bg-purple-50",
+                borderColor: "border-purple-200",
               },
               {
-                name: "Soft Skills con IA",
-                description: "Evaluación avanzada de habilidades blandas usando inteligencia artificial.",
+                icon: Palette,
+                name: "MBTI",
+                description: "Identifica tu tipo de personalidad Myers-Briggs y preferencias cognitivas",
+                duration: "20-25 min",
+                color: "text-green-600",
+                bgColor: "bg-green-50",
+                borderColor: "border-green-200",
+              },
+              {
+                icon: Compass,
+                name: "RIASEC",
+                description: "Descubre tus intereses vocacionales y carreras más compatibles",
+                duration: "15-20 min",
+                color: "text-orange-600",
+                bgColor: "bg-orange-50",
+                borderColor: "border-orange-200",
+              },
+              {
+                icon: Heart,
+                name: "Habilidades Blandas",
+                description: "Evalúa competencias interpersonales y profesionales clave",
                 duration: "20-30 min",
-                insights: ["Comunicación", "Liderazgo", "Adaptabilidad"],
-                color: "pink",
-                icon: MessageCircle,
+                color: "text-pink-600",
+                bgColor: "bg-pink-50",
+                borderColor: "border-pink-200",
               },
               {
-                name: "Evaluación 360°",
-                description: "Feedback completo de supervisores, pares y subordinados.",
+                icon: Lightbulb,
+                name: "Inteligencia Emocional",
+                description: "Próximamente: Evaluación completa de competencias emocionales",
                 duration: "Próximamente",
-                insights: ["Feedback integral", "Puntos ciegos", "Desarrollo"],
-                color: "gray",
-                icon: Globe,
+                color: "text-gray-400",
+                bgColor: "bg-gray-50",
+                borderColor: "border-gray-200",
                 comingSoon: true,
               },
             ].map((test, index) => (
               <Card
                 key={index}
-                className={`hover:shadow-lg transition-shadow duration-300 border-0 shadow-lg ${test.comingSoon ? "opacity-75" : ""}`}
+                className={`${test.borderColor} border-2 hover:shadow-lg transition-shadow ${test.comingSoon ? "opacity-60" : ""}`}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`bg-${test.color}-50 w-12 h-12 rounded-lg flex items-center justify-center`}>
-                      <test.icon className={`h-6 w-6 text-${test.color}-600`} />
-                    </div>
+                <CardHeader className={test.bgColor}>
+                  <div className="flex items-center justify-between">
+                    <test.icon className={`h-8 w-8 ${test.color}`} />
                     {test.comingSoon && (
                       <Badge variant="secondary" className="bg-gray-100 text-gray-600">
                         Próximamente
                       </Badge>
                     )}
                   </div>
-
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{test.name}</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{test.description}</p>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {test.duration}
-                    </div>
+                  <CardTitle className="text-xl">{test.name}</CardTitle>
+                  <CardDescription>{test.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="flex items-center justify-between text-sm mb-4">
+                    <span className="text-gray-600">Duración:</span>
+                    <span className="font-medium">{test.duration}</span>
                   </div>
-
-                  <div className="space-y-2 mb-4">
-                    <h4 className="text-sm font-medium text-gray-700">Insights que obtienes:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {test.insights.map((insight, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs bg-gray-100 text-gray-700">
-                          {insight}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {!test.comingSoon && (
-                    <Button
-                      className="w-full bg-transparent"
-                      variant="outline"
-                      onClick={() => (window.location.href = `/test/${test.name.toLowerCase().replace(/\s+/g, "-")}`)}
-                    >
-                      Comenzar Evaluación
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  )}
+                  <Button
+                    className="w-full"
+                    variant={test.comingSoon ? "outline" : "default"}
+                    disabled={test.comingSoon}
+                  >
+                    {test.comingSoon ? "Próximamente" : "Comenzar Test"}
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -574,76 +558,57 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Testimonials */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-green-100 text-green-800 border-green-200">
-              <Star className="h-3 w-3 mr-1" />
+            <Badge variant="secondary" className="mb-4">
               Testimonios
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Lo que dicen nuestros{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                usuarios
-              </span>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Lo que dicen nuestros <span className="text-blue-600">usuarios</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Profesionales de todo el mundo han transformado sus carreras con nuestra plataforma.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 name: "María González",
                 role: "Product Manager",
                 company: "TechCorp",
                 content:
-                  "Las evaluaciones me ayudaron a entender mis fortalezas y debilidades. Ahora lidero mi equipo con más confianza.",
+                  "Los insights del coach IA me ayudaron a identificar mis fortalezas y conseguir una promoción en 6 meses.",
                 rating: 5,
-                avatar: "/placeholder.svg?height=60&width=60&text=MG",
               },
               {
                 name: "Carlos Rodríguez",
                 role: "Desarrollador Senior",
                 company: "StartupXYZ",
                 content:
-                  "El análisis de soft skills con IA fue increíblemente preciso. Me dio insights que nunca había considerado.",
+                  "Las recomendaciones de carrera fueron precisas. Cambié a un rol que se alinea perfectamente con mi personalidad.",
                 rating: 5,
-                avatar: "/placeholder.svg?height=60&width=60&text=CR",
               },
               {
                 name: "Ana Martínez",
-                role: "HR Director",
-                company: "GlobalInc",
+                role: "Consultora",
+                company: "Freelance",
                 content:
-                  "Implementamos la plataforma para todo nuestro equipo. Los resultados en desarrollo profesional son evidentes.",
+                  "La plataforma me dio claridad sobre mi path profesional. Los tests son muy completos y precisos.",
                 rating: 5,
-                avatar: "/placeholder.svg?height=60&width=60&text=AM",
               },
             ].map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-lg">
+              <Card key={index} className="border-0 shadow-lg">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
                     ))}
                   </div>
-
-                  <p className="text-gray-600 mb-6 leading-relaxed italic">"{testimonial.content}"</p>
-
-                  <div className="flex items-center">
-                    <img
-                      src={testimonial.avatar || "/placeholder.svg"}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full mr-4"
-                    />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-600">
-                        {testimonial.role} en {testimonial.company}
-                      </p>
+                  <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
+                  <div>
+                    <div className="font-semibold">{testimonial.name}</div>
+                    <div className="text-sm text-gray-500">
+                      {testimonial.role} en {testimonial.company}
                     </div>
                   </div>
                 </CardContent>
@@ -653,121 +618,99 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Pricing */}
+      <section id="pricing" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-purple-100 text-purple-800 border-purple-200">
-              <TrendingUp className="h-3 w-3 mr-1" />
+            <Badge variant="secondary" className="mb-4">
               Planes y Precios
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Elige el plan perfecto para{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                tu desarrollo
-              </span>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Elige el plan que <span className="text-blue-600">mejor se adapte</span> a ti
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Opciones flexibles para individuos, equipos y organizaciones que buscan acelerar su crecimiento
-              profesional.
+              Desde acceso básico hasta coaching personalizado premium
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: "Individual",
-                price: "29",
-                period: "mes",
-                description: "Perfect para profesionales que buscan desarrollo personal",
+                name: "Básico",
+                price: "Gratis",
+                period: "siempre",
+                description: "Perfecto para comenzar tu desarrollo profesional",
                 features: [
-                  "5 evaluaciones psicométricas",
-                  "Análisis de soft skills con IA",
-                  "Dashboard personalizado",
-                  "Recomendaciones básicas",
-                  "Soporte por email",
+                  "2 tests psicométricos",
+                  "Análisis básico de resultados",
+                  "Recomendaciones generales",
+                  "Acceso a recursos básicos",
                 ],
+                cta: "Comenzar Gratis",
                 popular: false,
-                cta: "Comenzar Prueba Gratuita",
               },
               {
                 name: "Profesional",
-                price: "79",
+                price: "$29",
                 period: "mes",
-                description: "Ideal para profesionales avanzados y líderes de equipo",
+                description: "Para profesionales que buscan crecimiento acelerado",
                 features: [
-                  "Todas las evaluaciones disponibles",
-                  "Coaching personalizado con IA",
-                  "Análisis comparativo",
+                  "Todos los tests psicométricos",
+                  "Coach IA personalizado",
+                  "Análisis predictivo avanzado",
                   "Planes de desarrollo detallados",
+                  "Seguimiento de progreso",
                   "Soporte prioritario",
-                  "Sesiones de coaching 1:1",
                 ],
+                cta: "Comenzar Prueba",
                 popular: true,
-                cta: "Más Popular",
               },
               {
-                name: "Empresarial",
+                name: "Enterprise",
                 price: "Personalizado",
                 period: "",
-                description: "Soluciones completas para equipos y organizaciones",
+                description: "Para equipos y organizaciones",
                 features: [
-                  "Evaluaciones ilimitadas",
-                  "Dashboard de equipo",
+                  "Todo lo del plan Profesional",
+                  "Dashboard para equipos",
                   "Análisis organizacional",
                   "Integración con HRIS",
+                  "Coaching grupal",
                   "Soporte dedicado",
-                  "Consultoría especializada",
                 ],
-                popular: false,
                 cta: "Contactar Ventas",
+                popular: false,
               },
             ].map((plan, index) => (
               <Card
                 key={index}
-                className={`hover:shadow-lg transition-shadow duration-300 border-0 shadow-lg relative ${plan.popular ? "ring-2 ring-blue-500" : ""}`}
+                className={`border-2 ${plan.popular ? "border-blue-500 shadow-xl" : "border-gray-200"} relative`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-blue-600 text-white px-4 py-1">Más Popular</Badge>
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-blue-500 text-white">Más Popular</Badge>
                   </div>
                 )}
-
-                <CardContent className="p-6">
-                  <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    <p className="text-gray-600 mb-4">{plan.description}</p>
-
-                    <div className="mb-4">
-                      {plan.price === "Personalizado" ? (
-                        <div className="text-3xl font-bold text-gray-900">Personalizado</div>
-                      ) : (
-                        <div className="flex items-baseline justify-center">
-                          <span className="text-4xl font-bold text-gray-900">€{plan.price}</span>
-                          <span className="text-gray-600 ml-1">/{plan.period}</span>
-                        </div>
-                      )}
-                    </div>
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                  <div className="mt-4">
+                    <span className="text-4xl font-bold">{plan.price}</span>
+                    {plan.period && <span className="text-gray-500">/{plan.period}</span>}
                   </div>
-
+                  <CardDescription className="mt-2">{plan.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-gray-600">{feature}</span>
+                        <span className="text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
-
                   <Button
-                    className={`w-full ${plan.popular ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-900"}`}
-                    onClick={() => {
-                      if (plan.name === "Empresarial") {
-                        window.location.href = "mailto:ventas@dtcplatform.com"
-                      } else {
-                        document.getElementById("auth-section")?.scrollIntoView({ behavior: "smooth" })
-                      }
-                    }}
+                    className={`w-full ${plan.popular ? "bg-blue-600 hover:bg-blue-700" : ""}`}
+                    variant={plan.popular ? "default" : "outline"}
                   >
                     {plan.cta}
                   </Button>
@@ -779,125 +722,115 @@ export function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section id="auth-section" className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Listo para transformar tu carrera profesional?</h2>
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Listo para impulsar tu carrera profesional?</h2>
           <p className="text-xl mb-8 text-blue-100">
-            Únete a miles de profesionales que ya han descubierto su potencial con nuestra plataforma.
+            Únete a miles de profesionales que ya están acelerando su crecimiento con IA
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={handleDemoAccess}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                  Cargando...
-                </div>
-              ) : (
-                <>
-                  <User className="h-5 w-5 mr-2" />
-                  Probar Demo Gratuito
-                </>
-              )}
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8" onClick={handleDemoAccess}>
+              <Play className="h-5 w-5 mr-2" />
+              Comenzar Demo Gratuito
             </Button>
-
             <Button
               variant="outline"
               size="lg"
-              className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg font-semibold transition-all duration-300 bg-transparent"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="border-white text-white hover:bg-white hover:text-blue-600 px-8 bg-transparent"
             >
-              Crear Cuenta Completa
-              <ArrowRight className="h-5 w-5 ml-2" />
+              <MessageSquare className="h-5 w-5 mr-2" />
+              Hablar con Ventas
             </Button>
-          </div>
-
-          <div className="mt-8 text-blue-100">
-            <p className="text-sm">✓ Sin compromiso • ✓ Acceso inmediato • ✓ Todas las funcionalidades</p>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-4">
-                <Brain className="h-8 w-8 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">DTC Platform</span>
+      <footer className="bg-gray-900 text-white py-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Brain className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-xl font-bold">DespegaTuCarrera</span>
               </div>
-              <p className="text-gray-400 mb-4 max-w-md">
-                Plataforma líder en desarrollo profesional que combina evaluaciones científicas, inteligencia artificial
-                y coaching personalizado.
-              </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">LinkedIn</span>
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Twitter</span>
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                </a>
-              </div>
+              <p className="text-gray-400">Plataforma de IA para desarrollo profesional y coaching personalizado.</p>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Producto</h3>
-              <ul className="space-y-2">
+              <h3 className="font-semibold mb-4">Producto</h3>
+              <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#features" className="text-gray-400 hover:text-white transition-colors">
-                    Características
+                  <a href="#" className="hover:text-white transition-colors">
+                    Tests Psicométricos
                   </a>
                 </li>
                 <li>
-                  <a href="#tests" className="text-gray-400 hover:text-white transition-colors">
-                    Evaluaciones
+                  <a href="#" className="hover:text-white transition-colors">
+                    Coach IA
                   </a>
                 </li>
                 <li>
-                  <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">
-                    Precios
+                  <a href="#" className="hover:text-white transition-colors">
+                    Análisis Predictivo
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    API
+                  <a href="#" className="hover:text-white transition-colors">
+                    Planes de Desarrollo
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Soporte</h3>
-              <ul className="space-y-2">
+              <h3 className="font-semibold mb-4">Empresa</h3>
+              <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:text-white transition-colors">
+                    Sobre Nosotros
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Carreras
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contacto
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Soporte</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
                     Centro de Ayuda
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:text-white transition-colors">
                     Documentación
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    Contacto
+                  <a href="#" className="hover:text-white transition-colors">
+                    API
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="hover:text-white transition-colors">
                     Estado del Sistema
                   </a>
                 </li>
@@ -905,16 +838,16 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">© 2024 DTC Platform. Todos los derechos reservados.</p>
+          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400">© 2024 DespegaTuCarrera. Todos los derechos reservados.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Privacidad
               </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Términos
               </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Cookies
               </a>
             </div>
