@@ -1,216 +1,363 @@
-import { createClient } from "@supabase/supabase-js"
+import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-// Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Export createClient as named export for other uses
-export { createClient }
-
-// Database types for better TypeScript support
-export interface TestQuestion {
-  id: number
-  test_type: string
-  question_number: number
-  question_text: string
-  options: string
-  correct_answer?: number
-  category?: string
-  question_type: "multiple_choice" | "open_ended"
-  created_at?: string
-  updated_at?: string
-}
-
-export interface OpenResponse {
-  id: number
-  user_email: string
-  test_type: string
-  question_id: number
-  response_text: string
-  ai_analysis?: any
-  created_at: string
-  updated_at: string
-}
-
-export interface TestResult {
-  id: number
-  user_email: string
-  test_type: string
-  results: any
-  score: number
-  completed_at: string
-  created_at?: string
-  updated_at?: string
-}
-
-export interface UserProfile {
-  id: number
-  email: string
-  user_email: string
-  full_name: string
-  position: string
-  department: string
-  experience_years: number
-  skills: string[]
-  career_goals: string
-  current_level: number
-  total_xp: number
-  documents_read: number
-  tests_completed: number
-  skills_learned: number
-  created_at?: string
-  updated_at?: string
-}
-
-// Helper functions for database operations
-export async function getTestQuestions(testType: string): Promise<TestQuestion[]> {
-  const { data, error } = await supabase
-    .from("test_questions")
-    .select("*")
-    .eq("test_type", testType)
-    .order("question_number")
-
-  if (error) {
-    console.error("Error fetching test questions:", error)
-    throw error
-  }
-
-  return data || []
-}
-
-export async function saveOpenResponse(
-  userEmail: string,
-  testType: string,
-  questionId: number,
-  responseText: string,
-): Promise<OpenResponse> {
-  const { data, error } = await supabase
-    .from("open_responses")
-    .upsert(
-      {
-        user_email: userEmail,
-        test_type: testType,
-        question_id: questionId,
-        response_text: responseText,
-        updated_at: new Date().toISOString(),
-      },
-      {
-        onConflict: "user_email,test_type,question_id",
-      },
-    )
-    .select()
-    .single()
-
-  if (error) {
-    console.error("Error saving open response:", error)
-    throw error
-  }
-
-  return data
-}
-
-export async function getOpenResponses(userEmail: string, testType: string): Promise<OpenResponse[]> {
-  const { data, error } = await supabase
-    .from("open_responses")
-    .select("*")
-    .eq("user_email", userEmail)
-    .eq("test_type", testType)
-
-  if (error) {
-    console.error("Error fetching open responses:", error)
-    throw error
-  }
-
-  return data || []
-}
-
-export async function saveTestResult(
-  userEmail: string,
-  testType: string,
-  results: any,
-  score: number,
-): Promise<TestResult> {
-  const { data, error } = await supabase
-    .from("test_results")
-    .insert({
-      user_email: userEmail,
-      test_type: testType,
-      results,
-      score,
-      completed_at: new Date().toISOString(),
-    })
-    .select()
-    .single()
-
-  if (error) {
-    console.error("Error saving test result:", error)
-    throw error
-  }
-
-  return data
-}
-
-export async function getUserProfile(email: string): Promise<UserProfile | null> {
-  const { data, error } = await supabase.from("user_profiles").select("*").eq("email", email).single()
-
-  if (error) {
-    if (error.code === "PGRST116") {
-      // No rows returned
-      return null
-    }
-    console.error("Error fetching user profile:", error)
-    throw error
-  }
-
-  return data
-}
-
-export async function getTestResult(userEmail: string, testType: string): Promise<TestResult | null> {
-  const { data, error } = await supabase
-    .from("test_results")
-    .select("*")
-    .eq("user_email", userEmail)
-    .eq("test_type", testType)
-    .order("completed_at", { ascending: false })
-    .limit(1)
-    .single()
-
-  if (error) {
-    if (error.code === "PGRST116") {
-      // No rows returned
-      return null
-    }
-    console.error("Error fetching test result:", error)
-    throw error
-  }
-
-  return data
-}
-
-// AI Analysis for open-ended responses
-export async function analyzeOpenResponse(responseText: string, category: string): Promise<any> {
-  try {
-    const response = await fetch("/api/analyze-response", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        response: responseText,
-        category: category,
+// Mock Supabase client for development
+const mockSupabaseClient = {
+  auth: {
+    getSession: async () => ({
+      data: { session: null },
+      error: null,
+    }),
+    signInWithPassword: async ({ email, password }: { email: string; password: string }) => ({
+      data: { user: null, session: null },
+      error: { message: "Mock authentication - use demo@example.com" },
+    }),
+    signUp: async ({ email, password, options }: { email: string; password: string; options?: any }) => ({
+      data: { user: null, session: null },
+      error: { message: "Mock signup - use demo@example.com" },
+    }),
+    signOut: async () => ({
+      error: null,
+    }),
+  },
+  from: (table: string) => ({
+    select: () => ({
+      eq: () => ({
+        single: async () => ({ data: null, error: null }),
       }),
-    })
+    }),
+    insert: () => ({
+      select: () => ({
+        single: async () => ({ data: null, error: null }),
+      }),
+    }),
+    update: () => ({
+      eq: () => ({
+        select: () => ({
+          single: async () => ({ data: null, error: null }),
+        }),
+      }),
+    }),
+  }),
+}
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+export function createClient() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (supabaseUrl && supabaseKey) {
+      return createSupabaseClient(supabaseUrl, supabaseKey)
     }
-
-    const data = await response.json()
-    return data.analysis
   } catch (error) {
-    console.error("Error analyzing response:", error)
-    return null
+    console.warn("Supabase client creation failed, using mock client:", error)
+  }
+
+  return mockSupabaseClient as any
+}
+
+// Export the client instance
+export const supabase = createClient()
+
+// Mock data for development
+const mockUsers = [
+  {
+    id: "1",
+    email: "demo@example.com",
+    name: "Demo User",
+    password: "demo123",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    email: "travis@example.com",
+    name: "Travis Johnson",
+    password: "demo123",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "3",
+    email: "admin@example.com",
+    name: "Admin User",
+    password: "demo123",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "4",
+    email: "guest@example.com",
+    name: "Guest User",
+    password: "demo123",
+    created_at: new Date().toISOString(),
+  },
+]
+
+const mockTestQuestions = {
+  disc: [
+    {
+      id: 1,
+      question: "¿Cómo prefieres abordar los desafíos en el trabajo?",
+      options: [
+        "Tomo el control y actúo rápidamente",
+        "Analizo todas las opciones antes de decidir",
+        "Busco el consenso del equipo",
+        "Sigo los procedimientos establecidos",
+      ],
+    },
+    {
+      id: 2,
+      question: "En una reunión de equipo, tiendes a:",
+      options: [
+        "Liderar la discusión",
+        "Hacer preguntas para entender mejor",
+        "Escuchar y apoyar a otros",
+        "Tomar notas detalladas",
+      ],
+    },
+  ],
+  "big-five": [
+    {
+      id: 1,
+      question: "Me considero una persona extrovertida y entusiasta",
+      type: "likert",
+      scale: 5,
+    },
+    {
+      id: 2,
+      question: "Tiendo a ser crítico con otros",
+      type: "likert",
+      scale: 5,
+    },
+  ],
+  mbti: [
+    {
+      id: 1,
+      question: "¿Qué te energiza más?",
+      options: ["Interactuar con muchas personas", "Tiempo a solas para reflexionar"],
+    },
+    {
+      id: 2,
+      question: "¿Cómo prefieres procesar información?",
+      options: [
+        "A través de los cinco sentidos y experiencias concretas",
+        "A través de patrones, posibilidades e intuición",
+      ],
+    },
+  ],
+  riasec: [
+    {
+      id: 1,
+      question: "¿Qué actividades te interesan más?",
+      options: [
+        "Trabajar con herramientas y maquinaria",
+        "Investigar y analizar datos",
+        "Crear arte o diseños",
+        "Ayudar y enseñar a otros",
+        "Liderar y persuadir",
+        "Organizar y mantener registros",
+      ],
+    },
+  ],
+  "soft-skills": [
+    {
+      id: 1,
+      question: "Describe una situación donde tuviste que liderar un equipo bajo presión",
+      type: "open-ended",
+    },
+    {
+      id: 2,
+      question: "¿Cómo manejas los conflictos en el trabajo?",
+      type: "open-ended",
+    },
+  ],
+}
+
+// Mock authentication functions
+export async function signInWithEmail(email: string, password: string) {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const user = mockUsers.find((u) => u.email === email && u.password === password)
+
+  if (user) {
+    return {
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          user_metadata: { name: user.name },
+        },
+        session: {
+          access_token: "mock-token",
+          user: {
+            id: user.id,
+            email: user.email,
+            user_metadata: { name: user.name },
+          },
+        },
+      },
+      error: null,
+    }
+  }
+
+  return {
+    data: { user: null, session: null },
+    error: { message: "Invalid credentials" },
   }
 }
+
+export async function signUpWithEmail(email: string, password: string, name: string) {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const existingUser = mockUsers.find((u) => u.email === email)
+
+  if (existingUser) {
+    return {
+      data: { user: null, session: null },
+      error: { message: "User already exists" },
+    }
+  }
+
+  const newUser = {
+    id: String(mockUsers.length + 1),
+    email,
+    name,
+    password,
+    created_at: new Date().toISOString(),
+  }
+
+  mockUsers.push(newUser)
+
+  return {
+    data: {
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        user_metadata: { name: newUser.name },
+      },
+      session: {
+        access_token: "mock-token",
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          user_metadata: { name: newUser.name },
+        },
+      },
+    },
+    error: null,
+  }
+}
+
+export async function signOut() {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  return {
+    error: null,
+  }
+}
+
+export async function getSession() {
+  // Check localStorage for session
+  if (typeof window !== "undefined") {
+    const session = localStorage.getItem("career-dev-session")
+    if (session) {
+      const parsed = JSON.parse(session)
+      return {
+        data: { session: parsed },
+        error: null,
+      }
+    }
+  }
+
+  return {
+    data: { session: null },
+    error: null,
+  }
+}
+
+export async function getTestQuestions(testType: string) {
+  return {
+    data: [
+      {
+        id: 1,
+        question: "Sample question for " + testType,
+        options: ["Option A", "Option B", "Option C", "Option D"],
+        test_type: testType,
+      },
+    ],
+    error: null,
+  }
+}
+
+export async function saveOpenResponse(testType: string, responses: any) {
+  return {
+    data: { id: Date.now(), test_type: testType, responses },
+    error: null,
+  }
+}
+
+export async function saveTestResult(testType: string, result: any) {
+  return {
+    data: { id: Date.now(), test_type: testType, result },
+    error: null,
+  }
+}
+
+export async function getUserProfile(userId: string) {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  const user = mockUsers.find((u) => u.id === userId)
+
+  if (user) {
+    return {
+      data: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        created_at: user.created_at,
+        test_results: [],
+        coaching_sessions: [],
+      },
+      error: null,
+    }
+  }
+
+  return {
+    data: null,
+    error: { message: "User not found" },
+  }
+}
+
+export async function getTestResults(userId: string) {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  // Mock test results
+  return {
+    data: [
+      {
+        id: "1",
+        test_type: "disc",
+        results: { D: 85, I: 60, S: 40, C: 70 },
+        completed_at: new Date().toISOString(),
+      },
+      {
+        id: "2",
+        test_type: "big-five",
+        results: {
+          openness: 75,
+          conscientiousness: 80,
+          extraversion: 65,
+          agreeableness: 70,
+          neuroticism: 30,
+        },
+        completed_at: new Date().toISOString(),
+      },
+    ],
+    error: null,
+  }
+}
+
+// Export default client for compatibility
+export default supabase

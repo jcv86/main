@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,6 +43,123 @@ export async function GET(request: NextRequest) {
       testCount: 0,
       generatedAt: new Date().toISOString(),
       fallback: true,
+    })
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { testType, results, responses } = await request.json()
+
+    // Create a comprehensive prompt based on test results
+    const prompt = `
+Analiza los siguientes resultados de evaluación de habilidades blandas y proporciona insights personalizados:
+
+Tipo de Test: ${testType}
+Resultados: ${JSON.stringify(results)}
+Respuestas del usuario: ${JSON.stringify(responses)}
+
+Por favor proporciona:
+1. Un análisis detallado de las fortalezas principales
+2. Áreas de mejora identificadas
+3. Recomendaciones específicas y accionables
+4. Un plan de desarrollo personalizado
+
+Responde en formato JSON con la siguiente estructura:
+{
+  "insights": [
+    {
+      "category": "Fortalezas",
+      "title": "Título del insight",
+      "description": "Descripción detallada",
+      "confidence": 0.9,
+      "priority": "high"
+    }
+  ],
+  "recommendations": [
+    {
+      "title": "Título de la recomendación",
+      "description": "Descripción de la acción",
+      "timeframe": "corto plazo",
+      "difficulty": "fácil"
+    }
+  ],
+  "developmentPlan": {
+    "shortTerm": ["Acción 1", "Acción 2"],
+    "mediumTerm": ["Acción 3", "Acción 4"],
+    "longTerm": ["Acción 5", "Acción 6"]
+  }
+}
+`
+
+    const { text } = await generateText({
+      model: openai("gpt-4o"),
+      prompt,
+      temperature: 0.7,
+    })
+
+    // Try to parse the AI response as JSON
+    let aiInsights
+    try {
+      aiInsights = JSON.parse(text)
+    } catch (parseError) {
+      // Fallback if AI doesn't return valid JSON
+      aiInsights = {
+        insights: [
+          {
+            category: "Análisis General",
+            title: "Perfil de Habilidades Blandas",
+            description: text.substring(0, 500) + "...",
+            confidence: 0.8,
+            priority: "medium",
+          },
+        ],
+        recommendations: [
+          {
+            title: "Desarrollo Continuo",
+            description:
+              "Continúa trabajando en el desarrollo de tus habilidades blandas a través de práctica constante y feedback.",
+            timeframe: "mediano plazo",
+            difficulty: "moderado",
+          },
+        ],
+        developmentPlan: {
+          shortTerm: ["Autoevaluación regular", "Práctica diaria"],
+          mediumTerm: ["Buscar feedback", "Participar en proyectos colaborativos"],
+          longTerm: ["Mentoring", "Liderazgo de equipos"],
+        },
+      }
+    }
+
+    return NextResponse.json(aiInsights)
+  } catch (error) {
+    console.error("Error generating AI insights:", error)
+
+    // Return fallback insights
+    return NextResponse.json({
+      insights: [
+        {
+          category: "Análisis",
+          title: "Evaluación Completada",
+          description:
+            "Has completado exitosamente la evaluación de habilidades blandas. Tus resultados muestran un perfil equilibrado con oportunidades de crecimiento.",
+          confidence: 0.7,
+          priority: "medium",
+        },
+      ],
+      recommendations: [
+        {
+          title: "Desarrollo Continuo",
+          description: "Enfócate en practicar las habilidades identificadas como áreas de mejora.",
+          timeframe: "corto plazo",
+          difficulty: "fácil",
+        },
+      ],
+      developmentPlan: {
+        shortTerm: ["Reflexión personal", "Establecer metas"],
+        mediumTerm: ["Práctica estructurada", "Buscar feedback"],
+        longTerm: ["Aplicación en proyectos", "Mentoring a otros"],
+      },
     })
   }
 }
@@ -156,60 +275,52 @@ function generatePersonalityInsights(testResults: any[], hasDisc: boolean, hasBi
   if (hasDisc) {
     const discResult = testResults.find((r) => r.test_type === "disc")
     insights.push({
-      type: "DISC",
+      type: "strength",
       title: "Estilo de Comunicación y Liderazgo",
-      content: `Tu perfil DISC indica un estilo de comunicación ${getDiscStyle(discResult)}. Esto se traduce en fortalezas naturales para ${getDiscStrengths(discResult)} y sugiere que prosperas en entornos que valoran ${getDiscEnvironment(discResult)}.`,
-      confidence: 88,
-      actionItems: [
-        "Aprovecha tu estilo natural en roles de liderazgo",
-        "Desarrolla flexibilidad para adaptar tu comunicación",
-        "Busca oportunidades que alineen con tu perfil DISC",
-      ],
+      description: `Tu perfil DISC indica un estilo de comunicación ${getDiscStyle(discResult)}. Esto se traduce en fortalezas naturales para ${getDiscStrengths(discResult)} y sugiere que prosperas en entornos que valoran ${getDiscEnvironment(discResult)}.`,
+      confidence: 0.88,
+      priority: "high",
+      category: "communication",
+      actionable: true,
     })
   }
 
   if (hasBigFive) {
     const bigFiveResult = testResults.find((r) => r.test_type === "big-five")
     insights.push({
-      type: "Big Five",
+      type: "strength",
       title: "Rasgos de Personalidad Fundamentales",
-      content: `Tu perfil Big Five muestra características distintivas en ${getBigFiveHighlights(bigFiveResult)}. Esto indica que tienes fortalezas naturales en ${getBigFiveStrengths(bigFiveResult)} y te beneficiarías de desarrollar ${getBigFiveDevelopment(bigFiveResult)}.`,
-      confidence: 85,
-      actionItems: [
-        "Capitaliza tus rasgos dominantes en tu carrera",
-        "Trabaja conscientemente en áreas de menor puntuación",
-        "Busca roles que complementen tu perfil de personalidad",
-      ],
+      description: `Tu perfil Big Five muestra características distintivas en ${getBigFiveHighlights(bigFiveResult)}. Esto indica que tienes fortalezas naturales en ${getBigFiveStrengths(bigFiveResult)} y te beneficiarías de desarrollar ${getBigFiveDevelopment(bigFiveResult)}.`,
+      confidence: 0.85,
+      priority: "high",
+      category: "personality",
+      actionable: true,
     })
   }
 
   if (hasMbti) {
     const mbtiResult = testResults.find((r) => r.test_type === "mbti")
     insights.push({
-      type: "MBTI",
+      type: "strength",
       title: "Preferencias Cognitivas y Procesamiento",
-      content: `Como ${getMbtiType(mbtiResult)}, tienes preferencias claras por ${getMbtiPreferences(mbtiResult)}. Esto se traduce en fortalezas para ${getMbtiStrengths(mbtiResult)} y sugiere que te energizas en situaciones que involucran ${getMbtiEnergySource(mbtiResult)}.`,
-      confidence: 82,
-      actionItems: [
-        "Busca roles que alineen con tus preferencias cognitivas",
-        "Desarrolla habilidades complementarias a tu tipo",
-        "Considera la diversidad de tipos en equipos de trabajo",
-      ],
+      description: `Como ${getMbtiType(mbtiResult)}, tienes preferencias claras por ${getMbtiPreferences(mbtiResult)}. Esto se traduce en fortalezas para ${getMbtiStrengths(mbtiResult)} y sugiere que te energizas en situaciones que involucran ${getMbtiEnergySource(mbtiResult)}.`,
+      confidence: 0.82,
+      priority: "high",
+      category: "cognitive",
+      actionable: true,
     })
   }
 
   if (insights.length === 0) {
     insights.push({
-      type: "General",
+      type: "warning",
       title: "Evaluación de Personalidad Pendiente",
-      content:
+      description:
         "Para generar insights detallados de personalidad, te recomendamos completar evaluaciones como DISC, Big Five o MBTI. Estas herramientas proporcionarán una comprensión profunda de tu estilo de trabajo, preferencias de comunicación y compatibilidad con diferentes roles.",
       confidence: 0,
-      actionItems: [
-        "Completa la evaluación DISC para entender tu estilo de comunicación",
-        "Realiza el test Big Five para conocer tus rasgos fundamentales",
-        "Considera el MBTI para comprender tus preferencias cognitivas",
-      ],
+      priority: "low",
+      category: "general",
+      actionable: false,
     })
   }
 
@@ -221,7 +332,7 @@ function generateCareerMatches(testResults: any[], hasRiasec: boolean, avgScore:
     return [
       {
         role: "Consultor de Desarrollo Organizacional",
-        compatibility: 75,
+        compatibility: 0.75,
         description:
           "Basado en tu perfil general, muestras potencial para roles que combinan análisis, comunicación y desarrollo de personas.",
         requirements: ["Habilidades de comunicación", "Pensamiento analítico", "Orientación al desarrollo"],
@@ -229,7 +340,7 @@ function generateCareerMatches(testResults: any[], hasRiasec: boolean, avgScore:
       },
       {
         role: "Product Manager",
-        compatibility: 70,
+        compatibility: 0.7,
         description:
           "Tu perfil sugiere capacidades para gestionar productos, coordinar equipos y tomar decisiones estratégicas.",
         requirements: ["Gestión de proyectos", "Análisis de mercado", "Liderazgo de equipos"],
@@ -237,7 +348,7 @@ function generateCareerMatches(testResults: any[], hasRiasec: boolean, avgScore:
       },
       {
         role: "Especialista en Recursos Humanos",
-        compatibility: 68,
+        compatibility: 0.68,
         description:
           "Tus habilidades interpersonales y de análisis se alinean bien con roles en desarrollo de talento.",
         requirements: ["Psicología organizacional", "Gestión de talento", "Comunicación efectiva"],
@@ -374,6 +485,7 @@ function generateDevelopmentPlan(testResults: any[], avgScore: number, completed
 function generateSkillsAssessment(testResults: any[], hasSoftSkills: boolean) {
   if (!hasSoftSkills) {
     return {
+      type: "warning",
       title: "Evaluación de Habilidades Blandas Pendiente",
       message:
         "Completa la evaluación de Habilidades Blandas para obtener un análisis detallado de tus competencias interpersonales y profesionales.",
@@ -386,6 +498,7 @@ function generateSkillsAssessment(testResults: any[], hasSoftSkills: boolean) {
   const score = softSkillsResult?.score || 0
 
   return {
+    type: "strength",
     title: "Evaluación de Habilidades Blandas",
     overallScore: score,
     level: score >= 80 ? "Avanzado" : score >= 60 ? "Intermedio" : "Básico",
@@ -565,12 +678,14 @@ function getFallbackInsights() {
     },
     personalityInsights: [
       {
-        type: "General",
+        type: "warning",
         title: "Evaluaciones Pendientes",
-        content:
+        description:
           "Completa evaluaciones como DISC, Big Five o MBTI para obtener insights detallados sobre tu personalidad y estilo de trabajo.",
         confidence: 0,
-        actionItems: ["Realizar evaluación DISC", "Completar test Big Five", "Considerar evaluación MBTI"],
+        priority: "low",
+        category: "general",
+        actionable: false,
       },
     ],
     careerMatches: [
@@ -584,6 +699,7 @@ function getFallbackInsights() {
       },
     ],
     strengthsAnalysis: {
+      type: "warning",
       title: "Análisis Pendiente",
       primaryStrengths: ["Por determinar"],
       developmentAreas: ["Por evaluar"],
@@ -610,6 +726,7 @@ function getFallbackInsights() {
       ],
     },
     skillsAssessment: {
+      type: "warning",
       title: "Evaluación de Habilidades Pendiente",
       message: "Completa las evaluaciones para obtener un análisis detallado de tus habilidades.",
       recommendedAction: "Realizar evaluaciones psicométricas",
@@ -673,7 +790,7 @@ function getCareerMatchesByHollandCode(code: string, avgScore: number): any[] {
     IEA: [
       {
         role: "Consultor de Innovación",
-        compatibility: Math.min(95, 75 + avgScore * 0.2),
+        compatibility: Math.min(0.95, 0.75 + avgScore * 0.02),
         description:
           "Tu código IEA indica una combinación perfecta de investigación, liderazgo empresarial y creatividad artística.",
         requirements: ["Pensamiento analítico", "Liderazgo", "Creatividad", "Comunicación"],
@@ -681,14 +798,14 @@ function getCareerMatchesByHollandCode(code: string, avgScore: number): any[] {
       },
       {
         role: "Product Manager Tecnológico",
-        compatibility: Math.min(92, 70 + avgScore * 0.25),
+        compatibility: Math.min(0.92, 0.7 + avgScore * 0.025),
         description: "Ideal para liderar productos que requieren investigación profunda y visión creativa.",
         requirements: ["Gestión de productos", "Análisis técnico", "Liderazgo de equipos"],
         growthPath: "Associate PM → Product Manager → Senior PM → VP of Product",
       },
       {
         role: "Director de Estrategia",
-        compatibility: Math.min(88, 65 + avgScore * 0.3),
+        compatibility: Math.min(0.88, 0.65 + avgScore * 0.03),
         description: "Perfecto para roles que combinan análisis estratégico con liderazgo visionario.",
         requirements: ["Pensamiento estratégico", "Análisis de mercado", "Liderazgo ejecutivo"],
         growthPath: "Strategy Analyst → Strategy Manager → Director → Chief Strategy Officer",
@@ -697,14 +814,14 @@ function getCareerMatchesByHollandCode(code: string, avgScore: number): any[] {
     EIA: [
       {
         role: "Emprendedor Tecnológico",
-        compatibility: Math.min(94, 80 + avgScore * 0.15),
+        compatibility: Math.min(0.94, 0.8 + avgScore * 0.015),
         description: "Tu perfil EIA es ideal para liderar startups que requieren innovación y análisis de mercado.",
         requirements: ["Liderazgo", "Análisis de negocio", "Innovación", "Gestión de riesgos"],
         growthPath: "Founder → CEO → Serial Entrepreneur → Venture Partner",
       },
       {
         role: "Director de Desarrollo de Negocio",
-        compatibility: Math.min(90, 75 + avgScore * 0.2),
+        compatibility: Math.min(0.9, 0.75 + avgScore * 0.02),
         description: "Excelente para identificar oportunidades de crecimiento y liderar expansión empresarial.",
         requirements: ["Desarrollo de negocio", "Análisis financiero", "Negociación"],
         growthPath: "Business Analyst → BD Manager → BD Director → Chief Business Officer",

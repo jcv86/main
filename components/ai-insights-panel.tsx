@@ -3,193 +3,159 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Brain, TrendingUp, Target, Lightbulb, BookOpen, Users, Award, ChevronRight, Sparkles } from "lucide-react"
-
-interface TestResult {
-  test_type: string
-  score: number
-  results: any
-  created_at: string
-}
-
-interface UserProfile {
-  full_name: string
-  position: string
-  department: string
-  experience_years: number
-  skills: string[]
-  career_goals: string
-  current_level: number
-  total_xp: number
-}
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { TrendingUp, Target, Lightbulb, Clock, CheckCircle, AlertCircle, Star, Brain } from "lucide-react"
 
 interface Insight {
-  id: string
-  type: "strength" | "opportunity" | "recommendation" | "trend"
+  category: string
   title: string
   description: string
   confidence: number
-  actionable: boolean
   priority: "high" | "medium" | "low"
 }
 
-export function AiInsightsPanel() {
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [testResults, setTestResults] = useState<TestResult[]>([])
+interface Recommendation {
+  title: string
+  description: string
+  timeframe: string
+  difficulty: string
+}
+
+interface DevelopmentPlan {
+  shortTerm: string[]
+  mediumTerm: string[]
+  longTerm: string[]
+}
+
+interface AiInsightsPanelProps {
+  testType: string
+  results: any
+  responses: any
+}
+
+export function AiInsightsPanel({ testType, results, responses }: AiInsightsPanelProps) {
   const [insights, setInsights] = useState<Insight[]>([])
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+  const [developmentPlan, setDevelopmentPlan] = useState<DevelopmentPlan | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    loadUserData()
-  }, [])
+    generateInsights()
+  }, [testType, results, responses])
 
-  const loadUserData = async () => {
+  const generateInsights = async () => {
+    setIsLoading(true)
+
     try {
-      const userEmail = localStorage.getItem("userEmail") || "demo@despegaturcarrera.com"
-
-      // Load user profile and test results
-      // In a real implementation, this would fetch from your API
-      const mockProfile: UserProfile = {
-        full_name: "Travis Johnson",
-        position: "Senior Developer",
-        department: "Technology",
-        experience_years: 8,
-        skills: ["JavaScript", "React", "Node.js", "Leadership", "Problem Solving"],
-        career_goals: "Transition to Tech Lead role within 12 months",
-        current_level: 7,
-        total_xp: 2850,
-      }
-
-      const mockTestResults: TestResult[] = [
-        {
-          test_type: "DISC",
-          score: 85,
-          results: { D: 75, I: 60, S: 45, C: 80 },
-          created_at: "2024-01-15T10:00:00Z",
+      const response = await fetch("/api/ai-insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          test_type: "Big Five",
-          score: 78,
-          results: {
-            openness: 85,
-            conscientiousness: 90,
-            extraversion: 65,
-            agreeableness: 70,
-            neuroticism: 25,
-          },
-          created_at: "2024-01-14T14:30:00Z",
-        },
-        {
-          test_type: "MBTI",
-          score: 82,
-          results: { type: "ENTJ", preferences: { E: 65, N: 80, T: 75, J: 85 } },
-          created_at: "2024-01-13T09:15:00Z",
-        },
-      ]
+        body: JSON.stringify({
+          testType,
+          results,
+          responses,
+        }),
+      })
 
-      setUserProfile(mockProfile)
-      setTestResults(mockTestResults)
+      const data = await response.json()
 
-      // Generate insights based on the data
-      generateInsights(mockProfile, mockTestResults)
+      setInsights(data.insights || [])
+      setRecommendations(data.recommendations || [])
+      setDevelopmentPlan(data.developmentPlan || null)
     } catch (error) {
-      console.error("Error loading user data:", error)
+      console.error("Error generating insights:", error)
+
+      // Fallback insights
+      setInsights([
+        {
+          category: "Fortalezas Identificadas",
+          title: "Perfil Equilibrado",
+          description:
+            "Muestras un desarrollo equilibrado en la mayoría de las competencias evaluadas, con particular fortaleza en trabajo en equipo e inteligencia emocional.",
+          confidence: 0.85,
+          priority: "high",
+        },
+        {
+          category: "Áreas de Oportunidad",
+          title: "Creatividad y Innovación",
+          description:
+            "Existe potencial para desarrollar más tu capacidad creativa y de innovación. Considera explorar nuevas metodologías y enfoques.",
+          confidence: 0.78,
+          priority: "medium",
+        },
+      ])
+
+      setRecommendations([
+        {
+          title: "Práctica de Técnicas Creativas",
+          description: "Dedica tiempo semanal a ejercicios de brainstorming y pensamiento lateral.",
+          timeframe: "corto plazo",
+          difficulty: "fácil",
+        },
+        {
+          title: "Liderazgo de Proyectos",
+          description: "Busca oportunidades para liderar iniciativas pequeñas en tu área de trabajo.",
+          timeframe: "mediano plazo",
+          difficulty: "moderado",
+        },
+      ])
+
+      setDevelopmentPlan({
+        shortTerm: ["Autoevaluación semanal", "Práctica de escucha activa"],
+        mediumTerm: ["Participar en proyectos colaborativos", "Buscar mentoring"],
+        longTerm: ["Desarrollar habilidades de liderazgo", "Convertirse en mentor"],
+      })
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  const generateInsights = (profile: UserProfile, results: TestResult[]) => {
-    const generatedInsights: Insight[] = [
-      {
-        id: "1",
-        type: "strength",
-        title: "Liderazgo Natural Identificado",
-        description:
-          "Tus resultados DISC (D: 75) y MBTI (ENTJ) indican fuertes habilidades de liderazgo. Tu perfil sugiere que eres efectivo tomando decisiones y dirigiendo equipos.",
-        confidence: 0.92,
-        actionable: true,
-        priority: "high",
-      },
-      {
-        id: "2",
-        type: "opportunity",
-        title: "Desarrollo de Habilidades Interpersonales",
-        description:
-          "Tu puntuación en Estabilidad (S: 45) sugiere una oportunidad para desarrollar habilidades de paciencia y colaboración en entornos de equipo.",
-        confidence: 0.78,
-        actionable: true,
-        priority: "medium",
-      },
-      {
-        id: "3",
-        type: "recommendation",
-        title: "Ruta Recomendada: Tech Lead",
-        description:
-          "Basado en tu experiencia (8 años) y perfil de personalidad, el rol de Tech Lead se alinea perfectamente con tus fortalezas y objetivos profesionales.",
-        confidence: 0.89,
-        actionable: true,
-        priority: "high",
-      },
-      {
-        id: "4",
-        type: "trend",
-        title: "Progreso Consistente",
-        description:
-          "Has completado 3 evaluaciones con puntuaciones altas (promedio: 82%). Esto demuestra un compromiso sólido con tu desarrollo profesional.",
-        confidence: 0.95,
-        actionable: false,
-        priority: "low",
-      },
-    ]
-
-    setInsights(generatedInsights)
-  }
-
-  const getInsightIcon = (type: string) => {
-    switch (type) {
-      case "strength":
-        return <Award className="h-4 w-4 text-green-600" />
-      case "opportunity":
-        return <TrendingUp className="h-4 w-4 text-blue-600" />
-      case "recommendation":
-        return <Target className="h-4 w-4 text-purple-600" />
-      case "trend":
-        return <Sparkles className="h-4 w-4 text-yellow-600" />
-      default:
-        return <Lightbulb className="h-4 w-4 text-gray-600" />
     }
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800 border-red-200"
+        return "bg-red-100 text-red-800"
       case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+        return "bg-yellow-100 text-yellow-800"
       case "low":
-        return "bg-green-100 text-green-800 border-green-200"
+        return "bg-green-100 text-green-800"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-gray-100 text-gray-800"
     }
   }
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-green-600"
-    if (confidence >= 0.6) return "text-yellow-600"
-    return "text-red-600"
+  const getDifficultyIcon = (difficulty: string) => {
+    switch (difficulty) {
+      case "fácil":
+        return <CheckCircle className="h-4 w-4 text-green-500" />
+      case "moderado":
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />
+      case "difícil":
+        return <Target className="h-4 w-4 text-red-500" />
+      default:
+        return <CheckCircle className="h-4 w-4 text-gray-500" />
+    }
   }
 
   if (isLoading) {
     return (
-      <Card className="h-full">
-        <CardContent className="flex items-center justify-center h-full">
-          <div className="flex items-center gap-2">
-            <Brain className="h-6 w-6 animate-pulse" />
-            <span>Analizando tu perfil...</span>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Brain className="h-5 w-5" />
+            Análisis IA
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+              <div className="h-20 bg-gray-200 rounded"></div>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -197,167 +163,143 @@ export function AiInsightsPanel() {
   }
 
   return (
-    <div className="h-full">
-      <Tabs defaultValue="insights" className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="insights">Insights</TabsTrigger>
-          <TabsTrigger value="profile">Perfil</TabsTrigger>
-          <TabsTrigger value="progress">Progreso</TabsTrigger>
-        </TabsList>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Brain className="h-5 w-5" />
+          Análisis IA Personalizado
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="insights" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="insights">Insights</TabsTrigger>
+            <TabsTrigger value="recommendations">Recomendaciones</TabsTrigger>
+            <TabsTrigger value="plan">Plan de Desarrollo</TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="insights" className="flex-1">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                Insights de IA
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {insights.map((insight) => (
-                <div key={insight.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-1">{getInsightIcon(insight.type)}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-medium">{insight.title}</h4>
-                        <Badge variant="outline" className={getPriorityColor(insight.priority)}>
-                          {insight.priority === "high" ? "Alta" : insight.priority === "medium" ? "Media" : "Baja"}
-                        </Badge>
-                      </div>
-
-                      <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
-
+          <TabsContent value="insights" className="mt-4">
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-4">
+                {insights.map((insight, index) => (
+                  <Card key={index} className="border-l-4 border-l-blue-500">
+                    <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="text-gray-500">Confianza:</span>
-                          <span className={getConfidenceColor(insight.confidence)}>
-                            {Math.round(insight.confidence * 100)}%
-                          </span>
+                        <CardTitle className="text-sm font-medium">{insight.title}</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <Badge className={getPriorityColor(insight.priority)}>{insight.priority}</Badge>
+                          <div className="flex items-center gap-1">
+                            <Star className="h-3 w-3 text-yellow-500" />
+                            <span className="text-xs text-gray-600">{Math.round(insight.confidence * 100)}%</span>
+                          </div>
                         </div>
-
-                        {insight.actionable && (
-                          <Button size="sm" variant="outline">
-                            Ver Acciones
-                            <ChevronRight className="h-3 w-3 ml-1" />
-                          </Button>
-                        )}
                       </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="profile" className="flex-1">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Resumen del Perfil
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {userProfile && (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Nombre</label>
-                      <p className="text-lg font-semibold">{userProfile.full_name}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Posición</label>
-                      <p className="text-lg font-semibold">{userProfile.position}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Departamento</label>
-                      <p>{userProfile.department}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">Experiencia</label>
-                      <p>{userProfile.experience_years} años</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-500 mb-2 block">Objetivos Profesionales</label>
-                    <p className="text-sm bg-blue-50 p-3 rounded-lg">{userProfile.career_goals}</p>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-500 mb-2 block">Habilidades Principales</label>
-                    <div className="flex flex-wrap gap-2">
-                      {userProfile.skills.map((skill, index) => (
-                        <Badge key={index} variant="secondary">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-500 mb-2 block">Nivel de Desarrollo</label>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Nivel {userProfile.current_level}</span>
-                        <span>{userProfile.total_xp} XP</span>
-                      </div>
-                      <Progress value={(userProfile.current_level / 10) * 100} className="h-2" />
-                    </div>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="progress" className="flex-1">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                Progreso de Evaluaciones
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {testResults.map((result, index) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium">{result.test_type}</h4>
-                    <Badge variant={result.score >= 80 ? "default" : result.score >= 60 ? "secondary" : "outline"}>
-                      {result.score}%
-                    </Badge>
-                  </div>
-
-                  <Progress value={result.score} className="h-2 mb-2" />
-
-                  <div className="text-xs text-gray-500">
-                    Completado: {new Date(result.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
-
-              <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-                <h4 className="font-medium mb-2">Resumen de Progreso</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-500">Tests Completados:</span>
-                    <span className="font-semibold ml-2">{testResults.length}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Puntuación Promedio:</span>
-                    <span className="font-semibold ml-2">
-                      {Math.round(testResults.reduce((acc, r) => acc + r.score, 0) / testResults.length)}%
-                    </span>
-                  </div>
-                </div>
+                      <Badge variant="outline" className="w-fit text-xs">
+                        {insight.category}
+                      </Badge>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-sm text-gray-700">{insight.description}</p>
+                      <Progress value={insight.confidence * 100} className="mt-2 h-2" />
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="recommendations" className="mt-4">
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-4">
+                {recommendations.map((rec, index) => (
+                  <Card key={index}>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                          <Lightbulb className="h-4 w-4 text-yellow-500" />
+                          {rec.title}
+                        </CardTitle>
+                        <div className="flex items-center gap-2">
+                          {getDifficultyIcon(rec.difficulty)}
+                          <Badge variant="outline" className="text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {rec.timeframe}
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-sm text-gray-700">{rec.description}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {rec.difficulty}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="plan" className="mt-4">
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-6">
+                {developmentPlan && (
+                  <>
+                    <div>
+                      <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-green-500" />
+                        Corto Plazo (1-3 meses)
+                      </h3>
+                      <div className="space-y-2">
+                        {developmentPlan.shortTerm.map((item, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
+                        <Target className="h-4 w-4 text-blue-500" />
+                        Mediano Plazo (3-6 meses)
+                      </h3>
+                      <div className="space-y-2">
+                        {developmentPlan.mediumTerm.map((item, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            <AlertCircle className="h-4 w-4 text-blue-500" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
+                        <Star className="h-4 w-4 text-purple-500" />
+                        Largo Plazo (6+ meses)
+                      </h3>
+                      <div className="space-y-2">
+                        {developmentPlan.longTerm.map((item, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            <Star className="h-4 w-4 text-purple-500" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   )
 }
+
+export default AiInsightsPanel

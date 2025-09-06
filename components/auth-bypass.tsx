@@ -5,25 +5,25 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, User, Lock, LogIn } from "lucide-react"
+import { Loader2, LogIn, User, Lock } from "lucide-react"
 
 export default function AuthBypass() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const { login } = useSession()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError("")
+    setIsLoading(true)
 
     try {
       const success = await login(email, password)
@@ -39,19 +39,19 @@ export default function AuthBypass() {
     }
   }
 
-  const handleDemoLogin = async (demoEmail: string, demoPassword: string) => {
+  const quickLogin = async (testEmail: string, testPassword: string) => {
     setIsLoading(true)
     setError("")
 
     try {
-      const success = await login(demoEmail, demoPassword)
+      const success = await login(testEmail, testPassword)
       if (success) {
         router.push("/dashboard")
       } else {
-        setError("Error al acceder con usuario demo")
+        setError("Error al iniciar sesión con usuario de prueba.")
       }
     } catch (err) {
-      setError("Error al iniciar sesión demo")
+      setError("Error al iniciar sesión. Por favor intenta nuevamente.")
     } finally {
       setIsLoading(false)
     }
@@ -64,7 +64,7 @@ export default function AuthBypass() {
           <LogIn className="w-5 h-5" />
           Acceso a la Plataforma
         </CardTitle>
-        <CardDescription>Inicia sesión para acceder a tu dashboard personalizado</CardDescription>
+        <CardDescription>Ingresa tus credenciales o usa un usuario de prueba</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -113,7 +113,10 @@ export default function AuthBypass() {
                 Iniciando sesión...
               </>
             ) : (
-              "Iniciar Sesión"
+              <>
+                <LogIn className="w-4 h-4 mr-2" />
+                Iniciar Sesión
+              </>
             )}
           </Button>
         </form>
@@ -123,7 +126,7 @@ export default function AuthBypass() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">O prueba con</span>
+            <span className="bg-background px-2 text-muted-foreground">O usa un usuario de prueba</span>
           </div>
         </div>
 
@@ -131,7 +134,7 @@ export default function AuthBypass() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleDemoLogin("travis@nuanu.com", "travis123")}
+            onClick={() => quickLogin("travis@nuanu.com", "travis123")}
             disabled={isLoading}
             className="text-xs"
           >
@@ -140,7 +143,7 @@ export default function AuthBypass() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleDemoLogin("demo@despegaturcarrera.com", "demo123")}
+            onClick={() => quickLogin("demo@despegaturcarrera.com", "demo123")}
             disabled={isLoading}
             className="text-xs"
           >
@@ -149,7 +152,7 @@ export default function AuthBypass() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleDemoLogin("test@dtc.com", "test123")}
+            onClick={() => quickLogin("test@dtc.com", "test123")}
             disabled={isLoading}
             className="text-xs"
           >
@@ -158,7 +161,7 @@ export default function AuthBypass() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleDemoLogin("admin@dtc.com", "admin123")}
+            onClick={() => quickLogin("admin@dtc.com", "admin123")}
             disabled={isLoading}
             className="text-xs"
           >
@@ -167,7 +170,13 @@ export default function AuthBypass() {
         </div>
 
         <div className="text-center text-sm text-muted-foreground">
-          <p>Usuarios de prueba disponibles con perfiles completos</p>
+          <p>Usuarios de prueba disponibles:</p>
+          <p className="text-xs mt-1">
+            • Travis: Senior Developer
+            <br />• Ana: Marketing Analyst
+            <br />• Carlos: Project Coordinator
+            <br />• María: Platform Administrator
+          </p>
         </div>
       </CardContent>
     </Card>
