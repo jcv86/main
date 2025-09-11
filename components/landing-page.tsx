@@ -32,6 +32,7 @@ import {
   Lock,
   Eye,
   EyeOff,
+  Loader2,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
@@ -41,6 +42,7 @@ export function LandingPage() {
   const [authMode, setAuthMode] = useState<"login" | "signup">("login")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isDemoLoading, setIsDemoLoading] = useState(false)
   const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     email: "",
@@ -48,19 +50,36 @@ export function LandingPage() {
     name: "",
   })
 
-  const handleDemoAccess = () => {
-    // Set demo session
-    const demoSession = {
-      authenticated: true,
-      user: {
-        id: "demo-user",
-        email: "demo@example.com",
-        name: "Usuario Demo",
-      },
-    }
+  const handleDemoAccess = async () => {
+    setIsDemoLoading(true)
+    setError("")
 
-    localStorage.setItem("dtc_session", JSON.stringify(demoSession))
-    router.push("/dashboard")
+    try {
+      // Create demo session
+      const demoSession = {
+        authenticated: true,
+        user: {
+          id: "demo-user-12345",
+          email: "demo@despegaturcarrera.com",
+          name: "Usuario Demo",
+          role: "demo",
+        },
+      }
+
+      // Store in localStorage
+      localStorage.setItem("dtc_session", JSON.stringify(demoSession))
+
+      // Small delay to show loading state
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Navigate to dashboard
+      router.push("/dashboard")
+    } catch (err: any) {
+      console.error("Demo access error:", err)
+      setError("Error al acceder al demo. Por favor intenta nuevamente.")
+    } finally {
+      setIsDemoLoading(false)
+    }
   }
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -153,8 +172,15 @@ export function LandingPage() {
               <a href="#pricing" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Precios
               </a>
-              <Button variant="outline" size="sm">
-                Iniciar Sesión
+              <Button variant="outline" size="sm" onClick={handleDemoAccess} disabled={isDemoLoading}>
+                {isDemoLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Cargando...
+                  </>
+                ) : (
+                  "Demo Gratuito"
+                )}
               </Button>
             </nav>
           </div>
@@ -190,9 +216,19 @@ export function LandingPage() {
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8"
                   onClick={handleDemoAccess}
+                  disabled={isDemoLoading}
                 >
-                  <Play className="h-5 w-5 mr-2" />
-                  Acceso Demo Gratuito
+                  {isDemoLoading ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Cargando Demo...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-5 w-5 mr-2" />
+                      Acceso Demo Gratuito
+                    </>
+                  )}
                 </Button>
                 <Button variant="outline" size="lg" className="px-8 bg-transparent">
                   <BookOpen className="h-5 w-5 mr-2" />
@@ -276,7 +312,14 @@ export function LandingPage() {
                           </Alert>
                         )}
                         <Button type="submit" className="w-full" disabled={isLoading}>
-                          {isLoading ? "Iniciando..." : "Iniciar Sesión"}
+                          {isLoading ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Iniciando...
+                            </>
+                          ) : (
+                            "Iniciar Sesión"
+                          )}
                         </Button>
                       </form>
                     </TabsContent>
@@ -344,7 +387,14 @@ export function LandingPage() {
                           </Alert>
                         )}
                         <Button type="submit" className="w-full" disabled={isLoading}>
-                          {isLoading ? "Registrando..." : "Crear Cuenta"}
+                          {isLoading ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Registrando...
+                            </>
+                          ) : (
+                            "Crear Cuenta"
+                          )}
                         </Button>
                       </form>
                     </TabsContent>
@@ -355,9 +405,19 @@ export function LandingPage() {
                       variant="outline"
                       className="w-full bg-gradient-to-r from-green-50 to-blue-50 border-green-200 hover:from-green-100 hover:to-blue-100"
                       onClick={handleDemoAccess}
+                      disabled={isDemoLoading}
                     >
-                      <Play className="h-4 w-4 mr-2 text-green-600" />
-                      <span className="text-green-700 font-medium">Probar Demo Sin Registro</span>
+                      {isDemoLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin text-green-600" />
+                          <span className="text-green-700 font-medium">Cargando Demo...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play className="h-4 w-4 mr-2 text-green-600" />
+                          <span className="text-green-700 font-medium">Probar Demo Sin Registro</span>
+                        </>
+                      )}
                     </Button>
                     <p className="text-xs text-gray-500 text-center mt-2">
                       Acceso completo a todas las funciones • Sin compromiso
@@ -548,6 +608,7 @@ export function LandingPage() {
                     className="w-full"
                     variant={test.comingSoon ? "outline" : "default"}
                     disabled={test.comingSoon}
+                    onClick={test.comingSoon ? undefined : handleDemoAccess}
                   >
                     {test.comingSoon ? "Próximamente" : "Comenzar Test"}
                   </Button>
@@ -711,6 +772,7 @@ export function LandingPage() {
                   <Button
                     className={`w-full ${plan.popular ? "bg-blue-600 hover:bg-blue-700" : ""}`}
                     variant={plan.popular ? "default" : "outline"}
+                    onClick={handleDemoAccess}
                   >
                     {plan.cta}
                   </Button>
@@ -729,9 +791,23 @@ export function LandingPage() {
             Únete a miles de profesionales que ya están acelerando su crecimiento con IA
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8" onClick={handleDemoAccess}>
-              <Play className="h-5 w-5 mr-2" />
-              Comenzar Demo Gratuito
+            <Button
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8"
+              onClick={handleDemoAccess}
+              disabled={isDemoLoading}
+            >
+              {isDemoLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  Cargando Demo...
+                </>
+              ) : (
+                <>
+                  <Play className="h-5 w-5 mr-2" />
+                  Comenzar Demo Gratuito
+                </>
+              )}
             </Button>
             <Button
               variant="outline"

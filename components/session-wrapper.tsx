@@ -8,6 +8,7 @@ interface User {
   id: string
   email: string
   name: string
+  role?: string
 }
 
 interface SessionContextType {
@@ -35,6 +36,7 @@ export function SessionWrapper({ children }: { children: React.ReactNode }) {
     // Check for existing session
     const checkSession = async () => {
       try {
+        // First check Supabase auth
         const {
           data: { session: supabaseSession },
         } = await supabase.auth.getSession()
@@ -44,13 +46,20 @@ export function SessionWrapper({ children }: { children: React.ReactNode }) {
             id: supabaseSession.user.id,
             email: supabaseSession.user.email || "",
             name: supabaseSession.user.user_metadata?.name || supabaseSession.user.email || "",
+            role: supabaseSession.user.user_metadata?.role || "user",
           })
         } else {
+          // Check localStorage for demo session
           const session = localStorage.getItem("dtc_session")
           if (session) {
-            const parsed = JSON.parse(session)
-            if (parsed.authenticated && parsed.user) {
-              setUser(parsed.user)
+            try {
+              const parsed = JSON.parse(session)
+              if (parsed.authenticated && parsed.user) {
+                setUser(parsed.user)
+              }
+            } catch (e) {
+              console.error("Error parsing session:", e)
+              localStorage.removeItem("dtc_session")
             }
           }
         }
@@ -72,13 +81,23 @@ export function SessionWrapper({ children }: { children: React.ReactNode }) {
           id: supabaseSession.user.id,
           email: supabaseSession.user.email || "",
           name: supabaseSession.user.user_metadata?.name || supabaseSession.user.email || "",
+          role: supabaseSession.user.user_metadata?.role || "user",
         })
       } else {
+        // Check localStorage for demo session when auth session is null
         const session = localStorage.getItem("dtc_session")
         if (session) {
-          const parsed = JSON.parse(session)
-          if (parsed.authenticated && parsed.user) {
-            setUser(parsed.user)
+          try {
+            const parsed = JSON.parse(session)
+            if (parsed.authenticated && parsed.user) {
+              setUser(parsed.user)
+            } else {
+              setUser(null)
+            }
+          } catch (e) {
+            console.error("Error parsing session:", e)
+            localStorage.removeItem("dtc_session")
+            setUser(null)
           }
         } else {
           setUser(null)
@@ -90,11 +109,19 @@ export function SessionWrapper({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe()
   }, [supabase])
 
-  const signOut = () => {
-    supabase.auth.signOut()
-    localStorage.removeItem("dtc_session")
-    setUser(null)
-    window.location.href = "/"
+  const signOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      localStorage.removeItem("dtc_session")
+      setUser(null)
+      window.location.href = "/"
+    } catch (error) {
+      console.error("Sign out error:", error)
+      // Force logout even if Supabase fails
+      localStorage.removeItem("dtc_session")
+      setUser(null)
+      window.location.href = "/"
+    }
   }
 
   return <SessionContext.Provider value={{ user, loading, signOut }}>{children}</SessionContext.Provider>

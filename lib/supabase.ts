@@ -6,10 +6,15 @@ const createMockClient = () => ({
     getSession: async () => ({ data: { session: null }, error: null }),
     getUser: async () => ({ data: { user: null }, error: null }),
     signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
-      if (email === "demo@example.com" || email === "travis@example.com") {
+      // Mock successful login for demo purposes
+      if (email.includes("demo") || email.includes("test")) {
         return {
           data: {
-            user: { id: "demo-user", email, user_metadata: { name: "Demo User" } },
+            user: {
+              id: "demo-user",
+              email,
+              user_metadata: { name: "Demo User" },
+            },
             session: { access_token: "mock-token" },
           },
           error: null,
@@ -19,12 +24,19 @@ const createMockClient = () => ({
     },
     signUp: async ({ email, password, options }: any) => ({
       data: {
-        user: { id: `user-${Date.now()}`, email, user_metadata: options?.data || {} },
+        user: {
+          id: `user-${Date.now()}`,
+          email,
+          user_metadata: options?.data || {},
+        },
         session: { access_token: "mock-token" },
       },
       error: null,
     }),
     signOut: async () => ({ error: null }),
+    onAuthStateChange: (callback: any) => ({
+      data: { subscription: { unsubscribe: () => {} } },
+    }),
   },
   from: (table: string) => ({
     select: (columns?: string) => ({
