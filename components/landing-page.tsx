@@ -23,7 +23,6 @@ import {
   BookOpen,
   MessageSquare,
   BarChart3,
-  Lightbulb,
   Heart,
   Palette,
   Compass,
@@ -148,6 +147,10 @@ export function LandingPage() {
     }))
   }
 
+  const handleTestNavigation = (testId: string) => {
+    router.push(`/test/${testId}`)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -238,7 +241,7 @@ export function LandingPage() {
 
               <div className="flex items-center space-x-6 text-sm text-gray-600">
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />5 Tests Psicométricos
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />6 Tests Psicométricos
                 </div>
                 <div className="flex items-center">
                   <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
@@ -459,7 +462,7 @@ export function LandingPage() {
                 icon: Target,
                 title: "Tests Psicométricos Avanzados",
                 description:
-                  "5 evaluaciones científicamente validadas: DISC, Big Five, MBTI, RIASEC y Habilidades Blandas.",
+                  "6 evaluaciones científicamente validadas: DISC, Big Five, MBTI, RIASEC, Habilidades Blandas e Inteligencia Emocional.",
                 color: "text-blue-600",
                 bgColor: "bg-blue-50",
               },
@@ -535,6 +538,8 @@ export function LandingPage() {
                 color: "text-blue-600",
                 bgColor: "bg-blue-50",
                 borderColor: "border-blue-200",
+                testId: "disc",
+                available: true,
               },
               {
                 icon: Brain,
@@ -544,6 +549,8 @@ export function LandingPage() {
                 color: "text-purple-600",
                 bgColor: "bg-purple-50",
                 borderColor: "border-purple-200",
+                testId: "big-five",
+                available: true,
               },
               {
                 icon: Palette,
@@ -553,6 +560,8 @@ export function LandingPage() {
                 color: "text-green-600",
                 bgColor: "bg-green-50",
                 borderColor: "border-green-200",
+                testId: "mbti",
+                available: true,
               },
               {
                 icon: Compass,
@@ -562,39 +571,45 @@ export function LandingPage() {
                 color: "text-orange-600",
                 bgColor: "bg-orange-50",
                 borderColor: "border-orange-200",
+                testId: "riasec",
+                available: true,
               },
               {
-                icon: Heart,
+                icon: MessageSquare,
                 name: "Habilidades Blandas",
                 description: "Evalúa competencias interpersonales y profesionales clave",
                 duration: "20-30 min",
                 color: "text-pink-600",
                 bgColor: "bg-pink-50",
                 borderColor: "border-pink-200",
+                testId: "soft-skills",
+                available: true,
               },
               {
-                icon: Lightbulb,
+                icon: Heart,
                 name: "Inteligencia Emocional",
-                description: "Próximamente: Evaluación completa de competencias emocionales",
-                duration: "Próximamente",
-                color: "text-gray-400",
-                bgColor: "bg-gray-50",
-                borderColor: "border-gray-200",
-                comingSoon: true,
+                description: "Evaluación completa de competencias emocionales y manejo de emociones",
+                duration: "20-25 min",
+                color: "text-red-600",
+                bgColor: "bg-red-50",
+                borderColor: "border-red-200",
+                testId: "emotional-intelligence",
+                available: true,
               },
             ].map((test, index) => (
               <Card
                 key={index}
-                className={`${test.borderColor} border-2 hover:shadow-lg transition-shadow ${test.comingSoon ? "opacity-60" : ""}`}
+                className={`${test.borderColor} border-2 hover:shadow-lg transition-shadow ${!test.available ? "opacity-60" : ""}`}
               >
                 <CardHeader className={test.bgColor}>
                   <div className="flex items-center justify-between">
                     <test.icon className={`h-8 w-8 ${test.color}`} />
-                    {test.comingSoon && (
+                    {!test.available && (
                       <Badge variant="secondary" className="bg-gray-100 text-gray-600">
                         Próximamente
                       </Badge>
                     )}
+                    {test.available && <Badge className="bg-green-100 text-green-800">Disponible</Badge>}
                   </div>
                   <CardTitle className="text-xl">{test.name}</CardTitle>
                   <CardDescription>{test.description}</CardDescription>
@@ -606,11 +621,11 @@ export function LandingPage() {
                   </div>
                   <Button
                     className="w-full"
-                    variant={test.comingSoon ? "outline" : "default"}
-                    disabled={test.comingSoon}
-                    onClick={test.comingSoon ? undefined : handleDemoAccess}
+                    variant={!test.available ? "outline" : "default"}
+                    disabled={!test.available}
+                    onClick={test.available ? () => handleTestNavigation(test.testId) : undefined}
                   >
-                    {test.comingSoon ? "Próximamente" : "Comenzar Test"}
+                    {!test.available ? "Próximamente" : "Comenzar Test"}
                   </Button>
                 </CardContent>
               </Card>
@@ -702,7 +717,7 @@ export function LandingPage() {
                 period: "siempre",
                 description: "Perfecto para comenzar tu desarrollo profesional",
                 features: [
-                  "2 tests psicométricos",
+                  "3 tests psicométricos",
                   "Análisis básico de resultados",
                   "Recomendaciones generales",
                   "Acceso a recursos básicos",
