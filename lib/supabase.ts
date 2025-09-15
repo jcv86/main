@@ -1,5 +1,28 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 
+// Create client with proper error handling
+export function createClient() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseKey || supabaseUrl === "placeholder") {
+      console.warn("Supabase credentials not found, using mock client")
+      return createMockClient() as any
+    }
+
+    return createSupabaseClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })
+  } catch (error) {
+    console.warn("Supabase client creation failed, using mock client")
+    return createMockClient() as any
+  }
+}
+
 // Lightweight mock client to prevent memory issues
 const createMockClient = () => ({
   auth: {
@@ -43,6 +66,7 @@ const createMockClient = () => ({
       eq: (column: string, value: any) => ({
         single: async () => ({ data: null, error: null }),
         limit: (count: number) => ({ data: [], error: null }),
+        order: (column: string, options?: any) => ({ data: [], error: null }),
       }),
       order: (column: string, options?: any) => ({ data: [], error: null }),
     }),
@@ -53,28 +77,11 @@ const createMockClient = () => ({
   rpc: async (functionName: string, params?: any) => ({ data: null, error: null }),
 })
 
-// Create client with proper error handling
-export function createClient() {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (supabaseUrl && supabaseKey && supabaseUrl !== "placeholder") {
-      return createSupabaseClient(supabaseUrl, supabaseKey, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-        },
-      })
-    }
-  } catch (error) {
-    console.warn("Supabase client creation failed, using mock client")
-  }
-
-  return createMockClient() as any
-}
-
+// Create and export the default client instance
 export const supabase = createClient()
+
+// Export as default as well for compatibility
+export default createClient
 
 // Lightweight interfaces
 export interface UserProfile {
@@ -96,28 +103,123 @@ export interface TestResult {
 
 export interface TestQuestion {
   id: number
+  test_type: string
+  question_number: number
   question_text: string
+  options: string | string[]
+  correct_answer?: number
+  category: string
   question_type: string
-  options?: string
-  category?: string
+  created_at: string
+  updated_at: string
 }
 
 // Simplified mock functions
 export async function getTestQuestions(testType: string): Promise<TestQuestion[]> {
+  try {
+    const { data, error } = await supabase
+      .from("test_questions")
+      .select("*")
+      .eq("test_type", testType)
+      .order("question_number")
+
+    if (error) {
+      console.error("Database error:", error)
+      return getMockQuestions(testType)
+    }
+
+    return (data || []).map((question) => ({
+      ...question,
+      options: typeof question.options === "string" ? JSON.parse(question.options) : question.options,
+    }))
+  } catch (error) {
+    console.error("Error fetching questions:", error)
+    return getMockQuestions(testType)
+  }
+}
+
+function getMockQuestions(testType: string): TestQuestion[] {
   const mockQuestions: Record<string, TestQuestion[]> = {
-    "soft-skills": [
+    "emotional-intelligence": [
       {
         id: 1,
-        question_text: "¿Cómo manejas la presión en el trabajo?",
+        test_type: "emotional-intelligence",
+        question_number: 1,
+        question_text: "¿Cómo reaccionas cuando alguien te critica constructivamente?",
+        options: [
+          "Me molesto y me pongo a la defensiva",
+          "Escucho pero no cambio mi comportamiento",
+          "Considero la crítica y reflexiono sobre ella",
+          "Agradezco la retroalimentación y busco mejorar",
+        ],
+        category: "self-awareness",
         question_type: "multiple_choice",
-        options: JSON.stringify(["Muy mal", "Mal", "Regular", "Bien"]),
-        category: "adaptability",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: 2,
-        question_text: "Describe una situación donde lideraste un equipo",
-        question_type: "open_ended",
-        category: "leadership",
+        test_type: "emotional-intelligence",
+        question_number: 2,
+        question_text: "Cuando estás muy estresado en el trabajo, ¿qué haces?",
+        options: [
+          "Exploto y descargo mi frustración con otros",
+          "Me quedo callado pero sigo sintiéndome mal",
+          "Tomo un descanso para calmarme",
+          "Uso técnicas de respiración y manejo del estrés",
+        ],
+        category: "self-regulation",
+        question_type: "multiple_choice",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      {
+        id: 3,
+        test_type: "emotional-intelligence",
+        question_number: 3,
+        question_text: "¿Qué te motiva más en tu trabajo?",
+        options: [
+          "Solo el salario y los beneficios",
+          "El reconocimiento de otros",
+          "Los desafíos y el crecimiento personal",
+          "Hacer una diferencia significativa",
+        ],
+        category: "motivation",
+        question_type: "multiple_choice",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      {
+        id: 4,
+        test_type: "emotional-intelligence",
+        question_number: 4,
+        question_text: "Cuando un compañero está visiblemente molesto, ¿cómo respondes?",
+        options: [
+          "Lo ignoro, no es mi problema",
+          "Le pregunto qué pasa pero no profundizo",
+          "Trato de entender cómo se siente",
+          "Ofrezco apoyo y ayuda específica",
+        ],
+        category: "empathy",
+        question_type: "multiple_choice",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      {
+        id: 5,
+        test_type: "emotional-intelligence",
+        question_number: 5,
+        question_text: "En una reunión de equipo con conflicto, ¿cómo actúas?",
+        options: [
+          "Evito participar en la discusión",
+          "Tomo partido por una de las partes",
+          "Trato de mediar y encontrar puntos en común",
+          "Facilito una solución colaborativa",
+        ],
+        category: "social-skills",
+        question_type: "multiple_choice",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
     ],
   }
@@ -126,11 +228,93 @@ export async function getTestQuestions(testType: string): Promise<TestQuestion[]
 }
 
 export async function saveOpenResponse(userEmail: string, testType: string, questionId: number, response: string) {
-  return { data: { id: Date.now() }, error: null }
+  try {
+    const { data, error } = await supabase
+      .from("open_responses")
+      .insert({
+        user_email: userEmail,
+        test_type: testType,
+        question_id: questionId,
+        response: response,
+        created_at: new Date().toISOString(),
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Database error:", error)
+      return { data: { id: Date.now() }, error: null }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error("Error saving response:", error)
+    return { data: { id: Date.now() }, error: null }
+  }
 }
 
 export async function saveTestResult(userEmail: string, testType: string, results: any, score: number) {
-  return { data: { id: Date.now() }, error: null }
+  try {
+    const { data, error } = await supabase
+      .from("test_results")
+      .insert({
+        user_email: userEmail,
+        test_type: testType,
+        test_name: getTestName(testType),
+        results,
+        score,
+        completed_at: new Date().toISOString(),
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Database error:", error)
+      return { data: { id: Date.now() }, error: null }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error("Error saving result:", error)
+    return { data: { id: Date.now() }, error: null }
+  }
 }
 
-export default createClient
+export async function getLatestTestResult(userEmail: string, testType: string): Promise<TestResult | null> {
+  try {
+    const { data, error } = await supabase
+      .from("test_results")
+      .select("*")
+      .eq("user_email", userEmail)
+      .eq("test_type", testType)
+      .order("completed_at", { ascending: false })
+      .limit(1)
+      .single()
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        // No results found
+        return null
+      }
+      console.error("Database error:", error)
+      return null
+    }
+
+    return data
+  } catch (error) {
+    console.error("Error fetching result:", error)
+    return null
+  }
+}
+
+function getTestName(testType: string): string {
+  const testNames: { [key: string]: string } = {
+    disc: "Test DISC",
+    "big-five": "Big Five",
+    mbti: "MBTI",
+    riasec: "RIASEC",
+    "soft-skills": "Habilidades Blandas",
+    "emotional-intelligence": "Inteligencia Emocional",
+  }
+  return testNames[testType] || testType
+}
