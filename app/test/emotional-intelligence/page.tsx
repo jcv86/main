@@ -131,7 +131,7 @@ export default function EmotionalIntelligenceTest() {
     // Calculate scores by category
     questions.forEach((question) => {
       const answer = answers[question.id]
-      if (answer !== undefined) {
+      if (answer !== undefined && question.category && categoryScores[question.category]) {
         const score = (answer + 1) * 25 // Convert 0-3 to 25-100 scale
         categoryScores[question.category].total += score
         categoryScores[question.category].count += 1
@@ -210,9 +210,12 @@ export default function EmotionalIntelligenceTest() {
     })
 
     questions.forEach((question) => {
-      categoryProgress[question.category].total += 1
-      if (answers[question.id] !== undefined) {
-        categoryProgress[question.category].answered += 1
+      // Safety check: only process if category exists in our categoryInfo
+      if (question.category && categoryProgress[question.category]) {
+        categoryProgress[question.category].total += 1
+        if (answers[question.id] !== undefined) {
+          categoryProgress[question.category].answered += 1
+        }
       }
     })
 
@@ -369,9 +372,30 @@ export default function EmotionalIntelligenceTest() {
   }
 
   const currentQuestion = questions[currentQuestionIndex]
+
+  // Safety check: if currentQuestion doesn't exist, show loading
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
+        <div className="text-center">
+          <Heart className="h-12 w-12 animate-pulse mx-auto mb-4 text-red-500" />
+          <p className="text-gray-600">Cargando pregunta...</p>
+        </div>
+      </div>
+    )
+  }
+
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
   const categoryProgress = getProgressByCategory()
-  const currentCategory = categoryInfo[currentQuestion.category as keyof typeof categoryInfo]
+
+  // Safety check for current category - provide fallback if category doesn't exist
+  const currentCategory = categoryInfo[currentQuestion.category as keyof typeof categoryInfo] || {
+    name: "General",
+    icon: Brain,
+    color: "bg-gray-500",
+    description: "Pregunta general",
+  }
+
   const IconComponent = currentCategory.icon
 
   return (
@@ -397,6 +421,8 @@ export default function EmotionalIntelligenceTest() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {Object.entries(categoryProgress).map(([category, progress]) => {
               const info = categoryInfo[category as keyof typeof categoryInfo]
+              if (!info) return null
+
               const CategoryIcon = info.icon
               const percentage = progress.total > 0 ? (progress.answered / progress.total) * 100 : 0
 
@@ -437,17 +463,18 @@ export default function EmotionalIntelligenceTest() {
               value={answers[currentQuestion.id]?.toString() || ""}
               onValueChange={(value) => handleAnswerChange(currentQuestion.id, Number.parseInt(value))}
             >
-              {currentQuestion.options.map((option, index) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base leading-relaxed">
-                    {option}
-                  </Label>
-                </div>
-              ))}
+              {currentQuestion.options &&
+                currentQuestion.options.map((option, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base leading-relaxed">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
             </RadioGroup>
           </CardContent>
         </Card>
