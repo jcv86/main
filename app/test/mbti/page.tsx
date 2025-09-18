@@ -526,7 +526,7 @@ export default function MBTITest() {
   const canProceed = answers[question.id] !== undefined
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="min-h-screen bg-secondary">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -545,12 +545,12 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-green-800">Test de Personalidad MBTI</h2>
-                <p className="text-green-600">
+                <h2 className="text-2xl font-bold text-foreground">Test de Personalidad MBTI</h2>
+                <p className="text-foreground/80">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-foreground/80">
                 <Clock className="h-4 w-4" />
                 <span>~18 minutos</span>
               </div>
@@ -568,13 +568,13 @@ export default function MBTITest() {
           <CardContent>
             <RadioGroup value={answers[question.id] || ""} onValueChange={(value) => handleAnswer(question.id, value)}>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-green-50 border border-gray-200">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-foreground/10 border border-foreground/20">
                   <RadioGroupItem value="A" id="option-A" />
                   <Label htmlFor="option-A" className="flex-1 cursor-pointer">
                     {question.optionA}
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-green-50 border border-gray-200">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-foreground/10 border border-foreground/20">
                   <RadioGroupItem value="B" id="option-B" />
                   <Label htmlFor="option-B" className="flex-1 cursor-pointer">
                     {question.optionB}
@@ -600,7 +600,7 @@ export default function MBTITest() {
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-foreground hover:bg-foreground/90"
             >
               {isSubmitting ? (
                 <>
@@ -618,7 +618,7 @@ export default function MBTITest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(mbtiQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-foreground hover:bg-foreground/90"
             >
               Siguiente
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -634,15 +634,15 @@ export default function MBTITest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-green-600"
+                    ? "bg-foreground"
                     : answers[mbtiQuestions[index].id]
-                      ? "bg-green-300"
-                      : "bg-gray-200"
+                      ? "bg-foreground/30"
+                      : "bg-foreground/10"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-foreground/80 mt-2">
             {Object.keys(answers).length} de {mbtiQuestions.length} preguntas respondidas
           </p>
         </div>

@@ -400,7 +400,7 @@ export default function BigFiveTest() {
   const canProceed = answers[question.id] !== undefined && answers[question.id] !== ""
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <div className="min-h-screen bg-secondary">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -419,23 +419,23 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-purple-800">Test de Personalidad Big Five</h2>
-                <p className="text-purple-600">
+                <h2 className="text-2xl font-bold text-neutral-800">Test de Personalidad Big Five</h2>
+                <p className="text-neutral-600">
                   Pregunta {currentQuestion + 1} de {bigFiveQuestions.length}
                 </p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-neutral-600">
                   <Clock className="h-4 w-4" />
                   <span>~20 minutos</span>
                 </div>
-                <Badge variant="outline" className="bg-purple-100 text-purple-700">
+                <Badge variant="outline" className="bg-neutral-100 text-neutral-700">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Con Análisis IA
                 </Badge>
               </div>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-2 bg-neutral-200" />
           </CardContent>
         </Card>
 
@@ -468,7 +468,7 @@ export default function BigFiveTest() {
                 onValueChange={(value) => handleLikertAnswer(question.id, Number.parseInt(value))}
               >
                 {likertOptions.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-purple-50">
+                  <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-neutral-50">
                     <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
                     <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
                       {option.label}
@@ -484,7 +484,7 @@ export default function BigFiveTest() {
                   onChange={(e) => handleOpenAnswer(question.id, e.target.value)}
                   className="min-h-[120px] resize-none"
                 />
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-neutral-500">
                   <span>{((answers[question.id] as string) || "").length} caracteres (mínimo 50 requeridos)</span>
                   {((answers[question.id] as string) || "").length >= 50 && (
                     <Badge variant="secondary" className="bg-green-100 text-green-700">
@@ -513,7 +513,7 @@ export default function BigFiveTest() {
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-foreground hover:bg-foreground/90"
             >
               {isSubmitting ? (
                 <>
@@ -531,7 +531,7 @@ export default function BigFiveTest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(bigFiveQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-foreground hover:bg-foreground/90"
             >
               Siguiente
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -547,28 +547,28 @@ export default function BigFiveTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-purple-600"
+                    ? "bg-neutral-800"
                     : answers[bigFiveQuestions[index].id]
-                      ? "bg-purple-300"
-                      : "bg-gray-200"
+                      ? "bg-neutral-300"
+                      : "bg-neutral-200"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-neutral-600 mt-2">
             {Object.keys(answers).length} de {bigFiveQuestions.length} preguntas respondidas
           </p>
         </div>
 
         {/* AI Analysis Info */}
         {isGeneratingAI && (
-          <Card className="mt-6 border-purple-200 bg-purple-50">
+          <Card className="mt-6 border-neutral-200 bg-neutral-50">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-800"></div>
                 <div>
-                  <p className="font-semibold text-purple-800">Generando análisis con IA</p>
-                  <p className="text-sm text-purple-600">
+                  <p className="font-semibold text-neutral-800">Generando análisis con IA</p>
+                  <p className="text-sm text-neutral-600">
                     Nuestro sistema está creando una interpretación personalizada de tus resultados...
                   </p>
                 </div>

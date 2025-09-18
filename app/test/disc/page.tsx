@@ -425,9 +425,9 @@ export default function DISCTestPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-foreground mx-auto mb-4"></div>
           <p className="text-gray-600">Verificando acceso...</p>
         </div>
       </div>
@@ -440,8 +440,8 @@ export default function DISCTestPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
+      <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl bg-neutral hover:bg-neutral-100">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -452,7 +452,7 @@ export default function DISCTestPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-neutral p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Resumen de tu evaluación:</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -468,9 +468,9 @@ export default function DISCTestPage() {
               </div>
             </div>
 
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-neutral p-4 rounded-lg">
               <h3 className="font-semibold mb-2 flex items-center justify-center">
-                <Brain className="h-4 w-4 mr-2 text-purple-600" />
+                <Brain className="h-4 w-4 mr-2 text-foreground" />
                 Análisis con IA
               </h3>
               <p className="text-sm text-gray-600">
@@ -479,7 +479,7 @@ export default function DISCTestPage() {
               </p>
             </div>
 
-            <Button onClick={submitTest} disabled={isSubmitting} className="w-full" size="lg">
+            <Button onClick={submitTest} disabled={isSubmitting} className="w-full bg-foreground text-white" size="lg">
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
@@ -493,7 +493,11 @@ export default function DISCTestPage() {
               )}
             </Button>
 
-            <Button variant="outline" onClick={() => router.push("/dashboard")} className="w-full">
+            <Button
+              variant="outline"
+              onClick={() => router.push("/dashboard")}
+              className="w-full bg-foreground text-white"
+            >
               Volver al Dashboard
             </Button>
           </CardContent>
@@ -503,11 +507,11 @@ export default function DISCTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-secondary p-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+          <Button variant="outline" onClick={() => router.push("/dashboard")} className="bg-foreground text-white">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Volver al Dashboard
           </Button>
@@ -518,7 +522,7 @@ export default function DISCTestPage() {
         </div>
 
         {/* Progress */}
-        <Card className="mb-6">
+        <Card className="mb-6 bg-neutral hover:bg-neutral-100">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Progreso del Test</span>
@@ -536,15 +540,17 @@ export default function DISCTestPage() {
         </Card>
 
         {/* Question */}
-        <Card>
+        <Card className="bg-neutral hover:bg-neutral-100">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <Badge variant="outline">
+              <Badge variant="outline" className="bg-foreground text-white border-border">
                 {question.type === "multiple_choice" && "Opción Múltiple"}
                 {question.type === "open_ended" && "Respuesta Abierta"}
                 {question.type === "scenario" && "Escenario"}
               </Badge>
-              <Badge variant="secondary">Pregunta {currentQuestion + 1}</Badge>
+              <Badge variant="secondary" className="bg-foreground text-white border-border">
+                Pregunta {currentQuestion + 1}
+              </Badge>
             </div>
             <CardTitle className="text-xl">{question.question}</CardTitle>
           </CardHeader>
@@ -570,10 +576,10 @@ export default function DISCTestPage() {
                   placeholder="Escribe tu respuesta aquí... Sé específico y detallado para obtener un mejor análisis de IA."
                   value={currentAnswer || ""}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="min-h-[120px]"
+                  className="min-h-[120px] bg-neutral text-gray-600"
                 />
                 <div className="flex items-center text-xs text-gray-500">
-                  <Brain className="h-3 w-3 mr-1" />
+                  <Brain className="h-3 w-3 mr-1 text-foreground" />
                   Esta respuesta será analizada por IA para insights personalizados
                 </div>
               </div>
@@ -581,12 +587,21 @@ export default function DISCTestPage() {
 
             {/* Navigation */}
             <div className="flex justify-between pt-6">
-              <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0}>
+              <Button
+                variant="outline"
+                onClick={prevQuestion}
+                disabled={currentQuestion === 0}
+                className="bg-foreground text-white border-border"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Anterior
               </Button>
 
-              <Button onClick={nextQuestion} disabled={!currentAnswer}>
+              <Button
+                onClick={nextQuestion}
+                disabled={!currentAnswer}
+                className="bg-foreground text-white border-border"
+              >
                 {currentQuestion === discQuestions.length - 1 ? (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
@@ -604,7 +619,7 @@ export default function DISCTestPage() {
         </Card>
 
         {/* Test Info */}
-        <Card className="mt-6">
+        <Card className="mt-6 bg-neutral hover:bg-neutral-100">
           <CardContent className="pt-6">
             <div className="flex items-start space-x-3">
               <Brain className="h-5 w-5 text-blue-600 mt-0.5" />

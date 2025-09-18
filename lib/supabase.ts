@@ -30,7 +30,7 @@ const createMockClient = () => ({
     getUser: async () => ({ data: { user: null }, error: null }),
     signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
       // Mock successful login for demo purposes
-      if (email.includes("demo") || email.includes("test")) {
+      if (email.includes("demo") || email.includes("test") || email.includes("travis")) {
         return {
           data: {
             user: {
@@ -64,18 +64,302 @@ const createMockClient = () => ({
   from: (table: string) => ({
     select: (columns?: string) => ({
       eq: (column: string, value: any) => ({
-        single: async () => ({ data: null, error: null }),
-        limit: (count: number) => ({ data: [], error: null }),
-        order: (column: string, options?: any) => ({ data: [], error: null }),
+        single: async () => {
+          // Mock user profile data based on email
+          if (table === "user_profiles" && column === "email") {
+            return getMockUserProfile(value)
+          }
+          return { data: null, error: null }
+        },
+        limit: (count: number) => ({
+          order: (orderColumn: string, options?: any) => ({
+            data: getMockData(table, value),
+            error: null,
+          }),
+          data: getMockData(table, value),
+          error: null,
+        }),
+        order: (orderColumn: string, options?: any) => ({
+          limit: (count: number) => ({
+            data: getMockData(table, value),
+            error: null,
+          }),
+          data: getMockData(table, value),
+          error: null,
+        }),
+        data: getMockData(table, value),
+        error: null,
       }),
-      order: (column: string, options?: any) => ({ data: [], error: null }),
+      order: (column: string, options?: any) => ({
+        limit: (count: number) => ({
+          data: getMockData(table),
+          error: null,
+        }),
+        data: getMockData(table),
+        error: null,
+      }),
+      limit: (count: number) => ({
+        data: getMockData(table),
+        error: null,
+      }),
+      data: getMockData(table),
+      error: null,
     }),
-    insert: async (data: any) => ({ data, error: null }),
-    update: async (data: any) => ({ data, error: null }),
+    insert: async (data: any) => ({
+      select: () => ({
+        single: async () => ({
+          data: { ...data, id: Date.now().toString(), created_at: new Date().toISOString() },
+          error: null,
+        }),
+      }),
+      data: { ...data, id: Date.now().toString() },
+      error: null,
+    }),
+    update: async (data: any) => ({
+      eq: (column: string, value: any) => ({
+        select: () => ({
+          single: async () => ({
+            data: { ...data, id: Date.now().toString(), updated_at: new Date().toISOString() },
+            error: null,
+          }),
+        }),
+        data: { ...data, updated_at: new Date().toISOString() },
+        error: null,
+      }),
+    }),
     delete: async () => ({ data: null, error: null }),
   }),
   rpc: async (functionName: string, params?: any) => ({ data: null, error: null }),
 })
+
+function getMockUserProfile(email: string) {
+  const profiles = {
+    "demo@despegaturcarrera.com": {
+      data: {
+        id: "1",
+        email: "demo@despegaturcarrera.com",
+        name: "Ana García",
+        user_category: "premium",
+        preferences: {
+          communicationStyle: "collaborative",
+          learningStyle: "kinesthetic",
+          careerGoals: ["gerencia", "innovación", "transformación digital"],
+          interests: ["marketing digital", "análisis de datos", "liderazgo"],
+          skillLevel: "advanced",
+          timeAvailability: "high",
+        },
+        conversation_history: {
+          totalMessages: 25,
+          topics: ["marketing", "liderazgo", "innovación", "análisis"],
+          lastActive: "2024-01-15T10:30:00Z",
+          commonQuestions: ["¿Cómo liderar equipos remotos?", "Estrategias de marketing digital"],
+          progressTracking: {
+            leadership: { currentLevel: 8, targetLevel: 10 },
+            marketing: { currentLevel: 9, targetLevel: 10 },
+          },
+        },
+        personality_insights: {
+          strengths: ["Liderazgo estratégico", "Innovación", "Comunicación persuasiva", "Análisis de mercado"],
+          growthAreas: ["Gestión financiera", "Negociación avanzada"],
+          workStyle: "visionario-colaborativo",
+          motivators: ["Impacto transformacional", "Crecimiento de equipo", "Innovación disruptiva"],
+          stressors: ["Burocracia excesiva", "Resistencia al cambio"],
+          communicationPreferences: ["Visual", "Interactivo", "Estratégico"],
+        },
+        career_profile: {
+          currentRole: "Marketing Manager",
+          industry: "Tecnología",
+          experience: "senior",
+          aspirations: ["Directora de Marketing", "VP de Innovación", "Consultora Senior"],
+          skillGaps: ["Finanzas corporativas", "Gestión de P&L"],
+          networkingStyle: "estratégico-relacional",
+        },
+        learning_profile: {
+          completedBooks: ["Good to Great", "The Lean Startup", "Crossing the Chasm"],
+          currentReading: ["Blue Ocean Strategy", "The Innovators Dilemma"],
+          preferredFormats: ["audiobook", "interactive", "video"],
+          learningPace: "accelerated",
+          retentionStyle: "visual-practical",
+        },
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-15T10:30:00Z",
+      },
+      error: null,
+    },
+    "travis@nuanu.com": {
+      data: {
+        id: "2",
+        email: "travis@nuanu.com",
+        name: "Travis Herrera",
+        user_category: "enterprise",
+        preferences: {
+          communicationStyle: "direct",
+          learningStyle: "visual",
+          careerGoals: ["CTO", "arquitectura empresarial", "transformación digital"],
+          interests: ["tecnología", "arquitectura de software", "liderazgo técnico"],
+          skillLevel: "expert",
+          timeAvailability: "moderate",
+        },
+        conversation_history: {
+          totalMessages: 45,
+          topics: ["arquitectura", "liderazgo técnico", "innovación", "estrategia"],
+          lastActive: "2024-01-15T14:20:00Z",
+          commonQuestions: ["Arquitecturas escalables", "Liderazgo de equipos técnicos"],
+          progressTracking: {
+            technical_leadership: { currentLevel: 9, targetLevel: 10 },
+            architecture: { currentLevel: 10, targetLevel: 10 },
+          },
+        },
+        personality_insights: {
+          strengths: ["Arquitectura de sistemas", "Liderazgo técnico", "Visión estratégica", "Innovación tecnológica"],
+          growthAreas: ["Comunicación ejecutiva", "Gestión de presupuestos"],
+          workStyle: "técnico-visionario",
+          motivators: ["Excelencia técnica", "Impacto escalable", "Mentoring"],
+          stressors: ["Decisiones no basadas en datos", "Tecnología legacy"],
+          communicationPreferences: ["Técnico", "Directo", "Basado en datos"],
+        },
+        career_profile: {
+          currentRole: "Senior Software Architect",
+          industry: "Tecnología",
+          experience: "expert",
+          aspirations: ["CTO", "Principal Architect", "Tech Consultant"],
+          skillGaps: ["Gestión ejecutiva", "Comunicación con stakeholders"],
+          networkingStyle: "técnico-profesional",
+        },
+        learning_profile: {
+          completedBooks: ["Clean Architecture", "The Phoenix Project", "Accelerate"],
+          currentReading: ["Team Topologies", "The Technology Fallacy"],
+          preferredFormats: ["digital", "technical", "interactive"],
+          learningPace: "intensive",
+          retentionStyle: "hands-on-practical",
+        },
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-15T14:20:00Z",
+      },
+      error: null,
+    },
+    "test@dtc.com": {
+      data: {
+        id: "3",
+        email: "test@dtc.com",
+        name: "Carlos Mendoza",
+        user_category: "standard",
+        preferences: {
+          communicationStyle: "supportive",
+          learningStyle: "auditory",
+          careerGoals: ["coordinación de proyectos", "gestión de equipos", "certificación PMP"],
+          interests: ["gestión de proyectos", "metodologías ágiles", "comunicación"],
+          skillLevel: "intermediate",
+          timeAvailability: "moderate",
+        },
+        conversation_history: {
+          totalMessages: 12,
+          topics: ["proyectos", "metodologías", "comunicación"],
+          lastActive: "2024-01-15T09:15:00Z",
+          commonQuestions: ["Metodologías ágiles", "Gestión de stakeholders"],
+          progressTracking: {
+            project_management: { currentLevel: 6, targetLevel: 8 },
+            communication: { currentLevel: 7, targetLevel: 9 },
+          },
+        },
+        personality_insights: {
+          strengths: ["Organización", "Comunicación empática", "Resolución de conflictos"],
+          growthAreas: ["Liderazgo asertivo", "Gestión de riesgos"],
+          workStyle: "colaborativo-estructurado",
+          motivators: ["Trabajo en equipo", "Logro de objetivos", "Desarrollo personal"],
+          stressors: ["Conflictos no resueltos", "Plazos irreales"],
+          communicationPreferences: ["Empático", "Estructurado", "Inclusivo"],
+        },
+        career_profile: {
+          currentRole: "Project Coordinator",
+          industry: "Consultoría",
+          experience: "intermediate",
+          aspirations: ["Project Manager", "Scrum Master", "Program Manager"],
+          skillGaps: ["Certificación PMP", "Gestión financiera de proyectos"],
+          networkingStyle: "colaborativo-profesional",
+        },
+        learning_profile: {
+          completedBooks: ["PMBOK Guide", "Scrum: The Art of Doing Twice"],
+          currentReading: ["The Lean Startup", "Crucial Conversations"],
+          preferredFormats: ["audiobook", "workshop", "peer-learning"],
+          learningPace: "steady",
+          retentionStyle: "discussion-based",
+        },
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-15T09:15:00Z",
+      },
+      error: null,
+    },
+  }
+
+  return profiles[email as keyof typeof profiles] || { data: null, error: { code: "PGRST116" } }
+}
+
+function getMockData(table: string, filterValue?: any) {
+  if (table === "ai_insights") {
+    return [
+      {
+        id: "1",
+        user_email: "demo@despegaturcarrera.com",
+        insight_type: "strength",
+        title: "Liderazgo Estratégico Excepcional",
+        description:
+          "Tu capacidad para liderar con visión estratégica y comunicación persuasiva te posiciona perfectamente para roles de dirección en marketing e innovación.",
+        priority: "high",
+        progress: 90,
+        actionable: true,
+        category: "Liderazgo",
+        created_at: "2024-01-15T10:00:00Z",
+        updated_at: "2024-01-15T10:00:00Z",
+      },
+      {
+        id: "2",
+        user_email: "demo@despegaturcarrera.com",
+        insight_type: "opportunity",
+        title: "Desarrollo en Finanzas Corporativas",
+        description:
+          "Para alcanzar roles de VP, desarrollar competencias en gestión financiera y P&L será crucial para tu crecimiento.",
+        priority: "high",
+        progress: 30,
+        actionable: true,
+        category: "Finanzas",
+        created_at: "2024-01-15T10:00:00Z",
+        updated_at: "2024-01-15T10:00:00Z",
+      },
+      {
+        id: "3",
+        user_email: "travis@nuanu.com",
+        insight_type: "strength",
+        title: "Arquitectura y Liderazgo Técnico",
+        description:
+          "Tu expertise en arquitectura de sistemas combinado con liderazgo técnico te posiciona idealmente para roles de CTO.",
+        priority: "high",
+        progress: 95,
+        actionable: true,
+        category: "Técnico",
+        created_at: "2024-01-15T14:00:00Z",
+        updated_at: "2024-01-15T14:00:00Z",
+      },
+    ]
+  }
+
+  if (table === "ai_conversations") {
+    return [
+      {
+        id: "1",
+        user_email: "demo@despegaturcarrera.com",
+        message_type: "assistant",
+        content: "¡Hola Ana! ¿En qué puedo ayudarte hoy con tu desarrollo profesional?",
+        category: "bienvenida",
+        suggested_actions: ["Evaluar liderazgo", "Estrategia de marketing", "Plan de carrera"],
+        metadata: { confidence: 0.9 },
+        created_at: "2024-01-15T10:00:00Z",
+      },
+    ]
+  }
+
+  return []
+}
 
 // Create and export the default client instance
 export const supabase = createClient()

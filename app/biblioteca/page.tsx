@@ -398,17 +398,17 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-[400px] bg-gray-100">
         <div className="text-center">
           <BookOpen className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
-          <p>Cargando biblioteca...</p>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Cargando biblioteca...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 bg-gray-100">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">📚 Biblioteca de Conocimiento</h1>
@@ -472,10 +472,10 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
           {/* Books Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredBooks.map((book) => (
-              <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer group">
+              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer group">
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <Badge variant="secondary">{book.category}</Badge>
+                    <Badge variant="outline">{book.category}</Badge>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -541,14 +541,14 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
         <TabsContent value="popular" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {getPopularBooks().map((book, index) => (
-              <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer relative">
+              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer relative">
                 <div className="absolute top-4 left-4 z-10">
                   <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {index + 1}
                   </div>
                 </div>
                 <CardHeader className="pt-12">
-                  <Badge variant="secondary" className="w-fit">
+                  <Badge variant="outline" className="w-fit">
                     {book.category}
                   </Badge>
                   <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
@@ -587,10 +587,10 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
         <TabsContent value="recent" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {getRecentBooks().map((book) => (
-              <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <Badge variant="secondary">{book.category}</Badge>
+                    <Badge variant="outline">{book.category}</Badge>
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                       <Clock className="h-3 w-3" />
                       Nuevo
@@ -633,10 +633,10 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
           {getBookmarkedBooks().length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getBookmarkedBooks().map((book) => (
-                <Card key={book.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <Badge variant="secondary">{book.category}</Badge>
+                      <Badge variant="outline">{book.category}</Badge>
                       <Heart className="h-4 w-4 text-red-500" />
                     </div>
                     <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
@@ -685,7 +685,7 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
 
       {/* Book Detail Dialog */}
       <Dialog open={!!selectedBook && !isReading} onOpenChange={() => setSelectedBook(null)}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white">
           <DialogHeader>
             <div className="flex items-start justify-between">
               <div className="flex-1">
@@ -758,7 +758,7 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
 
       {/* Reading View Dialog - Fixed Layout */}
       <Dialog open={isReading} onOpenChange={stopReading}>
-        <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0">
+        <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 bg-white">
           {/* Fixed Header */}
           <DialogHeader className="flex-shrink-0 p-6 pb-4 border-b">
             <div className="flex items-center justify-between">
@@ -772,7 +772,7 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="secondary">{selectedBook?.category}</Badge>
+                <Badge variant="outline">{selectedBook?.category}</Badge>
                 <Button variant="ghost" size="sm" onClick={() => selectedBook && toggleBookmark(selectedBook.id)}>
                   {selectedBook && isBookmarked(selectedBook.id) ? (
                     <Bookmark className="h-4 w-4 text-blue-600" />

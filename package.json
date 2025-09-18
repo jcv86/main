@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "latest",
+    "@chakra-ui/react": "3.27.0",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "latest",
@@ -27,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.1.3",
     "@supabase/supabase-js": "latest",
     "ai": "latest",
+    "antd": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",

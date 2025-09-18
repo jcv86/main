@@ -1,7 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+import { createClient } from "@/lib/supabase"
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,31 +10,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
+    const supabase = createClient()
     const { data, error } = await supabase.from("user_profiles").select("*").eq("email", email).single()
 
     if (error) {
-      if (error.code === "PGRST116") {
-        return NextResponse.json({ error: "Profile not found" }, { status: 404 })
-      }
-      throw error
+      console.error("Error fetching user profile:", error)
+      return NextResponse.json({ error: "User profile not found" }, { status: 404 })
     }
 
-    // Transform database format to application format
-    const profile = {
-      id: data.id,
-      email: data.email,
-      name: data.name,
-      preferences: data.preferences,
-      testResults: data.test_results,
-      conversationHistory: data.conversation_history,
-      personalityInsights: data.personality_insights,
-      careerProfile: data.career_profile,
-      learningProfile: data.learning_profile,
-    }
-
-    return NextResponse.json(profile)
+    return NextResponse.json(data)
   } catch (error) {
-    console.error("Error fetching user profile:", error)
+    console.error("Error in user profile API:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
@@ -44,40 +28,42 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    const { email, name, userCategory, preferences, personalityInsights, careerProfile, learningProfile } = body
 
-    const profileData = {
-      email: body.email,
-      name: body.name,
-      preferences: body.preferences,
-      test_results: body.testResults,
-      conversation_history: body.conversationHistory,
-      personality_insights: body.personalityInsights,
-      career_profile: body.careerProfile,
-      learning_profile: body.learningProfile,
+    if (!email || !name) {
+      return NextResponse.json({ error: "Email and name are required" }, { status: 400 })
     }
 
-    const { data, error } = await supabase.from("user_profiles").insert(profileData).select().single()
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from("user_profiles")
+      .insert({
+        email,
+        name,
+        user_category: userCategory || "standard",
+        preferences: preferences || {},
+        conversation_history: {
+          totalMessages: 0,
+          topics: [],
+          lastActive: new Date().toISOString(),
+          commonQuestions: [],
+          progressTracking: {},
+        },
+        personality_insights: personalityInsights || {},
+        career_profile: careerProfile || {},
+        learning_profile: learningProfile || {},
+      })
+      .select()
+      .single()
 
     if (error) {
-      throw error
+      console.error("Error creating user profile:", error)
+      return NextResponse.json({ error: "Failed to create user profile" }, { status: 500 })
     }
 
-    // Transform back to application format
-    const profile = {
-      id: data.id,
-      email: data.email,
-      name: data.name,
-      preferences: data.preferences,
-      testResults: data.test_results,
-      conversationHistory: data.conversation_history,
-      personalityInsights: data.personality_insights,
-      careerProfile: data.career_profile,
-      learningProfile: data.learning_profile,
-    }
-
-    return NextResponse.json(profile, { status: 201 })
+    return NextResponse.json(data, { status: 201 })
   } catch (error) {
-    console.error("Error creating user profile:", error)
+    console.error("Error in user profile creation:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
@@ -85,44 +71,31 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
+    const { email, ...updates } = body
 
-    const profileData = {
-      name: body.name,
-      preferences: body.preferences,
-      test_results: body.testResults,
-      conversation_history: body.conversationHistory,
-      personality_insights: body.personalityInsights,
-      career_profile: body.careerProfile,
-      learning_profile: body.learningProfile,
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
+    const supabase = createClient()
     const { data, error } = await supabase
       .from("user_profiles")
-      .update(profileData)
-      .eq("email", body.email)
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("email", email)
       .select()
       .single()
 
     if (error) {
-      throw error
+      console.error("Error updating user profile:", error)
+      return NextResponse.json({ error: "Failed to update user profile" }, { status: 500 })
     }
 
-    // Transform back to application format
-    const profile = {
-      id: data.id,
-      email: data.email,
-      name: data.name,
-      preferences: data.preferences,
-      testResults: data.test_results,
-      conversationHistory: data.conversation_history,
-      personalityInsights: data.personality_insights,
-      careerProfile: data.career_profile,
-      learningProfile: data.learning_profile,
-    }
-
-    return NextResponse.json(profile)
+    return NextResponse.json(data)
   } catch (error) {
-    console.error("Error updating user profile:", error)
+    console.error("Error in user profile update:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

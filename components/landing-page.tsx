@@ -4,179 +4,238 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import {
   Brain,
-  Heart,
-  Users,
   Target,
-  Lightbulb,
+  TrendingUp,
+  Users,
   BookOpen,
   Award,
-  Zap,
-  ArrowRight,
   CheckCircle,
-  Clock,
+  Star,
+  ArrowRight,
+  Menu,
+  X,
   BarChart3,
-  Sparkles,
-  Trophy,
-  Rocket,
-  Globe,
-  Shield,
-  Compass,
+  MessageSquare,
+  Zap,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-const tests = [
-  {
-    id: "emotional-intelligence",
-    title: "Inteligencia Emocional",
-    description: "Evalúa tu capacidad para reconocer, entender y manejar emociones propias y ajenas",
-    icon: Heart,
-    color: "from-red-500 to-pink-500",
-    bgColor: "bg-red-50",
-    duration: "25 min",
-    questions: 30,
-    categories: ["Autoconciencia", "Autorregulación", "Motivación", "Empatía", "Habilidades Sociales"],
-    comingSoon: false,
-    featured: true,
-  },
-  {
-    id: "disc",
-    title: "Test DISC",
-    description: "Descubre tu estilo de comportamiento y comunicación predominante",
-    icon: Target,
-    color: "from-blue-500 to-cyan-500",
-    bgColor: "bg-blue-50",
-    duration: "15 min",
-    questions: 24,
-    categories: ["Dominancia", "Influencia", "Estabilidad", "Cumplimiento"],
-    comingSoon: false,
-  },
-  {
-    id: "big-five",
-    title: "Big Five",
-    description: "Análisis completo de los cinco grandes factores de personalidad",
-    icon: Brain,
-    color: "from-purple-500 to-indigo-500",
-    bgColor: "bg-purple-50",
-    duration: "20 min",
-    questions: 50,
-    categories: ["Apertura", "Responsabilidad", "Extraversión", "Amabilidad", "Neuroticismo"],
-    comingSoon: false,
-  },
-  {
-    id: "mbti",
-    title: "MBTI",
-    description: "Identifica tu tipo de personalidad según Myers-Briggs",
-    icon: Lightbulb,
-    color: "from-yellow-500 to-orange-500",
-    bgColor: "bg-yellow-50",
-    duration: "18 min",
-    questions: 40,
-    categories: ["Extraversión/Introversión", "Sensación/Intuición", "Pensamiento/Sentimiento", "Juicio/Percepción"],
-    comingSoon: false,
-  },
-  {
-    id: "riasec",
-    title: "RIASEC",
-    description: "Descubre tus intereses vocacionales y carreras compatibles",
-    icon: Compass,
-    color: "from-green-500 to-emerald-500",
-    bgColor: "bg-green-50",
-    duration: "22 min",
-    questions: 36,
-    categories: ["Realista", "Investigativo", "Artístico", "Social", "Emprendedor", "Convencional"],
-    comingSoon: false,
-  },
-  {
-    id: "soft-skills",
-    title: "Habilidades Blandas",
-    description: "Evalúa tus competencias interpersonales y profesionales",
-    icon: Users,
-    color: "from-teal-500 to-cyan-500",
-    bgColor: "bg-teal-50",
-    duration: "20 min",
-    questions: 35,
-    categories: ["Comunicación", "Liderazgo", "Trabajo en Equipo", "Adaptabilidad", "Resolución de Problemas"],
-    comingSoon: false,
-  },
-]
-
-const features = [
-  {
-    icon: Brain,
-    title: "Análisis Profundo",
-    description: "Evaluaciones basadas en metodologías científicas validadas",
-  },
-  {
-    icon: Zap,
-    title: "Resultados Instantáneos",
-    description: "Obtén tu perfil completo inmediatamente después del test",
-  },
-  {
-    icon: Shield,
-    title: "100% Confidencial",
-    description: "Tus datos están protegidos y nunca se comparten",
-  },
-  {
-    icon: Trophy,
-    title: "Recomendaciones Personalizadas",
-    description: "Recibe consejos específicos para tu desarrollo profesional",
-  },
-]
-
-const stats = [
-  { number: "50,000+", label: "Tests Completados" },
-  { number: "95%", label: "Satisfacción" },
-  { number: "6", label: "Evaluaciones Disponibles" },
-  { number: "24/7", label: "Acceso Disponible" },
-]
-
 export function LandingPage() {
   const router = useRouter()
-  const [selectedTest, setSelectedTest] = useState<string | null>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [email, setEmail] = useState("")
 
-  const handleStartTest = (testId: string) => {
-    router.push(`/test/${testId}`)
+  const features = [
+    {
+      icon: Brain,
+      title: "AI-Powered Insights",
+      description: "Get personalized career recommendations based on advanced AI analysis of your assessment results.",
+    },
+    {
+      icon: Target,
+      title: "Career Assessments",
+      description:
+        "Take scientifically-backed assessments including DISC, Big Five, MBTI, and career interest evaluations.",
+    },
+    {
+      icon: BookOpen,
+      title: "Learning Library",
+      description: "Access curated books, courses, and resources tailored to your professional development needs.",
+    },
+    {
+      icon: MessageSquare,
+      title: "Interactive AI Coach",
+      description: "Chat with your personal AI career coach for guidance, advice, and actionable development plans.",
+    },
+    {
+      icon: BarChart3,
+      title: "Progress Tracking",
+      description: "Monitor your growth with detailed analytics and progress reports across all assessments.",
+    },
+    {
+      icon: Users,
+      title: "Professional Network",
+      description: "Connect with like-minded professionals and build meaningful career relationships.",
+    },
+  ]
+
+  const assessmentTypes = [
+    {
+      name: "DISC Assessment",
+      description: "Behavioral style analysis",
+      icon: Users,
+      duration: "10 min",
+    },
+    {
+      name: "Big Five Personality",
+      description: "Comprehensive personality evaluation",
+      icon: Star,
+      duration: "15 min",
+    },
+    {
+      name: "MBTI Type Indicator",
+      description: "Psychological preferences mapping",
+      icon: Brain,
+      duration: "12 min",
+    },
+    {
+      name: "Career Interest (RIASEC)",
+      description: "Vocational interest assessment",
+      icon: Target,
+      duration: "8 min",
+    },
+    {
+      name: "Emotional Intelligence",
+      description: "EQ skills evaluation",
+      icon: Award,
+      duration: "10 min",
+    },
+    {
+      name: "Soft Skills Assessment",
+      description: "Professional skills analysis",
+      icon: TrendingUp,
+      duration: "12 min",
+    },
+  ]
+
+  const benefits = [
+    "Personalized AI career coaching",
+    "Scientifically-backed assessments",
+    "Comprehensive learning library",
+    "Progress tracking and analytics",
+    "Professional development plans",
+    "24/7 AI support and guidance",
+  ]
+
+  const stats = [
+    { number: "10,000+", label: "Professionals Served" },
+    { number: "95%", label: "User Satisfaction" },
+    { number: "6", label: "Assessment Types" },
+    { number: "24/7", label: "AI Support" },
+  ]
+
+  const handleGetStarted = () => {
+    router.push("/dashboard")
   }
 
-  const featuredTest = tests.find((test) => test.featured)
+  const handleTryAICoach = () => {
+    router.push("/ai-coach")
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-8">
-              <div className="p-4 bg-white/10 rounded-full backdrop-blur-sm">
-                <Sparkles className="h-16 w-16 text-yellow-300" />
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center">
+                <Brain className="h-5 w-5 text-background" />
               </div>
+              <span className="text-xl font-bold text-foreground">CareerDev Pro</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              Descubre Tu Potencial
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
+                Features
+              </a>
+              <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
+                Assessments
+              </a>
+              <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
+                About
+              </a>
+              <Button
+                variant="outline"
+                onClick={handleTryAICoach}
+                className="border-border hover:bg-muted bg-transparent"
+              >
+                Try AI Coach
+              </Button>
+              <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
+                Get Started
+              </Button>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="md:hidden border-border bg-transparent"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </Button>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
+              <div className="flex flex-col space-y-4">
+                <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
+                  Features
+                </a>
+                <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
+                  Assessments
+                </a>
+                <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
+                  About
+                </a>
+                <Button
+                  variant="outline"
+                  onClick={handleTryAICoach}
+                  className="border-border hover:bg-muted w-full bg-transparent"
+                >
+                  Try AI Coach
+                </Button>
+                <Button
+                  onClick={handleGetStarted}
+                  className="bg-foreground text-background hover:bg-foreground/90 w-full"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </nav>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center">
+          <div className="max-w-4xl mx-auto">
+            <Badge variant="secondary" className="mb-6 bg-muted text-mutedForeground">
+              <Zap className="h-3 w-3 mr-1" />
+              AI-Powered Career Development
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
+              Unlock Your Career Potential with <span className="text-foreground">AI Guidance</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Evaluaciones psicométricas profesionales para impulsar tu carrera y desarrollo personal
+            <p className="text-xl text-mutedForeground mb-8 leading-relaxed">
+              Take scientifically-backed assessments, get personalized AI coaching, and access curated learning
+              resources to accelerate your professional growth and achieve your career goals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={() => handleStartTest("emotional-intelligence")}
-                className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 text-lg shadow-xl"
+                onClick={handleGetStarted}
+                className="bg-foreground text-background hover:bg-foreground/90 text-lg px-8 py-6"
               >
-                <Heart className="mr-2 h-6 w-6" />
-                Comenzar Test Destacado
+                Start Your Journey
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => document.getElementById("tests")?.scrollIntoView({ behavior: "smooth" })}
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-8 py-4 text-lg backdrop-blur-sm"
+                onClick={handleTryAICoach}
+                className="border-border hover:bg-muted text-lg px-8 py-6 bg-transparent"
               >
-                <Globe className="mr-2 h-6 w-6" />
-                Explorar Todos los Tests
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Try AI Coach Free
               </Button>
             </div>
           </div>
@@ -184,252 +243,262 @@ export function LandingPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{stat.number}</div>
+                <div className="text-mutedForeground">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Test Section */}
-      {featuredTest && (
-        <section className="py-20 bg-gradient-to-br from-red-50 to-pink-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-red-100 text-red-800 px-4 py-2 text-sm font-semibold">✨ Test Destacado</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Test de Inteligencia Emocional</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Descubre y desarrolla tu capacidad para manejar emociones y relaciones interpersonales
-              </p>
-            </div>
-
-            <Card className="max-w-4xl mx-auto shadow-2xl border-0 overflow-hidden">
-              <div className="bg-gradient-to-r from-red-500 to-pink-500 p-8 text-white">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="p-3 bg-white/20 rounded-full">
-                      <Heart className="h-8 w-8" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">{featuredTest.title}</h3>
-                      <p className="text-red-100">{featuredTest.description}</p>
-                    </div>
-                  </div>
-                  <Badge className="bg-white/20 text-white px-3 py-1">Nuevo</Badge>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="text-center">
-                    <Clock className="h-8 w-8 mx-auto mb-2 text-red-200" />
-                    <div className="text-lg font-semibold">{featuredTest.duration}</div>
-                    <div className="text-red-200 text-sm">Duración</div>
-                  </div>
-                  <div className="text-center">
-                    <BarChart3 className="h-8 w-8 mx-auto mb-2 text-red-200" />
-                    <div className="text-lg font-semibold">{featuredTest.questions} preguntas</div>
-                    <div className="text-red-200 text-sm">Evaluación completa</div>
-                  </div>
-                  <div className="text-center">
-                    <Award className="h-8 w-8 mx-auto mb-2 text-red-200" />
-                    <div className="text-lg font-semibold">5 competencias</div>
-                    <div className="text-red-200 text-sm">Análisis detallado</div>
-                  </div>
-                </div>
-              </div>
-
-              <CardContent className="p-8">
-                <div className="mb-8">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">¿Qué evalúa este test?</h4>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {featuredTest.categories.map((category, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                        <span className="text-gray-700">{category}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <Button
-                    size="lg"
-                    onClick={() => handleStartTest(featuredTest.id)}
-                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-12 py-4 text-lg shadow-lg"
-                  >
-                    <Rocket className="mr-2 h-6 w-6" />
-                    Comenzar Test Ahora
-                    <ArrowRight className="ml-2 h-6 w-6" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-      )}
-
-      {/* All Tests Section */}
-      <section id="tests" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4">
+        <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Evaluaciones Disponibles</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Elige la evaluación que mejor se adapte a tus objetivos de desarrollo profesional
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Everything You Need for Career Success
+            </h2>
+            <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
+              Our comprehensive platform combines AI technology with proven career development methodologies to provide
+              you with personalized guidance and actionable insights.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tests.map((test) => {
-              const IconComponent = test.icon
-              return (
-                <Card
-                  key={test.id}
-                  className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer border-0 ${
-                    test.comingSoon ? "opacity-75" : ""
-                  }`}
-                  onClick={() => !test.comingSoon && setSelectedTest(test.id)}
-                >
-                  <div className={`h-2 bg-gradient-to-r ${test.color}`}></div>
-                  <CardHeader className={`${test.bgColor} pb-4`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`p-3 bg-gradient-to-r ${test.color} rounded-full shadow-lg`}>
-                        <IconComponent className="h-8 w-8 text-white" />
-                      </div>
-                      {test.featured && (
-                        <Badge className="bg-yellow-100 text-yellow-800 px-2 py-1 text-xs">Destacado</Badge>
-                      )}
-                      {test.comingSoon && (
-                        <Badge className="bg-gray-100 text-gray-600 px-2 py-1 text-xs">Próximamente</Badge>
-                      )}
-                    </div>
-                    <CardTitle className="text-xl text-gray-900">{test.title}</CardTitle>
-                    <CardDescription className="text-gray-600 leading-relaxed">{test.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <div className="flex justify-between items-center mb-4 text-sm text-gray-500">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{test.duration}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <BarChart3 className="h-4 w-4" />
-                        <span>{test.questions} preguntas</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-6">
-                      <div className="text-sm font-medium text-gray-700 mb-2">Evalúa:</div>
-                      <div className="flex flex-wrap gap-1">
-                        {test.categories.slice(0, 3).map((category, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {category}
-                          </Badge>
-                        ))}
-                        {test.categories.length > 3 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{test.categories.length - 3} más
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-
-                    <Button
-                      className={`w-full bg-gradient-to-r ${test.color} hover:opacity-90 text-white shadow-lg`}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (!test.comingSoon) {
-                          handleStartTest(test.id)
-                        }
-                      }}
-                      disabled={test.comingSoon}
-                    >
-                      {test.comingSoon ? (
-                        <>
-                          <Clock className="mr-2 h-4 w-4" />
-                          Próximamente
-                        </>
-                      ) : (
-                        <>
-                          <Rocket className="mr-2 h-4 w-4" />
-                          Comenzar Test
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  </CardContent>
-                </Card>
-              )
-            })}
+            {features.map((feature, index) => (
+              <Card key={index} className="border-border bg-card hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mb-4">
+                    <feature.icon className="h-6 w-6 text-foreground" />
+                  </div>
+                  <CardTitle className="text-foreground">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-mutedForeground leading-relaxed">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Assessment Types Section */}
+      <section id="assessments" className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              ¿Por qué elegir nuestras evaluaciones?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tecnología avanzada y metodologías científicas para resultados precisos y útiles
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Comprehensive Career Assessments</h2>
+            <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
+              Take scientifically-validated assessments to gain deep insights into your personality, skills, and career
+              preferences.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon
-              return (
-                <Card key={index} className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow">
-                  <CardContent className="pt-8 pb-6">
-                    <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full">
-                        <IconComponent className="h-8 w-8 text-white" />
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              )
-            })}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {assessmentTypes.map((assessment, index) => (
+              <Card key={index} className="border-border bg-card hover:shadow-md transition-shadow">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <assessment.icon className="h-8 w-8 text-foreground" />
+                    <Badge variant="secondary" className="bg-muted text-mutedForeground">
+                      {assessment.duration}
+                    </Badge>
+                  </div>
+                  <CardTitle className="text-lg text-foreground">{assessment.name}</CardTitle>
+                  <CardDescription className="text-mutedForeground">{assessment.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Why Choose CareerDev Pro?</h2>
+              <p className="text-lg text-mutedForeground mb-8">
+                Our platform combines cutting-edge AI technology with proven career development methodologies to provide
+                you with the most comprehensive and personalized career guidance available.
+              </p>
+              <div className="space-y-4">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-foreground flex-shrink-0" />
+                    <span className="text-foreground">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="text-foreground">Ready to Get Started?</CardTitle>
+                <CardDescription className="text-mutedForeground">
+                  Join thousands of professionals who have accelerated their careers with our platform.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex space-x-2">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="border-border"
+                  />
+                  <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
+                    Start Free
+                  </Button>
+                </div>
+                <p className="text-xs text-mutedForeground">
+                  No credit card required. Start your free assessment today.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">¿Listo para descubrir tu potencial?</h2>
-          <p className="text-xl mb-8 text-blue-100">
-            Únete a miles de profesionales que han transformado su carrera con nuestras evaluaciones
+      <section className="py-20 px-4 bg-foreground text-background">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Transform Your Career?</h2>
+          <p className="text-xl text-background/80 mb-8 max-w-2xl mx-auto">
+            Take the first step towards unlocking your full potential. Start with a free assessment and get personalized
+            AI-powered career guidance today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              onClick={() => handleStartTest("emotional-intelligence")}
-              className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg shadow-xl"
+              variant="secondary"
+              onClick={handleGetStarted}
+              className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6"
             >
-              <Heart className="mr-2 h-6 w-6" />
-              Comenzar Ahora
+              Get Started Free
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              onClick={() => router.push("/biblioteca")}
-              className="border-white text-white hover:bg-white/10 px-8 py-4 text-lg"
+              onClick={handleTryAICoach}
+              className="border-background/20 text-background hover:bg-background/10 text-lg px-8 py-6 bg-transparent"
             >
-              <BookOpen className="mr-2 h-6 w-6" />
-              Explorar Biblioteca
+              <MessageSquare className="mr-2 h-5 w-5" />
+              Try AI Coach
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 border-t border-border bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-6 h-6 bg-foreground rounded flex items-center justify-center">
+                  <Brain className="h-4 w-4 text-background" />
+                </div>
+                <span className="font-bold text-foreground">CareerDev Pro</span>
+              </div>
+              <p className="text-mutedForeground text-sm">
+                AI-powered career development platform helping professionals unlock their potential.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Platform</h3>
+              <ul className="space-y-2 text-sm text-mutedForeground">
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Assessments
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    AI Coach
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Learning Library
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Progress Tracking
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
+              <ul className="space-y-2 text-sm text-mutedForeground">
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Career Guides
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Success Stories
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Help Center
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Company</h3>
+              <ul className="space-y-2 text-sm text-mutedForeground">
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-foreground transition-colors">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-border mt-8 pt-8 text-center">
+            <p className="text-mutedForeground text-sm">© 2024 CareerDev Pro. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

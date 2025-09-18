@@ -1,949 +1,561 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
-import {
-  MessageCircle,
-  Send,
-  Minimize2,
-  Maximize2,
-  Brain,
-  Target,
-  TrendingUp,
-  User,
-  Lightbulb,
-  Star,
-  Clock,
-  BarChart3,
-  Zap,
-  ChevronDown,
-  ChevronUp,
-  Sparkles,
-  X,
-  BookOpen,
-  Award,
-  Play,
-} from "lucide-react"
+import { Send, Bot, User, Lightbulb, TrendingUp, Target, MessageSquare, Sparkles, Brain, ArrowLeft } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface Message {
   id: string
-  type: "user" | "assistant"
   content: string
+  sender: "user" | "ai"
   timestamp: Date
-  category?: string
-  suggestedActions?: string[]
-  isExpanded?: boolean
+  type?: "suggestion" | "insight" | "question"
 }
 
-interface UserProfile {
-  email: string
-  name: string
-  preferences: {
-    communicationStyle: string
-    learningStyle: string
-    careerGoals: string[]
-    interests: string[]
-    skillLevel: string
-    timeAvailability: string
-  }
-  conversation_history: {
-    totalMessages: number
-    topics: string[]
-    lastActive: string
-    commonQuestions: string[]
-    progressTracking: Record<string, any>
-  }
-  personality_insights: {
-    strengths: string[]
-    growthAreas: string[]
-    workStyle: string
-    motivators: string[]
-    stressors: string[]
-    communicationPreferences: string[]
-  }
-  career_profile: {
-    experience: string
-    aspirations: string[]
-    skillGaps: string[]
-    networkingStyle: string
-  }
-  learning_profile: {
-    completedBooks: string[]
-    currentReading: string[]
-    preferredFormats: string[]
-    learningPace: string
-    retentionStyle: string
-  }
+interface Suggestion {
+  id: string
+  text: string
+  category: "career" | "skills" | "development"
+  priority: "high" | "medium" | "low"
 }
 
-interface AIInsight {
-  type: "strength" | "opportunity" | "recommendation" | "milestone"
+interface Insight {
+  id: string
   title: string
   description: string
+  category: "personality" | "career" | "skills"
+  confidence: number
   actionable: boolean
-  priority: "high" | "medium" | "low"
-  progress?: number
 }
 
-export default function PersistentAICoach() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false)
-  const [activeTab, setActiveTab] = useState("chat")
+export function PersistentAICoach() {
+  const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
-  const [isTyping, setIsTyping] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [insights, setInsights] = useState<AIInsight[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  const [insights, setInsights] = useState<Insight[]>([])
+  const [activeTab, setActiveTab] = useState("chat")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Initialize component and load user data
+  // Initialize with welcome message and sample data
   useEffect(() => {
-    if (isOpen && !userProfile) {
-      initializeCoach()
+    const welcomeMessage: Message = {
+      id: "1",
+      content:
+        "Hello! I'm your AI Career Coach. I'm here to help you with career guidance, skill development, and professional growth. I can analyze your assessment results, provide personalized recommendations, and help you create action plans. How can I assist you today?",
+      sender: "ai",
+      timestamp: new Date(),
+      type: "question",
     }
-  }, [isOpen])
+    setMessages([welcomeMessage])
+
+    // Sample suggestions based on user profile
+    setSuggestions([
+      {
+        id: "1",
+        text: "Consider developing your leadership skills through online courses or mentorship programs",
+        category: "skills",
+        priority: "high",
+      },
+      {
+        id: "2",
+        text: "Explore networking opportunities in your industry to expand your professional connections",
+        category: "career",
+        priority: "medium",
+      },
+      {
+        id: "3",
+        text: "Set up regular one-on-ones with your manager to discuss career progression",
+        category: "development",
+        priority: "high",
+      },
+      {
+        id: "4",
+        text: "Update your LinkedIn profile to reflect your recent achievements and skills",
+        category: "career",
+        priority: "medium",
+      },
+      {
+        id: "5",
+        text: "Consider pursuing a professional certification in your field",
+        category: "development",
+        priority: "low",
+      },
+    ])
+
+    // Sample insights based on assessment results
+    setInsights([
+      {
+        id: "1",
+        title: "Strong Analytical Thinking",
+        description:
+          "Based on your assessment results, you demonstrate excellent analytical and problem-solving capabilities. This is a valuable asset in leadership roles and strategic positions.",
+        category: "personality",
+        confidence: 92,
+        actionable: true,
+      },
+      {
+        id: "2",
+        title: "Leadership Potential",
+        description:
+          "Your communication style and decision-making approach suggest strong leadership potential. Consider seeking opportunities to lead projects or mentor junior colleagues.",
+        category: "career",
+        confidence: 87,
+        actionable: true,
+      },
+      {
+        id: "3",
+        title: "Collaborative Work Style",
+        description:
+          "You show a preference for collaborative environments and team-based problem solving. This makes you well-suited for cross-functional roles and team leadership positions.",
+        category: "skills",
+        confidence: 89,
+        actionable: true,
+      },
+      {
+        id: "4",
+        title: "Growth Mindset",
+        description:
+          "Your responses indicate a strong growth mindset and willingness to learn. This is crucial for career advancement and adapting to changing industry demands.",
+        category: "personality",
+        confidence: 94,
+        actionable: false,
+      },
+    ])
+  }, [])
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
-    scrollToBottom()
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  const initializeCoach = async () => {
-    try {
-      setIsLoading(true)
-
-      // Load demo user profile
-      const demoProfile: UserProfile = {
-        email: "demo@example.com",
-        name: "Usuario Demo",
-        preferences: {
-          communicationStyle: "professional",
-          learningStyle: "visual",
-          careerGoals: ["liderazgo", "desarrollo profesional"],
-          interests: ["tecnología", "innovación", "gestión"],
-          skillLevel: "intermediate",
-          timeAvailability: "moderate",
-        },
-        conversation_history: {
-          totalMessages: 15,
-          topics: ["liderazgo", "carrera", "habilidades"],
-          lastActive: new Date().toISOString(),
-          commonQuestions: ["¿Cómo mejorar mi liderazgo?", "¿Qué habilidades desarrollar?"],
-          progressTracking: {
-            leadership: {
-              currentLevel: 3,
-              targetLevel: 5,
-              milestones: ["Completar curso de liderazgo", "Liderar proyecto"],
-              completedActions: ["Evaluación inicial"],
-            },
-          },
-        },
-        personality_insights: {
-          strengths: ["Comunicación", "Análisis", "Adaptabilidad"],
-          growthAreas: ["Delegación", "Gestión del tiempo"],
-          workStyle: "colaborativo",
-          motivators: ["Crecimiento profesional", "Impacto positivo"],
-          stressors: ["Plazos ajustados", "Ambigüedad"],
-          communicationPreferences: ["Directo", "Estructurado"],
-        },
-        career_profile: {
-          experience: "5 años",
-          aspirations: ["Gerente de equipo", "Consultor senior"],
-          skillGaps: ["Gestión financiera", "Estrategia empresarial"],
-          networkingStyle: "profesional activo",
-        },
-        learning_profile: {
-          completedBooks: ["El Líder que no Tenía Cargo", "Hábitos Atómicos"],
-          currentReading: ["Thinking, Fast and Slow"],
-          preferredFormats: ["digital", "interactive"],
-          learningPace: "moderate",
-          retentionStyle: "practical",
-        },
-      }
-
-      setUserProfile(demoProfile)
-
-      // Generate initial insights
-      generateInsights(demoProfile)
-
-      // Load conversation history
-      loadConversationHistory()
-
-      // Add welcome message
-      const welcomeMessage: Message = {
-        id: "welcome-1",
-        type: "assistant",
-        content: `¡Hola ${demoProfile.name}! 👋 
-
-Soy tu AI Career Coach personalizado. He analizado tu perfil y veo que tienes ${demoProfile.conversation_history.totalMessages} mensajes previos conmigo.
-
-🎯 **Tu perfil actual:**
-• Objetivos: ${demoProfile.preferences.careerGoals.join(", ")}
-• Fortalezas: ${demoProfile.personality_insights.strengths.slice(0, 3).join(", ")}
-• Experiencia: ${demoProfile.career_profile.experience}
-
-🚀 **¿En qué puedo ayudarte hoy?**`,
-        timestamp: new Date(),
-        category: "welcome",
-        suggestedActions: [
-          "¿Cómo mejorar mi liderazgo?",
-          "Evaluar mis habilidades actuales",
-          "Crear plan de desarrollo",
-          "Recomendar libros personalizados",
-        ],
-        isExpanded: false,
-      }
-
-      setMessages([welcomeMessage])
-    } catch (error) {
-      console.error("Error initializing AI Coach:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const loadConversationHistory = () => {
-    // Simulate loading recent conversation
-    const recentMessages: Message[] = [
-      {
-        id: "history-1",
-        type: "user",
-        content: "¿Cómo puedo mejorar mis habilidades de liderazgo?",
-        timestamp: new Date(Date.now() - 3600000), // 1 hour ago
-        category: "career",
-        isExpanded: false,
-      },
-      {
-        id: "history-2",
-        type: "assistant",
-        content:
-          "Excelente pregunta sobre liderazgo. Basado en tu perfil, te recomiendo enfocarte en tres áreas clave: comunicación efectiva, delegación estratégica y desarrollo de equipos. ¿Te gustaría profundizar en alguna de estas áreas específicamente?",
-        timestamp: new Date(Date.now() - 3590000),
-        category: "career",
-        suggestedActions: ["Comunicación efectiva", "Delegación estratégica", "Desarrollo de equipos"],
-        isExpanded: false,
-      },
-    ]
-
-    // Don't add history messages to avoid duplication with welcome message
-    // setMessages(prev => [...recentMessages, ...prev])
-  }
-
-  const generateInsights = (profile: UserProfile) => {
-    const generatedInsights: AIInsight[] = [
-      {
-        type: "strength",
-        title: "Fortalezas Clave Identificadas",
-        description: `Tus principales fortalezas son ${profile.personality_insights.strengths.join(
-          ", ",
-        )}. Estas habilidades te posicionan bien para roles de liderazgo.`,
-        actionable: true,
-        priority: "high",
-        progress: 85,
-      },
-      {
-        type: "opportunity",
-        title: "Áreas de Crecimiento",
-        description: `Enfócate en desarrollar ${profile.personality_insights.growthAreas.join(
-          " y ",
-        )} para maximizar tu potencial de liderazgo.`,
-        actionable: true,
-        priority: "medium",
-        progress: 45,
-      },
-      {
-        type: "recommendation",
-        title: "Plan de Desarrollo Personalizado",
-        description: `Basado en tus objetivos de ${profile.preferences.careerGoals.join(
-          " y ",
-        )}, te recomiendo un enfoque estructurado en 3 fases.`,
-        actionable: true,
-        priority: "high",
-        progress: 30,
-      },
-      {
-        type: "milestone",
-        title: "Progreso en Liderazgo",
-        description: "Has completado el 60% de tu plan de desarrollo en liderazgo. ¡Excelente progreso!",
-        actionable: false,
-        priority: "low",
-        progress: 60,
-      },
-    ]
-
-    setInsights(generatedInsights)
-  }
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, 100)
-  }
-
   const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isTyping) return
+    if (!inputMessage.trim() || isLoading) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      type: "user",
-      content: inputMessage.trim(),
+      content: inputMessage,
+      sender: "user",
       timestamp: new Date(),
-      isExpanded: false,
     }
 
     setMessages((prev) => [...prev, userMessage])
-    const currentInput = inputMessage.trim()
     setInputMessage("")
-    setIsTyping(true)
+    setIsLoading(true)
 
-    try {
-      // Simulate AI response
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      const aiResponse = generateAIResponse(currentInput, userProfile)
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "assistant",
-        content: aiResponse.content,
-        timestamp: new Date(),
-        category: aiResponse.category,
-        suggestedActions: aiResponse.suggestedActions,
-        isExpanded: false,
-      }
-
-      setMessages((prev) => [...prev, assistantMessage])
-
-      // Update conversation history
-      if (userProfile) {
-        setUserProfile({
-          ...userProfile,
-          conversation_history: {
-            ...userProfile.conversation_history,
-            totalMessages: userProfile.conversation_history.totalMessages + 1,
-            lastActive: new Date().toISOString(),
-            topics: [...new Set([...userProfile.conversation_history.topics, aiResponse.category])],
-          },
-        })
-      }
-    } catch (error) {
-      console.error("Error sending message:", error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "assistant",
-        content: "Lo siento, hubo un error procesando tu mensaje. Por favor intenta de nuevo.",
-        timestamp: new Date(),
-        suggestedActions: ["Intentar de nuevo", "Reformular pregunta"],
-        isExpanded: false,
-      }
-      setMessages((prev) => [...prev, errorMessage])
-    } finally {
-      setIsTyping(false)
-    }
+    // Simulate AI response with more realistic delay
+    setTimeout(
+      () => {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: generateAIResponse(inputMessage),
+          sender: "ai",
+          timestamp: new Date(),
+        }
+        setMessages((prev) => [...prev, aiResponse])
+        setIsLoading(false)
+      },
+      1500 + Math.random() * 1000,
+    ) // 1.5-2.5 second delay
   }
 
-  const generateAIResponse = (input: string, profile: UserProfile | null) => {
-    const lowerInput = input.toLowerCase()
+  const generateAIResponse = (userInput: string): string => {
+    const lowerInput = userInput.toLowerCase()
 
-    if (lowerInput.includes("liderazgo") || lowerInput.includes("líder")) {
-      return {
-        content: `Excelente pregunta sobre liderazgo, ${profile?.name || "Usuario"}! 
-
-Basado en tu perfil y experiencia de ${profile?.career_profile.experience || "varios años"}, te recomiendo enfocarte en:
-
-🎯 **Áreas prioritarias:**
-• **Comunicación efectiva**: Desarrolla tu capacidad de transmitir visión y motivar equipos
-• **Delegación estratégica**: Aprende a empoderar a tu equipo mientras mantienes el control
-• **Inteligencia emocional**: Fortalece tu capacidad de leer y gestionar emociones
-
-📚 **Recursos recomendados:**
-• Libro: "El Líder que no Tenía Cargo" (ya en tu lista de lectura)
-• Test: Evaluación de Inteligencia Emocional
-• Práctica: Liderar un proyecto pequeño esta semana
-
-¿Te gustaría profundizar en alguna de estas áreas específicamente?`,
-        category: "liderazgo",
-        suggestedActions: [
-          "Comunicación efectiva",
-          "Delegación estratégica",
-          "Inteligencia emocional",
-          "Evaluar mi estilo de liderazgo",
-        ],
-      }
+    // Career-related responses
+    if (lowerInput.includes("career") || lowerInput.includes("job") || lowerInput.includes("promotion")) {
+      return "Great question about career development! Based on your profile, I'd recommend focusing on three key areas: 1) Building your leadership skills through stretch assignments, 2) Expanding your network within and outside your organization, and 3) Developing expertise in emerging technologies relevant to your field. Would you like me to elaborate on any of these areas?"
     }
 
-    if (lowerInput.includes("habilidad") || lowerInput.includes("skill")) {
-      return {
-        content: `Perfecto, hablemos de desarrollo de habilidades! 💪
-
-**Tus fortalezas actuales:**
-${profile?.personality_insights.strengths.map((s) => `• ${s}`).join("\n") || "• Por evaluar"}
-
-**Áreas de crecimiento identificadas:**
-${profile?.personality_insights.growthAreas.map((g) => `• ${g}`).join("\n") || "• Por evaluar"}
-
-**Plan de acción recomendado:**
-1. **Evaluación completa**: Completa los tests pendientes para un análisis más preciso
-2. **Enfoque 80/20**: Concentra el 80% de tu tiempo en desarrollar 2-3 habilidades clave
-3. **Práctica deliberada**: Dedica 30 minutos diarios a practicar una habilidad específica
-
-¿Qué habilidad específica te gustaría desarrollar primero?`,
-        category: "habilidades",
-        suggestedActions: [
-          "Evaluar todas mis habilidades",
-          "Crear plan de desarrollo",
-          "Comenzar con comunicación",
-          "Enfocarse en liderazgo",
-        ],
-      }
+    // Skills development responses
+    if (lowerInput.includes("skill") || lowerInput.includes("learn") || lowerInput.includes("develop")) {
+      return "Skill development is crucial for career growth! Your assessment results show strong analytical abilities, which is excellent. I'd suggest focusing on complementary skills like communication, project management, and strategic thinking. Consider online courses, workshops, or finding a mentor in these areas. What specific skills are you most interested in developing?"
     }
 
-    if (lowerInput.includes("carrera") || lowerInput.includes("trabajo") || lowerInput.includes("profesional")) {
-      return {
-        content: `¡Excelente momento para planificar tu carrera! 🚀
-
-**Tu situación actual:**
-• Experiencia: ${profile?.career_profile.experience || "Por definir"}
-• Aspiraciones: ${profile?.career_profile.aspirations.join(", ") || "Por explorar"}
-• Objetivos: ${profile?.preferences.careerGoals.join(", ") || "Por definir"}
-
-**Recomendaciones personalizadas:**
-1. **Análisis de brechas**: Identifica las habilidades necesarias para tus aspiraciones
-2. **Networking estratégico**: Conecta con profesionales en tu área objetivo
-3. **Desarrollo continuo**: Mantén tus habilidades actualizadas y relevantes
-
-**Próximos pasos sugeridos:**
-• Completa tu perfil profesional con más detalles
-• Define objetivos SMART para los próximos 6 meses
-• Identifica mentores en tu industria
-
-¿Te gustaría que creemos un plan de carrera específico para ti?`,
-        category: "carrera",
-        suggestedActions: [
-          "Crear plan de carrera",
-          "Analizar brechas de habilidades",
-          "Estrategia de networking",
-          "Definir objetivos SMART",
-        ],
-      }
+    // Assessment-related responses
+    if (lowerInput.includes("test") || lowerInput.includes("assessment") || lowerInput.includes("result")) {
+      return "Your assessment results provide valuable insights into your work style and preferences. They show you have strong problem-solving abilities and work well in collaborative environments. These strengths position you well for leadership roles. I can help you understand how to leverage these insights for career planning. Which aspect of your results would you like to explore further?"
     }
 
-    if (lowerInput.includes("libro") || lowerInput.includes("leer") || lowerInput.includes("lectura")) {
-      return {
-        content: `¡Me encanta que quieras seguir aprendiendo! 📚
-
-**Libros en tu lista actual:**
-${profile?.learning_profile.completedBooks.map((book) => `✅ ${book}`).join("\n") || "• Ninguno aún"}
-
-**Leyendo actualmente:**
-${profile?.learning_profile.currentReading.map((book) => `📖 ${book}`).join("\n") || "• Ninguno"}
-
-**Recomendaciones personalizadas basadas en tus objetivos:**
-• **"Radical Candor"** - Para mejorar comunicación y liderazgo
-• **"The First 90 Days"** - Perfecto para transiciones profesionales
-• **"Multipliers"** - Sobre cómo ser un líder que potencia a otros
-• **"Emotional Intelligence 2.0"** - Para desarrollar inteligencia emocional
-
-¿Te interesa alguno de estos libros en particular?`,
-        category: "lectura",
-        suggestedActions: ["Ver biblioteca completa", "Radical Candor", "The First 90 Days", "Crear plan de lectura"],
-      }
+    // Leadership responses
+    if (lowerInput.includes("leader") || lowerInput.includes("manage") || lowerInput.includes("team")) {
+      return "Leadership is a key area where you show great potential! Your communication style and collaborative approach are strong foundations. To develop further, consider: 1) Seeking feedback from team members, 2) Taking on cross-functional projects, 3) Finding a leadership mentor, and 4) Practicing active listening and delegation skills. What leadership challenges are you currently facing?"
     }
 
-    // Default response
-    return {
-      content: `Gracias por tu pregunta, ${profile?.name || "Usuario"}! 
-
-Como tu AI Career Coach personalizado, estoy aquí para ayudarte con:
-
-🎯 **Desarrollo profesional**
-• Planificación de carrera
-• Identificación de fortalezas y áreas de mejora
-• Estrategias de crecimiento
-
-📚 **Aprendizaje continuo**
-• Recomendaciones de libros personalizadas
-• Planes de desarrollo de habilidades
-• Recursos de formación
-
-🧠 **Evaluaciones psicométricas**
-• Tests de personalidad y habilidades
-• Análisis de resultados
-• Aplicación práctica de insights
-
-¿En qué área específica te gustaría que te ayude hoy?`,
-      category: "general",
-      suggestedActions: [
-        "Planificar mi carrera",
-        "Evaluar mis habilidades",
-        "Recomendar libros",
-        "Hacer un test de personalidad",
-      ],
+    // Networking responses
+    if (lowerInput.includes("network") || lowerInput.includes("connect") || lowerInput.includes("relationship")) {
+      return "Networking is essential for career growth! Here are some strategies tailored to your profile: 1) Attend industry conferences and meetups, 2) Engage actively on LinkedIn with thoughtful comments and posts, 3) Reach out to alumni from your school, 4) Join professional associations in your field. Quality connections are more valuable than quantity. What networking goals would you like to set?"
     }
+
+    // Default responses
+    const defaultResponses = [
+      "That's an excellent question! Based on your assessment results and career profile, I can see several opportunities for growth. Your analytical strengths and collaborative nature are valuable assets. Let me help you create a specific action plan. What's your primary career goal right now?",
+      "I understand your concern, and it's something many professionals face. Your assessment shows you have the capabilities to overcome this challenge. Let's break it down into manageable steps and create a development plan that leverages your strengths.",
+      "This is a great area to focus on! Your personality profile suggests you'd excel in this direction. I recommend starting with small, achievable goals and building momentum. What specific outcome are you hoping to achieve?",
+      "Based on your results, you have strong potential in this area. I'd suggest combining your natural strengths with targeted skill development. Let's explore some specific strategies that align with your work style and career aspirations.",
+    ]
+
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)]
   }
 
-  const handleSuggestedAction = (action: string) => {
-    setInputMessage(action)
-    // Auto-send the suggested action
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    const message: Message = {
+      id: Date.now().toString(),
+      content: `Tell me more about: ${suggestion.text}`,
+      sender: "user",
+      timestamp: new Date(),
+    }
+    setMessages((prev) => [...prev, message])
+    setActiveTab("chat")
+
+    // Auto-generate AI response for the suggestion
     setTimeout(() => {
-      handleSendMessage()
-    }, 100)
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: generateSuggestionResponse(suggestion),
+        sender: "ai",
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, aiResponse])
+    }, 1000)
   }
 
-  const toggleMessageExpansion = (messageId: string) => {
-    setMessages((prev) => prev.map((msg) => (msg.id === messageId ? { ...msg, isExpanded: !msg.isExpanded } : msg)))
+  const generateSuggestionResponse = (suggestion: Suggestion): string => {
+    switch (suggestion.category) {
+      case "skills":
+        return "Excellent choice! Leadership skills are crucial for career advancement. I recommend starting with these specific actions: 1) Volunteer to lead a small project or initiative, 2) Take an online leadership course (I can recommend some), 3) Find a mentor who exemplifies the leadership style you admire, 4) Practice giving presentations to build confidence. Would you like me to help you create a 90-day leadership development plan?"
+
+      case "career":
+        return "Networking is one of the most effective career strategies! Here's a practical approach: 1) Set a goal to make 2-3 new professional connections per month, 2) Attend industry events or virtual meetups, 3) Engage meaningfully on LinkedIn by commenting on posts in your field, 4) Reach out to colleagues for informational interviews. Your collaborative nature will be a huge asset in networking. What industry events or groups interest you most?"
+
+      case "development":
+        return "Regular check-ins with your manager are incredibly valuable for career growth! Here's how to make them most effective: 1) Prepare an agenda with your goals and challenges, 2) Ask for specific feedback on your performance, 3) Discuss your career aspirations and get their input, 4) Request stretch assignments or new responsibilities. Your analytical skills will help you prepare well for these conversations. When was your last meaningful career conversation with your manager?"
+
+      default:
+        return "That's a great area to focus on! Based on your profile, you have the right foundation to succeed in this. Let me help you create a specific action plan with measurable goals and timelines. What's your biggest challenge in this area right now?"
+    }
   }
 
-  const truncateContent = (content: string, maxLength = 300) => {
-    if (content.length <= maxLength) return content
-    return content.substring(0, maxLength) + "..."
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return "bg-destructive/10 text-destructive border-destructive/20"
+      case "medium":
+        return "bg-muted text-mutedForeground border-border"
+      case "low":
+        return "bg-secondary text-secondaryForeground border-border"
+      default:
+        return "bg-muted text-mutedForeground border-border"
+    }
   }
 
-  const openCoach = () => {
-    setIsOpen(true)
-    setUnreadCount(0)
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "career":
+        return Target
+      case "skills":
+        return TrendingUp
+      case "development":
+        return Lightbulb
+      case "personality":
+        return Brain
+      default:
+        return MessageSquare
+    }
   }
 
-  const renderMessage = (message: Message) => {
-    const isLongMessage = message.content.length > 300
-    const shouldTruncate = isLongMessage && !message.isExpanded
-
-    return (
-      <div key={message.id} className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}>
-        {message.type === "assistant" && (
-          <Avatar className="w-8 h-8 bg-blue-100 flex-shrink-0">
-            <AvatarFallback>
-              <Brain className="w-4 h-4 text-blue-600" />
-            </AvatarFallback>
-          </Avatar>
-        )}
-
-        <div className={`max-w-[85%] ${message.type === "user" ? "order-first" : ""}`}>
-          <div
-            className={`p-3 rounded-lg ${
-              message.type === "user" ? "bg-blue-600 text-white ml-auto" : "bg-gray-100 text-gray-900"
-            }`}
-          >
-            <div className="text-sm whitespace-pre-wrap">
-              {shouldTruncate ? truncateContent(message.content) : message.content}
-            </div>
-
-            {isLongMessage && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleMessageExpansion(message.id)}
-                className={`mt-2 p-1 h-auto text-xs ${
-                  message.type === "user" ? "text-blue-100 hover:text-white" : "text-gray-600"
-                }`}
-              >
-                {message.isExpanded ? (
-                  <>
-                    <ChevronUp className="w-3 h-3 mr-1" />
-                    Mostrar menos
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="w-3 h-3 mr-1" />
-                    Mostrar más
-                  </>
-                )}
-              </Button>
-            )}
-          </div>
-
-          {message.category && message.type === "assistant" && (
-            <Badge variant="secondary" className="mt-1 text-xs">
-              {message.category}
-            </Badge>
-          )}
-
-          {message.suggestedActions && message.suggestedActions.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {message.suggestedActions.slice(0, 4).map((action, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSuggestedAction(action)}
-                  className="text-xs h-7 bg-white hover:bg-gray-50"
-                >
-                  {action}
-                </Button>
-              ))}
-            </div>
-          )}
-
-          <div className="text-xs text-gray-500 mt-1">{message.timestamp.toLocaleTimeString()}</div>
-        </div>
-
-        {message.type === "user" && (
-          <Avatar className="w-8 h-8 bg-green-100 flex-shrink-0">
-            <AvatarFallback>
-              <User className="w-4 h-4 text-green-600" />
-            </AvatarFallback>
-          </Avatar>
-        )}
-      </div>
-    )
-  }
-
-  const renderInsights = () => (
-    <div className="space-y-4 p-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-5 h-5 text-yellow-500" />
-        <h3 className="font-semibold">Insights Personalizados</h3>
-      </div>
-
-      {insights.map((insight, index) => (
-        <Card key={index} className="border-l-4 border-l-blue-500">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2">
-                {insight.type === "strength" && <Star className="w-4 h-4 text-yellow-500" />}
-                {insight.type === "opportunity" && <Target className="w-4 h-4 text-blue-500" />}
-                {insight.type === "recommendation" && <Lightbulb className="w-4 h-4 text-green-500" />}
-                {insight.type === "milestone" && <TrendingUp className="w-4 h-4 text-purple-500" />}
-                <h4 className="font-medium text-sm">{insight.title}</h4>
-              </div>
-              <Badge
-                variant={
-                  insight.priority === "high" ? "destructive" : insight.priority === "medium" ? "default" : "secondary"
-                }
-                className="text-xs"
-              >
-                {insight.priority}
-              </Badge>
-            </div>
-
-            <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
-
-            {insight.progress !== undefined && (
-              <div className="mb-3">
-                <div className="flex justify-between text-xs text-gray-600 mb-1">
-                  <span>Progreso</span>
-                  <span>{insight.progress}%</span>
-                </div>
-                <Progress value={insight.progress} className="h-2" />
-              </div>
-            )}
-
-            {insight.actionable && (
-              <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                <Play className="w-3 h-3 mr-1" />
-                Tomar Acción
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      ))}
-
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Brain className="w-4 h-4 text-blue-600" />
-            <span className="font-medium text-sm text-blue-900">IA Personalizada Activa</span>
-          </div>
-          <p className="text-xs text-blue-800 mb-2">
-            Estos insights se actualizan automáticamente basándose en tu progreso y conversaciones.
-          </p>
-          <div className="text-xs text-blue-700 font-medium">
-            🧠 Memoria persistente: {userProfile?.conversation_history.totalMessages || 0} interacciones analizadas
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-
-  const renderProfile = () => (
-    <div className="space-y-4 p-4">
-      {userProfile ? (
-        <>
-          <div className="text-center">
-            <Avatar className="w-16 h-16 mx-auto mb-3 bg-blue-100">
-              <AvatarFallback className="text-lg font-semibold text-blue-600">
-                {userProfile.name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <h3 className="font-semibold text-lg">{userProfile.name}</h3>
-            <p className="text-sm text-gray-600">{userProfile.email}</p>
-            <Badge variant="secondary" className="mt-1">
-              Usuario Demo
-            </Badge>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Card>
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <BarChart3 className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium">Nivel</span>
-                </div>
-                <Badge variant="secondary">{userProfile.preferences.skillLevel}</Badge>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-4 h-4 text-green-500" />
-                  <span className="text-sm font-medium">Tiempo</span>
-                </div>
-                <Badge variant="secondary">{userProfile.preferences.timeAvailability}</Badge>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Target className="w-4 h-4" />
-                Objetivos de Carrera
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex flex-wrap gap-1">
-                {userProfile.preferences.careerGoals.map((goal, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {goal}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Zap className="w-4 h-4" />
-                Fortalezas
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex flex-wrap gap-1">
-                {userProfile.personality_insights.strengths.map((strength, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {strength}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <BookOpen className="w-4 h-4" />
-                Libros Completados
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-1">
-                {userProfile.learning_profile.completedBooks.map((book, index) => (
-                  <div key={index} className="text-xs text-gray-600 flex items-center gap-1">
-                    <Award className="w-3 h-3 text-green-500" />
-                    {book}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
-                Estadísticas
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Mensajes:</span>
-                <span className="font-medium">{userProfile.conversation_history.totalMessages}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Temas explorados:</span>
-                <span className="font-medium">{userProfile.conversation_history.topics.length}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Libros leídos:</span>
-                <span className="font-medium">{userProfile.learning_profile.completedBooks.length}</span>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      ) : (
-        <div className="text-center py-8">
-          <User className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-          <p className="text-sm text-gray-500">Perfil no disponible</p>
-          <p className="text-xs text-gray-400 mt-1">Inicia sesión para ver tu perfil personalizado</p>
-        </div>
-      )}
-    </div>
-  )
-
-  if (!isOpen) {
-    return (
-      <Button
-        onClick={openCoach}
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 z-50 transition-all duration-300 hover:scale-110"
-        size="icon"
-      >
-        <Brain className="h-7 w-7 text-white" />
-        {unreadCount > 0 && (
-          <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center bg-red-500 text-white text-xs animate-pulse">
-            {unreadCount}
-          </Badge>
-        )}
-      </Button>
-    )
-  }
+  const quickStartQuestions = [
+    "How can I advance in my current role?",
+    "What skills should I develop next?",
+    "Help me understand my assessment results",
+    "How can I improve my leadership abilities?",
+    "What career paths suit my personality?",
+    "How do I build a professional network?",
+  ]
 
   return (
-    <Card
-      className={`fixed bottom-6 right-6 shadow-2xl z-50 flex flex-col transition-all duration-300 ${
-        isMinimized ? "w-80 h-16" : "w-[450px] h-[700px]"
-      }`}
-    >
-      <CardHeader className="flex-shrink-0 pb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Brain className="h-5 w-5" />
-            AI Career Coach
-            <Badge className="bg-white/20 text-white text-xs">Demo</Badge>
-            {isTyping && <span className="text-sm animate-pulse">escribiendo...</span>}
-          </CardTitle>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="h-8 w-8 text-white hover:bg-white/20"
-            >
-              {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(false)}
-              className="h-8 w-8 text-white hover:bg-white/20"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-muted">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+          <Badge variant="secondary" className="bg-muted text-mutedForeground">
+            <Bot className="h-3 w-3 mr-1" />
+            AI Powered
+          </Badge>
         </div>
-      </CardHeader>
+        <h1 className="text-3xl font-bold text-foreground mb-2">AI Career Coach</h1>
+        <p className="text-mutedForeground">
+          Get personalized career guidance, insights, and actionable recommendations based on your unique profile and
+          assessment results.
+        </p>
+      </div>
 
-      {!isMinimized && (
-        <CardContent className="flex-1 min-h-0 p-0">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <Brain className="w-8 h-8 text-blue-500 animate-pulse mx-auto mb-2" />
-                <p className="text-sm text-gray-600">Inicializando AI Coach...</p>
-              </div>
-            </div>
-          ) : (
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-              <TabsList className="grid w-full grid-cols-3 mx-4 mt-4">
-                <TabsTrigger value="chat" className="text-sm">
-                  <MessageCircle className="h-4 w-4 mr-1" />
-                  Chat
-                </TabsTrigger>
-                <TabsTrigger value="insights" className="text-sm">
-                  <Sparkles className="h-4 w-4 mr-1" />
-                  Insights
-                </TabsTrigger>
-                <TabsTrigger value="profile" className="text-sm">
-                  <User className="h-4 w-4 mr-1" />
-                  Perfil
-                </TabsTrigger>
-              </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-muted">
+          <TabsTrigger value="chat" className="data-[state=active]:bg-background">
+            <MessageSquare className="h-4 w-4 mr-2" />
+            Chat ({messages.length})
+          </TabsTrigger>
+          <TabsTrigger value="suggestions" className="data-[state=active]:bg-background">
+            <Lightbulb className="h-4 w-4 mr-2" />
+            Suggestions ({suggestions.length})
+          </TabsTrigger>
+          <TabsTrigger value="insights" className="data-[state=active]:bg-background">
+            <Sparkles className="h-4 w-4 mr-2" />
+            Insights ({insights.length})
+          </TabsTrigger>
+        </TabsList>
 
-              <TabsContent value="chat" className="flex-1 flex flex-col m-0 min-h-0 overflow-hidden">
-                <ScrollArea className="flex-1 px-4 max-h-full overflow-y-auto">
-                  <div className="space-y-4 py-4 min-h-0">
-                    {messages.length === 0 ? (
-                      <div className="text-center text-gray-500 py-8">
-                        <Brain className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                        <p className="text-sm">¡Hola! Soy tu AI Career Coach.</p>
-                        <p className="text-xs mt-1">¿En qué puedo ayudarte hoy?</p>
-                      </div>
-                    ) : (
-                      messages.map(renderMessage)
-                    )}
-
-                    {isTyping && (
-                      <div className="flex gap-3 justify-start">
-                        <Avatar className="w-8 h-8 bg-blue-100">
-                          <AvatarFallback>
-                            <Brain className="w-4 h-4 text-blue-600" />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="bg-gray-100 p-3 rounded-lg">
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div
-                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                              style={{ animationDelay: "0.1s" }}
-                            ></div>
-                            <div
-                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                              style={{ animationDelay: "0.2s" }}
-                            ></div>
+        <TabsContent value="chat" className="mt-6">
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="flex items-center text-foreground">
+                <Bot className="h-5 w-5 mr-2" />
+                Career Coaching Session
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-96 mb-4 pr-4">
+                <div className="space-y-4">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-lg p-4 ${
+                          message.sender === "user"
+                            ? "bg-foreground text-background"
+                            : "bg-muted text-foreground border border-border"
+                        }`}
+                      >
+                        <div className="flex items-start space-x-3">
+                          {message.sender === "ai" && <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />}
+                          {message.sender === "user" && <User className="h-4 w-4 mt-0.5 flex-shrink-0" />}
+                          <div className="flex-1">
+                            <p className="text-sm leading-relaxed">{message.content}</p>
+                            <p
+                              className={`text-xs mt-2 ${
+                                message.sender === "user" ? "text-background/70" : "text-mutedForeground"
+                              }`}
+                            >
+                              {message.timestamp.toLocaleTimeString()}
+                            </p>
                           </div>
                         </div>
                       </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                  </div>
-                </ScrollArea>
+                    </div>
+                  ))}
+                  {isLoading && (
+                    <div className="flex justify-start">
+                      <div className="bg-muted border border-border rounded-lg p-4 max-w-[80%]">
+                        <div className="flex items-center space-x-3">
+                          <Bot className="h-4 w-4" />
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"></div>
+                            <div
+                              className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"
+                              style={{ animationDelay: "0.1s" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
+                          </div>
+                          <span className="text-sm text-mutedForeground">AI is thinking...</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div ref={messagesEndRef} />
+              </ScrollArea>
 
-                <div className="p-4 border-t">
-                  <div className="flex gap-2">
-                    <Input
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      placeholder="Escribe tu mensaje..."
-                      onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      disabled={isTyping}
-                      className="text-sm"
-                    />
-                    <Button
-                      onClick={handleSendMessage}
-                      disabled={!inputMessage.trim() || isTyping}
-                      size="sm"
-                      className="px-3"
-                    >
-                      <Send className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-2">
-                    Presiona Enter para enviar • {inputMessage.length}/500
+              {/* Quick Start Questions */}
+              {messages.length <= 1 && (
+                <div className="mb-4">
+                  <p className="text-sm text-mutedForeground mb-3">Quick start questions:</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {quickStartQuestions.map((question, index) => (
+                      <Button
+                        key={index}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setInputMessage(question)}
+                        className="text-left justify-start h-auto p-3 border-border hover:bg-muted"
+                      >
+                        <MessageSquare className="h-3 w-3 mr-2 flex-shrink-0" />
+                        <span className="text-xs">{question}</span>
+                      </Button>
+                    ))}
                   </div>
                 </div>
-              </TabsContent>
+              )}
 
-              <TabsContent value="insights" className="flex-1 m-0 overflow-hidden">
-                <ScrollArea className="h-full">{renderInsights()}</ScrollArea>
-              </TabsContent>
+              <div className="flex space-x-2">
+                <Textarea
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder="Ask me about your career, skills, or professional development..."
+                  className="flex-1 min-h-[60px] resize-none border-border focus:border-foreground"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSendMessage()
+                    }
+                  }}
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim() || isLoading}
+                  className="bg-foreground text-background hover:bg-foreground/90"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-              <TabsContent value="profile" className="flex-1 m-0 overflow-hidden">
-                <ScrollArea className="h-full">{renderProfile()}</ScrollArea>
-              </TabsContent>
-            </Tabs>
-          )}
-        </CardContent>
-      )}
-    </Card>
+        <TabsContent value="suggestions" className="mt-6">
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="flex items-center text-foreground">
+                <Lightbulb className="h-5 w-5 mr-2" />
+                Personalized Suggestions
+              </CardTitle>
+              <p className="text-sm text-mutedForeground mt-2">
+                AI-generated recommendations based on your assessment results and career profile
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {suggestions.map((suggestion) => {
+                  const IconComponent = getCategoryIcon(suggestion.category)
+                  return (
+                    <div
+                      key={suggestion.id}
+                      className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start space-x-3 flex-1">
+                          <IconComponent className="h-5 w-5 text-foreground mt-0.5" />
+                          <div className="flex-1">
+                            <p className="text-foreground font-medium mb-2">{suggestion.text}</p>
+                            <div className="flex items-center space-x-2">
+                              <Badge variant="secondary" className="bg-muted text-mutedForeground">
+                                {suggestion.category}
+                              </Badge>
+                              <Badge className={getPriorityColor(suggestion.priority)}>
+                                {suggestion.priority} priority
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-border hover:bg-muted ml-4 bg-transparent"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleSuggestionClick(suggestion)
+                          }}
+                        >
+                          Discuss
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="insights" className="mt-6">
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="flex items-center text-foreground">
+                <Sparkles className="h-5 w-5 mr-2" />
+                AI-Generated Insights
+              </CardTitle>
+              <p className="text-sm text-mutedForeground mt-2">
+                Deep analysis of your assessment results and professional profile
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {insights.map((insight) => {
+                  const IconComponent = getCategoryIcon(insight.category)
+                  return (
+                    <div
+                      key={insight.id}
+                      className="border border-border rounded-lg p-6 hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-start space-x-4">
+                        <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="h-5 w-5 text-foreground" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-3">
+                            <h3 className="font-semibold text-foreground text-lg">{insight.title}</h3>
+                            <div className="flex items-center space-x-2">
+                              <Badge variant="secondary" className="bg-muted text-mutedForeground">
+                                {insight.category}
+                              </Badge>
+                              {insight.actionable && (
+                                <Badge className="bg-foreground/10 text-foreground border-foreground/20">
+                                  Actionable
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <p className="text-mutedForeground mb-4 leading-relaxed">{insight.description}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm text-mutedForeground">Confidence:</span>
+                              <Progress value={insight.confidence} className="w-24 h-2" />
+                              <span className="text-sm font-medium text-foreground">{insight.confidence}%</span>
+                            </div>
+                            {insight.actionable && (
+                              <Button
+                                size="sm"
+                                onClick={() => {
+                                  const message = `How can I leverage my ${insight.title.toLowerCase()} for career growth?`
+                                  setInputMessage(message)
+                                  setActiveTab("chat")
+                                }}
+                                className="bg-foreground text-background hover:bg-foreground/90"
+                              >
+                                Create Action Plan
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 }
+
+export default PersistentAICoach

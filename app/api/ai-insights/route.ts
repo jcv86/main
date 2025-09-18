@@ -1,166 +1,138 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
+import { createClient } from "@/lib/supabase"
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const userEmail = searchParams.get("userEmail") || "demo@example.com"
+    const email = searchParams.get("email")
 
-    console.log("🔍 Generating AI insights for:", userEmail)
-
-    // Get user's test results
-    const { data: testResults, error } = await supabase
-      .from("test_results")
-      .select("*")
-      .eq("user_email", userEmail)
-      .order("completed_at", { ascending: false })
-
-    if (error) {
-      console.error("❌ Error fetching test results:", error)
-      throw error
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    console.log("📊 Found test results:", testResults?.length || 0)
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from("ai_insights")
+      .select("*")
+      .eq("user_email", email)
+      .order("created_at", { ascending: false })
 
-    // Generate comprehensive insights
-    const insights = generateComprehensiveInsights(testResults || [], userEmail)
+    if (error) {
+      console.error("Error fetching insights:", error)
+      return NextResponse.json({ error: "Failed to fetch insights" }, { status: 500 })
+    }
 
-    return NextResponse.json({
-      success: true,
-      insights,
-      testCount: testResults?.length || 0,
-      generatedAt: new Date().toISOString(),
-    })
+    // Transform data to match AIInsight interface
+    const insights = data.map((insight) => ({
+      id: insight.id.toString(),
+      type: insight.type,
+      title: insight.title,
+      description: insight.description,
+      priority: insight.priority,
+      progress: insight.progress,
+      actionable: insight.actionable,
+      category: insight.category,
+      createdAt: insight.created_at,
+      updatedAt: insight.updated_at,
+    }))
+
+    return NextResponse.json(insights)
   } catch (error) {
-    console.error("❌ Error generating insights:", error)
-
-    // Return fallback insights
-    return NextResponse.json({
-      success: false,
-      insights: getFallbackInsights(),
-      testCount: 0,
-      generatedAt: new Date().toISOString(),
-      fallback: true,
-    })
+    console.error("Error in insights API:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { testType, results, responses } = await request.json()
+    const body = await request.json()
+    const { userEmail, type, title, description, priority, progress, actionable, category } = body
 
-    // Create a comprehensive prompt based on test results
-    const prompt = `
-Analiza los siguientes resultados de evaluación de habilidades blandas y proporciona insights personalizados:
-
-Tipo de Test: ${testType}
-Resultados: ${JSON.stringify(results)}
-Respuestas del usuario: ${JSON.stringify(responses)}
-
-Por favor proporciona:
-1. Un análisis detallado de las fortalezas principales
-2. Áreas de mejora identificadas
-3. Recomendaciones específicas y accionables
-4. Un plan de desarrollo personalizado
-
-Responde en formato JSON con la siguiente estructura:
-{
-  "insights": [
-    {
-      "category": "Fortalezas",
-      "title": "Título del insight",
-      "description": "Descripción detallada",
-      "confidence": 0.9,
-      "priority": "high"
+    if (!userEmail || !type || !title || !description) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
-  ],
-  "recommendations": [
-    {
-      "title": "Título de la recomendación",
-      "description": "Descripción de la acción",
-      "timeframe": "corto plazo",
-      "difficulty": "fácil"
+
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from("ai_insights")
+      .insert({
+        user_email: userEmail,
+        type,
+        title,
+        description,
+        priority: priority || "medium",
+        progress: progress || null,
+        actionable: actionable || false,
+        category: category || null,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Error creating insight:", error)
+      return NextResponse.json({ error: "Failed to create insight" }, { status: 500 })
     }
-  ],
-  "developmentPlan": {
-    "shortTerm": ["Acción 1", "Acción 2"],
-    "mediumTerm": ["Acción 3", "Acción 4"],
-    "longTerm": ["Acción 5", "Acción 6"]
+
+    return NextResponse.json(data, { status: 201 })
+  } catch (error) {
+    console.error("Error in insight creation:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
-`
 
-    const { text } = await generateText({
-      model: openai("gpt-4o"),
-      prompt,
-      temperature: 0.7,
-    })
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { id, ...updates } = body
 
-    // Try to parse the AI response as JSON
-    let aiInsights
-    try {
-      aiInsights = JSON.parse(text)
-    } catch (parseError) {
-      // Fallback if AI doesn't return valid JSON
-      aiInsights = {
-        insights: [
-          {
-            category: "Análisis General",
-            title: "Perfil de Habilidades Blandas",
-            description: text.substring(0, 500) + "...",
-            confidence: 0.8,
-            priority: "medium",
-          },
-        ],
-        recommendations: [
-          {
-            title: "Desarrollo Continuo",
-            description:
-              "Continúa trabajando en el desarrollo de tus habilidades blandas a través de práctica constante y feedback.",
-            timeframe: "mediano plazo",
-            difficulty: "moderado",
-          },
-        ],
-        developmentPlan: {
-          shortTerm: ["Autoevaluación regular", "Práctica diaria"],
-          mediumTerm: ["Buscar feedback", "Participar en proyectos colaborativos"],
-          longTerm: ["Mentoring", "Liderazgo de equipos"],
-        },
-      }
+    if (!id) {
+      return NextResponse.json({ error: "Insight ID is required" }, { status: 400 })
     }
 
-    return NextResponse.json(aiInsights)
-  } catch (error) {
-    console.error("Error generating AI insights:", error)
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from("ai_insights")
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id)
+      .select()
+      .single()
 
-    // Return fallback insights
-    return NextResponse.json({
-      insights: [
-        {
-          category: "Análisis",
-          title: "Evaluación Completada",
-          description:
-            "Has completado exitosamente la evaluación de habilidades blandas. Tus resultados muestran un perfil equilibrado con oportunidades de crecimiento.",
-          confidence: 0.7,
-          priority: "medium",
-        },
-      ],
-      recommendations: [
-        {
-          title: "Desarrollo Continuo",
-          description: "Enfócate en practicar las habilidades identificadas como áreas de mejora.",
-          timeframe: "corto plazo",
-          difficulty: "fácil",
-        },
-      ],
-      developmentPlan: {
-        shortTerm: ["Reflexión personal", "Establecer metas"],
-        mediumTerm: ["Práctica estructurada", "Buscar feedback"],
-        longTerm: ["Aplicación en proyectos", "Mentoring a otros"],
-      },
-    })
+    if (error) {
+      console.error("Error updating insight:", error)
+      return NextResponse.json({ error: "Failed to update insight" }, { status: 500 })
+    }
+
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error("Error in insight update:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "Insight ID is required" }, { status: 400 })
+    }
+
+    const supabase = createClient()
+    const { error } = await supabase.from("ai_insights").delete().eq("id", id)
+
+    if (error) {
+      console.error("Error deleting insight:", error)
+      return NextResponse.json({ error: "Failed to delete insight" }, { status: 500 })
+    }
+
+    return NextResponse.json({ message: "Insight deleted successfully" })
+  } catch (error) {
+    console.error("Error in insight deletion:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
