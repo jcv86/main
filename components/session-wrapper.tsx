@@ -1,128 +1,48 @@
 "use client"
 
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 interface User {
   id: string
-  email: string
   name: string
-  role?: string
+  email: string
 }
 
 interface SessionContextType {
   user: User | null
-  loading: boolean
-  signOut: () => void
+  setUser: (user: User | null) => void
+  isLoading: boolean
 }
 
-const SessionContext = createContext<SessionContextType>({
-  user: null,
-  loading: true,
-  signOut: () => {},
-})
+const SessionContext = createContext<SessionContextType | undefined>(undefined)
 
-export function useSession() {
-  return useContext(SessionContext)
-}
-
-export function SessionWrapper({ children }: { children: React.ReactNode }) {
+export function SessionWrapper({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check for existing session
-    const checkSession = async () => {
-      try {
-        // First check Supabase auth
-        const {
-          data: { session: supabaseSession },
-        } = await supabase.auth.getSession()
+    // Simulate loading user session
+    const timer = setTimeout(() => {
+      setUser({
+        id: "demo-user-1",
+        name: "Travis",
+        email: "demo@example.com",
+      })
+      setIsLoading(false)
+    }, 1000)
 
-        if (supabaseSession?.user) {
-          setUser({
-            id: supabaseSession.user.id,
-            email: supabaseSession.user.email || "",
-            name: supabaseSession.user.user_metadata?.name || supabaseSession.user.email || "",
-            role: supabaseSession.user.user_metadata?.role || "user",
-          })
-        } else {
-          // Check localStorage for demo session
-          const session = localStorage.getItem("dtc_session")
-          if (session) {
-            try {
-              const parsed = JSON.parse(session)
-              if (parsed.authenticated && parsed.user) {
-                setUser(parsed.user)
-              }
-            } catch (e) {
-              console.error("Error parsing session:", e)
-              localStorage.removeItem("dtc_session")
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Session check error:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
+    return () => clearTimeout(timer)
+  }, [])
 
-    checkSession()
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, supabaseSession) => {
-      if (supabaseSession?.user) {
-        setUser({
-          id: supabaseSession.user.id,
-          email: supabaseSession.user.email || "",
-          name: supabaseSession.user.user_metadata?.name || supabaseSession.user.email || "",
-          role: supabaseSession.user.user_metadata?.role || "user",
-        })
-      } else {
-        // Check localStorage for demo session when auth session is null
-        const session = localStorage.getItem("dtc_session")
-        if (session) {
-          try {
-            const parsed = JSON.parse(session)
-            if (parsed.authenticated && parsed.user) {
-              setUser(parsed.user)
-            } else {
-              setUser(null)
-            }
-          } catch (e) {
-            console.error("Error parsing session:", e)
-            localStorage.removeItem("dtc_session")
-            setUser(null)
-          }
-        } else {
-          setUser(null)
-        }
-      }
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [supabase])
-
-  const signOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      localStorage.removeItem("dtc_session")
-      setUser(null)
-      window.location.href = "/"
-    } catch (error) {
-      console.error("Sign out error:", error)
-      // Force logout even if Supabase fails
-      localStorage.removeItem("dtc_session")
-      setUser(null)
-      window.location.href = "/"
-    }
-  }
-
-  return <SessionContext.Provider value={{ user, loading, signOut }}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={{ user, setUser, isLoading }}>{children}</SessionContext.Provider>
 }
+
+export function useSession() {
+  const context = useContext(SessionContext)
+  if (context === undefined) {
+    throw new Error("useSession must be used within a SessionWrapper")
+  }
+  return context
+}
+
+export default SessionWrapper
