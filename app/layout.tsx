@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
+import PersistentAICoach from "@/components/persistent-ai-coach"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionWrapper>
           {children}
+          <PersistentAICoach />
           <Toaster />
         </SessionWrapper>
       </body>
