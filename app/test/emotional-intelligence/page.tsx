@@ -265,6 +265,11 @@ export default function EmotionalIntelligenceTest() {
     }
   }, [user, router, isLoading, mounted])
 
+  useEffect(() => {
+    // Load existing answer for current question
+    setSelectedAnswer(answers[emotionalIntelligenceQuestions[currentQuestion]?.id] || null)
+  }, [currentQuestion, answers])
+
   const calculateResults = () => {
     const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0)
     const maxScore = emotionalIntelligenceQuestions.length * 5
@@ -314,6 +319,24 @@ export default function EmotionalIntelligenceTest() {
     }
   }
 
+  const handleNext = () => {
+    if (selectedAnswer !== null) {
+      setAnswers((prev) => ({ ...prev, [emotionalIntelligenceQuestions[currentQuestion].id]: selectedAnswer }))
+
+      if (currentQuestion < emotionalIntelligenceQuestions.length - 1) {
+        setCurrentQuestion((prev) => prev + 1)
+      } else {
+        submitTest()
+      }
+    }
+  }
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((prev) => prev - 1)
+    }
+  }
+
   if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -341,26 +364,6 @@ export default function EmotionalIntelligenceTest() {
 
   const progress = ((currentQuestion + 1) / emotionalIntelligenceQuestions.length) * 100
   const question = emotionalIntelligenceQuestions[currentQuestion]
-
-  const handleNext = () => {
-    if (selectedAnswer !== null) {
-      setAnswers((prev) => ({ ...prev, [question.id]: selectedAnswer }))
-
-      if (currentQuestion < emotionalIntelligenceQuestions.length - 1) {
-        setCurrentQuestion((prev) => prev + 1)
-        setSelectedAnswer(answers[emotionalIntelligenceQuestions[currentQuestion + 1]?.id] || null)
-      } else {
-        submitTest()
-      }
-    }
-  }
-
-  const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((prev) => prev - 1)
-      setSelectedAnswer(answers[emotionalIntelligenceQuestions[currentQuestion - 1].id] || null)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
