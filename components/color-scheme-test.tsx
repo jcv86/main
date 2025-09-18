@@ -40,7 +40,7 @@ export function ColorSchemeTest() {
             Back to Home
           </Button>
           <h1 className="text-4xl font-bold text-foreground">Color Scheme Test</h1>
-          <p className="text-xl text-mutedForeground">
+          <p className="text-xl text-muted-foreground">
             Testing the minimal gray and white color palette across all UI components
           </p>
         </div>
@@ -49,7 +49,7 @@ export function ColorSchemeTest() {
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="text-foreground">Color Palette</CardTitle>
-            <CardDescription className="text-mutedForeground">
+            <CardDescription className="text-muted-foreground">
               Our minimal color scheme using only grays and white, with red for destructive actions
             </CardDescription>
           </CardHeader>
@@ -58,22 +58,22 @@ export function ColorSchemeTest() {
               <div className="space-y-2">
                 <div className="w-full h-16 bg-background border border-border rounded"></div>
                 <p className="text-sm text-foreground font-medium">Background</p>
-                <p className="text-xs text-mutedForeground">Pure White</p>
+                <p className="text-xs text-muted-foreground">Pure White</p>
               </div>
               <div className="space-y-2">
                 <div className="w-full h-16 bg-foreground rounded"></div>
                 <p className="text-sm text-foreground font-medium">Foreground</p>
-                <p className="text-xs text-mutedForeground">Dark Gray</p>
+                <p className="text-xs text-muted-foreground">Dark Gray</p>
               </div>
               <div className="space-y-2">
                 <div className="w-full h-16 bg-muted border border-border rounded"></div>
                 <p className="text-sm text-foreground font-medium">Muted</p>
-                <p className="text-xs text-mutedForeground">Light Gray</p>
+                <p className="text-xs text-muted-foreground">Light Gray</p>
               </div>
               <div className="space-y-2">
                 <div className="w-full h-16 bg-destructive rounded"></div>
                 <p className="text-sm text-foreground font-medium">Destructive</p>
-                <p className="text-xs text-mutedForeground">Red Accent</p>
+                <p className="text-xs text-muted-foreground">Red Accent</p>
               </div>
             </div>
           </CardContent>
@@ -83,7 +83,7 @@ export function ColorSchemeTest() {
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="text-foreground">Buttons</CardTitle>
-            <CardDescription className="text-mutedForeground">Various button styles and states</CardDescription>
+            <CardDescription className="text-muted-foreground">Various button styles and states</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4">
@@ -91,10 +91,10 @@ export function ColorSchemeTest() {
               <Button variant="outline" className="border-border hover:bg-muted bg-transparent">
                 Outline Button
               </Button>
-              <Button variant="secondary" className="bg-muted text-mutedForeground hover:bg-muted/80">
+              <Button variant="secondary" className="bg-muted text-muted-foreground hover:bg-muted/80">
                 Secondary Button
               </Button>
-              <Button variant="destructive" className="bg-destructive text-destructiveForeground">
+              <Button variant="destructive" className="bg-destructive text-destructive-foreground">
                 Destructive Button
               </Button>
               <Button variant="ghost" className="hover:bg-muted">
@@ -113,11 +113,11 @@ export function ColorSchemeTest() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-foreground">Sample Card</CardTitle>
-                <Badge variant="secondary" className="bg-muted text-mutedForeground">
+                <Badge variant="secondary" className="bg-muted text-muted-foreground">
                   New
                 </Badge>
               </div>
-              <CardDescription className="text-mutedForeground">
+              <CardDescription className="text-muted-foreground">
                 This is a sample card showing the color scheme in action
               </CardDescription>
             </CardHeader>
@@ -130,7 +130,7 @@ export function ColorSchemeTest() {
                   </Avatar>
                   <div>
                     <p className="text-sm font-medium text-foreground">John Doe</p>
-                    <p className="text-xs text-mutedForeground">Software Engineer</p>
+                    <p className="text-xs text-muted-foreground">Software Engineer</p>
                   </div>
                 </div>
                 <Progress value={75} className="w-full" />
@@ -150,27 +150,27 @@ export function ColorSchemeTest() {
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="text-foreground">Statistics</CardTitle>
-              <CardDescription className="text-mutedForeground">Performance metrics and progress</CardDescription>
+              <CardDescription className="text-muted-foreground">Performance metrics and progress</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-mutedForeground">Completion Rate</span>
+                  <span className="text-sm text-muted-foreground">Completion Rate</span>
                   <span className="text-sm font-medium text-foreground">85%</span>
                 </div>
                 <Progress value={85} className="w-full" />
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-foreground">12</div>
-                    <div className="text-xs text-mutedForeground">Tests</div>
+                    <div className="text-xs text-muted-foreground">Tests</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-foreground">94%</div>
-                    <div className="text-xs text-mutedForeground">Score</div>
+                    <div className="text-xs text-muted-foreground">Score</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-foreground">7</div>
-                    <div className="text-xs text-mutedForeground">Days</div>
+                    <div className="text-xs text-muted-foreground">Days</div>
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export function ColorSchemeTest() {
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="text-foreground">Form Elements</CardTitle>
-            <CardDescription className="text-mutedForeground">Input fields and form controls</CardDescription>
+            <CardDescription className="text-muted-foreground">Input fields and form controls</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
@@ -219,7 +219,7 @@ export function ColorSchemeTest() {
                 <Alert className="border-border bg-card">
                   <Info className="h-4 w-4" />
                   <AlertTitle className="text-foreground">Information</AlertTitle>
-                  <AlertDescription className="text-mutedForeground">
+                  <AlertDescription className="text-muted-foreground">
                     This is an informational alert using our color scheme.
                   </AlertDescription>
                 </Alert>
@@ -237,7 +237,7 @@ export function ColorSchemeTest() {
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="text-foreground">Tabs Component</CardTitle>
-            <CardDescription className="text-mutedForeground">
+            <CardDescription className="text-muted-foreground">
               Tabbed interface showing different content sections
             </CardDescription>
           </CardHeader>
@@ -266,17 +266,17 @@ export function ColorSchemeTest() {
                   <div className="text-center p-4 border border-border rounded-lg">
                     <Brain className="h-8 w-8 text-foreground mx-auto mb-2" />
                     <h3 className="font-semibold text-foreground">AI Insights</h3>
-                    <p className="text-sm text-mutedForeground">Powered by advanced algorithms</p>
+                    <p className="text-sm text-muted-foreground">Powered by advanced algorithms</p>
                   </div>
                   <div className="text-center p-4 border border-border rounded-lg">
                     <BookOpen className="h-8 w-8 text-foreground mx-auto mb-2" />
                     <h3 className="font-semibold text-foreground">Learning Resources</h3>
-                    <p className="text-sm text-mutedForeground">Curated content library</p>
+                    <p className="text-sm text-muted-foreground">Curated content library</p>
                   </div>
                   <div className="text-center p-4 border border-border rounded-lg">
                     <Award className="h-8 w-8 text-foreground mx-auto mb-2" />
                     <h3 className="font-semibold text-foreground">Achievements</h3>
-                    <p className="text-sm text-mutedForeground">Track your progress</p>
+                    <p className="text-sm text-muted-foreground">Track your progress</p>
                   </div>
                 </div>
               </TabsContent>
@@ -303,7 +303,7 @@ export function ColorSchemeTest() {
                       </Avatar>
                       <div className="flex-1">
                         <p className="font-medium text-foreground">Team Member {i}</p>
-                        <p className="text-sm text-mutedForeground">Role description</p>
+                        <p className="text-sm text-muted-foreground">Role description</p>
                       </div>
                       <Badge variant="outline" className="border-border text-foreground">
                         Active
@@ -317,7 +317,7 @@ export function ColorSchemeTest() {
                   <div className="flex items-center justify-between p-4 border border-border rounded-lg">
                     <div>
                       <p className="font-medium text-foreground">Notifications</p>
-                      <p className="text-sm text-mutedForeground">Receive email updates</p>
+                      <p className="text-sm text-muted-foreground">Receive email updates</p>
                     </div>
                     <Button variant="outline" size="sm" className="border-border hover:bg-muted bg-transparent">
                       <Bell className="h-4 w-4 mr-2" />
@@ -327,7 +327,7 @@ export function ColorSchemeTest() {
                   <div className="flex items-center justify-between p-4 border border-border rounded-lg">
                     <div>
                       <p className="font-medium text-foreground">Privacy</p>
-                      <p className="text-sm text-mutedForeground">Manage data preferences</p>
+                      <p className="text-sm text-muted-foreground">Manage data preferences</p>
                     </div>
                     <Button variant="outline" size="sm" className="border-border hover:bg-muted bg-transparent">
                       <User className="h-4 w-4 mr-2" />
@@ -354,7 +354,7 @@ export function ColorSchemeTest() {
               <CardHeader>
                 <feature.icon className="h-8 w-8 text-foreground mb-2" />
                 <CardTitle className="text-foreground">{feature.title}</CardTitle>
-                <CardDescription className="text-mutedForeground">{feature.desc}</CardDescription>
+                <CardDescription className="text-muted-foreground">{feature.desc}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button variant="outline" className="w-full border-border hover:bg-muted bg-transparent">
@@ -368,7 +368,7 @@ export function ColorSchemeTest() {
 
         {/* Footer */}
         <div className="text-center py-8 border-t border-border">
-          <p className="text-mutedForeground">
+          <p className="text-muted-foreground">
             Color scheme test completed. All components use the minimal gray and white palette.
           </p>
           <Button
