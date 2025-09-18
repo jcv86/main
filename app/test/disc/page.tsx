@@ -189,21 +189,24 @@ const discQuestions: Question[] = [
 ]
 
 export default function DISCTestPage() {
-  const { user } = useSession()
+  const { user, isLoading } = useSession()
   const router = useRouter()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
   const [isCompleted, setIsCompleted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
-
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (!user) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (mounted && !isLoading && !user) {
       router.push("/")
     }
-  }, [user, router])
+  }, [user, router, isLoading, mounted])
 
   const handleAnswer = (answer: string) => {
     setAnswers({ ...answers, [discQuestions[currentQuestion].id]: answer })
@@ -342,75 +345,80 @@ export default function DISCTestPage() {
       console.log("Generating AI interpretation...")
       const aiInterpretation = await generateAIInterpretation(testResults)
 
-      // Save to test_results table
-      const { error: testError } = await supabase.from("test_results").insert({
-        user_email: user.email,
-        test_type: "personality",
-        test_name: "DISC Assessment",
-        results: {
-          ...testResults,
-          ai_interpretation: aiInterpretation,
-        },
-        score: Math.max(scores.D, scores.I, scores.S, scores.C),
-        duration_minutes: duration,
-      })
+      // Create Supabase client only if environment variables are available
+      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-      if (testError) {
-        console.error("Error saving test results:", testError)
-      }
-
-      // Save to disc_results table
-      const { error: discError } = await supabase.from("disc_results").insert({
-        user_email: user.email,
-        d_score: scores.D,
-        i_score: scores.I,
-        s_score: scores.S,
-        c_score: scores.C,
-        primary_type: primaryStyle,
-        analysis: `Tu estilo principal es ${primaryStyle} con puntuaciones: D=${scores.D}%, I=${scores.I}%, S=${scores.S}%, C=${scores.C}%`,
-        recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
-      })
-
-      if (discError) {
-        console.error("Error saving DISC results:", discError)
-      }
-
-      // Save AI interpretation separately
-      const { error: aiError } = await supabase.from("ai_interpretations").insert({
-        user_email: user.email,
-        test_name: "DISC Assessment",
-        test_results: testResults,
-        interpretation: aiInterpretation,
-        model_version: "gpt-4o",
-      })
-
-      if (aiError) {
-        console.error("Error saving AI interpretation:", aiError)
-      }
-
-      // Update user profile
-      const { error: profileError } = await supabase
-        .from("user_profiles")
-        .update({
-          tests_completed: 1,
-          updated_at: new Date().toISOString(),
+        // Save to test_results table
+        const { error: testError } = await supabase.from("test_results").insert({
+          user_email: user.email,
+          test_type: "personality",
+          test_name: "DISC Assessment",
+          results: {
+            ...testResults,
+            ai_interpretation: aiInterpretation,
+          },
+          score: Math.max(scores.D, scores.I, scores.S, scores.C),
+          duration_minutes: duration,
         })
-        .eq("user_email", user.email)
 
-      if (profileError) {
-        console.error("Error updating profile:", profileError)
-      }
+        if (testError) {
+          console.error("Error saving test results:", testError)
+        }
 
-      // Add activity
-      const { error: activityError } = await supabase.from("user_activities").insert({
-        user_email: user.email,
-        activity_type: "test_completed",
-        activity_description: `Completó el Test DISC con estilo principal: ${primaryStyle}`,
-        xp_earned: 50,
-      })
+        // Save to disc_results table
+        const { error: discError } = await supabase.from("disc_results").insert({
+          user_email: user.email,
+          d_score: scores.D,
+          i_score: scores.I,
+          s_score: scores.S,
+          c_score: scores.C,
+          primary_type: primaryStyle,
+          analysis: `Tu estilo principal es ${primaryStyle} con puntuaciones: D=${scores.D}%, I=${scores.I}%, S=${scores.S}%, C=${scores.C}%`,
+          recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
+        })
 
-      if (activityError) {
-        console.error("Error saving activity:", activityError)
+        if (discError) {
+          console.error("Error saving DISC results:", discError)
+        }
+
+        // Save AI interpretation separately
+        const { error: aiError } = await supabase.from("ai_interpretations").insert({
+          user_email: user.email,
+          test_name: "DISC Assessment",
+          test_results: testResults,
+          interpretation: aiInterpretation,
+          model_version: "gpt-4o",
+        })
+
+        if (aiError) {
+          console.error("Error saving AI interpretation:", aiError)
+        }
+
+        // Update user profile
+        const { error: profileError } = await supabase
+          .from("user_profiles")
+          .update({
+            tests_completed: 1,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_email", user.email)
+
+        if (profileError) {
+          console.error("Error updating profile:", profileError)
+        }
+
+        // Add activity
+        const { error: activityError } = await supabase.from("user_activities").insert({
+          user_email: user.email,
+          activity_type: "test_completed",
+          activity_description: `Completó el Test DISC con estilo principal: ${primaryStyle}`,
+          xp_earned: 50,
+        })
+
+        if (activityError) {
+          console.error("Error saving activity:", activityError)
+        }
       }
 
       console.log("Test completed successfully, redirecting to results...")
@@ -423,12 +431,23 @@ export default function DISCTestPage() {
     }
   }
 
+  // Show loading state during SSR or while mounting
+  if (!mounted || isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando test DISC...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!user) {
     return (
-      <div className="min-h-screen bg-secondary flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-foreground mx-auto mb-4"></div>
-          <p className="text-gray-600">Verificando acceso...</p>
+          <p className="text-gray-600">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -440,8 +459,8 @@ export default function DISCTestPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl bg-neutral hover:bg-neutral-100">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -452,7 +471,7 @@ export default function DISCTestPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
-            <div className="bg-neutral p-4 rounded-lg">
+            <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Resumen de tu evaluación:</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -468,9 +487,9 @@ export default function DISCTestPage() {
               </div>
             </div>
 
-            <div className="bg-neutral p-4 rounded-lg">
+            <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="font-semibold mb-2 flex items-center justify-center">
-                <Brain className="h-4 w-4 mr-2 text-foreground" />
+                <Brain className="h-4 w-4 mr-2 text-blue-600" />
                 Análisis con IA
               </h3>
               <p className="text-sm text-gray-600">
@@ -479,7 +498,7 @@ export default function DISCTestPage() {
               </p>
             </div>
 
-            <Button onClick={submitTest} disabled={isSubmitting} className="w-full bg-foreground text-white" size="lg">
+            <Button onClick={submitTest} disabled={isSubmitting} className="w-full" size="lg">
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
@@ -493,11 +512,7 @@ export default function DISCTestPage() {
               )}
             </Button>
 
-            <Button
-              variant="outline"
-              onClick={() => router.push("/dashboard")}
-              className="w-full bg-foreground text-white"
-            >
+            <Button variant="outline" onClick={() => router.push("/dashboard")} className="w-full">
               Volver al Dashboard
             </Button>
           </CardContent>
@@ -507,11 +522,11 @@ export default function DISCTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-secondary p-4">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={() => router.push("/dashboard")} className="bg-foreground text-white">
+          <Button variant="outline" onClick={() => router.push("/dashboard")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Volver al Dashboard
           </Button>
@@ -522,7 +537,7 @@ export default function DISCTestPage() {
         </div>
 
         {/* Progress */}
-        <Card className="mb-6 bg-neutral hover:bg-neutral-100">
+        <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Progreso del Test</span>
@@ -540,17 +555,15 @@ export default function DISCTestPage() {
         </Card>
 
         {/* Question */}
-        <Card className="bg-neutral hover:bg-neutral-100">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <Badge variant="outline" className="bg-foreground text-white border-border">
+              <Badge variant="outline">
                 {question.type === "multiple_choice" && "Opción Múltiple"}
                 {question.type === "open_ended" && "Respuesta Abierta"}
                 {question.type === "scenario" && "Escenario"}
               </Badge>
-              <Badge variant="secondary" className="bg-foreground text-white border-border">
-                Pregunta {currentQuestion + 1}
-              </Badge>
+              <Badge variant="secondary">Pregunta {currentQuestion + 1}</Badge>
             </div>
             <CardTitle className="text-xl">{question.question}</CardTitle>
           </CardHeader>
@@ -576,10 +589,10 @@ export default function DISCTestPage() {
                   placeholder="Escribe tu respuesta aquí... Sé específico y detallado para obtener un mejor análisis de IA."
                   value={currentAnswer || ""}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="min-h-[120px] bg-neutral text-gray-600"
+                  className="min-h-[120px]"
                 />
                 <div className="flex items-center text-xs text-gray-500">
-                  <Brain className="h-3 w-3 mr-1 text-foreground" />
+                  <Brain className="h-3 w-3 mr-1 text-blue-600" />
                   Esta respuesta será analizada por IA para insights personalizados
                 </div>
               </div>
@@ -587,21 +600,12 @@ export default function DISCTestPage() {
 
             {/* Navigation */}
             <div className="flex justify-between pt-6">
-              <Button
-                variant="outline"
-                onClick={prevQuestion}
-                disabled={currentQuestion === 0}
-                className="bg-foreground text-white border-border"
-              >
+              <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Anterior
               </Button>
 
-              <Button
-                onClick={nextQuestion}
-                disabled={!currentAnswer}
-                className="bg-foreground text-white border-border"
-              >
+              <Button onClick={nextQuestion} disabled={!currentAnswer}>
                 {currentQuestion === discQuestions.length - 1 ? (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
@@ -619,7 +623,7 @@ export default function DISCTestPage() {
         </Card>
 
         {/* Test Info */}
-        <Card className="mt-6 bg-neutral hover:bg-neutral-100">
+        <Card className="mt-6">
           <CardContent className="pt-6">
             <div className="flex items-start space-x-3">
               <Brain className="h-5 w-5 text-blue-600 mt-0.5" />

@@ -40,6 +40,14 @@ export function SessionWrapper({ children }: { children: ReactNode }) {
 export function useSession() {
   const context = useContext(SessionContext)
   if (context === undefined) {
+    // Return a default value during SSR/build time
+    if (typeof window === "undefined") {
+      return {
+        user: null,
+        setUser: () => {},
+        isLoading: true,
+      }
+    }
     throw new Error("useSession must be used within a SessionWrapper")
   }
   return context

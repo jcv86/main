@@ -2,15 +2,24 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { SessionWrapper } from "@/components/session-wrapper"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CareerDev Pro - AI-Powered Career Development Platform",
+  title: "CareerDev Pro - Professional Development Platform",
   description:
-    "Unlock your career potential with AI-powered assessments, personalized coaching, and curated learning resources. Take scientifically-backed personality tests and get actionable career guidance.",
-  keywords:
-    "career development, AI coaching, personality assessment, DISC, Big Five, MBTI, career guidance, professional development",
+    "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
+  keywords: [
+    "career development",
+    "personality assessment",
+    "AI coaching",
+    "professional growth",
+    "DISC",
+    "MBTI",
+    "Big Five",
+  ],
   authors: [{ name: "CareerDev Pro Team" }],
   creator: "CareerDev Pro",
   publisher: "CareerDev Pro",
@@ -20,31 +29,20 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL("https://careerdev-pro.vercel.app"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
-    title: "CareerDev Pro - AI-Powered Career Development",
+    title: "CareerDev Pro - Professional Development Platform",
     description:
-      "Transform your career with AI-powered assessments and personalized coaching. Get insights into your personality, skills, and career preferences.",
+      "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
     url: "https://careerdev-pro.vercel.app",
     siteName: "CareerDev Pro",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "CareerDev Pro - AI-Powered Career Development Platform",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CareerDev Pro - AI-Powered Career Development",
-    description: "Transform your career with AI-powered assessments and personalized coaching.",
-    images: ["/og-image.jpg"],
+    title: "CareerDev Pro - Professional Development Platform",
+    description:
+      "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
     creator: "@careerdevpro",
   },
   robots: {
@@ -78,10 +76,13 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#ffffff" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
-        <div id="root">{children}</div>
+      <body className={`${inter.className} antialiased`}>
+        <SessionWrapper>
+          <main className="min-h-screen bg-background text-foreground">{children}</main>
+          <Toaster />
+        </SessionWrapper>
       </body>
     </html>
   )
