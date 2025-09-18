@@ -19,7 +19,9 @@ import {
   ArrowRight,
   PlayCircle,
   BarChart3,
-  Settings,
+  Monitor,
+  Zap,
+  Smartphone,
 } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
 
@@ -122,9 +124,19 @@ export default function TestsPage() {
   const [mounted, setMounted] = useState(false)
   const [completedTests, setCompletedTests] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
   useEffect(() => {
@@ -168,10 +180,10 @@ export default function TestsPage() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading assessments...</p>
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm sm:text-base">Loading assessments...</p>
         </div>
       </div>
     )
@@ -179,9 +191,9 @@ export default function TestsPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-gray-600 text-sm sm:text-base">Redirecting...</p>
         </div>
       </div>
     )
@@ -189,86 +201,143 @@ export default function TestsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        {/* Header - Mobile Optimized */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 sm:mb-8">
+          <Button variant="outline" onClick={() => router.push("/dashboard")} size={isMobile ? "sm" : "default"}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Button>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => router.push("/test-verification")} className="text-sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Test Verification
+            <Button
+              variant="outline"
+              onClick={() => router.push("/test-verification")}
+              className="text-xs sm:text-sm bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 flex-1 sm:flex-none"
+              size={isMobile ? "sm" : "default"}
+            >
+              {isMobile ? <Smartphone className="h-4 w-4 mr-2" /> : <Monitor className="h-4 w-4 mr-2" />}
+              {isMobile ? "Mobile Tests" : "Live Verification"}
             </Button>
           </div>
         </div>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Personality Assessments</h1>
-          <p className="text-gray-600">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Personality Assessments</h1>
+          <p className="text-gray-600 text-sm sm:text-base">
             Complete comprehensive assessments to discover your personality, skills, and career interests.
           </p>
         </div>
 
-        {/* Progress Overview */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Assessment Progress
-            </CardTitle>
-            <CardDescription>
-              Complete all assessments to get comprehensive career insights and personalized recommendations.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Overall Progress</span>
-                <span className="text-sm text-gray-600">
-                  {completedTests.length} of {tests.length} completed
-                </span>
-              </div>
-              <Progress value={completionPercentage} className="h-2" />
-
-              {nextTest && (
-                <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-3">
-                    <nextTest.icon className="h-5 w-5 text-blue-600" />
-                    <div>
-                      <p className="font-medium text-blue-900">Recommended Next: {nextTest.title}</p>
-                      <p className="text-sm text-blue-700">
-                        {nextTest.duration} • {nextTest.questions} questions • {nextTest.difficulty}
-                      </p>
-                    </div>
-                  </div>
-                  <Button onClick={() => router.push(nextTest.path)} className="bg-blue-600 hover:bg-blue-700">
-                    Start Test
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
+        {/* Mobile Device Banner */}
+        {isMobile && (
+          <Card className="mb-6 sm:mb-8 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Smartphone className="h-5 w-5 text-green-600" />
                 </div>
-              )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-green-900 text-sm">Mobile-Optimized Experience</h3>
+                  <p className="text-xs text-green-700">
+                    All tests are optimized for mobile devices with touch-friendly interfaces and responsive layouts.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Verification Status Banner */}
+        <Card className="mb-6 sm:mb-8 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-blue-900 text-sm sm:text-base">Real-Time Test Verification</h3>
+                  <p className="text-xs sm:text-sm text-blue-700">
+                    All personality tests are continuously verified for proper navigation, validation, and completion
+                    flows on {isMobile ? "mobile devices" : "all devices"}.
+                  </p>
+                </div>
+              </div>
+              <Button
+                onClick={() => router.push("/test-verification")}
+                className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+                size={isMobile ? "sm" : "default"}
+              >
+                {isMobile ? <Smartphone className="h-4 w-4 mr-2" /> : <Monitor className="h-4 w-4 mr-2" />}
+                View Live Tests
+              </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        {/* Progress Overview */}
+        <Card className="mb-6 sm:mb-8">
+          <CardHeader className="pb-3 sm:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" />
+              Assessment Progress
+            </CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Complete all assessments to get comprehensive career insights and personalized recommendations.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs sm:text-sm font-medium">Overall Progress</span>
+              <span className="text-xs sm:text-sm text-gray-600">
+                {completedTests.length} of {tests.length} completed
+              </span>
+            </div>
+            <Progress value={completionPercentage} className="h-2" />
+
+            {nextTest && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-3">
+                  <nextTest.icon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 flex-shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-medium text-blue-900 text-sm sm:text-base truncate">
+                      Recommended Next: {nextTest.title}
+                    </p>
+                    <p className="text-xs sm:text-sm text-blue-700">
+                      {nextTest.duration} • {nextTest.questions} questions • {nextTest.difficulty}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push(nextTest.path)}
+                  className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+                  size={isMobile ? "sm" : "default"}
+                >
+                  Start Test
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Category Filter - Mobile Optimized */}
+        <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
           {categories.map((category) => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(category)}
+              className="text-xs sm:text-sm"
             >
               {category}
             </Button>
           ))}
         </div>
 
-        {/* Tests Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Tests Grid - Mobile Responsive */}
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredTests.map((test) => {
             const IconComponent = test.icon
             const isCompleted = completedTests.includes(test.id)
@@ -286,100 +355,105 @@ export default function TestsPage() {
                 }`}
               >
                 {isCompleted && (
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                  <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
+                    <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Completed
                     </Badge>
                   </div>
                 )}
 
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`p-3 rounded-lg ${test.color}`}>
-                      <IconComponent className="h-6 w-6" />
+                <CardHeader className="pb-3 sm:pb-4">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <div className={`p-2 sm:p-3 rounded-lg ${test.color}`}>
+                      <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{test.title}</CardTitle>
-                      <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-base sm:text-lg truncate">{test.title}</CardTitle>
+                      <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
                         <Badge
                           variant="outline"
-                          className={
+                          className={`text-xs ${
                             test.difficulty === "Beginner"
                               ? "bg-green-100 text-green-700 border-green-200"
                               : test.difficulty === "Intermediate"
                                 ? "bg-yellow-100 text-yellow-700 border-yellow-200"
                                 : "bg-red-100 text-red-700 border-red-200"
-                          }
+                          }`}
                         >
                           {test.difficulty}
                         </Badge>
-                        <Badge variant="outline">{test.category}</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {test.category}
+                        </Badge>
                       </div>
                     </div>
                   </div>
-                  <CardDescription className="text-sm leading-relaxed">{test.description}</CardDescription>
+                  <CardDescription className="text-xs sm:text-sm leading-relaxed">{test.description}</CardDescription>
                 </CardHeader>
 
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{test.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Brain className="h-4 w-4" />
-                        <span>{test.questions} questions</span>
-                      </div>
+                <CardContent className="space-y-3 sm:space-y-4">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span>{test.duration}</span>
                     </div>
+                    <div className="flex items-center gap-1">
+                      <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span>{test.questions} questions</span>
+                    </div>
+                  </div>
 
-                    {test.prerequisites && !isCompleted && (
-                      <div className="text-xs text-gray-500 p-2 bg-gray-100 rounded">
-                        <span className="font-medium">Prerequisites:</span>{" "}
-                        {test.prerequisites.map((prereq) => {
-                          const prereqTest = tests.find((t) => t.id === prereq)
-                          const isPrereqCompleted = completedTests.includes(prereq)
-                          return (
-                            <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red-500"}>
-                              {prereqTest?.title}
-                              {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
-                            </span>
-                          )
-                        })}
-                      </div>
-                    )}
+                  {test.prerequisites && !isCompleted && (
+                    <div className="text-xs text-gray-500 p-2 bg-gray-100 rounded">
+                      <span className="font-medium">Prerequisites:</span>{" "}
+                      {test.prerequisites.map((prereq) => {
+                        const prereqTest = tests.find((t) => t.id === prereq)
+                        const isPrereqCompleted = completedTests.includes(prereq)
+                        return (
+                          <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red-500"}>
+                            {prereqTest?.title}
+                            {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  )}
 
-                    <div className="flex gap-2">
-                      {isCompleted ? (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => router.push(`${test.path}/results`)}
-                            className="flex-1"
-                          >
-                            View Results
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => router.push(test.path)}>
-                            Retake
-                          </Button>
-                        </>
-                      ) : isAvailable ? (
+                  <div className="flex gap-2">
+                    {isCompleted ? (
+                      <>
                         <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => router.push(`${test.path}/results`)}
+                          className="flex-1 text-xs sm:text-sm"
+                        >
+                          View Results
+                        </Button>
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => router.push(test.path)}
-                          className="flex-1 bg-gray-900 hover:bg-gray-800"
+                          className="text-xs sm:text-sm"
                         >
-                          <PlayCircle className="h-4 w-4 mr-2" />
-                          Start Assessment
+                          Retake
                         </Button>
-                      ) : (
-                        <Button variant="outline" size="sm" disabled className="flex-1 bg-transparent">
-                          Complete Prerequisites
-                        </Button>
-                      )}
-                    </div>
+                      </>
+                    ) : isAvailable ? (
+                      <Button
+                        size="sm"
+                        onClick={() => router.push(test.path)}
+                        className="flex-1 bg-gray-900 hover:bg-gray-800 text-xs sm:text-sm"
+                      >
+                        <PlayCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                        Start Assessment
+                      </Button>
+                    ) : (
+                      <Button variant="outline" size="sm" disabled className="flex-1 bg-transparent text-xs sm:text-sm">
+                        Complete Prerequisites
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -389,15 +463,19 @@ export default function TestsPage() {
 
         {/* Completion Message */}
         {completedTests.length === tests.length && (
-          <Card className="mt-8 border-green-200 bg-green-50">
-            <CardContent className="p-8 text-center">
-              <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-green-900 mb-2">🎉 All Assessments Complete!</h3>
-              <p className="text-green-700 mb-6">
+          <Card className="mt-6 sm:mt-8 border-green-200 bg-green-50">
+            <CardContent className="p-6 sm:p-8 text-center">
+              <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-600 mx-auto mb-4" />
+              <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-2">🎉 All Assessments Complete!</h3>
+              <p className="text-green-700 mb-4 sm:mb-6 text-sm sm:text-base">
                 Congratulations! You've completed all personality and career assessments. Visit your dashboard to
                 explore your comprehensive profile and get personalized recommendations.
               </p>
-              <Button onClick={() => router.push("/dashboard")} className="bg-green-600 hover:bg-green-700">
+              <Button
+                onClick={() => router.push("/dashboard")}
+                className="bg-green-600 hover:bg-green-700"
+                size={isMobile ? "sm" : "default"}
+              >
                 View Complete Profile
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
