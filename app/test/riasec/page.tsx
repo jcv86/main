@@ -1,8 +1,6 @@
 "use client"
 
-import React from "react"
-
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -42,19 +40,323 @@ export default function RIASECTest() {
 
   const loadQuestions = async () => {
     try {
+      // Try to fetch from database first
       const { data, error } = await supabase
         .from("test_questions")
         .select("*")
         .eq("test_type", "riasec")
         .order("question_number")
 
-      if (error) throw error
-      setQuestions(data || [])
+      if (error || !data || data.length === 0) {
+        console.log("Using mock RIASEC questions")
+        setQuestions(getMockRIASECQuestions())
+      } else {
+        // Parse options for each question
+        const parsedQuestions = data.map((q) => ({
+          ...q,
+          options: q.options ? (typeof q.options === "string" ? JSON.parse(q.options) : q.options) : undefined,
+        }))
+        setQuestions(parsedQuestions)
+      }
     } catch (error) {
       console.error("Error loading questions:", error)
+      setQuestions(getMockRIASECQuestions())
     } finally {
       setLoading(false)
     }
+  }
+
+  const getMockRIASECQuestions = (): Question[] => {
+    return [
+      // Realistic (R) - Questions 1-5
+      {
+        id: 1,
+        question_number: 1,
+        question_text: "¿Te gusta trabajar con herramientas y maquinaria?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "R",
+      },
+      {
+        id: 2,
+        question_number: 2,
+        question_text: "¿Disfrutas reparar objetos o dispositivos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "R",
+      },
+      {
+        id: 3,
+        question_number: 3,
+        question_text: "¿Te atrae trabajar al aire libre?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "R",
+      },
+      {
+        id: 4,
+        question_number: 4,
+        question_text: "¿Te gusta construir o ensamblar cosas?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "R",
+      },
+      {
+        id: 5,
+        question_number: 5,
+        question_text: "¿Prefieres trabajos que requieren habilidades físicas?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "R",
+      },
+
+      // Investigativo (I) - Questions 6-10
+      {
+        id: 6,
+        question_number: 6,
+        question_text: "¿Te gusta resolver problemas complejos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "I",
+      },
+      {
+        id: 7,
+        question_number: 7,
+        question_text: "¿Disfrutas investigar y analizar datos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "I",
+      },
+      {
+        id: 8,
+        question_number: 8,
+        question_text: "¿Te atrae la ciencia y la tecnología?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "I",
+      },
+      {
+        id: 9,
+        question_number: 9,
+        question_text: "¿Te gusta experimentar y probar teorías?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "I",
+      },
+      {
+        id: 10,
+        question_number: 10,
+        question_text: "¿Prefieres trabajar de forma independiente?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "I",
+      },
+
+      // Artístico (A) - Questions 11-15
+      {
+        id: 11,
+        question_number: 11,
+        question_text: "¿Te gusta crear arte o diseños?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "A",
+      },
+      {
+        id: 12,
+        question_number: 12,
+        question_text: "¿Disfrutas escribir o componer música?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "A",
+      },
+      {
+        id: 13,
+        question_number: 13,
+        question_text: "¿Te atrae la expresión creativa?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "A",
+      },
+      {
+        id: 14,
+        question_number: 14,
+        question_text: "¿Te gusta innovar y crear cosas nuevas?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "A",
+      },
+      {
+        id: 15,
+        question_number: 15,
+        question_text: "¿Prefieres ambientes de trabajo flexibles?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "A",
+      },
+
+      // Social (S) - Questions 16-20
+      {
+        id: 16,
+        question_number: 16,
+        question_text: "¿Te gusta ayudar y enseñar a otros?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "S",
+      },
+      {
+        id: 17,
+        question_number: 17,
+        question_text: "¿Disfrutas trabajar en equipo?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "S",
+      },
+      {
+        id: 18,
+        question_number: 18,
+        question_text: "¿Te atrae el trabajo comunitario?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "S",
+      },
+      {
+        id: 19,
+        question_number: 19,
+        question_text: "¿Te gusta cuidar y apoyar a las personas?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "S",
+      },
+      {
+        id: 20,
+        question_number: 20,
+        question_text: "¿Prefieres resolver conflictos interpersonales?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "S",
+      },
+
+      // Emprendedor (E) - Questions 21-25
+      {
+        id: 21,
+        question_number: 21,
+        question_text: "¿Te gusta liderar y dirigir proyectos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "E",
+      },
+      {
+        id: 22,
+        question_number: 22,
+        question_text: "¿Disfrutas persuadir y convencer a otros?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "E",
+      },
+      {
+        id: 23,
+        question_number: 23,
+        question_text: "¿Te atrae tomar decisiones importantes?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "E",
+      },
+      {
+        id: 24,
+        question_number: 24,
+        question_text: "¿Te gusta competir y ganar?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "E",
+      },
+      {
+        id: 25,
+        question_number: 25,
+        question_text: "¿Prefieres ambientes dinámicos y desafiantes?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "E",
+      },
+
+      // Convencional (C) - Questions 26-30
+      {
+        id: 26,
+        question_number: 26,
+        question_text: "¿Te gusta organizar y planificar actividades?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "C",
+      },
+      {
+        id: 27,
+        question_number: 27,
+        question_text: "¿Disfrutas trabajar con números y datos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "C",
+      },
+      {
+        id: 28,
+        question_number: 28,
+        question_text: "¿Te atrae seguir procedimientos establecidos?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "C",
+      },
+      {
+        id: 29,
+        question_number: 29,
+        question_text: "¿Te gusta mantener registros detallados?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "C",
+      },
+      {
+        id: 30,
+        question_number: 30,
+        question_text: "¿Prefieres trabajos estructurados y predecibles?",
+        question_type: "multiple_choice",
+        options: ["Nada", "Poco", "Algo", "Mucho"],
+        category: "C",
+      },
+
+      // Open-ended questions 31-35
+      {
+        id: 31,
+        question_number: 31,
+        question_text: "¿Qué tipo de actividades te motivan más en el trabajo?",
+        question_type: "open_ended",
+        category: null,
+      },
+      {
+        id: 32,
+        question_number: 32,
+        question_text: "¿Cómo te ves profesionalmente en 5 años?",
+        question_type: "open_ended",
+        category: null,
+      },
+      {
+        id: 33,
+        question_number: 33,
+        question_text: "¿Cuál ha sido tu mayor logro personal o profesional?",
+        question_type: "open_ended",
+        category: null,
+      },
+      {
+        id: 34,
+        question_number: 34,
+        question_text: "¿Cómo sueles enfrentar los desafíos o problemas?",
+        question_type: "open_ended",
+        category: null,
+      },
+      {
+        id: 35,
+        question_number: 35,
+        question_text: "¿De qué manera contribuyes mejor en un equipo de trabajo?",
+        question_type: "open_ended",
+        category: null,
+      },
+    ]
   }
 
   const handleAnswer = (questionId: number, value: number | string, category?: string) => {
@@ -406,6 +708,21 @@ export default function RIASECTest() {
   const progress = ((currentQuestion + 1) / questions.length) * 100
   const answeredCount = questions.filter((q) => isQuestionAnswered(q.id)).length
 
+  if (!currentQ) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <div className="text-center">
+              <p className="text-red-600 mb-4">Error: No se pudo cargar la pregunta actual</p>
+              <Button onClick={() => window.location.reload()}>Recargar página</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
@@ -462,52 +779,50 @@ export default function RIASECTest() {
         </Card>
 
         {/* Current Question */}
-        {currentQ && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="text-xl">{currentQ.question_text}</CardTitle>
-              {currentQ.question_type === "open_ended" && (
-                <CardDescription>Respuesta reflexiva (mínimo 50 caracteres para análisis IA)</CardDescription>
-              )}
-            </CardHeader>
-            <CardContent>
-              {currentQ.question_type === "multiple_choice" && currentQ.options ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {currentQ.options.map((option, index) => (
-                    <Button
-                      key={index}
-                      variant={getCurrentAnswer(currentQ.id) === index ? "default" : "outline"}
-                      onClick={() => handleAnswer(currentQ.id, index, currentQ.category)}
-                      className={`p-4 h-auto ${
-                        getCurrentAnswer(currentQ.id) === index ? "bg-blue-600 text-white" : "hover:bg-blue-50"
-                      }`}
-                    >
-                      <div className="text-center">
-                        <div className="font-semibold">{option}</div>
-                        <div className="text-xs opacity-75">{index} puntos</div>
-                      </div>
-                    </Button>
-                  ))}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-xl">{currentQ.question_text}</CardTitle>
+            {currentQ.question_type === "open_ended" && (
+              <CardDescription>Respuesta reflexiva (mínimo 50 caracteres para análisis IA)</CardDescription>
+            )}
+          </CardHeader>
+          <CardContent>
+            {currentQ.question_type === "multiple_choice" && currentQ.options ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {currentQ.options.map((option, index) => (
+                  <Button
+                    key={index}
+                    variant={getCurrentAnswer(currentQ.id) === index ? "default" : "outline"}
+                    onClick={() => handleAnswer(currentQ.id, index, currentQ.category)}
+                    className={`p-4 h-auto ${
+                      getCurrentAnswer(currentQ.id) === index ? "bg-blue-600 text-white" : "hover:bg-blue-50"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="font-semibold">{option}</div>
+                      <div className="text-xs opacity-75">{index} puntos</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <div>
+                <Textarea
+                  value={(getCurrentAnswer(currentQ.id) as string) || ""}
+                  onChange={(e) => handleAnswer(currentQ.id, e.target.value)}
+                  placeholder="Escribe tu respuesta aquí... (mínimo 50 caracteres)"
+                  className="min-h-[120px]"
+                />
+                <div className="mt-2 text-sm text-gray-500">
+                  Caracteres: {((getCurrentAnswer(currentQ.id) as string) || "").length}/50 mínimo
+                  {((getCurrentAnswer(currentQ.id) as string) || "").length >= 50 && (
+                    <span className="text-green-600 ml-2">✓ Listo para análisis IA</span>
+                  )}
                 </div>
-              ) : (
-                <div>
-                  <Textarea
-                    value={(getCurrentAnswer(currentQ.id) as string) || ""}
-                    onChange={(e) => handleAnswer(currentQ.id, e.target.value)}
-                    placeholder="Escribe tu respuesta aquí... (mínimo 50 caracteres)"
-                    className="min-h-[120px]"
-                  />
-                  <div className="mt-2 text-sm text-gray-500">
-                    Caracteres: {((getCurrentAnswer(currentQ.id) as string) || "").length}/50 mínimo
-                    {((getCurrentAnswer(currentQ.id) as string) || "").length >= 50 && (
-                      <span className="text-green-600 ml-2">✓ Listo para análisis IA</span>
-                    )}
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Navigation */}
         <Card>
