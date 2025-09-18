@@ -1,154 +1,189 @@
 "use client"
 
-import { CardDescription } from "@/components/ui/card"
-
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
-import { createClient } from "@supabase/supabase-js"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Brain, CheckCircle } from "lucide-react"
+import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock } from "lucide-react"
 
 interface Question {
   id: number
-  text: string
-  options: Array<{
-    text: string
-    value: string
-    dimension: "D" | "I" | "S" | "C"
-  }>
+  type: "multiple_choice" | "open_ended" | "scenario"
+  question: string
+  options?: string[]
+  category: "D" | "I" | "S" | "C"
 }
 
 const discQuestions: Question[] = [
   {
     id: 1,
-    text: "¿Cómo prefieres abordar los desafíos en el trabajo?",
+    type: "multiple_choice",
+    question: "¿Cómo prefieres abordar los desafíos en el trabajo?",
     options: [
-      { text: "Tomo el control y actúo rápidamente", value: "a", dimension: "D" },
-      { text: "Busco involucrar a otros y generar entusiasmo", value: "b", dimension: "I" },
-      { text: "Analizo cuidadosamente antes de actuar", value: "c", dimension: "S" },
-      { text: "Sigo procedimientos establecidos y busco precisión", value: "d", dimension: "C" },
+      "Tomo el control y actúo rápidamente",
+      "Busco involucrar a otros y generar entusiasmo",
+      "Analizo cuidadosamente antes de actuar",
+      "Sigo procedimientos establecidos y busco precisión",
     ],
+    category: "D",
   },
   {
     id: 2,
-    text: "En una reunión de equipo, tiendes a:",
+    type: "multiple_choice",
+    question: "En una reunión de equipo, tiendes a:",
     options: [
-      { text: "Liderar la discusión y tomar decisiones", value: "a", dimension: "D" },
-      { text: "Motivar al grupo y compartir ideas creativas", value: "b", dimension: "I" },
-      { text: "Escuchar atentamente y apoyar a otros", value: "c", dimension: "S" },
-      { text: "Hacer preguntas detalladas y verificar información", value: "d", dimension: "C" },
+      "Liderar la discusión y tomar decisiones",
+      "Motivar al grupo y compartir ideas creativas",
+      "Escuchar atentamente y apoyar a otros",
+      "Hacer preguntas detalladas y verificar información",
     ],
+    category: "I",
   },
   {
     id: 3,
-    text: "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste y cuál fue el resultado?",
-    options: [],
+    type: "scenario",
+    question:
+      "Tu equipo enfrenta una fecha límite muy ajustada. ¿Cuál sería tu enfoque principal para asegurar que se complete el proyecto a tiempo?",
+    options: [
+      "Reorganizar prioridades y eliminar tareas no esenciales",
+      "Motivar al equipo y mantener la moral alta",
+      "Trabajar horas extra y apoyar a quien lo necesite",
+      "Crear un plan detallado con pasos específicos",
+    ],
+    category: "D",
   },
   {
     id: 4,
-    text: "¿Cómo manejas los conflictos en el equipo?",
+    type: "multiple_choice",
+    question: "¿Cómo manejas los conflictos en el equipo?",
     options: [
-      { text: "Los abordo directamente y busco resolución rápida", value: "a", dimension: "D" },
-      { text: "Trato de mediar y encontrar puntos en común", value: "b", dimension: "I" },
-      { text: "Prefiero evitar confrontaciones y buscar armonía", value: "c", dimension: "S" },
-      { text: "Analizo los hechos antes de tomar una posición", value: "d", dimension: "C" },
+      "Los abordo directamente y busco resolución rápida",
+      "Trato de mediar y encontrar puntos en común",
+      "Prefiero evitar confrontaciones y buscar armonía",
+      "Analizo los hechos antes de tomar una posición",
     ],
+    category: "S",
   },
   {
     id: 5,
-    text: "¿Cómo defines el éxito en tu carrera profesional? Describe tus objetivos a largo plazo.",
-    options: [],
+    type: "open_ended",
+    question:
+      "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste y cuál fue el resultado?",
+    category: "I",
   },
   {
     id: 6,
-    text: "¿Qué te motiva más en el trabajo?",
+    type: "multiple_choice",
+    question: "¿Qué te motiva más en el trabajo?",
     options: [
-      { text: "Lograr resultados y superar objetivos", value: "a", dimension: "D" },
-      { text: "Trabajar con personas y crear conexiones", value: "b", dimension: "I" },
-      { text: "Contribuir al bienestar del equipo", value: "c", dimension: "S" },
-      { text: "Hacer las cosas correctamente y con precisión", value: "d", dimension: "C" },
+      "Lograr resultados y superar objetivos",
+      "Trabajar con personas y crear conexiones",
+      "Contribuir al bienestar del equipo",
+      "Hacer las cosas correctamente y con precisión",
     ],
+    category: "C",
   },
   {
     id: 7,
-    text: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría y por qué son importantes para ti?",
-    options: [],
+    type: "scenario",
+    question: "Se te asigna un proyecto completamente nuevo sin instrucciones claras. ¿Cuál es tu primera reacción?",
+    options: [
+      "Empiezo inmediatamente y ajusto sobre la marcha",
+      "Busco colaboradores y lluvia de ideas",
+      "Pido más información antes de comenzar",
+      "Investigo proyectos similares y creo un plan detallado",
+    ],
+    category: "D",
   },
   {
     id: 8,
-    text: "Ante cambios organizacionales importantes, tu reacción típica es:",
+    type: "multiple_choice",
+    question: "En tu tiempo libre, prefieres:",
     options: [
-      { text: "Veo oportunidades y me adapto rápidamente", value: "a", dimension: "D" },
-      { text: "Me enfoco en mantener la moral del equipo", value: "b", dimension: "I" },
-      { text: "Necesito tiempo para procesar y adaptarme", value: "c", dimension: "S" },
-      { text: "Analizo el impacto y busco entender todos los detalles", value: "d", dimension: "C" },
+      "Actividades competitivas o desafiantes",
+      "Socializar y conocer gente nueva",
+      "Actividades relajantes con familia/amigos cercanos",
+      "Hobbies que requieren precisión o aprendizaje",
     ],
+    category: "I",
   },
   {
     id: 9,
-    text: "Tienes que presentar un proyecto importante a la alta dirección. ¿Cuál es tu enfoque de preparación?",
-    options: [
-      { text: "Me enfoco en resultados clave y impacto en el negocio", value: "a", dimension: "D" },
-      { text: "Preparo una presentación engaging con historias y ejemplos", value: "b", dimension: "I" },
-      { text: "Me aseguro de conocer bien a la audiencia y sus expectativas", value: "c", dimension: "S" },
-      { text: "Preparo datos detallados y anticipo todas las preguntas posibles", value: "d", dimension: "C" },
-    ],
+    type: "open_ended",
+    question: "¿Cómo defines el éxito en tu carrera profesional? Describe tus objetivos a largo plazo.",
+    category: "S",
   },
   {
     id: 10,
-    text: "En tu tiempo libre, prefieres:",
+    type: "multiple_choice",
+    question: "Cuando trabajas en equipo, tu rol natural es:",
     options: [
-      { text: "Actividades competitivas o desafiantes", value: "a", dimension: "D" },
-      { text: "Socializar y conocer gente nueva", value: "b", dimension: "I" },
-      { text: "Actividades relajantes con familia/amigos cercanos", value: "c", dimension: "S" },
-      { text: "Hobbies que requieren precisión o aprendizaje", value: "d", dimension: "C" },
+      "El líder que toma decisiones finales",
+      "El motivador que mantiene la energía alta",
+      "El mediador que asegura que todos participen",
+      "El analista que verifica la calidad del trabajo",
     ],
+    category: "C",
   },
   {
     id: 11,
-    text: "Cuando trabajas en equipo, tu rol natural es:",
+    type: "scenario",
+    question: "Tu jefe te pide feedback sobre un colega que no está rindiendo bien. ¿Cómo respondes?",
     options: [
-      { text: "El líder que toma decisiones finales", value: "a", dimension: "D" },
-      { text: "El motivador que mantiene la energía alta", value: "b", dimension: "I" },
-      { text: "El mediador que asegura que todos participen", value: "c", dimension: "S" },
-      { text: "El analista que verifica la calidad del trabajo", value: "d", dimension: "C" },
+      "Doy feedback directo y específico sobre los problemas",
+      "Enfoco en aspectos positivos pero menciono áreas de mejora",
+      "Sugiero apoyo adicional y entrenamiento",
+      "Proporciono datos específicos y ejemplos documentados",
     ],
+    category: "D",
   },
   {
     id: 12,
-    text: "¿Cómo prefieres recibir reconocimiento por tu trabajo?",
+    type: "multiple_choice",
+    question: "¿Cómo prefieres recibir reconocimiento por tu trabajo?",
     options: [
-      { text: "Reconocimiento público de logros y resultados", value: "a", dimension: "D" },
-      { text: "Celebración grupal y reconocimiento social", value: "b", dimension: "I" },
-      { text: "Agradecimiento personal y privado", value: "c", dimension: "S" },
-      { text: "Reconocimiento por la calidad y precisión del trabajo", value: "d", dimension: "C" },
+      "Reconocimiento público de logros y resultados",
+      "Celebración grupal y reconocimiento social",
+      "Agradecimiento personal y privado",
+      "Reconocimiento por la calidad y precisión del trabajo",
     ],
+    category: "I",
   },
   {
     id: 13,
-    text: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría y por qué son importantes para ti?",
-    options: [],
+    type: "open_ended",
+    question: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría y por qué son importantes para ti?",
+    category: "S",
   },
   {
     id: 14,
-    text: "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste y cuál fue el resultado?",
-    options: [],
+    type: "multiple_choice",
+    question: "Ante cambios organizacionales importantes, tu reacción típica es:",
+    options: [
+      "Veo oportunidades y me adapto rápidamente",
+      "Me enfoco en mantener la moral del equipo",
+      "Necesito tiempo para procesar y adaptarme",
+      "Analizo el impacto y busco entender todos los detalles",
+    ],
+    category: "C",
   },
   {
     id: 15,
-    text: "¿Cómo manejas los conflictos en el equipo?",
+    type: "scenario",
+    question: "Tienes que presentar un proyecto importante a la alta dirección. ¿Cuál es tu enfoque de preparación?",
     options: [
-      { text: "Los abordo directamente y busco resolución rápida", value: "a", dimension: "D" },
-      { text: "Trato de mediar y encontrar puntos en común", value: "b", dimension: "I" },
-      { text: "Prefiero evitar confrontaciones y buscar armonía", value: "c", dimension: "S" },
-      { text: "Analizo los hechos antes de tomar una posición", value: "d", dimension: "C" },
+      "Me enfoco en resultados clave y impacto en el negocio",
+      "Preparo una presentación engaging con historias y ejemplos",
+      "Me aseguro de conocer bien a la audiencia y sus expectativas",
+      "Preparo datos detallados y anticipo todas las preguntas posibles",
     ],
+    category: "C",
   },
 ]
 
@@ -157,7 +192,6 @@ export default function DISCTestPage() {
   const router = useRouter()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
-  const [selectedAnswer, setSelectedAnswer] = useState("")
   const [isCompleted, setIsCompleted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
@@ -169,32 +203,26 @@ export default function DISCTestPage() {
 
   useEffect(() => {
     if (mounted && !isLoading && !user) {
-      router.push("/")
+      router.push("/auth")
     }
   }, [user, router, isLoading, mounted])
 
-  const handleNext = () => {
-    if (selectedAnswer) {
-      setAnswers({ ...answers, [discQuestions[currentQuestion].id]: selectedAnswer })
+  const handleAnswer = (answer: string) => {
+    setAnswers({ ...answers, [discQuestions[currentQuestion].id]: answer })
+  }
 
-      if (currentQuestion < discQuestions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1)
-        setSelectedAnswer("")
-      } else {
-        setIsCompleted(true)
-      }
+  const nextQuestion = () => {
+    if (currentQuestion < discQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1)
+    } else {
+      setIsCompleted(true)
     }
   }
 
-  const handlePrevious = () => {
+  const prevQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1)
-      setSelectedAnswer(answers[discQuestions[currentQuestion - 1].id] || "")
     }
-  }
-
-  const handleBack = () => {
-    router.push("/test")
   }
 
   const calculateDISCScores = () => {
@@ -203,15 +231,18 @@ export default function DISCTestPage() {
     discQuestions.forEach((question) => {
       const answer = answers[question.id]
       if (answer) {
-        question.options.forEach((option) => {
-          if (option.value === answer) {
-            scores[option.dimension] += 3
-          }
-        })
+        if (question.type === "multiple_choice" && question.options) {
+          const answerIndex = question.options.indexOf(answer)
+          if (answerIndex === 0) scores.D += 3
+          else if (answerIndex === 1) scores.I += 3
+          else if (answerIndex === 2) scores.S += 3
+          else if (answerIndex === 3) scores.C += 3
+        } else if (question.type === "open_ended" || question.type === "scenario") {
+          scores[question.category] += 2
+        }
       }
     })
 
-    // Normalize scores to percentage
     const total = scores.D + scores.I + scores.S + scores.C
     if (total > 0) {
       scores.D = Math.round((scores.D / total) * 100)
@@ -231,64 +262,6 @@ export default function DISCTestPage() {
     return "Compliance"
   }
 
-  const generateAIInterpretation = async (testResults: any) => {
-    try {
-      const response = await fetch("/api/ai-coach", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `Eres un coach profesional especializado en análisis DISC y desarrollo de carrera. 
-              Analiza los resultados del test DISC de manera personalizada y constructiva.
-
-              Para el test DISC, analiza:
-              - Las puntuaciones en Dominancia (D), Influencia (I), Estabilidad (S) y Cumplimiento (C)
-              - El estilo principal identificado
-              - Cómo estas características se manifiestan en el trabajo
-              - Fortalezas específicas del perfil
-              - Áreas de desarrollo y crecimiento
-              - Recomendaciones para roles y equipos
-              - Estrategias de comunicación y liderazgo
-
-              Proporciona una interpretación detallada de 400-600 palabras que incluya:
-              1. Resumen del perfil DISC principal
-              2. Análisis de las puntuaciones específicas
-              3. Fortalezas clave identificadas
-              4. Áreas de desarrollo recomendadas
-              5. Aplicaciones prácticas en el trabajo
-              6. Recomendaciones para el crecimiento profesional
-
-              Mantén un tono profesional pero cercano, y enfócate en el crecimiento y las oportunidades.`,
-            },
-            {
-              role: "user",
-              content: `Por favor interpreta mis resultados del test DISC:
-              
-              Resultados: ${JSON.stringify(testResults)}
-              
-              Quiero entender qué significan estos resultados para mi desarrollo profesional y personal.`,
-            },
-          ],
-          temperature: 0.7,
-        }),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        return data.message
-      } else {
-        throw new Error("Error en la respuesta de la API")
-      }
-    } catch (error) {
-      console.error("Error generating AI interpretation:", error)
-      return "Lo siento, no pude generar la interpretación de IA en este momento. Los resultados básicos están disponibles en las otras pestañas."
-    }
-  }
-
   const submitTest = async () => {
     if (!user) return
 
@@ -296,7 +269,7 @@ export default function DISCTestPage() {
     try {
       const scores = calculateDISCScores()
       const primaryStyle = getPrimaryStyle(scores)
-      const duration = Math.round((Date.now() - startTime) / 60000) // minutes
+      const duration = Math.round((Date.now() - startTime) / 60000)
 
       const testResults = {
         D: scores.D,
@@ -307,87 +280,15 @@ export default function DISCTestPage() {
         answers: answers,
       }
 
-      console.log("Generating AI interpretation...")
-      const aiInterpretation = await generateAIInterpretation(testResults)
-
-      // Create Supabase client only if environment variables are available
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-
-        // Save to test_results table
-        const { error: testError } = await supabase.from("test_results").insert({
-          user_email: user.email,
-          test_type: "personality",
-          test_name: "DISC Assessment",
-          results: {
-            ...testResults,
-            ai_interpretation: aiInterpretation,
-          },
-          score: Math.max(scores.D, scores.I, scores.S, scores.C),
-          duration_minutes: duration,
-        })
-
-        if (testError) {
-          console.error("Error saving test results:", testError)
-        }
-
-        // Save to disc_results table
-        const { error: discError } = await supabase.from("disc_results").insert({
-          user_email: user.email,
-          d_score: scores.D,
-          i_score: scores.I,
-          s_score: scores.S,
-          c_score: scores.C,
-          primary_type: primaryStyle,
-          analysis: `Tu estilo principal es ${primaryStyle} con puntuaciones: D=${scores.D}%, I=${scores.I}%, S=${scores.S}%, C=${scores.C}%`,
-          recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
-        })
-
-        if (discError) {
-          console.error("Error saving DISC results:", discError)
-        }
-
-        // Save AI interpretation separately
-        const { error: aiError } = await supabase.from("ai_interpretations").insert({
-          user_email: user.email,
-          test_name: "DISC Assessment",
-          test_results: testResults,
-          interpretation: aiInterpretation,
-          model_version: "gpt-4o",
-        })
-
-        if (aiError) {
-          console.error("Error saving AI interpretation:", aiError)
-        }
-
-        // Update user profile
-        const { error: profileError } = await supabase
-          .from("user_profiles")
-          .update({
-            tests_completed: 1,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("user_email", user.email)
-
-        if (profileError) {
-          console.error("Error updating profile:", profileError)
-        }
-
-        // Add activity
-        const { error: activityError } = await supabase.from("user_activities").insert({
-          user_email: user.email,
-          activity_type: "test_completed",
-          activity_description: `Completó el Test DISC con estilo principal: ${primaryStyle}`,
-          xp_earned: 50,
-        })
-
-        if (activityError) {
-          console.error("Error saving activity:", activityError)
-        }
+      // Save to localStorage for demo
+      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
+      if (!completedTests.includes("disc")) {
+        completedTests.push("disc")
+        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
       }
 
-      console.log("Test completed successfully, redirecting to results...")
-      // Redirect to results
+      localStorage.setItem("disc_results", JSON.stringify(testResults))
+
       router.push("/test/disc/results")
     } catch (error) {
       console.error("Error submitting test:", error)
@@ -396,13 +297,12 @@ export default function DISCTestPage() {
     }
   }
 
-  // Show loading state during SSR or while mounting
   if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando test DISC...</p>
+          <p className="text-gray-600">Loading DISC assessment...</p>
         </div>
       </div>
     )
@@ -412,7 +312,7 @@ export default function DISCTestPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirigiendo...</p>
+          <p className="text-gray-600">Redirecting...</p>
         </div>
       </div>
     )
@@ -420,6 +320,7 @@ export default function DISCTestPage() {
 
   const progress = ((currentQuestion + 1) / discQuestions.length) * 100
   const question = discQuestions[currentQuestion]
+  const currentAnswer = answers[question.id]
 
   if (isCompleted) {
     return (
@@ -430,9 +331,7 @@ export default function DISCTestPage() {
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <CardTitle className="text-2xl">¡Test DISC Completado!</CardTitle>
-            <CardDescription>
-              Has respondido todas las preguntas. Ahora procesaremos tus resultados con IA.
-            </CardDescription>
+            <CardDescription>Has respondido todas las preguntas. Ahora procesaremos tus resultados.</CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <div className="bg-gray-50 p-4 rounded-lg">
@@ -451,22 +350,11 @@ export default function DISCTestPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2 flex items-center justify-center">
-                <Brain className="h-4 w-4 mr-2 text-blue-600" />
-                Análisis con IA
-              </h3>
-              <p className="text-sm text-gray-600">
-                Nuestro sistema de IA analizará tus respuestas para proporcionarte insights personalizados sobre tu
-                estilo DISC.
-              </p>
-            </div>
-
             <Button onClick={submitTest} disabled={isSubmitting} className="w-full" size="lg">
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Generando análisis con IA...
+                  Procesando resultados...
                 </>
               ) : (
                 <>
@@ -476,8 +364,8 @@ export default function DISCTestPage() {
               )}
             </Button>
 
-            <Button variant="outline" onClick={() => router.push("/dashboard")} className="w-full">
-              Volver al Dashboard
+            <Button variant="outline" onClick={() => router.push("/test")} className="w-full">
+              Volver a Tests
             </Button>
           </CardContent>
         </Card>
@@ -486,52 +374,119 @@ export default function DISCTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-6">
-          <Button variant="ghost" onClick={handleBack} className="mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="container mx-auto max-w-4xl">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <Button variant="outline" onClick={() => router.push("/test")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tests
           </Button>
-
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">DISC Assessment</h1>
-            <Badge variant="secondary">
-              {currentQuestion + 1} of {discQuestions.length}
-            </Badge>
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4 text-gray-500" />
+            <span className="text-sm text-gray-600">{Math.round((Date.now() - startTime) / 60000)} min</span>
           </div>
-
-          <Progress value={progress} className="w-full" />
         </div>
 
+        {/* Progress */}
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Test Progress</span>
+              <span className="text-sm text-gray-600">
+                {currentQuestion + 1} of {discQuestions.length}
+              </span>
+            </div>
+            <Progress value={progress} className="mb-2" />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>Start</span>
+              <span>{Math.round(progress)}% complete</span>
+              <span>Finish</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Question */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Question {currentQuestion + 1}</CardTitle>
+            <div className="flex items-center justify-between">
+              <Badge variant="outline">
+                {question.type === "multiple_choice" && "Multiple Choice"}
+                {question.type === "open_ended" && "Open Response"}
+                {question.type === "scenario" && "Scenario"}
+              </Badge>
+              <Badge variant="secondary">Question {currentQuestion + 1}</Badge>
+            </div>
+            <CardTitle className="text-xl">{question.question}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <p className="text-gray-700 text-lg leading-relaxed">{question.text}</p>
-
-            <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer} className="space-y-3">
-              {question.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50">
-                  <RadioGroupItem value={option.value} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-gray-700">
-                    {option.text}
-                  </Label>
+          <CardContent className="space-y-4">
+            {question.type === "multiple_choice" && question.options && (
+              <RadioGroup value={currentAnswer || ""} onValueChange={handleAnswer}>
+                <div className="space-y-3">
+                  {question.options.map((option, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`option-${index}`} />
+                      <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                        {option}
+                      </Label>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </RadioGroup>
+              </RadioGroup>
+            )}
 
+            {(question.type === "open_ended" || question.type === "scenario") && (
+              <div className="space-y-2">
+                <Textarea
+                  placeholder="Write your detailed response here..."
+                  value={currentAnswer || ""}
+                  onChange={(e) => handleAnswer(e.target.value)}
+                  className="min-h-[120px]"
+                />
+                <div className="flex items-center text-xs text-gray-500">
+                  <Brain className="h-3 w-3 mr-1 text-blue-600" />
+                  This response will be analyzed for personalized insights
+                </div>
+              </div>
+            )}
+
+            {/* Navigation */}
             <div className="flex justify-between pt-6">
-              <Button variant="outline" onClick={handlePrevious} disabled={currentQuestion === 0}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
+              <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
                 Previous
               </Button>
 
-              <Button onClick={handleNext} disabled={!selectedAnswer} className="bg-gray-900 hover:bg-gray-800">
-                {currentQuestion === discQuestions.length - 1 ? "Complete" : "Next"}
-                <ArrowRight className="w-4 h-4 ml-2" />
+              <Button onClick={nextQuestion} disabled={!currentAnswer}>
+                {currentQuestion === discQuestions.length - 1 ? (
+                  <>
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Complete Test
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </>
+                )}
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Test Info */}
+        <Card className="mt-6">
+          <CardContent className="pt-6">
+            <div className="flex items-start space-x-3">
+              <Brain className="h-5 w-5 text-blue-600 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-sm">About the DISC Assessment</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  The DISC assessment evaluates four behavioral dimensions: Dominance (D), Influence (I), Steadiness
+                  (S), and Compliance (C). Your responses will help identify your natural behavioral style and
+                  communication preferences in professional settings.
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>

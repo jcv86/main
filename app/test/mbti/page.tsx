@@ -7,9 +7,9 @@ import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
 import { Lightbulb, Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
+import { useSession } from "@/components/session-wrapper"
 
 interface Question {
   id: number
@@ -288,43 +288,21 @@ export default function MBTITest() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [startTime, setStartTime] = useState<Date>(new Date())
-  const [userEmail, setUserEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const router = useRouter()
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const { user, isLoading } = useSession()
 
   useEffect(() => {
-    checkUserSession()
+    setMounted(true)
   }, [])
 
-  const checkUserSession = async () => {
-    const localSession = localStorage.getItem("dtc_session")
-    if (localSession) {
-      try {
-        const sessionData = JSON.parse(localSession)
-        if (sessionData.authenticated && sessionData.user) {
-          setUserEmail(sessionData.user.email)
-          return
-        }
-      } catch (error) {
-        console.log("Invalid local session")
-      }
-    }
-
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
-      } else {
-        router.push("/auth")
-      }
-    } catch (error) {
+  useEffect(() => {
+    if (mounted && !isLoading && !user) {
       router.push("/auth")
     }
-  }
+  }, [user, router, isLoading, mounted])
 
   const handleAnswer = (questionId: number, value: string) => {
     setAnswers((prev) => ({
@@ -354,99 +332,6 @@ export default function MBTITest() {
     return { type, scores }
   }
 
-  const getMBTIDescription = (type: string) => {
-    const descriptions: Record<string, { name: string; description: string; traits: string[] }> = {
-      INTJ: {
-        name: "El Arquitecto",
-        description: "Pensador estratégico con un plan para todo",
-        traits: ["Visionario", "Independiente", "Determinado", "Estratégico"],
-      },
-      INTP: {
-        name: "El Pensador",
-        description: "Innovador flexible y pensador creativo",
-        traits: ["Analítico", "Curioso", "Flexible", "Independiente"],
-      },
-      ENTJ: {
-        name: "El Comandante",
-        description: "Líder audaz, imaginativo y con voluntad fuerte",
-        traits: ["Líder natural", "Estratégico", "Eficiente", "Confiado"],
-      },
-      ENTP: {
-        name: "El Innovador",
-        description: "Pensador inteligente y curioso que no puede resistir un desafío intelectual",
-        traits: ["Innovador", "Entusiasta", "Estratégico", "Carismático"],
-      },
-      INFJ: {
-        name: "El Abogado",
-        description: "Idealista creativo e inspirado por sus propios valores",
-        traits: ["Idealista", "Organizado", "Insightful", "Inspirador"],
-      },
-      INFP: {
-        name: "El Mediador",
-        description: "Poeta idealista, siempre buscando lo bueno en las personas y eventos",
-        traits: ["Idealista", "Flexible", "Cuidadoso", "Sensible"],
-      },
-      ENFJ: {
-        name: "El Protagonista",
-        description: "Líder carismático e inspirador, capaz de fascinar a sus oyentes",
-        traits: ["Carismático", "Altruista", "Natural líder", "Confiable"],
-      },
-      ENFP: {
-        name: "El Activista",
-        description: "Espíritu libre entusiasta, creativo y sociable",
-        traits: ["Entusiasta", "Creativo", "Sociable", "Energético"],
-      },
-      ISTJ: {
-        name: "El Logista",
-        description: "Práctico y orientado a los hechos, confiabilidad personificada",
-        traits: ["Responsable", "Sincero", "Práctico", "Trabajador"],
-      },
-      ISFJ: {
-        name: "El Protector",
-        description: "Protector cálido y dedicado, siempre listo para defender a sus seres queridos",
-        traits: ["Cálido", "Considerado", "Colaborativo", "Confiable"],
-      },
-      ESTJ: {
-        name: "El Ejecutivo",
-        description: "Excelente administrador, insuperable en la gestión de cosas o personas",
-        traits: ["Organizado", "Práctico", "Lógico", "Asertivo"],
-      },
-      ESFJ: {
-        name: "El Cónsul",
-        description: "Extraordinariamente cuidadoso, sociable y popular, siempre ansioso por ayudar",
-        traits: ["Cuidadoso", "Sociable", "Popular", "Simpático"],
-      },
-      ISTP: {
-        name: "El Virtuoso",
-        description: "Experimentador audaz y práctico, maestro de todo tipo de herramientas",
-        traits: ["Audaz", "Práctico", "Experimental", "Espontáneo"],
-      },
-      ISFP: {
-        name: "El Aventurero",
-        description: "Artista flexible y encantador, siempre listo para explorar nuevas posibilidades",
-        traits: ["Flexible", "Encantador", "Artístico", "Curioso"],
-      },
-      ESTP: {
-        name: "El Emprendedor",
-        description: "Inteligente, enérgico y muy perceptivo, verdaderamente disfruta vivir al límite",
-        traits: ["Enérgico", "Perceptivo", "Espontáneo", "Pragmático"],
-      },
-      ESFP: {
-        name: "El Animador",
-        description: "Persona espontánea, enérgica y entusiasta - la vida nunca es aburrida a su alrededor",
-        traits: ["Espontáneo", "Enérgico", "Entusiasta", "Amigable"],
-      },
-    }
-
-    return (
-      descriptions[type] || {
-        name: "Tipo Desconocido",
-        description: "Descripción no disponible",
-        traits: [],
-      }
-    )
-  }
-
   const submitTest = async () => {
     if (Object.keys(answers).length < mbtiQuestions.length) {
       alert("Por favor responde todas las preguntas antes de continuar.")
@@ -457,9 +342,7 @@ export default function MBTITest() {
     const endTime = new Date()
     const duration = Math.round((endTime.getTime() - startTime.getTime()) / 60000)
     const { type, scores } = calculateMBTIType()
-    const description = getMBTIDescription(type)
 
-    // Calculate overall score based on clarity of type
     const typeStrength = Math.max(
       Math.abs(scores.E - scores.I),
       Math.abs(scores.S - scores.N),
@@ -470,48 +353,22 @@ export default function MBTITest() {
 
     const results = {
       type,
-      type_name: description.name,
-      type_description: description.description,
       scores,
-      traits: description.traits,
+      overall_score: overallScore,
       completion_date: endTime.toISOString(),
       total_questions: mbtiQuestions.length,
       answered_questions: Object.keys(answers).length,
     }
 
     try {
-      // Save to database
-      const { error } = await supabase.from("test_results").insert({
-        user_email: userEmail,
-        test_type: "personality",
-        test_name: "MBTI",
-        test_category: "personality",
-        results: results,
-        score: overallScore,
-        duration_minutes: duration,
-        completed_at: endTime.toISOString(),
-      })
-
-      if (error) {
-        console.error("Error saving test results:", error)
+      // Save to localStorage for demo
+      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
+      if (!completedTests.includes("mbti")) {
+        completedTests.push("mbti")
+        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
       }
 
-      // Add activity
-      await supabase.from("user_activities").insert({
-        user_email: userEmail,
-        activity_type: "test_completed",
-        activity_description: `Completó el Test MBTI - Tipo: ${type} (${description.name})`,
-        xp_earned: 100,
-      })
-
-      // Update user profile
-      await supabase.rpc("increment_user_stats", {
-        user_email: userEmail,
-        tests_increment: 1,
-        xp_increment: 100,
-      })
-
-      // Redirect to results
+      localStorage.setItem("mbti_results", JSON.stringify(results))
       router.push("/test/mbti/results")
     } catch (error) {
       console.error("Error submitting test:", error)
@@ -521,22 +378,43 @@ export default function MBTITest() {
     }
   }
 
+  if (!mounted || isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading MBTI assessment...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Redirecting...</p>
+        </div>
+      </div>
+    )
+  }
+
   const progress = ((currentQuestion + 1) / mbtiQuestions.length) * 100
   const question = mbtiQuestions[currentQuestion]
   const canProceed = answers[question.id] !== undefined
 
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+          <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
+            Back to Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Lightbulb className="h-4 w-4 mr-1" />
-            Test MBTI
+            MBTI Test
           </Badge>
         </div>
 
@@ -545,14 +423,14 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Test de Personalidad MBTI</h2>
-                <p className="text-foreground/80">
-                  Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
+                <h2 className="text-2xl font-bold text-gray-900">MBTI Personality Test</h2>
+                <p className="text-gray-600">
+                  Question {currentQuestion + 1} of {mbtiQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-foreground/80">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Clock className="h-4 w-4" />
-                <span>~18 minutos</span>
+                <span>~18 minutes</span>
               </div>
             </div>
             <Progress value={progress} className="h-2" />
@@ -563,18 +441,18 @@ export default function MBTITest() {
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-xl">{question.text}</CardTitle>
-            <CardDescription>Elige la opción que mejor describa tu preferencia natural</CardDescription>
+            <CardDescription>Choose the option that best describes your natural preference</CardDescription>
           </CardHeader>
           <CardContent>
             <RadioGroup value={answers[question.id] || ""} onValueChange={(value) => handleAnswer(question.id, value)}>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-foreground/10 border border-foreground/20">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 border border-gray-200">
                   <RadioGroupItem value="A" id="option-A" />
                   <Label htmlFor="option-A" className="flex-1 cursor-pointer">
                     {question.optionA}
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-foreground/10 border border-foreground/20">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 border border-gray-200">
                   <RadioGroupItem value="B" id="option-B" />
                   <Label htmlFor="option-B" className="flex-1 cursor-pointer">
                     {question.optionB}
@@ -593,24 +471,24 @@ export default function MBTITest() {
             disabled={currentQuestion === 0}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Anterior
+            Previous
           </Button>
 
           {currentQuestion === mbtiQuestions.length - 1 ? (
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-foreground hover:bg-foreground/90"
+              className="bg-gray-900 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Procesando...
+                  Processing...
                 </>
               ) : (
                 <>
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Finalizar Test
+                  Complete Test
                 </>
               )}
             </Button>
@@ -618,9 +496,9 @@ export default function MBTITest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(mbtiQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-foreground hover:bg-foreground/90"
+              className="bg-gray-900 hover:bg-gray-800"
             >
-              Siguiente
+              Next
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           )}
@@ -634,16 +512,16 @@ export default function MBTITest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-foreground"
+                    ? "bg-gray-900"
                     : answers[mbtiQuestions[index].id]
-                      ? "bg-foreground/30"
-                      : "bg-foreground/10"
+                      ? "bg-gray-300"
+                      : "bg-gray-200"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-foreground/80 mt-2">
-            {Object.keys(answers).length} de {mbtiQuestions.length} preguntas respondidas
+          <p className="text-sm text-gray-600 mt-2">
+            {Object.keys(answers).length} of {mbtiQuestions.length} questions answered
           </p>
         </div>
       </div>

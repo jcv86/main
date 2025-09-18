@@ -1,280 +1,287 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import {
-  Brain,
-  Heart,
-  Users,
-  Target,
-  Lightbulb,
-  BookOpen,
-  Clock,
-  Star,
-  TrendingUp,
-  Award,
-  Zap,
-  CheckCircle,
-  ArrowRight,
-  BarChart3,
-  PieChart,
-  Activity,
-} from "lucide-react"
+import type React from "react"
 
-const tests = [
-  {
-    id: "emotional-intelligence",
-    title: "Inteligencia Emocional",
-    description: "Evalúa tu capacidad para reconocer, entender y manejar emociones propias y ajenas",
-    icon: Heart,
-    color: "from-red-500 to-pink-500",
-    bgColor: "from-red-50 to-pink-50",
-    duration: "20-30 min",
-    questions: 30,
-    competencies: 5,
-    features: ["Análisis por competencias", "Plan de desarrollo", "Implicaciones profesionales", "Perfil emocional"],
-    available: true,
-  },
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { ArrowLeft, Brain, Users, Target, Lightbulb, Heart, Palette, Clock, CheckCircle } from "lucide-react"
+import { useSession } from "@/components/session-wrapper"
+
+interface TestInfo {
+  id: string
+  title: string
+  description: string
+  duration: string
+  questions: number
+  icon: React.ComponentType<{ className?: string }>
+  color: string
+  path: string
+  difficulty: "Beginner" | "Intermediate" | "Advanced"
+  category: "Personality" | "Skills" | "Intelligence" | "Career"
+}
+
+const availableTests: TestInfo[] = [
   {
     id: "disc",
-    title: "Test DISC",
-    description: "Descubre tu estilo de comportamiento y personalidad en el trabajo",
+    title: "DISC Assessment",
+    description: "Discover your behavioral style and communication preferences in professional settings.",
+    duration: "10-15 min",
+    questions: 15,
     icon: Target,
-    color: "from-blue-500 to-cyan-500",
-    bgColor: "from-blue-50 to-cyan-50",
-    duration: "15-20 min",
-    questions: 24,
-    competencies: 4,
-    features: ["Perfil DISC", "Estilo de trabajo", "Fortalezas naturales", "Áreas de desarrollo"],
-    available: true,
+    color: "bg-blue-100 text-blue-700 border-blue-200",
+    path: "/test/disc",
+    difficulty: "Beginner",
+    category: "Personality",
   },
   {
     id: "big-five",
-    title: "Big Five",
-    description: "Análisis completo de los cinco grandes factores de personalidad",
+    title: "Big Five Personality",
+    description: "Comprehensive personality assessment covering five major dimensions of human personality.",
+    duration: "15-20 min",
+    questions: 30,
     icon: Brain,
-    color: "from-purple-500 to-indigo-500",
-    bgColor: "from-purple-50 to-indigo-50",
-    duration: "25-35 min",
-    questions: 50,
-    competencies: 5,
-    features: ["Cinco dimensiones", "Percentiles", "Comparación poblacional", "Predicciones laborales"],
-    available: true,
+    color: "bg-purple-100 text-purple-700 border-purple-200",
+    path: "/test/big-five",
+    difficulty: "Intermediate",
+    category: "Personality",
   },
   {
     id: "mbti",
-    title: "MBTI",
-    description: "Identifica tu tipo de personalidad según el indicador Myers-Briggs",
+    title: "MBTI Assessment",
+    description: "Identify your psychological preferences and personality type based on Myers-Briggs theory.",
+    duration: "15-20 min",
+    questions: 25,
     icon: Users,
-    color: "from-green-500 to-emerald-500",
-    bgColor: "from-green-50 to-emerald-50",
-    duration: "20-25 min",
-    questions: 32,
-    competencies: 4,
-    features: ["16 tipos de personalidad", "Preferencias cognitivas", "Dinámicas de equipo", "Desarrollo personal"],
-    available: true,
+    color: "bg-green-100 text-green-700 border-green-200",
+    path: "/test/mbti",
+    difficulty: "Intermediate",
+    category: "Personality",
+  },
+  {
+    id: "emotional-intelligence",
+    title: "Emotional Intelligence",
+    description: "Assess your ability to recognize, understand, and manage emotions effectively.",
+    duration: "10-15 min",
+    questions: 20,
+    icon: Heart,
+    color: "bg-red-100 text-red-700 border-red-200",
+    path: "/test/emotional-intelligence",
+    difficulty: "Beginner",
+    category: "Intelligence",
   },
   {
     id: "riasec",
-    title: "RIASEC",
-    description: "Descubre tus intereses vocacionales y carreras compatibles",
-    icon: Lightbulb,
-    color: "from-yellow-500 to-orange-500",
-    bgColor: "from-yellow-50 to-orange-50",
-    duration: "15-20 min",
-    questions: 36,
-    competencies: 6,
-    features: ["Intereses vocacionales", "Carreras sugeridas", "Ambientes de trabajo", "Código Holland"],
-    available: true,
+    title: "Career Interests (RIASEC)",
+    description: "Discover your career interests and find professions that match your personality.",
+    duration: "12-18 min",
+    questions: 35,
+    icon: Palette,
+    color: "bg-orange-100 text-orange-700 border-orange-200",
+    path: "/test/riasec",
+    difficulty: "Intermediate",
+    category: "Career",
   },
   {
     id: "soft-skills",
-    title: "Habilidades Blandas",
-    description: "Evalúa tus competencias interpersonales y de liderazgo",
-    icon: Star,
-    color: "from-teal-500 to-cyan-500",
-    bgColor: "from-teal-50 to-cyan-50",
-    duration: "25-30 min",
-    questions: 40,
-    competencies: 8,
-    features: ["Competencias clave", "Liderazgo", "Comunicación", "Trabajo en equipo"],
-    available: true,
+    title: "Soft Skills Assessment",
+    description: "Evaluate your interpersonal and professional soft skills for career development.",
+    duration: "15-20 min",
+    questions: 30,
+    icon: Lightbulb,
+    color: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    path: "/test/soft-skills",
+    difficulty: "Advanced",
+    category: "Skills",
   },
 ]
 
-const stats = {
-  totalTests: 6,
-  totalQuestions: 212,
-  avgDuration: "22 min",
-  completionRate: "94%",
-}
-
 export default function TestsPage() {
+  const { user, isLoading } = useSession()
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [mounted, setMounted] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>("All")
+  const [completedTests, setCompletedTests] = useState<string[]>([])
 
-  const categories = [
-    { id: "all", name: "Todos los Tests", icon: BarChart3 },
-    { id: "personality", name: "Personalidad", icon: Brain },
-    { id: "emotional", name: "Inteligencia Emocional", icon: Heart },
-    { id: "vocational", name: "Vocacional", icon: Target },
-    { id: "skills", name: "Habilidades", icon: Star },
-  ]
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const getCategoryTests = (category: string) => {
-    if (category === "all") return tests
-    if (category === "personality") return tests.filter((t) => ["disc", "big-five", "mbti"].includes(t.id))
-    if (category === "emotional") return tests.filter((t) => t.id === "emotional-intelligence")
-    if (category === "vocational") return tests.filter((t) => t.id === "riasec")
-    if (category === "skills") return tests.filter((t) => t.id === "soft-skills")
-    return tests
+  useEffect(() => {
+    if (mounted && !isLoading && !user) {
+      router.push("/auth")
+    }
+  }, [user, router, isLoading, mounted])
+
+  useEffect(() => {
+    // Load completed tests from localStorage or API
+    const loadCompletedTests = () => {
+      try {
+        const completed = localStorage.getItem("completed_tests")
+        if (completed) {
+          setCompletedTests(JSON.parse(completed))
+        }
+      } catch (error) {
+        console.error("Error loading completed tests:", error)
+      }
+    }
+
+    if (mounted) {
+      loadCompletedTests()
+    }
+  }, [mounted])
+
+  if (!mounted || isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading assessments...</p>
+        </div>
+      </div>
+    )
   }
 
-  const filteredTests = getCategoryTests(selectedCategory)
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Redirecting to authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const categories = ["All", "Personality", "Skills", "Intelligence", "Career"]
+  const filteredTests =
+    selectedCategory === "All" ? availableTests : availableTests.filter((test) => test.category === selectedCategory)
+
+  const handleStartTest = (testPath: string) => {
+    router.push(testPath)
+  }
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "Beginner":
+        return "bg-green-100 text-green-700"
+      case "Intermediate":
+        return "bg-yellow-100 text-yellow-700"
+      case "Advanced":
+        return "bg-red-100 text-red-700"
+      default:
+        return "bg-gray-100 text-gray-700"
+    }
+  }
+
+  const completionPercentage = (completedTests.length / availableTests.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="p-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg">
-              <BarChart3 className="h-16 w-16 text-white" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Centro de Evaluaciones</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Descubre tu potencial con nuestros tests psicométricos profesionales. Obtén insights profundos sobre tu
-            personalidad, habilidades y preferencias vocacionales.
-          </p>
+        <div className="flex items-center justify-between mb-8">
+          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+          <Badge variant="secondary" className="text-sm">
+            <Brain className="h-4 w-4 mr-1" />
+            Career Assessments
+          </Badge>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          <Card className="text-center shadow-lg">
-            <CardContent className="p-6">
-              <BookOpen className="h-10 w-10 mx-auto mb-3 text-blue-500" />
-              <div className="text-2xl font-bold text-gray-900">{stats.totalTests}</div>
-              <div className="text-sm text-gray-600">Tests Disponibles</div>
-            </CardContent>
-          </Card>
-          <Card className="text-center shadow-lg">
-            <CardContent className="p-6">
-              <Activity className="h-10 w-10 mx-auto mb-3 text-green-500" />
-              <div className="text-2xl font-bold text-gray-900">{stats.totalQuestions}</div>
-              <div className="text-sm text-gray-600">Preguntas Total</div>
-            </CardContent>
-          </Card>
-          <Card className="text-center shadow-lg">
-            <CardContent className="p-6">
-              <Clock className="h-10 w-10 mx-auto mb-3 text-yellow-500" />
-              <div className="text-2xl font-bold text-gray-900">{stats.avgDuration}</div>
-              <div className="text-sm text-gray-600">Duración Promedio</div>
-            </CardContent>
-          </Card>
-          <Card className="text-center shadow-lg">
-            <CardContent className="p-6">
-              <TrendingUp className="h-10 w-10 mx-auto mb-3 text-purple-500" />
-              <div className="text-2xl font-bold text-gray-900">{stats.completionRate}</div>
-              <div className="text-sm text-gray-600">Tasa de Finalización</div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Progress Overview */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              Assessment Progress
+            </CardTitle>
+            <CardDescription>Complete all assessments to get comprehensive career insights</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Overall Progress</span>
+              <span className="text-sm text-gray-600">
+                {completedTests.length} of {availableTests.length} completed
+              </span>
+            </div>
+            <Progress value={completionPercentage} className="h-2" />
+            <p className="text-xs text-gray-500 mt-2">{Math.round(completionPercentage)}% complete</p>
+          </CardContent>
+        </Card>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category) => {
-            const IconComponent = category.icon
-            return (
-              <Button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                className={`flex items-center space-x-2 ${
-                  selectedCategory === category.id
-                    ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-white hover:bg-gray-50"
-                }`}
-              >
-                <IconComponent className="h-4 w-4" />
-                <span>{category.name}</span>
-              </Button>
-            )
-          })}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+              className={selectedCategory === category ? "bg-gray-900 text-white" : ""}
+            >
+              {category}
+            </Button>
+          ))}
         </div>
 
         {/* Tests Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTests.map((test) => {
             const IconComponent = test.icon
+            const isCompleted = completedTests.includes(test.id)
+
             return (
-              <Card
-                key={test.id}
-                className={`shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br ${test.bgColor} border-0`}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-4 rounded-full bg-gradient-to-r ${test.color} shadow-lg`}>
-                      <IconComponent className="h-8 w-8 text-white" />
-                    </div>
-                    {test.available && (
-                      <Badge className="bg-green-100 text-green-800 border-green-200">Disponible</Badge>
-                    )}
+              <Card key={test.id} className="relative hover:shadow-lg transition-shadow">
+                {isCompleted && (
+                  <div className="absolute top-4 right-4">
+                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Completed
+                    </Badge>
                   </div>
-                  <CardTitle className="text-2xl text-gray-900">{test.title}</CardTitle>
-                  <CardDescription className="text-gray-700 leading-relaxed">{test.description}</CardDescription>
+                )}
+
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`p-2 rounded-lg ${test.color}`}>
+                      <IconComponent className="h-5 w-5" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-lg">{test.title}</CardTitle>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline" className={getDifficultyColor(test.difficulty)}>
+                          {test.difficulty}
+                        </Badge>
+                        <Badge variant="outline">{test.category}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <CardDescription className="text-sm leading-relaxed">{test.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Test Info */}
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div className="p-3 bg-white bg-opacity-60 rounded-lg">
-                      <Clock className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <div className="text-sm font-medium text-gray-900">{test.duration}</div>
-                      <div className="text-xs text-gray-600">Duración</div>
+
+                <CardContent>
+                  <div className="flex items-center justify-between mb-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{test.duration}</span>
                     </div>
-                    <div className="p-3 bg-white bg-opacity-60 rounded-lg">
-                      <BookOpen className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <div className="text-sm font-medium text-gray-900">{test.questions}</div>
-                      <div className="text-xs text-gray-600">Preguntas</div>
-                    </div>
-                    <div className="p-3 bg-white bg-opacity-60 rounded-lg">
-                      <PieChart className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <div className="text-sm font-medium text-gray-900">{test.competencies}</div>
-                      <div className="text-xs text-gray-600">Áreas</div>
+                    <div className="flex items-center gap-1">
+                      <Brain className="h-4 w-4" />
+                      <span>{test.questions} questions</span>
                     </div>
                   </div>
 
-                  {/* Features */}
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-gray-900 text-sm">Incluye:</h4>
-                    <div className="space-y-1">
-                      {test.features.map((feature, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Action Button */}
                   <Button
-                    onClick={() => router.push(`/test/${test.id}`)}
-                    disabled={!test.available}
-                    className={`w-full bg-gradient-to-r ${test.color} hover:opacity-90 text-white shadow-lg`}
-                    size="lg"
+                    onClick={() => handleStartTest(test.path)}
+                    className="w-full bg-gray-900 hover:bg-gray-800"
+                    disabled={isCompleted}
                   >
-                    {test.available ? (
-                      <>
-                        <span>Comenzar Test</span>
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </>
-                    ) : (
-                      <span>Próximamente</span>
-                    )}
+                    {isCompleted ? "View Results" : "Start Assessment"}
                   </Button>
                 </CardContent>
               </Card>
@@ -282,124 +289,35 @@ export default function TestsPage() {
           })}
         </div>
 
-        {/* Featured Test Spotlight */}
-        <Card className="shadow-2xl bg-gradient-to-r from-red-500 to-pink-500 text-white mb-12">
-          <CardContent className="p-8">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="flex items-center space-x-3 mb-4">
-                  <Heart className="h-10 w-10" />
-                  <Badge className="bg-white bg-opacity-20 text-white border-white border-opacity-30">
-                    ⭐ Destacado
-                  </Badge>
-                </div>
-                <h2 className="text-3xl font-bold mb-4">Test de Inteligencia Emocional</h2>
-                <p className="text-red-100 text-lg leading-relaxed mb-6">
-                  Nuestro test más completo y popular. Descubre tu capacidad para manejar emociones y liderar con
-                  efectividad. Incluye análisis detallado en 4 pestañas con recomendaciones personalizadas.
-                </p>
-                <div className="flex flex-wrap gap-4 mb-6">
-                  <div className="flex items-center space-x-2">
-                    <Zap className="h-5 w-5" />
-                    <span>30 preguntas especializadas</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Award className="h-5 w-5" />
-                    <span>5 competencias evaluadas</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Target className="h-5 w-5" />
-                    <span>Plan de desarrollo incluido</span>
-                  </div>
-                </div>
-                <Button
-                  onClick={() => router.push("/test/emotional-intelligence")}
-                  size="lg"
-                  className="bg-white text-red-500 hover:bg-gray-100 shadow-lg"
-                >
-                  Comenzar Ahora
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
-              <div className="text-center">
-                <div className="bg-white bg-opacity-10 rounded-2xl p-8">
-                  <Heart className="h-24 w-24 mx-auto mb-6 text-white" />
-                  <div className="text-4xl font-bold mb-2">4.9/5</div>
-                  <div className="text-red-100">Calificación promedio</div>
-                  <div className="flex justify-center mt-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-6 w-6 fill-current text-yellow-300" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Benefits Section */}
-        <Card className="shadow-lg mb-12">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">¿Por qué tomar nuestros tests?</CardTitle>
-            <CardDescription className="text-lg">
-              Beneficios de completar las evaluaciones psicométricas
-            </CardDescription>
+        {/* Help Section */}
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5 text-yellow-600" />
+              Assessment Tips
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="p-4 bg-blue-100 rounded-full w-fit mx-auto mb-4">
-                  <Brain className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Autoconocimiento</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Obtén insights profundos sobre tu personalidad, fortalezas y áreas de mejora para el crecimiento
-                  personal.
-                </p>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <h4 className="font-semibold mb-2">Before Starting:</h4>
+                <ul className="space-y-1 text-gray-600">
+                  <li>• Find a quiet environment</li>
+                  <li>• Answer honestly and instinctively</li>
+                  <li>• Don't overthink your responses</li>
+                </ul>
               </div>
-              <div className="text-center">
-                <div className="p-4 bg-green-100 rounded-full w-fit mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Desarrollo Profesional</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Identifica oportunidades de carrera y desarrolla las competencias más valoradas en el mercado laboral.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="p-4 bg-purple-100 rounded-full w-fit mx-auto mb-4">
-                  <Users className="h-8 w-8 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Mejores Relaciones</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Comprende mejor tu estilo de comunicación y cómo interactuar más efectivamente con otros.
-                </p>
+              <div>
+                <h4 className="font-semibold mb-2">For Best Results:</h4>
+                <ul className="space-y-1 text-gray-600">
+                  <li>• Complete all assessments</li>
+                  <li>• Take breaks between tests</li>
+                  <li>• Review results with our AI coach</li>
+                </ul>
               </div>
             </div>
           </CardContent>
         </Card>
-
-        {/* Call to Action */}
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Listo para comenzar tu evaluación?</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Elige el test que más te interese y descubre insights valiosos sobre tu perfil profesional y personal.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button
-              onClick={() => router.push("/test/emotional-intelligence")}
-              size="lg"
-              className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8"
-            >
-              Test Más Popular
-              <Heart className="ml-2 h-5 w-5" />
-            </Button>
-            <Button onClick={() => router.push("/dashboard")} variant="outline" size="lg" className="bg-white px-8">
-              Ver Dashboard
-              <BarChart3 className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
       </div>
     </div>
   )

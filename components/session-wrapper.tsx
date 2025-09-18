@@ -1,6 +1,8 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
+import { createClient } from "@supabase/supabase-js"
 
 interface User {
   id: string
@@ -10,81 +12,116 @@ interface User {
 
 interface SessionContextType {
   user: User | null
-  loading: boolean
-  signIn: (email: string, password: string) => Promise<void>
-  signOut: () => Promise<void>
+  isLoading: boolean
+  login: (email: string, password: string) => Promise<boolean>
+  logout: () => void
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined)
 
-export function SessionWrapper({ children }: { children: ReactNode }) {
+export function SessionWrapper({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate session check
+    // Check for existing session
     const checkSession = async () => {
       try {
-        // For demo purposes, set a default user
-        setUser({
-          id: "demo-user",
-          email: "demo@example.com",
-          name: "Demo User",
-        })
+        // Check local storage first
+        const localSession = localStorage.getItem("dtc_session")
+        if (localSession) {
+          const sessionData = JSON.parse(localSession)
+          if (sessionData.authenticated && sessionData.user) {
+            setUser(sessionData.user)
+            setIsLoading(false)
+            return
+          }
+        }
+
+        // Check Supabase session if available
+        if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
+          const {
+            data: { user: supabaseUser },
+          } = await supabase.auth.getUser()
+          if (supabaseUser) {
+            const userData = {
+              id: supabaseUser.id,
+              email: supabaseUser.email || "",
+              name: supabaseUser.user_metadata?.name || supabaseUser.email,
+            }
+            setUser(userData)
+          }
+        }
       } catch (error) {
-        console.error("Session check failed:", error)
+        console.error("Session check error:", error)
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
     checkSession()
   }, [])
 
-  const signIn = async (email: string, password: string) => {
-    setLoading(true)
+  const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Simulate sign in
-      setUser({
-        id: "user-" + Date.now(),
-        email,
-        name: email.split("@")[0],
-      })
+      setIsLoading(true)
+
+      // Simple demo login - in production, use proper authentication
+      if (email && password) {
+        const userData = {
+          id: "demo-user-id",
+          email: email,
+          name: email.split("@")[0],
+        }
+
+        setUser(userData)
+        localStorage.setItem(
+          "dtc_session",
+          JSON.stringify({
+            authenticated: true,
+            user: userData,
+            timestamp: Date.now(),
+          }),
+        )
+
+        return true
+      }
+
+      return false
     } catch (error) {
-      console.error("Sign in failed:", error)
-      throw error
+      console.error("Login error:", error)
+      return false
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const signOut = async () => {
-    setLoading(true)
-    try {
-      setUser(null)
-    } catch (error) {
-      console.error("Sign out failed:", error)
-    } finally {
-      setLoading(false)
-    }
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem("dtc_session")
   }
 
-  return <SessionContext.Provider value={{ user, loading, signIn, signOut }}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={{ user, isLoading, login, logout }}>{children}</SessionContext.Provider>
 }
 
 export function useSession() {
   const context = useContext(SessionContext)
-  if (context === undefined) {
-    // Return safe defaults during SSR
-    if (typeof window === "undefined") {
-      return {
-        user: null,
-        loading: true,
-        signIn: async () => {},
-        signOut: async () => {},
-      }
+
+  // Provide safe fallbacks during SSR
+  if (typeof window === "undefined") {
+    return {
+      user: null,
+      isLoading: true,
+      login: async () => false,
+      logout: () => {},
     }
+  }
+
+  if (context === undefined) {
     throw new Error("useSession must be used within a SessionWrapper")
   }
+
   return context
 }

@@ -3,47 +3,50 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
-import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CareerDev Pro - Professional Development Platform",
+  title: "Career Development Platform - Discover Your Professional Path",
   description:
-    "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
-  keywords: [
-    "career development",
-    "personality assessment",
-    "AI coaching",
-    "professional growth",
-    "DISC",
-    "MBTI",
-    "Big Five",
-  ],
-  authors: [{ name: "CareerDev Pro Team" }],
-  creator: "CareerDev Pro",
-  publisher: "CareerDev Pro",
+    "Comprehensive career assessment platform with personality tests, skills evaluation, and AI-powered coaching to help you discover and develop your professional path.",
+  keywords:
+    "career development, personality tests, DISC assessment, MBTI, Big Five, career coaching, professional development, skills assessment",
+  authors: [{ name: "Career Development Platform" }],
+  creator: "Career Development Platform",
+  publisher: "Career Development Platform",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://careerdev-pro.vercel.app"),
+  metadataBase: new URL("https://career-development-platform.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "CareerDev Pro - Professional Development Platform",
+    title: "Career Development Platform - Discover Your Professional Path",
     description:
-      "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
-    url: "https://careerdev-pro.vercel.app",
-    siteName: "CareerDev Pro",
+      "Take comprehensive personality and skills assessments with AI-powered insights to accelerate your career growth.",
+    url: "https://career-development-platform.vercel.app",
+    siteName: "Career Development Platform",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Career Development Platform",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CareerDev Pro - Professional Development Platform",
+    title: "Career Development Platform - Discover Your Professional Path",
     description:
-      "Unlock your career potential with AI-powered insights, personality assessments, and personalized coaching.",
-    creator: "@careerdevpro",
+      "Take comprehensive personality and skills assessments with AI-powered insights to accelerate your career growth.",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -75,14 +78,9 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
-      <body className={`${inter.className} antialiased`}>
-        <SessionWrapper>
-          <main className="min-h-screen bg-background text-foreground">{children}</main>
-          <Toaster />
-        </SessionWrapper>
+      <body className={inter.className} suppressHydrationWarning>
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   )
