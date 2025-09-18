@@ -227,13 +227,36 @@ export default function SoftSkillsTest() {
   const categoryColor = categoryColors[question.category as keyof typeof categoryColors] || "text-gray-600"
   const categoryName = categoryNames[question.category as keyof typeof categoryNames] || question.category
 
-  // Parse options safely
+  // Parse options safely with better error handling
   let parsedOptions: string[] = []
   if (question.question_type === "multiple_choice" && question.options) {
     try {
-      parsedOptions = JSON.parse(question.options)
+      // Handle both string and array formats
+      if (typeof question.options === "string") {
+        // Try to parse as JSON first
+        try {
+          parsedOptions = JSON.parse(question.options)
+        } catch (jsonError) {
+          // If JSON parsing fails, try to split by common delimiters
+          if (question.options.includes("|")) {
+            parsedOptions = question.options.split("|").map((opt) => opt.trim())
+          } else if (question.options.includes(";")) {
+            parsedOptions = question.options.split(";").map((opt) => opt.trim())
+          } else if (question.options.includes(",")) {
+            parsedOptions = question.options.split(",").map((opt) => opt.trim())
+          } else {
+            // Fallback: treat as single option
+            parsedOptions = [question.options]
+          }
+        }
+      } else if (Array.isArray(question.options)) {
+        parsedOptions = question.options
+      } else {
+        console.warn("Unexpected options format:", question.options)
+        parsedOptions = []
+      }
     } catch (e) {
-      console.error("Error parsing options:", e)
+      console.error("Error parsing options for question", question.id, ":", e)
       parsedOptions = []
     }
   }
@@ -274,19 +297,29 @@ export default function SoftSkillsTest() {
           </CardHeader>
           <CardContent>
             {question.question_type === "multiple_choice" ? (
-              <RadioGroup
-                value={answers[question.id] || ""}
-                onValueChange={(value) => handleAnswerChange(question.id, value)}
-              >
-                {parsedOptions.map((option: string, index: number) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                      {option}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+              parsedOptions.length > 0 ? (
+                <RadioGroup
+                  value={answers[question.id] || ""}
+                  onValueChange={(value) => handleAnswerChange(question.id, value)}
+                >
+                  {parsedOptions.map((option: string, index: number) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                      <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                        {option}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              ) : (
+                <div className="text-red-500 p-4 border border-red-200 rounded">
+                  Error: No se pudieron cargar las opciones para esta pregunta.
+                  <br />
+                  <small>
+                    Formato de opciones: {typeof question.options} - {String(question.options).substring(0, 100)}...
+                  </small>
+                </div>
+              )
             ) : (
               <Textarea
                 placeholder="Escribe tu respuesta aquí..."
