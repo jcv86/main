@@ -14,6 +14,13 @@ import {
   Bookmark,
   ArrowLeft,
   Eye,
+  FileText,
+  BarChart3,
+  Target,
+  CheckCircle,
+  Circle,
+  Play,
+  Pause,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -23,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Progress } from "@/components/ui/progress"
 import { supabase } from "@/lib/supabase"
 
 interface KnowledgeBook {
@@ -36,6 +44,23 @@ interface KnowledgeBook {
   read_count: number
   created_at: string
   updated_at: string
+  pages?: number
+  isbn?: string
+  publication_year?: number
+  content_length?: number
+  reading_time_minutes?: number
+}
+
+interface BookStatus {
+  book_id: number
+  user_email: string
+  reading_progress: number
+  target_percentage: number
+  status: "not_started" | "reading" | "completed" | "paused"
+  notes: string
+  started_at?: string
+  completed_at?: string
+  last_read_at?: string
 }
 
 interface UserBookmark {
@@ -49,12 +74,23 @@ export default function BibliotecaPage() {
   const [filteredBooks, setFilteredBooks] = useState<KnowledgeBook[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [bookmarks, setBookmarks] = useState<UserBookmark[]>([])
+  const [bookStatuses, setBookStatuses] = useState<BookStatus[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedBook, setSelectedBook] = useState<KnowledgeBook | null>(null)
   const [sortBy, setSortBy] = useState<string>("popular")
   const [isReading, setIsReading] = useState(false)
+  const [showBookDetails, setShowBookDetails] = useState(false)
+  const [selectedReadingTarget, setSelectedReadingTarget] = useState<number>(100)
+  const [showTargetDialog, setShowTargetDialog] = useState(false)
+  const [libraryStats, setLibraryStats] = useState({
+    totalBooks: 0,
+    totalCategories: 0,
+    totalAuthors: 0,
+    avgContentLength: 0,
+    totalReads: 0,
+  })
 
   const userEmail = "demo@example.com" // In real app, get from auth
 
@@ -70,10 +106,21 @@ export default function BibliotecaPage() {
     try {
       setLoading(true)
 
-      // Load all books
-      const { data: booksData, error: booksError } = await supabase.from("knowledge_base").select("*")
+      // Load all books with enhanced data
+      const { data: booksData, error: booksError } = await supabase
+        .from("knowledge_base")
+        .select("*")
+        .order("created_at", { ascending: false })
 
       if (booksError) throw booksError
+
+      // Enhance books with calculated data
+      const enhancedBooks = (booksData || []).map((book) => ({
+        ...book,
+        content_length: book.content?.length || 0,
+        pages: Math.ceil((book.content?.length || 0) / 2000), // Estimate 2000 chars per page
+        reading_time_minutes: Math.ceil((book.content?.length || 0) / 1000), // Estimate 1000 chars per minute
+      }))
 
       // Load categories
       const { data: categoriesData, error: categoriesError } = await supabase
@@ -91,11 +138,32 @@ export default function BibliotecaPage() {
 
       if (bookmarksError) console.error("Bookmarks error:", bookmarksError)
 
+      // Load book reading statuses
+      const { data: statusData, error: statusError } = await supabase
+        .from("user_reading_progress")
+        .select("*")
+        .eq("user_email", userEmail)
+
+      if (statusError) console.error("Status error:", statusError)
+
+      // Calculate library statistics
+      const stats = {
+        totalBooks: enhancedBooks.length,
+        totalCategories: [...new Set(categoriesData?.map((c) => c.category) || [])].length,
+        totalAuthors: [...new Set(enhancedBooks.map((b) => b.author))].length,
+        avgContentLength: Math.round(
+          enhancedBooks.reduce((sum, book) => sum + (book.content_length || 0), 0) / enhancedBooks.length,
+        ),
+        totalReads: enhancedBooks.reduce((sum, book) => sum + book.read_count, 0),
+      }
+
       const uniqueCategories = [...new Set(categoriesData?.map((c) => c.category) || [])]
 
-      setBooks(booksData || [])
+      setBooks(enhancedBooks)
       setCategories(uniqueCategories)
       setBookmarks(bookmarksData || [])
+      setBookStatuses(statusData || [])
+      setLibraryStats(stats)
     } catch (error) {
       console.error("Error loading library:", error)
     } finally {
@@ -136,6 +204,12 @@ export default function BibliotecaPage() {
       case "author":
         filtered.sort((a, b) => a.author.localeCompare(b.author))
         break
+      case "length":
+        filtered.sort((a, b) => (b.content_length || 0) - (a.content_length || 0))
+        break
+      case "pages":
+        filtered.sort((a, b) => (b.pages || 0) - (a.pages || 0))
+        break
     }
 
     setFilteredBooks(filtered)
@@ -143,6 +217,7 @@ export default function BibliotecaPage() {
 
   const handleBookClick = async (book: KnowledgeBook) => {
     setSelectedBook(book)
+    setShowBookDetails(true)
 
     // Increment read count
     try {
@@ -153,6 +228,54 @@ export default function BibliotecaPage() {
     } catch (error) {
       console.error("Error incrementing read count:", error)
     }
+  }
+
+  const startReading = (targetPercentage = 100) => {
+    setSelectedReadingTarget(targetPercentage)
+    setShowBookDetails(false)
+    setIsReading(true)
+    updateBookStatus("reading", targetPercentage)
+  }
+
+  const updateBookStatus = async (status: string, targetPercentage?: number) => {
+    if (!selectedBook) return
+
+    try {
+      const statusData = {
+        user_email: userEmail,
+        book_id: selectedBook.id,
+        status: status,
+        target_percentage: targetPercentage || selectedReadingTarget,
+        last_read_at: new Date().toISOString(),
+      }
+
+      if (status === "reading" && !getBookStatus(selectedBook.id)) {
+        statusData.started_at = new Date().toISOString()
+      }
+
+      if (status === "completed") {
+        statusData.completed_at = new Date().toISOString()
+        statusData.reading_progress = targetPercentage || 100
+      }
+
+      await supabase.from("user_reading_progress").upsert(statusData)
+
+      // Update local state
+      setBookStatuses((prev) => {
+        const existing = prev.find((s) => s.book_id === selectedBook.id)
+        if (existing) {
+          return prev.map((s) => (s.book_id === selectedBook.id ? { ...s, ...statusData } : s))
+        } else {
+          return [...prev, statusData as BookStatus]
+        }
+      })
+    } catch (error) {
+      console.error("Error updating book status:", error)
+    }
+  }
+
+  const getBookStatus = (bookId: number): BookStatus | undefined => {
+    return bookStatuses.find((status) => status.book_id === bookId)
   }
 
   const toggleBookmark = async (bookId: number) => {
@@ -189,211 +312,59 @@ export default function BibliotecaPage() {
     return bookmarks.some((b) => b.book_id === bookId)
   }
 
-  const getPopularBooks = () => {
-    return books.sort((a, b) => b.read_count - a.read_count).slice(0, 6)
+  const getReadingProgress = (bookId: number) => {
+    const status = getBookStatus(bookId)
+    return status?.reading_progress || 0
   }
 
-  const getRecentBooks = () => {
-    return books.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6)
+  const getStatusIcon = (bookId: number) => {
+    const status = getBookStatus(bookId)
+    if (!status) return <Circle className="h-4 w-4 text-gray-400" />
+
+    switch (status.status) {
+      case "completed":
+        return <CheckCircle className="h-4 w-4 text-green-500" />
+      case "reading":
+        return <Play className="h-4 w-4 text-blue-500" />
+      case "paused":
+        return <Pause className="h-4 w-4 text-yellow-500" />
+      default:
+        return <Circle className="h-4 w-4 text-gray-400" />
+    }
+  }
+
+  const getStatusText = (bookId: number) => {
+    const status = getBookStatus(bookId)
+    if (!status) return "No iniciado"
+
+    switch (status.status) {
+      case "completed":
+        return `Completado (${status.target_percentage}%)`
+      case "reading":
+        return `Leyendo (${status.reading_progress}%)`
+      case "paused":
+        return "Pausado"
+      default:
+        return "No iniciado"
+    }
+  }
+
+  const getBooksInProgress = () => {
+    return books.filter((book) => {
+      const status = getBookStatus(book.id)
+      return status && status.status === "reading"
+    })
+  }
+
+  const getCompletedBooks = () => {
+    return books.filter((book) => {
+      const status = getBookStatus(book.id)
+      return status && status.status === "completed"
+    })
   }
 
   const getBookmarkedBooks = () => {
     return books.filter((book) => isBookmarked(book.id))
-  }
-
-  const startReading = () => {
-    setIsReading(true)
-  }
-
-  const stopReading = () => {
-    setIsReading(false)
-  }
-
-  const generateBookSummary = (book: KnowledgeBook) => {
-    // Generate a comprehensive summary based on the book's content and category
-    const summaries: { [key: string]: string } = {
-      Liderazgo: `**Resumen Ejecutivo:**
-
-Este libro explora los principios fundamentales del liderazgo efectivo en el mundo moderno. ${book.title} presenta un enfoque integral para desarrollar habilidades de liderazgo que trascienden los métodos tradicionales.
-
-**Conceptos Clave:**
-
-• **Liderazgo Auténtico**: La importancia de liderar desde la autenticidad personal y los valores propios
-• **Inteligencia Emocional**: Cómo gestionar las emociones propias y de otros para crear equipos más efectivos
-• **Comunicación Efectiva**: Técnicas para transmitir visión, inspirar y motivar a los equipos
-• **Toma de Decisiones**: Marcos para tomar decisiones difíciles bajo presión e incertidumbre
-• **Desarrollo de Equipos**: Estrategias para construir equipos de alto rendimiento y cultura organizacional
-
-**Aplicaciones Prácticas:**
-
-1. **Autoevaluación de Liderazgo**: Herramientas para identificar fortalezas y áreas de mejora
-2. **Plan de Desarrollo Personal**: Metodología para crear un plan de crecimiento como líder
-3. **Técnicas de Coaching**: Cómo desarrollar y mentorear a otros líderes
-4. **Gestión del Cambio**: Estrategias para liderar organizaciones a través de transformaciones
-
-**Lecciones Principales:**
-
-- El liderazgo efectivo comienza con el autoconocimiento y la autenticidad
-- La capacidad de inspirar y motivar es más importante que la autoridad formal
-- Los mejores líderes son aquellos que desarrollan a otros líderes
-- La adaptabilidad y la resiliencia son características esenciales del liderazgo moderno
-
-**Impacto en tu Carrera:**
-
-Este libro te proporcionará las herramientas necesarias para:
-- Desarrollar tu estilo de liderazgo único y auténtico
-- Mejorar tu capacidad de influir positivamente en otros
-- Construir equipos más comprometidos y productivos
-- Navegar desafíos organizacionales complejos con confianza`,
-
-      Productividad: `**Resumen Ejecutivo:**
-
-${book.title} presenta un sistema integral para maximizar la productividad personal y profesional. Este libro combina principios de gestión del tiempo, formación de hábitos y optimización de procesos para ayudarte a lograr más con menos esfuerzo.
-
-**Conceptos Fundamentales:**
-
-• **Gestión de Energía vs. Tiempo**: Cómo optimizar tu energía natural para máximo rendimiento
-• **Principio de Pareto**: Identificar el 20% de actividades que generan el 80% de resultados
-• **Flujo de Trabajo**: Crear sistemas que minimicen la fricción y maximicen la eficiencia
-• **Eliminación de Distracciones**: Técnicas para mantener el foco en lo verdaderamente importante
-• **Automatización Inteligente**: Usar tecnología y sistemas para reducir trabajo repetitivo
-
-**Metodologías Clave:**
-
-1. **Técnica Pomodoro Avanzada**: Gestión de tiempo en bloques con descansos estratégicos
-2. **Matriz de Eisenhower**: Priorización basada en urgencia e importancia
-3. **Getting Things Done (GTD)**: Sistema completo de organización y seguimiento
-4. **Batching**: Agrupar tareas similares para mayor eficiencia
-5. **Review Semanal**: Proceso de reflexión y planificación continua
-
-**Herramientas Prácticas:**
-
-- Templates para planificación diaria, semanal y mensual
-- Checklists para optimizar rutinas matutinas y vespertinas
-- Sistemas de seguimiento de hábitos y metas
-- Técnicas de delegación efectiva
-- Métodos para medir y mejorar la productividad
-
-**Transformación Personal:**
-
-Al aplicar estos principios, experimentarás:
-- Mayor claridad sobre tus prioridades y objetivos
-- Reducción significativa del estrés y la sobrecarga
-- Más tiempo libre para actividades que realmente importan
-- Sensación de control y progreso constante hacia tus metas
-- Mejor equilibrio entre vida personal y profesional
-
-**Plan de Implementación:**
-
-El libro incluye un plan de 30 días para implementar gradualmente estos sistemas, asegurando que los cambios sean sostenibles y se conviertan en hábitos permanentes.`,
-
-      "Desarrollo de Carrera": `**Resumen Ejecutivo:**
-
-${book.title} es una guía completa para navegar y acelerar tu desarrollo profesional en el mercado laboral actual. Este libro combina estrategias tradicionales de carrera con enfoques modernos adaptados a la economía digital.
-
-**Pilares del Desarrollo Profesional:**
-
-• **Autoconocimiento Profundo**: Identificar fortalezas, valores y pasiones para alinear carrera con propósito
-• **Construcción de Marca Personal**: Desarrollar una reputación profesional sólida y diferenciada
-• **Networking Estratégico**: Crear y mantener relaciones profesionales valiosas y auténticas
-• **Aprendizaje Continuo**: Mantenerse relevante a través de la actualización constante de habilidades
-• **Negociación y Comunicación**: Habilidades esenciales para avanzar en cualquier carrera
-
-**Estrategias de Crecimiento:**
-
-1. **Mapeo de Carrera**: Herramientas para visualizar y planificar tu trayectoria profesional
-2. **Desarrollo de Habilidades**: Framework para identificar y desarrollar competencias clave
-3. **Gestión de Oportunidades**: Cómo identificar, evaluar y aprovechar oportunidades de crecimiento
-4. **Transiciones Profesionales**: Navegar cambios de industria, función o nivel jerárquico
-5. **Emprendimiento Interno**: Actuar como emprendedor dentro de organizaciones establecidas
-
-**Herramientas de Carrera:**
-
-- Templates para CV y LinkedIn optimizados
-- Guías para entrevistas de trabajo efectivas
-- Frameworks para evaluación de oportunidades
-- Planes de desarrollo de habilidades personalizados
-- Estrategias de negociación salarial
-
-**Mentalidad de Crecimiento:**
-
-El libro enfatiza la importancia de:
-- Adoptar una mentalidad de crecimiento continuo
-- Ver los desafíos como oportunidades de aprendizaje
-- Construir resiliencia para superar obstáculos profesionales
-- Mantener curiosidad y apertura a nuevas posibilidades
-- Equilibrar ambición con bienestar personal
-
-**Resultados Esperados:**
-
-Al aplicar estos principios, lograrás:
-- Mayor claridad sobre tu dirección profesional
-- Aceleración en tu progreso de carrera
-- Mejor posicionamiento en el mercado laboral
-- Red profesional más sólida y valiosa
-- Confianza para tomar decisiones de carrera importantes`,
-
-      Comunicación: `**Resumen Ejecutivo:**
-
-${book.title} explora las dimensiones de la comunicación efectiva en contextos profesionales y personales. Este libro presenta técnicas avanzadas para mejorar tu capacidad de conectar, influir y colaborar con otros.
-
-**Fundamentos de Comunicación:**
-
-• **Escucha Activa**: Técnicas para comprender verdaderamente lo que otros comunican
-• **Comunicación No Verbal**: El poder del lenguaje corporal, tono y presencia
-• **Adaptación de Mensaje**: Ajustar comunicación según audiencia y contexto
-• **Storytelling**: Usar narrativas para hacer mensajes más memorables e impactantes
-• **Comunicación Digital**: Navegar la comunicación en entornos virtuales y remotos
-
-**Habilidades Avanzadas:**
-
-1. **Presentaciones Impactantes**: Crear y entregar presentaciones que inspiren acción
-2. **Negociación Colaborativa**: Técnicas para llegar a acuerdos win-win
-3. **Manejo de Conflictos**: Transformar desacuerdos en oportunidades de crecimiento
-4. **Feedback Constructivo**: Dar y recibir retroalimentación de manera efectiva
-5. **Comunicación Intercultural**: Navegar diferencias culturales en comunicación
-
-**Aplicaciones Prácticas:**
-
-- Frameworks para estructurar conversaciones difíciles
-- Técnicas para comunicar ideas complejas de manera simple
-- Estrategias para construir rapport y confianza rápidamente
-- Métodos para manejar objeciones y resistencia
-- Herramientas para comunicación en crisis
-
-**Transformación Personal:**
-
-Dominar estas habilidades te permitirá:
-- Construir relaciones más profundas y significativas
-- Influir positivamente en decisiones importantes
-- Resolver conflictos de manera constructiva
-- Liderar equipos con mayor efectividad
-- Avanzar más rápidamente en tu carrera profesional
-
-**Impacto a Largo Plazo:**
-
-La comunicación efectiva es la base de prácticamente todo éxito profesional y personal. Este libro te proporciona las herramientas para convertirte en un comunicador excepcional.`,
-    }
-
-    // Return category-specific summary or generate a general one
-    return (
-      summaries[book.category] ||
-      `**Resumen del Libro:**
-
-${book.content}
-
-**Conceptos Clave:**
-
-Este libro aborda temas fundamentales en ${book.category.toLowerCase()}, proporcionando insights valiosos y estrategias prácticas para el crecimiento profesional y personal.
-
-**Aplicación Práctica:**
-
-Las ideas presentadas en este libro pueden aplicarse inmediatamente en tu vida profesional, ayudándote a desarrollar nuevas habilidades y perspectivas que impulsarán tu carrera.
-
-**Valor para tu Desarrollo:**
-
-Al estudiar este material, ganarás una comprensión más profunda de ${book.category.toLowerCase()} y cómo aplicar estos principios para lograr mejores resultados en tu trabajo y vida personal.`
-    )
   }
 
   if (loading) {
@@ -409,24 +380,62 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
 
   return (
     <div className="space-y-6 p-6 bg-gray-100">
-      {/* Header */}
+      {/* Enhanced Header with Statistics */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">📚 Biblioteca de Conocimiento</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Explora nuestra colección de {books.length} libros especializados en desarrollo profesional
+        <h1 className="text-4xl font-bold mb-4">📚 Biblioteca de Conocimiento Completa</h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+          Explora nuestra colección completa de libros especializados en desarrollo profesional con contenido integral
         </p>
+
+        {/* Library Statistics */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-blue-600">{libraryStats.totalBooks}</div>
+              <div className="text-sm text-gray-600">Libros Totales</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-green-600">{libraryStats.totalCategories}</div>
+              <div className="text-sm text-gray-600">Categorías</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-purple-600">{libraryStats.totalAuthors}</div>
+              <div className="text-sm text-gray-600">Autores</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-orange-600">
+                {Math.round(libraryStats.avgContentLength / 1000)}K
+              </div>
+              <div className="text-sm text-gray-600">Promedio Chars</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-red-600">{libraryStats.totalReads}</div>
+              <div className="text-sm text-gray-600">Lecturas Totales</div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Tabs defaultValue="explore" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="explore">Explorar</TabsTrigger>
           <TabsTrigger value="popular">Populares</TabsTrigger>
-          <TabsTrigger value="recent">Recientes</TabsTrigger>
+          <TabsTrigger value="reading">Leyendo ({getBooksInProgress().length})</TabsTrigger>
+          <TabsTrigger value="completed">Completados ({getCompletedBooks().length})</TabsTrigger>
           <TabsTrigger value="bookmarks">Guardados ({getBookmarkedBooks().length})</TabsTrigger>
+          <TabsTrigger value="stats">Estadísticas</TabsTrigger>
         </TabsList>
 
         <TabsContent value="explore" className="space-y-6">
-          {/* Search and Filters */}
+          {/* Enhanced Search and Filters */}
           <Card>
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row gap-4">
@@ -434,7 +443,7 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="Buscar libros por título, autor, contenido..."
+                      placeholder="Buscar por título, autor, contenido, tags..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
@@ -455,7 +464,7 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                   </SelectContent>
                 </Select>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[150px]">
+                  <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Ordenar por" />
                   </SelectTrigger>
                   <SelectContent>
@@ -463,19 +472,24 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                     <SelectItem value="recent">Más recientes</SelectItem>
                     <SelectItem value="alphabetical">A-Z</SelectItem>
                     <SelectItem value="author">Por autor</SelectItem>
+                    <SelectItem value="length">Por extensión</SelectItem>
+                    <SelectItem value="pages">Por páginas</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </CardContent>
           </Card>
 
-          {/* Books Grid */}
+          {/* Enhanced Books Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredBooks.map((book) => (
-              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer group">
+              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer group relative">
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <Badge variant="outline">{book.category}</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">{book.category}</Badge>
+                      {getStatusIcon(book.id)}
+                    </div>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -501,12 +515,37 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                   </CardDescription>
                 </CardHeader>
                 <CardContent onClick={() => handleBookClick(book)}>
-                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Eye className="h-4 w-4" />
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content.substring(0, 150)}...</p>
+
+                  {/* Book Metrics */}
+                  <div className="grid grid-cols-3 gap-2 mb-4 text-xs text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <FileText className="h-3 w-3" />
+                      {book.pages} págs
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {book.reading_time_minutes} min
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-3 w-3" />
                       {book.read_count} lecturas
                     </div>
+                  </div>
+
+                  {/* Reading Progress */}
+                  {getReadingProgress(book.id) > 0 && (
+                    <div className="mb-3">
+                      <div className="flex justify-between text-xs text-gray-600 mb-1">
+                        <span>Progreso</span>
+                        <span>{getReadingProgress(book.id)}%</span>
+                      </div>
+                      <Progress value={getReadingProgress(book.id)} className="h-2" />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs text-gray-500">{getStatusText(book.id)}</div>
                     <div className="flex flex-wrap gap-1">
                       {book.tags.slice(0, 2).map((tag, index) => (
                         <Badge key={index} variant="outline" className="text-xs">
@@ -540,93 +579,207 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
 
         <TabsContent value="popular" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getPopularBooks().map((book, index) => (
-              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer relative">
-                <div className="absolute top-4 left-4 z-10">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {index + 1}
-                  </div>
-                </div>
-                <CardHeader className="pt-12">
-                  <Badge variant="outline" className="w-fit">
-                    {book.category}
-                  </Badge>
-                  <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
-                    {book.title}
-                  </CardTitle>
-                  <CardDescription>{book.author}</CardDescription>
-                </CardHeader>
-                <CardContent onClick={() => handleBookClick(book)}>
-                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      {book.read_count} lecturas
+            {books
+              .sort((a, b) => b.read_count - a.read_count)
+              .slice(0, 12)
+              .map((book, index) => (
+                <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer relative">
+                  <div className="absolute top-4 left-4 z-10">
+                    <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      {index + 1}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleBookmark(book.id)
-                      }}
-                    >
-                      {isBookmarked(book.id) ? (
-                        <Bookmark className="h-4 w-4 text-blue-600" />
-                      ) : (
-                        <BookmarkPlus className="h-4 w-4" />
-                      )}
-                    </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardHeader className="pt-12">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="w-fit">
+                        {book.category}
+                      </Badge>
+                      {getStatusIcon(book.id)}
+                    </div>
+                    <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
+                      {book.title}
+                    </CardTitle>
+                    <CardDescription>{book.author}</CardDescription>
+                  </CardHeader>
+                  <CardContent onClick={() => handleBookClick(book)}>
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content.substring(0, 150)}...</p>
+                    <div className="grid grid-cols-3 gap-2 mb-4 text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <FileText className="h-3 w-3" />
+                        {book.pages} págs
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {book.reading_time_minutes} min
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-3 w-3 text-yellow-500" />
+                        {book.read_count}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">{getStatusText(book.id)}</div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleBookmark(book.id)
+                        }}
+                      >
+                        {isBookmarked(book.id) ? (
+                          <Bookmark className="h-4 w-4 text-blue-600" />
+                        ) : (
+                          <BookmarkPlus className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </TabsContent>
 
-        <TabsContent value="recent" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getRecentBooks().map((book) => (
-              <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">{book.category}</Badge>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Clock className="h-3 w-3" />
-                      Nuevo
-                    </div>
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
-                    {book.title}
-                  </CardTitle>
-                  <CardDescription>{book.author}</CardDescription>
-                </CardHeader>
-                <CardContent onClick={() => handleBookClick(book)}>
-                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <TrendingUp className="h-4 w-4" />
-                      {book.read_count} lecturas
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleBookmark(book.id)
-                      }}
-                    >
-                      {isBookmarked(book.id) ? (
-                        <Bookmark className="h-4 w-4 text-blue-600" />
-                      ) : (
-                        <BookmarkPlus className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <TabsContent value="reading" className="space-y-6">
+          {getBooksInProgress().length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {getBooksInProgress().map((book) => {
+                const status = getBookStatus(book.id)
+                return (
+                  <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <Badge variant="outline">{book.category}</Badge>
+                        <div className="flex items-center gap-1 text-xs text-blue-600">
+                          <Play className="h-3 w-3" />
+                          Leyendo
+                        </div>
+                      </div>
+                      <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription>{book.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent onClick={() => handleBookClick(book)}>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                          <span>Progreso</span>
+                          <span>
+                            {status?.reading_progress || 0}% de {status?.target_percentage || 100}%
+                          </span>
+                        </div>
+                        <Progress value={status?.reading_progress || 0} className="h-3" />
+                      </div>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{book.content.substring(0, 120)}...</p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-gray-500">
+                          Última lectura:{" "}
+                          {status?.last_read_at ? new Date(status.last_read_at).toLocaleDateString() : "N/A"}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleBookmark(book.id)
+                          }}
+                        >
+                          {isBookmarked(book.id) ? (
+                            <Bookmark className="h-4 w-4 text-blue-600" />
+                          ) : (
+                            <BookmarkPlus className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center py-8">
+                  <Play className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes libros en progreso</h3>
+                  <p className="text-gray-600 mb-4">Comienza a leer un libro para verlo aquí</p>
+                  <Button onClick={() => document.querySelector('[value="explore"]')?.click()}>
+                    Explorar Biblioteca
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="completed" className="space-y-6">
+          {getCompletedBooks().length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {getCompletedBooks().map((book) => {
+                const status = getBookStatus(book.id)
+                return (
+                  <Card key={book.id} className="hover:bg-secondary transition-shadow cursor-pointer">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <Badge variant="outline">{book.category}</Badge>
+                        <div className="flex items-center gap-1 text-xs text-green-600">
+                          <CheckCircle className="h-3 w-3" />
+                          Completado
+                        </div>
+                      </div>
+                      <CardTitle className="text-lg line-clamp-2" onClick={() => handleBookClick(book)}>
+                        {book.title}
+                      </CardTitle>
+                      <CardDescription>{book.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent onClick={() => handleBookClick(book)}>
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                          <span>Completado</span>
+                          <span>{status?.target_percentage || 100}%</span>
+                        </div>
+                        <Progress value={100} className="h-3" />
+                      </div>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{book.content.substring(0, 120)}...</p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-gray-500">
+                          Completado:{" "}
+                          {status?.completed_at ? new Date(status.completed_at).toLocaleDateString() : "N/A"}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleBookmark(book.id)
+                          }}
+                        >
+                          {isBookmarked(book.id) ? (
+                            <Bookmark className="h-4 w-4 text-blue-600" />
+                          ) : (
+                            <BookmarkPlus className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center py-8">
+                  <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No has completado ningún libro</h3>
+                  <p className="text-gray-600 mb-4">Completa la lectura de un libro para verlo aquí</p>
+                  <Button onClick={() => document.querySelector('[value="explore"]')?.click()}>
+                    Explorar Biblioteca
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="bookmarks" className="space-y-6">
@@ -645,12 +798,23 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                     <CardDescription>{book.author}</CardDescription>
                   </CardHeader>
                   <CardContent onClick={() => handleBookClick(book)}>
-                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <TrendingUp className="h-4 w-4" />
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">{book.content.substring(0, 150)}...</p>
+                    <div className="grid grid-cols-3 gap-2 mb-4 text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <FileText className="h-3 w-3" />
+                        {book.pages} págs
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {book.reading_time_minutes} min
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="h-3 w-3" />
                         {book.read_count} lecturas
                       </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">{getStatusText(book.id)}</div>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -681,10 +845,112 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
             </Card>
           )}
         </TabsContent>
+
+        <TabsContent value="stats" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Reading Statistics */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Estadísticas de Lectura
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">Libros completados:</span>
+                    <span className="font-medium">{getCompletedBooks().length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Libros en progreso:</span>
+                    <span className="font-medium">{getBooksInProgress().length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Libros guardados:</span>
+                    <span className="font-medium">{getBookmarkedBooks().length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Total de páginas leídas:</span>
+                    <span className="font-medium">
+                      {getCompletedBooks().reduce((sum, book) => sum + (book.pages || 0), 0)}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Category Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Distribución por Categoría
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {categories.map((category) => {
+                    const categoryBooks = books.filter((book) => book.category === category)
+                    const percentage = Math.round((categoryBooks.length / books.length) * 100)
+                    return (
+                      <div key={category}>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>{category}</span>
+                          <span>{categoryBooks.length} libros</span>
+                        </div>
+                        <Progress value={percentage} className="h-2" />
+                      </div>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Reading Goals */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Objetivos de Lectura
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Meta mensual: 5 libros</span>
+                      <span>{getCompletedBooks().length}/5</span>
+                    </div>
+                    <Progress value={(getCompletedBooks().length / 5) * 100} className="h-2" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Páginas este mes:</span>
+                      <span>{getCompletedBooks().reduce((sum, book) => sum + (book.pages || 0), 0)}</span>
+                    </div>
+                    <Progress
+                      value={Math.min(
+                        (getCompletedBooks().reduce((sum, book) => sum + (book.pages || 0), 0) / 500) * 100,
+                        100,
+                      )}
+                      className="h-2"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <Button variant="outline" size="sm">
+                      Establecer Nueva Meta
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
       </Tabs>
 
-      {/* Book Detail Dialog */}
-      <Dialog open={!!selectedBook && !isReading} onOpenChange={() => setSelectedBook(null)}>
+      {/* Enhanced Book Details Dialog */}
+      <Dialog open={showBookDetails} onOpenChange={setShowBookDetails}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white">
           <DialogHeader>
             <div className="flex items-start justify-between">
@@ -703,21 +969,41 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
           </DialogHeader>
           {selectedBook && (
             <div className="space-y-6">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
                 <Badge className="text-sm">{selectedBook.category}</Badge>
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <FileText className="h-4 w-4" />
+                  {selectedBook.pages} páginas
+                </div>
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <Clock className="h-4 w-4" />
+                  {selectedBook.reading_time_minutes} min de lectura
+                </div>
                 <div className="flex items-center gap-1 text-sm text-gray-500">
                   <Eye className="h-4 w-4" />
                   {selectedBook.read_count} lecturas
                 </div>
                 <div className="flex items-center gap-1 text-sm text-gray-500">
-                  <Clock className="h-4 w-4" />
-                  Agregado {new Date(selectedBook.created_at).toLocaleDateString()}
+                  <BarChart3 className="h-4 w-4" />
+                  {selectedBook.content_length?.toLocaleString()} caracteres
                 </div>
               </div>
 
+              {/* Current Reading Status */}
+              {getBookStatus(selectedBook.id) && (
+                <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                  <h4 className="font-semibold text-blue-900 mb-2">Estado de Lectura</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-blue-800">{getStatusText(selectedBook.id)}</span>
+                    <span className="text-blue-800">{getReadingProgress(selectedBook.id)}%</span>
+                  </div>
+                  <Progress value={getReadingProgress(selectedBook.id)} className="h-2" />
+                </div>
+              )}
+
               <div>
-                <h4 className="font-semibold text-lg mb-3">Sobre este libro:</h4>
-                <p className="text-gray-700 leading-relaxed text-base">{selectedBook.content}</p>
+                <h4 className="font-semibold text-lg mb-3">Descripción del libro:</h4>
+                <p className="text-gray-700 leading-relaxed text-base">{selectedBook.content.substring(0, 500)}...</p>
               </div>
 
               <div>
@@ -732,10 +1018,53 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                 </div>
               </div>
 
+              {/* Reading Target Selection */}
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-green-900 mb-3">Selecciona tu objetivo de lectura:</h4>
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  <Button
+                    variant={selectedReadingTarget === 30 ? "default" : "outline"}
+                    onClick={() => setSelectedReadingTarget(30)}
+                    className="flex flex-col items-center p-4 h-auto"
+                  >
+                    <div className="text-lg font-bold">30%</div>
+                    <div className="text-xs">Lectura Rápida</div>
+                    <div className="text-xs text-gray-600">
+                      {Math.round((selectedBook.reading_time_minutes || 0) * 0.3)} min
+                    </div>
+                  </Button>
+                  <Button
+                    variant={selectedReadingTarget === 60 ? "default" : "outline"}
+                    onClick={() => setSelectedReadingTarget(60)}
+                    className="flex flex-col items-center p-4 h-auto"
+                  >
+                    <div className="text-lg font-bold">60%</div>
+                    <div className="text-xs">Lectura Completa</div>
+                    <div className="text-xs text-gray-600">
+                      {Math.round((selectedBook.reading_time_minutes || 0) * 0.6)} min
+                    </div>
+                  </Button>
+                  <Button
+                    variant={selectedReadingTarget === 100 ? "default" : "outline"}
+                    onClick={() => setSelectedReadingTarget(100)}
+                    className="flex flex-col items-center p-4 h-auto"
+                  >
+                    <div className="text-lg font-bold">100%</div>
+                    <div className="text-xs">Lectura Total</div>
+                    <div className="text-xs text-gray-600">{selectedBook.reading_time_minutes} min</div>
+                  </Button>
+                </div>
+                <p className="text-sm text-green-800">
+                  {selectedReadingTarget === 30 && "Obtén los conceptos clave y ideas principales del libro."}
+                  {selectedReadingTarget === 60 && "Comprende a fondo el contenido con ejemplos y aplicaciones."}
+                  {selectedReadingTarget === 100 && "Experiencia completa con todos los detalles y ejercicios."}
+                </p>
+              </div>
+
               <div className="flex gap-3 pt-4 border-t">
-                <Button className="flex-1" onClick={startReading}>
+                <Button className="flex-1" onClick={() => startReading(selectedReadingTarget)}>
                   <BookOpen className="h-4 w-4 mr-2" />
-                  Leer Ahora
+                  Leer {selectedReadingTarget}%
                 </Button>
                 <Button variant="outline" onClick={() => selectedBook && toggleBookmark(selectedBook.id)}>
                   {isBookmarked(selectedBook.id) ? (
@@ -756,19 +1085,21 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
         </DialogContent>
       </Dialog>
 
-      {/* Reading View Dialog - Fixed Layout */}
-      <Dialog open={isReading} onOpenChange={stopReading}>
+      {/* Enhanced Reading View Dialog */}
+      <Dialog open={isReading} onOpenChange={() => setIsReading(false)}>
         <DialogContent className="max-w-6xl h-[95vh] flex flex-col p-0 bg-white">
-          {/* Fixed Header */}
+          {/* Fixed Header with Progress */}
           <DialogHeader className="flex-shrink-0 p-6 pb-4 border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="sm" onClick={stopReading}>
+                <Button variant="ghost" size="sm" onClick={() => setIsReading(false)}>
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
                   <DialogTitle className="text-xl">{selectedBook?.title}</DialogTitle>
-                  <DialogDescription>por {selectedBook?.author}</DialogDescription>
+                  <DialogDescription>
+                    por {selectedBook?.author} • Objetivo: {selectedReadingTarget}%
+                  </DialogDescription>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -782,6 +1113,15 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                 </Button>
               </div>
             </div>
+
+            {/* Reading Progress */}
+            <div className="mt-4">
+              <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Progreso de lectura ({selectedReadingTarget}% objetivo)</span>
+                <span>{getReadingProgress(selectedBook?.id || 0)}% completado</span>
+              </div>
+              <Progress value={getReadingProgress(selectedBook?.id || 0)} className="h-3" />
+            </div>
           </DialogHeader>
 
           {/* Scrollable Content */}
@@ -792,12 +1132,22 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                   {selectedBook && (
                     <div className="space-y-6">
                       <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-                        <h3 className="text-lg font-semibold text-blue-900 mb-2">📖 Resumen del Libro</h3>
-                        <p className="text-blue-800">{selectedBook.content}</p>
+                        <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                          📖 Contenido del Libro ({selectedReadingTarget}%)
+                        </h3>
+                        <p className="text-blue-800">
+                          {selectedReadingTarget === 30 && "Leyendo los conceptos clave y ideas principales"}
+                          {selectedReadingTarget === 60 && "Leyendo contenido completo con ejemplos"}
+                          {selectedReadingTarget === 100 && "Leyendo contenido completo con todos los detalles"}
+                        </p>
                       </div>
 
                       <div className="whitespace-pre-line text-gray-800 leading-relaxed">
-                        {generateBookSummary(selectedBook)}
+                        {selectedReadingTarget === 30 &&
+                          selectedBook.content.substring(0, Math.floor(selectedBook.content.length * 0.3))}
+                        {selectedReadingTarget === 60 &&
+                          selectedBook.content.substring(0, Math.floor(selectedBook.content.length * 0.6))}
+                        {selectedReadingTarget === 100 && selectedBook.content}
                       </div>
 
                       <div className="bg-gray-50 p-6 rounded-lg">
@@ -822,7 +1172,31 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                         </ul>
                       </div>
 
-                      {/* Extra padding at bottom to ensure buttons are not covered */}
+                      {/* Reading completion actions */}
+                      <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                        <h4 className="font-semibold text-lg mb-3 text-yellow-900">
+                          🎯 ¿Completaste tu objetivo de {selectedReadingTarget}%?
+                        </h4>
+                        <div className="flex gap-3">
+                          <Button
+                            onClick={() => updateBookStatus("completed", selectedReadingTarget)}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Marcar como Completado
+                          </Button>
+                          <Button variant="outline" onClick={() => updateBookStatus("paused")}>
+                            <Pause className="h-4 w-4 mr-2" />
+                            Pausar Lectura
+                          </Button>
+                          <Button variant="outline" onClick={() => setShowTargetDialog(true)}>
+                            <Target className="h-4 w-4 mr-2" />
+                            Cambiar Objetivo
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Extra padding at bottom */}
                       <div className="h-20"></div>
                     </div>
                   )}
@@ -839,13 +1213,64 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                 {selectedBook?.read_count} personas han leído este libro
               </div>
               <div className="flex gap-3">
-                <Button variant="outline" onClick={stopReading}>
+                <Button variant="outline" onClick={() => setIsReading(false)}>
                   Cerrar
                 </Button>
-                <Button onClick={() => selectedBook && toggleBookmark(selectedBook.id)}>
-                  {selectedBook && isBookmarked(selectedBook.id) ? "Guardado" : "Guardar Libro"}
+                <Button onClick={() => updateBookStatus("completed", selectedReadingTarget)}>
+                  Completar Lectura ({selectedReadingTarget}%)
                 </Button>
               </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Target Change Dialog */}
+      <Dialog open={showTargetDialog} onOpenChange={setShowTargetDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cambiar Objetivo de Lectura</DialogTitle>
+            <DialogDescription>Selecciona un nuevo porcentaje objetivo para este libro</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              <Button
+                variant={selectedReadingTarget === 30 ? "default" : "outline"}
+                onClick={() => setSelectedReadingTarget(30)}
+                className="flex flex-col items-center p-4 h-auto"
+              >
+                <div className="text-lg font-bold">30%</div>
+                <div className="text-xs">Rápida</div>
+              </Button>
+              <Button
+                variant={selectedReadingTarget === 60 ? "default" : "outline"}
+                onClick={() => setSelectedReadingTarget(60)}
+                className="flex flex-col items-center p-4 h-auto"
+              >
+                <div className="text-lg font-bold">60%</div>
+                <div className="text-xs">Completa</div>
+              </Button>
+              <Button
+                variant={selectedReadingTarget === 100 ? "default" : "outline"}
+                onClick={() => setSelectedReadingTarget(100)}
+                className="flex flex-col items-center p-4 h-auto"
+              >
+                <div className="text-lg font-bold">100%</div>
+                <div className="text-xs">Total</div>
+              </Button>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setShowTargetDialog(false)}>
+                Cancelar
+              </Button>
+              <Button
+                onClick={() => {
+                  updateBookStatus("reading", selectedReadingTarget)
+                  setShowTargetDialog(false)
+                }}
+              >
+                Actualizar Objetivo
+              </Button>
             </div>
           </div>
         </DialogContent>
