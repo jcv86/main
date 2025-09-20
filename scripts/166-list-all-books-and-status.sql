@@ -1,5 +1,5 @@
--- Lista completa de todos los libros en la base de conocimientos
--- Complete list of all books in the knowledge base
+-- Listar todos los libros y su estado actual en la base de conocimientos
+-- List all books and their current status in the knowledge base
 
 -- 1. Verificar estructura de la tabla knowledge_base
 SELECT 
@@ -13,89 +13,143 @@ ORDER BY ordinal_position;
 
 -- 2. Contar total de libros por categoría
 SELECT 
-    category,
-    COUNT(*) as total_books,
-    AVG(LENGTH(content)) as avg_content_length,
-    MIN(read_count) as min_reads,
-    MAX(read_count) as max_reads,
-    AVG(read_count) as avg_reads
+    category as "Categoría",
+    COUNT(*) as "Total Libros",
+    AVG(LENGTH(content)) as "Promedio Caracteres",
+    AVG(read_count) as "Promedio Lecturas",
+    MIN(created_at) as "Primer Libro",
+    MAX(created_at) as "Último Libro"
 FROM knowledge_base 
 GROUP BY category 
-ORDER BY total_books DESC;
+ORDER BY COUNT(*) DESC;
 
--- 3. Lista completa de todos los libros con detalles
+-- 3. Mostrar todos los libros con información detallada
 SELECT 
     id,
-    title,
-    author,
-    category,
-    LENGTH(content) as content_length,
+    title as "Título",
+    author as "Autor",
+    category as "Categoría",
+    LENGTH(content) as "Caracteres",
+    CEIL(LENGTH(content) / 2000.0) as "Páginas Estimadas",
+    CEIL(LENGTH(content) / 200.0) as "Minutos Lectura",
+    read_count as "Veces Leído",
+    array_length(tags, 1) as "Número Tags",
     CASE 
         WHEN LENGTH(content) < 500 THEN 'Resumen Corto'
         WHEN LENGTH(content) < 1500 THEN 'Resumen Medio'
         WHEN LENGTH(content) < 3000 THEN 'Resumen Largo'
         ELSE 'Contenido Completo'
-    END as content_type,
-    array_length(tags, 1) as tag_count,
-    tags,
-    read_count,
-    slug,
-    created_at,
-    updated_at
+    END as "Estado Contenido",
+    created_at as "Fecha Creación"
 FROM knowledge_base 
 ORDER BY category, title;
 
--- 4. Libros que necesitan contenido completo (menos de 2000 caracteres)
+-- 4. Estadísticas generales de la biblioteca
 SELECT 
-    id,
-    title,
-    author,
-    category,
-    LENGTH(content) as current_length,
-    'NECESITA EXPANSIÓN' as status
-FROM knowledge_base 
-WHERE LENGTH(content) < 2000
-ORDER BY LENGTH(content) ASC;
-
--- 5. Estadísticas generales de la biblioteca
+    'Total de Libros' as "Métrica",
+    COUNT(*)::text as "Valor"
+FROM knowledge_base
+UNION ALL
 SELECT 
-    COUNT(*) as total_books,
-    COUNT(DISTINCT category) as total_categories,
-    COUNT(DISTINCT author) as total_authors,
-    AVG(LENGTH(content)) as avg_content_length,
-    SUM(read_count) as total_reads,
-    MAX(read_count) as most_read_count,
-    MIN(created_at) as oldest_book,
-    MAX(updated_at) as newest_update
+    'Categorías Únicas' as "Métrica",
+    COUNT(DISTINCT category)::text as "Valor"
+FROM knowledge_base
+UNION ALL
+SELECT 
+    'Autores Únicos' as "Métrica",
+    COUNT(DISTINCT author)::text as "Valor"
+FROM knowledge_base
+UNION ALL
+SELECT 
+    'Promedio Caracteres' as "Métrica",
+    ROUND(AVG(LENGTH(content)))::text as "Valor"
+FROM knowledge_base
+UNION ALL
+SELECT 
+    'Total Lecturas' as "Métrica",
+    SUM(read_count)::text as "Valor"
 FROM knowledge_base;
 
--- 6. Top 10 libros más leídos
+-- 5. Top 10 libros más leídos
 SELECT 
-    title,
-    author,
-    category,
-    read_count,
-    LENGTH(content) as content_length
+    title as "Título",
+    author as "Autor",
+    category as "Categoría",
+    read_count as "Lecturas",
+    LENGTH(content) as "Caracteres"
 FROM knowledge_base 
 ORDER BY read_count DESC 
 LIMIT 10;
 
--- 7. Libros por autor (autores con más libros)
+-- 6. Libros con contenido más extenso
 SELECT 
-    author,
-    COUNT(*) as book_count,
-    string_agg(DISTINCT category, ', ') as categories,
-    AVG(read_count) as avg_reads
+    title as "Título",
+    author as "Autor",
+    category as "Categoría",
+    LENGTH(content) as "Caracteres",
+    CEIL(LENGTH(content) / 2000.0) as "Páginas Est.",
+    read_count as "Lecturas"
 FROM knowledge_base 
-GROUP BY author 
-HAVING COUNT(*) > 1
-ORDER BY book_count DESC;
+ORDER BY LENGTH(content) DESC 
+LIMIT 10;
 
--- 8. Tags más utilizados
+-- 7. Verificar tags más comunes
 SELECT 
-    unnest(tags) as tag,
-    COUNT(*) as usage_count
+    unnest(tags) as "Tag",
+    COUNT(*) as "Frecuencia"
 FROM knowledge_base 
+WHERE tags IS NOT NULL
 GROUP BY unnest(tags)
-ORDER BY usage_count DESC
+ORDER BY COUNT(*) DESC
 LIMIT 20;
+
+-- 8. Libros por año de creación
+SELECT 
+    EXTRACT(YEAR FROM created_at) as "Año",
+    COUNT(*) as "Libros Creados"
+FROM knowledge_base 
+GROUP BY EXTRACT(YEAR FROM created_at)
+ORDER BY "Año" DESC;
+
+-- 9. Análisis de contenido por categoría
+SELECT 
+    category as "Categoría",
+    COUNT(*) as "Libros",
+    MIN(LENGTH(content)) as "Min Caracteres",
+    MAX(LENGTH(content)) as "Max Caracteres",
+    AVG(LENGTH(content))::integer as "Promedio Caracteres",
+    SUM(read_count) as "Total Lecturas"
+FROM knowledge_base 
+GROUP BY category 
+ORDER BY "Total Lecturas" DESC;
+
+-- 10. Verificar integridad de datos
+SELECT 
+    'Libros sin título' as "Problema",
+    COUNT(*) as "Cantidad"
+FROM knowledge_base 
+WHERE title IS NULL OR title = ''
+UNION ALL
+SELECT 
+    'Libros sin autor' as "Problema",
+    COUNT(*) as "Cantidad"
+FROM knowledge_base 
+WHERE author IS NULL OR author = ''
+UNION ALL
+SELECT 
+    'Libros sin categoría' as "Problema",
+    COUNT(*) as "Cantidad"
+FROM knowledge_base 
+WHERE category IS NULL OR category = ''
+UNION ALL
+SELECT 
+    'Libros sin contenido' as "Problema",
+    COUNT(*) as "Cantidad"
+FROM knowledge_base 
+WHERE content IS NULL OR LENGTH(content) < 100
+UNION ALL
+SELECT 
+    'Libros sin slug' as "Problema",
+    COUNT(*) as "Cantidad"
+FROM knowledge_base 
+WHERE slug IS NULL OR slug = '';
