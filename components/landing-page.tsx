@@ -31,90 +31,92 @@ export function LandingPage() {
   const features = [
     {
       icon: Brain,
-      title: "AI-Powered Insights",
-      description: "Get personalized career recommendations based on advanced AI analysis of your assessment results.",
+      title: "Insights Impulsados por IA",
+      description:
+        "Obtén recomendaciones profesionales personalizadas basadas en análisis avanzado de IA de tus resultados de evaluación.",
     },
     {
       icon: Target,
-      title: "Career Assessments",
+      title: "Evaluaciones Profesionales",
       description:
-        "Take scientifically-backed assessments including DISC, Big Five, MBTI, and career interest evaluations.",
+        "Realiza evaluaciones respaldadas científicamente incluyendo DISC, Big Five, MBTI y evaluaciones de intereses profesionales.",
     },
     {
       icon: BookOpen,
-      title: "Learning Library",
-      description: "Access curated books, courses, and resources tailored to your professional development needs.",
+      title: "Biblioteca de Aprendizaje",
+      description: "Accede a libros curados, cursos y recursos adaptados a tus necesidades de desarrollo profesional.",
     },
     {
       icon: MessageSquare,
-      title: "Interactive AI Coach",
-      description: "Chat with your personal AI career coach for guidance, advice, and actionable development plans.",
+      title: "Coach de IA Interactivo",
+      description:
+        "Chatea con tu coach profesional de IA personal para orientación, consejos y planes de desarrollo accionables.",
     },
     {
       icon: BarChart3,
-      title: "Progress Tracking",
-      description: "Monitor your growth with detailed analytics and progress reports across all assessments.",
+      title: "Seguimiento de Progreso",
+      description: "Monitorea tu crecimiento con análisis detallados e informes de progreso en todas las evaluaciones.",
     },
     {
       icon: Users,
-      title: "Professional Network",
-      description: "Connect with like-minded professionals and build meaningful career relationships.",
+      title: "Red Profesional",
+      description: "Conecta con profesionales afines y construye relaciones profesionales significativas.",
     },
   ]
 
   const assessmentTypes = [
     {
-      name: "DISC Assessment",
-      description: "Behavioral style analysis",
+      name: "Evaluación DISC",
+      description: "Análisis de estilo de comportamiento",
       icon: Users,
       duration: "10 min",
     },
     {
-      name: "Big Five Personality",
-      description: "Comprehensive personality evaluation",
+      name: "Personalidad Big Five",
+      description: "Evaluación integral de personalidad",
       icon: Star,
       duration: "15 min",
     },
     {
-      name: "MBTI Type Indicator",
-      description: "Psychological preferences mapping",
+      name: "Indicador de Tipo MBTI",
+      description: "Mapeo de preferencias psicológicas",
       icon: Brain,
       duration: "12 min",
     },
     {
-      name: "Career Interest (RIASEC)",
-      description: "Vocational interest assessment",
+      name: "Intereses Profesionales (RIASEC)",
+      description: "Evaluación de intereses vocacionales",
       icon: Target,
       duration: "8 min",
     },
     {
-      name: "Emotional Intelligence",
-      description: "EQ skills evaluation",
+      name: "Inteligencia Emocional",
+      description: "Evaluación de habilidades de IE",
       icon: Award,
       duration: "10 min",
     },
     {
-      name: "Soft Skills Assessment",
-      description: "Professional skills analysis",
+      name: "Evaluación de Habilidades Blandas",
+      description: "Análisis de habilidades profesionales",
       icon: TrendingUp,
       duration: "12 min",
     },
   ]
 
   const benefits = [
-    "Personalized AI career coaching",
-    "Scientifically-backed assessments",
-    "Comprehensive learning library",
-    "Progress tracking and analytics",
-    "Professional development plans",
-    "24/7 AI support and guidance",
+    "Coaching profesional personalizado con IA",
+    "Evaluaciones respaldadas científicamente",
+    "Biblioteca integral de aprendizaje",
+    "Seguimiento de progreso y análisis",
+    "Planes de desarrollo profesional",
+    "Soporte y orientación de IA 24/7",
   ]
 
   const stats = [
-    { number: "10,000+", label: "Professionals Served" },
-    { number: "95%", label: "User Satisfaction" },
-    { number: "6", label: "Assessment Types" },
-    { number: "24/7", label: "AI Support" },
+    { number: "10,000+", label: "Profesionales Atendidos" },
+    { number: "95%", label: "Satisfacción del Usuario" },
+    { number: "6", label: "Tipos de Evaluación" },
+    { number: "24/7", label: "Soporte de IA" },
   ]
 
   const handleGetStarted = () => {
@@ -141,23 +143,23 @@ export function LandingPage() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
-                Features
+                Características
               </a>
               <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
-                Assessments
+                Evaluaciones
               </a>
               <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
-                About
+                Acerca de
               </a>
               <Button
                 variant="outline"
                 onClick={handleTryAICoach}
                 className="border-border hover:bg-muted bg-transparent"
               >
-                Try AI Coach
+                Probar Coach IA
               </Button>
               <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
-                Get Started
+                Comenzar
               </Button>
             </nav>
 
@@ -177,26 +179,26 @@ export function LandingPage() {
             <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
               <div className="flex flex-col space-y-4">
                 <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
-                  Features
+                  Características
                 </a>
                 <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
-                  Assessments
+                  Evaluaciones
                 </a>
                 <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
-                  About
+                  Acerca de
                 </a>
                 <Button
                   variant="outline"
                   onClick={handleTryAICoach}
                   className="border-border hover:bg-muted w-full bg-transparent"
                 >
-                  Try AI Coach
+                  Probar Coach IA
                 </Button>
                 <Button
                   onClick={handleGetStarted}
                   className="bg-foreground text-background hover:bg-foreground/90 w-full"
                 >
-                  Get Started
+                  Comenzar
                 </Button>
               </div>
             </nav>
@@ -210,14 +212,14 @@ export function LandingPage() {
           <div className="max-w-4xl mx-auto">
             <Badge variant="secondary" className="mb-6 bg-muted text-mutedForeground">
               <Zap className="h-3 w-3 mr-1" />
-              AI-Powered Career Development
+              Desarrollo Profesional Impulsado por IA
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Unlock Your Career Potential with <span className="text-foreground">AI Guidance</span>
+              Desbloquea Tu Potencial Profesional con <span className="text-foreground">Orientación de IA</span>
             </h1>
             <p className="text-xl text-mutedForeground mb-8 leading-relaxed">
-              Take scientifically-backed assessments, get personalized AI coaching, and access curated learning
-              resources to accelerate your professional growth and achieve your career goals.
+              Realiza evaluaciones respaldadas científicamente, obtén coaching personalizado de IA y accede a recursos
+              de aprendizaje curados para acelerar tu crecimiento profesional y alcanzar tus metas profesionales.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -225,7 +227,7 @@ export function LandingPage() {
                 onClick={handleGetStarted}
                 className="bg-foreground text-background hover:bg-foreground/90 text-lg px-8 py-6"
               >
-                Start Your Journey
+                Comienza Tu Viaje
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
@@ -235,7 +237,7 @@ export function LandingPage() {
                 className="border-border hover:bg-muted text-lg px-8 py-6 bg-transparent"
               >
                 <MessageSquare className="mr-2 h-5 w-5" />
-                Try AI Coach Free
+                Probar Coach IA Gratis
               </Button>
             </div>
           </div>
@@ -261,11 +263,11 @@ export function LandingPage() {
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Everything You Need for Career Success
+              Todo Lo Que Necesitas Para El Éxito Profesional
             </h2>
             <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
-              Our comprehensive platform combines AI technology with proven career development methodologies to provide
-              you with personalized guidance and actionable insights.
+              Nuestra plataforma integral combina tecnología de IA con metodologías probadas de desarrollo profesional
+              para brindarte orientación personalizada e insights accionables.
             </p>
           </div>
 
@@ -293,10 +295,12 @@ export function LandingPage() {
       <section id="assessments" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Comprehensive Career Assessments</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Evaluaciones Profesionales Integrales
+            </h2>
             <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
-              Take scientifically-validated assessments to gain deep insights into your personality, skills, and career
-              preferences.
+              Realiza evaluaciones validadas científicamente para obtener insights profundos sobre tu personalidad,
+              habilidades y preferencias profesionales.
             </p>
           </div>
 
@@ -324,10 +328,10 @@ export function LandingPage() {
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Why Choose CareerDev Pro?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">¿Por Qué Elegir CareerDev Pro?</h2>
               <p className="text-lg text-mutedForeground mb-8">
-                Our platform combines cutting-edge AI technology with proven career development methodologies to provide
-                you with the most comprehensive and personalized career guidance available.
+                Nuestra plataforma combina tecnología de IA de vanguardia con metodologías probadas de desarrollo
+                profesional para brindarte la orientación profesional más integral y personalizada disponible.
               </p>
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -341,26 +345,26 @@ export function LandingPage() {
 
             <Card className="border-border bg-card">
               <CardHeader>
-                <CardTitle className="text-foreground">Ready to Get Started?</CardTitle>
+                <CardTitle className="text-foreground">¿Listo Para Comenzar?</CardTitle>
                 <CardDescription className="text-mutedForeground">
-                  Join thousands of professionals who have accelerated their careers with our platform.
+                  Únete a miles de profesionales que han acelerado sus carreras con nuestra plataforma.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex space-x-2">
                   <Input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Ingresa tu email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="border-border"
                   />
                   <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
-                    Start Free
+                    Comenzar Gratis
                   </Button>
                 </div>
                 <p className="text-xs text-mutedForeground">
-                  No credit card required. Start your free assessment today.
+                  No se requiere tarjeta de crédito. Comienza tu evaluación gratuita hoy.
                 </p>
               </CardContent>
             </Card>
@@ -371,10 +375,10 @@ export function LandingPage() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-foreground text-background">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Transform Your Career?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Listo Para Transformar Tu Carrera?</h2>
           <p className="text-xl text-background/80 mb-8 max-w-2xl mx-auto">
-            Take the first step towards unlocking your full potential. Start with a free assessment and get personalized
-            AI-powered career guidance today.
+            Da el primer paso hacia desbloquear tu potencial completo. Comienza con una evaluación gratuita y obtén
+            orientación profesional personalizada impulsada por IA hoy.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -383,7 +387,7 @@ export function LandingPage() {
               onClick={handleGetStarted}
               className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6"
             >
-              Get Started Free
+              Comenzar Gratis
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
@@ -393,7 +397,7 @@ export function LandingPage() {
               className="border-background/20 text-background hover:bg-background/10 text-lg px-8 py-6 bg-transparent"
             >
               <MessageSquare className="mr-2 h-5 w-5" />
-              Try AI Coach
+              Probar Coach IA
             </Button>
           </div>
         </div>
@@ -411,42 +415,43 @@ export function LandingPage() {
                 <span className="font-bold text-foreground">CareerDev Pro</span>
               </div>
               <p className="text-mutedForeground text-sm">
-                AI-powered career development platform helping professionals unlock their potential.
+                Plataforma de desarrollo profesional impulsada por IA que ayuda a los profesionales a desbloquear su
+                potencial.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Platform</h3>
+              <h3 className="font-semibold text-foreground mb-4">Plataforma</h3>
               <ul className="space-y-2 text-sm text-mutedForeground">
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Assessments
+                    Evaluaciones
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    AI Coach
+                    Coach IA
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Learning Library
+                    Biblioteca de Aprendizaje
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Progress Tracking
+                    Seguimiento de Progreso
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
+              <h3 className="font-semibold text-foreground mb-4">Recursos</h3>
               <ul className="space-y-2 text-sm text-mutedForeground">
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Career Guides
+                    Guías Profesionales
                   </a>
                 </li>
                 <li>
@@ -456,38 +461,38 @@ export function LandingPage() {
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Success Stories
+                    Historias de Éxito
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Help Center
+                    Centro de Ayuda
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Company</h3>
+              <h3 className="font-semibold text-foreground mb-4">Empresa</h3>
               <ul className="space-y-2 text-sm text-mutedForeground">
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    About Us
+                    Acerca de Nosotros
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Privacy Policy
+                    Política de Privacidad
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Terms of Service
+                    Términos de Servicio
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-foreground transition-colors">
-                    Contact
+                    Contacto
                   </a>
                 </li>
               </ul>
@@ -495,7 +500,7 @@ export function LandingPage() {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center">
-            <p className="text-mutedForeground text-sm">© 2024 CareerDev Pro. All rights reserved.</p>
+            <p className="text-mutedForeground text-sm">© 2024 CareerDev Pro. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

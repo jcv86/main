@@ -9,683 +9,514 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Brain,
   Target,
-  TrendingUp,
   Users,
   BookOpen,
   Award,
-  MessageSquare,
-  BarChart3,
   CheckCircle,
   Clock,
+  BarChart3,
+  MessageSquare,
   Star,
   ArrowRight,
-  Calendar,
-  ArrowLeft,
   Play,
-  Eye,
+  Trophy,
+  Zap,
+  Heart,
+  Lightbulb,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface TestResult {
   id: string
   name: string
-  type: string
   score: number
-  completedAt: Date
-  status: "completed" | "in-progress" | "not-started"
-  description: string
-  duration: string
-  questions: number
+  completedAt: string
+  insights: string[]
 }
 
-interface LearningResource {
-  id: string
-  title: string
-  author: string
-  category: string
-  progress: number
-  type: "Book" | "Course" | "Article" | "Video"
-  duration?: string
-  rating: number
+interface UserProfile {
+  name: string
+  email: string
+  completedTests: number
+  totalTests: number
+  level: string
+  points: number
 }
 
 export function DashboardContent() {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("overview")
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    name: "Usuario",
+    email: "usuario@ejemplo.com",
+    completedTests: 3,
+    totalTests: 6,
+    level: "Explorador",
+    points: 1250,
+  })
 
-  // Sample test results with more detailed data
-  const testResults: TestResult[] = [
+  const [recentResults, setRecentResults] = useState<TestResult[]>([
     {
-      id: "1",
-      name: "DISC Assessment",
-      type: "personality",
+      id: "disc",
+      name: "Evaluación DISC",
       score: 85,
-      completedAt: new Date("2024-01-15"),
-      status: "completed",
-      description: "Behavioral style and communication preferences",
-      duration: "10 minutes",
-      questions: 24,
+      completedAt: "2024-01-15",
+      insights: ["Estilo dominante", "Orientado a resultados", "Líder natural"],
     },
     {
-      id: "2",
-      name: "Big Five Personality",
-      type: "personality",
+      id: "big-five",
+      name: "Big Five",
       score: 78,
-      completedAt: new Date("2024-01-10"),
-      status: "completed",
-      description: "Five major dimensions of personality",
-      duration: "15 minutes",
-      questions: 50,
+      completedAt: "2024-01-10",
+      insights: ["Alta apertura", "Consciencioso", "Extrovertido"],
     },
-    {
-      id: "3",
-      name: "Emotional Intelligence",
-      type: "skills",
-      score: 0,
-      completedAt: new Date(),
-      status: "in-progress",
-      description: "Ability to understand and manage emotions",
-      duration: "10 minutes",
-      questions: 30,
-    },
-    {
-      id: "4",
-      name: "RIASEC Career Interest",
-      type: "career",
-      score: 0,
-      completedAt: new Date(),
-      status: "not-started",
-      description: "Career interests and vocational preferences",
-      duration: "8 minutes",
-      questions: 36,
-    },
-    {
-      id: "5",
-      name: "MBTI Type Indicator",
-      type: "personality",
-      score: 0,
-      completedAt: new Date(),
-      status: "not-started",
-      description: "Psychological preferences and type",
-      duration: "12 minutes",
-      questions: 40,
-    },
-    {
-      id: "6",
-      name: "Soft Skills Evaluation",
-      type: "skills",
-      score: 0,
-      completedAt: new Date(),
-      status: "not-started",
-      description: "Interpersonal and professional skills",
-      duration: "12 minutes",
-      questions: 35,
-    },
-  ]
-
-  // Sample learning resources
-  const learningResources: LearningResource[] = [
-    {
-      id: "1",
-      title: "Leadership in the 21st Century",
-      author: "John Maxwell",
-      category: "Leadership",
-      progress: 65,
-      type: "Book",
-      duration: "8 hours",
-      rating: 4.8,
-    },
-    {
-      id: "2",
-      title: "Emotional Intelligence 2.0",
-      author: "Travis Bradberry",
-      category: "Skills",
-      progress: 30,
-      type: "Book",
-      duration: "6 hours",
-      rating: 4.6,
-    },
-    {
-      id: "3",
-      title: "Career Development Masterclass",
-      author: "CareerDev Team",
-      category: "Career",
-      progress: 0,
-      type: "Course",
-      duration: "4 hours",
-      rating: 4.9,
-    },
-    {
-      id: "4",
-      title: "Effective Communication Strategies",
-      author: "Dale Carnegie",
-      category: "Communication",
-      progress: 85,
-      type: "Course",
-      duration: "3 hours",
-      rating: 4.7,
-    },
-    {
-      id: "5",
-      title: "Building High-Performance Teams",
-      author: "Patrick Lencioni",
-      category: "Leadership",
-      progress: 0,
-      type: "Book",
-      duration: "5 hours",
-      rating: 4.5,
-    },
-    {
-      id: "6",
-      title: "The Future of Work",
-      author: "Industry Experts",
-      category: "Trends",
-      progress: 100,
-      type: "Article",
-      duration: "30 minutes",
-      rating: 4.4,
-    },
-  ]
+  ])
 
   const availableTests = [
     {
       id: "disc",
-      title: "DISC Assessment",
-      description: "Understand your behavioral style and communication preferences",
+      name: "Evaluación DISC",
+      description: "Descubre tu estilo de comportamiento y comunicación",
+      duration: "10-15 min",
       icon: Users,
-      duration: "10 minutes",
-      questions: 24,
-      category: "Personality",
-      difficulty: "Beginner",
-    },
-    {
-      id: "big-five",
-      title: "Big Five Personality",
-      description: "Explore the five major dimensions of personality",
-      icon: Star,
-      duration: "15 minutes",
-      questions: 50,
-      category: "Personality",
-      difficulty: "Intermediate",
-    },
-    {
-      id: "mbti",
-      title: "MBTI Type Indicator",
-      description: "Discover your psychological preferences and type",
-      icon: Brain,
-      duration: "12 minutes",
-      questions: 40,
-      category: "Personality",
-      difficulty: "Intermediate",
-    },
-    {
-      id: "riasec",
-      title: "RIASEC Career Interest",
-      description: "Find careers that match your interests and values",
-      icon: Target,
-      duration: "8 minutes",
-      questions: 36,
-      category: "Career",
-      difficulty: "Beginner",
+      color: "bg-blue-500",
+      completed: true,
+      route: "/test/disc",
     },
     {
       id: "emotional-intelligence",
-      title: "Emotional Intelligence",
-      description: "Assess your ability to understand and manage emotions",
-      icon: Award,
-      duration: "10 minutes",
-      questions: 30,
-      category: "Skills",
-      difficulty: "Intermediate",
+      name: "Inteligencia Emocional",
+      description: "Evalúa tu capacidad de gestionar emociones",
+      duration: "12-18 min",
+      icon: Heart,
+      color: "bg-pink-500",
+      completed: false,
+      route: "/test/emotional-intelligence",
+    },
+    {
+      id: "mbti",
+      name: "Indicador MBTI",
+      description: "Identifica tu tipo de personalidad psicológica",
+      duration: "15-20 min",
+      icon: Brain,
+      color: "bg-purple-500",
+      completed: false,
+      route: "/test/mbti",
+    },
+    {
+      id: "big-five",
+      name: "Big Five",
+      description: "Análisis completo de los cinco grandes rasgos",
+      duration: "12-18 min",
+      icon: Star,
+      color: "bg-yellow-500",
+      completed: true,
+      route: "/test/big-five",
+    },
+    {
+      id: "riasec",
+      name: "Intereses Profesionales",
+      description: "Descubre tus intereses vocacionales y carreras afines",
+      duration: "10-15 min",
+      icon: Target,
+      color: "bg-green-500",
+      completed: false,
+      route: "/test/riasec",
     },
     {
       id: "soft-skills",
-      title: "Soft Skills Evaluation",
-      description: "Evaluate your interpersonal and professional skills",
-      icon: TrendingUp,
-      duration: "12 minutes",
-      questions: 35,
-      category: "Skills",
-      difficulty: "Advanced",
+      name: "Habilidades Blandas",
+      description: "Evalúa tus competencias interpersonales",
+      duration: "15-20 min",
+      icon: Lightbulb,
+      color: "bg-orange-500",
+      completed: false,
+      route: "/test/soft-skills",
     },
   ]
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-foreground/10 text-foreground border-foreground/20"
-      case "in-progress":
-        return "bg-muted text-mutedForeground border-border"
-      case "not-started":
-        return "bg-secondary text-secondaryForeground border-border"
-      default:
-        return "bg-muted text-mutedForeground border-border"
-    }
+  const achievements = [
+    {
+      title: "Primer Test Completado",
+      description: "Completaste tu primera evaluación",
+      icon: Trophy,
+      earned: true,
+      date: "2024-01-15",
+    },
+    {
+      title: "Explorador de Personalidad",
+      description: "Completaste 3 tests de personalidad",
+      icon: Brain,
+      earned: true,
+      date: "2024-01-10",
+    },
+    {
+      title: "Maestro del Autoconocimiento",
+      description: "Completa todos los tests disponibles",
+      icon: Award,
+      earned: false,
+      date: null,
+    },
+  ]
+
+  const recommendations = [
+    {
+      title: "Desarrolla tu Liderazgo",
+      description: "Basado en tu perfil DISC, te recomendamos explorar habilidades de liderazgo",
+      action: "Ver Recursos",
+      icon: Users,
+    },
+    {
+      title: "Inteligencia Emocional",
+      description: "Completa la evaluación de IE para obtener insights sobre tu gestión emocional",
+      action: "Realizar Test",
+      icon: Heart,
+    },
+    {
+      title: "Planificación de Carrera",
+      description: "Usa tus resultados para crear un plan de desarrollo profesional",
+      action: "Crear Plan",
+      icon: Target,
+    },
+  ]
+
+  const handleStartTest = (testRoute: string) => {
+    router.push(testRoute)
   }
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Beginner":
-        return "bg-green-100 text-green-800 border-green-200"
-      case "Intermediate":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "Advanced":
-        return "bg-red-100 text-red-800 border-red-200"
-      default:
-        return "bg-muted text-mutedForeground border-border"
-    }
+  const handleViewResults = (testId: string) => {
+    router.push(`/test/${testId}/results`)
   }
 
-  const completedTests = testResults.filter((test) => test.status === "completed").length
-  const totalTests = testResults.length
-  const completionPercentage = (completedTests / totalTests) * 100
-
-  const totalLearningHours = learningResources.reduce((acc, resource) => {
-    if (resource.duration) {
-      const hours = Number.parseFloat(resource.duration.split(" ")[0])
-      return acc + (resource.progress / 100) * hours
-    }
-    return acc
-  }, 0)
-
-  const averageScore =
-    testResults.filter((test) => test.status === "completed").reduce((acc, test) => acc + test.score, 0) /
-      completedTests || 0
+  const completionPercentage = Math.round((userProfile.completedTests / userProfile.totalTests) * 100)
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-muted">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center">
-                  <Brain className="h-5 w-5 text-background" />
-                </div>
-                <span className="text-2xl font-bold text-foreground">Dashboard</span>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="border-border">
-                <Star className="h-3 w-3 mr-1" />
-                Level 5
-              </Badge>
-              <Button
-                onClick={() => router.push("/ai-coach")}
-                className="bg-foreground text-background hover:bg-foreground/90"
-              >
-                <MessageSquare className="h-4 w-4 mr-2" />
-                AI Coach
-              </Button>
-            </div>
+    <div className="min-h-screen bg-background p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Panel de Control</h1>
+            <p className="text-mutedForeground">Bienvenido de vuelta, {userProfile.name}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => router.push("/ai-coach")} className="border-border bg-transparent">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Coach IA
+            </Button>
+            <Button onClick={() => router.push("/biblioteca")} className="bg-foreground text-background">
+              <BookOpen className="h-4 w-4 mr-2" />
+              Biblioteca
+            </Button>
           </div>
         </div>
-      </header>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Welcome back!</h1>
-          <p className="text-mutedForeground">Continue your professional development journey</p>
+        {/* Progress Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card className="border-border bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-mutedForeground">Tests Completados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">
+                {userProfile.completedTests}/{userProfile.totalTests}
+              </div>
+              <Progress value={completionPercentage} className="mt-2" />
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-mutedForeground">Nivel Actual</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">{userProfile.level}</div>
+              <div className="text-sm text-mutedForeground">{userProfile.points} puntos</div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-mutedForeground">Logros Obtenidos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">{achievements.filter((a) => a.earned).length}</div>
+              <div className="text-sm text-mutedForeground">de {achievements.length} disponibles</div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-mutedForeground">Última Actividad</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">Hoy</div>
+              <div className="text-sm text-mutedForeground">Evaluación DISC</div>
+            </CardContent>
+          </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Main Content Tabs */}
+        <Tabs defaultValue="tests" className="space-y-4">
           <TabsList className="grid w-full grid-cols-4 bg-muted">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-background">
-              <BarChart3 className="h-4 w-4 mr-2" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="assessments" className="data-[state=active]:bg-background">
-              <Target className="h-4 w-4 mr-2" />
-              Assessments
+            <TabsTrigger value="tests" className="data-[state=active]:bg-background">
+              Tests
             </TabsTrigger>
             <TabsTrigger value="results" className="data-[state=active]:bg-background">
-              <Award className="h-4 w-4 mr-2" />
-              Results
+              Resultados
             </TabsTrigger>
-            <TabsTrigger value="library" className="data-[state=active]:bg-background">
-              <BookOpen className="h-4 w-4 mr-2" />
-              Library
+            <TabsTrigger value="recommendations" className="data-[state=active]:bg-background">
+              Recomendaciones
+            </TabsTrigger>
+            <TabsTrigger value="achievements" className="data-[state=active]:bg-background">
+              Logros
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="mt-6">
-            {/* Stats Cards */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-              <Card className="border-border bg-card hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-foreground">Tests Completed</CardTitle>
-                  <CheckCircle className="h-4 w-4 text-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-foreground">
-                    {completedTests}/{totalTests}
-                  </div>
-                  <p className="text-xs text-mutedForeground">{Math.round(completionPercentage)}% completion rate</p>
-                  <Progress value={completionPercentage} className="mt-2 h-2" />
-                </CardContent>
-              </Card>
-
-              <Card className="border-border bg-card hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-foreground">Average Score</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{Math.round(averageScore)}%</div>
-                  <p className="text-xs text-mutedForeground">Across completed assessments</p>
-                  <Progress value={averageScore} className="mt-2 h-2" />
-                </CardContent>
-              </Card>
-
-              <Card className="border-border bg-card hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-foreground">Learning Hours</CardTitle>
-                  <Clock className="h-4 w-4 text-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{Math.round(totalLearningHours)}</div>
-                  <p className="text-xs text-mutedForeground">Hours completed this month</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border bg-card hover:shadow-md transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-foreground">Streak</CardTitle>
-                  <Calendar className="h-4 w-4 text-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-foreground">7</div>
-                  <p className="text-xs text-mutedForeground">Days active</p>
-                </CardContent>
-              </Card>
+          {/* Available Tests */}
+          <TabsContent value="tests" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-foreground">Evaluaciones Disponibles</h2>
+              <Badge variant="secondary" className="bg-muted text-mutedForeground">
+                {availableTests.filter((t) => !t.completed).length} pendientes
+              </Badge>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Recent Activity */}
-              <Card className="border-border bg-card">
-                <CardHeader>
-                  <CardTitle className="text-foreground">Recent Activity</CardTitle>
-                  <CardDescription>Your latest progress and achievements</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {testResults.slice(0, 4).map((test) => (
-                      <div key={test.id} className="flex items-center space-x-4">
-                        <div className="w-2 h-2 bg-foreground rounded-full flex-shrink-0"></div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{test.name}</p>
-                          <p className="text-xs text-mutedForeground">
-                            {test.status === "completed"
-                              ? `Completed ${test.completedAt.toLocaleDateString()} - Score: ${test.score}%`
-                              : test.status === "in-progress"
-                                ? "In progress"
-                                : "Ready to start"}
-                          </p>
-                        </div>
-                        <Badge className={getStatusColor(test.status)} variant="outline">
-                          {test.status === "completed" ? "Done" : test.status === "in-progress" ? "Active" : "New"}
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Actions */}
-              <Card className="border-border bg-card">
-                <CardHeader>
-                  <CardTitle className="text-foreground">Quick Actions</CardTitle>
-                  <CardDescription>Continue your development journey</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border-border hover:bg-muted bg-transparent"
-                    onClick={() => router.push("/ai-coach")}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Chat with AI Coach
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border-border hover:bg-muted bg-transparent"
-                    onClick={() => setActiveTab("assessments")}
-                  >
-                    <Target className="h-4 w-4 mr-2" />
-                    Take New Assessment
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border-border hover:bg-muted bg-transparent"
-                    onClick={() => setActiveTab("results")}
-                  >
-                    <Award className="h-4 w-4 mr-2" />
-                    View Results
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border-border hover:bg-muted bg-transparent"
-                    onClick={() => setActiveTab("library")}
-                  >
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Browse Library
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="assessments" className="mt-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Available Assessments</h2>
-              <p className="text-mutedForeground">
-                Take scientifically-backed assessments to gain insights into your personality, skills, and career
-                preferences.
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {availableTests.map((test) => {
-                const testResult = testResults.find((result) => result.id === test.id)
-                const isCompleted = testResult?.status === "completed"
-                const isInProgress = testResult?.status === "in-progress"
-
-                return (
-                  <Card
-                    key={test.id}
-                    className={`border-border bg-card hover:bg-muted/50 transition-colors ${
-                      isCompleted ? "ring-1 ring-foreground/20" : ""
-                    }`}
-                  >
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-2">
-                        <test.icon className="h-8 w-8 text-foreground" />
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="secondary" className="bg-muted text-mutedForeground">
-                            {test.duration}
-                          </Badge>
-                          {isCompleted && <CheckCircle className="h-4 w-4 text-foreground" />}
-                        </div>
-                      </div>
-                      <CardTitle className="text-lg text-foreground">{test.title}</CardTitle>
-                      <CardDescription className="text-mutedForeground">{test.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-mutedForeground">{test.questions} questions</span>
-                          <Badge className={getDifficultyColor(test.difficulty)} variant="outline">
-                            {test.difficulty}
-                          </Badge>
-                        </div>
-                        {isCompleted && testResult && (
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-mutedForeground">Your Score:</span>
-                              <span className="font-medium text-foreground">{testResult.score}%</span>
-                            </div>
-                            <Progress value={testResult.score} className="h-2" />
-                          </div>
-                        )}
-                        <div className="flex space-x-2">
-                          {isCompleted ? (
-                            <>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setActiveTab("results")}
-                                className="flex-1 border-border hover:bg-muted"
-                              >
-                                <Eye className="h-4 w-4 mr-1" />
-                                View Results
-                              </Button>
-                              <Button size="sm" className="flex-1 bg-foreground text-background hover:bg-foreground/90">
-                                <ArrowRight className="h-4 w-4 mr-1" />
-                                Retake
-                              </Button>
-                            </>
-                          ) : (
-                            <Button size="sm" className="w-full bg-foreground text-background hover:bg-foreground/90">
-                              <Play className="h-4 w-4 mr-1" />
-                              {isInProgress ? "Continue" : "Start Assessment"}
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="results" className="mt-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Your Results</h2>
-              <p className="text-mutedForeground">Review your assessment results and track your progress over time.</p>
-            </div>
-
-            <div className="space-y-4">
-              {testResults.map((test) => (
-                <Card key={test.id} className="border-border bg-card">
-                  <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availableTests.map((test) => (
+                <Card key={test.id} className="border-border bg-card hover:shadow-md transition-shadow">
+                  <CardHeader>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-                          <Target className="h-6 w-6 text-foreground" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-foreground text-lg">{test.name}</h3>
-                          <p className="text-sm text-mutedForeground">{test.description}</p>
-                          <div className="flex items-center space-x-4 mt-1">
-                            <span className="text-xs text-mutedForeground">{test.duration}</span>
-                            <span className="text-xs text-mutedForeground">•</span>
-                            <span className="text-xs text-mutedForeground">{test.questions} questions</span>
-                            {test.status === "completed" && (
-                              <>
-                                <span className="text-xs text-mutedForeground">•</span>
-                                <span className="text-xs text-mutedForeground">
-                                  Completed {test.completedAt.toLocaleDateString()}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                      <div className={`w-10 h-10 rounded-lg ${test.color} flex items-center justify-center`}>
+                        <test.icon className="h-5 w-5 text-white" />
                       </div>
-                      <div className="flex items-center space-x-4">
-                        {test.status === "completed" && (
-                          <div className="text-right">
-                            <div className="text-3xl font-bold text-foreground">{test.score}%</div>
-                            <div className="text-xs text-mutedForeground">Score</div>
-                          </div>
-                        )}
-                        <div className="flex flex-col space-y-2">
-                          <Badge className={getStatusColor(test.status)} variant="outline">
-                            {test.status === "completed"
-                              ? "Completed"
-                              : test.status === "in-progress"
-                                ? "In Progress"
-                                : "Not Started"}
-                          </Badge>
-                          <Button variant="outline" size="sm" className="border-border hover:bg-muted bg-transparent">
-                            {test.status === "completed" ? "View Details" : "Start Test"}
-                          </Button>
-                        </div>
-                      </div>
+                      {test.completed && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Completado
+                        </Badge>
+                      )}
                     </div>
-                    {test.status === "completed" && (
-                      <div className="mt-4">
-                        <Progress value={test.score} className="h-2" />
+                    <CardTitle className="text-foreground">{test.name}</CardTitle>
+                    <CardDescription className="text-mutedForeground">{test.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center text-sm text-mutedForeground">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {test.duration}
                       </div>
-                    )}
+                      <Button
+                        size="sm"
+                        onClick={() => handleStartTest(test.route)}
+                        variant={test.completed ? "outline" : "default"}
+                        className={
+                          test.completed
+                            ? "border-border bg-transparent"
+                            : "bg-foreground text-background hover:bg-foreground/90"
+                        }
+                      >
+                        {test.completed ? (
+                          <>
+                            <BarChart3 className="h-4 w-4 mr-1" />
+                            Ver Resultados
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-4 w-4 mr-1" />
+                            Comenzar
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="library" className="mt-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Learning Library</h2>
-              <p className="text-mutedForeground">
-                Access curated resources, books, and materials for your professional development.
-              </p>
-            </div>
+          {/* Recent Results */}
+          <TabsContent value="results" className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">Resultados Recientes</h2>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {learningResources.map((resource) => (
-                <Card key={resource.id} className="border-border bg-card hover:bg-muted/50 transition-colors">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <BookOpen className="h-8 w-8 text-foreground" />
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary" className="bg-muted text-mutedForeground">
-                          {resource.type}
-                        </Badge>
-                        <div className="flex items-center space-x-1">
-                          <Star className="h-3 w-3 text-foreground" />
-                          <span className="text-xs text-foreground">{resource.rating}</span>
+            {recentResults.length > 0 ? (
+              <div className="grid gap-4">
+                {recentResults.map((result) => (
+                  <Card key={result.id} className="border-border bg-card">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-foreground">{result.name}</CardTitle>
+                          <CardDescription className="text-mutedForeground">
+                            Completado el {new Date(result.completedAt).toLocaleDateString("es-ES")}
+                          </CardDescription>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-foreground">{result.score}%</div>
+                          <div className="text-sm text-mutedForeground">Puntuación</div>
                         </div>
                       </div>
-                    </div>
-                    <CardTitle className="text-lg text-foreground">{resource.title}</CardTitle>
-                    <CardDescription className="text-mutedForeground">by {resource.author}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-mutedForeground">Progress</span>
-                        <span className="text-foreground font-medium">{resource.progress}%</span>
-                      </div>
-                      <Progress value={resource.progress} className="h-2" />
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="border-border text-foreground">
-                            {resource.category}
-                          </Badge>
-                          {resource.duration && (
-                            <span className="text-xs text-mutedForeground">{resource.duration}</span>
-                          )}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-foreground">Insights Clave:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {result.insights.map((insight, index) => (
+                            <Badge key={index} variant="secondary" className="bg-muted text-mutedForeground">
+                              {insight}
+                            </Badge>
+                          ))}
                         </div>
-                        <Button size="sm" className="bg-foreground text-background hover:bg-foreground/90">
-                          {resource.progress > 0 ? "Continue" : "Start"}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewResults(result.id)}
+                          className="mt-3 border-border bg-transparent"
+                        >
+                          Ver Análisis Completo
+                          <ArrowRight className="h-4 w-4 ml-1" />
                         </Button>
                       </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card className="border-border bg-card">
+                <CardContent className="text-center py-8">
+                  <BarChart3 className="h-12 w-12 text-mutedForeground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-2">No hay resultados aún</h3>
+                  <p className="text-mutedForeground mb-4">
+                    Completa tu primera evaluación para ver tus resultados aquí
+                  </p>
+                  <Button onClick={() => handleStartTest("/test/disc")} className="bg-foreground text-background">
+                    Comenzar Primera Evaluación
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* Recommendations */}
+          <TabsContent value="recommendations" className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">Recomendaciones Personalizadas</h2>
+
+            <div className="grid gap-4">
+              {recommendations.map((rec, index) => (
+                <Card key={index} className="border-border bg-card">
+                  <CardHeader>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                        <rec.icon className="h-5 w-5 text-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-foreground">{rec.title}</CardTitle>
+                        <CardDescription className="text-mutedForeground">{rec.description}</CardDescription>
+                      </div>
+                      <Button variant="outline" size="sm" className="border-border bg-transparent">
+                        {rec.action}
+                      </Button>
                     </div>
-                  </CardContent>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Achievements */}
+          <TabsContent value="achievements" className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">Logros y Reconocimientos</h2>
+
+            <div className="grid gap-4">
+              {achievements.map((achievement, index) => (
+                <Card
+                  key={index}
+                  className={`border-border ${achievement.earned ? "bg-card" : "bg-muted/50"} transition-all`}
+                >
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                          achievement.earned ? "bg-yellow-500" : "bg-muted"
+                        }`}
+                      >
+                        <achievement.icon
+                          className={`h-6 w-6 ${achievement.earned ? "text-white" : "text-mutedForeground"}`}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className={achievement.earned ? "text-foreground" : "text-mutedForeground"}>
+                          {achievement.title}
+                        </CardTitle>
+                        <CardDescription className="text-mutedForeground">{achievement.description}</CardDescription>
+                        {achievement.earned && achievement.date && (
+                          <div className="text-sm text-mutedForeground mt-1">
+                            Obtenido el {new Date(achievement.date).toLocaleDateString("es-ES")}
+                          </div>
+                        )}
+                      </div>
+                      {achievement.earned && (
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                          <Trophy className="h-3 w-3 mr-1" />
+                          Obtenido
+                        </Badge>
+                      )}
+                    </div>
+                  </CardHeader>
                 </Card>
               ))}
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Quick Actions */}
+        <Card className="border-border bg-card">
+          <CardHeader>
+            <CardTitle className="text-foreground">Acciones Rápidas</CardTitle>
+            <CardDescription className="text-mutedForeground">
+              Continúa tu desarrollo profesional con estas acciones recomendadas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Button
+                variant="outline"
+                className="h-auto p-4 border-border bg-transparent"
+                onClick={() => router.push("/ai-coach")}
+              >
+                <div className="text-center">
+                  <MessageSquare className="h-8 w-8 mx-auto mb-2 text-foreground" />
+                  <div className="font-medium text-foreground">Consultar Coach IA</div>
+                  <div className="text-sm text-mutedForeground">Obtén consejos personalizados</div>
+                </div>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="h-auto p-4 border-border bg-transparent"
+                onClick={() => router.push("/biblioteca")}
+              >
+                <div className="text-center">
+                  <BookOpen className="h-8 w-8 mx-auto mb-2 text-foreground" />
+                  <div className="font-medium text-foreground">Explorar Biblioteca</div>
+                  <div className="text-sm text-mutedForeground">Recursos de desarrollo</div>
+                </div>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="h-auto p-4 border-border bg-transparent"
+                onClick={() => handleStartTest("/test/emotional-intelligence")}
+              >
+                <div className="text-center">
+                  <Zap className="h-8 w-8 mx-auto mb-2 text-foreground" />
+                  <div className="font-medium text-foreground">Siguiente Test</div>
+                  <div className="text-sm text-mutedForeground">Inteligencia Emocional</div>
+                </div>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
 }
-
-export default DashboardContent

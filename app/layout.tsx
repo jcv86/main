@@ -7,14 +7,14 @@ import { SessionWrapper } from "@/components/session-wrapper"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Career Development Platform - Discover Your Professional Path",
+  title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
   description:
-    "Comprehensive career assessment platform with personality tests, skills evaluation, and AI-powered coaching to help you discover and develop your professional path.",
+    "Plataforma integral de evaluación profesional con tests de personalidad, evaluación de habilidades y coaching impulsado por IA para ayudarte a descubrir y desarrollar tu camino profesional.",
   keywords:
-    "career development, personality tests, DISC assessment, MBTI, Big Five, career coaching, professional development, skills assessment",
-  authors: [{ name: "Career Development Platform" }],
-  creator: "Career Development Platform",
-  publisher: "Career Development Platform",
+    "desarrollo profesional, tests de personalidad, evaluación DISC, MBTI, Big Five, coaching profesional, desarrollo profesional, evaluación de habilidades",
+  authors: [{ name: "Plataforma de Desarrollo Profesional" }],
+  creator: "Plataforma de Desarrollo Profesional",
+  publisher: "Plataforma de Desarrollo Profesional",
   formatDetection: {
     email: false,
     address: false,
@@ -25,27 +25,27 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Career Development Platform - Discover Your Professional Path",
+    title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
     description:
-      "Take comprehensive personality and skills assessments with AI-powered insights to accelerate your career growth.",
+      "Realiza evaluaciones integrales de personalidad y habilidades con insights impulsados por IA para acelerar tu crecimiento profesional.",
     url: "https://career-development-platform.vercel.app",
-    siteName: "Career Development Platform",
+    siteName: "Plataforma de Desarrollo Profesional",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Career Development Platform",
+        alt: "Plataforma de Desarrollo Profesional",
       },
     ],
-    locale: "en_US",
+    locale: "es_ES",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Career Development Platform - Discover Your Professional Path",
+    title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
     description:
-      "Take comprehensive personality and skills assessments with AI-powered insights to accelerate your career growth.",
+      "Realiza evaluaciones integrales de personalidad y habilidades con insights impulsados por IA para acelerar tu crecimiento profesional.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -71,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

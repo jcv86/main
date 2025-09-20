@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Smartphone, Tablet, Laptop, Wifi, Battery, Signal } from "lucide-react"
+import { Smartphone, Tablet, Laptop, Wifi, Battery, Signal, Zap } from "lucide-react"
 
 interface DeviceInfo {
   type: "mobile" | "tablet" | "desktop"
@@ -15,6 +15,9 @@ interface DeviceInfo {
   pixelRatio: number
   connection?: string
   battery?: number
+  platform: string
+  maxTouchPoints: number
+  isOnline: boolean
 }
 
 interface MobileTestDetectorProps {
@@ -23,9 +26,15 @@ interface MobileTestDetectorProps {
 
 export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) {
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null)
-  const [isOnline, setIsOnline] = useState(true)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+
     const updateDeviceInfo = () => {
       const width = window.innerWidth
       const height = window.innerHeight
@@ -33,6 +42,8 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
       const touchSupport = "ontouchstart" in window || navigator.maxTouchPoints > 0
       const orientation = width > height ? "landscape" : "portrait"
       const pixelRatio = window.devicePixelRatio || 1
+      const maxTouchPoints = navigator.maxTouchPoints || 0
+      const isOnline = navigator.onLine
 
       let type: "mobile" | "tablet" | "desktop"
       if (width < 768) {
@@ -43,6 +54,19 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         type = "desktop"
       }
 
+      let platform = "Unknown"
+      if (userAgent.includes("iPhone") || userAgent.includes("iPad")) {
+        platform = "iOS"
+      } else if (userAgent.includes("Android")) {
+        platform = "Android"
+      } else if (userAgent.includes("Windows")) {
+        platform = "Windows"
+      } else if (userAgent.includes("Mac")) {
+        platform = "macOS"
+      } else if (userAgent.includes("Linux")) {
+        platform = "Linux"
+      }
+
       const info: DeviceInfo = {
         type,
         width,
@@ -51,6 +75,9 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         touchSupport,
         orientation,
         pixelRatio,
+        platform,
+        maxTouchPoints,
+        isOnline,
       }
 
       // Try to get connection info
@@ -78,8 +105,8 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
       }
     }
 
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
+    const handleOnline = () => updateDeviceInfo()
+    const handleOffline = () => updateDeviceInfo()
 
     updateDeviceInfo()
     window.addEventListener("resize", updateDeviceInfo)
@@ -93,9 +120,9 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
       window.removeEventListener("online", handleOnline)
       window.removeEventListener("offline", handleOffline)
     }
-  }, [onDeviceChange])
+  }, [onDeviceChange, isClient])
 
-  if (!deviceInfo) {
+  if (!isClient || !deviceInfo) {
     return (
       <Card>
         <CardContent className="p-4">
@@ -127,6 +154,23 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
     }
   }
 
+  const getPlatformIcon = () => {
+    switch (deviceInfo.platform) {
+      case "iOS":
+        return "📱"
+      case "Android":
+        return "🤖"
+      case "Windows":
+        return "🪟"
+      case "macOS":
+        return "🍎"
+      case "Linux":
+        return "🐧"
+      default:
+        return "💻"
+    }
+  }
+
   return (
     <Card className="border-gray-200">
       <CardHeader className="pb-3">
@@ -136,12 +180,15 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Device Type */}
+        {/* Device Type & Platform */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Device Type</span>
-          <Badge className={getDeviceColor()}>
-            {deviceInfo.type.charAt(0).toUpperCase() + deviceInfo.type.slice(1)}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge className={getDeviceColor()}>
+              {deviceInfo.type.charAt(0).toUpperCase() + deviceInfo.type.slice(1)}
+            </Badge>
+            <span className="text-lg">{getPlatformIcon()}</span>
+          </div>
         </div>
 
         {/* Screen Info */}
@@ -158,82 +205,136 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
           </div>
         </div>
 
-        {/* Capabilities */}
+        {/* Touch Capabilities */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Touch Support</span>
             <Badge variant={deviceInfo.touchSupport ? "default" : "outline"}>
-              {deviceInfo.touchSupport ? "Yes" : "No"}
+              {deviceInfo.touchSupport ? "✅ Enabled" : "❌ Disabled"}
             </Badge>
           </div>
           <div className="flex items-center justify-between text-sm">
+            <span className="font-medium">Max Touch Points</span>
+            <span className="text-gray-600 font-mono">{deviceInfo.maxTouchPoints}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Pixel Ratio</span>
-            <span className="text-gray-600">{deviceInfo.pixelRatio}x</span>
+            <span className="text-gray-600 font-mono">{deviceInfo.pixelRatio}x</span>
           </div>
         </div>
 
-        {/* Network Status */}
+        {/* Network & System Status */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium flex items-center gap-1">
               <Wifi className="h-4 w-4" />
-              Online Status
+              Network Status
             </span>
-            <Badge variant={isOnline ? "default" : "destructive"}>{isOnline ? "Online" : "Offline"}</Badge>
+            <Badge variant={deviceInfo.isOnline ? "default" : "destructive"}>
+              {deviceInfo.isOnline ? "🟢 Online" : "🔴 Offline"}
+            </Badge>
           </div>
           {deviceInfo.connection && (
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium flex items-center gap-1">
                 <Signal className="h-4 w-4" />
-                Connection
+                Connection Type
               </span>
-              <span className="text-gray-600 uppercase">{deviceInfo.connection}</span>
+              <span className="text-gray-600 uppercase font-mono">{deviceInfo.connection}</span>
             </div>
           )}
           {deviceInfo.battery !== undefined && (
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium flex items-center gap-1">
                 <Battery className="h-4 w-4" />
-                Battery
+                Battery Level
               </span>
-              <span className="text-gray-600">{deviceInfo.battery}%</span>
+              <div className="flex items-center gap-1">
+                <span className="text-gray-600 font-mono">{deviceInfo.battery}%</span>
+                <div className="w-8 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all ${
+                      deviceInfo.battery > 50
+                        ? "bg-green-500"
+                        : deviceInfo.battery > 20
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                    }`}
+                    style={{ width: `${deviceInfo.battery}%` }}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
 
-        {/* User Agent (truncated) */}
+        {/* Platform Details */}
         <div className="text-xs">
-          <span className="font-medium">User Agent:</span>
-          <p className="text-gray-600 break-all mt-1">
-            {deviceInfo.userAgent.length > 100 ? `${deviceInfo.userAgent.substring(0, 100)}...` : deviceInfo.userAgent}
-          </p>
+          <span className="font-medium">Platform:</span>
+          <p className="text-gray-600 mt-1">{deviceInfo.platform}</p>
         </div>
 
-        {/* Test Recommendations */}
+        {/* Gesture Testing Recommendations */}
         <div className="p-3 bg-gray-50 rounded-lg">
-          <h4 className="text-sm font-medium mb-2">Test Recommendations</h4>
+          <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
+            <Zap className="h-4 w-4" />
+            Gesture Testing Recommendations
+          </h4>
           <div className="space-y-1 text-xs text-gray-600">
-            {deviceInfo.type === "mobile" && (
+            {deviceInfo.type === "mobile" && deviceInfo.touchSupport && (
               <>
-                <p>• Test touch interactions and gestures</p>
-                <p>• Verify responsive layout on small screens</p>
-                <p>• Check loading performance on mobile networks</p>
+                <p>• ✅ Perfect for comprehensive gesture testing</p>
+                <p>• Test all swipe directions and pinch gestures</p>
+                <p>• Verify touch accuracy and response times</p>
+                <p>• Check multi-finger gesture support</p>
               </>
             )}
-            {deviceInfo.type === "tablet" && (
+            {deviceInfo.type === "tablet" && deviceInfo.touchSupport && (
               <>
-                <p>• Test both portrait and landscape orientations</p>
-                <p>• Verify touch and keyboard input methods</p>
-                <p>• Check medium-sized screen layouts</p>
+                <p>• ✅ Excellent for gesture testing</p>
+                <p>• Test both portrait and landscape modes</p>
+                <p>• Verify large screen touch interactions</p>
+                <p>• Check edge gesture handling</p>
               </>
             )}
-            {deviceInfo.type === "desktop" && (
+            {deviceInfo.type === "desktop" && !deviceInfo.touchSupport && (
               <>
-                <p>• Test keyboard navigation and shortcuts</p>
-                <p>• Verify mouse hover interactions</p>
-                <p>• Check large screen layouts and spacing</p>
+                <p>• ⚠️ Limited gesture testing capability</p>
+                <p>• Mouse events will simulate touch</p>
+                <p>• Pinch gestures not available</p>
+                <p>• Use developer tools for mobile simulation</p>
               </>
             )}
+            {deviceInfo.type === "desktop" && deviceInfo.touchSupport && (
+              <>
+                <p>• ✅ Touch-enabled desktop detected</p>
+                <p>• Test desktop touch interactions</p>
+                <p>• Verify hybrid input methods</p>
+                <p>• Check touch and mouse compatibility</p>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Performance Indicators */}
+        <div className="grid grid-cols-3 gap-2 text-xs">
+          <div className="text-center p-2 bg-blue-50 rounded">
+            <div className="font-semibold text-blue-900">Touch Latency</div>
+            <div className="text-blue-700">
+              {deviceInfo.touchSupport ? (deviceInfo.type === "mobile" ? "~10ms" : "~15ms") : "N/A"}
+            </div>
+          </div>
+          <div className="text-center p-2 bg-green-50 rounded">
+            <div className="font-semibold text-green-900">Gesture Accuracy</div>
+            <div className="text-green-700">
+              {deviceInfo.touchSupport ? (deviceInfo.maxTouchPoints >= 5 ? "High" : "Medium") : "Low"}
+            </div>
+          </div>
+          <div className="text-center p-2 bg-purple-50 rounded">
+            <div className="font-semibold text-purple-900">Multi-Touch</div>
+            <div className="text-purple-700">
+              {deviceInfo.maxTouchPoints >= 2 ? `${deviceInfo.maxTouchPoints} points` : "Single"}
+            </div>
           </div>
         </div>
       </CardContent>
