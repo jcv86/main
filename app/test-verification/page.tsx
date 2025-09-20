@@ -157,10 +157,18 @@ export default function TestVerificationSystem() {
   const [executionLog, setExecutionLog] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<"desktop" | "mobile">("desktop")
   const [isMobile, setIsMobile] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const router = useRouter()
 
-  // Detect mobile device
+  // Client-side initialization
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Detect mobile device - only on client side
+  useEffect(() => {
+    if (!isClient) return
+
     const checkMobile = () => {
       const mobile = window.innerWidth < 768
       setIsMobile(mobile)
@@ -170,7 +178,7 @@ export default function TestVerificationSystem() {
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
-  }, [])
+  }, [isClient])
 
   // Add log entry
   const addLog = (message: string) => {
@@ -517,7 +525,10 @@ export default function TestVerificationSystem() {
     setOverallProgress(0)
     setExecutionLog([])
     addLog(`🚀 Starting comprehensive ${isMobile ? "mobile" : "desktop"} test verification suite...`)
-    addLog(`📱 Device: ${isMobile ? "Mobile" : "Desktop"} (${window.innerWidth}x${window.innerHeight})`)
+
+    if (isClient) {
+      addLog(`📱 Device: ${isMobile ? "Mobile" : "Desktop"} (${window.innerWidth}x${window.innerHeight})`)
+    }
 
     // Reset all tests
     setTestFlows(
@@ -627,6 +638,8 @@ export default function TestVerificationSystem() {
 
   // Auto-start verification on component mount
   useEffect(() => {
+    if (!isClient) return
+
     const timer = setTimeout(() => {
       if (!isRunning && passedTests === 0 && failedTests === 0) {
         runAllTests()
@@ -634,7 +647,21 @@ export default function TestVerificationSystem() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [isMobile])
+  }, [isClient, isMobile])
+
+  // Show loading state during SSR
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+        <Card>
+          <CardContent className="p-8 text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p>Loading test verification system...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4">

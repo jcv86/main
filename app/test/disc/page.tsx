@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock } from "lucide-react"
+import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock, Hand, Smartphone } from "lucide-react"
 
 interface Question {
   id: number
@@ -196,9 +196,13 @@ export default function DISCTestPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
   const [mounted, setMounted] = useState(false)
+  const [gestureLog, setGestureLog] = useState<string[]>([])
+  const [touchSupport, setTouchSupport] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1)
 
   useEffect(() => {
     setMounted(true)
+    setTouchSupport("ontouchstart" in window || navigator.maxTouchPoints > 0)
   }, [])
 
   useEffect(() => {
@@ -207,21 +211,31 @@ export default function DISCTestPage() {
     }
   }, [user, router, isLoading, mounted])
 
+  // Gesture handling
+  const handleGestureUsed = (gesture: string) => {
+    const timestamp = new Date().toLocaleTimeString()
+    setGestureLog((prev) => [`[${timestamp}] ${gesture}`, ...prev.slice(0, 4)])
+  }
+
   const handleAnswer = (answer: string) => {
     setAnswers({ ...answers, [discQuestions[currentQuestion].id]: answer })
+    handleGestureUsed(`Answer selected: ${answer.substring(0, 30)}...`)
   }
 
   const nextQuestion = () => {
     if (currentQuestion < discQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
+      handleGestureUsed("Navigated to next question")
     } else {
       setIsCompleted(true)
+      handleGestureUsed("Test completed")
     }
   }
 
   const prevQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1)
+      handleGestureUsed("Navigated to previous question")
     }
   }
 
@@ -278,6 +292,8 @@ export default function DISCTestPage() {
         C: scores.C,
         primary_style: primaryStyle,
         answers: answers,
+        gesture_interactions: gestureLog.length,
+        touch_enabled: touchSupport,
       }
 
       // Save to localStorage for demo
@@ -288,6 +304,7 @@ export default function DISCTestPage() {
       }
 
       localStorage.setItem("disc_results", JSON.stringify(testResults))
+      handleGestureUsed("Test results saved and submitted")
 
       router.push("/test/disc/results")
     } catch (error) {
@@ -347,6 +364,12 @@ export default function DISCTestPage() {
                   <span className="font-medium">Tiempo empleado:</span>
                   <p>{Math.round((Date.now() - startTime) / 60000)} minutos</p>
                 </div>
+                {touchSupport && (
+                  <div className="col-span-2">
+                    <span className="font-medium">Interacciones gestuales:</span>
+                    <p>{gestureLog.length} gestos detectados</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -374,17 +397,25 @@ export default function DISCTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-4 touch-none select-none" style={{ fontSize: `${zoomLevel}rem` }}>
       <div className="container mx-auto max-w-4xl">
-        {/* Header */}
+        {/* Header with Gesture Support */}
         <div className="flex items-center justify-between mb-6">
           <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tests
           </Button>
           <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4 text-gray-500" />
-            <span className="text-sm text-gray-600">{Math.round((Date.now() - startTime) / 60000)} min</span>
+            {touchSupport && (
+              <Badge variant="outline" className="text-blue-600 border-blue-300">
+                <Hand className="h-4 w-4 mr-1" />
+                Gesture Enabled
+              </Badge>
+            )}
+            <div className="flex items-center space-x-2">
+              <Clock className="h-4 w-4 text-gray-500" />
+              <span className="text-sm text-gray-600">{Math.round((Date.now() - startTime) / 60000)} min</span>
+            </div>
           </div>
         </div>
 
@@ -406,8 +437,26 @@ export default function DISCTestPage() {
           </CardContent>
         </Card>
 
+        {/* Gesture Instructions for Touch Devices */}
+        {touchSupport && (
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Smartphone className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-900">Gesture Controls Available</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-blue-800">
+                <div>← Swipe right: Previous</div>
+                <div>Swipe left: Next →</div>
+                <div>🤏 Pinch: Zoom text</div>
+                <div>👆 Long press: Context</div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Question */}
-        <Card>
+        <Card className="transition-all duration-300" style={{ transform: `scale(${Math.min(zoomLevel, 1.1)})` }}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <Badge variant="outline">
@@ -424,7 +473,11 @@ export default function DISCTestPage() {
               <RadioGroup value={currentAnswer || ""} onValueChange={handleAnswer}>
                 <div className="space-y-3">
                   {question.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors"
+                      onClick={() => handleAnswer(option)}
+                    >
                       <RadioGroupItem value={option} id={`option-${index}`} />
                       <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                         {option}
@@ -452,12 +505,12 @@ export default function DISCTestPage() {
 
             {/* Navigation */}
             <div className="flex justify-between pt-6">
-              <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0}>
+              <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0} size="lg">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Previous
               </Button>
 
-              <Button onClick={nextQuestion} disabled={!currentAnswer}>
+              <Button onClick={nextQuestion} disabled={!currentAnswer} size="lg">
                 {currentQuestion === discQuestions.length - 1 ? (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
@@ -474,6 +527,27 @@ export default function DISCTestPage() {
           </CardContent>
         </Card>
 
+        {/* Gesture Activity Log */}
+        {gestureLog.length > 0 && (
+          <Card className="mt-6 border-purple-200 bg-purple-50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Hand className="h-4 w-4" />
+                Recent Gesture Activity
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1 max-h-24 overflow-y-auto">
+                {gestureLog.map((log, index) => (
+                  <div key={index} className="text-xs text-purple-700 bg-white p-2 rounded border">
+                    {log}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Test Info */}
         <Card className="mt-6">
           <CardContent className="pt-6">
@@ -485,6 +559,7 @@ export default function DISCTestPage() {
                   The DISC assessment evaluates four behavioral dimensions: Dominance (D), Influence (I), Steadiness
                   (S), and Compliance (C). Your responses will help identify your natural behavioral style and
                   communication preferences in professional settings.
+                  {touchSupport && " This version includes gesture support for enhanced mobile interaction."}
                 </p>
               </div>
             </div>
