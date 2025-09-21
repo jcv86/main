@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
+import EnhancedBookReader from "@/components/enhanced-book-reader"
 import {
   BookOpen,
   Clock,
@@ -73,6 +75,12 @@ export default function BibliotecaPage() {
   const [sortBy, setSortBy] = useState<string>("popular")
   const [activeTab, setActiveTab] = useState("explore")
 
+  // Book reader state
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+  const [isReaderOpen, setIsReaderOpen] = useState(false)
+
+  const { toast } = useToast()
+
   useEffect(() => {
     loadLibraryData()
   }, [])
@@ -81,143 +89,132 @@ export default function BibliotecaPage() {
     try {
       setLoading(true)
 
-      // Simular carga de datos (en producción vendría de la API)
-      const mockBooks: Book[] = [
-        {
-          id: 1,
-          title: "Fundamentos del Liderazgo Efectivo",
-          author: "Dr. Carlos Ruiz",
-          category: "Liderazgo",
-          content: "Contenido completo del libro...",
-          tags: ["liderazgo", "gestión", "desarrollo profesional"],
-          slug: "fundamentos-liderazgo-efectivo",
-          read_count: 156,
-          created_at: "2024-01-15",
-          updated_at: "2024-01-20",
-          pages: 45,
-          reading_time: 180,
-          characters: 8950,
-        },
-        {
-          id: 2,
-          title: "Gestión de Energía Personal",
-          author: "Dra. Laura Mendez",
-          category: "Productividad",
-          content: "Contenido completo del libro...",
-          tags: ["productividad", "energía", "bienestar"],
-          slug: "gestion-energia-personal",
-          read_count: 134,
-          created_at: "2024-01-10",
-          updated_at: "2024-01-18",
-          pages: 38,
-          reading_time: 152,
-          characters: 7600,
-        },
-        {
-          id: 3,
-          title: "Estrategias de Desarrollo de Carrera",
-          author: "Mg. Ana Torres",
-          category: "Desarrollo de Carrera",
-          content: "Contenido completo del libro...",
-          tags: ["carrera", "desarrollo profesional", "estrategia"],
-          slug: "estrategias-desarrollo-carrera",
-          read_count: 98,
-          created_at: "2024-01-05",
-          updated_at: "2024-01-15",
-          pages: 52,
-          reading_time: 208,
-          characters: 10400,
-        },
-        {
-          id: 4,
-          title: "Comunicación Avanzada para Profesionales",
-          author: "Dr. María González",
-          category: "Comunicación",
-          content: "Contenido completo del libro...",
-          tags: ["comunicación", "presentaciones", "habilidades blandas"],
-          slug: "comunicacion-avanzada-profesionales",
-          read_count: 87,
-          created_at: "2024-01-12",
-          updated_at: "2024-01-22",
-          pages: 41,
-          reading_time: 164,
-          characters: 8200,
-        },
-        {
-          id: 5,
-          title: "Inteligencia Emocional en el Trabajo",
-          author: "Dra. Ana Martínez",
-          category: "Desarrollo Personal",
-          content: "Contenido completo del libro...",
-          tags: ["inteligencia emocional", "trabajo en equipo", "liderazgo"],
-          slug: "inteligencia-emocional-trabajo",
-          read_count: 142,
-          created_at: "2024-01-08",
-          updated_at: "2024-01-25",
-          pages: 47,
-          reading_time: 188,
-          characters: 9400,
-        },
-      ]
+      // Load books from database
+      const response = await fetch("/api/books")
+      if (response.ok) {
+        const booksData = await response.json()
 
-      const mockProgress: ReadingProgress[] = [
-        {
-          book_id: 1,
-          reading_progress: 100,
-          target_percentage: 100,
-          status: "completed",
-          reading_time_minutes: 180,
-          completed_at: "2024-01-20",
-        },
-        {
-          book_id: 2,
-          reading_progress: 65,
-          target_percentage: 100,
-          status: "reading",
-          reading_time_minutes: 98,
-          started_at: "2024-01-18",
-          last_read_at: "2024-01-25",
-        },
-        {
-          book_id: 3,
-          reading_progress: 30,
-          target_percentage: 60,
-          status: "reading",
-          reading_time_minutes: 45,
-          started_at: "2024-01-22",
-          last_read_at: "2024-01-24",
-        },
-        { book_id: 4, reading_progress: 0, target_percentage: 30, status: "not_started", reading_time_minutes: 0 },
-        {
-          book_id: 5,
-          reading_progress: 85,
-          target_percentage: 100,
-          status: "reading",
-          reading_time_minutes: 160,
-          started_at: "2024-01-15",
-          last_read_at: "2024-01-26",
-        },
-      ]
+        // Transform the data to include calculated fields
+        const transformedBooks = booksData.map((book: any) => ({
+          ...book,
+          pages: Math.ceil(book.content.length / 200), // Estimate pages based on content length
+          reading_time: Math.ceil(book.content.length / 1000), // Estimate reading time
+          characters: book.content.length,
+        }))
 
-      const mockBookmarks = [1, 3, 5]
+        setBooks(transformedBooks)
 
-      const mockStats: LibraryStats = {
-        total_books: mockBooks.length,
-        categories: new Set(mockBooks.map((b) => b.category)).size,
-        authors: new Set(mockBooks.map((b) => b.author)).size,
-        total_reads: mockBooks.reduce((sum, book) => sum + book.read_count, 0),
-        avg_characters: Math.round(mockBooks.reduce((sum, book) => sum + book.characters, 0) / mockBooks.length),
+        // Calculate stats
+        const mockStats: LibraryStats = {
+          total_books: transformedBooks.length,
+          categories: new Set(transformedBooks.map((b: Book) => b.category)).size,
+          authors: new Set(transformedBooks.map((b: Book) => b.author)).size,
+          total_reads: transformedBooks.reduce((sum: number, book: Book) => sum + book.read_count, 0),
+          avg_characters: Math.round(
+            transformedBooks.reduce((sum: number, book: Book) => sum + book.characters, 0) / transformedBooks.length,
+          ),
+        }
+        setStats(mockStats)
       }
 
-      setBooks(mockBooks)
-      setReadingProgress(mockProgress)
-      setBookmarks(mockBookmarks)
-      setStats(mockStats)
+      // Load user progress and bookmarks
+      await loadUserData()
     } catch (error) {
       console.error("Error loading library data:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo cargar la biblioteca. Usando datos de ejemplo.",
+        variant: "destructive",
+      })
+
+      // Fallback to example data
+      loadExampleData()
     } finally {
       setLoading(false)
     }
+  }
+
+  const loadUserData = async () => {
+    // Load user reading progress
+    const mockProgress: ReadingProgress[] = [
+      {
+        book_id: 1,
+        reading_progress: 100,
+        target_percentage: 100,
+        status: "completed",
+        reading_time_minutes: 180,
+        completed_at: "2024-01-20",
+      },
+      {
+        book_id: 2,
+        reading_progress: 65,
+        target_percentage: 100,
+        status: "reading",
+        reading_time_minutes: 98,
+        started_at: "2024-01-18",
+        last_read_at: "2024-01-25",
+      },
+      {
+        book_id: 3,
+        reading_progress: 30,
+        target_percentage: 60,
+        status: "reading",
+        reading_time_minutes: 45,
+        started_at: "2024-01-22",
+        last_read_at: "2024-01-24",
+      },
+    ]
+
+    setReadingProgress(mockProgress)
+    setBookmarks([1, 3, 5])
+  }
+
+  const loadExampleData = () => {
+    const exampleBooks: Book[] = [
+      {
+        id: 1,
+        title: "Deep Work: Rules for Focused Success in a Distracted World",
+        author: "Cal Newport",
+        category: "Productivity",
+        content:
+          "Deep work is professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit. These efforts create new value, improve your skill, and are hard to replicate...",
+        tags: ["productivity", "focus", "concentration"],
+        slug: "deep-work-focused-success",
+        read_count: 1247,
+        created_at: "2024-01-15",
+        updated_at: "2024-01-20",
+        pages: 45,
+        reading_time: 180,
+        characters: 8950,
+      },
+      {
+        id: 2,
+        title: "Atomic Habits: An Easy & Proven Way to Build Good Habits",
+        author: "James Clear",
+        category: "Personal Development",
+        content:
+          "Changes that seem small and unimportant at first will compound into remarkable results if you are willing to stick with them for years...",
+        tags: ["habits", "behavior change", "self-improvement"],
+        slug: "atomic-habits-build-good",
+        read_count: 2156,
+        created_at: "2024-01-10",
+        updated_at: "2024-01-18",
+        pages: 38,
+        reading_time: 152,
+        characters: 7600,
+      },
+    ]
+
+    setBooks(exampleBooks)
+
+    const exampleStats: LibraryStats = {
+      total_books: exampleBooks.length,
+      categories: new Set(exampleBooks.map((b) => b.category)).size,
+      authors: new Set(exampleBooks.map((b) => b.author)).size,
+      total_reads: exampleBooks.reduce((sum, book) => sum + book.read_count, 0),
+      avg_characters: Math.round(exampleBooks.reduce((sum, book) => sum + book.characters, 0) / exampleBooks.length),
+    }
+    setStats(exampleStats)
   }
 
   const getBookProgress = (bookId: number) => {
@@ -228,12 +225,81 @@ export default function BibliotecaPage() {
     return bookmarks.includes(bookId)
   }
 
-  const toggleBookmark = (bookId: number) => {
-    setBookmarks((prev) => (prev.includes(bookId) ? prev.filter((id) => id !== bookId) : [...prev, bookId]))
+  const toggleBookmark = async (bookId: number) => {
+    try {
+      const isCurrentlyBookmarked = isBookmarked(bookId)
+
+      if (isCurrentlyBookmarked) {
+        setBookmarks((prev) => prev.filter((id) => id !== bookId))
+        toast({
+          title: "Bookmark eliminado",
+          description: "El libro se ha eliminado de tus guardados.",
+        })
+      } else {
+        setBookmarks((prev) => [...prev, bookId])
+        toast({
+          title: "Libro guardado",
+          description: "El libro se ha añadido a tus guardados.",
+        })
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el bookmark.",
+        variant: "destructive",
+      })
+    }
   }
 
-  const setReadingGoal = (bookId: number, percentage: 30 | 60 | 100) => {
-    setReadingProgress((prev) => prev.map((p) => (p.book_id === bookId ? { ...p, target_percentage: percentage } : p)))
+  const setReadingGoal = async (bookId: number, percentage: 30 | 60 | 100) => {
+    try {
+      // Update local state
+      setReadingProgress((prev) =>
+        prev.map((p) => (p.book_id === bookId ? { ...p, target_percentage: percentage } : p)),
+      )
+
+      // If no progress exists, create it
+      if (!getBookProgress(bookId)) {
+        const newProgress: ReadingProgress = {
+          book_id: bookId,
+          reading_progress: 0,
+          target_percentage: percentage,
+          status: "not_started",
+          reading_time_minutes: 0,
+        }
+        setReadingProgress((prev) => [...prev, newProgress])
+      }
+
+      toast({
+        title: "Objetivo actualizado",
+        description: `Objetivo de lectura establecido en ${percentage}%`,
+      })
+    } catch (error) {
+      console.error("Error setting reading goal:", error)
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el objetivo de lectura.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const openBookReader = (book: Book) => {
+    setSelectedBook(book)
+    setIsReaderOpen(true)
+
+    // Update read count
+    setBooks((prev) => prev.map((b) => (b.id === book.id ? { ...b, read_count: b.read_count + 1 } : b)))
+  }
+
+  const closeBookReader = () => {
+    setIsReaderOpen(false)
+    setSelectedBook(null)
+  }
+
+  const handleBookmarkFromReader = (bookId: number) => {
+    toggleBookmark(bookId)
   }
 
   const getStatusIcon = (status: string) => {
@@ -525,11 +591,11 @@ export default function BibliotecaPage() {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2">
-                          <Button className="flex-1">
+                          <Button className="flex-1" onClick={() => openBookReader(book)}>
                             <PlayCircle className="h-4 w-4 mr-2" />
                             {progress?.status === "completed" ? "Releer" : "Leer"}
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" onClick={() => toggleBookmark(book.id)}>
                             <BookOpen className="h-4 w-4" />
                           </Button>
                         </div>
@@ -541,7 +607,7 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Populares Tab */}
+          {/* Other tabs remain the same but with working buttons */}
           <TabsContent value="popular">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">📈 Libros Más Populares</h3>
@@ -577,7 +643,7 @@ export default function BibliotecaPage() {
                               <Progress value={progress.reading_progress} className="h-2" />
                             </div>
                           )}
-                          <Button className="w-full">
+                          <Button className="w-full" onClick={() => openBookReader(book)}>
                             <PlayCircle className="h-4 w-4 mr-2" />
                             Leer Ahora
                           </Button>
@@ -589,7 +655,7 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Leyendo Tab */}
+          {/* Reading Tab */}
           <TabsContent value="reading">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">📖 Libros que Estás Leyendo</h3>
@@ -634,7 +700,7 @@ export default function BibliotecaPage() {
                                 {progress.last_read_at ? new Date(progress.last_read_at).toLocaleDateString() : "N/A"}
                               </div>
                             </div>
-                            <Button className="w-full">
+                            <Button className="w-full" onClick={() => openBookReader(book)}>
                               <PlayCircle className="h-4 w-4 mr-2" />
                               Continuar Leyendo
                             </Button>
@@ -648,7 +714,7 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Completados Tab */}
+          {/* Completed Tab */}
           <TabsContent value="completed">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">✅ Libros Completados</h3>
@@ -692,7 +758,11 @@ export default function BibliotecaPage() {
                                 <Star className="h-4 w-4 mr-2" />
                                 Reseñar
                               </Button>
-                              <Button variant="outline" className="flex-1 bg-transparent">
+                              <Button
+                                variant="outline"
+                                className="flex-1 bg-transparent"
+                                onClick={() => openBookReader(book)}
+                              >
                                 <PlayCircle className="h-4 w-4 mr-2" />
                                 Releer
                               </Button>
@@ -707,7 +777,7 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Guardados Tab */}
+          {/* Bookmarks Tab */}
           <TabsContent value="bookmarks">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">🔖 Libros Guardados</h3>
@@ -759,7 +829,7 @@ export default function BibliotecaPage() {
                               <div>{book.pages} páginas</div>
                               <div>{book.reading_time} min</div>
                             </div>
-                            <Button className="w-full">
+                            <Button className="w-full" onClick={() => openBookReader(book)}>
                               <PlayCircle className="h-4 w-4 mr-2" />
                               {progress?.status === "completed" ? "Releer" : "Leer"}
                             </Button>
@@ -773,7 +843,7 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Estadísticas Tab */}
+          {/* Stats Tab */}
           <TabsContent value="stats">
             <div className="space-y-6">
               <h3 className="text-xl font-semibold mb-4">📊 Estadísticas de Lectura</h3>
@@ -884,6 +954,17 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Enhanced Book Reader */}
+        {selectedBook && (
+          <EnhancedBookReader
+            book={selectedBook}
+            isOpen={isReaderOpen}
+            onClose={closeBookReader}
+            onBookmark={handleBookmarkFromReader}
+            isBookmarked={isBookmarked(selectedBook.id)}
+          />
+        )}
       </div>
     </div>
   )

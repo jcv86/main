@@ -25,7 +25,9 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@supabase/supabase-js"
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 interface KnowledgeBook {
   id: number
@@ -246,186 +248,244 @@ export default function EnhancedBookReader({
 
   const generateBookSummary = (book: KnowledgeBook) => {
     const summaries: { [key: string]: string } = {
-      Liderazgo: `**Resumen Ejecutivo:**
+      Leadership: `**Los 7 Hábitos de la Gente Altamente Efectiva**
 
-Este libro explora los principios fundamentales del liderazgo efectivo en el mundo moderno. ${book.title} presenta un enfoque integral para desarrollar habilidades de liderazgo que trascienden los métodos tradicionales.
+**Resumen Ejecutivo:**
+Stephen Covey presenta un enfoque basado en principios para la efectividad personal e interpersonal. Los siete hábitos representan un paradigma de efectividad basado en principios universales del carácter humano.
+
+**Los Siete Hábitos:**
+
+**Hábitos de la Victoria Privada:**
+1. **Ser Proactivo**: Tomar responsabilidad de tu vida y respuestas
+2. **Comenzar con el Fin en Mente**: Definir tu misión y visión personal
+3. **Poner Primero lo Primero**: Priorizar y ejecutar basado en principios
+
+**Hábitos de la Victoria Pública:**
+4. **Pensar Ganar-Ganar**: Buscar beneficio mutuo en todas las interacciones
+5. **Buscar Primero Entender, Luego Ser Entendido**: Practicar la escucha empática
+6. **Sinergizar**: Combinar fortalezas para crear algo mejor
+
+**Hábito de Renovación:**
+7. **Afilar la Sierra**: Renovación equilibrada en las cuatro dimensiones de la vida
+
+**Principios Fundamentales:**
+
+• **Paradigmas y Principios**: Cómo vemos el mundo determina cómo actuamos
+• **El Continuum de Madurez**: Progresión de dependencia a independencia a interdependencia
+• **La Cuenta Bancaria Emocional**: Construir confianza a través de pequeños actos de consideración
+• **Liderazgo vs. Administración**: Hacer las cosas correctas vs. hacer las cosas bien
+
+**Aplicaciones Prácticas:**
+
+- Desarrollar una declaración de misión personal
+- Usar la matriz de administración del tiempo
+- Practicar la escucha empática en todas las conversaciones
+- Buscar terceras alternativas en conflictos
+- Crear planes de renovación personal
+
+**Impacto en el Liderazgo:**
+
+Estos hábitos te permitirán:
+- Liderar desde adentro hacia afuera
+- Construir relaciones basadas en confianza
+- Crear soluciones sinérgicas a problemas complejos
+- Mantener un equilibrio sostenible entre efectividad y bienestar`,
+
+      Productivity: `**Deep Work: Reglas para el Éxito Enfocado en un Mundo Distraído**
+
+**Resumen Ejecutivo:**
+En la economía actual, la capacidad de enfocarse sin distracción en una tarea cognitivamente demandante es cada vez más valiosa. Cal Newport define el "trabajo profundo" como actividades profesionales realizadas en un estado de concentración libre de distracciones que llevan las capacidades cognitivas al límite.
 
 **Conceptos Clave:**
 
-• **Liderazgo Auténtico**: La importancia de liderar desde la autenticidad personal y los valores propios
-• **Inteligencia Emocional**: Cómo gestionar las emociones propias y de otros para crear equipos más efectivos
-• **Comunicación Efectiva**: Técnicas para transmitir visión, inspirar y motivar a los equipos
-• **Toma de Decisiones**: Marcos para tomar decisiones difíciles bajo presión e incertidumbre
-• **Desarrollo de Equipos**: Estrategias para construir equipos de alto rendimiento y cultura organizacional
+• **Trabajo Profundo vs. Trabajo Superficial**: Distinguir entre actividades que crean valor y aquellas que son logísticas y no cognitivamente demandantes
+• **La Hipótesis del Trabajo Profundo**: La capacidad de realizar trabajo profundo se está volviendo cada vez más rara y valiosa
+• **Filosofías de Trabajo Profundo**: Monástica, bimodal, rítmica y periodística
+• **Las Cuatro Disciplinas**: Enfocarse en lo importante, actuar sobre medidas de liderazgo, mantener un marcador convincente, y crear una cadencia de responsabilidad
 
-**Aplicaciones Prácticas:**
+**Estrategias Prácticas:**
 
-1. **Autoevaluación de Liderazgo**: Herramientas para identificar fortalezas y áreas de mejora
-2. **Plan de Desarrollo Personal**: Metodología para crear un plan de crecimiento como líder
-3. **Técnicas de Coaching**: Cómo desarrollar y mentorear a otros líderes
-4. **Gestión del Cambio**: Estrategias para liderar organizaciones a través de transformaciones
+1. **Rituales de Trabajo Profundo**: Crear rutinas específicas para maximizar la concentración
+2. **Arquitectura de Atención**: Diseñar el entorno físico y digital para minimizar distracciones
+3. **Entrenamiento de Concentración**: Ejercicios para fortalecer la capacidad de atención sostenida
+4. **Drenaje de lo Superficial**: Identificar y minimizar el trabajo que no agrega valor
 
-**Lecciones Principales:**
+**Implementación:**
 
-- El liderazgo efectivo comienza con el autoconocimiento y la autenticidad
-- La capacidad de inspirar y motivar es más importante que la autoridad formal
-- Los mejores líderes son aquellos que desarrollan a otros líderes
-- La adaptabilidad y la resiliencia son características esenciales del liderazgo moderno
+- Programar bloques específicos de tiempo para trabajo profundo
+- Crear rituales que señalen el inicio del trabajo concentrado
+- Eliminar o minimizar las fuentes de distracción digital
+- Desarrollar la capacidad de trabajar sin estimulación constante
 
 **Impacto en tu Carrera:**
 
-Este libro te proporcionará las herramientas necesarias para:
-- Desarrollar tu estilo de liderazgo único y auténtico
-- Mejorar tu capacidad de influir positivamente en otros
-- Construir equipos más comprometidos y productivos
-- Navegar desafíos organizacionales complejos con confianza`,
+El dominio del trabajo profundo te permitirá:
+- Producir trabajo de mayor calidad en menos tiempo
+- Desarrollar habilidades valiosas más rápidamente
+- Crear valor económico significativo en tu campo
+- Diferenciarte en un mercado laboral cada vez más competitivo`,
 
-      Productividad: `**Resumen Ejecutivo:**
+      "Personal Development": `**Atomic Habits: Un Método Fácil y Comprobado para Construir Buenos Hábitos**
 
-${book.title} presenta un sistema integral para maximizar la productividad personal y profesional. Este libro combina principios de gestión del tiempo, formación de hábitos y optimización de procesos para ayudarte a lograr más con menos esfuerzo.
+**Resumen Ejecutivo:**
+Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. James Clear presenta un sistema completo para la formación de hábitos basado en cuatro leyes fundamentales.
+
+**Las Cuatro Leyes del Cambio de Comportamiento:**
+
+• **Hacerlo Obvio**: Diseñar el entorno para que los buenos hábitos sean visibles
+• **Hacerlo Atractivo**: Usar el agrupamiento de tentaciones y encontrar formas de hacer los hábitos atractivos
+• **Hacerlo Fácil**: Reducir la fricción para los buenos hábitos y aumentarla para los malos
+• **Hacerlo Satisfactorio**: Usar refuerzo inmediato y seguimiento de hábitos
 
 **Conceptos Fundamentales:**
 
-• **Gestión de Energía vs. Tiempo**: Cómo optimizar tu energía natural para máximo rendimiento
-• **Principio de Pareto**: Identificar el 20% de actividades que generan el 80% de resultados
-• **Flujo de Trabajo**: Crear sistemas que minimicen la fricción y maximicen la eficiencia
-• **Eliminación de Distracciones**: Técnicas para mantener el foco en lo verdaderamente importante
-• **Automatización Inteligente**: Usar tecnología y sistemas para reducir trabajo repetitivo
+1. **El Poder del 1%**: Mejoras marginales compuestas a lo largo del tiempo
+2. **Sistemas vs. Objetivos**: Enfocarse en el proceso, no solo en los resultados
+3. **Identidad y Hábitos**: Cambiar quién eres, no solo lo que haces
+4. **El Plateau de Potencial Latente**: Por qué los cambios parecen no funcionar al principio
 
-**Metodologías Clave:**
+**Estrategias Prácticas:**
 
-1. **Técnica Pomodoro Avanzada**: Gestión de tiempo en bloques con descansos estratégicos
-2. **Matriz de Eisenhower**: Priorización basada en urgencia e importancia
-3. **Getting Things Done (GTD)**: Sistema completo de organización y seguimiento
-4. **Batching**: Agrupar tareas similares para mayor eficiencia
-5. **Review Semanal**: Proceso de reflexión y planificación continua
+- **Apilamiento de Hábitos**: Vincular nuevos hábitos a rutinas existentes
+- **Diseño del Entorno**: Modificar el contexto para facilitar buenos comportamientos
+- **La Regla de los 2 Minutos**: Hacer que los nuevos hábitos tomen menos de dos minutos
+- **Seguimiento de Hábitos**: Usar métricas simples para mantener la consistencia
 
-**Herramientas Prácticas:**
+**Aplicación Inmediata:**
 
-- Templates para planificación diaria, semanal y mensual
-- Checklists para optimizar rutinas matutinas y vespertinas
-- Sistemas de seguimiento de hábitos y metas
-- Técnicas de delegación efectiva
-- Métodos para medir y mejorar la productividad
+1. Identifica los hábitos que refuerzan la identidad que deseas
+2. Comienza con cambios increíblemente pequeños
+3. Diseña tu entorno para el éxito
+4. Celebra las pequeñas victorias para reforzar el comportamiento
 
-**Transformación Personal:**
+**Transformación a Largo Plazo:**
 
-Al aplicar estos principios, experimentarás:
-- Mayor claridad sobre tus prioridades y objetivos
-- Reducción significativa del estrés y la sobrecarga
-- Más tiempo libre para actividades que realmente importan
-- Sensación de control y progreso constante hacia tus metas
-- Mejor equilibrio entre vida personal y profesional
+Este sistema te ayudará a:
+- Construir hábitos duraderos sin depender de la motivación
+- Romper malos hábitos de manera sistemática
+- Crear un sistema de mejora continua
+- Alinear tus acciones diarias con tus objetivos a largo plazo`,
 
-**Plan de Implementación:**
+      Communication: `**Comunicación No Violenta: Un Lenguaje de Vida**
 
-El libro incluye un plan de 30 días para implementar gradualmente estos sistemas, asegurando que los cambios sean sostenibles y se conviertan en hábitos permanentes.`,
+**Resumen Ejecutivo:**
+Marshall Rosenberg presenta un proceso de comunicación que nos ayuda a intercambiar la información necesaria para resolver conflictos y diferencias de manera pacífica. La CNV se basa en habilidades de lenguaje y comunicación que fortalecen nuestra capacidad de seguir siendo humanos, incluso en condiciones difíciles.
 
-      "Desarrollo de Carrera": `**Resumen Ejecutivo:**
+**Los Cuatro Componentes de la CNV:**
 
-${book.title} es una guía completa para navegar y acelerar tu desarrollo profesional en el mercado laboral actual. Este libro combina estrategias tradicionales de carrera con enfoques modernos adaptados a la economía digital.
+1. **Observación**: Observar sin evaluar, describir sin interpretar
+2. **Sentimientos**: Expresar emociones sin culpar o juzgar
+3. **Necesidades**: Identificar las necesidades humanas universales detrás de los sentimientos
+4. **Peticiones**: Hacer peticiones específicas y realizables
 
-**Pilares del Desarrollo Profesional:**
+**Principios Fundamentales:**
 
-• **Autoconocimiento Profundo**: Identificar fortalezas, valores y pasiones para alinear carrera con propósito
-• **Construcción de Marca Personal**: Desarrollar una reputación profesional sólida y diferenciada
-• **Networking Estratégico**: Crear y mantener relaciones profesionales valiosas y auténticas
-• **Aprendizaje Continuo**: Mantenerse relevante a través de la actualización constante de habilidades
-• **Negociación y Comunicación**: Habilidades esenciales para avanzar en cualquier carrera
+• **Lenguaje de Vida vs. Lenguaje de Muerte**: Comunicación que conecta vs. comunicación que separa
+• **Responsabilidad por Nuestros Sentimientos**: Reconocer que otros no "causan" nuestras emociones
+• **El Poder de la Empatía**: Escuchar los sentimientos y necesidades detrás de las palabras
+• **Expresión Honesta**: Comunicar nuestras necesidades sin exigir
 
-**Estrategias de Crecimiento:**
+**Obstáculos Comunes:**
 
-1. **Mapeo de Carrera**: Herramientas para visualizar y planificar tu trayectoria profesional
-2. **Desarrollo de Habilidades**: Framework para identificar y desarrollar competencias clave
-3. **Gestión de Oportunidades**: Cómo identificar, evaluar y aprovechar oportunidades de crecimiento
-4. **Transiciones Profesionales**: Navegar cambios de industria, función o nivel jerárquico
-5. **Emprendimiento Interno**: Actuar como emprendedor dentro de organizaciones establecidas
-
-**Herramientas de Carrera:**
-
-- Templates para CV y LinkedIn optimizados
-- Guías para entrevistas de trabajo efectivas
-- Frameworks para evaluación de oportunidades
-- Planes de desarrollo de habilidades personalizados
-- Estrategias de negociación salarial
-
-**Mentalidad de Crecimiento:**
-
-El libro enfatiza la importancia de:
-- Adoptar una mentalidad de crecimiento continuo
-- Ver los desafíos como oportunidades de aprendizaje
-- Construir resiliencia para superar obstáculos profesionales
-- Mantener curiosidad y apertura a nuevas posibilidades
-- Equilibrar ambición con bienestar personal
-
-**Resultados Esperados:**
-
-Al aplicar estos principios, lograrás:
-- Mayor claridad sobre tu dirección profesional
-- Aceleración en tu progreso de carrera
-- Mejor posicionamiento en el mercado laboral
-- Red profesional más sólida y valiosa
-- Confianza para tomar decisiones de carrera importantes`,
-
-      Comunicación: `**Resumen Ejecutivo:**
-
-${book.title} explora las dimensiones de la comunicación efectiva en contextos profesionales y personales. Este libro presenta técnicas avanzadas para mejorar tu capacidad de conectar, influir y colaborar con otros.
-
-**Fundamentos de Comunicación:**
-
-• **Escucha Activa**: Técnicas para comprender verdaderamente lo que otros comunican
-• **Comunicación No Verbal**: El poder del lenguaje corporal, tono y presencia
-• **Adaptación de Mensaje**: Ajustar comunicación según audiencia y contexto
-• **Storytelling**: Usar narrativas para hacer mensajes más memorables e impactantes
-• **Comunicación Digital**: Navegar la comunicación en entornos virtuales y remotos
-
-**Habilidades Avanzadas:**
-
-1. **Presentaciones Impactantes**: Crear y entregar presentaciones que inspiren acción
-2. **Negociación Colaborativa**: Técnicas para llegar a acuerdos win-win
-3. **Manejo de Conflictos**: Transformar desacuerdos en oportunidades de crecimiento
-4. **Feedback Constructivo**: Dar y recibir retroalimentación de manera efectiva
-5. **Comunicación Intercultural**: Navegar diferencias culturales en comunicación
+- Comunicación moralizante y juicios
+- Hacer comparaciones que generan miseria
+- Negar responsabilidad por nuestras acciones
+- Comunicar nuestros deseos como exigencias
 
 **Aplicaciones Prácticas:**
 
-- Frameworks para estructurar conversaciones difíciles
-- Técnicas para comunicar ideas complejas de manera simple
-- Estrategias para construir rapport y confianza rápidamente
-- Métodos para manejar objeciones y resistencia
-- Herramientas para comunicación en crisis
+1. **En el Trabajo**: Dar retroalimentación constructiva, resolver conflictos de equipo
+2. **En Relaciones Personales**: Expresar necesidades sin culpar, escuchar con empatía
+3. **En la Educación**: Crear ambientes de aprendizaje seguros y conectados
+4. **En Conflictos Sociales**: Mediar disputas, construir puentes entre grupos
 
-**Transformación Personal:**
+**Proceso de Transformación:**
 
-Dominar estas habilidades te permitirá:
-- Construir relaciones más profundas y significativas
-- Influir positivamente en decisiones importantes
+- Desarrollar un vocabulario de sentimientos y necesidades
+- Practicar la observación sin evaluación
+- Aprender a hacer peticiones claras y específicas
+- Cultivar la empatía hacia uno mismo y otros
+
+**Beneficios a Largo Plazo:**
+
+La CNV te ayudará a:
+- Crear conexiones más profundas y auténticas
 - Resolver conflictos de manera constructiva
-- Liderar equipos con mayor efectividad
-- Avanzar más rápidamente en tu carrera profesional
+- Expresar tu autenticidad sin herir a otros
+- Contribuir a un mundo más compasivo y conectado`,
 
-**Impacto a Largo Plazo:**
+      "Team Management": `**Las Cinco Disfunciones de un Equipo**
 
-La comunicación efectiva es la base de prácticamente todo éxito profesional y personal. Este libro te proporciona las herramientas para convertirte en un comunicador excepcional.`,
+**Resumen Ejecutivo:**
+Patrick Lencioni identifica las cinco disfunciones más comunes que impiden que los equipos trabajen de manera efectiva. Presenta un modelo cohesivo para construir equipos que funcionen como una unidad cohesiva.
+
+**Las Cinco Disfunciones:**
+
+1. **Ausencia de Confianza**: Los miembros del equipo no se sienten seguros siendo vulnerables entre sí
+2. **Temor al Conflicto**: Los equipos que carecen de confianza son incapaces de tener debates apasionados sobre ideas
+3. **Falta de Compromiso**: Sin conflicto, es difícil que los miembros del equipo se comprometan con las decisiones
+4. **Evitar la Responsabilidad**: Sin compromiso, los miembros del equipo evitan responsabilizarse mutuamente
+5. **Falta de Atención a los Resultados**: Cuando los equipos no se responsabilizan mutuamente, tienden a poner sus necesidades individuales por encima de los objetivos colectivos
+
+**Construyendo Confianza:**
+
+• **Vulnerabilidad**: Los líderes deben modelar la vulnerabilidad primero
+• **Ejercicios de Construcción de Confianza**: Actividades que revelan fortalezas, debilidades y experiencias
+• **Credibilidad**: Demostrar competencia, carácter y cuidado
+• **Tiempo**: La confianza se construye a través de experiencias compartidas
+
+**Dominando el Conflicto:**
+
+- Distinguir entre conflicto productivo e improductivo
+- Crear seguridad para el desacuerdo
+- Usar técnicas para extraer conflicto cuando sea necesario
+- Reconocer que el conflicto es esencial para la innovación
+
+**Logrando Compromiso:**
+
+1. **Claridad**: Asegurar que todos entiendan las decisiones
+2. **Buy-in**: Crear oportunidades para que todos contribuyan
+3. **Fechas Límite**: Establecer plazos claros para las decisiones
+4. **Peor Escenario**: Discutir qué pasaría si la decisión es incorrecta
+
+**Abrazando la Responsabilidad:**
+
+- Establecer estándares claros de comportamiento
+- Crear sistemas de responsabilidad mutua
+- Abordar problemas de rendimiento rápidamente
+- Recompensar comportamientos que apoyan los objetivos del equipo
+
+**Enfocándose en Resultados:**
+
+• **Objetivos Colectivos**: Definir claramente qué constituye el éxito del equipo
+• **Métricas**: Usar indicadores específicos y medibles
+• **Recompensas**: Alinear incentivos individuales con objetivos de equipo
+• **Consecuencias**: Establecer consecuencias claras por no alcanzar resultados
+
+**Implementación Práctica:**
+
+1. Evaluar a tu equipo usando el modelo de cinco disfunciones
+2. Comenzar con la construcción de confianza como base
+3. Trabajar progresivamente a través de cada disfunción
+4. Usar herramientas y ejercicios específicos para cada área
+5. Medir el progreso regularmente y ajustar el enfoque
+
+**Liderazgo de Equipos Efectivos:**
+
+Como líder, debes:
+- Modelar la vulnerabilidad y la autenticidad
+- Facilitar conflictos productivos
+- Forzar claridad y cierre en decisiones
+- Confrontar comportamientos que socavan al equipo
+- Mantener el enfoque en resultados colectivos
+
+Este modelo proporciona un marco práctico para transformar cualquier grupo de individuos en un equipo cohesivo y de alto rendimiento.`,
     }
 
     return (
       summaries[book.category] ||
-      `**Resumen del Libro:**
-
-${book.content}
-
-**Conceptos Clave:**
-
-Este libro aborda temas fundamentales en ${book.category.toLowerCase()}, proporcionando insights valiosos y estrategias prácticas para el crecimiento profesional y personal.
-
-**Aplicación Práctica:**
-
-Las ideas presentadas en este libro pueden aplicarse inmediatamente en tu vida profesional, ayudándote a desarrollar nuevas habilidades y perspectivas que impulsarán tu carrera.
-
-**Valor para tu Desarrollo:**
-
-Al estudiar este material, ganarás una comprensión más profunda de ${book.category.toLowerCase()} y cómo aplicar estos principios para lograr mejores resultados en tu trabajo y vida personal.`
+      book.content ||
+      `Este es un libro valioso sobre ${book.category.toLowerCase()} que te ayudará a desarrollar nuevas habilidades y perspectivas profesionales.`
     )
   }
 
@@ -487,10 +547,10 @@ Al estudiar este material, ganarás una comprensión más profunda de ${book.cat
                   <div className="space-y-6">
                     <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
                       <h3 className="text-lg font-semibold text-blue-900 mb-2">📖 Resumen del Libro</h3>
-                      <p className="text-blue-800">{book.content}</p>
+                      <p className="text-blue-800">{generateBookSummary(book)}</p>
                     </div>
 
-                    <div className="whitespace-pre-line text-gray-800 leading-relaxed">{generateBookSummary(book)}</div>
+                    <div className="whitespace-pre-line text-gray-800 leading-relaxed">{book.content}</div>
 
                     <div className="bg-gray-50 p-6 rounded-lg">
                       <h4 className="font-semibold text-lg mb-3">🏷️ Tags y Temas:</h4>
