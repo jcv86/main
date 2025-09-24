@@ -3,193 +3,211 @@
 import type React from "react"
 
 import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Separator } from "@/components/ui/separator"
 import {
-  Search,
   CheckCircle,
   Clock,
+  AlertCircle,
   Calendar,
   User,
   Mail,
   Phone,
-  Building,
-  AlertCircle,
-  ExternalLink,
   MapPin,
+  Briefcase,
   Video,
+  MessageSquare,
+  ExternalLink,
+  RefreshCw,
+  Search,
+  Info,
 } from "lucide-react"
 
-interface Application {
+interface ApplicationData {
   id: string
-  applicationId: string
-  jobTitle: string
-  department: string
-  candidateName: string
-  candidateEmail: string
-  candidatePhone: string
+  application_id: string
+  job_id: string
+  job_title: string
+  first_name: string
+  last_name: string
+  email: string
+  phone: string
   status: string
-  createdAt: string
-  updatedAt: string
-  statusHistory: Array<{
+  created_at: string
+  updated_at: string
+  application_status_history: Array<{
     status: string
     notes: string
-    updated_by: string
+    changed_by: string
     created_at: string
   }>
-  interviews: Array<{
+  application_interviews: Array<{
     interview_type: string
     scheduled_date: string
     duration_minutes: number
     interviewer_name: string
     interviewer_email: string
     meeting_link: string
-    location: string
-    status: string
     notes: string
+    status: string
+    created_at: string
   }>
 }
 
-const ApplicationStatusTracker = () => {
-  const [applicationId, setApplicationId] = useState("")
+const statusSteps = [
+  { key: "submitted", label: "Aplicación Enviada", description: "Tu aplicación ha sido recibida" },
+  { key: "under_review", label: "En Revisión", description: "Nuestro equipo está revisando tu perfil" },
+  { key: "phone_screening", label: "Entrevista Telefónica", description: "Primera entrevista con RRHH" },
+  { key: "interview_scheduled", label: "Entrevista Programada", description: "Entrevista técnica programada" },
+  { key: "technical_interview", label: "Entrevista Técnica", description: "Evaluación de habilidades técnicas" },
+  { key: "final_interview", label: "Entrevista Final", description: "Entrevista con el equipo y manager" },
+  { key: "reference_check", label: "Verificación de Referencias", description: "Contactando referencias laborales" },
+  { key: "offer_pending", label: "Oferta Pendiente", description: "Preparando oferta de trabajo" },
+  { key: "offer_extended", label: "Oferta Extendida", description: "Oferta de trabajo enviada" },
+  { key: "hired", label: "Contratado", description: "¡Bienvenido al equipo!" },
+  { key: "rejected", label: "No Seleccionado", description: "Gracias por tu interés" },
+]
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "submitted":
+      return "bg-blue-100 text-blue-800"
+    case "under_review":
+      return "bg-yellow-100 text-yellow-800"
+    case "phone_screening":
+    case "interview_scheduled":
+    case "technical_interview":
+    case "final_interview":
+      return "bg-purple-100 text-purple-800"
+    case "reference_check":
+    case "offer_pending":
+      return "bg-orange-100 text-orange-800"
+    case "offer_extended":
+      return "bg-green-100 text-green-800"
+    case "hired":
+      return "bg-green-200 text-green-900"
+    case "rejected":
+      return "bg-red-100 text-red-800"
+    default:
+      return "bg-gray-100 text-gray-800"
+  }
+}
+
+const getStatusIcon = (status: string, isActive: boolean, isCompleted: boolean) => {
+  if (status === "rejected") {
+    return <AlertCircle className="h-5 w-5 text-red-600" />
+  }
+  if (isCompleted) {
+    return <CheckCircle className="h-5 w-5 text-green-600" />
+  }
+  if (isActive) {
+    return <Clock className="h-5 w-5 text-blue-600" />
+  }
+  return <div className="h-5 w-5 rounded-full border-2 border-gray-300" />
+}
+
+const calculateProgress = (currentStatus: string) => {
+  const currentIndex = statusSteps.findIndex((step) => step.key === currentStatus)
+  if (currentIndex === -1) return 0
+  if (currentStatus === "rejected") return 100
+  return ((currentIndex + 1) / (statusSteps.length - 1)) * 100
+}
+
+const getNextSteps = (status: string) => {
+  switch (status) {
+    case "submitted":
+      return [
+        "Nuestro equipo de RRHH revisará tu aplicación en 2-3 días hábiles",
+        "Recibirás un email si tu perfil es seleccionado para continuar",
+        "Mientras tanto, puedes revisar más información sobre nuestra empresa",
+      ]
+    case "under_review":
+      return [
+        "Tu aplicación está siendo evaluada por nuestro equipo",
+        "Te contactaremos pronto para programar una entrevista telefónica",
+        "Asegúrate de que tu teléfono esté disponible",
+      ]
+    case "phone_screening":
+      return [
+        "Prepárate para una conversación de 30 minutos sobre tu experiencia",
+        "Ten tu CV a mano para referenciar tu experiencia",
+        "Prepara preguntas sobre la empresa y el rol",
+      ]
+    case "interview_scheduled":
+      return [
+        "Revisa los detalles de tu entrevista programada",
+        "Prepara ejemplos específicos de tu experiencia técnica",
+        "Confirma tu asistencia respondiendo al email de invitación",
+      ]
+    case "technical_interview":
+      return [
+        "Demuestra tus habilidades técnicas con ejemplos prácticos",
+        "Prepárate para resolver problemas en tiempo real",
+        "Haz preguntas técnicas sobre el stack y arquitectura",
+      ]
+    case "final_interview":
+      return [
+        "Conoce al equipo con el que trabajarías directamente",
+        "Discute expectativas y objetivos del rol",
+        "Pregunta sobre cultura de equipo y oportunidades de crecimiento",
+      ]
+    case "reference_check":
+      return [
+        "Asegúrate de que tus referencias estén disponibles",
+        "Informa a tus referencias que pueden ser contactadas",
+        "Este proceso usualmente toma 2-3 días hábiles",
+      ]
+    case "offer_pending":
+      return [
+        "Estamos preparando tu oferta de trabajo",
+        "Recibirás los detalles por email en los próximos días",
+        "Prepárate para revisar términos y condiciones",
+      ]
+    case "offer_extended":
+      return [
+        "Revisa cuidadosamente todos los términos de la oferta",
+        "No dudes en hacer preguntas sobre beneficios o condiciones",
+        "Responde dentro del plazo indicado en la oferta",
+      ]
+    case "hired":
+      return [
+        "¡Felicitaciones! Bienvenido al equipo",
+        "Recibirás información sobre tu primer día de trabajo",
+        "Nuestro equipo de onboarding te contactará pronto",
+      ]
+    case "rejected":
+      return [
+        "Gracias por tu interés en nuestra empresa",
+        "Aunque no fuiste seleccionado esta vez, valoramos tu tiempo",
+        "Te animamos a aplicar a futuras posiciones que se ajusten a tu perfil",
+      ]
+    default:
+      return ["Mantente atento a tu email para próximas actualizaciones"]
+  }
+}
+
+export default function ApplicationStatusTracker() {
   const [email, setEmail] = useState("")
-  const [application, setApplication] = useState<Application | null>(null)
+  const [applicationId, setApplicationId] = useState("")
+  const [applicationData, setApplicationData] = useState<ApplicationData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const statusSteps = [
-    { key: "submitted", label: "Enviada", description: "Aplicación recibida" },
-    { key: "screening", label: "Revisión Inicial", description: "Revisando tu perfil" },
-    { key: "phone_screen", label: "Llamada Inicial", description: "Conversación telefónica" },
-    { key: "technical_interview", label: "Entrevista Técnica", description: "Evaluación técnica" },
-    { key: "team_interview", label: "Entrevista con Equipo", description: "Conoce al equipo" },
-    { key: "final_interview", label: "Entrevista Final", description: "Conversación con liderazgo" },
-    { key: "reference_check", label: "Referencias", description: "Verificación de referencias" },
-    { key: "offer", label: "Oferta", description: "Oferta de trabajo" },
-    { key: "hired", label: "Contratado", description: "¡Bienvenido al equipo!" },
-  ]
-
-  const getCurrentStepIndex = (status: string) => {
-    const index = statusSteps.findIndex((step) => step.key === status)
-    return index >= 0 ? index : 0
-  }
-
-  const getProgressPercentage = (status: string) => {
-    const currentIndex = getCurrentStepIndex(status)
-    return ((currentIndex + 1) / statusSteps.length) * 100
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "submitted":
-        return "bg-blue-500"
-      case "screening":
-      case "phone_screen":
-        return "bg-yellow-500"
-      case "technical_interview":
-      case "team_interview":
-      case "final_interview":
-        return "bg-orange-500"
-      case "reference_check":
-        return "bg-purple-500"
-      case "offer":
-        return "bg-green-500"
-      case "hired":
-        return "bg-emerald-500"
-      case "rejected":
-        return "bg-red-500"
-      case "withdrawn":
-        return "bg-gray-500"
-      default:
-        return "bg-gray-400"
-    }
-  }
-
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case "hired":
-      case "offer":
-        return "default"
-      case "rejected":
-      case "withdrawn":
-        return "destructive"
-      default:
-        return "secondary"
-    }
-  }
-
-  const getNextSteps = (status: string) => {
-    switch (status) {
-      case "submitted":
-        return [
-          "Nuestro equipo revisará tu aplicación en 2-3 días hábiles",
-          "Recibirás un email de confirmación si pasas a la siguiente etapa",
-          "Mientras tanto, puedes revisar nuestra página de cultura empresarial",
-        ]
-      case "screening":
-        return [
-          "Un miembro de nuestro equipo de Talent te contactará pronto",
-          "Prepara una breve presentación sobre tu experiencia",
-          "Ten a mano tu CV actualizado",
-        ]
-      case "phone_screen":
-        return [
-          "Recibirás una invitación de calendario para la llamada",
-          "La conversación durará aproximadamente 30 minutos",
-          "Prepara preguntas sobre el rol y la empresa",
-        ]
-      case "technical_interview":
-        return [
-          "Recibirás detalles sobre el formato de la entrevista técnica",
-          "Repasa los conceptos técnicos relevantes para el rol",
-          "Prepara ejemplos de proyectos anteriores",
-        ]
-      case "team_interview":
-        return [
-          "Conocerás a miembros del equipo con el que trabajarías",
-          "Prepara preguntas sobre la dinámica del equipo",
-          "Piensa en ejemplos de colaboración exitosa",
-        ]
-      case "final_interview":
-        return [
-          "Conversarás con liderazgo sobre fit cultural",
-          "Prepara preguntas sobre la visión de la empresa",
-          "Reflexiona sobre tus objetivos profesionales",
-        ]
-      case "reference_check":
-        return [
-          "Proporcionaremos contactos de referencias si es necesario",
-          "Asegúrate de que tus referencias estén disponibles",
-          "Este proceso suele tomar 2-3 días hábiles",
-        ]
-      case "offer":
-        return [
-          "¡Felicitaciones! Recibirás una oferta formal pronto",
-          "Revisa cuidadosamente todos los términos",
-          "No dudes en hacer preguntas sobre la oferta",
-        ]
-      case "hired":
-        return [
-          "¡Bienvenido al equipo!",
-          "Recibirás información sobre el proceso de onboarding",
-          "Nos pondremos en contacto contigo antes de tu primer día",
-        ]
-      default:
-        return ["Mantente atento a tu email para actualizaciones"]
-    }
-  }
-
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleTrackApplication = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!email || !applicationId) {
+      setError("Por favor ingresa tu email y ID de aplicación")
+      return
+    }
+
     setLoading(true)
     setError("")
-    setApplication(null)
 
     try {
       const response = await fetch("/api/applications/track", {
@@ -197,23 +215,26 @@ const ApplicationStatusTracker = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          applicationId: applicationId.trim(),
-          email: email.trim(),
-        }),
+        body: JSON.stringify({ email, applicationId }),
       })
 
       const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || "Error al buscar la aplicación")
+      if (response.ok) {
+        setApplicationData(data.application)
+      } else {
+        setError(data.error || "Error al buscar la aplicación")
       }
-
-      setApplication(data.application)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido")
+    } catch (error) {
+      setError("Error de conexión. Por favor intenta nuevamente.")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleRefresh = () => {
+    if (applicationData) {
+      handleTrackApplication(new Event("submit") as any)
     }
   }
 
@@ -227,331 +248,311 @@ const ApplicationStatusTracker = () => {
     })
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Seguimiento de Aplicación</h1>
-            <p className="text-xl text-gray-600">
-              Ingresa tu ID de aplicación y email para ver el estado de tu postulación
-            </p>
-          </div>
+  const currentStatusIndex = statusSteps.findIndex((step) => step.key === applicationData?.status)
+  const progress = applicationData ? calculateProgress(applicationData.status) : 0
 
-          {/* Search Form */}
-          <Card className="mb-8">
+  if (!applicationData) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Search className="h-5 w-5" />
+              Seguir mi Aplicación
+            </CardTitle>
+            <p className="text-gray-600">
+              Ingresa tu email y el ID de aplicación que recibiste para ver el estado de tu postulación.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleTrackApplication} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu.email@ejemplo.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="applicationId">ID de Aplicación *</Label>
+                <Input
+                  id="applicationId"
+                  value={applicationId}
+                  onChange={(e) => setApplicationId(e.target.value)}
+                  placeholder="APP-2024-123456"
+                  required
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Encontrarás este ID en el email de confirmación que recibiste
+                </p>
+              </div>
+
+              {error && (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Buscando...
+                  </>
+                ) : (
+                  <>
+                    <Search className="h-4 w-4 mr-2" />
+                    Buscar Aplicación
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Application Header */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl">Estado de tu Aplicación</CardTitle>
+              <p className="text-gray-600">
+                {applicationData.first_name} {applicationData.last_name} • {applicationData.job_title}
+              </p>
+            </div>
+            <div className="text-right">
+              <Badge className={getStatusColor(applicationData.status)}>
+                {statusSteps.find((step) => step.key === applicationData.status)?.label || applicationData.status}
+              </Badge>
+              <p className="text-sm text-gray-500 mt-1">ID: {applicationData.application_id}</p>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Progreso</span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <Progress value={progress} className="h-2" />
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-gray-500" />
+                <span>Aplicado: {formatDate(applicationData.created_at)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 text-gray-500" />
+                <span>Actualizado: {formatDate(applicationData.updated_at)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Briefcase className="h-4 w-4 text-gray-500" />
+                <span>{applicationData.job_title}</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Status Timeline */}
+        <div className="lg:col-span-2">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Search className="h-5 w-5" />
-                Buscar Mi Aplicación
-              </CardTitle>
-              <CardDescription>
-                Necesitas el ID de aplicación que recibiste al enviar tu postulación y el email que usaste
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <CardTitle>Proceso de Selección</CardTitle>
+                <Button variant="outline" size="sm" onClick={handleRefresh}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Actualizar
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSearch} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="applicationId">ID de Aplicación</Label>
-                    <Input
-                      id="applicationId"
-                      placeholder="APP-123456"
-                      value={applicationId}
-                      onChange={(e) => setApplicationId(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
+              <div className="space-y-4">
+                {statusSteps
+                  .filter((step) => step.key !== "rejected" || applicationData.status === "rejected")
+                  .map((step, index) => {
+                    const isCompleted = currentStatusIndex > index || applicationData.status === "hired"
+                    const isActive = currentStatusIndex === index
+                    const isRejected = applicationData.status === "rejected" && step.key === "rejected"
 
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
+                    return (
+                      <div
+                        key={step.key}
+                        className={`flex items-start gap-4 pb-4 ${
+                          index < statusSteps.length - 1 ? "border-b border-gray-100" : ""
+                        }`}
+                      >
+                        <div className="flex-shrink-0 mt-1">
+                          {getStatusIcon(step.key, isActive, isCompleted || isRejected)}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3
+                              className={`font-medium ${
+                                isActive
+                                  ? "text-blue-600"
+                                  : isCompleted || isRejected
+                                    ? "text-green-600"
+                                    : "text-gray-600"
+                              }`}
+                            >
+                              {step.label}
+                            </h3>
+                            {isActive && (
+                              <Badge variant="outline" className="text-xs">
+                                Actual
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">{step.description}</p>
 
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Buscando..." : "Buscar Aplicación"}
-                  <Search className="ml-2 h-4 w-4" />
-                </Button>
-              </form>
+                          {/* Show timestamp for completed steps */}
+                          {applicationData.application_status_history
+                            .filter((history) => history.status === step.key)
+                            .map((history, historyIndex) => (
+                              <p key={historyIndex} className="text-xs text-gray-500 mt-1">
+                                {formatDate(history.created_at)}
+                                {history.notes && history.notes !== `Status changed automatically` && (
+                                  <span className="ml-2">• {history.notes}</span>
+                                )}
+                              </p>
+                            ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Next Steps */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                Próximos Pasos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm">
+                {getNextSteps(applicationData.status).map((step, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
             </CardContent>
           </Card>
 
-          {/* Application Details */}
-          {application && (
-            <div className="space-y-8">
-              {/* Application Overview */}
-              <Card>
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-2xl">{application.jobTitle}</CardTitle>
-                      <CardDescription className="text-lg mt-2">
-                        {application.department} • Aplicación {application.applicationId}
-                      </CardDescription>
-                    </div>
-                    <Badge variant={getStatusBadgeVariant(application.status)} className="text-sm px-3 py-1">
-                      {statusSteps.find((step) => step.key === application.status)?.label || application.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Candidate Info */}
-                  <div className="grid md:grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-500" />
-                      <span>{application.candidateName}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-gray-500" />
-                      <span>{application.candidateEmail}</span>
-                    </div>
-                    {application.candidatePhone && (
-                      <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gray-500" />
-                        <span>{application.candidatePhone}</span>
+          {/* Scheduled Interviews */}
+          {applicationData.application_interviews.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Video className="h-5 w-5" />
+                  Entrevistas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {applicationData.application_interviews.map((interview, index) => (
+                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm capitalize">{interview.interview_type.replace("_", " ")}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {interview.status}
+                        </Badge>
                       </div>
-                    )}
-                  </div>
 
-                  <Separator />
-
-                  {/* Application Dates */}
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-500">Fecha de aplicación:</span>
-                      <p className="font-medium">{formatDate(application.createdAt)}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Última actualización:</span>
-                      <p className="font-medium">{formatDate(application.updatedAt)}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Status Progress */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    Progreso de la Aplicación
-                  </CardTitle>
-                  <CardDescription>
-                    Tu aplicación está en la etapa:{" "}
-                    <strong>{statusSteps.find((step) => step.key === application.status)?.label}</strong>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Progress Bar */}
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-600 mb-2">
-                      <span>Progreso</span>
-                      <span>{Math.round(getProgressPercentage(application.status))}%</span>
-                    </div>
-                    <Progress value={getProgressPercentage(application.status)} className="h-2" />
-                  </div>
-
-                  {/* Status Steps */}
-                  <div className="space-y-4">
-                    {statusSteps.map((step, index) => {
-                      const currentIndex = getCurrentStepIndex(application.status)
-                      const isCompleted = index <= currentIndex
-                      const isCurrent = index === currentIndex
-
-                      return (
-                        <div key={step.key} className="flex items-start gap-4">
-                          <div className="flex-shrink-0 mt-1">
-                            {isCompleted ? (
-                              <div
-                                className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                                  isCurrent ? getStatusColor(application.status) : "bg-green-500"
-                                }`}
-                              >
-                                <CheckCircle className="h-4 w-4 text-white" />
-                              </div>
-                            ) : (
-                              <div className="w-6 h-6 rounded-full border-2 border-gray-300 bg-white" />
-                            )}
+                      {interview.scheduled_date && (
+                        <div className="space-y-1 text-sm text-gray-600">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-3 w-3" />
+                            <span>{formatDate(interview.scheduled_date)}</span>
                           </div>
-                          <div className={`flex-1 ${isCompleted ? "text-gray-900" : "text-gray-500"}`}>
-                            <h4 className={`font-medium ${isCurrent ? "text-blue-600" : ""}`}>{step.label}</h4>
-                            <p className="text-sm text-gray-600">{step.description}</p>
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-3 w-3" />
+                            <span>{interview.duration_minutes} minutos</span>
                           </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Interviews */}
-              {application.interviews && application.interviews.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5" />
-                      Entrevistas Programadas
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {application.interviews.map((interview, index) => (
-                        <div key={index} className="border rounded-lg p-4">
-                          <div className="flex justify-between items-start mb-3">
-                            <div>
-                              <h4 className="font-medium text-lg">{interview.interview_type}</h4>
-                              <p className="text-gray-600">
-                                {formatDate(interview.scheduled_date)} • {interview.duration_minutes} minutos
-                              </p>
-                            </div>
-                            <Badge variant={interview.status === "completed" ? "default" : "secondary"}>
-                              {interview.status}
-                            </Badge>
-                          </div>
-
-                          <div className="grid md:grid-cols-2 gap-4 text-sm">
-                            {interview.interviewer_name && (
-                              <div className="flex items-center gap-2">
-                                <User className="h-4 w-4 text-gray-500" />
-                                <span>{interview.interviewer_name}</span>
-                              </div>
-                            )}
-                            {interview.interviewer_email && (
-                              <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 text-gray-500" />
-                                <span>{interview.interviewer_email}</span>
-                              </div>
-                            )}
-                            {interview.location && (
-                              <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4 text-gray-500" />
-                                <span>{interview.location}</span>
-                              </div>
-                            )}
-                            {interview.meeting_link && (
-                              <div className="flex items-center gap-2">
-                                <Video className="h-4 w-4 text-gray-500" />
-                                <a
-                                  href={interview.meeting_link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                                >
-                                  Unirse a la reunión
-                                  <ExternalLink className="h-3 w-3" />
-                                </a>
-                              </div>
-                            )}
-                          </div>
-
-                          {interview.notes && (
-                            <div className="mt-3 p-3 bg-gray-50 rounded">
-                              <p className="text-sm text-gray-700">{interview.notes}</p>
+                          {interview.interviewer_name && (
+                            <div className="flex items-center gap-2">
+                              <User className="h-3 w-3" />
+                              <span>{interview.interviewer_name}</span>
                             </div>
                           )}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                      )}
 
-              {/* Status History */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    Historial de Estados
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {application.statusHistory.map((history, index) => (
-                      <div key={index} className="flex items-start gap-4 pb-4 border-b last:border-b-0">
-                        <div className="flex-shrink-0 mt-1">
-                          <div className={`w-3 h-3 rounded-full ${getStatusColor(history.status)}`} />
+                      {interview.meeting_link && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full mt-2 bg-transparent"
+                          onClick={() => window.open(interview.meeting_link, "_blank")}
+                        >
+                          <ExternalLink className="h-3 w-3 mr-2" />
+                          Unirse a la Reunión
+                        </Button>
+                      )}
+
+                      {interview.notes && (
+                        <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                          <MessageSquare className="h-3 w-3 inline mr-1" />
+                          {interview.notes}
                         </div>
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-medium">
-                              {statusSteps.find((step) => step.key === history.status)?.label || history.status}
-                            </h4>
-                            <span className="text-sm text-gray-500">{formatDate(history.created_at)}</span>
-                          </div>
-                          {history.notes && <p className="text-sm text-gray-600">{history.notes}</p>}
-                          <p className="text-xs text-gray-500 mt-1">Actualizado por: {history.updated_by}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Next Steps */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5" />
-                    Próximos Pasos
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {getNextSteps(application.status).map((step, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
-                        <span className="text-gray-700">{step}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* Contact Information */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building className="h-5 w-5" />
-                    ¿Necesitas Ayuda?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-4">
-                    Si tienes preguntas sobre tu aplicación o el proceso, no dudes en contactarnos:
-                  </p>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-gray-500" />
-                      <span>careers@tuempresa.com</span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-gray-500" />
-                      <span>+56 2 1234 5678</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           )}
+
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Información de Contacto</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-gray-500" />
+                <span>rrhh@empresa.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-gray-500" />
+                <span>+56 2 2345 6789</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-gray-500" />
+                <span>Santiago, Chile</span>
+              </div>
+              <Separator className="my-3" />
+              <p className="text-xs text-gray-600">
+                Si tienes preguntas sobre tu aplicación, no dudes en contactarnos. Nuestro horario de atención es de
+                lunes a viernes de 9:00 a 18:00.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
   )
 }
-
-export default ApplicationStatusTracker

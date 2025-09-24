@@ -2,20 +2,20 @@
 CREATE TABLE IF NOT EXISTS job_applications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     application_id VARCHAR(20) UNIQUE NOT NULL,
-    job_title VARCHAR(255) NOT NULL,
-    department VARCHAR(100) NOT NULL,
-    candidate_name VARCHAR(255) NOT NULL,
-    candidate_email VARCHAR(255) NOT NULL,
-    candidate_phone VARCHAR(50),
-    resume_url TEXT,
-    cover_letter TEXT,
-    linkedin_profile VARCHAR(500),
-    portfolio_url VARCHAR(500),
-    years_experience INTEGER,
-    current_company VARCHAR(255),
-    current_position VARCHAR(255),
-    salary_expectation INTEGER,
-    availability_date DATE,
+    job_id VARCHAR(100) NOT NULL,
+    job_title VARCHAR(200) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    linkedin VARCHAR(500),
+    portfolio VARCHAR(500),
+    experience TEXT NOT NULL,
+    motivation TEXT NOT NULL,
+    availability VARCHAR(50) NOT NULL,
+    expected_salary VARCHAR(100),
+    cv_filename VARCHAR(255),
+    cv_url VARCHAR(500),
     status VARCHAR(50) DEFAULT 'submitted',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -27,128 +27,170 @@ CREATE TABLE IF NOT EXISTS application_status_history (
     application_id UUID REFERENCES job_applications(id) ON DELETE CASCADE,
     status VARCHAR(50) NOT NULL,
     notes TEXT,
-    updated_by VARCHAR(255),
+    changed_by VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create application interviews table
+-- Create interviews table
 CREATE TABLE IF NOT EXISTS application_interviews (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     application_id UUID REFERENCES job_applications(id) ON DELETE CASCADE,
-    interview_type VARCHAR(100) NOT NULL,
+    interview_type VARCHAR(50) NOT NULL, -- 'phone', 'technical', 'final'
     scheduled_date TIMESTAMP WITH TIME ZONE,
     duration_minutes INTEGER DEFAULT 60,
-    interviewer_name VARCHAR(255),
+    interviewer_name VARCHAR(100),
     interviewer_email VARCHAR(255),
     meeting_link VARCHAR(500),
-    location VARCHAR(255),
     notes TEXT,
-    status VARCHAR(50) DEFAULT 'scheduled',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'cancelled', 'rescheduled'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_job_applications_application_id ON job_applications(application_id);
-CREATE INDEX IF NOT EXISTS idx_job_applications_email ON job_applications(candidate_email);
+CREATE INDEX IF NOT EXISTS idx_job_applications_email ON job_applications(email);
 CREATE INDEX IF NOT EXISTS idx_job_applications_status ON job_applications(status);
+CREATE INDEX IF NOT EXISTS idx_job_applications_created_at ON job_applications(created_at);
 CREATE INDEX IF NOT EXISTS idx_application_status_history_application_id ON application_status_history(application_id);
 CREATE INDEX IF NOT EXISTS idx_application_interviews_application_id ON application_interviews(application_id);
 
 -- Function to generate application ID
-CREATE OR REPLACE FUNCTION generate_application_id()
-RETURNS VARCHAR(20) AS $$
+CREATE OR REPLACE FUNCTION generate_application_id() RETURNS VARCHAR(20) AS $$
 DECLARE
     new_id VARCHAR(20);
     exists_check INTEGER;
 BEGIN
     LOOP
-        new_id := 'APP-' || LPAD(FLOOR(RANDOM() * 1000000)::TEXT, 6, '0');
+        -- Generate ID in format: APP-YYYY-XXXXXX (APP-2024-123456)
+        new_id := 'APP-' || EXTRACT(YEAR FROM NOW()) || '-' || LPAD(FLOOR(RANDOM() * 999999 + 1)::TEXT, 6, '0');
+        
+        -- Check if ID already exists
         SELECT COUNT(*) INTO exists_check FROM job_applications WHERE application_id = new_id;
-        EXIT WHEN exists_check = 0;
+        
+        -- If ID doesn't exist, break the loop
+        IF exists_check = 0 THEN
+            EXIT;
+        END IF;
     END LOOP;
+    
     RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;
 
--- Function to update application status
-CREATE OR REPLACE FUNCTION update_application_status(
-    app_id UUID,
-    new_status VARCHAR(50),
-    status_notes TEXT DEFAULT NULL,
-    updated_by_user VARCHAR(255) DEFAULT 'system'
-)
-RETURNS BOOLEAN AS $$
+-- Function to automatically set application_id before insert
+CREATE OR REPLACE FUNCTION set_application_id() RETURNS TRIGGER AS $$
 BEGIN
-    -- Update the main application status
-    UPDATE job_applications 
-    SET status = new_status, updated_at = NOW()
-    WHERE id = app_id;
-    
-    -- Insert status history record
-    INSERT INTO application_status_history (application_id, status, notes, updated_by)
-    VALUES (app_id, new_status, status_notes, updated_by_user);
-    
-    RETURN TRUE;
+    IF NEW.application_id IS NULL OR NEW.application_id = '' THEN
+        NEW.application_id := generate_application_id();
+    END IF;
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Function to get application details with history
-CREATE OR REPLACE FUNCTION get_application_details(app_id VARCHAR(20))
-RETURNS TABLE(
-    id UUID,
-    application_id VARCHAR(20),
-    job_title VARCHAR(255),
-    department VARCHAR(100),
-    candidate_name VARCHAR(255),
-    candidate_email VARCHAR(255),
-    candidate_phone VARCHAR(50),
-    status VARCHAR(50),
-    created_at TIMESTAMP WITH TIME ZONE,
-    updated_at TIMESTAMP WITH TIME ZONE,
-    status_history JSONB,
-    interviews JSONB
-) AS $$
+-- Create trigger to auto-generate application_id
+DROP TRIGGER IF EXISTS trigger_set_application_id ON job_applications;
+CREATE TRIGGER trigger_set_application_id
+    BEFORE INSERT ON job_applications
+    FOR EACH ROW
+    EXECUTE FUNCTION set_application_id();
+
+-- Function to update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column() RETURNS TRIGGER AS $$
 BEGIN
-    RETURN QUERY
-    SELECT 
-        ja.id,
-        ja.application_id,
-        ja.job_title,
-        ja.department,
-        ja.candidate_name,
-        ja.candidate_email,
-        ja.candidate_phone,
-        ja.status,
-        ja.created_at,
-        ja.updated_at,
-        COALESCE(
-            (SELECT jsonb_agg(
-                jsonb_build_object(
-                    'status', ash.status,
-                    'notes', ash.notes,
-                    'updated_by', ash.updated_by,
-                    'created_at', ash.created_at
-                ) ORDER BY ash.created_at DESC
-            ) FROM application_status_history ash WHERE ash.application_id = ja.id),
-            '[]'::jsonb
-        ) as status_history,
-        COALESCE(
-            (SELECT jsonb_agg(
-                jsonb_build_object(
-                    'interview_type', ai.interview_type,
-                    'scheduled_date', ai.scheduled_date,
-                    'duration_minutes', ai.duration_minutes,
-                    'interviewer_name', ai.interviewer_name,
-                    'interviewer_email', ai.interviewer_email,
-                    'meeting_link', ai.meeting_link,
-                    'location', ai.location,
-                    'status', ai.status,
-                    'notes', ai.notes
-                ) ORDER BY ai.scheduled_date ASC
-            ) FROM application_interviews ai WHERE ai.application_id = ja.id),
-            '[]'::jsonb
-        ) as interviews
-    FROM job_applications ja
-    WHERE ja.application_id = app_id;
+    NEW.updated_at = NOW();
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create triggers for updated_at
+DROP TRIGGER IF EXISTS trigger_update_job_applications_updated_at ON job_applications;
+CREATE TRIGGER trigger_update_job_applications_updated_at
+    BEFORE UPDATE ON job_applications
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS trigger_update_application_interviews_updated_at ON application_interviews;
+CREATE TRIGGER trigger_update_application_interviews_updated_at
+    BEFORE UPDATE ON application_interviews
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Function to automatically create status history entry
+CREATE OR REPLACE FUNCTION create_status_history() RETURNS TRIGGER AS $$
+BEGIN
+    -- Insert into status history when status changes
+    IF TG_OP = 'INSERT' OR (TG_OP = 'UPDATE' AND OLD.status != NEW.status) THEN
+        INSERT INTO application_status_history (application_id, status, notes, changed_by)
+        VALUES (NEW.id, NEW.status, 'Status changed automatically', 'system');
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger for status history
+DROP TRIGGER IF EXISTS trigger_create_status_history ON job_applications;
+CREATE TRIGGER trigger_create_status_history
+    AFTER INSERT OR UPDATE ON job_applications
+    FOR EACH ROW
+    EXECUTE FUNCTION create_status_history();
+
+-- Insert some sample data for testing
+INSERT INTO job_applications (
+    job_id, job_title, first_name, last_name, email, phone, 
+    experience, motivation, availability, expected_salary, status
+) VALUES 
+(
+    'senior-software-engineer', 
+    'Ingeniero de Software Senior',
+    'Juan',
+    'Pérez',
+    'juan.perez@email.com',
+    '+56912345678',
+    'Tengo 6 años de experiencia desarrollando aplicaciones web con React y Node.js. He trabajado en startups y empresas grandes, liderando equipos de desarrollo.',
+    'Me interesa esta posición porque quiero contribuir al crecimiento profesional de otros desarrolladores y trabajar con tecnologías de vanguardia.',
+    '2-semanas',
+    '$4.000.000 CLP',
+    'under_review'
+),
+(
+    'product-manager',
+    'Product Manager',
+    'María',
+    'González',
+    'maria.gonzalez@email.com',
+    '+56987654321',
+    'Soy Product Manager con 4 años de experiencia en productos SaaS B2B. He liderado el lanzamiento de 3 productos exitosos.',
+    'Esta oportunidad me emociona porque combina mi pasión por el producto con el impacto social del desarrollo profesional.',
+    'inmediata',
+    '$3.500.000 CLP',
+    'interview_scheduled'
+);
+
+-- Update one application to have interview scheduled
+DO $$
+DECLARE
+    app_id UUID;
+BEGIN
+    SELECT id INTO app_id FROM job_applications WHERE email = 'maria.gonzalez@email.com' LIMIT 1;
+    
+    IF app_id IS NOT NULL THEN
+        INSERT INTO application_interviews (
+            application_id, interview_type, scheduled_date, 
+            interviewer_name, interviewer_email, meeting_link
+        ) VALUES (
+            app_id,
+            'phone',
+            NOW() + INTERVAL '2 days',
+            'Ana Rodríguez',
+            'ana.rodriguez@company.com',
+            'https://meet.google.com/abc-defg-hij'
+        );
+    END IF;
+END $$;
+
+-- Verify the setup
+SELECT 'Applications table created successfully' as status;
+SELECT COUNT(*) as total_applications FROM job_applications;
+SELECT COUNT(*) as total_status_history FROM application_status_history;
+SELECT COUNT(*) as total_interviews FROM application_interviews;

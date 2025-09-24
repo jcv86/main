@@ -1,103 +1,88 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-
-// Generate unique application ID
-async function generateApplicationId(): Promise<string> {
-  const { data, error } = await supabase.rpc("generate_application_id")
-  if (error) {
-    throw new Error("Failed to generate application ID")
-  }
-  return data
-}
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 // POST - Submit new job application
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const formData = await request.formData()
 
-    const {
-      jobTitle,
-      department,
-      candidateName,
-      candidateEmail,
-      candidatePhone,
-      resumeUrl,
-      coverLetter,
-      linkedinProfile,
-      portfolioUrl,
-      yearsExperience,
-      currentCompany,
-      currentPosition,
-      salaryExpectation,
-      availabilityDate,
-    } = body
+    const applicationData = {
+      job_id: formData.get("jobId") as string,
+      job_title: formData.get("jobTitle") as string,
+      first_name: formData.get("firstName") as string,
+      last_name: formData.get("lastName") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      linkedin: (formData.get("linkedin") as string) || null,
+      portfolio: (formData.get("portfolio") as string) || null,
+      experience: formData.get("experience") as string,
+      motivation: formData.get("motivation") as string,
+      availability: formData.get("availability") as string,
+      expected_salary: (formData.get("expectedSalary") as string) || null,
+    }
 
     // Validate required fields
-    if (!jobTitle || !department || !candidateName || !candidateEmail) {
-      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
+    const requiredFields = [
+      "job_id",
+      "job_title",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "experience",
+      "motivation",
+      "availability",
+    ]
+    for (const field of requiredFields) {
+      if (!applicationData[field as keyof typeof applicationData]) {
+        return NextResponse.json({ error: `Missing required field: ${field}` }, { status: 400 })
+      }
     }
 
-    // Generate application ID
-    const { data: appIdData, error: appIdError } = await supabase.rpc("generate_application_id")
+    // Handle CV file upload (in a real app, you'd upload to storage)
+    const cvFile = formData.get("cv") as File
+    let cvFilename = null
+    let cvUrl = null
 
-    if (appIdError) {
-      console.error("Error generating application ID:", appIdError)
-      return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    if (cvFile) {
+      cvFilename = cvFile.name
+      // In a real application, you would upload the file to a storage service
+      // and get back a URL. For now, we'll just store the filename.
+      cvUrl = `/uploads/cv/${Date.now()}-${cvFile.name}`
     }
 
-    const applicationId = appIdData
-
-    // Insert application
-    const { data: applicationData, error: insertError } = await supabase
+    // Insert application into database
+    const { data, error } = await supabase
       .from("job_applications")
-      .insert({
-        application_id: applicationId,
-        job_title: jobTitle,
-        department: department,
-        candidate_name: candidateName,
-        candidate_email: candidateEmail,
-        candidate_phone: candidatePhone,
-        resume_url: resumeUrl,
-        cover_letter: coverLetter,
-        linkedin_profile: linkedinProfile,
-        portfolio_url: portfolioUrl,
-        years_experience: yearsExperience,
-        current_company: currentCompany,
-        current_position: currentPosition,
-        salary_expectation: salaryExpectation,
-        availability_date: availabilityDate,
-        status: "submitted",
-      })
-      .select()
+      .insert([
+        {
+          ...applicationData,
+          cv_filename: cvFilename,
+          cv_url: cvUrl,
+          status: "submitted",
+        },
+      ])
+      .select("application_id")
       .single()
 
-    if (insertError) {
-      console.error("Error inserting application:", insertError)
-      return NextResponse.json({ error: "Error al guardar la aplicación" }, { status: 500 })
+    if (error) {
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to submit application" }, { status: 500 })
     }
 
-    // Insert initial status history
-    const { error: historyError } = await supabase.from("application_status_history").insert({
-      application_id: applicationData.id,
-      status: "submitted",
-      notes: "Aplicación enviada por el candidato",
-      updated_by: "system",
-    })
-
-    if (historyError) {
-      console.error("Error inserting status history:", historyError)
-    }
+    // Send confirmation email (in a real app)
+    // await sendConfirmationEmail(applicationData.email, data.application_id)
 
     return NextResponse.json({
       success: true,
-      applicationId: applicationId,
-      message: "Aplicación enviada exitosamente",
+      applicationId: data.application_id,
+      message: "Application submitted successfully",
     })
   } catch (error) {
-    console.error("Error in POST /api/applications:", error)
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    console.error("Application submission error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
@@ -106,13 +91,28 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get("status")
-    const department = searchParams.get("department")
+    const jobId = searchParams.get("jobId")
     const limit = Number.parseInt(searchParams.get("limit") || "50")
     const offset = Number.parseInt(searchParams.get("offset") || "0")
 
     let query = supabase
       .from("job_applications")
-      .select("*")
+      .select(`
+        *,
+        application_status_history (
+          status,
+          notes,
+          changed_by,
+          created_at
+        ),
+        application_interviews (
+          interview_type,
+          scheduled_date,
+          interviewer_name,
+          meeting_link,
+          status
+        )
+      `)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -120,24 +120,23 @@ export async function GET(request: NextRequest) {
       query = query.eq("status", status)
     }
 
-    if (department) {
-      query = query.eq("department", department)
+    if (jobId) {
+      query = query.eq("job_id", jobId)
     }
 
     const { data, error } = await query
 
     if (error) {
-      console.error("Error fetching applications:", error)
-      return NextResponse.json({ error: "Error al obtener las aplicaciones" }, { status: 500 })
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to fetch applications" }, { status: 500 })
     }
 
     return NextResponse.json({
-      success: true,
       applications: data,
-      total: data.length,
+      total: data?.length || 0,
     })
   } catch (error) {
-    console.error("Error in GET /api/applications:", error)
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    console.error("Fetch applications error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

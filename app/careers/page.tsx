@@ -3,970 +3,1023 @@
 import type React from "react"
 
 import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
 import {
   MapPin,
-  DollarSign,
   Clock,
+  DollarSign,
   Users,
+  Briefcase,
+  GraduationCap,
   Heart,
   Coffee,
-  Laptop,
-  GraduationCap,
-  ChevronRight,
-  Filter,
-  Mail,
-  Phone,
-  Building,
+  Zap,
+  Shield,
+  Calendar,
   CheckCircle,
-  Search,
-  AlertCircle,
+  ArrowRight,
+  Building,
+  Award,
+  TrendingUp,
 } from "lucide-react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-const CareersPage = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState("all")
-  const [selectedJob, setSelectedJob] = useState<string | null>(null)
+interface JobPosition {
+  id: string
+  title: string
+  department: string
+  location: string
+  type: string
+  experience: string
+  salary: string
+  description: string
+  requirements: string[]
+  responsibilities: string[]
+  benefits: string[]
+  posted: string
+  urgent: boolean
+}
+
+const jobPositions: JobPosition[] = [
+  {
+    id: "senior-software-engineer",
+    title: "Ingeniero de Software Senior",
+    department: "Tecnología",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "5+ años",
+    salary: "$3.500.000 - $4.500.000 CLP",
+    description:
+      "Únete a nuestro equipo de tecnología para desarrollar soluciones innovadoras que impacten a miles de profesionales en su crecimiento.",
+    requirements: [
+      "5+ años de experiencia en desarrollo de software",
+      "Dominio de React, Node.js y TypeScript",
+      "Experiencia con bases de datos PostgreSQL",
+      "Conocimiento de AWS o servicios cloud similares",
+      "Experiencia en metodologías ágiles",
+      "Inglés técnico intermedio",
+    ],
+    responsibilities: [
+      "Desarrollar y mantener aplicaciones web escalables",
+      "Colaborar con equipos multidisciplinarios",
+      "Mentorear desarrolladores junior",
+      "Participar en revisiones de código y arquitectura",
+      "Implementar mejores prácticas de desarrollo",
+    ],
+    benefits: [
+      "Seguro de salud premium",
+      "15 días de vacaciones adicionales",
+      "Presupuesto para capacitación",
+      "Trabajo remoto híbrido",
+      "Stock options",
+    ],
+    posted: "2024-01-15",
+    urgent: true,
+  },
+  {
+    id: "product-manager",
+    title: "Product Manager",
+    department: "Producto",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "3+ años",
+    salary: "$3.000.000 - $4.000.000 CLP",
+    description:
+      "Lidera el desarrollo de productos que transforman la experiencia de desarrollo profesional de nuestros usuarios.",
+    requirements: [
+      "3+ años de experiencia en gestión de productos",
+      "Experiencia con metodologías ágiles",
+      "Conocimiento de analytics y métricas de producto",
+      "Habilidades de comunicación excepcionales",
+      "Experiencia en productos B2B",
+      "MBA o formación equivalente preferible",
+    ],
+    responsibilities: [
+      "Definir roadmap y estrategia de producto",
+      "Colaborar con equipos de ingeniería y diseño",
+      "Analizar métricas y feedback de usuarios",
+      "Gestionar stakeholders internos y externos",
+      "Liderar lanzamientos de nuevas funcionalidades",
+    ],
+    benefits: [
+      "Seguro de salud familiar",
+      "Bono por objetivos",
+      "Capacitación en liderazgo",
+      "Flexibilidad horaria",
+      "Participación en conferencias",
+    ],
+    posted: "2024-01-12",
+    urgent: false,
+  },
+  {
+    id: "ux-designer",
+    title: "UX/UI Designer Senior",
+    department: "Diseño",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "4+ años",
+    salary: "$2.800.000 - $3.800.000 CLP",
+    description: "Crea experiencias excepcionales que ayuden a los profesionales a alcanzar su máximo potencial.",
+    requirements: [
+      "4+ años de experiencia en UX/UI",
+      "Dominio de Figma, Sketch y herramientas de prototipado",
+      "Experiencia en design systems",
+      "Conocimiento de usabilidad y testing",
+      "Portfolio sólido con casos de estudio",
+      "Experiencia en productos digitales",
+    ],
+    responsibilities: [
+      "Diseñar interfaces intuitivas y atractivas",
+      "Realizar investigación de usuarios",
+      "Crear y mantener design system",
+      "Colaborar con equipos de producto e ingeniería",
+      "Realizar testing de usabilidad",
+    ],
+    benefits: [
+      "Seguro de salud",
+      "Presupuesto para herramientas de diseño",
+      "Capacitación en UX",
+      "Ambiente creativo",
+      "Proyectos desafiantes",
+    ],
+    posted: "2024-01-10",
+    urgent: false,
+  },
+  {
+    id: "data-scientist",
+    title: "Data Scientist",
+    department: "Analytics",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "3+ años",
+    salary: "$3.200.000 - $4.200.000 CLP",
+    description:
+      "Utiliza datos para generar insights que impulsen decisiones estratégicas y mejoren la experiencia del usuario.",
+    requirements: [
+      "3+ años de experiencia en data science",
+      "Dominio de Python, R y SQL",
+      "Experiencia con machine learning",
+      "Conocimiento de estadística avanzada",
+      "Experiencia con herramientas de visualización",
+      "Título en ingeniería, matemáticas o afines",
+    ],
+    responsibilities: [
+      "Desarrollar modelos predictivos",
+      "Analizar comportamiento de usuarios",
+      "Crear dashboards y reportes",
+      "Colaborar con equipos de producto",
+      "Implementar experimentos A/B",
+    ],
+    benefits: [
+      "Seguro de salud",
+      "Capacitación en tecnologías emergentes",
+      "Conferencias especializadas",
+      "Trabajo con datos reales",
+      "Impacto directo en producto",
+    ],
+    posted: "2024-01-08",
+    urgent: true,
+  },
+  {
+    id: "marketing-manager",
+    title: "Marketing Manager",
+    department: "Marketing",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "4+ años",
+    salary: "$2.500.000 - $3.500.000 CLP",
+    description:
+      "Lidera estrategias de marketing que conecten con profesionales y impulsen el crecimiento de la plataforma.",
+    requirements: [
+      "4+ años de experiencia en marketing digital",
+      "Experiencia en marketing B2B",
+      "Conocimiento de SEO, SEM y social media",
+      "Experiencia con herramientas de analytics",
+      "Habilidades de copywriting",
+      "Experiencia en growth marketing",
+    ],
+    responsibilities: [
+      "Desarrollar estrategias de marketing",
+      "Gestionar campañas digitales",
+      "Analizar métricas de marketing",
+      "Colaborar con equipos de ventas",
+      "Crear contenido estratégico",
+    ],
+    benefits: [
+      "Seguro de salud",
+      "Presupuesto para herramientas de marketing",
+      "Capacitación en marketing digital",
+      "Flexibilidad creativa",
+      "Bonos por performance",
+    ],
+    posted: "2024-01-05",
+    urgent: false,
+  },
+  {
+    id: "customer-success",
+    title: "Customer Success Manager",
+    department: "Customer Success",
+    location: "Santiago, Chile",
+    type: "Tiempo Completo",
+    experience: "2+ años",
+    salary: "$2.200.000 - $3.200.000 CLP",
+    description:
+      "Asegura el éxito y satisfacción de nuestros clientes, ayudándolos a maximizar el valor de nuestra plataforma.",
+    requirements: [
+      "2+ años de experiencia en customer success",
+      "Excelentes habilidades de comunicación",
+      "Experiencia en SaaS B2B",
+      "Conocimiento de CRM y herramientas de CS",
+      "Orientación a resultados",
+      "Capacidad analítica",
+    ],
+    responsibilities: [
+      "Gestionar cartera de clientes",
+      "Asegurar adopción y retención",
+      "Identificar oportunidades de crecimiento",
+      "Resolver problemas de clientes",
+      "Colaborar con equipos internos",
+    ],
+    benefits: [
+      "Seguro de salud",
+      "Comisiones por retención",
+      "Capacitación en customer success",
+      "Interacción directa con clientes",
+      "Crecimiento profesional acelerado",
+    ],
+    posted: "2024-01-03",
+    urgent: false,
+  },
+]
+
+const companyBenefits = [
+  {
+    icon: Heart,
+    title: "Bienestar Integral",
+    description: "Seguro de salud premium, apoyo psicológico y programas de wellness",
+  },
+  {
+    icon: GraduationCap,
+    title: "Desarrollo Profesional",
+    description: "Presupuesto anual para capacitación, conferencias y certificaciones",
+  },
+  {
+    icon: Coffee,
+    title: "Ambiente Flexible",
+    description: "Trabajo remoto híbrido, horarios flexibles y espacios colaborativos",
+  },
+  {
+    icon: Zap,
+    title: "Innovación Constante",
+    description: "Proyectos desafiantes, tecnologías de vanguardia y autonomía creativa",
+  },
+  {
+    icon: Shield,
+    title: "Estabilidad y Crecimiento",
+    description: "Stock options, bonos por performance y plan de carrera claro",
+  },
+  {
+    icon: Users,
+    title: "Equipo Excepcional",
+    description: "Colabora con profesionales talentosos en un ambiente inclusivo",
+  },
+]
+
+const applicationProcess = [
+  {
+    step: 1,
+    title: "Aplicación Online",
+    description: "Completa tu aplicación con CV y carta de presentación",
+    duration: "5 min",
+  },
+  {
+    step: 2,
+    title: "Revisión Inicial",
+    description: "Nuestro equipo de RRHH revisa tu perfil",
+    duration: "2-3 días",
+  },
+  {
+    step: 3,
+    title: "Entrevista Telefónica",
+    description: "Conversación inicial con el equipo de reclutamiento",
+    duration: "30 min",
+  },
+  {
+    step: 4,
+    title: "Entrevista Técnica",
+    description: "Evaluación de habilidades específicas del rol",
+    duration: "1 hora",
+  },
+  {
+    step: 5,
+    title: "Entrevista Final",
+    description: "Conversación con el equipo y manager directo",
+    duration: "45 min",
+  },
+  {
+    step: 6,
+    title: "Oferta y Negociación",
+    description: "Presentación de oferta y términos de contratación",
+    duration: "1-2 días",
+  },
+]
+
+export default function CareersPage() {
+  const router = useRouter()
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("all")
+  const [selectedJob, setSelectedJob] = useState<JobPosition | null>(null)
+  const [showApplicationForm, setShowApplicationForm] = useState(false)
   const [applicationData, setApplicationData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    positionId: "",
-    positionTitle: "",
-    department: "",
-    experienceLevel: "",
+    linkedin: "",
+    portfolio: "",
+    experience: "",
     motivation: "",
-    currentCompany: "",
-    currentPosition: "",
-    linkedinProfile: "",
-    portfolioUrl: "",
-    salaryExpectation: "",
-    availabilityDate: "",
+    availability: "",
+    salary: "",
+    cv: null as File | null,
   })
-  const [submitting, setSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [applicationId, setApplicationId] = useState("")
-  const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [applicationId, setApplicationId] = useState<string>("")
 
-  const departments = [
-    { id: "all", name: "Todos los Departamentos", count: 6 },
-    { id: "technology", name: "Tecnología", count: 2 },
-    { id: "design", name: "Diseño", count: 1 },
-    { id: "ai", name: "Inteligencia Artificial", count: 1 },
-    { id: "product", name: "Producto", count: 1 },
-    { id: "customer", name: "Customer Success", count: 1 },
-    { id: "marketing", name: "Marketing", count: 1 },
-  ]
+  const departments = ["all", ...Array.from(new Set(jobPositions.map((job) => job.department)))]
 
-  const jobs = [
-    {
-      id: "senior-fullstack",
-      title: "Senior Full Stack Developer",
-      department: "technology",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$3.500.000 - $4.500.000 CLP",
-      description:
-        "Buscamos un desarrollador senior para liderar el desarrollo de nuestra plataforma de evaluaciones psicométricas.",
-      requirements: [
-        "5+ años de experiencia en desarrollo full stack",
-        "Experiencia avanzada con React, Next.js, TypeScript",
-        "Conocimiento sólido de Node.js y bases de datos PostgreSQL",
-        "Experiencia con APIs REST y GraphQL",
-        "Conocimiento de AWS o servicios cloud similares",
-        "Experiencia con metodologías ágiles",
-        "Inglés conversacional",
-      ],
-      responsibilities: [
-        "Desarrollar y mantener aplicaciones web escalables",
-        "Colaborar con el equipo de producto en nuevas funcionalidades",
-        "Optimizar el rendimiento de aplicaciones existentes",
-        "Mentorear desarrolladores junior",
-        "Participar en revisiones de código y arquitectura",
-        "Implementar mejores prácticas de desarrollo",
-      ],
-      benefits: [
-        "Salario competitivo + equity",
-        "Seguro de salud premium",
-        "Trabajo híbrido (3 días remotos)",
-        "Presupuesto anual de $800.000 CLP para capacitación",
-        "Laptop y setup completo",
-        "Vacaciones flexibles",
-      ],
-    },
-    {
-      id: "ux-ui-designer",
-      title: "UX/UI Designer",
-      department: "design",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$2.800.000 - $3.800.000 CLP",
-      description:
-        "Diseñador UX/UI para crear experiencias excepcionales en nuestra plataforma de desarrollo profesional.",
-      requirements: [
-        "3+ años de experiencia en diseño UX/UI",
-        "Dominio de Figma, Sketch o herramientas similares",
-        "Experiencia en design systems",
-        "Conocimiento de principios de usabilidad",
-        "Portfolio sólido con casos de estudio",
-        "Experiencia en investigación de usuarios",
-        "Conocimientos básicos de HTML/CSS",
-      ],
-      responsibilities: [
-        "Diseñar interfaces intuitivas y atractivas",
-        "Realizar investigación de usuarios y testing",
-        "Crear y mantener el design system",
-        "Colaborar estrechamente con desarrollo",
-        "Prototipar nuevas funcionalidades",
-        "Analizar métricas de usabilidad",
-      ],
-      benefits: [
-        "Salario competitivo + bonos por performance",
-        "Seguro de salud premium",
-        "Horarios flexibles",
-        "Presupuesto para conferencias y cursos",
-        "Ambiente creativo y colaborativo",
-        "Oportunidades de crecimiento",
-      ],
-    },
-    {
-      id: "data-scientist-ai",
-      title: "Data Scientist - AI Coach",
-      department: "ai",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$4.000.000 - $5.200.000 CLP",
-      description: "Científico de datos especializado en IA para desarrollar y mejorar nuestro coach inteligente.",
-      requirements: [
-        "PhD o Master en Data Science, ML o campo relacionado",
-        "Experiencia con Python, TensorFlow, PyTorch",
-        "Conocimiento profundo de NLP y LLMs",
-        "Experiencia con modelos de recomendación",
-        "Conocimiento de psicología organizacional (deseable)",
-        "Experiencia en producción con modelos ML",
-        "Inglés avanzado",
-      ],
-      responsibilities: [
-        "Desarrollar algoritmos de recomendación personalizados",
-        "Mejorar el modelo de coaching con IA",
-        "Analizar datos de comportamiento de usuarios",
-        "Implementar modelos de ML en producción",
-        "Colaborar con psicólogos organizacionales",
-        "Investigar nuevas técnicas de IA aplicadas",
-      ],
-      benefits: [
-        "Salario top del mercado + equity significativo",
-        "Seguro de salud premium + familia",
-        "Flexibilidad total de horarios",
-        "Presupuesto ilimitado para investigación",
-        "Acceso a recursos computacionales avanzados",
-        "Oportunidades de publicación académica",
-      ],
-    },
-    {
-      id: "product-manager",
-      title: "Product Manager",
-      department: "product",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$3.200.000 - $4.200.000 CLP",
-      description: "Product Manager para liderar la estrategia y desarrollo de nuestras funcionalidades principales.",
-      requirements: [
-        "4+ años de experiencia como Product Manager",
-        "Experiencia en productos SaaS B2B",
-        "Conocimiento de metodologías ágiles",
-        "Habilidades analíticas fuertes",
-        "Experiencia con herramientas como Jira, Notion",
-        "Background técnico deseable",
-        "Excelentes habilidades de comunicación",
-      ],
-      responsibilities: [
-        "Definir roadmap de producto",
-        "Colaborar con equipos de desarrollo y diseño",
-        "Analizar métricas de producto y usuario",
-        "Gestionar backlog y prioridades",
-        "Comunicar visión de producto a stakeholders",
-        "Realizar investigación de mercado",
-      ],
-      benefits: [
-        "Salario competitivo + equity",
-        "Seguro de salud premium",
-        "Trabajo híbrido flexible",
-        "Presupuesto para herramientas y capacitación",
-        "Oportunidades de liderazgo",
-        "Impacto directo en el producto",
-      ],
-    },
-    {
-      id: "customer-success",
-      title: "Customer Success Manager",
-      department: "customer",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$2.500.000 - $3.200.000 CLP",
-      description: "Customer Success Manager para asegurar el éxito y satisfacción de nuestros clientes empresariales.",
-      requirements: [
-        "3+ años en Customer Success o Account Management",
-        "Experiencia en SaaS B2B",
-        "Excelentes habilidades de comunicación",
-        "Orientación a resultados y métricas",
-        "Experiencia con CRM (Salesforce, HubSpot)",
-        "Capacidad de análisis de datos",
-        "Inglés intermedio-avanzado",
-      ],
-      responsibilities: [
-        "Gestionar cartera de clientes empresariales",
-        "Asegurar adopción exitosa de la plataforma",
-        "Identificar oportunidades de upselling",
-        "Resolver problemas y consultas de clientes",
-        "Crear contenido educativo y webinars",
-        "Analizar métricas de satisfacción y retención",
-      ],
-      benefits: [
-        "Salario base + comisiones atractivas",
-        "Seguro de salud premium",
-        "Horarios flexibles",
-        "Presupuesto para capacitación en CS",
-        "Oportunidades de crecimiento",
-        "Ambiente colaborativo",
-      ],
-    },
-    {
-      id: "marketing-digital",
-      title: "Marketing Digital Specialist",
-      department: "marketing",
-      location: "Santiago, Chile",
-      type: "Tiempo Completo",
-      salary: "$2.200.000 - $3.000.000 CLP",
-      description: "Especialista en marketing digital para impulsar el crecimiento y adquisición de usuarios.",
-      requirements: [
-        "2+ años en marketing digital",
-        "Experiencia con Google Ads, Facebook Ads",
-        "Conocimiento de SEO y content marketing",
-        "Experiencia con herramientas de analytics",
-        "Habilidades de copywriting",
-        "Conocimiento de marketing automation",
-        "Creatividad y pensamiento analítico",
-      ],
-      responsibilities: [
-        "Gestionar campañas de paid media",
-        "Crear y optimizar contenido para redes sociales",
-        "Analizar métricas de marketing y ROI",
-        "Desarrollar estrategias de content marketing",
-        "Colaborar en el diseño de landing pages",
-        "Implementar estrategias de email marketing",
-      ],
-      benefits: [
-        "Salario competitivo + bonos por performance",
-        "Seguro de salud",
-        "Trabajo híbrido",
-        "Presupuesto para herramientas de marketing",
-        "Oportunidades de especialización",
-        "Ambiente dinámico y creativo",
-      ],
-    },
-  ]
+  const filteredJobs =
+    selectedDepartment === "all" ? jobPositions : jobPositions.filter((job) => job.department === selectedDepartment)
 
-  const filteredJobs = selectedDepartment === "all" ? jobs : jobs.filter((job) => job.department === selectedDepartment)
+  const handleJobSelect = (job: JobPosition) => {
+    setSelectedJob(job)
+    setShowApplicationForm(false)
+  }
 
-  const companyBenefits = [
-    {
-      icon: <DollarSign className="h-8 w-8 text-green-500" />,
-      title: "Compensación Competitiva",
-      description: "Salarios top del mercado, equity, bonos por performance y revisiones salariales anuales.",
-    },
-    {
-      icon: <Heart className="h-8 w-8 text-red-500" />,
-      title: "Salud y Bienestar",
-      description: "Seguro de salud premium, cobertura dental, programas de bienestar y apoyo psicológico.",
-    },
-    {
-      icon: <Clock className="h-8 w-8 text-blue-500" />,
-      title: "Flexibilidad Total",
-      description: "Horarios flexibles, trabajo híbrido (3 días remotos), vacaciones ilimitadas.",
-    },
-    {
-      icon: <GraduationCap className="h-8 w-8 text-purple-500" />,
-      title: "Desarrollo Profesional",
-      description: "Presupuesto anual de capacitación, conferencias, cursos online y mentoring interno.",
-    },
-    {
-      icon: <Laptop className="h-8 w-8 text-gray-500" />,
-      title: "Tecnología de Punta",
-      description: "MacBook Pro, monitor 4K, setup ergonómico completo y herramientas premium.",
-    },
-    {
-      icon: <Coffee className="h-8 w-8 text-amber-500" />,
-      title: "Ambiente Excepcional",
-      description: "Oficina moderna en Providencia, snacks ilimitados, eventos de equipo y cultura colaborativa.",
-    },
-  ]
+  const handleApplyClick = () => {
+    setShowApplicationForm(true)
+  }
 
-  const hiringProcess = [
-    {
-      step: 1,
-      title: "Aplicación",
-      description: "Envía tu CV y carta de presentación a través de nuestro formulario.",
-    },
-    {
-      step: 2,
-      title: "Screening Inicial",
-      description: "Llamada de 30 minutos con nuestro equipo de Talent para conocerte mejor.",
-    },
-    {
-      step: 3,
-      title: "Entrevista Técnica",
-      description: "Evaluación técnica específica del rol con el equipo correspondiente.",
-    },
-    {
-      step: 4,
-      title: "Entrevista Final",
-      description: "Conversación con liderazgo sobre fit cultural y expectativas mutuas.",
-    },
-  ]
+  const handleInputChange = (field: string, value: string) => {
+    setApplicationData((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+  }
 
-  const handleApplyToJob = (job: any) => {
-    setApplicationData({
-      ...applicationData,
-      positionId: job.id,
-      positionTitle: job.title,
-      department: departments.find((d) => d.id === job.department)?.name || job.department,
-    })
-    setSelectedJob(job.id)
-    // Scroll to application form
-    document.getElementById("application-form")?.scrollIntoView({ behavior: "smooth" })
+  const handleFileChange = (file: File | null) => {
+    setApplicationData((prev) => ({
+      ...prev,
+      cv: file,
+    }))
   }
 
   const handleSubmitApplication = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitting(true)
-    setError("")
+    if (!selectedJob) return
+
+    setIsSubmitting(true)
 
     try {
-      const response = await fetch("/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          jobTitle: applicationData.positionTitle,
-          department: applicationData.department,
-          candidateName: `${applicationData.firstName} ${applicationData.lastName}`,
-          candidateEmail: applicationData.email,
-          candidatePhone: applicationData.phone,
-          coverLetter: applicationData.motivation,
-          linkedinProfile: applicationData.linkedinProfile,
-          portfolioUrl: applicationData.portfolioUrl,
-          yearsExperience: applicationData.experienceLevel
-            ? Number.parseInt(applicationData.experienceLevel.split("-")[0])
-            : 0,
-          currentCompany: applicationData.currentCompany,
-          currentPosition: applicationData.currentPosition,
-          salaryExpectation: applicationData.salaryExpectation
-            ? Number.parseInt(applicationData.salaryExpectation.replace(/\D/g, ""))
-            : null,
-          availabilityDate: applicationData.availabilityDate || null,
-        }),
-      })
+      const formData = new FormData()
+      formData.append("jobId", selectedJob.id)
+      formData.append("jobTitle", selectedJob.title)
+      formData.append("firstName", applicationData.firstName)
+      formData.append("lastName", applicationData.lastName)
+      formData.append("email", applicationData.email)
+      formData.append("phone", applicationData.phone)
+      formData.append("linkedin", applicationData.linkedin)
+      formData.append("portfolio", applicationData.portfolio)
+      formData.append("experience", applicationData.experience)
+      formData.append("motivation", applicationData.motivation)
+      formData.append("availability", applicationData.availability)
+      formData.append("expectedSalary", applicationData.salary)
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || "Error al enviar la aplicación")
+      if (applicationData.cv) {
+        formData.append("cv", applicationData.cv)
       }
 
-      setApplicationId(data.applicationId)
-      setSubmitted(true)
-
-      // Reset form
-      setApplicationData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        positionId: "",
-        positionTitle: "",
-        department: "",
-        experienceLevel: "",
-        motivation: "",
-        currentCompany: "",
-        currentPosition: "",
-        linkedinProfile: "",
-        portfolioUrl: "",
-        salaryExpectation: "",
-        availabilityDate: "",
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        body: formData,
       })
-      setSelectedJob(null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido")
+
+      if (response.ok) {
+        const result = await response.json()
+        setApplicationId(result.applicationId)
+        setSubmitSuccess(true)
+        setShowApplicationForm(false)
+
+        // Reset form
+        setApplicationData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          linkedin: "",
+          portfolio: "",
+          experience: "",
+          motivation: "",
+          availability: "",
+          salary: "",
+          cv: null,
+        })
+      } else {
+        throw new Error("Error al enviar aplicación")
+      }
+    } catch (error) {
+      console.error("Error submitting application:", error)
+      alert("Error al enviar la aplicación. Por favor intenta nuevamente.")
     } finally {
-      setSubmitting(false)
+      setIsSubmitting(false)
     }
   }
 
-  const handleInputChange = (field: string, value: string) => {
-    setApplicationData({ ...applicationData, [field]: value })
+  if (submitSuccess) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="mb-8">
+            <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold mb-4">¡Aplicación Enviada Exitosamente!</h1>
+            <p className="text-gray-600 mb-6">
+              Gracias por tu interés en unirte a nuestro equipo. Hemos recibido tu aplicación y la revisaremos
+              cuidadosamente.
+            </p>
+          </div>
+
+          <Card className="mb-8">
+            <CardContent className="p-6">
+              <h3 className="font-semibold mb-4">Detalles de tu Aplicación</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">ID de Aplicación:</span>
+                  <span className="font-mono font-semibold">{applicationId}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Posición:</span>
+                  <span className="font-semibold">{selectedJob?.title}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Fecha:</span>
+                  <span>{new Date().toLocaleDateString("es-CL")}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              <strong>Próximos pasos:</strong> Recibirás un email de confirmación en los próximos minutos. Nuestro
+              equipo de RRHH revisará tu aplicación y te contactaremos dentro de 2-3 días hábiles.
+            </p>
+
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={() => router.push(`/track-application?email=${applicationData.email}&id=${applicationId}`)}
+                className="flex items-center gap-2"
+              >
+                <Calendar className="h-4 w-4" />
+                Seguir mi Aplicación
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSubmitSuccess(false)
+                  setSelectedJob(null)
+                }}
+              >
+                Ver Más Posiciones
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">Construye el Futuro del Desarrollo Profesional</h1>
-            <p className="text-xl mb-8 text-blue-100">
-              Únete a nuestro equipo en Santiago y ayuda a transformar carreras con inteligencia artificial y ciencia de
-              datos.
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Construye tu Carrera con Nosotros</h1>
+            <p className="text-xl mb-8 opacity-90">
+              Únete a un equipo apasionado por transformar el desarrollo profesional. Encuentra tu próxima oportunidad
+              en Santiago, Chile.
             </p>
-            <div className="flex items-center justify-center space-x-8 text-lg mb-8">
-              <div className="flex items-center">
-                <MapPin className="h-5 w-5 mr-2" />
-                Santiago, Chile
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <Building className="h-4 w-4" />
+                <span>Oficinas en Santiago</span>
               </div>
-              <div className="flex items-center">
-                <Users className="h-5 w-5 mr-2" />
-                25+ Miembros del Equipo
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                <span>50+ Profesionales</span>
               </div>
-              <div className="flex items-center">
-                <Building className="h-5 w-5 mr-2" />
-                Oficina en Providencia
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                <span>Crecimiento 200% anual</span>
               </div>
-            </div>
-
-            {/* Track Application CTA */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 inline-block">
-              <p className="text-blue-100 mb-2">¿Ya aplicaste? Rastrea tu aplicación</p>
-              <Link href="/track-application">
-                <Button variant="secondary" size="lg">
-                  <Search className="mr-2 h-4 w-4" />
-                  Seguir Mi Aplicación
-                </Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                <span>Great Place to Work</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Company Stats */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">25+</div>
-              <div className="text-gray-600">Miembros del Equipo</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">95%</div>
-              <div className="text-gray-600">Retención de Talento</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-purple-600 mb-2">4.8/5</div>
-              <div className="text-gray-600">Satisfacción Laboral</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-orange-600 mb-2">6</div>
-              <div className="text-gray-600">Posiciones Abiertas</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="container mx-auto px-4 py-12">
+        {!selectedJob ? (
+          <>
+            {/* Job Listings */}
+            <div className="mb-12">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">Posiciones Abiertas</h2>
+                  <p className="text-gray-600">Descubre oportunidades que se alineen con tus objetivos profesionales</p>
+                </div>
 
-      {/* Job Listings */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Oportunidades Abiertas</h2>
-              <p className="text-xl text-gray-600">Encuentra tu próximo desafío profesional en nuestro equipo</p>
-            </div>
-
-            {/* Department Filter */}
-            <div className="mb-8">
-              <div className="flex items-center mb-4">
-                <Filter className="h-5 w-5 text-gray-500 mr-2" />
-                <span className="text-gray-700 font-medium">Filtrar por departamento:</span>
+                <div className="mt-4 md:mt-0">
+                  <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Filtrar por departamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos los Departamentos</SelectItem>
+                      {departments.slice(1).map((dept) => (
+                        <SelectItem key={dept} value={dept}>
+                          {dept}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {departments.map((dept) => (
-                  <Button
-                    key={dept.id}
-                    variant={selectedDepartment === dept.id ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedDepartment(dept.id)}
-                    className="mb-2"
+
+              <div className="grid gap-6">
+                {filteredJobs.map((job) => (
+                  <Card
+                    key={job.id}
+                    className="hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => handleJobSelect(job)}
                   >
-                    {dept.name} ({dept.count})
-                  </Button>
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="text-xl font-semibold">{job.title}</h3>
+                            {job.urgent && (
+                              <Badge variant="destructive" className="text-xs">
+                                Urgente
+                              </Badge>
+                            )}
+                          </div>
+
+                          <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                            <div className="flex items-center gap-1">
+                              <Briefcase className="h-4 w-4" />
+                              <span>{job.department}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              <span>{job.location}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              <span>{job.type}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <GraduationCap className="h-4 w-4" />
+                              <span>{job.experience}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <DollarSign className="h-4 w-4" />
+                              <span>{job.salary}</span>
+                            </div>
+                          </div>
+
+                          <p className="text-gray-700 mb-4">{job.description}</p>
+
+                          <div className="flex flex-wrap gap-2">
+                            {job.requirements.slice(0, 3).map((req, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                {req}
+                              </Badge>
+                            ))}
+                            {job.requirements.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{job.requirements.length - 3} más
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 md:mt-0 md:ml-6">
+                          <Button className="w-full md:w-auto">
+                            Ver Detalles
+                            <ArrowRight className="h-4 w-4 ml-2" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             </div>
 
-            {/* Job Cards */}
-            <div className="grid gap-6">
-              {filteredJobs.map((job) => (
-                <Card key={job.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-2xl mb-2">{job.title}</CardTitle>
-                        <CardDescription className="text-lg mb-4">{job.description}</CardDescription>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                          <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-1" />
-                            {job.location}
+            {/* Company Benefits */}
+            <div className="mb-12">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">¿Por Qué Trabajar con Nosotros?</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Ofrecemos un ambiente de trabajo excepcional donde puedes crecer profesionalmente mientras contribuyes
+                  a transformar el desarrollo de carrera de miles de personas.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {companyBenefits.map((benefit, index) => (
+                  <Card key={index}>
+                    <CardContent className="p-6 text-center">
+                      <benefit.icon className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                      <h3 className="font-semibold mb-2">{benefit.title}</h3>
+                      <p className="text-gray-600 text-sm">{benefit.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Application Process */}
+            <div className="mb-12">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">Proceso de Selección</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Nuestro proceso está diseñado para conocerte mejor y asegurar que sea una excelente oportunidad tanto
+                  para ti como para nuestro equipo.
+                </p>
+              </div>
+
+              <div className="max-w-4xl mx-auto">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {applicationProcess.map((step, index) => (
+                    <Card key={step.step} className="relative">
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                            {step.step}
                           </div>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
-                            {job.type}
+                          <Badge variant="outline" className="text-xs">
+                            {step.duration}
+                          </Badge>
+                        </div>
+                        <h3 className="font-semibold mb-2">{step.title}</h3>
+                        <p className="text-gray-600 text-sm">{step.description}</p>
+                      </CardContent>
+                      {index < applicationProcess.length - 1 && (
+                        <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
+                          <ArrowRight className="h-3 w-3 text-gray-600" />
+                        </div>
+                      )}
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          /* Job Detail View */
+          <div className="max-w-4xl mx-auto">
+            <Button variant="outline" onClick={() => setSelectedJob(null)} className="mb-6">
+              ← Volver a Posiciones
+            </Button>
+
+            {!showApplicationForm ? (
+              <div className="space-y-8">
+                {/* Job Header */}
+                <Card>
+                  <CardContent className="p-8">
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-4">
+                          <h1 className="text-3xl font-bold">{selectedJob.title}</h1>
+                          {selectedJob.urgent && <Badge variant="destructive">Urgente</Badge>}
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Briefcase className="h-4 w-4 text-gray-500" />
+                            <span>{selectedJob.department}</span>
                           </div>
-                          <div className="flex items-center">
-                            <DollarSign className="h-4 w-4 mr-1" />
-                            {job.salary}
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-gray-500" />
+                            <span>{selectedJob.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-gray-500" />
+                            <span>{selectedJob.type}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <GraduationCap className="h-4 w-4 text-gray-500" />
+                            <span>{selectedJob.experience}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <DollarSign className="h-4 w-4 text-gray-500" />
+                            <span>{selectedJob.salary}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <span>Publicado: {new Date(selectedJob.posted).toLocaleDateString("es-CL")}</span>
                           </div>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="capitalize">
-                        {departments.find((d) => d.id === job.department)?.name}
-                      </Badge>
+
+                      <div className="mt-6 md:mt-0">
+                        <Button size="lg" onClick={handleApplyClick} className="w-full md:w-auto">
+                          Aplicar Ahora
+                        </Button>
+                      </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <Tabs defaultValue="requirements" className="w-full">
-                      <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="requirements">Requisitos</TabsTrigger>
-                        <TabsTrigger value="responsibilities">Responsabilidades</TabsTrigger>
-                        <TabsTrigger value="benefits">Beneficios</TabsTrigger>
-                      </TabsList>
-                      <TabsContent value="requirements" className="mt-4">
-                        <ul className="space-y-2">
-                          {job.requirements.map((req, index) => (
-                            <li key={index} className="flex items-start">
-                              <ChevronRight className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                              <span className="text-gray-700">{req}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </TabsContent>
-                      <TabsContent value="responsibilities" className="mt-4">
-                        <ul className="space-y-2">
-                          {job.responsibilities.map((resp, index) => (
-                            <li key={index} className="flex items-start">
-                              <ChevronRight className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                              <span className="text-gray-700">{resp}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </TabsContent>
-                      <TabsContent value="benefits" className="mt-4">
-                        <ul className="space-y-2">
-                          {job.benefits.map((benefit, index) => (
-                            <li key={index} className="flex items-start">
-                              <ChevronRight className="h-4 w-4 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
-                              <span className="text-gray-700">{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </TabsContent>
-                    </Tabs>
-                    <div className="mt-6 pt-4 border-t">
-                      <Button className="w-full" onClick={() => handleApplyToJob(job)}>
-                        Aplicar a esta Posición
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
+
+                    <Separator className="my-6" />
+
+                    <p className="text-gray-700 leading-relaxed">{selectedJob.description}</p>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Company Benefits */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">¿Por qué Trabajar con Nosotros?</h2>
-              <p className="text-xl text-gray-600">
-                Ofrecemos un paquete integral de beneficios y un ambiente de trabajo excepcional
-              </p>
-            </div>
+                {/* Job Details Tabs */}
+                <Tabs defaultValue="requirements" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="requirements">Requisitos</TabsTrigger>
+                    <TabsTrigger value="responsibilities">Responsabilidades</TabsTrigger>
+                    <TabsTrigger value="benefits">Beneficios</TabsTrigger>
+                  </TabsList>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {companyBenefits.map((benefit, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="mx-auto mb-4">{benefit.icon}</div>
-                    <CardTitle className="text-xl">{benefit.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600">{benefit.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+                  <TabsContent value="requirements" className="mt-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Requisitos del Puesto</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {selectedJob.requirements.map((req, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span>{req}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-      {/* Hiring Process */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Nuestro Proceso de Selección</h2>
-              <p className="text-xl text-gray-600">
-                Un proceso transparente y eficiente diseñado para conocernos mutuamente
-              </p>
-            </div>
+                  <TabsContent value="responsibilities" className="mt-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Responsabilidades Principales</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {selectedJob.responsibilities.map((resp, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <ArrowRight className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <span>{resp}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {hiringProcess.map((process, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                    {process.step}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{process.title}</h3>
-                  <p className="text-gray-600">{process.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+                  <TabsContent value="benefits" className="mt-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Beneficios del Puesto</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {selectedJob.benefits.map((benefit, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <Heart className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                              <span>{benefit}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
 
-      {/* Application Form */}
-      {submitted ? (
-        <section id="application-form" className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center">
-              <Card className="border-green-200 bg-green-50">
-                <CardHeader>
-                  <div className="mx-auto w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle className="h-8 w-8 text-white" />
-                  </div>
-                  <CardTitle className="text-2xl text-green-800">¡Aplicación Enviada Exitosamente!</CardTitle>
-                  <CardDescription className="text-green-700">
-                    Tu aplicación ha sido recibida y está siendo procesada
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="bg-white rounded-lg p-4 border border-green-200">
-                    <p className="text-sm text-gray-600 mb-2">Tu ID de aplicación es:</p>
-                    <p className="text-2xl font-bold text-gray-900 mb-4">{applicationId}</p>
-                    <p className="text-sm text-gray-600">
-                      Guarda este ID para hacer seguimiento de tu aplicación. También lo recibirás por email.
+                {/* Apply CTA */}
+                <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+                  <CardContent className="p-8 text-center">
+                    <h3 className="text-2xl font-bold mb-4">¿Listo para Unirte a Nuestro Equipo?</h3>
+                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                      Si cumples con los requisitos y te emociona la oportunidad de contribuir a nuestro crecimiento,
+                      nos encantaría conocerte mejor.
                     </p>
-                  </div>
-
-                  <div className="space-y-3 text-left">
-                    <h4 className="font-semibold text-gray-900">Próximos pasos:</h4>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span>Recibirás un email de confirmación en los próximos minutos</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Clock className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                        <span>Nuestro equipo revisará tu aplicación en 2-3 días hábiles</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Mail className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
-                        <span>Te contactaremos por email para los siguientes pasos</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="flex gap-4 pt-4">
-                    <Link href="/track-application" className="flex-1">
-                      <Button variant="outline" className="w-full bg-transparent">
-                        <Search className="mr-2 h-4 w-4" />
-                        Seguir Mi Aplicación
-                      </Button>
-                    </Link>
-                    <Button
-                      onClick={() => {
-                        setSubmitted(false)
-                        setApplicationId("")
-                      }}
-                      className="flex-1"
-                    >
-                      Aplicar a Otra Posición
+                    <Button size="lg" onClick={handleApplyClick}>
+                      Aplicar a Esta Posición
                     </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <section id="application-form" className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                  {selectedJob ? `Aplicar a ${jobs.find((j) => j.id === selectedJob)?.title}` : "Aplica Ahora"}
-                </h2>
-                <p className="text-xl text-gray-600">Completa el formulario y nos contactaremos contigo pronto</p>
+                  </CardContent>
+                </Card>
               </div>
-
+            ) : (
+              /* Application Form */
               <Card>
                 <CardHeader>
-                  <CardTitle>Formulario de Aplicación</CardTitle>
-                  <CardDescription>Todos los campos marcados con * son obligatorios</CardDescription>
+                  <CardTitle className="text-2xl">Aplicar a {selectedJob.title}</CardTitle>
+                  <p className="text-gray-600">
+                    Completa el formulario a continuación para aplicar a esta posición. Todos los campos marcados con *
+                    son obligatorios.
+                  </p>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmitApplication} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
+                    {/* Personal Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Información Personal</h3>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="firstName">Nombre *</Label>
+                          <Input
+                            id="firstName"
+                            value={applicationData.firstName}
+                            onChange={(e) => handleInputChange("firstName", e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="lastName">Apellido *</Label>
+                          <Input
+                            id="lastName"
+                            value={applicationData.lastName}
+                            onChange={(e) => handleInputChange("lastName", e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="email">Email *</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={applicationData.email}
+                            onChange={(e) => handleInputChange("email", e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="phone">Teléfono *</Label>
+                          <Input
+                            id="phone"
+                            value={applicationData.phone}
+                            onChange={(e) => handleInputChange("phone", e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="linkedin">LinkedIn</Label>
+                          <Input
+                            id="linkedin"
+                            value={applicationData.linkedin}
+                            onChange={(e) => handleInputChange("linkedin", e.target.value)}
+                            placeholder="https://linkedin.com/in/tu-perfil"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="portfolio">Portfolio/GitHub</Label>
+                          <Input
+                            id="portfolio"
+                            value={applicationData.portfolio}
+                            onChange={(e) => handleInputChange("portfolio", e.target.value)}
+                            placeholder="https://tu-portfolio.com"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Professional Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Información Profesional</h3>
+
                       <div>
-                        <Label htmlFor="firstName">Nombre *</Label>
-                        <Input
-                          id="firstName"
-                          placeholder="Tu nombre"
-                          value={applicationData.firstName}
-                          onChange={(e) => handleInputChange("firstName", e.target.value)}
+                        <Label htmlFor="experience">Experiencia Relevante *</Label>
+                        <Textarea
+                          id="experience"
+                          value={applicationData.experience}
+                          onChange={(e) => handleInputChange("experience", e.target.value)}
+                          placeholder="Describe tu experiencia relevante para esta posición..."
+                          rows={4}
                           required
                         />
                       </div>
+
                       <div>
-                        <Label htmlFor="lastName">Apellido *</Label>
-                        <Input
-                          id="lastName"
-                          placeholder="Tu apellido"
-                          value={applicationData.lastName}
-                          onChange={(e) => handleInputChange("lastName", e.target.value)}
+                        <Label htmlFor="motivation">¿Por qué te interesa esta posición? *</Label>
+                        <Textarea
+                          id="motivation"
+                          value={applicationData.motivation}
+                          onChange={(e) => handleInputChange("motivation", e.target.value)}
+                          placeholder="Cuéntanos qué te motiva a aplicar a esta posición..."
+                          rows={4}
                           required
                         />
                       </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="availability">Disponibilidad *</Label>
+                          <Select
+                            value={applicationData.availability}
+                            onValueChange={(value) => handleInputChange("availability", value)}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona tu disponibilidad" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="inmediata">Inmediata</SelectItem>
+                              <SelectItem value="2-semanas">2 semanas</SelectItem>
+                              <SelectItem value="1-mes">1 mes</SelectItem>
+                              <SelectItem value="2-meses">2 meses</SelectItem>
+                              <SelectItem value="a-convenir">A convenir</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="salary">Expectativa Salarial</Label>
+                          <Input
+                            id="salary"
+                            value={applicationData.salary}
+                            onChange={(e) => handleInputChange("salary", e.target.value)}
+                            placeholder="Ej: $3.000.000 - $4.000.000 CLP"
+                          />
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={applicationData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        required
-                      />
+                    <Separator />
+
+                    {/* CV Upload */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Documentos</h3>
+
+                      <div>
+                        <Label htmlFor="cv">Curriculum Vitae *</Label>
+                        <Input
+                          id="cv"
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                          required
+                        />
+                        <p className="text-sm text-gray-500 mt-1">Formatos aceptados: PDF, DOC, DOCX (máx. 5MB)</p>
+                      </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="phone">Teléfono</Label>
-                      <Input
-                        id="phone"
-                        placeholder="+56 9 1234 5678"
-                        value={applicationData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
-                      />
-                    </div>
+                    <Separator />
 
-                    <div>
-                      <Label htmlFor="position">Posición de Interés *</Label>
-                      <select
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        value={applicationData.positionId}
-                        onChange={(e) => {
-                          const selectedJob = jobs.find((job) => job.id === e.target.value)
-                          if (selectedJob) {
-                            handleInputChange("positionId", selectedJob.id)
-                            handleInputChange("positionTitle", selectedJob.title)
-                            handleInputChange(
-                              "department",
-                              departments.find((d) => d.id === selectedJob.department)?.name || selectedJob.department,
-                            )
-                          }
-                        }}
-                        required
+                    {/* Submit */}
+                    <div className="flex gap-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setShowApplicationForm(false)}
+                        disabled={isSubmitting}
                       >
-                        <option value="">Selecciona una posición</option>
-                        {jobs.map((job) => (
-                          <option key={job.id} value={job.id}>
-                            {job.title}
-                          </option>
-                        ))}
-                      </select>
+                        Cancelar
+                      </Button>
+                      <Button type="submit" disabled={isSubmitting} className="flex-1">
+                        {isSubmitting ? "Enviando..." : "Enviar Aplicación"}
+                      </Button>
                     </div>
-
-                    <div>
-                      <Label htmlFor="experience">Años de Experiencia</Label>
-                      <select
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        value={applicationData.experienceLevel}
-                        onChange={(e) => handleInputChange("experienceLevel", e.target.value)}
-                      >
-                        <option value="">Selecciona tu experiencia</option>
-                        <option value="0-1">0-1 años</option>
-                        <option value="2-3">2-3 años</option>
-                        <option value="4-5">4-5 años</option>
-                        <option value="6-10">6-10 años</option>
-                        <option value="10+">Más de 10 años</option>
-                      </select>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="currentCompany">Empresa Actual</Label>
-                        <Input
-                          id="currentCompany"
-                          placeholder="Nombre de tu empresa actual"
-                          value={applicationData.currentCompany}
-                          onChange={(e) => handleInputChange("currentCompany", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="currentPosition">Cargo Actual</Label>
-                        <Input
-                          id="currentPosition"
-                          placeholder="Tu cargo actual"
-                          value={applicationData.currentPosition}
-                          onChange={(e) => handleInputChange("currentPosition", e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="linkedin">LinkedIn</Label>
-                        <Input
-                          id="linkedin"
-                          placeholder="https://linkedin.com/in/tu-perfil"
-                          value={applicationData.linkedinProfile}
-                          onChange={(e) => handleInputChange("linkedinProfile", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="portfolio">Portafolio/GitHub</Label>
-                        <Input
-                          id="portfolio"
-                          placeholder="https://tu-portafolio.com"
-                          value={applicationData.portfolioUrl}
-                          onChange={(e) => handleInputChange("portfolioUrl", e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="salary">Expectativa Salarial (CLP)</Label>
-                        <Input
-                          id="salary"
-                          placeholder="3.500.000"
-                          value={applicationData.salaryExpectation}
-                          onChange={(e) => handleInputChange("salaryExpectation", e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="availability">Disponibilidad</Label>
-                        <Input
-                          id="availability"
-                          type="date"
-                          value={applicationData.availabilityDate}
-                          onChange={(e) => handleInputChange("availabilityDate", e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="motivation">¿Por qué quieres trabajar con nosotros? *</Label>
-                      <Textarea
-                        id="motivation"
-                        placeholder="Cuéntanos qué te motiva a unirte a nuestro equipo..."
-                        rows={4}
-                        value={applicationData.motivation}
-                        onChange={(e) => handleInputChange("motivation", e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="cv">CV / Portafolio</Label>
-                      <Input id="cv" type="file" accept=".pdf,.doc,.docx" />
-                      <p className="text-sm text-gray-500 mt-1">Formatos aceptados: PDF, DOC, DOCX (máx. 5MB)</p>
-                    </div>
-
-                    {error && (
-                      <Alert variant="destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
-
-                    <Button type="submit" className="w-full" size="lg" disabled={submitting}>
-                      {submitting ? "Enviando..." : "Enviar Aplicación"}
-                      {!submitting && <ChevronRight className="ml-2 h-4 w-4" />}
-                    </Button>
                   </form>
                 </CardContent>
               </Card>
-            </div>
+            )}
           </div>
-        </section>
-      )}
-
-      {/* Contact Information */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">¿Tienes Preguntas?</h2>
-              <p className="text-xl text-gray-600">Nuestro equipo de Talent está aquí para ayudarte</p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <Card>
-                <CardHeader>
-                  <Mail className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-                  <CardTitle>Email</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">careers@tuempresa.com</p>
-                  <p className="text-sm text-gray-500 mt-2">Respuesta en 24-48 horas</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <Phone className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                  <CardTitle>Teléfono</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">+56 2 1234 5678</p>
-                  <p className="text-sm text-gray-500 mt-2">Lun-Vie 9:00-18:00</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <MapPin className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-                  <CardTitle>Oficina</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">
-                    Av. Providencia 1234
-                    <br />
-                    Providencia, Santiago
-                  </p>
-                  <p className="text-sm text-gray-500 mt-2">Metro Manuel Montt</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
+        )}
+      </div>
     </div>
   )
 }
-
-export default CareersPage

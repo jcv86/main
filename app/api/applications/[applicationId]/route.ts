@@ -1,46 +1,49 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 export async function GET(request: NextRequest, { params }: { params: { applicationId: string } }) {
   try {
     const { applicationId } = params
 
-    // Get application details with history and interviews
-    const { data, error } = await supabase.rpc("get_application_details", { app_id: applicationId })
+    const { data, error } = await supabase
+      .from("job_applications")
+      .select(`
+        *,
+        application_status_history (
+          status,
+          notes,
+          changed_by,
+          created_at
+        ),
+        application_interviews (
+          interview_type,
+          scheduled_date,
+          duration_minutes,
+          interviewer_name,
+          interviewer_email,
+          meeting_link,
+          notes,
+          status,
+          created_at
+        )
+      `)
+      .eq("application_id", applicationId)
+      .single()
 
     if (error) {
-      console.error("Error fetching application details:", error)
-      return NextResponse.json({ error: "Error al obtener los detalles de la aplicación" }, { status: 500 })
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "Application not found" }, { status: 404 })
+      }
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to fetch application" }, { status: 500 })
     }
 
-    if (!data || data.length === 0) {
-      return NextResponse.json({ error: "Aplicación no encontrada" }, { status: 404 })
-    }
-
-    const application = data[0]
-
-    return NextResponse.json({
-      success: true,
-      application: {
-        id: application.id,
-        applicationId: application.application_id,
-        jobTitle: application.job_title,
-        department: application.department,
-        candidateName: application.candidate_name,
-        candidateEmail: application.candidate_email,
-        candidatePhone: application.candidate_phone,
-        status: application.status,
-        createdAt: application.created_at,
-        updatedAt: application.updated_at,
-        statusHistory: application.status_history,
-        interviews: application.interviews,
-      },
-    })
+    return NextResponse.json(data)
   } catch (error) {
-    console.error("Error in GET /api/applications/[applicationId]:", error)
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    console.error("Fetch application error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
@@ -48,42 +51,64 @@ export async function PUT(request: NextRequest, { params }: { params: { applicat
   try {
     const { applicationId } = params
     const body = await request.json()
-    const { status, notes, updatedBy = "admin" } = body
 
-    if (!status) {
-      return NextResponse.json({ error: "El estado es requerido" }, { status: 400 })
-    }
+    const { status, notes, changed_by } = body
 
-    // Get application ID (UUID) from application_id
-    const { data: appData, error: appError } = await supabase
+    // Update application status
+    const { data, error } = await supabase
       .from("job_applications")
-      .select("id")
+      .update({
+        status,
+        updated_at: new Date().toISOString(),
+      })
       .eq("application_id", applicationId)
+      .select()
       .single()
 
-    if (appError || !appData) {
-      return NextResponse.json({ error: "Aplicación no encontrada" }, { status: 404 })
+    if (error) {
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to update application" }, { status: 500 })
     }
 
-    // Update application status using the function
-    const { error: updateError } = await supabase.rpc("update_application_status", {
-      app_id: appData.id,
-      new_status: status,
-      status_notes: notes,
-      updated_by_user: updatedBy,
-    })
-
-    if (updateError) {
-      console.error("Error updating application status:", updateError)
-      return NextResponse.json({ error: "Error al actualizar el estado de la aplicación" }, { status: 500 })
+    // Add status history entry
+    if (status) {
+      await supabase.from("application_status_history").insert([
+        {
+          application_id: data.id,
+          status,
+          notes: notes || `Status updated to ${status}`,
+          changed_by: changed_by || "system",
+        },
+      ])
     }
 
     return NextResponse.json({
       success: true,
-      message: "Estado de aplicación actualizado exitosamente",
+      application: data,
     })
   } catch (error) {
-    console.error("Error in PUT /api/applications/[applicationId]:", error)
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    console.error("Update application error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { applicationId: string } }) {
+  try {
+    const { applicationId } = params
+
+    const { error } = await supabase.from("job_applications").delete().eq("application_id", applicationId)
+
+    if (error) {
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to delete application" }, { status: 500 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Application deleted successfully",
+    })
+  } catch (error) {
+    console.error("Delete application error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
