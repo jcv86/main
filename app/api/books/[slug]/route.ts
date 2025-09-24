@@ -7,30 +7,60 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
   try {
     const { slug } = params
 
-    // Intentar buscar por slug primero
-    let { data: book, error } = await supabase.from("knowledge_base").select("*").eq("slug", slug).single()
+    console.log("Searching for book with slug:", slug)
 
-    // Si no se encuentra por slug, intentar por ID
-    if (error && error.code === "PGRST116") {
-      const id = Number.parseInt(slug)
-      if (!isNaN(id)) {
-        const result = await supabase.from("knowledge_base").select("*").eq("id", id).single()
+    // First try to search by slug
+    let { data: books, error } = await supabase.from("knowledge_base").select("*").eq("slug", slug).limit(1)
 
-        book = result.data
-        error = result.error
-      }
+    console.log("Search by slug result:", { books, error })
+
+    let book = books?.[0] || null
+
+    // If no book found by slug, try by ID if slug is numeric
+    if (!book && !isNaN(Number(slug))) {
+      const id = Number(slug)
+      const result = await supabase.from("knowledge_base").select("*").eq("id", id).limit(1)
+
+      console.log("Search by ID result:", result)
+      book = result.data?.[0] || null
+      error = result.error
     }
 
-    if (error) {
-      console.error("Error fetching book:", error)
+    // If still no book found, try partial slug match
+    if (!book) {
+      const partialResult = await supabase.from("knowledge_base").select("*").ilike("slug", `%${slug}%`).limit(1)
+
+      console.log("Partial slug search result:", partialResult)
+      book = partialResult.data?.[0] || null
+    }
+
+    // If still no book found, try title match
+    if (!book) {
+      const titleResult = await supabase
+        .from("knowledge_base")
+        .select("*")
+        .ilike("title", `%${slug.replace(/-/g, " ")}%`)
+        .limit(1)
+
+      console.log("Title search result:", titleResult)
+      book = titleResult.data?.[0] || null
+    }
+
+    if (!book) {
+      console.log("No book found for slug:", slug)
       return NextResponse.json({ error: "Book not found" }, { status: 404 })
     }
 
-    // Incrementar contador de lectura
-    await supabase
-      .from("knowledge_base")
-      .update({ read_count: (book.read_count || 0) + 1 })
-      .eq("id", book.id)
+    // Increment read count
+    try {
+      await supabase
+        .from("knowledge_base")
+        .update({ read_count: (book.read_count || 0) + 1 })
+        .eq("id", book.id)
+    } catch (updateError) {
+      console.error("Error updating read count:", updateError)
+      // Don't fail the request if we can't update the count
+    }
 
     return NextResponse.json(book)
   } catch (error) {

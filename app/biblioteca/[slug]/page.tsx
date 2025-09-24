@@ -37,41 +37,14 @@ interface Book {
   updated_at: string
 }
 
-export default function BookReaderPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [book, setBook] = useState<Book | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [readingProgress, setReadingProgress] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
-  const [notes, setNotes] = useState("")
-  const [fontSize, setFontSize] = useState(16)
-  const [readingTime, setReadingTime] = useState(0)
-  const [showSettings, setShowSettings] = useState(false)
-
-  // Cargar libro
-  useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        setLoading(true)
-        const slug = params.slug as string
-
-        // Intentar cargar desde API
-        const response = await fetch(`/api/books/${slug}`)
-        if (response.ok) {
-          const data = await response.json()
-          setBook(data)
-        } else {
-          // Datos de respaldo
-          const fallbackBooks: Book[] = [
-            {
-              id: 1,
-              title: "Organízate con Eficacia",
-              author: "David Allen",
-              category: "Productividad",
-              content: `# Organízate con Eficacia (Getting Things Done)
+// Fallback books data
+const fallbackBooks: Book[] = [
+  {
+    id: 1,
+    title: "Organízate con Eficacia",
+    author: "David Allen",
+    category: "Productividad",
+    content: `# Organízate con Eficacia (Getting Things Done)
 
 Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
 
@@ -222,18 +195,18 @@ Organiza las acciones por el contexto donde puedes realizarlas (@casa, @oficina,
 - Porcentaje de compromisos cumplidos a tiempo
 
 GTD no es solo un sistema de productividad, es una forma de vida que te permite estar presente y enfocado en lo que realmente importa. La clave está en la implementación consistente y la adaptación del sistema a tus necesidades específicas.`,
-              tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
-              slug: "organizate-con-eficacia",
-              read_count: 2847,
-              created_at: "2024-01-15T00:00:00Z",
-              updated_at: "2024-01-20T00:00:00Z",
-            },
-            {
-              id: 2,
-              title: "Inteligencia Emocional",
-              author: "Daniel Goleman",
-              category: "Psicología",
-              content: `# Inteligencia Emocional
+    tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+    slug: "organizate-con-eficacia",
+    read_count: 2847,
+    created_at: "2024-01-15T00:00:00Z",
+    updated_at: "2024-01-20T00:00:00Z",
+  },
+  {
+    id: 2,
+    title: "Inteligencia Emocional",
+    author: "Daniel Goleman",
+    category: "Psicología",
+    content: `# Inteligencia Emocional
 
 La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
 
@@ -324,18 +297,18 @@ La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuest
 - Construcción de redes de relaciones
 
 La inteligencia emocional es más predictiva del éxito en la vida que el CI tradicional, y afortunadamente, puede desarrollarse a cualquier edad con práctica y dedicación.`,
-              tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
-              slug: "inteligencia-emocional",
-              read_count: 3156,
-              created_at: "2024-01-10T00:00:00Z",
-              updated_at: "2024-01-18T00:00:00Z",
-            },
-            {
-              id: 3,
-              title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-              author: "Stephen R. Covey",
-              category: "Desarrollo Personal",
-              content: `# Los 7 Hábitos de la Gente Altamente Efectiva
+    tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
+    slug: "inteligencia-emocional",
+    read_count: 3156,
+    created_at: "2024-01-10T00:00:00Z",
+    updated_at: "2024-01-18T00:00:00Z",
+  },
+  {
+    id: 3,
+    title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+    author: "Stephen R. Covey",
+    category: "Desarrollo Personal",
+    content: `# Los 7 Hábitos de la Gente Altamente Efectiva
 
 Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
 
@@ -428,18 +401,18 @@ Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los princ
 - Comprométete con el aprendizaje continuo
 
 Los 7 hábitos no son técnicas de personalidad superficiales, sino principios fundamentales de efectividad humana que, cuando se practican consistentemente, se convierten en la base del carácter.`,
-              tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
-              slug: "7-habitos-gente-altamente-efectiva",
-              read_count: 4521,
-              created_at: "2024-01-05T00:00:00Z",
-              updated_at: "2024-01-15T00:00:00Z",
-            },
-            {
-              id: 4,
-              title: "Cómo Ganar Amigos e Influir sobre las Personas",
-              author: "Dale Carnegie",
-              category: "Comunicación",
-              content: `# Cómo Ganar Amigos e Influir sobre las Personas
+    tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
+    slug: "7-habitos-gente-altamente-efectiva",
+    read_count: 4521,
+    created_at: "2024-01-05T00:00:00Z",
+    updated_at: "2024-01-15T00:00:00Z",
+  },
+  {
+    id: 4,
+    title: "Cómo Ganar Amigos e Influir sobre las Personas",
+    author: "Dale Carnegie",
+    category: "Comunicación",
+    content: `# Cómo Ganar Amigos e Influir sobre las Personas
 
 Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
 
@@ -550,18 +523,18 @@ Este libro clásico enseña técnicas fundamentales para manejar personas, hacer
 - Resolución de conflictos
 
 Los principios de Carnegie siguen siendo relevantes porque se basan en necesidades humanas fundamentales que no cambian con el tiempo: el deseo de sentirse importante, comprendido y apreciado.`,
-              tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
-              slug: "como-ganar-amigos-influir-personas",
-              read_count: 5234,
-              created_at: "2024-01-12T00:00:00Z",
-              updated_at: "2024-01-22T00:00:00Z",
-            },
-            {
-              id: 5,
-              title: "Hábitos Atómicos",
-              author: "James Clear",
-              category: "Desarrollo Personal",
-              content: `# Hábitos Atómicos
+    tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
+    slug: "como-ganar-amigos-influir-personas",
+    read_count: 5234,
+    created_at: "2024-01-12T00:00:00Z",
+    updated_at: "2024-01-22T00:00:00Z",
+  },
+  {
+    id: 5,
+    title: "Hábitos Atómicos",
+    author: "James Clear",
+    category: "Desarrollo Personal",
+    content: `# Hábitos Atómicos
 
 Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos.
 
@@ -653,21 +626,84 @@ Los cambios que parecen pequeños e insignificantes al principio se convertirán
 - Crea consecuencias por no cumplir
 
 El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es notable lo que puedes construir si simplemente no paras.`,
-              tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
-              slug: "habitos-atomicos",
-              read_count: 6789,
-              created_at: "2024-01-08T00:00:00Z",
-              updated_at: "2024-01-25T00:00:00Z",
-            },
-          ]
+    tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
+    slug: "habitos-atomicos",
+    read_count: 6789,
+    created_at: "2024-01-08T00:00:00Z",
+    updated_at: "2024-01-25T00:00:00Z",
+  },
+]
 
-          const foundBook = fallbackBooks.find((b) => b.slug === slug || b.id.toString() === slug)
+export default function BookReaderPage() {
+  const params = useParams()
+  const router = useRouter()
+  const [book, setBook] = useState<Book | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [readingProgress, setReadingProgress] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+  const [notes, setNotes] = useState("")
+  const [fontSize, setFontSize] = useState(16)
+  const [readingTime, setReadingTime] = useState(0)
+  const [showSettings, setShowSettings] = useState(false)
+
+  // Cargar libro
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const slug = params.slug as string
+
+        console.log("Fetching book with slug:", slug)
+
+        // Intentar cargar desde API
+        const response = await fetch(`/api/books/${slug}`)
+
+        if (response.ok) {
+          const data = await response.json()
+          console.log("Book loaded from API:", data)
+          setBook(data)
+        } else {
+          console.log("API failed, using fallback data")
+          // Usar datos de respaldo
+          const foundBook = fallbackBooks.find(
+            (b) =>
+              b.slug === slug ||
+              b.id.toString() === slug ||
+              b.slug.includes(slug) ||
+              b.title.toLowerCase().replace(/\s+/g, "-").includes(slug),
+          )
+
           if (foundBook) {
+            console.log("Found fallback book:", foundBook.title)
             setBook(foundBook)
+          } else {
+            console.log("No book found for slug:", slug)
+            setError("Libro no encontrado")
           }
         }
       } catch (error) {
         console.error("Error loading book:", error)
+        setError("Error al cargar el libro")
+
+        // Intentar con datos de respaldo como último recurso
+        const slug = params.slug as string
+        const foundBook = fallbackBooks.find(
+          (b) =>
+            b.slug === slug ||
+            b.id.toString() === slug ||
+            b.slug.includes(slug) ||
+            b.title.toLowerCase().replace(/\s+/g, "-").includes(slug),
+        )
+
+        if (foundBook) {
+          console.log("Using fallback book after error:", foundBook.title)
+          setBook(foundBook)
+          setError(null)
+        }
       } finally {
         setLoading(false)
       }
@@ -752,6 +788,21 @@ El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Cargando libro...</p>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !book) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">{error}</h1>
+          <p className="text-gray-600 mb-4">No se pudo encontrar el libro solicitado.</p>
+          <Button onClick={() => router.push("/biblioteca")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver a la biblioteca
+          </Button>
         </div>
       </div>
     )
