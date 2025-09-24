@@ -10,6 +10,8 @@ import { Progress } from "@/components/ui/progress"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import EnhancedBookReader from "@/components/enhanced-book-reader"
+import QuickBookAccess from "@/components/quick-book-access"
+import EnhancedSearchAlgorithm from "@/components/enhanced-search-algorithm"
 import {
   BookOpen,
   Clock,
@@ -19,8 +21,6 @@ import {
   Filter,
   Bookmark,
   TrendingUp,
-  Target,
-  Award,
   BarChart3,
   Users,
   CheckCircle,
@@ -28,6 +28,7 @@ import {
   PauseCircle,
   BookmarkIcon,
   RefreshCw,
+  Zap,
 } from "lucide-react"
 
 interface Book {
@@ -44,6 +45,8 @@ interface Book {
   pages: number
   reading_time: number
   characters: number
+  difficulty_level?: string
+  estimated_read_time?: number
 }
 
 interface ReadingProgress {
@@ -100,9 +103,12 @@ export default function BibliotecaPage() {
         // Transformar los datos para incluir campos calculados
         const transformedBooks = booksData.map((book: any) => ({
           ...book,
-          pages: Math.ceil(book.content.length / 200), // Estimar páginas basado en la longitud del contenido
-          reading_time: Math.ceil(book.content.length / 1000), // Estimar tiempo de lectura
+          pages: Math.ceil(book.content.length / 200), // 200 caracteres por página
+          reading_time: Math.ceil(book.content.length / 1000), // 1000 caracteres = 1 minuto
           characters: book.content.length,
+          // Mapear campos si vienen con nombres diferentes
+          difficulty_level: book.difficulty_level || "intermedio",
+          estimated_read_time: book.estimated_read_time || Math.ceil(book.content.length / 1000),
         }))
 
         setBooks(transformedBooks)
@@ -137,11 +143,261 @@ export default function BibliotecaPage() {
         variant: "destructive",
       })
 
-      // Datos de respaldo de ejemplo más completos
-      loadExampleData()
+      // Datos de respaldo completos si falla la API
+      loadFallbackData()
     } finally {
       setLoading(false)
     }
+  }
+
+  const loadFallbackData = () => {
+    // Datos de respaldo más completos cuando falla la conexión
+    const fallbackBooks: Book[] = [
+      {
+        id: 1,
+        title: "Organízate con Eficacia",
+        author: "David Allen",
+        category: "Productividad",
+        content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
+
+**El Problema Fundamental:**
+Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante y perdemos claridad mental.
+
+**Los Cinco Pasos del Método GTD:**
+
+**1. Capturar**
+- Recopila todo lo que llame tu atención en bandejas de entrada confiables
+- Usa herramientas como libretas, aplicaciones o grabadoras de voz
+- El objetivo es sacar todo de tu mente y ponerlo en un sistema externo
+
+**2. Aclarar**
+- Procesa cada elemento de tus bandejas de entrada
+- Pregúntate: "¿Es accionable?"
+- Si no es accionable: elimínalo, archívalo o ponlo en "algún día/tal vez"
+- Si es accionable: define la siguiente acción específica
+
+**3. Organizar**
+- Coloca los elementos accionables en las listas apropiadas
+- Usa contextos como @llamadas, @ordenador, @recados
+- Mantén un calendario solo para citas y compromisos con fecha específica
+
+**4. Reflexionar**
+- Revisa semanalmente todo tu sistema
+- Actualiza listas, proyectos y compromisos
+- Mantén tu sistema actualizado y confiable
+
+**5. Comprometerse**
+- Usa tu sistema para tomar decisiones sobre qué hacer
+- Confía en tu sistema para elegir la siguiente acción
+- Actúa con confianza sabiendo que no se te olvida nada
+
+GTD no es solo un sistema de productividad, es una forma de vida que te permite estar presente y enfocado en lo que realmente importa.`,
+        tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+        slug: "organizate-con-eficacia",
+        read_count: 2847,
+        created_at: "2024-01-15T00:00:00Z",
+        updated_at: "2024-01-20T00:00:00Z",
+        pages: 45,
+        reading_time: 9,
+        characters: 8950,
+        difficulty_level: "intermedio",
+        estimated_read_time: 540,
+      },
+      {
+        id: 2,
+        title: "Inteligencia Emocional",
+        author: "Daniel Goleman",
+        category: "Psicología",
+        content: `La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
+
+**Los Cinco Componentes de la Inteligencia Emocional:**
+
+**1. Autoconciencia Emocional**
+- Reconocer y entender tus propias emociones
+- Ser consciente de cómo tus emociones afectan tus pensamientos y comportamiento
+- Conocer tus fortalezas y limitaciones emocionales
+- Tener confianza en ti mismo basada en el autoconocimiento
+
+**2. Autorregulación**
+- Manejar efectivamente las emociones disruptivas e impulsos
+- Mantener estándares de honestidad e integridad
+- Asumir responsabilidad por tu desempeño personal
+- Ser flexible en el manejo del cambio
+
+**3. Motivación**
+- Estar impulsado a lograr por el simple placer del logro
+- Tener un fuerte impulso para mejorar el desempeño
+- Mostrar compromiso con los objetivos del grupo u organización
+- Estar listo para actuar en oportunidades y ser optimista incluso frente al fracaso
+
+**4. Empatía**
+- Entender las emociones de otros y mostrar interés activo en sus preocupaciones
+- Anticipar, reconocer y satisfacer las necesidades de los clientes
+- Ayudar a desarrollar las habilidades de otros
+- Leer las corrientes políticas y redes sociales de una organización
+
+**5. Habilidades Sociales**
+- Ser efectivo en liderar el cambio
+- Ser persuasivo y usar habilidades de comunicación efectivas
+- Ser experto en construir y liderar equipos
+- Manejar disputas y negociar resoluciones
+
+La inteligencia emocional es más predictiva del éxito en la vida que el CI tradicional, y afortunadamente, puede desarrollarse a cualquier edad con práctica y dedicación.`,
+        tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
+        slug: "inteligencia-emocional",
+        read_count: 3156,
+        created_at: "2024-01-10T00:00:00Z",
+        updated_at: "2024-01-18T00:00:00Z",
+        pages: 38,
+        reading_time: 8,
+        characters: 7600,
+        difficulty_level: "intermedio",
+        estimated_read_time: 480,
+      },
+      {
+        id: 3,
+        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+        author: "Stephen R. Covey",
+        category: "Desarrollo Personal",
+        content: `Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
+
+**Paradigmas y Principios:**
+Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los principios son leyes naturales universales que gobiernan la efectividad humana.
+
+**Los 7 Hábitos:**
+
+**VICTORIA PRIVADA (Independencia)**
+
+**Hábito 1: Ser Proactivo**
+- Toma responsabilidad de tu vida y decisiones
+- Enfócate en tu Círculo de Influencia, no en tu Círculo de Preocupación
+- Usa lenguaje proactivo: "Yo puedo", "Yo elegiré", "Yo prefiero"
+- Responde basándote en valores, no en condiciones o sentimientos
+
+**Hábito 2: Comenzar con el Fin en Mente**
+- Define claramente tu misión y visión personal
+- Crea una declaración de misión personal basada en principios
+- Visualiza tu funeral: ¿qué te gustaría que dijeran de ti?
+- Todos los logros se crean mentalmente antes que físicamente
+
+**Hábito 3: Poner Primero lo Primero**
+- Gestiona tu tiempo basándote en principios, no en prioridades
+- Enfócate en actividades del Cuadrante II (importante pero no urgente)
+- Aprende a decir "no" a lo bueno para decir "sí" a lo mejor
+- Organiza y ejecuta alrededor de prioridades
+
+Los 7 hábitos no son técnicas de personalidad superficiales, sino principios fundamentales de efectividad humana que, cuando se practican consistentemente, se convierten en la base del carácter.`,
+        tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
+        slug: "7-habitos-gente-altamente-efectiva",
+        read_count: 4521,
+        created_at: "2024-01-05T00:00:00Z",
+        updated_at: "2024-01-15T00:00:00Z",
+        pages: 42,
+        reading_time: 8,
+        characters: 8400,
+        difficulty_level: "intermedio",
+        estimated_read_time: 504,
+      },
+      {
+        id: 4,
+        title: "Cómo Ganar Amigos e Influir sobre las Personas",
+        author: "Dale Carnegie",
+        category: "Comunicación",
+        content: `Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
+
+**PARTE I: TÉCNICAS FUNDAMENTALES PARA TRATAR CON LA GENTE**
+
+**Principio 1: No Critiques, No Condenes, No Te Quejes**
+- La crítica es inútil porque pone a la persona a la defensiva
+- La crítica hiere el orgullo, lastima el sentido de importancia
+- En lugar de criticar, trata de entender por qué hacen lo que hacen
+
+**Principio 2: Demuestra Aprecio Honesto y Sincero**
+- El deseo más profundo del ser humano es sentirse importante
+- Aprecia genuinamente las buenas cualidades de otros
+- Sé específico en tus elogios y hazlos inmediatamente
+
+**Principio 3: Despierta en la Otra Persona un Deseo Vehemente**
+- Habla de lo que la otra persona quiere
+- Muestra cómo pueden obtener lo que desean
+- Conecta tus ideas con sus motivaciones
+
+**PARTE II: SEIS MANERAS DE AGRADAR A LA GENTE**
+
+**Principio 1: Interésate Genuinamente en Otras Personas**
+- Muestra interés real en los demás y sus vidas
+- Haz preguntas sobre sus intereses y experiencias
+- Recuerda detalles importantes sobre las personas
+
+Los principios de Carnegie siguen siendo relevantes porque se basan en necesidades humanas fundamentales que no cambian con el tiempo: el deseo de sentirse importante, comprendido y apreciado.`,
+        tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
+        slug: "como-ganar-amigos-influir-personas",
+        read_count: 5234,
+        created_at: "2024-01-12T00:00:00Z",
+        updated_at: "2024-01-22T00:00:00Z",
+        pages: 40,
+        reading_time: 8,
+        characters: 8000,
+        difficulty_level: "principiante",
+        estimated_read_time: 480,
+      },
+      {
+        id: 5,
+        title: "Hábitos Atómicos",
+        author: "James Clear",
+        category: "Desarrollo Personal",
+        content: `Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos.
+
+**Las Cuatro Leyes del Cambio de Comportamiento:**
+
+**1ª Ley: Hazlo Obvio**
+- Usa intenciones de implementación: "Haré [COMPORTAMIENTO] a las [TIEMPO] en [LUGAR]"
+- Usa el apilamiento de hábitos: "Después de [HÁBITO ACTUAL], haré [NUEVO HÁBITO]"
+- Diseña tu ambiente para hacer obvios los buenos hábitos
+- Usa señales visuales para activar los comportamientos deseados
+
+**2ª Ley: Hazlo Atractivo**
+- Usa el agrupamiento de tentaciones: combina acciones que quieres hacer con acciones que necesitas hacer
+- Únete a una cultura donde tu comportamiento deseado sea normal
+- Crea un ritual de motivación antes de hábitos difíciles
+- Resalta los beneficios de evitar malos hábitos
+
+**3ª Ley: Hazlo Fácil**
+- Reduce la fricción para buenos hábitos y aumenta la fricción para malos hábitos
+- Usa la Regla de los Dos Minutos: escala los hábitos hasta que tomen menos de dos minutos
+- Prepara tu ambiente para hacer más fáciles las acciones futuras
+- Usa la tecnología para automatizar buenos hábitos
+
+**4ª Ley: Hazlo Satisfactorio**
+- Usa refuerzo: date recompensas inmediatas por buenos hábitos
+- Haz que "no hacer nada" sea disfrutable para hábitos que quieres evitar
+- Usa un rastreador de hábitos para visualizar tu progreso
+- Nunca falles dos veces: regresa rápidamente después de errores
+
+El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es notable lo que puedes construir si simplemente no paras.`,
+        tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
+        slug: "habitos-atomicos",
+        read_count: 6789,
+        created_at: "2024-01-08T00:00:00Z",
+        updated_at: "2024-01-25T00:00:00Z",
+        pages: 36,
+        reading_time: 7,
+        characters: 7200,
+        difficulty_level: "intermedio",
+        estimated_read_time: 432,
+      },
+    ]
+
+    setBooks(fallbackBooks)
+
+    const fallbackStats: LibraryStats = {
+      total_books: fallbackBooks.length,
+      categories: new Set(fallbackBooks.map((b) => b.category)).size,
+      authors: new Set(fallbackBooks.map((b) => b.author)).size,
+      total_reads: fallbackBooks.reduce((sum, book) => sum + book.read_count, 0),
+      avg_characters: Math.round(fallbackBooks.reduce((sum, book) => sum + book.characters, 0) / fallbackBooks.length),
+    }
+    setStats(fallbackStats)
   }
 
   const loadUserData = async () => {
@@ -177,102 +433,6 @@ export default function BibliotecaPage() {
 
     setReadingProgress(mockProgress)
     setBookmarks([1, 3, 5, 7, 9])
-  }
-
-  const loadExampleData = () => {
-    // Datos de ejemplo más completos cuando falla la conexión
-    const exampleBooks: Book[] = [
-      {
-        id: 1,
-        title: "Organízate con Eficacia",
-        author: "David Allen",
-        category: "Productividad",
-        content:
-          "Sistema GTD completo para gestión de tareas y productividad personal. Los cinco pasos fundamentales para organizar tu vida y trabajo de manera efectiva...",
-        tags: ["productividad", "organización", "gestión del tiempo"],
-        slug: "organizate-con-eficacia",
-        read_count: 2847,
-        created_at: "2024-01-15",
-        updated_at: "2024-01-20",
-        pages: 45,
-        reading_time: 180,
-        characters: 8950,
-      },
-      {
-        id: 2,
-        title: "Inteligencia Emocional",
-        author: "Daniel Goleman",
-        category: "Psicología",
-        content:
-          "Desarrollo de habilidades emocionales para el éxito personal y profesional. Los cinco componentes de la inteligencia emocional...",
-        tags: ["inteligencia emocional", "psicología", "liderazgo"],
-        slug: "inteligencia-emocional",
-        read_count: 3156,
-        created_at: "2024-01-10",
-        updated_at: "2024-01-18",
-        pages: 38,
-        reading_time: 152,
-        characters: 7600,
-      },
-      {
-        id: 3,
-        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-        author: "Stephen R. Covey",
-        category: "Desarrollo Personal",
-        content:
-          "Principios fundamentales para la efectividad personal y profesional. Victoria privada, victoria pública y renovación continua...",
-        tags: ["desarrollo personal", "liderazgo", "efectividad"],
-        slug: "7-habitos-gente-altamente-efectiva",
-        read_count: 4521,
-        created_at: "2024-01-05",
-        updated_at: "2024-01-15",
-        pages: 42,
-        reading_time: 168,
-        characters: 8400,
-      },
-      {
-        id: 4,
-        title: "Cómo Ganar Amigos e Influir sobre las Personas",
-        author: "Dale Carnegie",
-        category: "Comunicación",
-        content: "Técnicas fundamentales para mejorar las relaciones interpersonales y la comunicación efectiva...",
-        tags: ["comunicación", "relaciones interpersonales", "influencia"],
-        slug: "como-ganar-amigos-influir-personas",
-        read_count: 5234,
-        created_at: "2024-01-12",
-        updated_at: "2024-01-22",
-        pages: 40,
-        reading_time: 160,
-        characters: 8000,
-      },
-      {
-        id: 5,
-        title: "Hábitos Atómicos",
-        author: "James Clear",
-        category: "Desarrollo Personal",
-        content:
-          "Pequeños cambios que generan resultados extraordinarios. Las cuatro leyes del cambio de comportamiento...",
-        tags: ["hábitos", "cambio de comportamiento", "automejora"],
-        slug: "habitos-atomicos",
-        read_count: 6789,
-        created_at: "2024-01-08",
-        updated_at: "2024-01-25",
-        pages: 36,
-        reading_time: 144,
-        characters: 7200,
-      },
-    ]
-
-    setBooks(exampleBooks)
-
-    const exampleStats: LibraryStats = {
-      total_books: exampleBooks.length,
-      categories: new Set(exampleBooks.map((b) => b.category)).size,
-      authors: new Set(exampleBooks.map((b) => b.author)).size,
-      total_reads: exampleBooks.reduce((sum, book) => sum + book.read_count, 0),
-      avg_characters: Math.round(exampleBooks.reduce((sum, book) => sum + book.characters, 0) / exampleBooks.length),
-    }
-    setStats(exampleStats)
   }
 
   const refreshLibrary = async () => {
@@ -390,6 +550,19 @@ export default function BibliotecaPage() {
     }
   }
 
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "principiante":
+        return "bg-green-100 text-green-800"
+      case "intermedio":
+        return "bg-yellow-100 text-yellow-800"
+      case "avanzado":
+        return "bg-red-100 text-red-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
   const filteredBooks = books.filter((book) => {
     const matchesSearch =
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -453,10 +626,32 @@ export default function BibliotecaPage() {
                 Explora, aprende y crece con nuestra colección completa de libros de desarrollo profesional
               </p>
             </div>
-            <Button onClick={refreshLibrary} variant="outline" className="flex items-center gap-2 bg-transparent">
-              <RefreshCw className="h-4 w-4" />
-              Actualizar
-            </Button>
+            <div className="flex items-center gap-2">
+              <QuickBookAccess
+                books={books}
+                onBookSelect={openBookReader}
+                trigger={
+                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                    <Zap className="h-4 w-4" />
+                    Acceso Rápido
+                  </Button>
+                }
+              />
+              <EnhancedSearchAlgorithm
+                books={books}
+                onBookSelect={openBookReader}
+                trigger={
+                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                    <Search className="h-4 w-4" />
+                    Búsqueda IA
+                  </Button>
+                }
+              />
+              <Button onClick={refreshLibrary} variant="outline" className="flex items-center gap-2 bg-transparent">
+                <RefreshCw className="h-4 w-4" />
+                Actualizar
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -487,14 +682,14 @@ export default function BibliotecaPage() {
             <Card>
               <CardContent className="p-4 text-center">
                 <TrendingUp className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.total_reads}</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.total_reads.toLocaleString()}</div>
                 <div className="text-sm text-gray-600">Total Lecturas</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
                 <BarChart3 className="h-8 w-8 mx-auto mb-2 text-red-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.avg_characters}</div>
+                <div className="text-2xl font-bold text-gray-900">{stats.avg_characters.toLocaleString()}</div>
                 <div className="text-sm text-gray-600">Promedio Caracteres</div>
               </CardContent>
             </Card>
@@ -604,6 +799,9 @@ export default function BibliotecaPage() {
                         </div>
                         <div className="flex items-center gap-2 mb-2">
                           <Badge variant="secondary">{book.category}</Badge>
+                          {book.difficulty_level && (
+                            <Badge className={getDifficultyColor(book.difficulty_level)}>{book.difficulty_level}</Badge>
+                          )}
                           {progress && (
                             <div className="flex items-center gap-1">
                               {getStatusIcon(progress.status)}
@@ -642,11 +840,11 @@ export default function BibliotecaPage() {
                             </div>
                             <div className="flex items-center gap-1">
                               <Star className="h-4 w-4" />
-                              {book.read_count} lecturas
+                              {book.read_count.toLocaleString()} lecturas
                             </div>
                             <div className="flex items-center gap-1">
                               <BarChart3 className="h-4 w-4" />
-                              {book.characters} chars
+                              {book.characters.toLocaleString()} chars
                             </div>
                           </div>
 
@@ -723,7 +921,7 @@ export default function BibliotecaPage() {
                             <Badge variant="secondary">{book.category}</Badge>
                             <div className="flex items-center gap-1 text-sm text-gray-600">
                               <Star className="h-4 w-4 text-yellow-500" />
-                              {book.read_count} lecturas
+                              {book.read_count.toLocaleString()} lecturas
                             </div>
                           </div>
                         </CardHeader>
@@ -1011,37 +1209,6 @@ export default function BibliotecaPage() {
                         </div>
                       )
                     })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Objetivos de Lectura */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Objetivos de Lectura</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="text-center p-4 bg-blue-50 rounded-lg">
-                        <Target className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                        <div className="text-2xl font-bold text-blue-900">3</div>
-                        <div className="text-sm text-blue-700">Libros este mes</div>
-                        <div className="text-xs text-blue-600 mt-1">2/3 completados</div>
-                      </div>
-                      <div className="text-center p-4 bg-green-50 rounded-lg">
-                        <Clock className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                        <div className="text-2xl font-bold text-green-900">30</div>
-                        <div className="text-sm text-green-700">Min por día</div>
-                        <div className="text-xs text-green-600 mt-1">25/30 promedio</div>
-                      </div>
-                      <div className="text-center p-4 bg-purple-50 rounded-lg">
-                        <Award className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                        <div className="text-2xl font-bold text-purple-900">10</div>
-                        <div className="text-sm text-purple-700">Páginas por día</div>
-                        <div className="text-xs text-purple-600 mt-1">8/10 promedio</div>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
