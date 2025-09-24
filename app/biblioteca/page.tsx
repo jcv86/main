@@ -27,6 +27,7 @@ import {
   PlayCircle,
   PauseCircle,
   BookmarkIcon,
+  RefreshCw,
 } from "lucide-react"
 
 interface Book {
@@ -88,11 +89,13 @@ export default function BibliotecaPage() {
   const loadLibraryData = async () => {
     try {
       setLoading(true)
+      console.log("Cargando datos de la biblioteca...")
 
       // Cargar libros desde la base de datos
       const response = await fetch("/api/books")
       if (response.ok) {
         const booksData = await response.json()
+        console.log("Libros cargados desde API:", booksData.length)
 
         // Transformar los datos para incluir campos calculados
         const transformedBooks = booksData.map((book: any) => ({
@@ -104,8 +107,8 @@ export default function BibliotecaPage() {
 
         setBooks(transformedBooks)
 
-        // Calcular estadísticas
-        const mockStats: LibraryStats = {
+        // Calcular estadísticas reales
+        const realStats: LibraryStats = {
           total_books: transformedBooks.length,
           categories: new Set(transformedBooks.map((b: Book) => b.category)).size,
           authors: new Set(transformedBooks.map((b: Book) => b.author)).size,
@@ -114,7 +117,14 @@ export default function BibliotecaPage() {
             transformedBooks.reduce((sum: number, book: Book) => sum + book.characters, 0) / transformedBooks.length,
           ),
         }
-        setStats(mockStats)
+        setStats(realStats)
+
+        toast({
+          title: "Biblioteca cargada",
+          description: `Se cargaron ${transformedBooks.length} libros exitosamente.`,
+        })
+      } else {
+        throw new Error("Error en la respuesta de la API")
       }
 
       // Cargar progreso del usuario y marcadores
@@ -122,12 +132,12 @@ export default function BibliotecaPage() {
     } catch (error) {
       console.error("Error cargando datos de la biblioteca:", error)
       toast({
-        title: "Error",
-        description: "No se pudo cargar la biblioteca. Usando datos de ejemplo.",
+        title: "Error de conexión",
+        description: "No se pudo conectar a la base de datos. Mostrando datos de ejemplo.",
         variant: "destructive",
       })
 
-      // Datos de respaldo de ejemplo
+      // Datos de respaldo de ejemplo más completos
       loadExampleData()
     } finally {
       setLoading(false)
@@ -135,7 +145,7 @@ export default function BibliotecaPage() {
   }
 
   const loadUserData = async () => {
-    // Cargar progreso de lectura del usuario
+    // Cargar progreso de lectura del usuario (simulado)
     const mockProgress: ReadingProgress[] = [
       {
         book_id: 1,
@@ -166,21 +176,22 @@ export default function BibliotecaPage() {
     ]
 
     setReadingProgress(mockProgress)
-    setBookmarks([1, 3, 5])
+    setBookmarks([1, 3, 5, 7, 9])
   }
 
   const loadExampleData = () => {
+    // Datos de ejemplo más completos cuando falla la conexión
     const exampleBooks: Book[] = [
       {
         id: 1,
-        title: "Trabajo Profundo: Reglas para el Éxito Enfocado en un Mundo Distraído",
-        author: "Cal Newport",
+        title: "Organízate con Eficacia",
+        author: "David Allen",
         category: "Productividad",
         content:
-          "El trabajo profundo son actividades profesionales realizadas en un estado de concentración libre de distracciones que llevan las capacidades cognitivas al límite. Estos esfuerzos crean nuevo valor, mejoran tu habilidad, y son difíciles de replicar...",
-        tags: ["productividad", "enfoque", "concentración"],
-        slug: "trabajo-profundo-exito-enfocado",
-        read_count: 1247,
+          "Sistema GTD completo para gestión de tareas y productividad personal. Los cinco pasos fundamentales para organizar tu vida y trabajo de manera efectiva...",
+        tags: ["productividad", "organización", "gestión del tiempo"],
+        slug: "organizate-con-eficacia",
+        read_count: 2847,
         created_at: "2024-01-15",
         updated_at: "2024-01-20",
         pages: 45,
@@ -189,19 +200,66 @@ export default function BibliotecaPage() {
       },
       {
         id: 2,
-        title: "Hábitos Atómicos: Una Manera Fácil y Comprobada de Construir Buenos Hábitos",
-        author: "James Clear",
-        category: "Desarrollo Personal",
+        title: "Inteligencia Emocional",
+        author: "Daniel Goleman",
+        category: "Psicología",
         content:
-          "Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años...",
-        tags: ["hábitos", "cambio de comportamiento", "automejora"],
-        slug: "habitos-atomicos-construir-buenos",
-        read_count: 2156,
+          "Desarrollo de habilidades emocionales para el éxito personal y profesional. Los cinco componentes de la inteligencia emocional...",
+        tags: ["inteligencia emocional", "psicología", "liderazgo"],
+        slug: "inteligencia-emocional",
+        read_count: 3156,
         created_at: "2024-01-10",
         updated_at: "2024-01-18",
         pages: 38,
         reading_time: 152,
         characters: 7600,
+      },
+      {
+        id: 3,
+        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+        author: "Stephen R. Covey",
+        category: "Desarrollo Personal",
+        content:
+          "Principios fundamentales para la efectividad personal y profesional. Victoria privada, victoria pública y renovación continua...",
+        tags: ["desarrollo personal", "liderazgo", "efectividad"],
+        slug: "7-habitos-gente-altamente-efectiva",
+        read_count: 4521,
+        created_at: "2024-01-05",
+        updated_at: "2024-01-15",
+        pages: 42,
+        reading_time: 168,
+        characters: 8400,
+      },
+      {
+        id: 4,
+        title: "Cómo Ganar Amigos e Influir sobre las Personas",
+        author: "Dale Carnegie",
+        category: "Comunicación",
+        content: "Técnicas fundamentales para mejorar las relaciones interpersonales y la comunicación efectiva...",
+        tags: ["comunicación", "relaciones interpersonales", "influencia"],
+        slug: "como-ganar-amigos-influir-personas",
+        read_count: 5234,
+        created_at: "2024-01-12",
+        updated_at: "2024-01-22",
+        pages: 40,
+        reading_time: 160,
+        characters: 8000,
+      },
+      {
+        id: 5,
+        title: "Hábitos Atómicos",
+        author: "James Clear",
+        category: "Desarrollo Personal",
+        content:
+          "Pequeños cambios que generan resultados extraordinarios. Las cuatro leyes del cambio de comportamiento...",
+        tags: ["hábitos", "cambio de comportamiento", "automejora"],
+        slug: "habitos-atomicos",
+        read_count: 6789,
+        created_at: "2024-01-08",
+        updated_at: "2024-01-25",
+        pages: 36,
+        reading_time: 144,
+        characters: 7200,
       },
     ]
 
@@ -215,6 +273,10 @@ export default function BibliotecaPage() {
       avg_characters: Math.round(exampleBooks.reduce((sum, book) => sum + book.characters, 0) / exampleBooks.length),
     }
     setStats(exampleStats)
+  }
+
+  const refreshLibrary = async () => {
+    await loadLibraryData()
   }
 
   const getBookProgress = (bookId: number) => {
@@ -372,6 +434,7 @@ export default function BibliotecaPage() {
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
             <p className="text-lg text-gray-600">Cargando biblioteca...</p>
+            <p className="text-sm text-gray-500 mt-2">Conectando con la base de datos...</p>
           </div>
         </div>
       </div>
@@ -383,10 +446,18 @@ export default function BibliotecaPage() {
       <div className="max-w-7xl mx-auto">
         {/* Encabezado */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">📚 Biblioteca de Desarrollo Profesional</h1>
-          <p className="text-lg text-gray-600">
-            Explora, aprende y crece con nuestra colección completa de libros de desarrollo profesional
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">📚 Biblioteca de Desarrollo Profesional</h1>
+              <p className="text-lg text-gray-600">
+                Explora, aprende y crece con nuestra colección completa de libros de desarrollo profesional
+              </p>
+            </div>
+            <Button onClick={refreshLibrary} variant="outline" className="flex items-center gap-2 bg-transparent">
+              <RefreshCw className="h-4 w-4" />
+              Actualizar
+            </Button>
+          </div>
         </div>
 
         {/* Tarjetas de Estadísticas */}
@@ -470,6 +541,11 @@ export default function BibliotecaPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="mt-4 text-sm text-gray-600">
+              Mostrando {sortedBooks.length} de {books.length} libros
+              {searchTerm && ` para "${searchTerm}"`}
+              {selectedCategory !== "all" && ` en ${selectedCategory}`}
+            </div>
           </CardContent>
         </Card>
 
@@ -486,125 +562,143 @@ export default function BibliotecaPage() {
 
           {/* Pestaña Explorar */}
           <TabsContent value="explorar">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedBooks.map((book) => {
-                const progress = getBookProgress(book.id)
-                return (
-                  <Card key={book.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <CardTitle className="text-lg mb-2">{book.title}</CardTitle>
-                          <CardDescription className="flex items-center gap-2 mb-2">
-                            <User className="h-4 w-4" />
-                            {book.author}
-                          </CardDescription>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleBookmark(book.id)}
-                          className={isBookmarked(book.id) ? "text-yellow-600" : "text-gray-400"}
-                        >
-                          <BookmarkIcon className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="secondary">{book.category}</Badge>
-                        {progress && (
-                          <div className="flex items-center gap-1">
-                            {getStatusIcon(progress.status)}
-                            <span className="text-xs text-gray-600">{getStatusText(progress.status)}</span>
+            {sortedBooks.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <p className="text-gray-600">No se encontraron libros con los filtros actuales</p>
+                  <Button
+                    className="mt-4"
+                    onClick={() => {
+                      setSearchTerm("")
+                      setSelectedCategory("all")
+                    }}
+                  >
+                    Limpiar Filtros
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sortedBooks.map((book) => {
+                  const progress = getBookProgress(book.id)
+                  return (
+                    <Card key={book.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg mb-2 line-clamp-2">{book.title}</CardTitle>
+                            <CardDescription className="flex items-center gap-2 mb-2">
+                              <User className="h-4 w-4" />
+                              {book.author}
+                            </CardDescription>
                           </div>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {/* Barra de Progreso */}
-                        {progress && progress.reading_progress > 0 && (
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span>Progreso</span>
-                              <span>
-                                {progress.reading_progress}% de {progress.target_percentage}%
-                              </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleBookmark(book.id)}
+                            className={isBookmarked(book.id) ? "text-yellow-600" : "text-gray-400"}
+                          >
+                            <BookmarkIcon className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant="secondary">{book.category}</Badge>
+                          {progress && (
+                            <div className="flex items-center gap-1">
+                              {getStatusIcon(progress.status)}
+                              <span className="text-xs text-gray-600">{getStatusText(progress.status)}</span>
                             </div>
-                            <Progress
-                              value={(progress.reading_progress / progress.target_percentage) * 100}
-                              className="h-2"
-                            />
-                          </div>
-                        )}
-
-                        {/* Información del Libro */}
-                        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <BookOpen className="h-4 w-4" />
-                            {book.pages} páginas
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {book.reading_time} min
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4" />
-                            {book.read_count} lecturas
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <BarChart3 className="h-4 w-4" />
-                            {book.characters} chars
-                          </div>
-                        </div>
-
-                        {/* Etiquetas */}
-                        <div className="flex flex-wrap gap-1">
-                          {book.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="outline" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {book.tags.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{book.tags.length - 3}
-                            </Badge>
                           )}
                         </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {/* Barra de Progreso */}
+                          {progress && progress.reading_progress > 0 && (
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span>Progreso</span>
+                                <span>
+                                  {progress.reading_progress}% de {progress.target_percentage}%
+                                </span>
+                              </div>
+                              <Progress
+                                value={(progress.reading_progress / progress.target_percentage) * 100}
+                                className="h-2"
+                              />
+                            </div>
+                          )}
 
-                        {/* Selección de Objetivo de Lectura */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Objetivo de Lectura:</label>
-                          <div className="flex gap-2">
-                            {[30, 60, 100].map((percentage) => (
-                              <Button
-                                key={percentage}
-                                variant={progress?.target_percentage === percentage ? "default" : "outline"}
-                                size="sm"
-                                onClick={() => setReadingGoal(book.id, percentage as 30 | 60 | 100)}
-                                className="flex-1"
-                              >
-                                {percentage}%
-                              </Button>
+                          {/* Información del Libro */}
+                          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div className="flex items-center gap-1">
+                              <BookOpen className="h-4 w-4" />
+                              {book.pages} páginas
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {book.reading_time} min
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4" />
+                              {book.read_count} lecturas
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <BarChart3 className="h-4 w-4" />
+                              {book.characters} chars
+                            </div>
+                          </div>
+
+                          {/* Etiquetas */}
+                          <div className="flex flex-wrap gap-1">
+                            {book.tags.slice(0, 3).map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
                             ))}
+                            {book.tags.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{book.tags.length - 3}
+                              </Badge>
+                            )}
+                          </div>
+
+                          {/* Selección de Objetivo de Lectura */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Objetivo de Lectura:</label>
+                            <div className="flex gap-2">
+                              {[30, 60, 100].map((percentage) => (
+                                <Button
+                                  key={percentage}
+                                  variant={progress?.target_percentage === percentage ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => setReadingGoal(book.id, percentage as 30 | 60 | 100)}
+                                  className="flex-1"
+                                >
+                                  {percentage}%
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Botones de Acción */}
+                          <div className="flex gap-2">
+                            <Button className="flex-1" onClick={() => openBookReader(book)}>
+                              <PlayCircle className="h-4 w-4 mr-2" />
+                              {progress?.status === "completed" ? "Releer" : "Leer"}
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => toggleBookmark(book.id)}>
+                              <BookOpen className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
-
-                        {/* Botones de Acción */}
-                        <div className="flex gap-2">
-                          <Button className="flex-1" onClick={() => openBookReader(book)}>
-                            <PlayCircle className="h-4 w-4 mr-2" />
-                            {progress?.status === "completed" ? "Releer" : "Leer"}
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => toggleBookmark(book.id)}>
-                            <BookOpen className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
           </TabsContent>
 
           {/* Pestaña Populares */}
@@ -614,7 +708,7 @@ export default function BibliotecaPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {books
                   .sort((a, b) => b.read_count - a.read_count)
-                  .slice(0, 6)
+                  .slice(0, 9)
                   .map((book, index) => {
                     const progress = getBookProgress(book.id)
                     return (
@@ -623,7 +717,7 @@ export default function BibliotecaPage() {
                           {index + 1}
                         </div>
                         <CardHeader>
-                          <CardTitle className="text-lg">{book.title}</CardTitle>
+                          <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
                           <CardDescription>{book.author}</CardDescription>
                           <div className="flex items-center gap-2">
                             <Badge variant="secondary">{book.category}</Badge>

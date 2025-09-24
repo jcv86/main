@@ -5,538 +5,597 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 export async function GET() {
   try {
+    console.log("Fetching books from database...")
+
     const { data: books, error } = await supabase
       .from("knowledge_base")
       .select("*")
       .order("read_count", { ascending: false })
 
     if (error) {
-      console.error("Error fetching books:", error)
+      console.error("Error fetching books from database:", error)
 
-      // Return fallback data if database fails
+      // Si hay error de base de datos, usar datos de respaldo más completos
       const fallbackBooks = [
         {
           id: 1,
-          title: "Deep Work: Rules for Focused Success in a Distracted World",
-          author: "Cal Newport",
-          category: "Productivity",
-          content: `Deep work is professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit. These efforts create new value, improve your skill, and are hard to replicate.
+          title: "Organízate con Eficacia",
+          author: "David Allen",
+          category: "Productividad",
+          content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
 
-**The Deep Work Hypothesis:**
-The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. As a consequence, the few who cultivate this skill, and then make it the core of their working life, will thrive.
+**El Problema Fundamental:**
+Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante y perdemos claridad mental.
 
-**Deep Work Rules:**
+**Los Cinco Pasos del Método GTD:**
 
-1. **Work Deeply**: Transform deep work from an aspiration into a regular practice through the development of routines and rituals.
+**1. Capturar**
+- Recopila todo lo que llame tu atención en bandejas de entrada confiables
+- Usa herramientas como libretas, aplicaciones o grabadoras de voz
+- El objetivo es sacar todo de tu mente y ponerlo en un sistema externo
 
-2. **Embrace Boredom**: The ability to concentrate intensely is a skill that must be trained. Efforts to deepen your focus will struggle if you don't simultaneously wean your mind from a dependence on distraction.
+**2. Aclarar**
+- Procesa cada elemento de tus bandejas de entrada
+- Pregúntate: "¿Es accionable?"
+- Si no es accionable: elimínalo, archívalo o ponlo en "algún día/tal vez"
+- Si es accionable: define la siguiente acción específica
 
-3. **Quit Social Media**: Network tools are distracting us from work that requires unbroken concentration, while simultaneously degrading our capacity to remain focused.
+**3. Organizar**
+- Coloca los elementos accionables en las listas apropiadas
+- Usa contextos como @llamadas, @ordenador, @recados
+- Mantén un calendario solo para citas y compromisos con fecha específica
 
-4. **Drain the Shallows**: Identify and minimize the shallow work in your schedule to make room for deep work.
+**4. Reflexionar**
+- Revisa semanalmente todo tu sistema
+- Actualiza listas, proyectos y compromisos
+- Mantén tu sistema actualizado y confiable
 
-**Practical Strategies:**
+**5. Comprometerse**
+- Usa tu sistema para tomar decisiones sobre qué hacer
+- Confía en tu sistema para elegir la siguiente acción
+- Actúa con confianza sabiendo que no se te olvida nada
 
-- **Philosophies of Deep Work**: Choose between monastic, bimodal, rhythmic, or journalistic approaches
-- **Ritualize**: Create specific routines around when, where, and how you work deeply
-- **Make Grand Gestures**: Leverage radical changes to your environment to support deep work
-- **Don't Work Alone**: Use collaboration strategically to push your deep work to new levels
-- **Execute Like a Business**: Apply the 4 Disciplines of Execution to your deep work practice
+**Conceptos Clave:**
 
-**The Four Disciplines:**
-1. Focus on the Wildly Important
-2. Act on Lead Measures
-3. Keep a Compelling Scoreboard  
-4. Create a Cadence of Accountability
+**La Regla de los 2 Minutos:**
+Si una tarea toma menos de 2 minutos, hazla inmediatamente en lugar de organizarla.
 
-**Benefits:**
-- Produce better results in less time
-- Experience the satisfaction that comes from craftsmanship
-- Develop skills that are increasingly rare and valuable
-- Create work that matters in an increasingly competitive economy
+**Proyectos vs. Acciones:**
+- Un proyecto es cualquier resultado que requiere más de una acción
+- Cada proyecto debe tener definida su siguiente acción específica
 
-Deep work is not just a productivity strategy—it's a philosophy that can transform both your work and your life, leading to greater satisfaction, better results, and a more meaningful career.`,
-          tags: ["productivity", "focus", "concentration", "deep work", "distraction"],
-          slug: "deep-work-focused-success",
-          read_count: 1247,
+**Contextos:**
+Organiza las acciones por el contexto donde puedes realizarlas (@casa, @oficina, @teléfono).
+
+**Niveles de Perspectiva:**
+- Pista de aterrizaje: Acciones actuales
+- 10,000 pies: Proyectos actuales  
+- 20,000 pies: Áreas de responsabilidad
+- 30,000 pies: Objetivos de 1-2 años
+- 40,000 pies: Visión de 3-5 años
+- 50,000 pies: Propósito y principios de vida
+
+**Beneficios del Sistema:**
+- Mente clara y libre de estrés
+- Mayor productividad y eficiencia
+- Mejor toma de decisiones
+- Sensación de control y confianza
+- Más tiempo para lo que realmente importa
+
+**Implementación Práctica:**
+1. Dedica tiempo inicial para configurar tu sistema
+2. Haz una recopilación completa de todos tus compromisos
+3. Procesa todo hasta llegar a bandeja de entrada cero
+4. Establece el hábito de la revisión semanal
+5. Mantén la disciplina de capturar todo inmediatamente
+
+GTD no es solo un sistema de productividad, es una forma de vida que te permite estar presente y enfocado en lo que realmente importa.`,
+          tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+          slug: "organizate-con-eficacia",
+          read_count: 2847,
           created_at: "2024-01-15T00:00:00Z",
           updated_at: "2024-01-20T00:00:00Z",
         },
         {
           id: 2,
-          title: "Atomic Habits: An Easy & Proven Way to Build Good Habits",
-          author: "James Clear",
-          category: "Personal Development",
-          content: `Changes that seem small and unimportant at first will compound into remarkable results if you are willing to stick with them for years. This is the power of atomic habits—tiny changes that deliver remarkable results.
+          title: "Inteligencia Emocional",
+          author: "Daniel Goleman",
+          category: "Psicología",
+          content: `La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
 
-**The Four Laws of Behavior Change:**
+**Los Cinco Componentes de la Inteligencia Emocional:**
 
-**1st Law: Make It Obvious**
-- Use implementation intentions: "I will [BEHAVIOR] at [TIME] in [LOCATION]"
-- Use habit stacking: "After [CURRENT HABIT], I will [NEW HABIT]"
-- Design your environment to make good habits obvious
-- Use visual cues to trigger desired behaviors
+**1. Autoconciencia Emocional**
+- Reconocer y entender tus propias emociones
+- Ser consciente de cómo tus emociones afectan tus pensamientos y comportamiento
+- Conocer tus fortalezas y limitaciones emocionales
+- Tener confianza en ti mismo basada en el autoconocimiento
 
-**2nd Law: Make It Attractive**
-- Use temptation bundling: pair actions you want to do with actions you need to do
-- Join a culture where your desired behavior is normal
-- Create a motivation ritual before difficult habits
-- Highlight the benefits of avoiding bad habits
+**2. Autorregulación**
+- Manejar efectivamente las emociones disruptivas e impulsos
+- Mantener estándares de honestidad e integridad
+- Asumir responsabilidad por tu desempeño personal
+- Ser flexible en el manejo del cambio
 
-**3rd Law: Make It Easy**
-- Reduce friction for good habits and increase friction for bad habits
-- Use the Two-Minute Rule: scale habits down until they take less than two minutes
-- Prepare your environment to make future actions easier
-- Use technology to automate good habits
+**3. Motivación**
+- Estar impulsado a lograr por el simple placer del logro
+- Tener un fuerte impulso para mejorar el desempeño
+- Mostrar compromiso con los objetivos del grupo u organización
+- Estar listo para actuar en oportunidades y ser optimista incluso frente al fracaso
 
-**4th Law: Make It Satisfying**
-- Use reinforcement: give yourself immediate rewards for good habits
-- Make "doing nothing" enjoyable for habits you want to avoid
-- Use a habit tracker to visualize progress
-- Never miss twice: get back on track quickly after mistakes
+**4. Empatía**
+- Entender las emociones de otros y mostrar interés activo en sus preocupaciones
+- Anticipar, reconocer y satisfacer las necesidades de los clientes
+- Ayudar a desarrollar las habilidades de otros
+- Leer las corrientes políticas y redes sociales de una organización
 
-**Key Concepts:**
+**5. Habilidades Sociales**
+- Ser efectivo en liderar el cambio
+- Ser persuasivo y usar habilidades de comunicación efectivas
+- Ser experto en construir y liderar equipos
+- Manejar disputas y negociar resoluciones
 
-**Systems vs. Goals:**
-- Goals are about the results you want to achieve
-- Systems are about the processes that lead to those results
-- Focus on systems, not goals, for lasting change
+**El Cerebro Emocional vs. El Cerebro Racional:**
 
-**Identity-Based Habits:**
-- Every action is a vote for the type of person you wish to become
-- Focus on who you want to be, not what you want to achieve
-- Ask: "What would a healthy person do?" or "What would an organized person do?"
+**Sistema Límbico (Cerebro Emocional):**
+- Procesa emociones rápidamente
+- Responde instintivamente
+- Almacena memorias emocionales
+- Puede "secuestrar" la respuesta racional
 
-**The Plateau of Latent Potential:**
-- Habits often appear to make no difference until you cross a critical threshold
-- Breakthrough moments are often the result of many previous actions
-- Be patient with the process—results will compound over time
+**Neocórtex (Cerebro Racional):**
+- Procesa información lógicamente
+- Planifica y analiza
+- Controla impulsos
+- Permite el pensamiento abstracto
 
-**Practical Applications:**
+**Aplicaciones Prácticas:**
 
-**For Building Good Habits:**
-1. Start with habits so small they seem trivial
-2. Stack new habits onto existing routines
-3. Design your environment for success
-4. Track your progress visually
-5. Celebrate small wins immediately
+**En el Liderazgo:**
+- Los líderes emocionalmente inteligentes crean climas de trabajo positivos
+- Inspiran y motivan a sus equipos
+- Manejan conflictos de manera constructiva
+- Toman mejores decisiones considerando factores emocionales
 
-**For Breaking Bad Habits:**
-1. Make them invisible (remove cues)
-2. Make them unattractive (focus on downsides)
-3. Make them difficult (increase friction)
-4. Make them unsatisfying (create accountability)
+**En las Relaciones:**
+- Mejora la comunicación y comprensión mutua
+- Reduce conflictos y malentendidos
+- Fortalece vínculos personales y profesionales
+- Facilita la colaboración y trabajo en equipo
 
-**Advanced Tactics:**
-- Use habit stacking to build routines
-- Create implementation intentions for specific scenarios
-- Use environment design to support desired behaviors
-- Apply the Goldilocks Rule: work on challenges of just manageable difficulty
+**En el Desempeño:**
+- Mejora la capacidad de manejar estrés y presión
+- Aumenta la resiliencia ante adversidades
+- Facilita la adaptación al cambio
+- Mejora la toma de decisiones bajo presión
 
-The secret to getting results that last is to never stop making improvements. It's remarkable what you can build if you just don't stop.`,
-          tags: ["habits", "behavior change", "self-improvement", "systems", "identity"],
-          slug: "atomic-habits-build-good",
-          read_count: 2156,
+**Desarrollo de la Inteligencia Emocional:**
+
+**Técnicas de Autoconciencia:**
+- Práctica de mindfulness y meditación
+- Llevar un diario emocional
+- Solicitar feedback de otros
+- Reflexión regular sobre reacciones emocionales
+
+**Estrategias de Autorregulación:**
+- Técnicas de respiración y relajación
+- Pausa antes de reaccionar
+- Reencuadre cognitivo de situaciones
+- Establecimiento de límites personales
+
+**Mejora de Habilidades Sociales:**
+- Práctica de escucha activa
+- Desarrollo de empatía a través de perspectiva
+- Comunicación asertiva y clara
+- Construcción de redes de relaciones
+
+La inteligencia emocional es más predictiva del éxito en la vida que el CI tradicional, y afortunadamente, puede desarrollarse a cualquier edad con práctica y dedicación.`,
+          tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
+          slug: "inteligencia-emocional",
+          read_count: 3156,
           created_at: "2024-01-10T00:00:00Z",
           updated_at: "2024-01-18T00:00:00Z",
         },
         {
           id: 3,
-          title: "The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation",
-          author: "Eric Ries",
-          category: "Entrepreneurship",
-          content: `The Lean Startup methodology is a scientific approach to creating and managing successful startups in an age when companies need to innovate more than ever. It's about learning what your customers really want and learning it quickly.
+          title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+          author: "Stephen R. Covey",
+          category: "Desarrollo Personal",
+          content: `Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
 
-**Core Principles:**
+**Paradigmas y Principios:**
+Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los principios son leyes naturales universales que gobiernan la efectividad humana.
 
-**Build-Measure-Learn Loop:**
-The fundamental activity of a startup is to turn ideas into products, measure how customers respond, and then learn whether to pivot or persevere. All successful startup processes should be geared to accelerate this feedback loop.
+**Los 7 Hábitos:**
 
-**Minimum Viable Product (MVP):**
-The MVP is that version of a new product that allows a team to collect the maximum amount of validated learning about customers with the least effort. It's not necessarily the smallest product imaginable; it's simply the fastest way to get through the Build-Measure-Learn feedback loop.
+**VICTORIA PRIVADA (Independencia)**
 
-**Validated Learning:**
-Validated learning is the process of demonstrating empirically that a team has discovered valuable truths about a startup's present and future business prospects. It's more concrete, accurate, and faster than market forecasting or classical business planning.
+**Hábito 1: Ser Proactivo**
+- Toma responsabilidad de tu vida y decisiones
+- Enfócate en tu Círculo de Influencia, no en tu Círculo de Preocupación
+- Usa lenguaje proactivo: "Yo puedo", "Yo elegiré", "Yo prefiero"
+- Responde basándote en valores, no en condiciones o sentimientos
 
-**Innovation Accounting:**
-A way of evaluating progress when all the metrics typically used in an established company (revenue, customers, ROI, market share) are effectively zero. It focuses on learning milestones instead of traditional milestones.
+**Hábito 2: Comenzar con el Fin en Mente**
+- Define claramente tu misión y visión personal
+- Crea una declaración de misión personal basada en principios
+- Visualiza tu funeral: ¿qué te gustaría que dijeran de ti?
+- Todos los logros se crean mentalmente antes que físicamente
 
-**The Five Principles:**
+**Hábito 3: Poner Primero lo Primero**
+- Gestiona tu tiempo basándote en principios, no en prioridades
+- Enfócate en actividades del Cuadrante II (importante pero no urgente)
+- Aprende a decir "no" a lo bueno para decir "sí" a lo mejor
+- Organiza y ejecuta alrededor de prioridades
 
-1. **Entrepreneurs are everywhere**: Entrepreneurship is a kind of management, and it works in companies of all sizes, even very large enterprises, in any sector or industry.
+**VICTORIA PÚBLICA (Interdependencia)**
 
-2. **Entrepreneurship is management**: A startup is an institution, not just a product, and so it requires a new kind of management specifically geared to its context of extreme uncertainty.
+**Hábito 4: Pensar Ganar-Ganar**
+- Busca beneficio mutuo en todas las interacciones humanas
+- Desarrolla una mentalidad de abundancia, no de escasez
+- Considera las alternativas: Ganar-Ganar o No Hay Trato
+- Construye relaciones basadas en confianza y respeto mutuo
 
-3. **Validated learning**: Startups exist not just to make stuff, make money, or serve customers. They exist to learn how to build a sustainable business.
+**Hábito 5: Buscar Primero Entender, Luego Ser Entendido**
+- Practica la escucha empática antes de buscar ser escuchado
+- Escucha con la intención de entender, no de responder
+- Reformula lo que la otra persona dice para confirmar comprensión
+- Presenta tus ideas de manera que otros puedan entenderlas
 
-4. **Build-Measure-Learn**: The fundamental activity of a startup is to turn ideas into products, measure how customers respond, and learn whether to pivot or persevere.
+**Hábito 6: Sinergizar**
+- Combina las fortalezas de las personas para lograr objetivos que ninguna podría alcanzar sola
+- Valora las diferencias mentales, emocionales y psicológicas
+- Busca la tercera alternativa que es mejor que cualquier solución individual
+- Crea un ambiente donde es seguro hablar sobre diferencias
 
-5. **Innovation accounting**: To improve entrepreneurial outcomes and hold innovators accountable, we need to focus on the boring stuff: how to measure progress, how to set up milestones, and how to prioritize work.
+**RENOVACIÓN CONTINUA**
 
-**Key Concepts:**
+**Hábito 7: Afilar la Sierra**
+- Renueva regularmente las cuatro dimensiones de tu naturaleza:
+  - **Física**: ejercicio, nutrición, manejo del estrés
+  - **Espiritual**: clarificación de valores, compromiso, estudio y meditación
+  - **Mental**: lectura, visualización, planificación, escritura
+  - **Social/Emocional**: servicio, empatía, sinergia, seguridad intrínseca
 
-**Pivot vs. Persevere:**
-A pivot is a structured course correction designed to test a new fundamental hypothesis about the product, strategy, and engine of growth. Types of pivots include:
-- Zoom-in pivot: A single feature becomes the whole product
-- Zoom-out pivot: The whole product becomes a single feature
-- Customer segment pivot: The product hypothesis is confirmed but for a different customer
-- Customer need pivot: The target customer has a problem worth solving, just not the one originally anticipated
+**Conceptos Clave:**
 
-**Engines of Growth:**
-- **Sticky Engine**: Focuses on attracting and retaining customers for the long term
-- **Viral Engine**: Depends on person-to-person transmission as a necessary consequence of normal product use
-- **Paid Engine**: Uses advertising or sales to acquire customers
+**Cuenta Bancaria Emocional:**
+- Cada interacción hace un depósito o retiro en las relaciones
+- Depósitos: cumplir promesas, pequeñas cortesías, clarificar expectativas
+- Retiros: romper promesas, pequeñas descortesías, traicionar confianzas
 
-**Practical Implementation:**
+**Círculo de Influencia vs. Círculo de Preocupación:**
+- Enfócate en lo que puedes controlar (Círculo de Influencia)
+- No desperdicies energía en lo que no puedes controlar (Círculo de Preocupación)
 
-**Getting Started:**
-1. Identify your leap-of-faith assumptions
-2. Build an MVP to test these assumptions
-3. Establish baseline metrics
-4. Tune the engine from baseline toward ideal
+**Matriz de Gestión del Tiempo:**
+- Cuadrante I: Urgente e Importante (Crisis)
+- Cuadrante II: No Urgente pero Importante (Prevención, planificación)
+- Cuadrante III: Urgente pero No Importante (Interrupciones)
+- Cuadrante IV: No Urgente y No Importante (Pérdidas de tiempo)
 
-**Measuring Progress:**
-- Use cohort analysis to understand customer behavior
-- Focus on actionable metrics, not vanity metrics
-- Implement split-testing (A/B testing) for product decisions
-- Create learning milestones, not just product milestones
+**Aplicación Práctica:**
 
-**Building the Right Product:**
-- Start with a clear value hypothesis and growth hypothesis
-- Use customer development to validate assumptions
-- Implement continuous deployment for rapid iteration
-- Focus on sustainable growth, not just growth
+**En el Liderazgo:**
+- Lidera con el ejemplo y principios
+- Desarrolla a otros a través de delegación efectiva
+- Crea visión compartida y compromiso
 
-**Organizational Learning:**
-- Create cross-functional teams with clear accountability
-- Implement innovation accounting to measure progress
-- Use the "Five Whys" technique for root cause analysis
-- Build adaptive organizations that can pivot when necessary
+**En las Relaciones:**
+- Construye confianza a través de la integridad
+- Busca entender antes de ser entendido
+- Encuentra soluciones ganar-ganar
 
-The Lean Startup approach helps entrepreneurs and innovators reduce waste, increase their odds of success, and build products that customers actually want. It's not just for startups—these principles can be applied in organizations of any size to drive innovation and growth.`,
-          tags: ["entrepreneurship", "startup", "innovation", "lean", "mvp", "pivot"],
-          slug: "lean-startup-continuous-innovation",
-          read_count: 892,
+**En el Crecimiento Personal:**
+- Desarrolla proactividad y responsabilidad personal
+- Mantén equilibrio en todas las áreas de la vida
+- Comprométete con el aprendizaje continuo
+
+Los 7 hábitos no son técnicas de personalidad superficiales, sino principios fundamentales de efectividad humana que, cuando se practican consistentemente, se convierten en la base del carácter.`,
+          tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
+          slug: "7-habitos-gente-altamente-efectiva",
+          read_count: 4521,
           created_at: "2024-01-05T00:00:00Z",
           updated_at: "2024-01-15T00:00:00Z",
         },
         {
           id: 4,
-          title: "Crucial Conversations: Tools for Talking When Stakes Are High",
-          author: "Kerry Patterson, Joseph Grenny, Ron McMillan, Al Switzler",
-          category: "Communication",
-          content: `Crucial conversations are discussions between two or more people where stakes are high, opinions vary, and emotions run strong. These conversations can have a huge impact on your career, your happiness, and your life.
+          title: "Cómo Ganar Amigos e Influir sobre las Personas",
+          author: "Dale Carnegie",
+          category: "Comunicación",
+          content: `Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
 
-**What Makes a Conversation Crucial:**
-- Opinions vary: People have different views about the topic
-- Stakes are high: The outcome matters and could impact lives significantly  
-- Emotions run strong: People care deeply about the topic and may become emotional
+**PARTE I: TÉCNICAS FUNDAMENTALES PARA TRATAR CON LA GENTE**
 
-**The Power of Dialogue:**
-When people feel safe to share their meaning—even when it's controversial, uncomfortable, or at odds with yours—you're in dialogue. The free flow of meaning between people is the key to successful crucial conversations.
+**Principio 1: No Critiques, No Condenes, No Te Quejes**
+- La crítica es inútil porque pone a la persona a la defensiva
+- La crítica hiere el orgullo, lastima el sentido de importancia
+- En lugar de criticar, trata de entender por qué hacen lo que hacen
 
-**Start with Heart:**
-Before you open your mouth, you need to know what you really want—for yourself, for others, and for the relationship. Ask yourself:
-- What do I really want for myself?
-- What do I really want for others?
-- What do I really want for the relationship?
-- How would I behave if I really wanted these results?
+**Principio 2: Demuestra Aprecio Honesto y Sincero**
+- El deseo más profundo del ser humano es sentirse importante
+- Aprecia genuinamente las buenas cualidades de otros
+- Sé específico en tus elogios y hazlos inmediatamente
 
-**Learn to Look:**
-Learn to look for safety problems and silence or violence:
+**Principio 3: Despierta en la Otra Persona un Deseo Vehemente**
+- Habla de lo que la otra persona quiere
+- Muestra cómo pueden obtener lo que desean
+- Conecta tus ideas con sus motivaciones
 
-**Silence:** When people feel unsafe, they withdraw from conversation through:
-- Masking: Understating or selectively showing true opinions
-- Avoiding: Steering completely away from sensitive subjects
-- Withdrawing: Pulling out of the conversation entirely
+**PARTE II: SEIS MANERAS DE AGRADAR A LA GENTE**
 
-**Violence:** When people feel unsafe, they try to force meaning through:
-- Controlling: Coercing others to your way of thinking
-- Labeling: Putting a label on people or ideas to dismiss them
-- Attacking: Speaking in ways that tear down others
+**Principio 1: Interésate Genuinamente en Otras Personas**
+- Muestra interés real en los demás y sus vidas
+- Haz preguntas sobre sus intereses y experiencias
+- Recuerda detalles importantes sobre las personas
 
-**Make It Safe:**
-When you notice safety is at risk, step out of the conversation and rebuild safety by:
+**Principio 2: Sonríe**
+- Una sonrisa genuina comunica: "Me alegra verte"
+- Las sonrisas son contagiosas y crean ambiente positivo
+- Sonríe incluso cuando hablas por teléfono
 
-**Apologizing:** When you've made a mistake that has hurt others
-**Contrasting:** When others misunderstand your purpose or intent
-**Creating Mutual Purpose:** When you're at cross-purposes
+**Principio 3: Recuerda que el Nombre de una Persona es el Sonido más Dulce**
+- Usa el nombre de la persona frecuentemente en la conversación
+- Haz el esfuerzo de aprender y recordar nombres correctamente
+- El nombre es parte de la identidad de la persona
 
-**STATE Your Path:**
-When you have a tough message to share, or when you're so convinced of your own rightness that you may push too hard, remember to STATE:
+**Principio 4: Sé un Buen Oyente. Anima a Otros a Hablar de Sí Mismos**
+- Escucha más de lo que hablas
+- Haz preguntas que inviten a la persona a compartir
+- Muestra interés genuino en lo que dicen
 
-- **Share** your facts: Start with the least controversial, most persuasive elements
-- **Tell** your story: Explain what you're beginning to conclude
-- **Ask** for others' paths: Encourage others to share their facts, stories, and feelings
-- **Talk** tentatively: State your story as a story—don't disguise it as fact
-- **Encourage** testing: Make it safe for others to express differing or opposing views
+**Principio 5: Habla en Términos de los Intereses de la Otra Persona**
+- Descubre qué le interesa a la persona
+- Conecta tus conversaciones con sus pasiones
+- Investiga sobre sus hobbies y actividades
 
-**Explore Others' Paths:**
-When others are in silence or violence, help them feel safe to share their meaning:
+**Principio 6: Haz que la Otra Persona se Sienta Importante - y Hazlo Sinceramente**
+- Reconoce los logros y contribuciones de otros
+- Pide su opinión y consejo
+- Trata a todos con respeto y dignidad
 
-**Ask:** Start with an attitude of curiosity and patience
-**Mirror:** Acknowledge the emotions people are feeling
-**Paraphrase:** Restate what you've heard to show you understand
-**Prime:** If others continue to hold back, take your best guess at what they may be thinking or feeling
+**PARTE III: LOGRA QUE LA GENTE PIENSE COMO TÚ**
 
-**Move to Action:**
-Turn your successful crucial conversations into results and relationships:
+**Principio 1: La Única Forma de Ganar una Discusión es Evitándola**
+- Las discusiones rara vez cambian opiniones
+- Busca puntos de acuerdo en lugar de diferencias
+- Respeta las opiniones de otros
 
-**Decide How to Decide:**
-- Command: Decisions made without involving others
-- Consult: Input is gathered from others before deciding
-- Vote: An agreed-upon percentage swings the decision
-- Consensus: Everyone comes to an agreement and then supports the final decision
+**Principio 2: Demuestra Respeto por las Opiniones Ajenas. Jamás Digas "Estás Equivocado"**
+- Evita contradecir directamente a las personas
+- Usa frases como "Puede que esté equivocado, pero..."
+- Permite que otros mantengan su dignidad
 
-**Finish Clearly:**
-- Who does what by when?
-- How will you follow up?
-- Document the details and follow up
+**Principio 3: Si Estás Equivocado, Admítelo Rápida y Enfáticamente**
+- Admite tus errores antes que otros te los señalen
+- La autocrítica desarma la crítica de otros
+- Muestra humildad y disposición a aprender
 
-**Common Crucial Conversations:**
+**Principio 4: Comienza de Manera Amigable**
+- Inicia conversaciones difíciles con calidez
+- Encuentra terreno común antes de abordar diferencias
+- El tono amigable predispone a la cooperación
 
-**At Work:**
-- Giving negative feedback to a colleague
-- Discussing problems with your boss
-- Addressing team performance issues
-- Negotiating salary or promotions
+**Principio 5: Consigue que la Otra Persona Diga "Sí, Sí" Inmediatamente**
+- Comienza con preguntas que generen acuerdo
+- Construye momentum de acuerdo antes de presentar tu punto
+- Evita que la persona se comprometa con el "no"
 
-**At Home:**
-- Talking with a spouse about relationship problems
-- Discussing household responsibilities
-- Addressing issues with children's behavior
-- Having financial discussions
+**Principio 6: Permite que la Otra Persona Hable Mucho**
+- Deja que otros expresen completamente sus ideas
+- Las personas se convencen más por sus propias palabras
+- Escucha para entender, no para rebatir
 
-**Practical Tips:**
+**PARTE IV: SÉ UN LÍDER**
 
-1. **Prepare mentally:** Before the conversation, get your heart right and clarify what you really want
-2. **Create safety first:** People won't share honestly if they don't feel safe
-3. **Listen with curiosity:** Seek to understand before seeking to be understood
-4. **Speak persuasively, not abrasively:** Share your view in a way that invites dialogue
-5. **Agree on next steps:** End with clear commitments about who will do what by when
+**Principio 1: Comienza con Elogio y Aprecio Honesto**
+- Reconoce primero las fortalezas antes de señalar áreas de mejora
+- Crea un ambiente positivo para la retroalimentación
+- Las personas son más receptivas después del reconocimiento
 
-**Master Your Stories:**
-The stories we tell ourselves about what's happening drive our emotions and actions. Learn to:
-- Separate facts from stories
-- Challenge your assumptions
-- Tell the most respectful story possible
-- Take responsibility for your role in problems
+**Principio 2: Llama la Atención sobre los Errores de Otros Indirectamente**
+- Usa "y" en lugar de "pero" después de un elogio
+- Sugiere mejoras sin atacar directamente
+- Permite que las personas mantengan su autoestima
 
-Mastering crucial conversations is one of the most important skills you can develop. It will improve your relationships, increase your influence, and help you achieve better results in every area of your life.`,
-          tags: ["communication", "difficult conversations", "dialogue", "conflict resolution", "leadership"],
-          slug: "crucial-conversations-high-stakes",
-          read_count: 1543,
+**Principio 3: Habla de tus Propios Errores antes de Criticar los de la Otra Persona**
+- Comparte tus propias experiencias de error y aprendizaje
+- Esto hace que la crítica sea menos amenazante
+- Muestra que todos cometemos errores
+
+**Aplicaciones Modernas:**
+- Networking profesional efectivo
+- Liderazgo de equipos
+- Ventas y negociación
+- Relaciones familiares y de pareja
+- Servicio al cliente
+- Resolución de conflictos
+
+Los principios de Carnegie siguen siendo relevantes porque se basan en necesidades humanas fundamentales que no cambian con el tiempo: el deseo de sentirse importante, comprendido y apreciado.`,
+          tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
+          slug: "como-ganar-amigos-influir-personas",
+          read_count: 5234,
           created_at: "2024-01-12T00:00:00Z",
           updated_at: "2024-01-22T00:00:00Z",
         },
         {
           id: 5,
-          title: "The First 90 Days: Proven Strategies for Getting Up to Speed Faster",
-          author: "Michael Watkins",
-          category: "Leadership",
-          content: `The first 90 days in a new leadership role are critical. The actions you take during this period will largely determine whether you succeed or fail in your new position. This book provides a systematic approach for leaders at all levels to accelerate their transitions.
+          title: "Hábitos Atómicos",
+          author: "James Clear",
+          category: "Desarrollo Personal",
+          content: `Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos: pequeños cambios que generan resultados extraordinarios.
 
-**The Transition Timeline:**
+**Las Cuatro Leyes del Cambio de Comportamiento:**
 
-**Before Day One: Prepare Yourself**
-- Get oriented to the business situation
-- Begin building key relationships
-- Clarify expectations with your new boss
-- Secure early wins to build credibility
+**1ª Ley: Hazlo Obvio**
+- Usa intenciones de implementación: "Haré [COMPORTAMIENTO] a las [TIEMPO] en [LUGAR]"
+- Usa el apilamiento de hábitos: "Después de [HÁBITO ACTUAL], haré [NUEVO HÁBITO]"
+- Diseña tu ambiente para hacer obvios los buenos hábitos
+- Usa señales visuales para activar los comportamientos deseados
 
-**First 30 Days: Learn and Listen**
-- Assess the situation you're inheriting
-- Build relationships with key stakeholders  
-- Understand the culture and politics
-- Identify quick wins and potential pitfalls
+**2ª Ley: Hazlo Atractivo**
+- Usa el agrupamiento de tentaciones: combina acciones que quieres hacer con acciones que necesitas hacer
+- Únete a una cultura donde tu comportamiento deseado sea normal
+- Crea un ritual de motivación antes de hábitos difíciles
+- Resalta los beneficios de evitar malos hábitos
 
-**Days 30-60: Develop Your Strategy**
-- Complete your situational assessment
-- Begin making necessary changes
-- Build your team and align resources
-- Communicate your vision and priorities
+**3ª Ley: Hazlo Fácil**
+- Reduce la fricción para buenos hábitos y aumenta la fricción para malos hábitos
+- Usa la Regla de los Dos Minutos: escala los hábitos hasta que tomen menos de dos minutos
+- Prepara tu ambiente para hacer más fáciles las acciones futuras
+- Usa la tecnología para automatizar buenos hábitos
 
-**Days 60-90: Execute and Establish Momentum**
-- Implement your strategic initiatives
-- Measure progress and adjust course
-- Solidify key relationships
-- Plan for the next phase of your leadership
+**4ª Ley: Hazlo Satisfactorio**
+- Usa refuerzo: date recompensas inmediatas por buenos hábitos
+- Haz que "no hacer nada" sea disfrutable para hábitos que quieres evitar
+- Usa un rastreador de hábitos para visualizar tu progreso
+- Nunca falles dos veces: regresa rápidamente después de errores
 
-**The STARS Model:**
+**Conceptos Clave:**
 
-Diagnose the business situation you're entering:
+**Sistemas vs. Objetivos:**
+- Los objetivos son sobre los resultados que quieres lograr
+- Los sistemas son sobre los procesos que llevan a esos resultados
+- Enfócate en sistemas, no en objetivos, para cambios duraderos
 
-**Startup:** Assembling the capabilities to get a new business, product, or project off the ground
+**Hábitos Basados en Identidad:**
+- Cada acción es un voto por el tipo de persona que deseas ser
+- Enfócate en quién quieres ser, no en lo que quieres lograr
+- Pregúntate: "¿Qué haría una persona saludable?" o "¿Qué haría una persona organizada?"
 
-**Turnaround:** Saving a business or project that's in serious trouble
+**La Meseta del Potencial Latente:**
+- Los hábitos a menudo parecen no hacer diferencia hasta que cruzas un umbral crítico
+- Los momentos de avance son a menudo el resultado de muchas acciones previas
+- Sé paciente con el proceso: los resultados se acumularán con el tiempo
 
-**Accelerated Growth:** Managing rapid expansion of a successful business or project
+**Aplicaciones Prácticas:**
 
-**Realignment:** Revitalizing a previously successful business or project that's encountering problems
+**Para Construir Buenos Hábitos:**
+1. Comienza con hábitos tan pequeños que parezcan triviales
+2. Apila nuevos hábitos sobre rutinas existentes
+3. Diseña tu ambiente para el éxito
+4. Rastrea tu progreso visualmente
+5. Celebra pequeñas victorias inmediatamente
 
-**Sustaining Success:** Preserving the vitality of a successful business or project and taking it to the next level
+**Para Romper Malos Hábitos:**
+1. Hazlos invisibles (elimina señales)
+2. Hazlos poco atractivos (enfócate en las desventajas)
+3. Hazlos difíciles (aumenta la fricción)
+4. Hazlos insatisfactorios (crea responsabilidad)
 
-**Key Strategies by Situation:**
+**Tácticas Avanzadas:**
+- Usa el apilamiento de hábitos para construir rutinas
+- Crea intenciones de implementación para escenarios específicos
+- Aplica la Regla de Goldilocks: trabaja en desafíos de dificultad manejable
+- Usa el diseño del ambiente para apoyar comportamientos deseados
 
-**For Startups:**
-- Build systems and structures from scratch
-- Attract and develop talent
-- Create a strong culture
-- Focus on speed and flexibility
+**El Proceso de Cuatro Pasos:**
+1. **Señal**: El disparador que inicia el comportamiento
+2. **Anhelo**: La fuerza motivacional detrás de cada hábito
+3. **Respuesta**: El hábito real que realizas
+4. **Recompensa**: El beneficio que obtienes del hábito
 
-**For Turnarounds:**
-- Make tough decisions quickly
-- Focus on the vital few priorities
-- Communicate urgency effectively
-- Stabilize the situation before growing
+**Estrategias de Implementación:**
 
-**For Accelerated Growth:**
-- Build scalable systems and processes
-- Develop leadership capability
-- Maintain quality while growing fast
-- Manage cash flow carefully
+**Diseño del Ambiente:**
+- Haz obvias las señales para buenos hábitos
+- Reduce la fricción para comportamientos deseados
+- Usa el contexto para tu ventaja
 
-**For Realignments:**
-- Diagnose root causes of problems
-- Challenge existing assumptions
-- Revitalize the organization
-- Balance change with stability
+**Seguimiento del Progreso:**
+- Usa un rastreador de hábitos simple
+- Enfócate en la consistencia, no en la perfección
+- Nunca rompas la cadena dos veces seguidas
 
-**For Sustaining Success:**
-- Identify improvement opportunities
-- Avoid complacency
-- Develop next-generation leaders
-- Continue to innovate
+**Responsabilidad:**
+- Encuentra un compañero de responsabilidad
+- Haz públicos tus compromisos
+- Crea consecuencias por no cumplir
 
-**Building Your Team:**
-
-**Assess Inherited Team Members:**
-- Keep: High performers who fit the new direction
-- Develop: People with potential who need support
-- Move: Good people who don't fit current needs
-- Replace: Poor performers or poor fits
-
-**Key Principles:**
-- Make people decisions early but not too early
-- Focus on the vital few positions first
-- Be systematic in your evaluation process
-- Balance continuity with necessary change
-
-**Creating Coalitions:**
-
-**Identify Key Stakeholders:**
-- Supporters: People who agree with your goals and have influence
-- Opponents: People who disagree with your goals and have influence  
-- Fence-sitters: People who are undecided but have influence
-
-**Influence Strategies:**
-- Build coalitions of supporters
-- Neutralize or convert opponents
-- Win over fence-sitters
-- Isolate those who can't be converted
-
-**Securing Early Wins:**
-
-**Types of Early Wins:**
-- Business results that create value
-- Behavioral changes that improve performance
-- Learning that reduces uncertainty
-- Relationship building that creates support
-
-**Guidelines for Early Wins:**
-- Focus on a few promising opportunities
-- Get wins that matter to your boss
-- Get wins in the right ways
-- Take STARS situation into account
-
-**Common Transition Traps:**
-
-1. **Sticking with what you know:** Trying to do the same things that made you successful in your previous role
-
-2. **Falling prey to the "action imperative":** Feeling pressure to do something, anything, rather than taking time to understand the situation
-
-3. **Setting unrealistic expectations:** Promising too much too soon to your new boss or team
-
-4. **Attempting to do too much:** Trying to change everything at once instead of focusing on vital priorities
-
-5. **Coming in with "the answer":** Assuming you know what needs to be done without taking time to learn
-
-6. **Engaging in the wrong type of learning:** Focusing on technical learning when you need cultural and political learning
-
-7. **Neglecting horizontal relationships:** Focusing only on your boss and direct reports while ignoring peers and other stakeholders
-
-**Accelerating Your Learning:**
-
-**Learning Agenda Questions:**
-- What are the biggest challenges the organization is facing?
-- Why is the organization facing these challenges?
-- What are the most promising unexploited opportunities?
-- What would need to change for the organization to exploit these opportunities?
-- What is the culture of the organization?
-- Who are the key players and how do they interact?
-
-**Learning Methods:**
-- Structured conversations with key stakeholders
-- Review of key documents and data
-- Direct observation of operations
-- Immersion in the culture
-- Pilot projects and experiments
-
-**Managing Your Boss:**
-
-**Five Conversations with Your New Boss:**
-
-1. **The situational diagnosis conversation:** How does your boss see the STARS situation?
-
-2. **The expectations conversation:** What does your boss expect you to accomplish?
-
-3. **The style conversation:** How does your boss like to work?
-
-4. **The resources conversation:** What resources will you have available?
-
-5. **The personal development conversation:** How can your boss help you develop?
-
-**Ongoing Relationship Management:**
-- Don't surprise your boss
-- Over-communicate early, then adjust
-- Ask for advice and input
-- Clarify decision-making authority
-- Agree on how you'll work together
-
-The first 90 days set the trajectory for your entire tenure in a role. By following a systematic approach to transition, you can accelerate your learning, build key relationships, and establish the foundation for long-term success.`,
-          tags: ["leadership", "transition", "new role", "90 days", "management", "strategy"],
-          slug: "first-90-days-leadership-transition",
-          read_count: 967,
+El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es notable lo que puedes construir si simplemente no paras.`,
+          tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
+          slug: "habitos-atomicos",
+          read_count: 6789,
           created_at: "2024-01-08T00:00:00Z",
           updated_at: "2024-01-25T00:00:00Z",
         },
       ]
 
+      console.log("Using fallback data with", fallbackBooks.length, "books")
       return NextResponse.json(fallbackBooks)
     }
 
+    console.log("Successfully fetched", books?.length || 0, "books from database")
     return NextResponse.json(books || [])
   } catch (error) {
     console.error("API Error:", error)
 
-    // Return fallback data on any error
-    const fallbackBooks = [
+    // Datos de respaldo más completos en caso de error
+    const comprehensiveFallbackBooks = [
       {
         id: 1,
-        title: "Deep Work: Rules for Focused Success in a Distracted World",
-        author: "Cal Newport",
-        category: "Productivity",
-        content:
-          "Deep work is professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit...",
-        tags: ["productivity", "focus", "concentration"],
-        slug: "deep-work-focused-success",
-        read_count: 1247,
+        title: "Organízate con Eficacia",
+        author: "David Allen",
+        category: "Productividad",
+        content: "Sistema GTD completo para gestión de tareas y productividad personal...",
+        tags: ["productividad", "organización", "gestión del tiempo"],
+        slug: "organizate-con-eficacia",
+        read_count: 2847,
         created_at: "2024-01-15T00:00:00Z",
         updated_at: "2024-01-20T00:00:00Z",
       },
+      {
+        id: 2,
+        title: "Inteligencia Emocional",
+        author: "Daniel Goleman",
+        category: "Psicología",
+        content: "Desarrollo de habilidades emocionales para el éxito personal y profesional...",
+        tags: ["inteligencia emocional", "psicología", "liderazgo"],
+        slug: "inteligencia-emocional",
+        read_count: 3156,
+        created_at: "2024-01-10T00:00:00Z",
+        updated_at: "2024-01-18T00:00:00Z",
+      },
+      {
+        id: 3,
+        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+        author: "Stephen R. Covey",
+        category: "Desarrollo Personal",
+        content: "Principios fundamentales para la efectividad personal y profesional...",
+        tags: ["desarrollo personal", "liderazgo", "efectividad"],
+        slug: "7-habitos-gente-altamente-efectiva",
+        read_count: 4521,
+        created_at: "2024-01-05T00:00:00Z",
+        updated_at: "2024-01-15T00:00:00Z",
+      },
+      {
+        id: 4,
+        title: "Cómo Ganar Amigos e Influir sobre las Personas",
+        author: "Dale Carnegie",
+        category: "Comunicación",
+        content: "Técnicas fundamentales para mejorar las relaciones interpersonales...",
+        tags: ["comunicación", "relaciones interpersonales", "influencia"],
+        slug: "como-ganar-amigos-influir-personas",
+        read_count: 5234,
+        created_at: "2024-01-12T00:00:00Z",
+        updated_at: "2024-01-22T00:00:00Z",
+      },
+      {
+        id: 5,
+        title: "Hábitos Atómicos",
+        author: "James Clear",
+        category: "Desarrollo Personal",
+        content: "Pequeños cambios que generan resultados extraordinarios...",
+        tags: ["hábitos", "cambio de comportamiento", "automejora"],
+        slug: "habitos-atomicos",
+        read_count: 6789,
+        created_at: "2024-01-08T00:00:00Z",
+        updated_at: "2024-01-25T00:00:00Z",
+      },
     ]
 
-    return NextResponse.json(fallbackBooks)
+    console.log("Using comprehensive fallback data with", comprehensiveFallbackBooks.length, "books")
+    return NextResponse.json(comprehensiveFallbackBooks)
   }
 }
 
