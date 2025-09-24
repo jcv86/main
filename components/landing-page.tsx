@@ -1,509 +1,410 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
 import { Button } from "@/components/ui/button"
+import { ChevronRight, Target, Award, BookOpen, Brain, TrendingUp } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import {
-  Brain,
-  Target,
-  TrendingUp,
-  Users,
-  BookOpen,
-  Award,
-  CheckCircle,
-  Star,
-  ArrowRight,
-  Menu,
-  X,
-  BarChart3,
-  MessageSquare,
-  Zap,
-} from "lucide-react"
-import { useRouter } from "next/navigation"
+import Image from "next/image"
 
-export function LandingPage() {
-  const router = useRouter()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [email, setEmail] = useState("")
-
-  const features = [
-    {
-      icon: Brain,
-      title: "Insights Impulsados por IA",
-      description:
-        "Obtén recomendaciones profesionales personalizadas basadas en análisis avanzado de IA de tus resultados de evaluación.",
-    },
-    {
-      icon: Target,
-      title: "Evaluaciones Profesionales",
-      description:
-        "Realiza evaluaciones respaldadas científicamente incluyendo DISC, Big Five, MBTI y evaluaciones de intereses profesionales.",
-    },
-    {
-      icon: BookOpen,
-      title: "Biblioteca de Aprendizaje",
-      description: "Accede a libros curados, cursos y recursos adaptados a tus necesidades de desarrollo profesional.",
-    },
-    {
-      icon: MessageSquare,
-      title: "Coach de IA Interactivo",
-      description:
-        "Chatea con tu coach profesional de IA personal para orientación, consejos y planes de desarrollo accionables.",
-    },
-    {
-      icon: BarChart3,
-      title: "Seguimiento de Progreso",
-      description: "Monitorea tu crecimiento con análisis detallados e informes de progreso en todas las evaluaciones.",
-    },
-    {
-      icon: Users,
-      title: "Red Profesional",
-      description: "Conecta con profesionales afines y construye relaciones profesionales significativas.",
-    },
-  ]
-
-  const assessmentTypes = [
-    {
-      name: "Evaluación DISC",
-      description: "Análisis de estilo de comportamiento",
-      icon: Users,
-      duration: "10 min",
-    },
-    {
-      name: "Personalidad Big Five",
-      description: "Evaluación integral de personalidad",
-      icon: Star,
-      duration: "15 min",
-    },
-    {
-      name: "Indicador de Tipo MBTI",
-      description: "Mapeo de preferencias psicológicas",
-      icon: Brain,
-      duration: "12 min",
-    },
-    {
-      name: "Intereses Profesionales (RIASEC)",
-      description: "Evaluación de intereses vocacionales",
-      icon: Target,
-      duration: "8 min",
-    },
-    {
-      name: "Inteligencia Emocional",
-      description: "Evaluación de habilidades de IE",
-      icon: Award,
-      duration: "10 min",
-    },
-    {
-      name: "Evaluación de Habilidades Blandas",
-      description: "Análisis de habilidades profesionales",
-      icon: TrendingUp,
-      duration: "12 min",
-    },
-  ]
-
-  const benefits = [
-    "Coaching profesional personalizado con IA",
-    "Evaluaciones respaldadas científicamente",
-    "Biblioteca integral de aprendizaje",
-    "Seguimiento de progreso y análisis",
-    "Planes de desarrollo profesional",
-    "Soporte y orientación de IA 24/7",
-  ]
-
-  const stats = [
-    { number: "10,000+", label: "Profesionales Atendidos" },
-    { number: "95%", label: "Satisfacción del Usuario" },
-    { number: "6", label: "Tipos de Evaluación" },
-    { number: "24/7", label: "Soporte de IA" },
-  ]
-
-  const handleGetStarted = () => {
-    router.push("/dashboard")
-  }
-
-  const handleTryAICoach = () => {
-    router.push("/ai-coach")
-  }
-
+const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center">
-                <Brain className="h-5 w-5 text-background" />
-              </div>
-              <span className="text-xl font-bold text-foreground">CareerDev Pro</span>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
-                Características
-              </a>
-              <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
-                Evaluaciones
-              </a>
-              <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
-                Acerca de
-              </a>
-              <Button
-                variant="outline"
-                onClick={handleTryAICoach}
-                className="border-border hover:bg-muted bg-transparent"
-              >
-                Probar Coach IA
-              </Button>
-              <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
-                Comenzar
-              </Button>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              className="md:hidden border-border bg-transparent"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </Button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
-              <div className="flex flex-col space-y-4">
-                <a href="#features" className="text-foreground hover:text-foreground/80 transition-colors">
-                  Características
-                </a>
-                <a href="#assessments" className="text-foreground hover:text-foreground/80 transition-colors">
-                  Evaluaciones
-                </a>
-                <a href="#about" className="text-foreground hover:text-foreground/80 transition-colors">
-                  Acerca de
-                </a>
-                <Button
-                  variant="outline"
-                  onClick={handleTryAICoach}
-                  className="border-border hover:bg-muted w-full bg-transparent"
-                >
-                  Probar Coach IA
-                </Button>
-                <Button
-                  onClick={handleGetStarted}
-                  className="bg-foreground text-background hover:bg-foreground/90 w-full"
-                >
-                  Comenzar
-                </Button>
-              </div>
-            </nav>
-          )}
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <div className="max-w-4xl mx-auto">
-            <Badge variant="secondary" className="mb-6 bg-muted text-mutedForeground">
-              <Zap className="h-3 w-3 mr-1" />
-              Desarrollo Profesional Impulsado por IA
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Desbloquea Tu Potencial Profesional con <span className="text-foreground">Orientación de IA</span>
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative container mx-auto px-4 py-24">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Transforma tu Carrera con
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
+                Inteligencia Artificial
+              </span>
             </h1>
-            <p className="text-xl text-mutedForeground mb-8 leading-relaxed">
-              Realiza evaluaciones respaldadas científicamente, obtén coaching personalizado de IA y accede a recursos
-              de aprendizaje curados para acelerar tu crecimiento profesional y alcanzar tus metas profesionales.
+            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+              Descubre tu potencial profesional con evaluaciones psicométricas avanzadas, coaching personalizado con IA
+              y una biblioteca de desarrollo profesional.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={handleGetStarted}
-                className="bg-foreground text-background hover:bg-foreground/90 text-lg px-8 py-6"
+                className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+                onClick={() => (window.location.href = "/auth")}
               >
-                Comienza Tu Viaje
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Comenzar Gratis
+                <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                onClick={handleTryAICoach}
-                className="border-border hover:bg-muted text-lg px-8 py-6 bg-transparent"
+                className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4 bg-transparent"
+                onClick={() => (window.location.href = "/demo")}
               >
-                <MessageSquare className="mr-2 h-5 w-5" />
-                Probar Coach IA Gratis
+                Ver Demo
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{stat.number}</div>
-                <div className="text-mutedForeground">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Todo Lo Que Necesitas Para El Éxito Profesional
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Todo lo que Necesitas para Crecer Profesionalmente
             </h2>
-            <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
-              Nuestra plataforma integral combina tecnología de IA con metodologías probadas de desarrollo profesional
-              para brindarte orientación personalizada e insights accionables.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Una plataforma integral que combina ciencia, tecnología y experiencia para acelerar tu desarrollo
+              profesional.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="border-border bg-card hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="h-6 w-6 text-foreground" />
-                  </div>
-                  <CardTitle className="text-foreground">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-mutedForeground leading-relaxed">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Assessment Types Section */}
-      <section id="assessments" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Evaluaciones Profesionales Integrales
-            </h2>
-            <p className="text-xl text-mutedForeground max-w-2xl mx-auto">
-              Realiza evaluaciones validadas científicamente para obtener insights profundos sobre tu personalidad,
-              habilidades y preferencias profesionales.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {assessmentTypes.map((assessment, index) => (
-              <Card key={index} className="border-border bg-card hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <assessment.icon className="h-8 w-8 text-foreground" />
-                    <Badge variant="secondary" className="bg-muted text-mutedForeground">
-                      {assessment.duration}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg text-foreground">{assessment.name}</CardTitle>
-                  <CardDescription className="text-mutedForeground">{assessment.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">¿Por Qué Elegir CareerDev Pro?</h2>
-              <p className="text-lg text-mutedForeground mb-8">
-                Nuestra plataforma combina tecnología de IA de vanguardia con metodologías probadas de desarrollo
-                profesional para brindarte la orientación profesional más integral y personalizada disponible.
-              </p>
-              <div className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-foreground flex-shrink-0" />
-                    <span className="text-foreground">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <Card className="border-border bg-card">
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <CardTitle className="text-foreground">¿Listo Para Comenzar?</CardTitle>
-                <CardDescription className="text-mutedForeground">
-                  Únete a miles de profesionales que han acelerado sus carreras con nuestra plataforma.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex space-x-2">
-                  <Input
-                    type="email"
-                    placeholder="Ingresa tu email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border-border"
-                  />
-                  <Button onClick={handleGetStarted} className="bg-foreground text-background hover:bg-foreground/90">
-                    Comenzar Gratis
-                  </Button>
+                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <Brain className="h-8 w-8 text-blue-600" />
                 </div>
-                <p className="text-xs text-mutedForeground">
-                  No se requiere tarjeta de crédito. Comienza tu evaluación gratuita hoy.
-                </p>
+                <CardTitle className="text-2xl">Evaluaciones Psicométricas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Tests científicamente validados: DISC, Big Five, MBTI, RIASEC, Inteligencia Emocional y Habilidades
+                  Blandas.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                  <Target className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-2xl">Coach IA Personalizado</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Coaching 24/7 con inteligencia artificial que se adapta a tu perfil y objetivos profesionales
+                  específicos.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <BookOpen className="h-8 w-8 text-green-600" />
+                </div>
+                <CardTitle className="text-2xl">Biblioteca Digital</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Más de 70 libros de desarrollo profesional con contenido curado y recomendaciones personalizadas.
+                </CardDescription>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-foreground text-background">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Listo Para Transformar Tu Carrera?</h2>
-          <p className="text-xl text-background/80 mb-8 max-w-2xl mx-auto">
-            Da el primer paso hacia desbloquear tu potencial completo. Comienza con una evaluación gratuita y obtén
-            orientación profesional personalizada impulsada por IA hoy.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Historias de Éxito</h2>
+            <p className="text-xl text-gray-600">
+              Profesionales que han transformado sus carreras con nuestra plataforma
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <Image
+                  src="/testimonial-ana-garcia.jpg"
+                  alt="Ana García"
+                  width={80}
+                  height={80}
+                  className="rounded-full mx-auto mb-4"
+                />
+                <CardTitle className="text-lg">Ana García</CardTitle>
+                <CardDescription>Gerente de Marketing, Tech Startup</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 italic">
+                  "Las evaluaciones me ayudaron a entender mis fortalezas en liderazgo. En 6 meses logré una promoción
+                  que llevaba años buscando."
+                </p>
+                <div className="flex justify-center mt-4">
+                  <Badge variant="secondary">Promoción +40% salario</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <Image
+                  src="/testimonial-carlos-mendoza.jpg"
+                  alt="Carlos Mendoza"
+                  width={80}
+                  height={80}
+                  className="rounded-full mx-auto mb-4"
+                />
+                <CardTitle className="text-lg">Carlos Mendoza</CardTitle>
+                <CardDescription>Desarrollador Senior, Fintech</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 italic">
+                  "El coach IA me guió para hacer la transición a Product Manager. Ahora lidero un equipo de 12 personas
+                  en una empresa internacional."
+                </p>
+                <div className="flex justify-center mt-4">
+                  <Badge variant="secondary">Cambio de carrera exitoso</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="text-center">
+                <Image
+                  src="/testimonial-maria-rodriguez.jpg"
+                  alt="María Rodríguez"
+                  width={80}
+                  height={80}
+                  className="rounded-full mx-auto mb-4"
+                />
+                <CardTitle className="text-lg">María Rodríguez</CardTitle>
+                <CardDescription>Consultora Independiente</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 italic">
+                  "La biblioteca digital me dio las herramientas para lanzar mi consultora. Hoy facturo 3x más que en mi
+                  trabajo anterior."
+                </p>
+                <div className="flex justify-center mt-4">
+                  <Badge variant="secondary">Emprendimiento exitoso</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Sobre Nosotros</h2>
+              <p className="text-xl text-gray-600">
+                Somos expertos en desarrollo profesional con base en Santiago de Chile
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Nuestra Misión</h3>
+                <p className="text-gray-600 mb-6 text-lg">
+                  Democratizar el acceso al desarrollo profesional de calidad mundial, combinando la sabiduría de la
+                  psicología organizacional con el poder de la inteligencia artificial.
+                </p>
+                <p className="text-gray-600 mb-6 text-lg">
+                  Desde Santiago de Chile, servimos a profesionales de toda Latinoamérica que buscan acelerar su
+                  crecimiento profesional con herramientas científicamente validadas.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600">10,000+</div>
+                    <div className="text-gray-600">Profesionales Evaluados</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-600">95%</div>
+                    <div className="text-gray-600">Satisfacción del Cliente</div>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Award className="h-6 w-6 text-yellow-500 mr-2" />
+                      Certificaciones Internacionales
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">
+                      Nuestros tests están validados por organizaciones internacionales de psicología organizacional.
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <TrendingUp className="h-6 w-6 text-green-500 mr-2" />
+                      Resultados Comprobados
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">
+                      85% de nuestros usuarios reporta mejoras significativas en su carrera dentro de los primeros 6
+                      meses.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Preguntas Frecuentes</h2>
+              <p className="text-xl text-gray-600">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
+            </div>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>¿Qué incluye la evaluación completa?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Incluye 6 tests psicométricos (DISC, Big Five, MBTI, RIASEC, Inteligencia Emocional y Habilidades
+                    Blandas), análisis detallado con IA, plan de desarrollo personalizado y acceso completo a la
+                    biblioteca digital.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>¿Cómo funciona el Coach IA?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Nuestro Coach IA analiza tus resultados psicométricos, objetivos profesionales y contexto laboral
+                    para brindarte consejos personalizados 24/7. Utiliza modelos de lenguaje avanzados entrenados
+                    específicamente en desarrollo profesional.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>¿Los tests son científicamente válidos?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Sí, todos nuestros tests están basados en modelos psicológicos reconocidos internacionalmente y han
+                    sido validados en poblaciones latinoamericanas. Cumplimos con estándares internacionales de
+                    evaluación psicométrica.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>¿Qué tipo de libros incluye la biblioteca?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Más de 70 libros cuidadosamente seleccionados sobre liderazgo, comunicación, productividad,
+                    inteligencia emocional, negociación, estrategia empresarial y desarrollo personal. Todos con
+                    resúmenes y ejercicios prácticos.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>¿Ofrecen soporte técnico?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Sí, ofrecemos soporte técnico por email y chat en vivo de lunes a viernes de 9:00 a 18:00 (hora de
+                    Chile). También tenemos una base de conocimientos completa y tutoriales en video.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Company Culture & Careers Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold mb-6">Únete a Nuestro Equipo en Santiago</h2>
+            <p className="text-xl mb-8 text-blue-100">
+              Estamos construyendo el futuro del desarrollo profesional. Buscamos talento excepcional para unirse a
+              nuestra misión.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-yellow-300 mb-2">25+</div>
+                <div className="text-blue-100">Miembros del Equipo</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-yellow-300 mb-2">95%</div>
+                <div className="text-blue-100">Retención de Talento</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-yellow-300 mb-2">4.8/5</div>
+                <div className="text-blue-100">Satisfacción Laboral</div>
+              </div>
+            </div>
+
             <Button
               size="lg"
-              variant="secondary"
-              onClick={handleGetStarted}
-              className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6"
+              className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+              onClick={() => (window.location.href = "/careers")}
             >
-              Comenzar Gratis
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={handleTryAICoach}
-              className="border-background/20 text-background hover:bg-background/10 text-lg px-8 py-6 bg-transparent"
-            >
-              <MessageSquare className="mr-2 h-5 w-5" />
-              Probar Coach IA
+              Ver Oportunidades de Trabajo
+              <ChevronRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 border-t border-border bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-6 h-6 bg-foreground rounded flex items-center justify-center">
-                  <Brain className="h-4 w-4 text-background" />
-                </div>
-                <span className="font-bold text-foreground">CareerDev Pro</span>
-              </div>
-              <p className="text-mutedForeground text-sm">
-                Plataforma de desarrollo profesional impulsada por IA que ayuda a los profesionales a desbloquear su
-                potencial.
-              </p>
+      {/* CTA Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">¿Listo para Transformar tu Carrera?</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Únete a miles de profesionales que ya están acelerando su crecimiento con nuestra plataforma de desarrollo
+              profesional.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
+                onClick={() => (window.location.href = "/auth")}
+              >
+                Comenzar Evaluación Gratuita
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-4 bg-transparent"
+                onClick={() => (window.location.href = "/biblioteca")}
+              >
+                Explorar Biblioteca
+              </Button>
             </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Plataforma</h3>
-              <ul className="space-y-2 text-sm text-mutedForeground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Evaluaciones
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Coach IA
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Biblioteca de Aprendizaje
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Seguimiento de Progreso
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Recursos</h3>
-              <ul className="space-y-2 text-sm text-mutedForeground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Guías Profesionales
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Historias de Éxito
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Centro de Ayuda
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Empresa</h3>
-              <ul className="space-y-2 text-sm text-mutedForeground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Acerca de Nosotros
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Política de Privacidad
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Términos de Servicio
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Contacto
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-border mt-8 pt-8 text-center">
-            <p className="text-mutedForeground text-sm">© 2024 CareerDev Pro. Todos los derechos reservados.</p>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   )
 }
+
+export default LandingPage
