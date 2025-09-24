@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BookOpen, Search, Filter, Clock, User, TrendingUp, Star, Bookmark, Eye, Heart, X, Tag } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface Book {
   id: number
@@ -39,6 +40,7 @@ export default function BibliotecaPage() {
   const [selectedTag, setSelectedTag] = useState<string>("")
   const [sortBy, setSortBy] = useState<string>("popularity")
   const [activeTab, setActiveTab] = useState("all")
+  const router = useRouter()
 
   // Cargar libros desde la API
   useEffect(() => {
@@ -684,7 +686,11 @@ El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es
                     )}
 
                     <div className="flex gap-2">
-                      <Button className="flex-1" size="sm">
+                      <Button
+                        className="flex-1"
+                        size="sm"
+                        onClick={() => router.push(`/biblioteca/${book.slug || book.id}`)}
+                      >
                         <BookOpen className="h-4 w-4 mr-2" />
                         Leer
                       </Button>
