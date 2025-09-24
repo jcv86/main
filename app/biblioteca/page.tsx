@@ -73,9 +73,9 @@ export default function BibliotecaPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [sortBy, setSortBy] = useState<string>("popular")
-  const [activeTab, setActiveTab] = useState("explore")
+  const [activeTab, setActiveTab] = useState("explorar")
 
-  // Book reader state
+  // Estado del lector de libros
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
   const [isReaderOpen, setIsReaderOpen] = useState(false)
 
@@ -89,22 +89,22 @@ export default function BibliotecaPage() {
     try {
       setLoading(true)
 
-      // Load books from database
+      // Cargar libros desde la base de datos
       const response = await fetch("/api/books")
       if (response.ok) {
         const booksData = await response.json()
 
-        // Transform the data to include calculated fields
+        // Transformar los datos para incluir campos calculados
         const transformedBooks = booksData.map((book: any) => ({
           ...book,
-          pages: Math.ceil(book.content.length / 200), // Estimate pages based on content length
-          reading_time: Math.ceil(book.content.length / 1000), // Estimate reading time
+          pages: Math.ceil(book.content.length / 200), // Estimar páginas basado en la longitud del contenido
+          reading_time: Math.ceil(book.content.length / 1000), // Estimar tiempo de lectura
           characters: book.content.length,
         }))
 
         setBooks(transformedBooks)
 
-        // Calculate stats
+        // Calcular estadísticas
         const mockStats: LibraryStats = {
           total_books: transformedBooks.length,
           categories: new Set(transformedBooks.map((b: Book) => b.category)).size,
@@ -117,17 +117,17 @@ export default function BibliotecaPage() {
         setStats(mockStats)
       }
 
-      // Load user progress and bookmarks
+      // Cargar progreso del usuario y marcadores
       await loadUserData()
     } catch (error) {
-      console.error("Error loading library data:", error)
+      console.error("Error cargando datos de la biblioteca:", error)
       toast({
         title: "Error",
         description: "No se pudo cargar la biblioteca. Usando datos de ejemplo.",
         variant: "destructive",
       })
 
-      // Fallback to example data
+      // Datos de respaldo de ejemplo
       loadExampleData()
     } finally {
       setLoading(false)
@@ -135,7 +135,7 @@ export default function BibliotecaPage() {
   }
 
   const loadUserData = async () => {
-    // Load user reading progress
+    // Cargar progreso de lectura del usuario
     const mockProgress: ReadingProgress[] = [
       {
         book_id: 1,
@@ -173,13 +173,13 @@ export default function BibliotecaPage() {
     const exampleBooks: Book[] = [
       {
         id: 1,
-        title: "Deep Work: Rules for Focused Success in a Distracted World",
+        title: "Trabajo Profundo: Reglas para el Éxito Enfocado en un Mundo Distraído",
         author: "Cal Newport",
-        category: "Productivity",
+        category: "Productividad",
         content:
-          "Deep work is professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit. These efforts create new value, improve your skill, and are hard to replicate...",
-        tags: ["productivity", "focus", "concentration"],
-        slug: "deep-work-focused-success",
+          "El trabajo profundo son actividades profesionales realizadas en un estado de concentración libre de distracciones que llevan las capacidades cognitivas al límite. Estos esfuerzos crean nuevo valor, mejoran tu habilidad, y son difíciles de replicar...",
+        tags: ["productividad", "enfoque", "concentración"],
+        slug: "trabajo-profundo-exito-enfocado",
         read_count: 1247,
         created_at: "2024-01-15",
         updated_at: "2024-01-20",
@@ -189,13 +189,13 @@ export default function BibliotecaPage() {
       },
       {
         id: 2,
-        title: "Atomic Habits: An Easy & Proven Way to Build Good Habits",
+        title: "Hábitos Atómicos: Una Manera Fácil y Comprobada de Construir Buenos Hábitos",
         author: "James Clear",
-        category: "Personal Development",
+        category: "Desarrollo Personal",
         content:
-          "Changes that seem small and unimportant at first will compound into remarkable results if you are willing to stick with them for years...",
-        tags: ["habits", "behavior change", "self-improvement"],
-        slug: "atomic-habits-build-good",
+          "Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años...",
+        tags: ["hábitos", "cambio de comportamiento", "automejora"],
+        slug: "habitos-atomicos-construir-buenos",
         read_count: 2156,
         created_at: "2024-01-10",
         updated_at: "2024-01-18",
@@ -232,7 +232,7 @@ export default function BibliotecaPage() {
       if (isCurrentlyBookmarked) {
         setBookmarks((prev) => prev.filter((id) => id !== bookId))
         toast({
-          title: "Bookmark eliminado",
+          title: "Marcador eliminado",
           description: "El libro se ha eliminado de tus guardados.",
         })
       } else {
@@ -243,10 +243,10 @@ export default function BibliotecaPage() {
         })
       }
     } catch (error) {
-      console.error("Error toggling bookmark:", error)
+      console.error("Error cambiando marcador:", error)
       toast({
         title: "Error",
-        description: "No se pudo actualizar el bookmark.",
+        description: "No se pudo actualizar el marcador.",
         variant: "destructive",
       })
     }
@@ -254,12 +254,12 @@ export default function BibliotecaPage() {
 
   const setReadingGoal = async (bookId: number, percentage: 30 | 60 | 100) => {
     try {
-      // Update local state
+      // Actualizar estado local
       setReadingProgress((prev) =>
         prev.map((p) => (p.book_id === bookId ? { ...p, target_percentage: percentage } : p)),
       )
 
-      // If no progress exists, create it
+      // Si no existe progreso, crearlo
       if (!getBookProgress(bookId)) {
         const newProgress: ReadingProgress = {
           book_id: bookId,
@@ -276,7 +276,7 @@ export default function BibliotecaPage() {
         description: `Objetivo de lectura establecido en ${percentage}%`,
       })
     } catch (error) {
-      console.error("Error setting reading goal:", error)
+      console.error("Error estableciendo objetivo de lectura:", error)
       toast({
         title: "Error",
         description: "No se pudo actualizar el objetivo de lectura.",
@@ -289,7 +289,7 @@ export default function BibliotecaPage() {
     setSelectedBook(book)
     setIsReaderOpen(true)
 
-    // Update read count
+    // Actualizar contador de lecturas
     setBooks((prev) => prev.map((b) => (b.id === book.id ? { ...b, read_count: b.read_count + 1 } : b)))
   }
 
@@ -381,15 +381,15 @@ export default function BibliotecaPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Encabezado */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">📚 Biblioteca de Conocimiento</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">📚 Biblioteca de Desarrollo Profesional</h1>
           <p className="text-lg text-gray-600">
-            Explora, aprende y crece con nuestra colección completa de libros profesionales
+            Explora, aprende y crece con nuestra colección completa de libros de desarrollo profesional
           </p>
         </div>
 
-        {/* Stats Cards */}
+        {/* Tarjetas de Estadísticas */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
             <Card>
@@ -430,7 +430,7 @@ export default function BibliotecaPage() {
           </div>
         )}
 
-        {/* Search and Filters */}
+        {/* Búsqueda y Filtros */}
         <Card className="mb-8">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
@@ -438,7 +438,7 @@ export default function BibliotecaPage() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Buscar por título, autor o tags..."
+                    placeholder="Buscar por título, autor o etiquetas..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
@@ -473,19 +473,19 @@ export default function BibliotecaPage() {
           </CardContent>
         </Card>
 
-        {/* Tabs */}
+        {/* Pestañas */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="explore">Explorar</TabsTrigger>
-            <TabsTrigger value="popular">Populares</TabsTrigger>
-            <TabsTrigger value="reading">Leyendo</TabsTrigger>
-            <TabsTrigger value="completed">Completados</TabsTrigger>
-            <TabsTrigger value="bookmarks">Guardados</TabsTrigger>
-            <TabsTrigger value="stats">Estadísticas</TabsTrigger>
+            <TabsTrigger value="explorar">Explorar</TabsTrigger>
+            <TabsTrigger value="populares">Populares</TabsTrigger>
+            <TabsTrigger value="leyendo">Leyendo</TabsTrigger>
+            <TabsTrigger value="completados">Completados</TabsTrigger>
+            <TabsTrigger value="guardados">Guardados</TabsTrigger>
+            <TabsTrigger value="estadisticas">Estadísticas</TabsTrigger>
           </TabsList>
 
-          {/* Explorar Tab */}
-          <TabsContent value="explore">
+          {/* Pestaña Explorar */}
+          <TabsContent value="explorar">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sortedBooks.map((book) => {
                 const progress = getBookProgress(book.id)
@@ -521,7 +521,7 @@ export default function BibliotecaPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {/* Progress Bar */}
+                        {/* Barra de Progreso */}
                         {progress && progress.reading_progress > 0 && (
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
@@ -537,7 +537,7 @@ export default function BibliotecaPage() {
                           </div>
                         )}
 
-                        {/* Book Info */}
+                        {/* Información del Libro */}
                         <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
                           <div className="flex items-center gap-1">
                             <BookOpen className="h-4 w-4" />
@@ -557,7 +557,7 @@ export default function BibliotecaPage() {
                           </div>
                         </div>
 
-                        {/* Tags */}
+                        {/* Etiquetas */}
                         <div className="flex flex-wrap gap-1">
                           {book.tags.slice(0, 3).map((tag) => (
                             <Badge key={tag} variant="outline" className="text-xs">
@@ -571,7 +571,7 @@ export default function BibliotecaPage() {
                           )}
                         </div>
 
-                        {/* Reading Goal Selection */}
+                        {/* Selección de Objetivo de Lectura */}
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Objetivo de Lectura:</label>
                           <div className="flex gap-2">
@@ -589,7 +589,7 @@ export default function BibliotecaPage() {
                           </div>
                         </div>
 
-                        {/* Action Buttons */}
+                        {/* Botones de Acción */}
                         <div className="flex gap-2">
                           <Button className="flex-1" onClick={() => openBookReader(book)}>
                             <PlayCircle className="h-4 w-4 mr-2" />
@@ -607,8 +607,8 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Other tabs remain the same but with working buttons */}
-          <TabsContent value="popular">
+          {/* Pestaña Populares */}
+          <TabsContent value="populares">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">📈 Libros Más Populares</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -655,8 +655,8 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Reading Tab */}
-          <TabsContent value="reading">
+          {/* Pestaña Leyendo */}
+          <TabsContent value="leyendo">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">📖 Libros que Estás Leyendo</h3>
               {getBooksByStatus("reading").length === 0 ? (
@@ -664,7 +664,7 @@ export default function BibliotecaPage() {
                   <CardContent className="p-8 text-center">
                     <BookOpen className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                     <p className="text-gray-600">No tienes libros en progreso</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explore")}>
+                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
                       Explorar Biblioteca
                     </Button>
                   </CardContent>
@@ -714,8 +714,8 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Completed Tab */}
-          <TabsContent value="completed">
+          {/* Pestaña Completados */}
+          <TabsContent value="completados">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">✅ Libros Completados</h3>
               {getBooksByStatus("completed").length === 0 ? (
@@ -723,7 +723,7 @@ export default function BibliotecaPage() {
                   <CardContent className="p-8 text-center">
                     <CheckCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                     <p className="text-gray-600">Aún no has completado ningún libro</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explore")}>
+                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
                       Comenzar a Leer
                     </Button>
                   </CardContent>
@@ -777,8 +777,8 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Bookmarks Tab */}
-          <TabsContent value="bookmarks">
+          {/* Pestaña Guardados */}
+          <TabsContent value="guardados">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold mb-4">🔖 Libros Guardados</h3>
               {getBookmarkedBooks().length === 0 ? (
@@ -786,7 +786,7 @@ export default function BibliotecaPage() {
                   <CardContent className="p-8 text-center">
                     <Bookmark className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                     <p className="text-gray-600">No tienes libros guardados</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explore")}>
+                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
                       Explorar y Guardar
                     </Button>
                   </CardContent>
@@ -843,8 +843,8 @@ export default function BibliotecaPage() {
             </div>
           </TabsContent>
 
-          {/* Stats Tab */}
-          <TabsContent value="stats">
+          {/* Pestaña Estadísticas */}
+          <TabsContent value="estadisticas">
             <div className="space-y-6">
               <h3 className="text-xl font-semibold mb-4">📊 Estadísticas de Lectura</h3>
 
@@ -888,7 +888,7 @@ export default function BibliotecaPage() {
                 </Card>
               </div>
 
-              {/* Progress by Category */}
+              {/* Progreso por Categoría */}
               <Card>
                 <CardHeader>
                   <CardTitle>Progreso por Categoría</CardTitle>
@@ -921,7 +921,7 @@ export default function BibliotecaPage() {
                 </CardContent>
               </Card>
 
-              {/* Reading Goals */}
+              {/* Objetivos de Lectura */}
               <Card>
                 <CardHeader>
                   <CardTitle>Objetivos de Lectura</CardTitle>
@@ -955,7 +955,7 @@ export default function BibliotecaPage() {
           </TabsContent>
         </Tabs>
 
-        {/* Enhanced Book Reader */}
+        {/* Lector de Libros Mejorado */}
         {selectedBook && (
           <EnhancedBookReader
             book={selectedBook}
