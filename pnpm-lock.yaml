@@ -15,7 +15,7 @@ importers:
         specifier: 3.27.0
         version: 3.27.0(@emotion/react@11.14.0(@types/react@19.0.0)(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-alert-dialog':
-        specifier: latest
+        specifier: ^1.1.2
         version: 1.1.15(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-avatar':
         specifier: latest

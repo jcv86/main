@@ -34,11 +34,23 @@ export async function POST(request: NextRequest) {
       availabilityDate,
     } = body
 
-    // Generate unique application ID
-    const applicationId = await generateApplicationId()
+    // Validate required fields
+    if (!jobTitle || !department || !candidateName || !candidateEmail) {
+      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
+    }
 
-    // Insert the application
-    const { data, error } = await supabase
+    // Generate application ID
+    const { data: appIdData, error: appIdError } = await supabase.rpc("generate_application_id")
+
+    if (appIdError) {
+      console.error("Error generating application ID:", appIdError)
+      return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    }
+
+    const applicationId = appIdData
+
+    // Insert application
+    const { data: applicationData, error: insertError } = await supabase
       .from("job_applications")
       .insert({
         application_id: applicationId,
@@ -61,27 +73,31 @@ export async function POST(request: NextRequest) {
       .select()
       .single()
 
-    if (error) {
-      console.error("Database error:", error)
-      return NextResponse.json({ error: "Failed to submit application" }, { status: 500 })
+    if (insertError) {
+      console.error("Error inserting application:", insertError)
+      return NextResponse.json({ error: "Error al guardar la aplicación" }, { status: 500 })
     }
 
-    // Add initial status history entry
-    await supabase.from("application_status_history").insert({
-      application_id: data.id,
+    // Insert initial status history
+    const { error: historyError } = await supabase.from("application_status_history").insert({
+      application_id: applicationData.id,
       status: "submitted",
-      notes: "Application submitted successfully",
+      notes: "Aplicación enviada por el candidato",
       updated_by: "system",
     })
+
+    if (historyError) {
+      console.error("Error inserting status history:", historyError)
+    }
 
     return NextResponse.json({
       success: true,
       applicationId: applicationId,
-      message: "Application submitted successfully",
+      message: "Aplicación enviada exitosamente",
     })
   } catch (error) {
-    console.error("Application submission error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error in POST /api/applications:", error)
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }
 
@@ -96,21 +112,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from("job_applications")
-      .select(`
-        *,
-        application_status_history(
-          status,
-          notes,
-          updated_by,
-          created_at
-        ),
-        application_interviews(
-          interview_type,
-          scheduled_date,
-          interviewer_name,
-          status
-        )
-      `)
+      .select("*")
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -125,16 +127,17 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query
 
     if (error) {
-      console.error("Database error:", error)
-      return NextResponse.json({ error: "Failed to fetch applications" }, { status: 500 })
+      console.error("Error fetching applications:", error)
+      return NextResponse.json({ error: "Error al obtener las aplicaciones" }, { status: 500 })
     }
 
     return NextResponse.json({
+      success: true,
       applications: data,
-      total: data?.length || 0,
+      total: data.length,
     })
   } catch (error) {
-    console.error("Applications fetch error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error in GET /api/applications:", error)
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }
