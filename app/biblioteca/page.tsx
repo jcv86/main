@@ -1,35 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect, useMemo } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import EnhancedBookReader from "@/components/enhanced-book-reader"
-import QuickBookAccess from "@/components/quick-book-access"
-import EnhancedSearchAlgorithm from "@/components/enhanced-search-algorithm"
-import {
-  BookOpen,
-  Clock,
-  User,
-  Star,
-  Search,
-  Filter,
-  Bookmark,
-  TrendingUp,
-  BarChart3,
-  Users,
-  CheckCircle,
-  PlayCircle,
-  PauseCircle,
-  BookmarkIcon,
-  RefreshCw,
-  Zap,
-} from "lucide-react"
+import { BookOpen, Search, Filter, Clock, User, TrendingUp, Star, Bookmark, Eye, Heart, X, Tag } from "lucide-react"
 
 interface Book {
   id: number
@@ -42,123 +20,59 @@ interface Book {
   read_count: number
   created_at: string
   updated_at: string
-  pages: number
-  reading_time: number
-  characters: number
-  difficulty_level?: string
-  estimated_read_time?: number
 }
 
-interface ReadingProgress {
-  book_id: number
-  reading_progress: number
-  target_percentage: number
-  status: "not_started" | "reading" | "completed" | "paused"
-  reading_time_minutes: number
-  started_at?: string
-  completed_at?: string
-  last_read_at?: string
-}
-
-interface LibraryStats {
-  total_books: number
-  categories: number
-  authors: number
-  total_reads: number
-  avg_characters: number
+interface BookStats {
+  totalBooks: number
+  totalCategories: number
+  totalAuthors: number
+  averageReadCount: number
+  mostPopularCategory: string
+  recentBooks: number
 }
 
 export default function BibliotecaPage() {
   const [books, setBooks] = useState<Book[]>([])
-  const [readingProgress, setReadingProgress] = useState<ReadingProgress[]>([])
-  const [bookmarks, setBookmarks] = useState<number[]>([])
-  const [stats, setStats] = useState<LibraryStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [sortBy, setSortBy] = useState<string>("popular")
-  const [activeTab, setActiveTab] = useState("explorar")
+  const [selectedTag, setSelectedTag] = useState<string>("")
+  const [sortBy, setSortBy] = useState<string>("popularity")
+  const [activeTab, setActiveTab] = useState("all")
 
-  // Estado del lector de libros
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
-  const [isReaderOpen, setIsReaderOpen] = useState(false)
-
-  const { toast } = useToast()
-
+  // Cargar libros desde la API
   useEffect(() => {
-    loadLibraryData()
-  }, [])
+    const fetchBooks = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch("/api/books")
+        const data = await response.json()
 
-  const loadLibraryData = async () => {
-    try {
-      setLoading(true)
-      console.log("Cargando datos de la biblioteca...")
-
-      // Cargar libros desde la base de datos
-      const response = await fetch("/api/books")
-      if (response.ok) {
-        const booksData = await response.json()
-        console.log("Libros cargados desde API:", booksData.length)
-
-        // Transformar los datos para incluir campos calculados
-        const transformedBooks = booksData.map((book: any) => ({
-          ...book,
-          pages: Math.ceil(book.content.length / 200), // 200 caracteres por página
-          reading_time: Math.ceil(book.content.length / 1000), // 1000 caracteres = 1 minuto
-          characters: book.content.length,
-          // Mapear campos si vienen con nombres diferentes
-          difficulty_level: book.difficulty_level || "intermedio",
-          estimated_read_time: book.estimated_read_time || Math.ceil(book.content.length / 1000),
+        // Transformar datos para asegurar compatibilidad
+        const transformedBooks = data.map((book: any) => ({
+          id: book.id,
+          title: book.title || "Sin título",
+          author: book.author || "Autor desconocido",
+          category: book.category || "General",
+          content: book.content || "",
+          tags: Array.isArray(book.tags) ? book.tags : [],
+          slug: book.slug || "",
+          read_count: book.read_count || 0,
+          created_at: book.created_at || new Date().toISOString(),
+          updated_at: book.updated_at || new Date().toISOString(),
         }))
 
         setBooks(transformedBooks)
-
-        // Calcular estadísticas reales
-        const realStats: LibraryStats = {
-          total_books: transformedBooks.length,
-          categories: new Set(transformedBooks.map((b: Book) => b.category)).size,
-          authors: new Set(transformedBooks.map((b: Book) => b.author)).size,
-          total_reads: transformedBooks.reduce((sum: number, book: Book) => sum + book.read_count, 0),
-          avg_characters: Math.round(
-            transformedBooks.reduce((sum: number, book: Book) => sum + book.characters, 0) / transformedBooks.length,
-          ),
-        }
-        setStats(realStats)
-
-        toast({
-          title: "Biblioteca cargada",
-          description: `Se cargaron ${transformedBooks.length} libros exitosamente.`,
-        })
-      } else {
-        throw new Error("Error en la respuesta de la API")
-      }
-
-      // Cargar progreso del usuario y marcadores
-      await loadUserData()
-    } catch (error) {
-      console.error("Error cargando datos de la biblioteca:", error)
-      toast({
-        title: "Error de conexión",
-        description: "No se pudo conectar a la base de datos. Mostrando datos de ejemplo.",
-        variant: "destructive",
-      })
-
-      // Datos de respaldo completos si falla la API
-      loadFallbackData()
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const loadFallbackData = () => {
-    // Datos de respaldo más completos cuando falla la conexión
-    const fallbackBooks: Book[] = [
-      {
-        id: 1,
-        title: "Organízate con Eficacia",
-        author: "David Allen",
-        category: "Productividad",
-        content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
+      } catch (error) {
+        console.error("Error loading books:", error)
+        // Datos de respaldo mejorados
+        setBooks([
+          {
+            id: 1,
+            title: "Organízate con Eficacia",
+            author: "David Allen",
+            category: "Productividad",
+            content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
 
 **El Problema Fundamental:**
 Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante y perdemos claridad mental.
@@ -192,23 +106,18 @@ Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando inte
 - Actúa con confianza sabiendo que no se te olvida nada
 
 GTD no es solo un sistema de productividad, es una forma de vida que te permite estar presente y enfocado en lo que realmente importa.`,
-        tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
-        slug: "organizate-con-eficacia",
-        read_count: 2847,
-        created_at: "2024-01-15T00:00:00Z",
-        updated_at: "2024-01-20T00:00:00Z",
-        pages: 45,
-        reading_time: 9,
-        characters: 8950,
-        difficulty_level: "intermedio",
-        estimated_read_time: 540,
-      },
-      {
-        id: 2,
-        title: "Inteligencia Emocional",
-        author: "Daniel Goleman",
-        category: "Psicología",
-        content: `La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
+            tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+            slug: "organizate-con-eficacia",
+            read_count: 2847,
+            created_at: "2024-01-15T00:00:00Z",
+            updated_at: "2024-01-20T00:00:00Z",
+          },
+          {
+            id: 2,
+            title: "Inteligencia Emocional",
+            author: "Daniel Goleman",
+            category: "Psicología",
+            content: `La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
 
 **Los Cinco Componentes de la Inteligencia Emocional:**
 
@@ -243,23 +152,18 @@ GTD no es solo un sistema de productividad, es una forma de vida que te permite 
 - Manejar disputas y negociar resoluciones
 
 La inteligencia emocional es más predictiva del éxito en la vida que el CI tradicional, y afortunadamente, puede desarrollarse a cualquier edad con práctica y dedicación.`,
-        tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
-        slug: "inteligencia-emocional",
-        read_count: 3156,
-        created_at: "2024-01-10T00:00:00Z",
-        updated_at: "2024-01-18T00:00:00Z",
-        pages: 38,
-        reading_time: 8,
-        characters: 7600,
-        difficulty_level: "intermedio",
-        estimated_read_time: 480,
-      },
-      {
-        id: 3,
-        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-        author: "Stephen R. Covey",
-        category: "Desarrollo Personal",
-        content: `Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
+            tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
+            slug: "inteligencia-emocional",
+            read_count: 3156,
+            created_at: "2024-01-10T00:00:00Z",
+            updated_at: "2024-01-18T00:00:00Z",
+          },
+          {
+            id: 3,
+            title: "Los 7 Hábitos de la Gente Altamente Efectiva",
+            author: "Stephen R. Covey",
+            category: "Desarrollo Personal",
+            content: `Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
 
 **Paradigmas y Principios:**
 Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los principios son leyes naturales universales que gobiernan la efectividad humana.
@@ -287,23 +191,18 @@ Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los princ
 - Organiza y ejecuta alrededor de prioridades
 
 Los 7 hábitos no son técnicas de personalidad superficiales, sino principios fundamentales de efectividad humana que, cuando se practican consistentemente, se convierten en la base del carácter.`,
-        tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
-        slug: "7-habitos-gente-altamente-efectiva",
-        read_count: 4521,
-        created_at: "2024-01-05T00:00:00Z",
-        updated_at: "2024-01-15T00:00:00Z",
-        pages: 42,
-        reading_time: 8,
-        characters: 8400,
-        difficulty_level: "intermedio",
-        estimated_read_time: 504,
-      },
-      {
-        id: 4,
-        title: "Cómo Ganar Amigos e Influir sobre las Personas",
-        author: "Dale Carnegie",
-        category: "Comunicación",
-        content: `Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
+            tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
+            slug: "7-habitos-gente-altamente-efectiva",
+            read_count: 4521,
+            created_at: "2024-01-05T00:00:00Z",
+            updated_at: "2024-01-15T00:00:00Z",
+          },
+          {
+            id: 4,
+            title: "Cómo Ganar Amigos e Influir sobre las Personas",
+            author: "Dale Carnegie",
+            category: "Comunicación",
+            content: `Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
 
 **PARTE I: TÉCNICAS FUNDAMENTALES PARA TRATAR CON LA GENTE**
 
@@ -322,31 +221,19 @@ Los 7 hábitos no son técnicas de personalidad superficiales, sino principios f
 - Muestra cómo pueden obtener lo que desean
 - Conecta tus ideas con sus motivaciones
 
-**PARTE II: SEIS MANERAS DE AGRADAR A LA GENTE**
-
-**Principio 1: Interésate Genuinamente en Otras Personas**
-- Muestra interés real en los demás y sus vidas
-- Haz preguntas sobre sus intereses y experiencias
-- Recuerda detalles importantes sobre las personas
-
 Los principios de Carnegie siguen siendo relevantes porque se basan en necesidades humanas fundamentales que no cambian con el tiempo: el deseo de sentirse importante, comprendido y apreciado.`,
-        tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
-        slug: "como-ganar-amigos-influir-personas",
-        read_count: 5234,
-        created_at: "2024-01-12T00:00:00Z",
-        updated_at: "2024-01-22T00:00:00Z",
-        pages: 40,
-        reading_time: 8,
-        characters: 8000,
-        difficulty_level: "principiante",
-        estimated_read_time: 480,
-      },
-      {
-        id: 5,
-        title: "Hábitos Atómicos",
-        author: "James Clear",
-        category: "Desarrollo Personal",
-        content: `Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos.
+            tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
+            slug: "como-ganar-amigos-influir-personas",
+            read_count: 5234,
+            created_at: "2024-01-12T00:00:00Z",
+            updated_at: "2024-01-22T00:00:00Z",
+          },
+          {
+            id: 5,
+            title: "Hábitos Atómicos",
+            author: "James Clear",
+            category: "Desarrollo Personal",
+            content: `Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos.
 
 **Las Cuatro Leyes del Cambio de Comportamiento:**
 
@@ -375,239 +262,191 @@ Los principios de Carnegie siguen siendo relevantes porque se basan en necesidad
 - Nunca falles dos veces: regresa rápidamente después de errores
 
 El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es notable lo que puedes construir si simplemente no paras.`,
-        tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
-        slug: "habitos-atomicos",
-        read_count: 6789,
-        created_at: "2024-01-08T00:00:00Z",
-        updated_at: "2024-01-25T00:00:00Z",
-        pages: 36,
-        reading_time: 7,
-        characters: 7200,
-        difficulty_level: "intermedio",
-        estimated_read_time: 432,
-      },
-    ]
-
-    setBooks(fallbackBooks)
-
-    const fallbackStats: LibraryStats = {
-      total_books: fallbackBooks.length,
-      categories: new Set(fallbackBooks.map((b) => b.category)).size,
-      authors: new Set(fallbackBooks.map((b) => b.author)).size,
-      total_reads: fallbackBooks.reduce((sum, book) => sum + book.read_count, 0),
-      avg_characters: Math.round(fallbackBooks.reduce((sum, book) => sum + book.characters, 0) / fallbackBooks.length),
-    }
-    setStats(fallbackStats)
-  }
-
-  const loadUserData = async () => {
-    // Cargar progreso de lectura del usuario (simulado)
-    const mockProgress: ReadingProgress[] = [
-      {
-        book_id: 1,
-        reading_progress: 100,
-        target_percentage: 100,
-        status: "completed",
-        reading_time_minutes: 180,
-        completed_at: "2024-01-20",
-      },
-      {
-        book_id: 2,
-        reading_progress: 65,
-        target_percentage: 100,
-        status: "reading",
-        reading_time_minutes: 98,
-        started_at: "2024-01-18",
-        last_read_at: "2024-01-25",
-      },
-      {
-        book_id: 3,
-        reading_progress: 30,
-        target_percentage: 60,
-        status: "reading",
-        reading_time_minutes: 45,
-        started_at: "2024-01-22",
-        last_read_at: "2024-01-24",
-      },
-    ]
-
-    setReadingProgress(mockProgress)
-    setBookmarks([1, 3, 5, 7, 9])
-  }
-
-  const refreshLibrary = async () => {
-    await loadLibraryData()
-  }
-
-  const getBookProgress = (bookId: number) => {
-    return readingProgress.find((p) => p.book_id === bookId)
-  }
-
-  const isBookmarked = (bookId: number) => {
-    return bookmarks.includes(bookId)
-  }
-
-  const toggleBookmark = async (bookId: number) => {
-    try {
-      const isCurrentlyBookmarked = isBookmarked(bookId)
-
-      if (isCurrentlyBookmarked) {
-        setBookmarks((prev) => prev.filter((id) => id !== bookId))
-        toast({
-          title: "Marcador eliminado",
-          description: "El libro se ha eliminado de tus guardados.",
-        })
-      } else {
-        setBookmarks((prev) => [...prev, bookId])
-        toast({
-          title: "Libro guardado",
-          description: "El libro se ha añadido a tus guardados.",
-        })
+            tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
+            slug: "habitos-atomicos",
+            read_count: 6789,
+            created_at: "2024-01-08T00:00:00Z",
+            updated_at: "2024-01-25T00:00:00Z",
+          },
+        ])
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error cambiando marcador:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el marcador.",
-        variant: "destructive",
-      })
     }
-  }
 
-  const setReadingGoal = async (bookId: number, percentage: 30 | 60 | 100) => {
-    try {
-      // Actualizar estado local
-      setReadingProgress((prev) =>
-        prev.map((p) => (p.book_id === bookId ? { ...p, target_percentage: percentage } : p)),
-      )
+    fetchBooks()
+  }, [])
 
-      // Si no existe progreso, crearlo
-      if (!getBookProgress(bookId)) {
-        const newProgress: ReadingProgress = {
-          book_id: bookId,
-          reading_progress: 0,
-          target_percentage: percentage,
-          status: "not_started",
-          reading_time_minutes: 0,
+  // Calcular estadísticas - CORREGIDO: agregando valores iniciales para reduce
+  const stats: BookStats = useMemo(() => {
+    if (books.length === 0) {
+      return {
+        totalBooks: 0,
+        totalCategories: 0,
+        totalAuthors: 0,
+        averageReadCount: 0,
+        mostPopularCategory: "",
+        recentBooks: 0,
+      }
+    }
+
+    const categories = [...new Set(books.map((book) => book.category))]
+    const authors = [...new Set(books.map((book) => book.author))]
+    const totalReadCount = books.reduce((sum, book) => sum + (book.read_count || 0), 0)
+    const averageReadCount = Math.round(totalReadCount / books.length)
+
+    // Encontrar categoría más popular - CORREGIDO: manejando array vacío
+    const categoryCount = books.reduce(
+      (acc, book) => {
+        const category = book.category || "General"
+        acc[category] = (acc[category] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>,
+    )
+
+    const categoryEntries = Object.entries(categoryCount)
+    const mostPopularCategory =
+      categoryEntries.length > 0 ? categoryEntries.reduce((a, b) => (a[1] > b[1] ? a : b))[0] : ""
+
+    // Libros recientes (últimos 30 días)
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    const recentBooks = books.filter((book) => new Date(book.created_at) > thirtyDaysAgo).length
+
+    return {
+      totalBooks: books.length,
+      totalCategories: categories.length,
+      totalAuthors: authors.length,
+      averageReadCount,
+      mostPopularCategory,
+      recentBooks,
+    }
+  }, [books])
+
+  // Obtener todas las categorías únicas
+  const categories = useMemo(() => {
+    if (books.length === 0) return []
+    return [...new Set(books.map((book) => book.category))].sort()
+  }, [books])
+
+  // Obtener todos los tags únicos con frecuencia - CORREGIDO: manejando array vacío
+  const allTags = useMemo(() => {
+    if (books.length === 0) return []
+
+    const tagCount = books.reduce(
+      (acc, book) => {
+        if (Array.isArray(book.tags)) {
+          book.tags.forEach((tag) => {
+            acc[tag] = (acc[tag] || 0) + 1
+          })
         }
-        setReadingProgress((prev) => [...prev, newProgress])
-      }
+        return acc
+      },
+      {} as Record<string, number>,
+    )
 
-      toast({
-        title: "Objetivo actualizado",
-        description: `Objetivo de lectura establecido en ${percentage}%`,
-      })
-    } catch (error) {
-      console.error("Error estableciendo objetivo de lectura:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el objetivo de lectura.",
-        variant: "destructive",
-      })
+    return Object.entries(tagCount)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 20) // Top 20 tags más populares
+  }, [books])
+
+  // Filtrar libros
+  const filteredBooks = useMemo(() => {
+    let filtered = [...books]
+
+    // Filtrar por término de búsqueda
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase()
+      filtered = filtered.filter(
+        (book) =>
+          book.title.toLowerCase().includes(term) ||
+          book.author.toLowerCase().includes(term) ||
+          book.category.toLowerCase().includes(term) ||
+          (Array.isArray(book.tags) && book.tags.some((tag) => tag.toLowerCase().includes(term))) ||
+          book.content.toLowerCase().includes(term),
+      )
     }
-  }
 
-  const openBookReader = (book: Book) => {
-    setSelectedBook(book)
-    setIsReaderOpen(true)
-
-    // Actualizar contador de lecturas
-    setBooks((prev) => prev.map((b) => (b.id === book.id ? { ...b, read_count: b.read_count + 1 } : b)))
-  }
-
-  const closeBookReader = () => {
-    setIsReaderOpen(false)
-    setSelectedBook(null)
-  }
-
-  const handleBookmarkFromReader = (bookId: number) => {
-    toggleBookmark(bookId)
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4 text-green-600" />
-      case "reading":
-        return <PlayCircle className="h-4 w-4 text-blue-600" />
-      case "paused":
-        return <PauseCircle className="h-4 w-4 text-yellow-600" />
-      default:
-        return <BookOpen className="h-4 w-4 text-gray-400" />
+    // Filtrar por categoría
+    if (selectedCategory && selectedCategory !== "all") {
+      filtered = filtered.filter((book) => book.category === selectedCategory)
     }
-  }
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "Completado"
-      case "reading":
-        return "Leyendo"
-      case "paused":
-        return "Pausado"
-      default:
-        return "No iniciado"
+    // Filtrar por tag seleccionado
+    if (selectedTag) {
+      filtered = filtered.filter((book) => Array.isArray(book.tags) && book.tags.includes(selectedTag))
     }
-  }
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "principiante":
-        return "bg-green-100 text-green-800"
-      case "intermedio":
-        return "bg-yellow-100 text-yellow-800"
-      case "avanzado":
-        return "bg-red-100 text-red-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
-  }
-
-  const filteredBooks = books.filter((book) => {
-    const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
-
-  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    // Ordenar
     switch (sortBy) {
-      case "popular":
-        return b.read_count - a.read_count
+      case "popularity":
+        filtered.sort((a, b) => (b.read_count || 0) - (a.read_count || 0))
+        break
       case "recent":
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      case "title":
-        return a.title.localeCompare(b.title)
+        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        break
+      case "alphabetical":
+        filtered.sort((a, b) => a.title.localeCompare(b.title))
+        break
       case "author":
-        return a.author.localeCompare(b.author)
-      default:
-        return 0
+        filtered.sort((a, b) => a.author.localeCompare(b.author))
+        break
     }
-  })
 
-  const getBooksByStatus = (status: string) => {
-    return books.filter((book) => {
-      const progress = getBookProgress(book.id)
-      return progress?.status === status
-    })
+    return filtered
+  }, [books, searchTerm, selectedCategory, selectedTag, sortBy])
+
+  // Filtrar por pestañas
+  const getBooksByTab = (tab: string) => {
+    switch (tab) {
+      case "popular":
+        return filteredBooks.filter((book) => (book.read_count || 0) > 1000)
+      case "recent":
+        const thirtyDaysAgo = new Date()
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+        return filteredBooks.filter((book) => new Date(book.created_at) > thirtyDaysAgo)
+      case "favorites":
+        return filteredBooks.filter((book) => (book.read_count || 0) > 2000)
+      default:
+        return filteredBooks
+    }
   }
 
-  const getBookmarkedBooks = () => {
-    return books.filter((book) => isBookmarked(book.id))
+  const displayBooks = getBooksByTab(activeTab)
+
+  // Función para manejar click en tag
+  const handleTagClick = (tag: string) => {
+    if (selectedTag === tag) {
+      setSelectedTag("") // Deseleccionar si ya está seleccionado
+    } else {
+      setSelectedTag(tag)
+      setActiveTab("all") // Cambiar a la pestaña "all" para mostrar resultados
+    }
   }
 
-  const categories = Array.from(new Set(books.map((book) => book.category)))
+  // Función para limpiar filtros
+  const clearFilters = () => {
+    setSearchTerm("")
+    setSelectedCategory("all")
+    setSelectedTag("")
+    setActiveTab("all")
+  }
+
+  const estimateReadingTime = (content: string) => {
+    if (!content) return 0
+    const wordsPerMinute = 200
+    const wordCount = content.split(" ").length
+    return Math.ceil(wordCount / wordsPerMinute)
+  }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <BookOpen className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
-            <p className="text-lg text-gray-600">Cargando biblioteca...</p>
-            <p className="text-sm text-gray-500 mt-2">Conectando con la base de datos...</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Cargando biblioteca...</p>
           </div>
         </div>
       </div>
@@ -615,618 +454,254 @@ El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Encabezado */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">📚 Biblioteca de Desarrollo Profesional</h1>
-              <p className="text-lg text-gray-600">
-                Explora, aprende y crece con nuestra colección completa de libros de desarrollo profesional
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <QuickBookAccess
-                books={books}
-                onBookSelect={openBookReader}
-                trigger={
-                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-                    <Zap className="h-4 w-4" />
-                    Acceso Rápido
-                  </Button>
-                }
-              />
-              <EnhancedSearchAlgorithm
-                books={books}
-                onBookSelect={openBookReader}
-                trigger={
-                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-                    <Search className="h-4 w-4" />
-                    Búsqueda IA
-                  </Button>
-                }
-              />
-              <Button onClick={refreshLibrary} variant="outline" className="flex items-center gap-2 bg-transparent">
-                <RefreshCw className="h-4 w-4" />
-                Actualizar
-              </Button>
-            </div>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Biblioteca de Desarrollo Profesional</h1>
+        <p className="text-gray-600">Descubre recursos valiosos para tu crecimiento personal y profesional</p>
+      </div>
 
-        {/* Tarjetas de Estadísticas */}
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-            <Card>
-              <CardContent className="p-4 text-center">
-                <BookOpen className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.total_books}</div>
-                <div className="text-sm text-gray-600">Total Libros</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <Filter className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.categories}</div>
-                <div className="text-sm text-gray-600">Categorías</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <Users className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.authors}</div>
-                <div className="text-sm text-gray-600">Autores</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <TrendingUp className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.total_reads.toLocaleString()}</div>
-                <div className="text-sm text-gray-600">Total Lecturas</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <BarChart3 className="h-8 w-8 mx-auto mb-2 text-red-600" />
-                <div className="text-2xl font-bold text-gray-900">{stats.avg_characters.toLocaleString()}</div>
-                <div className="text-sm text-gray-600">Promedio Caracteres</div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Búsqueda y Filtros */}
-        <Card className="mb-8">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <Card>
           <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    placeholder="Buscar por título, autor o etiquetas..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
+            <div className="flex items-center">
+              <BookOpen className="h-8 w-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total de Libros</p>
+                <p className="text-2xl font-bold">{stats.totalBooks}</p>
               </div>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Categoría" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas las categorías</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="popular">Más populares</SelectItem>
-                  <SelectItem value="recent">Más recientes</SelectItem>
-                  <SelectItem value="title">Título A-Z</SelectItem>
-                  <SelectItem value="author">Autor A-Z</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="mt-4 text-sm text-gray-600">
-              Mostrando {sortedBooks.length} de {books.length} libros
-              {searchTerm && ` para "${searchTerm}"`}
-              {selectedCategory !== "all" && ` en ${selectedCategory}`}
             </div>
           </CardContent>
         </Card>
 
-        {/* Pestañas */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="explorar">Explorar</TabsTrigger>
-            <TabsTrigger value="populares">Populares</TabsTrigger>
-            <TabsTrigger value="leyendo">Leyendo</TabsTrigger>
-            <TabsTrigger value="completados">Completados</TabsTrigger>
-            <TabsTrigger value="guardados">Guardados</TabsTrigger>
-            <TabsTrigger value="estadisticas">Estadísticas</TabsTrigger>
-          </TabsList>
-
-          {/* Pestaña Explorar */}
-          <TabsContent value="explorar">
-            {sortedBooks.length === 0 ? (
-              <Card>
-                <CardContent className="p-8 text-center">
-                  <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                  <p className="text-gray-600">No se encontraron libros con los filtros actuales</p>
-                  <Button
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchTerm("")
-                      setSelectedCategory("all")
-                    }}
-                  >
-                    Limpiar Filtros
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedBooks.map((book) => {
-                  const progress = getBookProgress(book.id)
-                  return (
-                    <Card key={book.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg mb-2 line-clamp-2">{book.title}</CardTitle>
-                            <CardDescription className="flex items-center gap-2 mb-2">
-                              <User className="h-4 w-4" />
-                              {book.author}
-                            </CardDescription>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleBookmark(book.id)}
-                            className={isBookmarked(book.id) ? "text-yellow-600" : "text-gray-400"}
-                          >
-                            <BookmarkIcon className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary">{book.category}</Badge>
-                          {book.difficulty_level && (
-                            <Badge className={getDifficultyColor(book.difficulty_level)}>{book.difficulty_level}</Badge>
-                          )}
-                          {progress && (
-                            <div className="flex items-center gap-1">
-                              {getStatusIcon(progress.status)}
-                              <span className="text-xs text-gray-600">{getStatusText(progress.status)}</span>
-                            </div>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          {/* Barra de Progreso */}
-                          {progress && progress.reading_progress > 0 && (
-                            <div className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span>Progreso</span>
-                                <span>
-                                  {progress.reading_progress}% de {progress.target_percentage}%
-                                </span>
-                              </div>
-                              <Progress
-                                value={(progress.reading_progress / progress.target_percentage) * 100}
-                                className="h-2"
-                              />
-                            </div>
-                          )}
-
-                          {/* Información del Libro */}
-                          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <BookOpen className="h-4 w-4" />
-                              {book.pages} páginas
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              {book.reading_time} min
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4" />
-                              {book.read_count.toLocaleString()} lecturas
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <BarChart3 className="h-4 w-4" />
-                              {book.characters.toLocaleString()} chars
-                            </div>
-                          </div>
-
-                          {/* Etiquetas */}
-                          <div className="flex flex-wrap gap-1">
-                            {book.tags.slice(0, 3).map((tag) => (
-                              <Badge key={tag} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                            {book.tags.length > 3 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{book.tags.length - 3}
-                              </Badge>
-                            )}
-                          </div>
-
-                          {/* Selección de Objetivo de Lectura */}
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium">Objetivo de Lectura:</label>
-                            <div className="flex gap-2">
-                              {[30, 60, 100].map((percentage) => (
-                                <Button
-                                  key={percentage}
-                                  variant={progress?.target_percentage === percentage ? "default" : "outline"}
-                                  size="sm"
-                                  onClick={() => setReadingGoal(book.id, percentage as 30 | 60 | 100)}
-                                  className="flex-1"
-                                >
-                                  {percentage}%
-                                </Button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Botones de Acción */}
-                          <div className="flex gap-2">
-                            <Button className="flex-1" onClick={() => openBookReader(book)}>
-                              <PlayCircle className="h-4 w-4 mr-2" />
-                              {progress?.status === "completed" ? "Releer" : "Leer"}
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => toggleBookmark(book.id)}>
-                              <BookOpen className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Pestaña Populares */}
-          <TabsContent value="populares">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold mb-4">📈 Libros Más Populares</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {books
-                  .sort((a, b) => b.read_count - a.read_count)
-                  .slice(0, 9)
-                  .map((book, index) => {
-                    const progress = getBookProgress(book.id)
-                    return (
-                      <Card key={book.id} className="relative">
-                        <div className="absolute -top-2 -left-2 bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
-                          {index + 1}
-                        </div>
-                        <CardHeader>
-                          <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
-                          <CardDescription>{book.author}</CardDescription>
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary">{book.category}</Badge>
-                            <div className="flex items-center gap-1 text-sm text-gray-600">
-                              <Star className="h-4 w-4 text-yellow-500" />
-                              {book.read_count.toLocaleString()} lecturas
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          {progress && progress.reading_progress > 0 && (
-                            <div className="mb-4">
-                              <div className="flex justify-between text-sm mb-1">
-                                <span>Tu progreso</span>
-                                <span>{progress.reading_progress}%</span>
-                              </div>
-                              <Progress value={progress.reading_progress} className="h-2" />
-                            </div>
-                          )}
-                          <Button className="w-full" onClick={() => openBookReader(book)}>
-                            <PlayCircle className="h-4 w-4 mr-2" />
-                            Leer Ahora
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Filter className="h-8 w-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Categorías</p>
+                <p className="text-2xl font-bold">{stats.totalCategories}</p>
               </div>
             </div>
-          </TabsContent>
+          </CardContent>
+        </Card>
 
-          {/* Pestaña Leyendo */}
-          <TabsContent value="leyendo">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold mb-4">📖 Libros que Estás Leyendo</h3>
-              {getBooksByStatus("reading").length === 0 ? (
-                <Card>
-                  <CardContent className="p-8 text-center">
-                    <BookOpen className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">No tienes libros en progreso</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
-                      Explorar Biblioteca
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {getBooksByStatus("reading").map((book) => {
-                    const progress = getBookProgress(book.id)!
-                    return (
-                      <Card key={book.id}>
-                        <CardHeader>
-                          <CardTitle className="text-lg">{book.title}</CardTitle>
-                          <CardDescription>{book.author}</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div>
-                              <div className="flex justify-between text-sm mb-2">
-                                <span>Progreso</span>
-                                <span>
-                                  {progress.reading_progress}% de {progress.target_percentage}%
-                                </span>
-                              </div>
-                              <Progress
-                                value={(progress.reading_progress / progress.target_percentage) * 100}
-                                className="h-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                              <div>Tiempo leído: {progress.reading_time_minutes} min</div>
-                              <div>
-                                Última lectura:{" "}
-                                {progress.last_read_at ? new Date(progress.last_read_at).toLocaleDateString() : "N/A"}
-                              </div>
-                            </div>
-                            <Button className="w-full" onClick={() => openBookReader(book)}>
-                              <PlayCircle className="h-4 w-4 mr-2" />
-                              Continuar Leyendo
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Pestaña Completados */}
-          <TabsContent value="completados">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold mb-4">✅ Libros Completados</h3>
-              {getBooksByStatus("completed").length === 0 ? (
-                <Card>
-                  <CardContent className="p-8 text-center">
-                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">Aún no has completado ningún libro</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
-                      Comenzar a Leer
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {getBooksByStatus("completed").map((book) => {
-                    const progress = getBookProgress(book.id)!
-                    return (
-                      <Card key={book.id}>
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <CardTitle className="text-lg">{book.title}</CardTitle>
-                              <CardDescription>{book.author}</CardDescription>
-                            </div>
-                            <CheckCircle className="h-6 w-6 text-green-600" />
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            <div className="text-sm text-gray-600">
-                              Completado:{" "}
-                              {progress.completed_at ? new Date(progress.completed_at).toLocaleDateString() : "N/A"}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              Tiempo total: {progress.reading_time_minutes} minutos
-                            </div>
-                            <Progress value={100} className="h-2" />
-                            <div className="flex gap-2">
-                              <Button variant="outline" className="flex-1 bg-transparent">
-                                <Star className="h-4 w-4 mr-2" />
-                                Reseñar
-                              </Button>
-                              <Button
-                                variant="outline"
-                                className="flex-1 bg-transparent"
-                                onClick={() => openBookReader(book)}
-                              >
-                                <PlayCircle className="h-4 w-4 mr-2" />
-                                Releer
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Pestaña Guardados */}
-          <TabsContent value="guardados">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold mb-4">🔖 Libros Guardados</h3>
-              {getBookmarkedBooks().length === 0 ? (
-                <Card>
-                  <CardContent className="p-8 text-center">
-                    <Bookmark className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600">No tienes libros guardados</p>
-                    <Button className="mt-4" onClick={() => setActiveTab("explorar")}>
-                      Explorar y Guardar
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {getBookmarkedBooks().map((book) => {
-                    const progress = getBookProgress(book.id)
-                    return (
-                      <Card key={book.id}>
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <CardTitle className="text-lg">{book.title}</CardTitle>
-                              <CardDescription>{book.author}</CardDescription>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => toggleBookmark(book.id)}
-                              className="text-yellow-600"
-                            >
-                              <BookmarkIcon className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <Badge variant="secondary">{book.category}</Badge>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            {progress && progress.reading_progress > 0 && (
-                              <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                  <span>Progreso</span>
-                                  <span>{progress.reading_progress}%</span>
-                                </div>
-                                <Progress value={progress.reading_progress} className="h-2" />
-                              </div>
-                            )}
-                            <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-                              <div>{book.pages} páginas</div>
-                              <div>{book.reading_time} min</div>
-                            </div>
-                            <Button className="w-full" onClick={() => openBookReader(book)}>
-                              <PlayCircle className="h-4 w-4 mr-2" />
-                              {progress?.status === "completed" ? "Releer" : "Leer"}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Pestaña Estadísticas */}
-          <TabsContent value="estadisticas">
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold mb-4">📊 Estadísticas de Lectura</h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <BookOpen className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                    <div className="text-2xl font-bold text-gray-900">
-                      {readingProgress.filter((p) => p.status === "completed").length}
-                    </div>
-                    <div className="text-sm text-gray-600">Libros Completados</div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <PlayCircle className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                    <div className="text-2xl font-bold text-gray-900">
-                      {readingProgress.filter((p) => p.status === "reading").length}
-                    </div>
-                    <div className="text-sm text-gray-600">Leyendo Actualmente</div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Clock className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                    <div className="text-2xl font-bold text-gray-900">
-                      {readingProgress.reduce((sum, p) => sum + p.reading_time_minutes, 0)}
-                    </div>
-                    <div className="text-sm text-gray-600">Minutos Totales</div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Bookmark className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                    <div className="text-2xl font-bold text-gray-900">{bookmarks.length}</div>
-                    <div className="text-sm text-gray-600">Libros Guardados</div>
-                  </CardContent>
-                </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <User className="h-8 w-8 text-purple-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Autores</p>
+                <p className="text-2xl font-bold">{stats.totalAuthors}</p>
               </div>
-
-              {/* Progreso por Categoría */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Progreso por Categoría</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {categories.map((category) => {
-                      const categoryBooks = books.filter((b) => b.category === category)
-                      const categoryProgress = categoryBooks.map((b) => getBookProgress(b.id)).filter(Boolean)
-                      const avgProgress =
-                        categoryProgress.length > 0
-                          ? categoryProgress.reduce((sum, p) => sum + p!.reading_progress, 0) / categoryProgress.length
-                          : 0
-
-                      return (
-                        <div key={category} className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="font-medium">{category}</span>
-                            <span>{Math.round(avgProgress)}% promedio</span>
-                          </div>
-                          <Progress value={avgProgress} className="h-2" />
-                          <div className="text-xs text-gray-600">
-                            {categoryBooks.length} libros •{" "}
-                            {categoryProgress.filter((p) => p!.status === "completed").length} completados
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
             </div>
-          </TabsContent>
-        </Tabs>
+          </CardContent>
+        </Card>
 
-        {/* Lector de Libros Mejorado */}
-        {selectedBook && (
-          <EnhancedBookReader
-            book={selectedBook}
-            isOpen={isReaderOpen}
-            onClose={closeBookReader}
-            onBookmark={handleBookmarkFromReader}
-            isBookmarked={isBookmarked(selectedBook.id)}
-          />
-        )}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <TrendingUp className="h-8 w-8 text-orange-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Promedio de Lecturas</p>
+                <p className="text-2xl font-bold">{stats.averageReadCount}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Search and Filters */}
+      <Card className="mb-8">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Buscar libros, autores, temas..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Todas las categorías" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas las categorías</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger>
+                <SelectValue placeholder="Ordenar por" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="popularity">Más populares</SelectItem>
+                <SelectItem value="recent">Más recientes</SelectItem>
+                <SelectItem value="alphabetical">Alfabético</SelectItem>
+                <SelectItem value="author">Por autor</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline" onClick={clearFilters} className="w-full bg-transparent">
+              Limpiar filtros
+            </Button>
+          </div>
+
+          {/* Filtros activos */}
+          {(selectedTag || selectedCategory !== "all" || searchTerm) && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="text-sm text-gray-600">Filtros activos:</span>
+              {selectedTag && (
+                <Badge variant="secondary" className="cursor-pointer" onClick={() => setSelectedTag("")}>
+                  Tag: {selectedTag}
+                  <X className="h-3 w-3 ml-1" />
+                </Badge>
+              )}
+              {selectedCategory !== "all" && (
+                <Badge variant="secondary" className="cursor-pointer" onClick={() => setSelectedCategory("all")}>
+                  Categoría: {selectedCategory}
+                  <X className="h-3 w-3 ml-1" />
+                </Badge>
+              )}
+              {searchTerm && (
+                <Badge variant="secondary" className="cursor-pointer" onClick={() => setSearchTerm("")}>
+                  Búsqueda: {searchTerm}
+                  <X className="h-3 w-3 ml-1" />
+                </Badge>
+              )}
+            </div>
+          )}
+
+          {/* Tags populares */}
+          {allTags.length > 0 && (
+            <div className="border-t pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Tag className="h-4 w-4 text-gray-600" />
+                <span className="text-sm font-medium text-gray-600">Tags populares:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {allTags.slice(0, 15).map(([tag, count]) => (
+                  <Badge
+                    key={tag}
+                    variant={selectedTag === tag ? "default" : "outline"}
+                    className="cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag} ({count})
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="all">Todos ({filteredBooks.length})</TabsTrigger>
+          <TabsTrigger value="popular">
+            Populares ({filteredBooks.filter((book) => (book.read_count || 0) > 1000).length})
+          </TabsTrigger>
+          <TabsTrigger value="recent">Recientes ({stats.recentBooks})</TabsTrigger>
+          <TabsTrigger value="favorites">
+            Favoritos ({filteredBooks.filter((book) => (book.read_count || 0) > 2000).length})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={activeTab} className="mt-6">
+          {displayBooks.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-600 mb-2">No se encontraron libros</h3>
+                <p className="text-gray-500 mb-4">Intenta ajustar tus filtros o términos de búsqueda</p>
+                <Button onClick={clearFilters}>Limpiar todos los filtros</Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayBooks.map((book) => (
+                <Card key={book.id} className="hover:shadow-lg transition-shadow duration-200">
+                  <CardHeader>
+                    <div className="flex justify-between items-start mb-2">
+                      <Badge variant="outline">{book.category}</Badge>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Eye className="h-4 w-4 mr-1" />
+                        {book.read_count || 0}
+                      </div>
+                    </div>
+                    <CardTitle className="text-lg leading-tight">{book.title}</CardTitle>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <User className="h-4 w-4 mr-1" />
+                      {book.author}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                      {book.content ? book.content.substring(0, 150) + "..." : "Sin descripción disponible"}
+                    </p>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {estimateReadingTime(book.content)} min lectura
+                      </div>
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 mr-1 text-yellow-500" />
+                        4.5
+                      </div>
+                    </div>
+
+                    {Array.isArray(book.tags) && book.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {book.tags.slice(0, 3).map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs cursor-pointer hover:bg-blue-100 transition-colors"
+                            onClick={() => handleTagClick(tag)}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                        {book.tags.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{book.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="flex gap-2">
+                      <Button className="flex-1" size="sm">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Leer
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Bookmark className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Heart className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
