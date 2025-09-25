@@ -1,8 +1,7 @@
 "use client"
-
-import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { createClient } from "@supabase/supabase-js"
+import type { ReactNode } from "react"
 
 interface User {
   id: string
@@ -19,7 +18,11 @@ interface SessionContextType {
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined)
 
-export function SessionWrapper({ children }: { children: React.ReactNode }) {
+interface SessionWrapperProps {
+  children: ReactNode
+}
+
+export function SessionWrapper({ children }: SessionWrapperProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
