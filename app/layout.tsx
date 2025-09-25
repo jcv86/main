@@ -3,61 +3,36 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
+  title: "Plataforma de Desarrollo Profesional con IA",
   description:
-    "Plataforma integral de evaluación profesional con tests de personalidad, evaluación de habilidades y coaching impulsado por IA para ayudarte a descubrir y desarrollar tu camino profesional.",
+    "Transforma tu carrera con evaluaciones psicométricas avanzadas, coaching personalizado con IA y una biblioteca de desarrollo profesional.",
   keywords:
-    "desarrollo profesional, tests de personalidad, evaluación DISC, MBTI, Big Five, coaching profesional, desarrollo profesional, evaluación de habilidades",
-  authors: [{ name: "Plataforma de Desarrollo Profesional" }],
-  creator: "Plataforma de Desarrollo Profesional",
-  publisher: "Plataforma de Desarrollo Profesional",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL("https://career-development-platform.vercel.app"),
-  alternates: {
-    canonical: "/",
-  },
+    "desarrollo profesional, coaching IA, evaluaciones psicométricas, DISC, Big Five, MBTI, RIASEC, inteligencia emocional",
+  authors: [{ name: "Equipo de Desarrollo Profesional" }],
   openGraph: {
-    title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
+    title: "Plataforma de Desarrollo Profesional con IA",
     description:
-      "Realiza evaluaciones integrales de personalidad y habilidades con insights impulsados por IA para acelerar tu crecimiento profesional.",
-    url: "https://career-development-platform.vercel.app",
-    siteName: "Plataforma de Desarrollo Profesional",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Plataforma de Desarrollo Profesional",
-      },
-    ],
-    locale: "es_ES",
+      "Descubre tu potencial profesional con evaluaciones psicométricas avanzadas y coaching personalizado con IA",
     type: "website",
+    locale: "es_ES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Plataforma de Desarrollo Profesional - Descubre Tu Camino Profesional",
-    description:
-      "Realiza evaluaciones integrales de personalidad y habilidades con insights impulsados por IA para acelerar tu crecimiento profesional.",
-    images: ["/og-image.jpg"],
+    title: "Plataforma de Desarrollo Profesional con IA",
+    description: "Transforma tu carrera con evaluaciones psicométricas avanzadas y coaching personalizado con IA",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
   },
     generator: 'v0.app'
 }
@@ -68,9 +43,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        <SessionWrapper>{children}</SessionWrapper>
+    <html lang="es">
+      <body className={inter.className}>
+        <SessionWrapper>
+          {children}
+          <Toaster />
+        </SessionWrapper>
       </body>
     </html>
   )

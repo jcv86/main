@@ -1,13 +1,12 @@
 "use client"
 
-import type React from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronRight, Target, Award, BookOpen, Brain, TrendingUp } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 
-const LandingPage: React.FC = () => {
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
@@ -406,5 +405,3 @@ const LandingPage: React.FC = () => {
     </div>
   )
 }
-
-export default LandingPage
