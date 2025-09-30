@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
+import { Slider } from "@/components/ui/slider"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   BookOpen,
   Clock,
@@ -22,6 +24,12 @@ import {
   Heart,
   Download,
   ArrowLeft,
+  Play,
+  Pause,
+  Square,
+  Volume2,
+  SkipForward,
+  SkipBack,
 } from "lucide-react"
 
 interface Book {
@@ -37,7 +45,7 @@ interface Book {
   updated_at: string
 }
 
-// Fallback books data with extensive content
+// Fallback books data
 const fallbackBooks: Book[] = [
   {
     id: 1,
@@ -46,753 +54,25 @@ const fallbackBooks: Book[] = [
     category: "Productividad",
     content: `# Organízate con Eficacia (Getting Things Done)
 
-Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo. Desarrollado por David Allen, este método no es solo una técnica de organización, sino una filosofía completa para vivir y trabajar con mayor claridad, control y confianza.
+Organízate con Eficacia es un sistema revolucionario de gestión del tiempo y la productividad desarrollado por David Allen.
 
-## Introducción: El Arte de la Productividad sin Estrés
+## Los Cinco Pasos Fundamentales
 
-En el mundo moderno, nos enfrentamos a una avalancha constante de información, tareas, compromisos y responsabilidades. La mayoría de las personas viven en un estado de estrés crónico, tratando de recordar todo lo que necesitan hacer mientras intentan concentrarse en lo que están haciendo ahora. Este es el problema fundamental que GTD resuelve.
+### 1. Capturar
+Captura todo lo que llama tu atención en un sistema externo confiable.
 
-### El Problema de la Mente como Sistema de Recordatorio
+### 2. Aclarar
+Procesa cada elemento y decide qué significa y qué hacer con él.
 
-Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando intentamos mantener todo en nuestra cabeza, experimentamos lo que David Allen llama "bucles abiertos" - pensamientos recurrentes sobre cosas que necesitamos hacer pero que no hemos capturado o procesado adecuadamente.
+### 3. Organizar
+Pon cada elemento en su lugar apropiado según el sistema GTD.
 
-Estos bucles abiertos consumen energía mental constantemente, incluso cuando no podemos hacer nada al respecto. Es como tener docenas de aplicaciones abiertas en tu computadora - eventualmente, el sistema se ralentiza y puede colapsar.
+### 4. Reflexionar
+Revisa regularmente tu sistema para mantenerlo actualizado.
 
-### La Promesa de GTD
-
-GTD promete algo revolucionario: una mente clara y libre de estrés, donde puedes confiar completamente en tu sistema externo para recordar todo lo que necesitas hacer, permitiéndote estar completamente presente en lo que estás haciendo ahora.
-
-## PARTE I: EL ARTE DE HACER QUE LAS COSAS SUCEDAN
-
-### Capítulo 1: Una Nueva Práctica para una Nueva Realidad
-
-El mundo ha cambiado dramáticamente en las últimas décadas. Antes, las personas tenían trabajos claramente definidos con tareas específicas. Hoy, la mayoría de nosotros somos "trabajadores del conocimiento" con responsabilidades ambiguas y en constante cambio.
-
-#### Los Desafíos del Trabajo Moderno
-
-**Sobrecarga de Información:**
-Recibimos más información en un día de la que nuestros antepasados procesaban en meses. Emails, mensajes, notificaciones, reuniones, llamadas - todo compite por nuestra atención.
-
-**Fronteras Difusas:**
-Ya no existe una separación clara entre trabajo y vida personal. Los smartphones nos mantienen conectados 24/7, y las responsabilidades se mezclan constantemente.
-
-**Expectativas Crecientes:**
-Se espera que seamos más productivos, más creativos, más responsivos y más eficientes que nunca antes.
-
-**Múltiples Roles:**
-La mayoría de nosotros jugamos múltiples roles: empleado, padre, cónyuge, amigo, ciudadano, cada uno con sus propias demandas y responsabilidades.
-
-#### La Anatomía del Control
-
-Para tener control sobre tu trabajo y tu vida, necesitas dos elementos fundamentales:
-
-1. **Definir claramente el trabajo:** Saber exactamente qué constituye "terminado" para cualquier proyecto o tarea.
-
-2. **Controlar los compromisos:** Tener un sistema confiable para capturar, procesar y organizar todos tus compromisos.
-
-### Capítulo 2: Controlar tu Trabajo: Los Cinco Pasos
-
-El método GTD se basa en cinco pasos fundamentales que forman un flujo de trabajo natural y sostenible:
-
-#### Paso 1: CAPTURAR - Recopilar lo que Llama tu Atención
-
-**El Principio:**
-Todo lo que consideres incompleto, inacabado o que requiera tu atención debe salir de tu mente y entrar en un sistema de captura confiable.
-
-**Herramientas de Captura:**
-- **Bandeja de entrada física:** Para documentos, tarjetas de visita, recibos
-- **Aplicación de notas:** En tu smartphone para captura rápida
-- **Libreta:** Para cuando no tienes acceso digital
-- **Grabadora de voz:** Para ideas mientras conduces
-- **Email:** Para enviar ideas a ti mismo
-
-**Reglas de Captura:**
-1. **Captura todo:** No confíes en tu memoria para nada
-2. **Una sola bandeja de entrada por tipo:** No disperses las cosas
-3. **Vacía regularmente:** Las bandejas llenas pierden efectividad
-4. **No proceses mientras capturas:** Solo recopila, no analices
-
-**Técnicas Avanzadas de Captura:**
-
-**La Recopilación Completa:**
-Dedica 2-6 horas a hacer una recopilación exhaustiva de todo lo que está en tu mente y en tu entorno. Esto incluye:
-- Todo lo que está en tu escritorio
-- Todos los papeles sueltos
-- Todas las notas adhesivas
-- Todo lo que está en tu mente que te preocupa
-- Todos los proyectos pendientes
-- Todas las ideas para el futuro
-
-**Captura Ubicua:**
-Desarrolla el hábito de capturar inmediatamente cualquier cosa que llame tu atención. Esto requiere tener siempre a mano una herramienta de captura.
-
-#### Paso 2: ACLARAR - Procesar lo que Significa
-
-**El Algoritmo de Procesamiento:**
-Para cada elemento en tu bandeja de entrada, pregúntate:
-
-1. **¿Qué es esto exactamente?**
-   - Define claramente de qué se trata el elemento
-
-2. **¿Es accionable?**
-   - Si NO es accionable:
-     - **Basura:** Elimínalo si no lo necesitas
-     - **Incubar:** Ponlo en "Algún día/Tal vez" si podrías querer hacerlo
-     - **Referencia:** Archívalo si es información útil
-
-   - Si SÍ es accionable:
-     - **¿Cuál es la siguiente acción específica?**
-     - **¿Tomará menos de 2 minutos?**
-       - Si SÍ: Hazlo ahora
-       - Si NO: Delégalo o ponlo en tu sistema
-
-**La Regla de los 2 Minutos:**
-Si una acción toma menos de 2 minutos, hazla inmediatamente. Es más eficiente hacerla que organizarla.
-
-**Definir Acciones Específicas:**
-Una de las claves de GTD es definir acciones específicas y físicas. En lugar de "Planificar vacaciones", define "Llamar a la agencia de viajes para preguntar sobre paquetes a Europa".
-
-**Ejemplos de Procesamiento:**
-
-**Elemento:** Email sobre reunión de presupuesto
-- **¿Es accionable?** Sí
-- **¿Siguiente acción?** "Revisar números de ventas del Q3 para preparar presentación"
-- **¿Menos de 2 minutos?** No
-- **Acción:** Agregar a lista @Ordenador
-
-**Elemento:** Artículo interesante sobre liderazgo
-- **¿Es accionable?** No directamente
-- **¿Qué es?** Material de referencia
-- **Acción:** Archivar en carpeta "Desarrollo profesional"
-
-#### Paso 3: ORGANIZAR - Poner las Cosas en su Lugar
-
-**Listas de Contexto:**
-Organiza tus acciones por el contexto donde puedes realizarlas:
-
-- **@Llamadas:** Acciones que requieren teléfono
-- **@Ordenador:** Tareas que necesitas hacer en la computadora
-- **@Recados:** Cosas que hacer cuando sales
-- **@Casa:** Acciones para hacer en casa
-- **@Oficina:** Tareas específicas del lugar de trabajo
-- **@Agenda:** Cosas para discutir con personas específicas
-
-**Listas de Proyectos:**
-Un proyecto es cualquier resultado deseado que requiere más de una acción. Mantén una lista de todos tus proyectos activos.
-
-**Calendario:**
-Usa tu calendario SOLO para:
-- Citas con hora específica
-- Acciones que deben hacerse en un día específico
-- Información específica del día
-
-**Sistema de Archivo de Referencia:**
-Crea un sistema simple y accesible para información que podrías necesitar más tarde.
-
-**Algún Día/Tal Vez:**
-Una lista para cosas que podrías querer hacer pero no ahora.
-
-#### Paso 4: REFLEXIONAR - Revisar Frecuentemente
-
-**La Revisión Diaria:**
-Cada día, revisa:
-- Tu calendario para el día
-- Tus listas de acciones
-- Nuevos elementos en bandejas de entrada
-
-**La Revisión Semanal:**
-Esta es la práctica más crítica de GTD. Cada semana:
-
-1. **Recopilar y procesar:** Vacía todas las bandejas de entrada
-2. **Revisar sistema:** Mira todas las listas de acciones
-3. **Revisar calendario:** Revisa la semana pasada y las próximas semanas
-4. **Revisar proyectos:** Asegúrate de que cada proyecto tenga una siguiente acción
-5. **Revisar "Algún día/Tal vez":** Ve si algo se ha vuelto activo
-
-**Beneficios de la Revisión Semanal:**
-- Mantiene tu sistema actualizado y confiable
-- Te da perspectiva sobre tu trabajo y vida
-- Reduce el estrés al confirmar que no se te olvida nada
-- Te permite hacer ajustes proactivos
-
-#### Paso 5: COMPROMETERSE - Simplemente Hacer
-
-**Elegir Acciones:**
-Con un sistema confiable, puedes elegir qué hacer basándote en:
-- **Contexto:** ¿Dónde estás y qué herramientas tienes?
-- **Tiempo disponible:** ¿Cuánto tiempo tienes?
-- **Energía disponible:** ¿Qué tan alerta te sientes?
-- **Prioridad:** ¿Qué es más importante ahora?
-
-**El Modelo de Cuatro Criterios:**
-1. **Contexto:** ¿Puedes hacerlo aquí y ahora?
-2. **Tiempo:** ¿Tienes suficiente tiempo?
-3. **Energía:** ¿Tienes la energía mental/física necesaria?
-4. **Prioridad:** ¿Es lo más importante que puedes hacer?
-
-## PARTE II: PRACTICANDO LA PRODUCTIVIDAD SIN ESTRÉS
-
-### Capítulo 3: Comenzar: Configurando el Tiempo, Espacio y Herramientas
-
-**Configuración del Espacio de Trabajo:**
-
-**El Escritorio:**
-- Mantén solo lo que necesitas para el trabajo actual
-- Ten bandejas de entrada claramente definidas
-- Asegúrate de tener espacio para procesar
-
-**Herramientas Esenciales:**
-- Bandejas de entrada (física y digital)
-- Sistema de archivo de referencia
-- Calendario
-- Listas de acciones
-- Herramientas de captura portátiles
-
-**La Configuración Digital:**
-- Email como bandeja de entrada
-- Aplicación de gestión de tareas
-- Sistema de archivo digital
-- Herramientas de sincronización entre dispositivos
-
-### Capítulo 4: Capturando: Corriendo la Mente
-
-**La Recopilación Mental:**
-Haz una lista de todo lo que está en tu mente que sientes que debería ser diferente de como es ahora. Esto incluye:
-
-- Proyectos profesionales pendientes
-- Proyectos personales que quieres hacer
-- Cosas que necesitas comprar o reemplazar
-- Personas con las que necesitas hablar
-- Lugares que quieres visitar
-- Ideas para el futuro
-- Preocupaciones sobre la salud
-- Asuntos financieros pendientes
-
-**Técnicas para la Recopilación:**
-
-**Lluvia de Ideas Estructurada:**
-- Dedica 2-3 horas sin interrupciones
-- Usa papel o aplicación digital
-- No edites ni priorices, solo captura
-- Incluye todo, sin importar cuán pequeño o grande
-
-**Revisión de Áreas de Vida:**
-- Carrera profesional
-- Finanzas personales
-- Salud y ejercicio
-- Familia y relaciones
-- Hogar y posesiones
-- Diversión y recreación
-- Crecimiento personal
-- Contribución y servicio
-
-### Capítulo 5: Aclarando: Vaciando la Bandeja de Entrada
-
-**El Flujo de Trabajo de Procesamiento:**
-
-**Reglas Fundamentales:**
-1. Procesa desde arriba hacia abajo
-2. Procesa un elemento a la vez
-3. Nunca devuelvas nada a la bandeja de entrada
-
-**Decisiones de Procesamiento:**
-
-**Para Elementos No Accionables:**
-
-**Basura:**
-- Información obsoleta
-- Materiales de referencia que ya no necesitas
-- Ideas que ya no te interesan
-
-**Incubación:**
-- Ideas que podrían ser interesantes en el futuro
-- Proyectos que no puedes hacer ahora pero podrías querer hacer
-- Información que podría ser útil más tarde
-
-**Referencia:**
-- Información que podrías necesitar consultar
-- Documentos importantes
-- Materiales de aprendizaje
-
-**Para Elementos Accionables:**
-
-**Proyectos:**
-Si requiere más de una acción, es un proyecto. Define:
-- El resultado exitoso específico
-- La siguiente acción física requerida
-
-**Acciones Siguientes:**
-- Debe ser la siguiente acción física visible
-- Debe ser específica y clara
-- Debe asignarse a un contexto apropiado
-
-### Capítulo 6: Organizando: Configurando los Mapas de Ruta Correctos
-
-**Categorías de Recordatorios:**
-
-**Proyectos:**
-Lista de todos los resultados que requieren más de una acción.
-
-**Información de Soporte de Proyectos:**
-Materiales de referencia específicos para proyectos activos.
-
-**Acciones Siguientes Calendadas:**
-Acciones que deben hacerse en un día/hora específica.
-
-**Listas de Acciones Siguientes:**
-Organizadas por contexto donde pueden realizarse.
-
-**En Espera:**
-Cosas que has delegado o que estás esperando que otros hagan.
-
-**Materiales de Referencia:**
-Información que podrías necesitar para proyectos actuales o futuros.
-
-**Algún Día/Tal Vez:**
-Cosas que podrías querer hacer pero no ahora.
-
-**Diseño del Sistema de Listas:**
-
-**Listas de Contexto Efectivas:**
-
-**@Llamadas:**
-- Incluye número de teléfono si no lo tienes memorizado
-- Nota el mejor momento para llamar si es relevante
-- Incluye el propósito específico de la llamada
-
-**@Ordenador:**
-- Subdivide si usas múltiples computadoras
-- Incluye acciones online y offline
-- Considera subcategorías como @Email, @Investigación
-
-**@Recados:**
-- Organiza por ubicación geográfica si es útil
-- Incluye direcciones si las necesitas
-- Agrupa por eficiencia de ruta
-
-**Sistema de Archivo de Referencia:**
-
-**Principios del Archivo:**
-- Simple y fácil de usar
-- Accesible rápidamente
-- Fácil de mantener
-- Consistente en nomenclatura
-
-**Categorías de Archivo:**
-- Por tema (Finanzas, Salud, Hogar)
-- Por proyecto (cuando hay mucho material)
-- Por persona (para relaciones importantes)
-- Por fecha (para información temporal)
-
-### Capítulo 7: Revisando: Manteniendo la Funcionalidad del Sistema
-
-**La Importancia de la Revisión:**
-Un sistema que no se revisa regularmente se vuelve obsoleto y pierde confiabilidad. La revisión es lo que mantiene tu sistema vivo y útil.
-
-**Niveles de Revisión:**
-
-**Revisión Inmediata (Momento a Momento):**
-- Consultar listas de contexto cuando tienes tiempo
-- Capturar nuevos elementos inmediatamente
-- Procesar bandejas de entrada cuando se llenan
-
-**Revisión Diaria:**
-- Revisar calendario para el día
-- Revisar listas de acciones relevantes
-- Procesar nuevos elementos capturados
-
-**Revisión Semanal (La Práctica Crítica):**
-
-**Pasos de la Revisión Semanal:**
-
-1. **Recopilar Elementos Sueltos:**
-   - Papeles en escritorio, bolsillos, auto
-   - Notas en teléfono, computadora
-   - Tarjetas de visita recibidas
-   - Recibos y documentos
-
-2. **Procesar Bandejas de Entrada:**
-   - Email
-   - Bandeja física
-   - Notas de voz
-   - Aplicaciones de captura
-
-3. **Revisar Sistema:**
-   - Listas de acciones siguientes
-   - Lista de proyectos
-   - Lista "En espera"
-   - "Algún día/Tal vez"
-
-4. **Revisar Calendario:**
-   - Semana anterior (acciones de seguimiento)
-   - Próximas semanas (preparación necesaria)
-   - Fechas importantes más adelante
-
-5. **Actualizar Listas:**
-   - Marcar elementos completados
-   - Agregar nuevos proyectos identificados
-   - Mover elementos entre listas según corresponda
-
-### Capítulo 8: Comprometiéndose: Tomando las Mejores Decisiones de Acción
-
-**El Modelo de Cuatro Criterios para Elegir Acciones:**
-
-**1. Contexto:**
-¿Dónde estás y qué herramientas tienes disponibles?
-- Si estás en el auto, solo puedes hacer llamadas
-- Si estás sin internet, no puedes hacer tareas online
-- Si estás en una reunión, puedes tomar notas o hacer seguimientos
-
-**2. Tiempo Disponible:**
-¿Cuánto tiempo tienes antes de tu próximo compromiso?
-- 5 minutos: Revisar email, hacer llamada rápida
-- 30 minutos: Trabajar en documento, investigar tema
-- 2 horas: Trabajar en proyecto importante, planificar
-
-**3. Energía Disponible:**
-¿Qué tan alerta y enfocado te sientes?
-- Energía alta: Trabajo creativo, decisiones importantes
-- Energía media: Tareas rutinarias, organización
-- Energía baja: Archivo, limpieza, tareas mecánicas
-
-**4. Prioridad:**
-Dado el contexto, tiempo y energía, ¿qué es lo más importante?
-
-**El Modelo de Seis Niveles para Revisar tu Trabajo:**
-
-**Nivel 5: Propósito y Principios (50,000+ pies)**
-- ¿Por qué existes?
-- ¿Cuáles son tus valores fundamentales?
-- ¿Cuál es tu misión en la vida?
-
-**Nivel 4: Visión (40,000 pies)**
-- ¿Cómo te ves en 3-5 años?
-- ¿Qué quieres haber logrado?
-- ¿Cómo quieres que sea tu vida?
-
-**Nivel 3: Objetivos (30,000 pies)**
-- ¿Qué quieres lograr en 1-2 años?
-- ¿Qué experiencias quieres tener?
-- ¿Qué habilidades quieres desarrollar?
-
-**Nivel 2: Áreas de Enfoque y Responsabilidades (20,000 pies)**
-- ¿Cuáles son tus roles clave?
-- ¿Qué áreas de tu vida requieren atención?
-- ¿Qué estándares quieres mantener?
-
-**Nivel 1: Proyectos Actuales (10,000 pies)**
-- ¿Qué resultados específicos quieres lograr?
-- ¿Qué compromisos has hecho?
-- ¿Qué necesita tu atención en los próximos meses?
-
-**Nivel 0: Acciones Actuales (Pista de aterrizaje)**
-- ¿Qué necesitas hacer hoy?
-- ¿Cuáles son tus próximas acciones físicas?
-- ¿Qué puedes hacer ahora mismo?
-
-## PARTE III: EL PODER DE LOS PRINCIPIOS CLAVE
-
-### Capítulo 9: El Poder del Principio de Captura
-
-**Por Qué Funciona la Captura:**
-
-**Liberación Cognitiva:**
-Cuando capturas algo externamente, tu mente puede dejar de recordarlo y enfocarse en el presente.
-
-**Reducción del Estrés:**
-Los "bucles abiertos" mentales crean estrés constante. Capturarlos los cierra.
-
-**Mejora de la Creatividad:**
-Una mente clara puede ser más creativa y hacer mejores conexiones.
-
-**Técnicas Avanzadas de Captura:**
-
-**Captura Contextual:**
-- En reuniones: Captura acciones y compromisos inmediatamente
-- Mientras lees: Captura ideas e insights
-- En conversaciones: Nota seguimientos necesarios
-
-**Captura Emocional:**
-- Preocupaciones: Captura qué te preocupa y por qué
-- Frustraciones: Identifica qué necesita cambiar
-- Inspiraciones: Registra ideas que te emocionan
-
-### Capítulo 10: El Poder del Principio de Siguiente Acción
-
-**Definiendo Acciones Específicas:**
-
-**Características de una Buena Acción Siguiente:**
-- Física y visible
-- Específica y clara
-- Realizable en el contexto definido
-- Avanza el proyecto hacia su conclusión
-
-**Ejemplos de Transformación:**
-
-**Vago:** "Planificar vacaciones"
-**Específico:** "Buscar en internet hoteles en París para fechas del 15-22 de julio"
-
-**Vago:** "Hablar con Juan sobre el proyecto"
-**Específico:** "Llamar a Juan para discutir cronograma del proyecto de marketing"
-
-**Vago:** "Organizar oficina"
-**Específico:** "Clasificar papeles en escritorio en bandejas de acción, referencia y basura"
-
-**El Poder Psicológico de la Especificidad:**
-Cuando defines exactamente qué hacer, eliminas la resistencia mental que viene de la ambigüedad.
-
-### Capítulo 11: El Poder del Enfoque en Resultados
-
-**Pensamiento Orientado a Resultados:**
-
-**Definir "Terminado":**
-Para cada proyecto, define claramente cómo se ve el éxito:
-- ¿Qué habrá cambiado?
-- ¿Cómo sabrás que está completo?
-- ¿Qué criterios definen el éxito?
-
-**Planificación Natural:**
-El cerebro planifica naturalmente en cinco pasos:
-1. **Propósito:** ¿Por qué estamos haciendo esto?
-2. **Principios:** ¿Cuáles son las reglas del juego?
-3. **Resultado:** ¿Cómo se ve el éxito?
-4. **Lluvia de ideas:** ¿Qué opciones tenemos?
-5. **Organización:** ¿Cuáles son los próximos pasos?
-
-## PARTE IV: IMPLEMENTACIÓN AVANZADA
-
-### Capítulo 12: GTD y la Tecnología
-
-**Herramientas Digitales para GTD:**
-
-**Aplicaciones de Gestión de Tareas:**
-- **Todoist:** Excelente para listas de contexto y proyectos
-- **Things:** Diseño elegante, ideal para usuarios de Apple
-- **OmniFocus:** Potente pero complejo, para usuarios avanzados
-- **Any.do:** Simple y visual
-
-**Gestión de Email:**
-- Usar email como bandeja de entrada
-- Procesar a cero diariamente
-- Usar carpetas para organizar por contexto
-- Configurar filtros automáticos
-
-**Sincronización Multi-Dispositivo:**
-- Usar servicios en la nube
-- Mantener consistencia entre dispositivos
-- Tener acceso offline cuando sea necesario
-
-**Automatización:**
-- Usar IFTTT o Zapier para automatizar capturas
-- Configurar recordatorios automáticos
-- Integrar calendarios con listas de tareas
-
-### Capítulo 13: GTD en Diferentes Contextos
-
-**GTD para Estudiantes:**
-
-**Captura Académica:**
-- Ideas durante clases
-- Fechas de exámenes y entregas
-- Recursos de investigación
-- Oportunidades de networking
-
-**Proyectos Estudiantiles:**
-- Trabajos de investigación
-- Preparación de exámenes
-- Solicitudes de becas
-- Planificación de carrera
-
-**GTD para Ejecutivos:**
-
-**Gestión de Múltiples Proyectos:**
-- Delegación efectiva
-- Seguimiento de compromisos del equipo
-- Planificación estratégica
-- Gestión de stakeholders
-
-**Comunicación Ejecutiva:**
-- Preparación de reuniones
-- Seguimiento de decisiones
-- Gestión de relaciones clave
-- Reportes y presentaciones
-
-**GTD para Emprendedores:**
-
-**Gestión de la Incertidumbre:**
-- Múltiples oportunidades simultáneas
-- Pivotes y cambios de dirección
-- Gestión de recursos limitados
-- Balance entre urgente e importante
-
-**Crecimiento del Negocio:**
-- Desarrollo de productos
-- Adquisición de clientes
-- Gestión de inversores
-- Construcción de equipo
-
-### Capítulo 14: Superando Obstáculos Comunes
-
-**Resistencia al Sistema:**
-
-**"No Tengo Tiempo para Organizar":**
-- La organización ahorra más tiempo del que consume
-- Comienza con 15 minutos diarios
-- La inversión inicial se recupera rápidamente
-
-**"Es Demasiado Complicado":**
-- Comienza simple y añade complejidad gradualmente
-- Usa solo las partes que te sirven
-- Adapta el sistema a tu estilo
-
-**"No Funciona para Trabajo Creativo":**
-- GTD libera la mente para la creatividad
-- Captura ideas creativas cuando surgen
-- Usa el sistema para apoyar, no restringir
-
-**Problemas de Implementación:**
-
-**Sistema Obsoleto:**
-- Hacer revisiones semanales religiosamente
-- Actualizar listas regularmente
-- Eliminar elementos completados
-
-**Sobrecarga de Listas:**
-- Ser más selectivo en compromisos
-- Usar "Algún día/Tal vez" más liberalmente
-- Revisar y purgar regularmente
-
-**Falta de Confianza en el Sistema:**
-- Capturar absolutamente todo
-- Procesar completamente las bandejas
-- Mantener el sistema actualizado
-
-### Capítulo 15: Mastery de GTD
-
-**Señales de Dominio del Sistema:**
-
-**Mente Clara:**
-- Raramente te preocupas por olvidar algo
-- Puedes estar presente en conversaciones
-- Duermes mejor sin pensar en tareas
-
-**Respuesta vs. Reacción:**
-- Eliges conscientemente qué hacer
-- No te sientes abrumado por las demandas
-- Mantienes perspectiva en situaciones estresantes
-
-**Productividad Effortless:**
-- El sistema se siente natural
-- Capturas y procesas automáticamente
-- Las decisiones de acción son fáciles
-
-**Niveles de Implementación:**
-
-**Nivel 1: Supervivencia**
-- Capturas la mayoría de las cosas
-- Procesas irregularmente
-- Tienes listas básicas
-
-**Nivel 2: Estabilidad**
-- Capturas todo consistentemente
-- Procesas regularmente
-- Haces revisiones semanales
-
-**Nivel 3: Maestría**
-- El sistema es automático
-- Integras todos los niveles de perspectiva
-- Ayudas a otros a implementar GTD
-
-## PARTE V: APLICACIONES ESPECIALIZADAS
-
-### Capítulo 16: GTD para Equipos y Organizaciones
-
-**Implementación Organizacional:**
-
-**Cultura de Captura:**
-- Reuniones con captura clara de acciones
-- Sistemas compartidos para proyectos
-- Comunicación clara de compromisos
-
-**Gestión de Proyectos GTD:**
-- Definir resultados claros para proyectos
-- Asignar acciones siguientes específicas
-- Revisar progreso regularmente
-
-**Liderazgo GTD:**
-- Modelar comportamientos GTD
-- Ayudar al equipo a definir compromisos
-- Crear sistemas de seguimiento efectivos
-
-### Capítulo 17: GTD y Balance Vida-Trabajo
-
-**Integración Holística:**
-GTD no separa trabajo y vida personal - los integra en un sistema coherente.
-
-**Gestión de Múltiples Roles:**
-- Profesional
-- Padre/Madre
-- Cónyuge
-- Amigo
-- Ciudadano
-- Individuo
-
-**Cada rol tiene sus propios proyectos y acciones, pero todos se gestionan en el mismo sistema.**
-
-**Prevención del Burnout:**
-- Capturar preocupaciones reduce estrés
-- Claridad sobre compromisos previene sobrecarga
-- Revisión regular permite ajustes proactivos
-
-### Capítulo 18: El Futuro de GTD
-
-**Evolución Continua:**
-GTD no es un sistema estático - evoluciona con la tecnología y las necesidades cambiantes.
-
-**Inteligencia Artificial y GTD:**
-- Captura automática de compromisos
-- Sugerencias inteligentes de acciones
-- Análisis de patrones de productividad
-
-**GTD en la Era Digital:**
-- Gestión de sobrecarga de información
-- Integración con IoT y dispositivos inteligentes
-- Colaboración en tiempo real
-
-## CONCLUSIÓN: VIVIENDO EL ARTE DE HACER QUE LAS COSAS SUCEDAN
-
-GTD es más que un sistema de productividad - es una forma de vida que te permite estar presente, ser efectivo y mantener perspectiva en un mundo cada vez más complejo.
-
-**Los Beneficios Duraderos:**
-
-**Claridad Mental:**
-Una mente libre de preocupaciones sobre lo que podrías estar olvidando.
-
-**Control Relajado:**
-La confianza de que tienes todo bajo control sin estar tenso.
-
-**Perspectiva Apropiada:**
-La habilidad de ver el panorama completo y tomar decisiones sabias.
-
-**Enfoque Creativo:**
-La libertad mental para ser innovador y pensar estratégicamente.
-
-**Implementación Gradual:**
-No necesitas implementar todo GTD de una vez. Comienza con:
-1. Capturar todo en bandejas de entrada confiables
-2. Procesar estas bandejas regularmente
-3. Organizar acciones por contexto
-4. Hacer revisiones semanales
-5. Elegir acciones basándote en contexto, tiempo, energía y prioridad
-
-**El Viaje Continuo:**
-GTD es una práctica, no una perfección. Continúa refinando y adaptando el sistema a medida que tu vida y trabajo evolucionan.
-
-**La Promesa Cumplida:**
-Cuando implementas GTD completamente, experimentas lo que David Allen llama "mente como agua" - un estado de alerta relajada donde respondes apropiadamente a cualquier situación sin estar abrumado o distraído.
-
-Esta es la verdadera promesa de GTD: no solo hacer más cosas, sino vivir con mayor claridad, control y confianza en todo lo que haces.`,
-    tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+### 5. Hacer
+Simplemente ejecuta las acciones que has planificado.`,
+    tags: ["productividad", "organización", "gestión del tiempo"],
     slug: "organizate-con-eficacia",
     read_count: 2847,
     created_at: "2024-01-15T00:00:00Z",
@@ -1395,7 +675,7 @@ Las relaciones íntimas son el laboratorio más exigente para la inteligencia em
 
 **Desprecio:**
 - Sarcasmo y cinismo
-- Burla y ridiculización
+- Burla y<bos> ridículo
 - Sentimiento de superioridad moral
 
 **Actitud Defensiva:**
@@ -2578,7 +1858,7 @@ Vendedor experto: "Este producto te ayudará a ahorrar 3 horas por semana, lo qu
 Jefe promedio: "Necesito que trabajes horas extra este fin de semana"
 Líder efectivo: "Este proyecto te dará la oportunidad de demostrar tus habilidades de liderazgo y podría ser clave para tu próxima promoción"
 
-**En las relaciones:**
+**En las relaciones personales:**
 Enfoque inefectivo: "Nunca me ayudas con las tareas domésticas"
 Enfoque efectivo: "Cuando compartimos las tareas domésticas, ambos tenemos más tiempo para relajarnos juntos"
 
@@ -3365,7 +2645,6 @@ Cuando alguien comete un error o necesita cambiar su comportamiento, es crucial 
 **Por qué es importante salvar las apariencias:**
 - Preserva la autoestima de la persona
 - Mantiene relaciones a largo plazo
-- Reduce la resistencia al cambio
 - Permite que la persona se enfoque en mejorar en lugar de defenderse
 
 **Técnicas para preservar la dignidad:**
@@ -3809,6 +3088,20 @@ export default function BookReaderPage() {
   const [readingTime, setReadingTime] = useState(0)
   const [showSettings, setShowSettings] = useState(false)
 
+  // TTS States
+  const [isTTSSupported, setIsTTSSupported] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const [ttsRate, setTtsRate] = useState(1.0)
+  const [ttsVolume, setTtsVolume] = useState(1.0)
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [selectedVoice, setSelectedVoice] = useState<string>("")
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0)
+  const [ttsError, setTtsError] = useState<string>("")
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
+  const chunksRef = useRef<string[]>([])
+  const isPlayingRef = useRef(false)
+
   // Cargar libro
   useEffect(() => {
     const fetchBook = async () => {
@@ -3817,18 +3110,12 @@ export default function BookReaderPage() {
         setError(null)
         const slug = params.slug as string
 
-        console.log("Fetching book with slug:", slug)
-
-        // Intentar cargar desde API
         const response = await fetch(`/api/books/${slug}`)
 
         if (response.ok) {
           const data = await response.json()
-          console.log("Book loaded from API:", data)
           setBook(data)
         } else {
-          console.log("API failed, using fallback data")
-          // Usar datos de respaldo
           const foundBook = fallbackBooks.find(
             (b) =>
               b.slug === slug ||
@@ -3838,18 +3125,13 @@ export default function BookReaderPage() {
           )
 
           if (foundBook) {
-            console.log("Found fallback book:", foundBook.title)
             setBook(foundBook)
           } else {
-            console.log("No book found for slug:", slug)
             setError("Libro no encontrado")
           }
         }
       } catch (error) {
         console.error("Error loading book:", error)
-        setError("Error al cargar el libro")
-
-        // Intentar con datos de respaldo como último recurso
         const slug = params.slug as string
         const foundBook = fallbackBooks.find(
           (b) =>
@@ -3860,9 +3142,10 @@ export default function BookReaderPage() {
         )
 
         if (foundBook) {
-          console.log("Using fallback book after error:", foundBook.title)
           setBook(foundBook)
           setError(null)
+        } else {
+          setError("Error al cargar el libro")
         }
       } finally {
         setLoading(false)
@@ -3872,7 +3155,203 @@ export default function BookReaderPage() {
     fetchBook()
   }, [params.slug])
 
-  // Simular páginas dividiendo el contenido
+  // Inicializar TTS
+  useEffect(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      setIsTTSSupported(true)
+
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices()
+        const spanishVoices = voices.filter((voice) => voice.lang.startsWith("es"))
+        setAvailableVoices(spanishVoices)
+
+        if (spanishVoices.length > 0) {
+          const preferredVoice =
+            spanishVoices.find((v) => v.lang === "es-ES" && v.name.includes("Google")) ||
+            spanishVoices.find((v) => v.lang === "es-ES") ||
+            spanishVoices.find((v) => v.lang === "es-MX") ||
+            spanishVoices[0]
+
+          if (preferredVoice) {
+            setSelectedVoice(preferredVoice.name)
+          }
+        }
+      }
+
+      loadVoices()
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices
+      }
+    }
+  }, [])
+
+  // Dividir contenido en chunks más pequeños para TTS
+  useEffect(() => {
+    if (book) {
+      const content = getCurrentPageContent()
+      // Dividir por puntos y limitar longitud de cada chunk
+      const sentences = content
+        .split(/[.!?]+/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
+
+      // Agrupar oraciones en chunks de máximo 200 caracteres
+      const chunks: string[] = []
+      let currentChunk = ""
+
+      for (const sentence of sentences) {
+        if (currentChunk.length + sentence.length < 200) {
+          currentChunk += sentence + ". "
+        } else {
+          if (currentChunk) chunks.push(currentChunk.trim())
+          currentChunk = sentence + ". "
+        }
+      }
+      if (currentChunk) chunks.push(currentChunk.trim())
+
+      chunksRef.current = chunks
+    }
+  }, [book, currentPage])
+
+  // Funciones TTS optimizadas
+  const speakChunk = (index: number) => {
+    if (index >= chunksRef.current.length || !isPlayingRef.current) {
+      setIsPlaying(false)
+      setCurrentChunkIndex(0)
+      isPlayingRef.current = false
+      return
+    }
+
+    const text = chunksRef.current[index]
+    if (!text || text.length === 0) {
+      speakChunk(index + 1)
+      return
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text)
+    utteranceRef.current = utterance
+
+    // Configurar voz
+    const voice = availableVoices.find((v) => v.name === selectedVoice)
+    if (voice) {
+      utterance.voice = voice
+    }
+
+    utterance.rate = ttsRate
+    utterance.volume = ttsVolume
+    utterance.lang = "es-ES"
+
+    utterance.onend = () => {
+      if (isPlayingRef.current) {
+        const nextIndex = index + 1
+        setCurrentChunkIndex(nextIndex)
+        // Pequeña pausa entre chunks
+        setTimeout(() => {
+          if (isPlayingRef.current) {
+            speakChunk(nextIndex)
+          }
+        }, 100)
+      }
+    }
+
+    utterance.onerror = (event) => {
+      console.error("TTS Error:", event.error)
+      setTtsError(`Error: ${event.error || "Desconocido"}`)
+      setIsPlaying(false)
+      isPlayingRef.current = false
+
+      // Intentar siguiente chunk si hay error
+      if (event.error === "interrupted" || event.error === "canceled") {
+        setTimeout(() => {
+          if (isPlayingRef.current) {
+            speakChunk(index + 1)
+          }
+        }, 100)
+      }
+    }
+
+    try {
+      window.speechSynthesis.speak(utterance)
+    } catch (err) {
+      console.error("Error al hablar:", err)
+      setTtsError("Error al iniciar la reproducción")
+      setIsPlaying(false)
+      isPlayingRef.current = false
+    }
+  }
+
+  const startTTS = () => {
+    if (!isTTSSupported || !book) return
+
+    stopTTS()
+    setTtsError("")
+    isPlayingRef.current = true
+    setIsPlaying(true)
+    setIsPaused(false)
+    setCurrentChunkIndex(0)
+    speakChunk(0)
+  }
+
+  const pauseTTS = () => {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      window.speechSynthesis.pause()
+      isPlayingRef.current = false
+      setIsPaused(true)
+      setIsPlaying(false)
+    }
+  }
+
+  const resumeTTS = () => {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume()
+      isPlayingRef.current = true
+      setIsPaused(false)
+      setIsPlaying(true)
+    }
+  }
+
+  const stopTTS = () => {
+    window.speechSynthesis.cancel()
+    isPlayingRef.current = false
+    setIsPlaying(false)
+    setIsPaused(false)
+    setCurrentChunkIndex(0)
+    setTtsError("")
+  }
+
+  const toggleTTS = () => {
+    if (isPlaying) {
+      pauseTTS()
+    } else if (isPaused) {
+      resumeTTS()
+    } else {
+      startTTS()
+    }
+  }
+
+  const skipForward = () => {
+    if (currentChunkIndex < chunksRef.current.length - 1) {
+      window.speechSynthesis.cancel()
+      const nextIndex = currentChunkIndex + 1
+      setCurrentChunkIndex(nextIndex)
+      if (isPlayingRef.current) {
+        speakChunk(nextIndex)
+      }
+    }
+  }
+
+  const skipBackward = () => {
+    if (currentChunkIndex > 0) {
+      window.speechSynthesis.cancel()
+      const prevIndex = currentChunkIndex - 1
+      setCurrentChunkIndex(prevIndex)
+      if (isPlayingRef.current) {
+        speakChunk(prevIndex)
+      }
+    }
+  }
+
+  // Simular páginas
   const wordsPerPage = 300
   const words = book?.content.split(" ") || []
   const totalPages = Math.ceil(words.length / wordsPerPage)
@@ -3891,25 +3370,25 @@ export default function BookReaderPage() {
     }
   }, [currentPage, totalPages])
 
-  // Simular tiempo de lectura
+  // Tiempo de lectura
   useEffect(() => {
     const timer = setInterval(() => {
       setReadingTime((prev) => prev + 1)
     }, 1000)
-
     return () => clearInterval(timer)
   }, [])
 
-  // Debug: Log pagination info
+  // Limpiar TTS al cambiar de página
   useEffect(() => {
-    if (book) {
-      console.log("Book content length:", book.content.length)
-      console.log("Total words:", words.length)
-      console.log("Words per page:", wordsPerPage)
-      console.log("Total pages:", totalPages)
-      console.log("Current page:", currentPage)
+    stopTTS()
+  }, [currentPage])
+
+  // Limpiar TTS al desmontar
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel()
     }
-  }, [book, words.length, totalPages, currentPage])
+  }, [])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -3995,20 +3474,11 @@ export default function BookReaderPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {/* Debug Info */}
-      {process.env.NODE_ENV === "development" && (
-        <div className="mb-4 p-4 bg-yellow-100 rounded-lg text-sm">
-          <strong>Debug Info:</strong> Palabras: {words.length}, Páginas: {totalPages}, Página actual: {currentPage}
-        </div>
-      )}
-
-      {/* Back Button */}
       <Button variant="outline" onClick={() => router.push("/biblioteca")} className="mb-6">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Volver a la biblioteca
       </Button>
 
-      {/* Header */}
       <Card className="mb-6">
         <CardHeader>
           <div className="flex justify-between items-start">
@@ -4029,7 +3499,7 @@ export default function BookReaderPage() {
                 </div>
                 <div className="flex items-center">
                   <Eye className="h-4 w-4 mr-1" />
-                  Tiempo: {formatTime(readingTime)}
+                  {formatTime(readingTime)}
                 </div>
               </div>
 
@@ -4051,7 +3521,6 @@ export default function BookReaderPage() {
               >
                 <Bookmark className="h-4 w-4" />
               </Button>
-
               <Button
                 variant="outline"
                 size="sm"
@@ -4060,22 +3529,18 @@ export default function BookReaderPage() {
               >
                 <Heart className="h-4 w-4" />
               </Button>
-
               <Button variant="outline" size="sm">
                 <Share2 className="h-4 w-4" />
               </Button>
-
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4" />
               </Button>
-
               <Button variant="outline" size="sm" onClick={() => setShowSettings(!showSettings)}>
                 <Settings className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
-          {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Progreso de lectura</span>
@@ -4083,15 +3548,123 @@ export default function BookReaderPage() {
             </div>
             <Progress value={readingProgress} className="h-2" />
           </div>
+
+          {isTTSSupported && (
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Volume2 className="h-5 w-5 text-blue-600" />
+                  <span className="font-semibold text-blue-900">Lectura en Voz Alta</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={skipBackward}
+                    disabled={currentChunkIndex === 0}
+                    className="bg-white"
+                  >
+                    <SkipBack className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={toggleTTS} className="bg-white min-w-[100px]">
+                    {isPlaying ? (
+                      <>
+                        <Pause className="h-4 w-4 mr-2" />
+                        Pausar
+                      </>
+                    ) : (
+                      <>
+                        <Play className="h-4 w-4 mr-2" />
+                        {isPaused ? "Continuar" : "Reproducir"}
+                      </>
+                    )}
+                  </Button>
+                  {(isPlaying || isPaused) && (
+                    <Button variant="outline" size="sm" onClick={stopTTS} className="bg-white">
+                      <Square className="h-4 w-4 mr-2" />
+                      Detener
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={skipForward}
+                    disabled={currentChunkIndex >= chunksRef.current.length - 1}
+                    className="bg-white"
+                  >
+                    <SkipForward className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-blue-900">Voz</label>
+                  <Select value={selectedVoice} onValueChange={setSelectedVoice} disabled={isPlaying}>
+                    <SelectTrigger className="bg-white">
+                      <SelectValue placeholder="Seleccionar voz" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableVoices.map((voice) => (
+                        <SelectItem key={voice.name} value={voice.name}>
+                          {voice.name.substring(0, 30)} ({voice.lang})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-blue-900">Velocidad: {ttsRate.toFixed(1)}x</label>
+                  <Slider
+                    value={[ttsRate]}
+                    onValueChange={(value) => setTtsRate(value[0])}
+                    min={0.5}
+                    max={2.0}
+                    step={0.1}
+                    disabled={isPlaying}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-blue-900">Volumen: {Math.round(ttsVolume * 100)}%</label>
+                  <Slider
+                    value={[ttsVolume]}
+                    onValueChange={(value) => setTtsVolume(value[0])}
+                    min={0}
+                    max={1}
+                    step={0.1}
+                  />
+                </div>
+              </div>
+
+              {isPlaying && (
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="text-sm text-blue-700">
+                    Fragmento {currentChunkIndex + 1} de {chunksRef.current.length}
+                  </div>
+                  <Progress value={((currentChunkIndex + 1) / chunksRef.current.length) * 100} className="h-2 w-48" />
+                </div>
+              )}
+
+              {ttsError && (
+                <div className="mt-3 p-2 bg-red-100 border border-red-300 rounded text-sm text-red-700">{ttsError}</div>
+              )}
+
+              {!isPlaying && !isPaused && availableVoices.length === 0 && (
+                <div className="mt-3 p-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-yellow-700">
+                  Cargando voces disponibles...
+                </div>
+              )}
+            </div>
+          )}
         </CardHeader>
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Main Content */}
         <div className="lg:col-span-3">
           <Card>
             <CardContent className="p-8">
-              {/* Settings Panel */}
               {showSettings && (
                 <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                   <h3 className="font-semibold mb-3">Configuración de Lectura</h3>
@@ -4108,23 +3681,19 @@ export default function BookReaderPage() {
                 </div>
               )}
 
-              {/* Content */}
               <div className="prose max-w-none leading-relaxed" style={{ fontSize: `${fontSize}px` }}>
                 <div className="whitespace-pre-wrap">{getCurrentPageContent()}</div>
               </div>
 
-              {/* Navigation */}
               <div className="flex justify-between items-center mt-8 pt-6 border-t">
                 <Button variant="outline" onClick={prevPage} disabled={currentPage === 1}>
                   <ChevronLeft className="h-4 w-4 mr-2" />
                   Anterior
                 </Button>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">
-                    Página {currentPage} de {totalPages}
-                  </span>
-                </div>
+                <span className="text-sm text-gray-600">
+                  Página {currentPage} de {totalPages}
+                </span>
 
                 <Button variant="outline" onClick={nextPage} disabled={currentPage === totalPages}>
                   Siguiente
@@ -4135,9 +3704,7 @@ export default function BookReaderPage() {
           </Card>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Reading Stats */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Estadísticas</CardTitle>
@@ -4147,27 +3714,17 @@ export default function BookReaderPage() {
                 <span className="text-sm text-gray-600">Progreso</span>
                 <span className="text-sm font-medium">{Math.round(readingProgress)}%</span>
               </div>
-
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Tiempo leyendo</span>
                 <span className="text-sm font-medium">{formatTime(readingTime)}</span>
               </div>
-
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Páginas restantes</span>
                 <span className="text-sm font-medium">{totalPages - currentPage}</span>
               </div>
-
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Tiempo estimado</span>
-                <span className="text-sm font-medium">
-                  {Math.round(estimateReadingTime(book.content) * (1 - readingProgress / 100))} min
-                </span>
-              </div>
             </CardContent>
           </Card>
 
-          {/* Notes */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center">
@@ -4177,10 +3734,10 @@ export default function BookReaderPage() {
             </CardHeader>
             <CardContent>
               <Textarea
-                placeholder="Escribe tus notas y reflexiones aquí..."
+                placeholder="Escribe tus notas aquí..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="min-h-[120px] resize-none"
+                className="min-h-[120px]"
               />
               <Button className="w-full mt-3" size="sm">
                 Guardar Nota
@@ -4188,7 +3745,6 @@ export default function BookReaderPage() {
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Acciones Rápidas</CardTitle>
@@ -4198,15 +3754,13 @@ export default function BookReaderPage() {
                 <Star className="h-4 w-4 mr-2" />
                 Calificar Libro
               </Button>
-
               <Button variant="outline" className="w-full justify-start bg-transparent">
                 <Share2 className="h-4 w-4 mr-2" />
-                Compartir Progreso
+                Compartir
               </Button>
-
               <Button variant="outline" className="w-full justify-start bg-transparent">
                 <BookOpen className="h-4 w-4 mr-2" />
-                Libros Relacionados
+                Relacionados
               </Button>
             </CardContent>
           </Card>
