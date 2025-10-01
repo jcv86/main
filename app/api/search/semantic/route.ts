@@ -1,18 +1,25 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { semanticSearch } from "@/lib/embeddings"
+import { semanticSearch, isOpenAIConfigured } from "@/lib/embeddings"
+
+export const runtime = "nodejs"
 
 export async function POST(request: NextRequest) {
   try {
-    const { query, similarityThreshold, sourceTypeFilter, limit } = await request.json()
-
-    if (!query) {
+    if (!isOpenAIConfigured()) {
       return NextResponse.json(
         {
-          success: false,
-          error: "Query is required",
+          error: "OpenAI API key is not configured",
+          message: "Semantic search is unavailable. Please add OPENAI_API_KEY to your environment variables.",
         },
-        { status: 400 },
+        { status: 500 },
       )
+    }
+
+    const body = await request.json()
+    const { query, similarityThreshold, sourceTypeFilter, limit } = body
+
+    if (!query || typeof query !== "string") {
+      return NextResponse.json({ error: "Query is required and must be a string" }, { status: 400 })
     }
 
     const results = await semanticSearch(query, {
@@ -24,58 +31,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       query,
-      resultsCount: results.length,
       results,
+      count: results.length,
     })
   } catch (error) {
     console.error("Error in semantic search:", error)
     return NextResponse.json(
       {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 },
-    )
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const query = searchParams.get("q")
-
-    if (!query) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Query parameter 'q' is required",
-        },
-        { status: 400 },
-      )
-    }
-
-    const similarityThreshold = Number.parseFloat(searchParams.get("threshold") || "0.7")
-    const sourceTypeFilter = searchParams.get("type") as "book" | "web_resource" | null
-    const limit = Number.parseInt(searchParams.get("limit") || "10")
-
-    const results = await semanticSearch(query, {
-      similarityThreshold,
-      sourceTypeFilter: sourceTypeFilter || undefined,
-      limit,
-    })
-
-    return NextResponse.json({
-      success: true,
-      query,
-      resultsCount: results.length,
-      results,
-    })
-  } catch (error) {
-    console.error("Error in semantic search:", error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "Semantic search failed",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     )

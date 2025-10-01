@@ -1,47 +1,57 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateAllEmbeddings, getEmbeddingStatistics } from "@/lib/embeddings"
+import { generateAllEmbeddings, getEmbeddingStatistics, isOpenAIConfigured } from "@/lib/embeddings"
 
-// POST - Generate embeddings for all items or specific batch
+export const runtime = "nodejs"
+export const maxDuration = 300
+
 export async function POST(request: NextRequest) {
   try {
-    const { batchSize = 10 } = await request.json()
+    if (!isOpenAIConfigured()) {
+      return NextResponse.json(
+        {
+          error: "OpenAI API key is not configured",
+          message: "Please add OPENAI_API_KEY to your environment variables",
+        },
+        { status: 500 },
+      )
+    }
 
-    console.log(`Starting embedding generation with batch size: ${batchSize}`)
+    const body = await request.json()
+    const batchSize = body.batchSize || 10
 
     const result = await generateAllEmbeddings(batchSize)
 
     return NextResponse.json({
       success: true,
-      message: `Processed ${result.totalProcessed} items: ${result.successful} successful, ${result.failed} failed`,
-      data: result,
+      ...result,
     })
   } catch (error) {
-    console.error("Error generating embeddings:", error)
+    console.error("Error in embeddings generation:", error)
     return NextResponse.json(
       {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "Failed to generate embeddings",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     )
   }
 }
 
-// GET - Get embedding generation statistics
 export async function GET() {
   try {
     const stats = await getEmbeddingStatistics()
 
     return NextResponse.json({
       success: true,
-      data: stats,
+      stats,
+      configured: isOpenAIConfigured(),
     })
   } catch (error) {
     console.error("Error getting embedding statistics:", error)
     return NextResponse.json(
       {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "Failed to get statistics",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     )

@@ -2,6 +2,12 @@ import { openai } from "@ai-sdk/openai"
 import { embed } from "ai"
 import { createClient } from "@supabase/supabase-js"
 
+// Only use server-side API key
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+if (!OPENAI_API_KEY) {
+  console.warn("⚠️ WARNING: OpenAI API key not found. Semantic search will not work.")
+}
+
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 export interface EmbeddingResult {
@@ -25,9 +31,20 @@ export interface SemanticSearchResult {
 }
 
 /**
+ * Check if OpenAI API key is configured (server-side only)
+ */
+export function isOpenAIConfigured(): boolean {
+  return !!OPENAI_API_KEY && OPENAI_API_KEY.length > 20
+}
+
+/**
  * Generate embedding for a text using OpenAI's text-embedding-3-small model
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
+  if (!isOpenAIConfigured()) {
+    throw new Error("OpenAI API key is not configured. Please add OPENAI_API_KEY to your environment variables.")
+  }
+
   try {
     const { embedding } = await embed({
       model: openai.embedding("text-embedding-3-small"),
@@ -37,6 +54,9 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     return embedding
   } catch (error) {
     console.error("Error generating embedding:", error)
+    if (error instanceof Error && error.message.includes("401")) {
+      throw new Error("Invalid OpenAI API key. Please check your OPENAI_API_KEY environment variable.")
+    }
     throw error
   }
 }
@@ -48,7 +68,10 @@ export async function generateBookEmbedding(bookId: number): Promise<EmbeddingRe
   const startTime = Date.now()
 
   try {
-    // Get book content
+    if (!isOpenAIConfigured()) {
+      throw new Error("OpenAI API key is not configured")
+    }
+
     const { data: book, error: fetchError } = await supabase
       .from("knowledge_base")
       .select("id, title, author, content, category, tags")
@@ -59,13 +82,10 @@ export async function generateBookEmbedding(bookId: number): Promise<EmbeddingRe
       throw new Error(`Failed to fetch book: ${fetchError?.message}`)
     }
 
-    // Create text to embed (title + author + category + tags + content)
     const textToEmbed = `${book.title} ${book.author} ${book.category} ${book.tags.join(" ")} ${book.content}`
 
-    // Generate embedding
     const embedding = await generateEmbedding(textToEmbed)
 
-    // Store embedding in database
     const { error: updateError } = await supabase.from("knowledge_base").update({ embedding }).eq("id", bookId)
 
     if (updateError) {
@@ -74,7 +94,6 @@ export async function generateBookEmbedding(bookId: number): Promise<EmbeddingRe
 
     const processingTimeMs = Date.now() - startTime
 
-    // Log success
     await supabase.rpc("log_embedding_generation", {
       p_source_type: "book",
       p_source_id: bookId,
@@ -92,7 +111,6 @@ export async function generateBookEmbedding(bookId: number): Promise<EmbeddingRe
     const processingTimeMs = Date.now() - startTime
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
 
-    // Log error
     await supabase.rpc("log_embedding_generation", {
       p_source_type: "book",
       p_source_id: bookId,
@@ -118,7 +136,10 @@ export async function generateWebResourceEmbedding(resourceId: number): Promise<
   const startTime = Date.now()
 
   try {
-    // Get web resource content
+    if (!isOpenAIConfigured()) {
+      throw new Error("OpenAI API key is not configured")
+    }
+
     const { data: resource, error: fetchError } = await supabase
       .from("web_resources")
       .select("id, title, author, description, content, category, tags")
@@ -129,13 +150,10 @@ export async function generateWebResourceEmbedding(resourceId: number): Promise<
       throw new Error(`Failed to fetch web resource: ${fetchError?.message}`)
     }
 
-    // Create text to embed
     const textToEmbed = `${resource.title} ${resource.author || ""} ${resource.category} ${resource.tags.join(" ")} ${resource.description || ""} ${resource.content}`
 
-    // Generate embedding
     const embedding = await generateEmbedding(textToEmbed)
 
-    // Store embedding in database
     const { error: updateError } = await supabase.from("web_resources").update({ embedding }).eq("id", resourceId)
 
     if (updateError) {
@@ -144,7 +162,6 @@ export async function generateWebResourceEmbedding(resourceId: number): Promise<
 
     const processingTimeMs = Date.now() - startTime
 
-    // Log success
     await supabase.rpc("log_embedding_generation", {
       p_source_type: "web_resource",
       p_source_id: resourceId,
@@ -162,7 +179,6 @@ export async function generateWebResourceEmbedding(resourceId: number): Promise<
     const processingTimeMs = Date.now() - startTime
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
 
-    // Log error
     await supabase.rpc("log_embedding_generation", {
       p_source_type: "web_resource",
       p_source_id: resourceId,
@@ -190,10 +206,13 @@ export async function generateAllEmbeddings(batchSize = 10): Promise<{
   failed: number
   results: EmbeddingResult[]
 }> {
+  if (!isOpenAIConfigured()) {
+    throw new Error("OpenAI API key is not configured. Please add OPENAI_API_KEY to your environment variables.")
+  }
+
   const results: EmbeddingResult[] = []
 
   try {
-    // Get items that need embeddings
     const { data: items, error } = await supabase.rpc("get_items_needing_embeddings")
 
     if (error) {
@@ -207,12 +226,11 @@ export async function generateAllEmbeddings(batchSize = 10): Promise<{
 
     console.log(`Found ${items.length} items needing embeddings`)
 
-    // Process in batches
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize)
       console.log(`Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(items.length / batchSize)}`)
 
-      const batchPromises = batch.map((item) => {
+      const batchPromises = batch.map((item: { source_type: string; id: number }) => {
         if (item.source_type === "book") {
           return generateBookEmbedding(item.id)
         } else {
@@ -223,7 +241,6 @@ export async function generateAllEmbeddings(batchSize = 10): Promise<{
       const batchResults = await Promise.all(batchPromises)
       results.push(...batchResults)
 
-      // Add delay between batches to avoid rate limits
       if (i + batchSize < items.length) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
       }
@@ -255,13 +272,15 @@ export async function semanticSearch(
     limit?: number
   } = {},
 ): Promise<SemanticSearchResult[]> {
+  if (!isOpenAIConfigured()) {
+    throw new Error("OpenAI API key is not configured. Semantic search is unavailable.")
+  }
+
   try {
     const { similarityThreshold = 0.7, sourceTypeFilter, limit = 10 } = options
 
-    // Generate embedding for query
     const queryEmbedding = await generateEmbedding(query)
 
-    // Search using the unified semantic search function
     const { data, error } = await supabase.rpc("search_brain_semantic", {
       query_embedding: queryEmbedding,
       similarity_threshold: similarityThreshold,
@@ -274,7 +293,7 @@ export async function semanticSearch(
       throw error
     }
 
-    return (data || []).map((item) => ({
+    return (data || []).map((item: any) => ({
       sourceType: item.source_type as "book" | "web_resource",
       id: item.id,
       title: item.title,
@@ -306,14 +325,14 @@ export async function getEmbeddingStatistics(): Promise<{
       throw error
     }
 
-    const books = data?.find((item) => item.source === "Books") || {
+    const books = data?.find((item: any) => item.source === "Books") || {
       total_items: 0,
       items_with_embeddings: 0,
       items_missing_embeddings: 0,
       completion_percentage: 0,
     }
 
-    const webResources = data?.find((item) => item.source === "Web Resources") || {
+    const webResources = data?.find((item: any) => item.source === "Web Resources") || {
       total_items: 0,
       items_with_embeddings: 0,
       items_missing_embeddings: 0,
