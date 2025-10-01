@@ -1,14 +1,16 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Search, Book, Globe, AlertCircle } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Search, Brain, BookOpen, Globe, Sparkles, TrendingUp, Loader2, AlertCircle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface SearchResult {
   sourceType: "book" | "web_resource"
@@ -24,12 +26,15 @@ interface SearchResult {
 
 export default function TestSemanticSearchPage() {
   const [query, setQuery] = useState("")
-  const [searchMode, setSearchMode] = useState<"semantic" | "brain">("semantic")
   const [similarityThreshold, setSimilarityThreshold] = useState(0.7)
-  const [isLoading, setIsLoading] = useState(false)
   const [results, setResults] = useState<SearchResult[]>([])
+  const [isSearching, setIsSearching] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [searchTime, setSearchTime] = useState<number | null>(null)
+  const [searchStats, setSearchStats] = useState<{
+    totalResults: number
+    avgSimilarity: number
+    searchTimeMs: number
+  } | null>(null)
 
   const exampleQueries = [
     "¿Cómo puedo mejorar mi liderazgo?",
@@ -37,17 +42,14 @@ export default function TestSemanticSearchPage() {
     "Desarrollo de inteligencia emocional",
     "Técnicas de negociación efectiva",
     "Cómo construir buenos hábitos",
+    "Comunicación asertiva en el trabajo",
   ]
 
-  const handleSearch = async () => {
-    if (!query.trim()) {
-      setError("Por favor ingresa una consulta")
-      return
-    }
+  const performSearch = async (searchQuery: string) => {
+    if (!searchQuery.trim()) return
 
-    setIsLoading(true)
+    setIsSearching(true)
     setError(null)
-    setResults([])
     const startTime = Date.now()
 
     try {
@@ -57,250 +59,409 @@ export default function TestSemanticSearchPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          query,
+          query: searchQuery,
           similarityThreshold,
           limit: 10,
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
-        throw new Error(data.message || data.error || "Error en la búsqueda")
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Error en la búsqueda")
       }
 
+      const data = await response.json()
       setResults(data.results || [])
-      setSearchTime(Date.now() - startTime)
+
+      const searchTimeMs = Date.now() - startTime
+      const avgSimilarity =
+        data.results.length > 0
+          ? data.results.reduce((sum: number, r: SearchResult) => sum + r.similarityScore, 0) / data.results.length
+          : 0
+
+      setSearchStats({
+        totalResults: data.results.length,
+        avgSimilarity: Math.round(avgSimilarity * 100) / 100,
+        searchTimeMs,
+      })
     } catch (err) {
+      console.error("Search error:", err)
       setError(err instanceof Error ? err.message : "Error desconocido")
+      setResults([])
+      setSearchStats(null)
     } finally {
-      setIsLoading(false)
+      setIsSearching(false)
     }
   }
 
-  const handleExampleClick = (example: string) => {
-    setQuery(example)
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    performSearch(query)
+  }
+
+  const handleExampleClick = (exampleQuery: string) => {
+    setQuery(exampleQuery)
+    performSearch(exampleQuery)
+  }
+
+  const getSimilarityColor = (score: number) => {
+    if (score >= 0.9) return "text-green-600 bg-green-50 border-green-200"
+    if (score >= 0.8) return "text-blue-600 bg-blue-50 border-blue-200"
+    if (score >= 0.7) return "text-purple-600 bg-purple-50 border-purple-200"
+    return "text-gray-600 bg-gray-50 border-gray-200"
+  }
+
+  const getSimilarityLabel = (score: number) => {
+    if (score >= 0.9) return "Excelente"
+    if (score >= 0.8) return "Muy buena"
+    if (score >= 0.7) return "Buena"
+    return "Relevante"
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">🔍 Búsqueda Semántica Inteligente</h1>
-        <p className="text-muted-foreground">Prueba el sistema de búsqueda semántica con embeddings de OpenAI</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+      <div className="container mx-auto py-8 px-4 max-w-7xl">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl">
+              <Brain className="h-8 w-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Búsqueda Semántica
+              </h1>
+              <p className="text-muted-foreground">Encuentra contenido relevante usando inteligencia artificial</p>
+            </div>
+          </div>
+        </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Realizar Búsqueda</CardTitle>
-              <CardDescription>Ingresa tu consulta para buscar en la base de conocimiento</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="query">Consulta</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="query"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="¿Qué quieres aprender hoy?"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !isLoading) {
-                        handleSearch()
-                      }
-                    }}
-                  />
-                  <Button onClick={handleSearch} disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Buscando...
-                      </>
-                    ) : (
-                      <>
-                        <Search className="mr-2 h-4 w-4" />
-                        Buscar
-                      </>
-                    )}
-                  </Button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Search className="h-5 w-5" />
+                  Buscar en la Base de Conocimiento
+                </CardTitle>
+                <CardDescription>Ingresa tu pregunta o tema de interés</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <form onSubmit={handleSearch} className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="¿Qué quieres aprender hoy?"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      className="flex-1"
+                      disabled={isSearching}
+                    />
+                    <Button type="submit" disabled={isSearching || !query.trim()} className="px-6">
+                      {isSearching ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Buscando
+                        </>
+                      ) : (
+                        <>
+                          <Search className="mr-2 h-4 w-4" />
+                          Buscar
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">Umbral de Similitud: {similarityThreshold}</label>
+                      <Badge variant="outline">{getSimilarityLabel(similarityThreshold)} coincidencia</Badge>
+                    </div>
+                    <Slider
+                      value={[similarityThreshold]}
+                      onValueChange={([value]) => setSimilarityThreshold(value)}
+                      min={0.5}
+                      max={0.95}
+                      step={0.05}
+                      disabled={isSearching}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Valores más altos = resultados más precisos pero menos resultados
+                    </p>
+                  </div>
+                </form>
+
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Ejemplos de búsqueda:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {exampleQueries.map((example, index) => (
+                      <Button
+                        key={index}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleExampleClick(example)}
+                        disabled={isSearching}
+                        className="text-xs"
+                      >
+                        {example}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="space-y-2">
-                <Label>Umbral de Similitud: {similarityThreshold.toFixed(2)}</Label>
-                <Slider
-                  value={[similarityThreshold]}
-                  onValueChange={([value]) => setSimilarityThreshold(value)}
-                  min={0.5}
-                  max={0.95}
-                  step={0.05}
-                  className="w-full"
-                />
-                <p className="text-xs text-muted-foreground">Mayor = Resultados más precisos pero menos cantidad</p>
-              </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error en la búsqueda</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
+            {searchStats && !error && (
+              <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      <span className="font-medium">Resultados encontrados: {searchStats.totalResults}</span>
+                    </div>
+                    <div className="flex gap-4 text-sm text-muted-foreground">
+                      <span>Similitud promedio: {(searchStats.avgSimilarity * 100).toFixed(0)}%</span>
+                      <span>Tiempo: {searchStats.searchTimeMs}ms</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Resultados de Búsqueda</CardTitle>
-                  <CardDescription>
-                    {results.length > 0
-                      ? `${results.length} resultados encontrados${searchTime ? ` en ${searchTime}ms` : ""}`
-                      : "No hay resultados aún"}
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {results.length === 0 && !isLoading && (
-                <div className="text-center py-12 text-muted-foreground">
-                  <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Realiza una búsqueda para ver resultados</p>
-                </div>
-              )}
+            <Tabs defaultValue="results" className="w-full">
+              <TabsList className="w-full">
+                <TabsTrigger value="results" className="flex-1">
+                  Resultados ({results.length})
+                </TabsTrigger>
+                <TabsTrigger value="stats" className="flex-1">
+                  Estadísticas
+                </TabsTrigger>
+              </TabsList>
 
-              {isLoading && (
-                <div className="text-center py-12">
-                  <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin text-primary" />
-                  <p className="text-muted-foreground">Buscando en la base de conocimiento...</p>
-                </div>
-              )}
+              <TabsContent value="results" className="space-y-4">
+                {results.length === 0 && !isSearching && !error && (
+                  <Card>
+                    <CardContent className="py-12 text-center">
+                      <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">
+                        No hay resultados aún. Realiza una búsqueda para comenzar.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
 
-              <div className="space-y-4">
+                {isSearching && (
+                  <Card>
+                    <CardContent className="py-12 text-center">
+                      <Loader2 className="h-12 w-12 text-purple-600 animate-spin mx-auto mb-4" />
+                      <p className="text-muted-foreground">Buscando en la base de conocimiento...</p>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {results.map((result, index) => (
-                  <Card key={`${result.sourceType}-${result.id}`} className="border-l-4 border-l-primary">
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
                     <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                          <CardTitle className="text-lg mb-2">{result.title}</CardTitle>
+                          <CardDescription className="flex items-center gap-2 flex-wrap">
                             {result.sourceType === "book" ? (
-                              <Book className="h-4 w-4 text-blue-500" />
+                              <Badge variant="outline" className="flex items-center gap-1">
+                                <BookOpen className="h-3 w-3" />
+                                Libro
+                              </Badge>
                             ) : (
-                              <Globe className="h-4 w-4 text-green-500" />
+                              <Badge variant="outline" className="flex items-center gap-1">
+                                <Globe className="h-3 w-3" />
+                                Recurso Web
+                              </Badge>
                             )}
-                            <CardTitle className="text-lg">{result.title}</CardTitle>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span>{result.author}</span>
-                            <span>•</span>
-                            <Badge variant="outline">{result.category}</Badge>
-                          </div>
+                            <Badge variant="secondary">{result.category}</Badge>
+                            <span className="text-sm text-muted-foreground">por {result.author}</span>
+                          </CardDescription>
                         </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-primary">
-                            {Math.round(result.similarityScore * 100)}%
-                          </div>
-                          <div className="text-xs text-muted-foreground">similitud</div>
+                        <div className={`px-3 py-1 rounded-full border ${getSimilarityColor(result.similarityScore)}`}>
+                          <span className="text-sm font-semibold">{(result.similarityScore * 100).toFixed(0)}%</span>
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground mb-3">{result.contentPreview}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {result.tags.slice(0, 5).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-muted-foreground line-clamp-3">{result.contentPreview}</p>
+                      {result.tags && result.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {result.tags.slice(0, 5).map((tag, tagIndex) => (
+                            <Badge key={tagIndex} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </TabsContent>
 
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Ejemplos de Consultas</CardTitle>
-              <CardDescription>Haz clic en cualquier ejemplo para probar</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {exampleQueries.map((example) => (
-                <Button
-                  key={example}
-                  variant="outline"
-                  className="w-full justify-start text-left h-auto py-3 bg-transparent"
-                  onClick={() => handleExampleClick(example)}
-                >
-                  <Search className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm">{example}</span>
-                </Button>
-              ))}
-            </CardContent>
-          </Card>
+              <TabsContent value="stats" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5" />
+                      Estadísticas de Búsqueda
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {searchStats ? (
+                      <>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="text-center p-4 bg-purple-50 rounded-lg">
+                            <p className="text-2xl font-bold text-purple-600">{searchStats.totalResults}</p>
+                            <p className="text-sm text-muted-foreground">Resultados</p>
+                          </div>
+                          <div className="text-center p-4 bg-blue-50 rounded-lg">
+                            <p className="text-2xl font-bold text-blue-600">
+                              {(searchStats.avgSimilarity * 100).toFixed(0)}%
+                            </p>
+                            <p className="text-sm text-muted-foreground">Similitud Promedio</p>
+                          </div>
+                          <div className="text-center p-4 bg-indigo-50 rounded-lg">
+                            <p className="text-2xl font-bold text-indigo-600">{searchStats.searchTimeMs}ms</p>
+                            <p className="text-sm text-muted-foreground">Tiempo de Búsqueda</p>
+                          </div>
+                        </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Cómo Funciona</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                  1
-                </div>
-                <div>
-                  <strong>Embeddings</strong>
-                  <p className="text-muted-foreground">Tu consulta se convierte en un vector de 1536 dimensiones</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                  2
-                </div>
-                <div>
-                  <strong>Similitud Coseno</strong>
-                  <p className="text-muted-foreground">Se compara con todos los vectores en la base de datos</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                  3
-                </div>
-                <div>
-                  <strong>Resultados Ordenados</strong>
-                  <p className="text-muted-foreground">Los resultados más relevantes aparecen primero</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Distribución por Tipo de Fuente</h4>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <span className="text-sm flex items-center gap-2">
+                                <BookOpen className="h-4 w-4" />
+                                Libros
+                              </span>
+                              <span className="font-medium">
+                                {results.filter((r) => r.sourceType === "book").length}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <span className="text-sm flex items-center gap-2">
+                                <Globe className="h-4 w-4" />
+                                Recursos Web
+                              </span>
+                              <span className="font-medium">
+                                {results.filter((r) => r.sourceType === "web_resource").length}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Estadísticas</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Libros en base de datos:</span>
-                <strong>120</strong>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Recursos web:</span>
-                <strong>100</strong>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Total de contenido:</span>
-                <strong>220 fuentes</strong>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Modelo de embeddings:</span>
-                <strong>text-embedding-3-small</strong>
-              </div>
-            </CardContent>
-          </Card>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Categorías Encontradas</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {Array.from(new Set(results.map((r) => r.category))).map((category, index) => (
+                              <Badge key={index} variant="secondary">
+                                {category} ({results.filter((r) => r.category === category).length})
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-center text-muted-foreground py-8">
+                        Realiza una búsqueda para ver estadísticas
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          <div className="space-y-6">
+            <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-50 to-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-purple-900">
+                  <Brain className="h-5 w-5" />
+                  ¿Cómo Funciona?
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 font-bold text-xs">
+                    1
+                  </div>
+                  <p className="text-purple-900">Ingresa tu pregunta o tema en lenguaje natural (español o inglés)</p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs">
+                    2
+                  </div>
+                  <p className="text-purple-900">
+                    La IA convierte tu búsqueda en embeddings vectoriales (1536 dimensiones)
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-xs">
+                    3
+                  </div>
+                  <p className="text-purple-900">Busca en 120+ libros y 100+ recursos web usando similitud de coseno</p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 font-bold text-xs">
+                    4
+                  </div>
+                  <p className="text-purple-900">Recibe resultados ordenados por relevancia con scores de similitud</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg">Base de Conocimiento</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-blue-600" />
+                    <span className="font-medium">Libros</span>
+                  </div>
+                  <Badge className="bg-blue-600">120+</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-5 w-5 text-purple-600" />
+                    <span className="font-medium">Recursos Web</span>
+                  </div>
+                  <Badge className="bg-purple-600">100+</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-indigo-600" />
+                    <span className="font-medium">Total Fuentes</span>
+                  </div>
+                  <Badge className="bg-indigo-600">220+</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-lg border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-900">Consejos de Búsqueda</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm text-green-900">
+                <p>✓ Usa preguntas completas y específicas</p>
+                <p>✓ Incluye contexto relevante en tu búsqueda</p>
+                <p>✓ Ajusta el umbral de similitud según necesites</p>
+                <p>✓ Prueba diferentes formulaciones de tu pregunta</p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

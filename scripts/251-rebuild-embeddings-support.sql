@@ -1,9 +1,25 @@
 -- ============================================================================
--- Script 249: Add Vector Embeddings Support for Semantic Search
+-- Script 251: Rebuild Embeddings Support (Drop and Recreate)
 -- ============================================================================
--- This script enables pgvector extension and creates all necessary tables,
--- functions, and indexes for semantic search functionality
+-- This script drops existing functions and recreates them with correct signatures
 -- ============================================================================
+
+-- Drop existing functions if they exist
+DROP FUNCTION IF EXISTS search_brain_semantic(vector, FLOAT, TEXT, INTEGER);
+DROP FUNCTION IF EXISTS search_knowledge_semantic(vector, FLOAT, INTEGER);
+DROP FUNCTION IF EXISTS search_web_resources_semantic(vector, FLOAT, INTEGER);
+DROP FUNCTION IF EXISTS get_items_needing_embeddings();
+DROP FUNCTION IF EXISTS log_embedding_generation(TEXT, INTEGER, TEXT, TEXT, INTEGER);
+
+-- Drop existing view
+DROP VIEW IF EXISTS embedding_statistics;
+
+-- Drop existing table
+DROP TABLE IF EXISTS embedding_generation_logs;
+
+-- Drop existing indexes
+DROP INDEX IF EXISTS knowledge_base_embedding_idx;
+DROP INDEX IF EXISTS web_resources_embedding_idx;
 
 -- Enable the pgvector extension for vector similarity search
 CREATE EXTENSION IF NOT EXISTS vector;
@@ -17,20 +33,19 @@ ALTER TABLE web_resources
 ADD COLUMN IF NOT EXISTS embedding vector(1536);
 
 -- Create index for faster vector similarity search on knowledge_base
--- Using IVFFlat index for approximate nearest neighbor search
-CREATE INDEX IF NOT EXISTS knowledge_base_embedding_idx 
+CREATE INDEX knowledge_base_embedding_idx 
 ON knowledge_base 
 USING ivfflat (embedding vector_cosine_ops)
 WITH (lists = 100);
 
 -- Create index for faster vector similarity search on web_resources
-CREATE INDEX IF NOT EXISTS web_resources_embedding_idx 
+CREATE INDEX web_resources_embedding_idx 
 ON web_resources 
 USING ivfflat (embedding vector_cosine_ops)
 WITH (lists = 100);
 
 -- Create table to track embedding generation logs
-CREATE TABLE IF NOT EXISTS embedding_generation_logs (
+CREATE TABLE embedding_generation_logs (
     id SERIAL PRIMARY KEY,
     source_type TEXT NOT NULL CHECK (source_type IN ('book', 'web_resource')),
     source_id INTEGER NOT NULL,
@@ -40,27 +55,13 @@ CREATE TABLE IF NOT EXISTS embedding_generation_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create indexes on embedding logs for better query performance
-CREATE INDEX IF NOT EXISTS embedding_logs_source_idx 
-ON embedding_generation_logs(source_type, source_id);
+-- Create indexes on embedding logs
+CREATE INDEX embedding_logs_source_idx ON embedding_generation_logs(source_type, source_id);
+CREATE INDEX embedding_logs_created_idx ON embedding_generation_logs(created_at DESC);
+CREATE INDEX embedding_logs_status_idx ON embedding_generation_logs(status);
 
-CREATE INDEX IF NOT EXISTS embedding_logs_created_idx 
-ON embedding_generation_logs(created_at DESC);
-
-CREATE INDEX IF NOT EXISTS embedding_logs_status_idx 
-ON embedding_generation_logs(status);
-
--- ============================================================================
--- FUNCTION: log_embedding_generation
--- Purpose: Log embedding generation attempts for monitoring and debugging
--- Parameters:
---   p_source_type: 'book' or 'web_resource'
---   p_source_id: ID of the book or web resource
---   p_status: 'completed' or 'failed'
---   p_error_message: Error message if failed (optional)
---   p_processing_time_ms: Time taken to generate embedding (optional)
--- ============================================================================
-CREATE OR REPLACE FUNCTION log_embedding_generation(
+-- Create function to log embedding generation
+CREATE FUNCTION log_embedding_generation(
     p_source_type TEXT,
     p_source_id INTEGER,
     p_status TEXT,
@@ -88,12 +89,8 @@ BEGIN
 END;
 $$;
 
--- ============================================================================
--- FUNCTION: get_items_needing_embeddings
--- Purpose: Get all books and web resources that don't have embeddings yet
--- Returns: Table with source_type, id, and title of items needing embeddings
--- ============================================================================
-CREATE OR REPLACE FUNCTION get_items_needing_embeddings()
+-- Create function to get items needing embeddings
+CREATE FUNCTION get_items_needing_embeddings()
 RETURNS TABLE (
     source_type TEXT,
     id INTEGER,
@@ -123,16 +120,8 @@ BEGIN
 END;
 $$;
 
--- ============================================================================
--- FUNCTION: search_knowledge_semantic
--- Purpose: Perform semantic search on books using vector similarity
--- Parameters:
---   query_embedding: The 1536-dimensional embedding vector of the search query
---   similarity_threshold: Minimum similarity score (0.0 to 1.0), default 0.7
---   limit_results: Maximum number of results to return, default 10
--- Returns: Table with book details and similarity scores
--- ============================================================================
-CREATE OR REPLACE FUNCTION search_knowledge_semantic(
+-- Create function to search books semantically
+CREATE FUNCTION search_knowledge_semantic(
     query_embedding vector(1536),
     similarity_threshold FLOAT DEFAULT 0.7,
     limit_results INTEGER DEFAULT 10
@@ -168,13 +157,8 @@ BEGIN
 END;
 $$;
 
--- ============================================================================
--- FUNCTION: search_web_resources_semantic
--- Purpose: Perform semantic search on web resources using vector similarity
--- Parameters: Same as search_knowledge_semantic
--- Returns: Table with web resource details and similarity scores
--- ============================================================================
-CREATE OR REPLACE FUNCTION search_web_resources_semantic(
+-- Create function to search web resources semantically
+CREATE FUNCTION search_web_resources_semantic(
     query_embedding vector(1536),
     similarity_threshold FLOAT DEFAULT 0.7,
     limit_results INTEGER DEFAULT 10
@@ -210,18 +194,8 @@ BEGIN
 END;
 $$;
 
--- ============================================================================
--- FUNCTION: search_brain_semantic
--- Purpose: Unified semantic search across both books and web resources
--- This is the main function the AI brain will use for semantic search
--- Parameters:
---   query_embedding: The embedding vector of the search query
---   similarity_threshold: Minimum similarity score, default 0.7
---   source_type_filter: Optional filter ('book', 'web_resource', or NULL for both)
---   limit_results: Maximum number of results, default 10
--- Returns: Combined results from both sources with similarity scores
--- ============================================================================
-CREATE OR REPLACE FUNCTION search_brain_semantic(
+-- Create unified semantic search function
+CREATE FUNCTION search_brain_semantic(
     query_embedding vector(1536),
     similarity_threshold FLOAT DEFAULT 0.7,
     source_type_filter TEXT DEFAULT NULL,
@@ -243,7 +217,6 @@ AS $$
 BEGIN
     RETURN QUERY
     WITH combined_results AS (
-        -- Search in books (knowledge_base)
         SELECT 
             'book'::TEXT as source_type,
             kb.id,
@@ -261,7 +234,6 @@ BEGIN
         
         UNION ALL
         
-        -- Search in web resources
         SELECT 
             'web_resource'::TEXT as source_type,
             wr.id,
@@ -283,12 +255,8 @@ BEGIN
 END;
 $$;
 
--- ============================================================================
--- VIEW: embedding_statistics
--- Purpose: Provide quick overview of embedding generation progress
--- Shows statistics for books, web resources, and overall totals
--- ============================================================================
-CREATE OR REPLACE VIEW embedding_statistics AS
+-- Create statistics view
+CREATE VIEW embedding_statistics AS
 SELECT 
     'Books' as source,
     COUNT(*) as total_items,
@@ -320,7 +288,7 @@ SELECT
         NULLIF(((SELECT COUNT(*) FROM knowledge_base) + (SELECT COUNT(*) FROM web_resources)), 0) * 100
     )::NUMERIC, 2) as completion_percentage;
 
--- Grant necessary permissions for authenticated and anonymous users
+-- Grant permissions
 GRANT SELECT ON embedding_statistics TO authenticated, anon;
 GRANT SELECT ON embedding_generation_logs TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION log_embedding_generation TO authenticated, anon;
@@ -329,49 +297,21 @@ GRANT EXECUTE ON FUNCTION search_knowledge_semantic TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION search_web_resources_semantic TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION search_brain_semantic TO authenticated, anon;
 
--- ============================================================================
--- Verification and Success Message
--- ============================================================================
+-- Success message
 DO $$
 DECLARE
     v_books_count INTEGER;
     v_resources_count INTEGER;
     v_total_count INTEGER;
 BEGIN
-    -- Get counts of existing data
     SELECT COUNT(*) INTO v_books_count FROM knowledge_base;
     SELECT COUNT(*) INTO v_resources_count FROM web_resources;
     v_total_count := v_books_count + v_resources_count;
     
-    -- Display success message with statistics
     RAISE NOTICE '============================================================================';
-    RAISE NOTICE 'SUCCESS: Embeddings support has been successfully added!';
+    RAISE NOTICE 'SUCCESS: Embeddings support rebuilt successfully!';
     RAISE NOTICE '============================================================================';
-    RAISE NOTICE '';
-    RAISE NOTICE 'Database Statistics:';
-    RAISE NOTICE '  Books in knowledge base: %', v_books_count;
-    RAISE NOTICE '  Web resources: %', v_resources_count;
-    RAISE NOTICE '  Total items ready for embedding: %', v_total_count;
-    RAISE NOTICE '';
-    RAISE NOTICE 'Created Components:';
-    RAISE NOTICE '  - pgvector extension enabled';
-    RAISE NOTICE '  - embedding columns added to both tables';
-    RAISE NOTICE '  - IVFFlat indexes created for fast similarity search';
-    RAISE NOTICE '  - embedding_generation_logs table created';
-    RAISE NOTICE '  - 4 search functions created';
-    RAISE NOTICE '  - embedding_statistics view created';
-    RAISE NOTICE '';
-    RAISE NOTICE 'Next Steps:';
-    RAISE NOTICE '  1. Check current status: SELECT * FROM embedding_statistics;';
-    RAISE NOTICE '  2. Generate embeddings: Visit /admin/embeddings';
-    RAISE NOTICE '  3. Test semantic search: Visit /test-semantic-search';
-    RAISE NOTICE '';
-    RAISE NOTICE 'Available Functions:';
-    RAISE NOTICE '  - search_brain_semantic(query_embedding, threshold, filter, limit)';
-    RAISE NOTICE '  - search_knowledge_semantic(query_embedding, threshold, limit)';
-    RAISE NOTICE '  - search_web_resources_semantic(query_embedding, threshold, limit)';
-    RAISE NOTICE '  - get_items_needing_embeddings()';
-    RAISE NOTICE '  - log_embedding_generation(type, id, status, error, time)';
-    RAISE NOTICE '';
+    RAISE NOTICE 'Books: % | Web Resources: % | Total: %', v_books_count, v_resources_count, v_total_count;
+    RAISE NOTICE 'Next: SELECT * FROM embedding_statistics;';
     RAISE NOTICE '============================================================================';
 END $$;
