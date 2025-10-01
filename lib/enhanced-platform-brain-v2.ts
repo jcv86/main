@@ -1,5 +1,5 @@
-// Enhanced Platform Brain with comprehensive knowledge base
 import { createClient } from "@supabase/supabase-js"
+import { semanticSearch } from "./embeddings"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
@@ -10,9 +10,11 @@ export interface KnowledgeItem {
   content: string
   author: string
   tags: string[]
-  slug: string
-  read_count: number
-  relevance_score?: number
+  slug?: string
+  url?: string
+  sourceType: "book" | "web_resource"
+  relevanceScore?: number
+  similarityScore?: number
   created_at: string
   updated_at: string
 }
@@ -22,6 +24,8 @@ export interface BrainQuery {
   category?: string
   limit?: number
   context?: string
+  useSemanticSearch?: boolean
+  similarityThreshold?: number
 }
 
 export interface BrainResponse {
@@ -31,49 +35,149 @@ export interface BrainResponse {
   suggestions: string[]
   categories_used: string[]
   search_time_ms: number
+  search_method: "semantic" | "keyword" | "hybrid"
 }
 
-export class EnhancedPlatformBrain {
+export class EnhancedPlatformBrainV2 {
   private knowledgeCache: Map<string, KnowledgeItem[]> = new Map()
   private cacheExpiry: Map<string, number> = new Map()
   private readonly CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
   /**
-   * Search the knowledge base with full-text search and relevance scoring
+   * Search using semantic similarity (embeddings)
    */
-  async searchKnowledge(query: string, category?: string, limit = 10): Promise<KnowledgeItem[]> {
-    const cacheKey = `${query}-${category || "all"}-${limit}`
-
-    // Check cache first
-    if (this.knowledgeCache.has(cacheKey)) {
-      const expiry = this.cacheExpiry.get(cacheKey) || 0
-      if (Date.now() < expiry) {
-        return this.knowledgeCache.get(cacheKey)!
-      }
-    }
-
+  async semanticKnowledgeSearch(query: string, limit = 10): Promise<KnowledgeItem[]> {
     try {
-      const { data, error } = await supabase.rpc("search_knowledge_base", {
-        search_query: query,
-        category_filter: category || null,
-        limit_results: limit,
+      const results = await semanticSearch(query, {
+        similarityThreshold: 0.7,
+        limit,
       })
 
-      if (error) {
-        console.error("Knowledge search error:", error)
-        return this.getFallbackKnowledge(query)
+      return results.map((result) => ({
+        id: result.id,
+        title: result.title,
+        category: result.category,
+        content: result.contentPreview,
+        author: result.author,
+        tags: result.tags,
+        slug: result.sourceType === "book" ? result.identifier : undefined,
+        url: result.sourceType === "web_resource" ? result.identifier : undefined,
+        sourceType: result.sourceType,
+        similarityScore: result.similarityScore,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }))
+    } catch (error) {
+      console.error("Semantic search error:", error)
+      return []
+    }
+  }
+
+  /**
+   * Search using traditional keyword search
+   */
+  async keywordKnowledgeSearch(query: string, category?: string, limit = 10): Promise<KnowledgeItem[]> {
+    try {
+      // Search in knowledge_base
+      const { data: books, error: booksError } = await supabase
+        .from("knowledge_base")
+        .select("*")
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%,author.ilike.%${query}%`)
+        .limit(limit / 2)
+
+      if (booksError) {
+        console.error("Books search error:", booksError)
       }
 
-      const results = data || []
+      // Search in web_resources
+      const { data: resources, error: resourcesError } = await supabase
+        .from("web_resources")
+        .select("*")
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%,description.ilike.%${query}%`)
+        .limit(limit / 2)
 
-      // Cache results
-      this.knowledgeCache.set(cacheKey, results)
-      this.cacheExpiry.set(cacheKey, Date.now() + this.CACHE_DURATION)
+      if (resourcesError) {
+        console.error("Resources search error:", resourcesError)
+      }
 
-      return results
+      const bookResults: KnowledgeItem[] =
+        books?.map((book) => ({
+          id: book.id,
+          title: book.title,
+          category: book.category,
+          content: book.content,
+          author: book.author,
+          tags: book.tags || [],
+          slug: book.slug,
+          sourceType: "book" as const,
+          created_at: book.created_at,
+          updated_at: book.updated_at,
+        })) || []
+
+      const resourceResults: KnowledgeItem[] =
+        resources?.map((resource) => ({
+          id: resource.id,
+          title: resource.title,
+          category: resource.category,
+          content: resource.content,
+          author: resource.author || "Web Resource",
+          tags: resource.tags || [],
+          url: resource.url,
+          sourceType: "web_resource" as const,
+          created_at: resource.created_at,
+          updated_at: resource.updated_at,
+        })) || []
+
+      return [...bookResults, ...resourceResults]
     } catch (error) {
-      console.error("Knowledge search failed:", error)
-      return this.getFallbackKnowledge(query)
+      console.error("Keyword search error:", error)
+      return []
+    }
+  }
+
+  /**
+   * Hybrid search combining semantic and keyword search
+   */
+  async hybridKnowledgeSearch(query: string, category?: string, limit = 10): Promise<KnowledgeItem[]> {
+    try {
+      // Get results from both methods
+      const [semanticResults, keywordResults] = await Promise.all([
+        this.semanticKnowledgeSearch(query, limit),
+        this.keywordKnowledgeSearch(query, category, limit),
+      ])
+
+      // Merge and deduplicate results
+      const resultsMap = new Map<string, KnowledgeItem>()
+
+      semanticResults.forEach((result) => {
+        const key = `${result.sourceType}-${result.id}`
+        resultsMap.set(key, {
+          ...result,
+          relevanceScore: (result.similarityScore || 0) * 1.2, // Boost semantic results
+        })
+      })
+
+      keywordResults.forEach((result) => {
+        const key = `${result.sourceType}-${result.id}`
+        const existing = resultsMap.get(key)
+        if (existing) {
+          // If found by both methods, boost the score
+          existing.relevanceScore = (existing.relevanceScore || 0) + 0.5
+        } else {
+          resultsMap.set(key, {
+            ...result,
+            relevanceScore: 0.8, // Base score for keyword results
+          })
+        }
+      })
+
+      // Sort by relevance and return top results
+      return Array.from(resultsMap.values())
+        .sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0))
+        .slice(0, limit)
+    } catch (error) {
+      console.error("Hybrid search error:", error)
+      return []
     }
   }
 
@@ -82,10 +186,19 @@ export class EnhancedPlatformBrain {
    */
   async generateResponse(brainQuery: BrainQuery): Promise<BrainResponse> {
     const startTime = Date.now()
-    const { query, category, limit = 5, context } = brainQuery
+    const { query, category, limit = 5, context, useSemanticSearch = true } = brainQuery
 
-    // Search relevant knowledge
-    const relevantKnowledge = await this.searchKnowledge(query, category, limit)
+    let relevantKnowledge: KnowledgeItem[] = []
+    let searchMethod: "semantic" | "keyword" | "hybrid" = "keyword"
+
+    // Choose search method
+    if (useSemanticSearch) {
+      relevantKnowledge = await this.hybridKnowledgeSearch(query, category, limit)
+      searchMethod = "hybrid"
+    } else {
+      relevantKnowledge = await this.keywordKnowledgeSearch(query, category, limit)
+      searchMethod = "keyword"
+    }
 
     if (relevantKnowledge.length === 0) {
       return {
@@ -100,6 +213,7 @@ export class EnhancedPlatformBrain {
         ],
         categories_used: [],
         search_time_ms: Date.now() - startTime,
+        search_method: searchMethod,
       }
     }
 
@@ -118,6 +232,7 @@ export class EnhancedPlatformBrain {
       suggestions,
       categories_used: categoriesUsed,
       search_time_ms: Date.now() - startTime,
+      search_method: searchMethod,
     }
   }
 
@@ -133,7 +248,8 @@ export class EnhancedPlatformBrain {
 
     // Add insights from top sources
     topSources.forEach((source, index) => {
-      answer += `**${index + 1}. "${source.title}"** - *${source.author}*\n`
+      const sourceLabel = source.sourceType === "book" ? "📚 Libro" : "🌐 Recurso Web"
+      answer += `**${index + 1}. ${sourceLabel}: "${source.title}"** - *${source.author}*\n`
       answer += `${source.content.substring(0, 200)}...\n\n`
     })
 
@@ -240,45 +356,18 @@ export class EnhancedPlatformBrain {
   private calculateConfidence(knowledge: KnowledgeItem[]): number {
     if (knowledge.length === 0) return 0
 
-    const avgRelevance = knowledge.reduce((sum, k) => sum + (k.relevance_score || 0.5), 0) / knowledge.length
+    const avgRelevance =
+      knowledge.reduce((sum, k) => sum + (k.relevanceScore || k.similarityScore || 0.5), 0) / knowledge.length
     const sourceCount = Math.min(knowledge.length / 5, 1) // Max confidence with 5+ sources
 
     return Math.min(avgRelevance * sourceCount * 100, 95) // Cap at 95%
   }
-
-  /**
-   * Fallback knowledge when database is unavailable
-   */
-  private getFallbackKnowledge(query: string): KnowledgeItem[] {
-    const fallbackItems: KnowledgeItem[] = [
-      {
-        id: 1,
-        title: "Desarrollo de Carrera Profesional",
-        content:
-          "Guía completa para planificar y ejecutar una carrera exitosa, incluyendo autoconocimiento, networking y desarrollo de habilidades clave.",
-        category: "Desarrollo de Carrera",
-        author: "Plataforma DespegaTuCarrera",
-        tags: ["carrera", "desarrollo", "profesional"],
-        slug: "desarrollo-carrera",
-        read_count: 0,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-    ]
-
-    return fallbackItems.filter(
-      (item) =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.content.toLowerCase().includes(query.toLowerCase()) ||
-        item.tags.some((tag) => query.toLowerCase().includes(tag)),
-    )
-  }
 }
 
 // Export singleton instance
-export const platformBrain = new EnhancedPlatformBrain()
+export const platformBrainV2 = new EnhancedPlatformBrainV2()
 
 // Helper function for quick queries
-export async function queryBrain(query: string, category?: string): Promise<BrainResponse> {
-  return platformBrain.generateResponse({ query, category })
+export async function queryBrainV2(query: string, options?: Partial<BrainQuery>): Promise<BrainResponse> {
+  return platformBrainV2.generateResponse({ query, ...options })
 }
