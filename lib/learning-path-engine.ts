@@ -214,7 +214,7 @@ export async function getDueRepetitions(userEmail: string, limit = 10) {
 }
 
 /**
- * Process spaced repetition response
+ * Process spaced repetition response (SuperMemo 2 algorithm)
  */
 export async function processRepetitionResponse(
   userEmail: string,
@@ -308,7 +308,7 @@ export async function addToSpacedRepetition(
 }
 
 /**
- * Get user percentile for skill
+ * Get user percentile for skill (peer benchmarking)
  */
 export async function getUserPercentile(
   skillName: string,

@@ -25,7 +25,7 @@ export function generateQueryHash(query: string, userContext?: any): string {
 }
 
 /**
- * Get cached brain response
+ * Get cached brain response (returns response from cache if valid and not expired)
  */
 export async function getCachedResponse(queryHash: string): Promise<any | null> {
   try {
@@ -42,7 +42,7 @@ export async function getCachedResponse(queryHash: string): Promise<any | null> 
 }
 
 /**
- * Cache brain response
+ * Cache brain response with configurable TTL
  */
 export async function cacheResponse(
   queryHash: string,
@@ -109,7 +109,7 @@ export async function trackAPIUsage(
 }
 
 /**
- * Track analytics event
+ * Track analytics event for user behavior analysis
  */
 export async function trackAnalyticsEvent(
   eventType: string,
@@ -131,7 +131,7 @@ export async function trackAnalyticsEvent(
 }
 
 /**
- * Get performance metrics
+ * Get performance metrics for monitoring
  */
 export async function getPerformanceMetrics(days = 7): Promise<{
   avgResponseTime: number
@@ -186,7 +186,7 @@ export async function getPerformanceMetrics(days = 7): Promise<{
 }
 
 /**
- * A/B Test assignment
+ * A/B Test assignment (assigns user to test variant)
  */
 export async function getABTestVariant(userEmail: string, testName: string): Promise<string> {
   try {
@@ -232,7 +232,7 @@ export async function getABTestVariant(userEmail: string, testName: string): Pro
 }
 
 /**
- * Track A/B test event
+ * Track A/B test event for variant analysis
  */
 export async function trackABTestEvent(
   userEmail: string,
@@ -255,7 +255,7 @@ export async function trackABTestEvent(
 }
 
 /**
- * Clean up expired cache entries
+ * Clean up expired cache entries (run as scheduled job)
  */
 export async function cleanupExpiredCache(): Promise<number> {
   try {
