@@ -1,12 +1,56 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { advancedBrain } from "@/lib/advanced-brain-engine"
 import { createClient } from "@/lib/supabase"
+import {
+  generateQueryHash,
+  getCachedResponse,
+  cacheResponse,
+  trackAPIUsage,
+  trackAnalyticsEvent,
+} from "@/lib/performance-optimizer"
 
 export const runtime = "nodejs"
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+  let cacheHit = false
+
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
+
+    // Generate cache key
+    const queryHash = generateQueryHash(message, { userId })
+
+    // Check cache first
+    const cachedResponse = await getCachedResponse(queryHash)
+    if (cachedResponse) {
+      cacheHit = true
+      const responseTimeMs = Date.now() - startTime
+
+      // Track analytics
+      await trackAnalyticsEvent(
+        "brain_query",
+        {
+          category: "cached",
+          response_time_ms: responseTimeMs,
+          cache_hit: true,
+        },
+        userId,
+      )
+
+      // Track API usage (cached)
+      await trackAPIUsage("brain-query-advanced", "openai", "gpt-4o", 0, responseTimeMs, true)
+
+      return NextResponse.json({
+        response: cachedResponse.response,
+        conversationId: cachedResponse.conversationId,
+        metadata: {
+          ...cachedResponse.metadata,
+          cacheHit: true,
+          responseTimeMs,
+        },
+      })
+    }
 
     // Process query with advanced brain
     const brainResponse = await advancedBrain.processQuery({
@@ -22,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Add sources
     if (brainResponse.sources.length > 0) {
       responseContent += "\n\n📚 **Fuentes Consultadas:**\n"
-      brainResponse.sources.forEach((source, index) => {
+      brainResponse.sources.forEach((source) => {
         const icon = source.sourceType === "book" ? "📖" : "🌐"
         responseContent += `${icon} **${source.title}** - ${source.author}\n`
         responseContent += `   └ ${source.relevanceReason} (${(source.similarityScore * 100).toFixed(0)}% relevancia)\n`
@@ -68,6 +112,8 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     }
 
+    const responseTimeMs = Date.now() - startTime
+
     // Save to database
     const supabase = createClient()
     const finalConversationId = conversationId || `conv_${Date.now()}`
@@ -103,7 +149,7 @@ export async function POST(request: NextRequest) {
       console.error("Database save error:", dbError)
     }
 
-    return NextResponse.json({
+    const responseData = {
       response: aiMessage,
       conversationId: finalConversationId,
       metadata: {
@@ -111,10 +157,47 @@ export async function POST(request: NextRequest) {
         personalizationLevel: brainResponse.personalizationLevel,
         sourcesFound: brainResponse.sources.length,
         reasoning: brainResponse.reasoning,
+        cacheHit: false,
+        responseTimeMs,
       },
-    })
+    }
+
+    // Cache response (24 hours TTL)
+    await cacheResponse(queryHash, message, responseData, { ttlHours: 24 })
+
+    // Track analytics
+    await trackAnalyticsEvent(
+      "brain_query",
+      {
+        category: "success",
+        confidence: brainResponse.confidence,
+        sources_count: brainResponse.sources.length,
+        response_time_ms: responseTimeMs,
+        cache_hit: false,
+      },
+      userId,
+      finalConversationId,
+    )
+
+    // Track API usage (estimate tokens)
+    const estimatedTokens = Math.ceil(
+      (message.length + brainResponse.answer.length + JSON.stringify(brainResponse.sources).length) / 4,
+    )
+    await trackAPIUsage("brain-query-advanced", "openai", "gpt-4o", estimatedTokens, responseTimeMs, false)
+
+    return NextResponse.json(responseData)
   } catch (error) {
     console.error("Error in advanced brain query:", error)
+
+    const responseTimeMs = Date.now() - startTime
+
+    // Track error
+    await trackAnalyticsEvent("brain_query_error", {
+      category: "error",
+      error_message: error instanceof Error ? error.message : "Unknown error",
+      response_time_ms: responseTimeMs,
+    })
+
     return NextResponse.json(
       {
         error: "Error processing query",
@@ -131,6 +214,18 @@ export async function PATCH(request: NextRequest) {
     const { conversationId, userId, rating, feedback } = await request.json()
 
     await advancedBrain.learnFromFeedback(userId, conversationId, rating, feedback)
+
+    // Track feedback event
+    await trackAnalyticsEvent(
+      "brain_feedback",
+      {
+        category: "feedback",
+        rating,
+        has_text_feedback: !!feedback,
+      },
+      userId,
+      conversationId,
+    )
 
     return NextResponse.json({ success: true })
   } catch (error) {
