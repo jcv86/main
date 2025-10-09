@@ -53,7 +53,6 @@ function splitIntoChunks(content: string, chunkSize = 2000, overlap = 200): Cont
       chunkIndex: chunkIndex++,
     })
 
-    // Move forward with overlap
     startIndex += chunkSize - overlap
   }
 
@@ -67,21 +66,17 @@ function findRelevantChunks(chunks: ContentChunk[], query: string, maxChunks = 3
   const queryLower = query.toLowerCase()
   const queryWords = queryLower.split(/\s+/)
 
-  // Score each chunk based on keyword matches
   const scoredChunks = chunks.map((chunk) => {
     const chunkLower = chunk.content.toLowerCase()
     let score = 0
 
-    // Count keyword matches
     queryWords.forEach((word) => {
       if (word.length > 3) {
-        // Only count meaningful words
         const matches = (chunkLower.match(new RegExp(word, "g")) || []).length
         score += matches
       }
     })
 
-    // Bonus for chunks that contain multiple query words close together
     if (queryWords.every((word) => chunkLower.includes(word))) {
       score += 10
     }
@@ -89,7 +84,6 @@ function findRelevantChunks(chunks: ContentChunk[], query: string, maxChunks = 3
     return { chunk, score }
   })
 
-  // Sort by score and return top chunks
   return scoredChunks
     .sort((a, b) => b.score - a.score)
     .slice(0, maxChunks)
@@ -111,10 +105,8 @@ export async function enhancedSemanticSearch(options: SearchOptions): Promise<En
   } = options
 
   try {
-    // Generate embedding for query
     const queryEmbedding = await generateEmbedding(query)
 
-    // Perform semantic search
     const { data, error } = await supabase.rpc("search_brain_semantic", {
       query_embedding: queryEmbedding,
       similarity_threshold: similarityThreshold,
@@ -131,10 +123,8 @@ export async function enhancedSemanticSearch(options: SearchOptions): Promise<En
       return []
     }
 
-    // Enhance results with chunking and relevance
     const enhancedResults: EnhancedSearchResult[] = await Promise.all(
       data.map(async (item: any) => {
-        // Get full content
         let fullContent = ""
         let readCount = 0
 
@@ -156,7 +146,6 @@ export async function enhancedSemanticSearch(options: SearchOptions): Promise<En
           readCount = resourceData?.access_count || 0
         }
 
-        // Split into chunks and find most relevant
         const chunks = splitIntoChunks(fullContent, chunkSize)
         const relevantChunks = findRelevantChunks(chunks, query)
 
@@ -176,7 +165,6 @@ export async function enhancedSemanticSearch(options: SearchOptions): Promise<En
       }),
     )
 
-    // Apply category filter if specified
     let filteredResults = enhancedResults
     if (categoryFilter) {
       filteredResults = enhancedResults.filter((result) =>
@@ -213,7 +201,6 @@ export async function generateEnhancedBrainResponse(
     }
   }
 
-  // Extract key insights from relevant chunks
   const keyInsights: string[] = []
   const categories = new Set<string>()
 
@@ -221,7 +208,6 @@ export async function generateEnhancedBrainResponse(
     categories.add(result.category)
     result.relevantChunks.forEach((chunk, index) => {
       if (index === 0 && chunk.content.length > 100) {
-        // Take first sentence or two from most relevant chunk
         const sentences = chunk.content.split(/[.!?]+/)
         const insight = sentences.slice(0, 2).join(". ").trim()
         if (insight.length > 50) {
@@ -231,17 +217,14 @@ export async function generateEnhancedBrainResponse(
     })
   })
 
-  // Build comprehensive answer
   let answer = `🧠 **Respuesta del Cerebro Mejorado**\n\n`
   answer += `He encontrado información relevante en **${searchResults.length} fuentes** sobre **${Array.from(categories).join(", ")}**.\n\n`
 
-  // Add insights from top sources
   searchResults.slice(0, 3).forEach((result, index) => {
     const sourceIcon = result.sourceType === "book" ? "📚" : "🌐"
     answer += `**${index + 1}. ${sourceIcon} "${result.title}"** - *${result.author}*\n`
     answer += `*Categoría: ${result.category}*\n\n`
 
-    // Add most relevant chunk
     if (result.relevantChunks.length > 0) {
       const chunk = result.relevantChunks[0]
       const preview = chunk.content.substring(0, 300).trim()
@@ -249,7 +232,6 @@ export async function generateEnhancedBrainResponse(
     }
   })
 
-  // Add key insights summary
   if (keyInsights.length > 0) {
     answer += `\n**💡 Insights Clave:**\n`
     keyInsights.slice(0, 3).forEach((insight, index) => {
@@ -257,7 +239,6 @@ export async function generateEnhancedBrainResponse(
     })
   }
 
-  // Calculate confidence based on similarity scores and result count
   const avgSimilarity = searchResults.reduce((sum, r) => sum + r.similarityScore, 0) / searchResults.length
   const resultCountFactor = Math.min(searchResults.length / 5, 1)
   const confidence = Math.min(avgSimilarity * resultCountFactor * 100, 95)

@@ -33,18 +33,16 @@ export async function POST(request: NextRequest) {
 
     const startTime = Date.now()
 
-    // Perform enhanced semantic search
     const searchResults = await enhancedSemanticSearch({
       query,
       limit: limit || 10,
       similarityThreshold: similarityThreshold || 0.7,
       categoryFilter,
       sourceTypeFilter,
-      includeFullContent: false, // Don't include full content in response for performance
+      includeFullContent: false,
       chunkSize: 2000,
     })
 
-    // Generate AI response
     const brainResponse = await generateEnhancedBrainResponse(query, searchResults)
 
     const searchTimeMs = Date.now() - startTime

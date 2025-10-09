@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -96,7 +95,6 @@ export function AdvancedBrainInterface() {
 
         setMessages((prev) => [...prev, assistantMessage])
 
-        // Update stats
         setStats((prev) => {
           const newTotal = prev.totalQueries + 1
           const categories = data.sources?.map((s: any) => s.category) || []
@@ -134,7 +132,6 @@ export function AdvancedBrainInterface() {
   return (
     <div className="container mx-auto p-4 max-w-7xl">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Chat Interface */}
         <div className="lg:col-span-2">
           <Card className="h-[800px] flex flex-col">
             <CardHeader>
@@ -148,7 +145,6 @@ export function AdvancedBrainInterface() {
             </CardHeader>
 
             <CardContent className="flex-1 flex flex-col p-4">
-              {/* Messages Area */}
               <ScrollArea className="flex-1 pr-4 mb-4" ref={scrollRef}>
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center p-8">
@@ -177,14 +173,13 @@ export function AdvancedBrainInterface() {
                       <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                         <div
                           className={`max-w-[85%] rounded-lg p-4 ${
-                            message.role === "user" ? "bg-purple-600 text-white" : "bg-muted border border-border"
+                            message.role === "user" ? "bg-purple-600 text-white" : "bg-muted"
                           }`}
                         >
                           <div className="whitespace-pre-wrap">{message.content}</div>
 
                           {message.role === "assistant" && (
                             <>
-                              {/* Confidence and Time */}
                               {message.confidence !== undefined && (
                                 <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/50 text-sm">
                                   <div className="flex items-center gap-1">
@@ -197,7 +192,6 @@ export function AdvancedBrainInterface() {
                                 </div>
                               )}
 
-                              {/* Sources */}
                               {message.sources && message.sources.length > 0 && (
                                 <div className="mt-3 space-y-2">
                                   <div className="text-sm font-semibold">Fuentes consultadas:</div>
@@ -229,12 +223,11 @@ export function AdvancedBrainInterface() {
                 )}
               </ScrollArea>
 
-              {/* Input Area */}
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Pregunta algo sobre desarrollo profesional, liderazgo, productividad..."
+                  placeholder="Pregunta algo sobre desarrollo profesional..."
                   disabled={loading}
                   className="flex-1"
                 />
@@ -246,12 +239,10 @@ export function AdvancedBrainInterface() {
           </Card>
         </div>
 
-        {/* Sidebar - Stats and Info */}
         <div className="space-y-6">
-          {/* Stats Card */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Estadísticas de Búsqueda</CardTitle>
+              <CardTitle className="text-lg">Estadísticas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -270,65 +261,34 @@ export function AdvancedBrainInterface() {
                     <div className="text-2xl font-bold">{stats.avgSearchTime.toFixed(0)}ms</div>
                     <div className="text-sm text-muted-foreground">Tiempo promedio</div>
                   </div>
-
-                  {stats.topCategories.length > 0 && (
-                    <div>
-                      <div className="text-sm font-semibold mb-2">Categorías más consultadas</div>
-                      <div className="flex flex-wrap gap-1">
-                        {stats.topCategories.map((cat, idx) => (
-                          <Badge key={idx} variant="secondary">
-                            {cat}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </>
               )}
             </CardContent>
           </Card>
 
-          {/* Features Card */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Nuevas Capacidades</CardTitle>
+              <CardTitle className="text-lg">Capacidades</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                 <div>
                   <div className="font-semibold">Búsqueda Semántica</div>
-                  <div className="text-muted-foreground">Entiende el significado de tus preguntas</div>
+                  <div className="text-muted-foreground">Entiende el significado</div>
                 </div>
               </div>
 
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                 <div>
                   <div className="font-semibold">Contenido Expandido</div>
-                  <div className="text-muted-foreground">Libros con 20k+ caracteres de contenido detallado</div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Chunks Relevantes</div>
-                  <div className="text-muted-foreground">Extrae las partes más relevantes de cada fuente</div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <div className="font-semibold">Scoring Inteligente</div>
-                  <div className="text-muted-foreground">Calcula relevancia y confianza de respuestas</div>
+                  <div className="text-muted-foreground">20k+ caracteres por libro</div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Suggested Queries Card */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -344,7 +304,7 @@ export function AdvancedBrainInterface() {
                   className="w-full justify-start text-left h-auto py-2"
                   onClick={() => setInput(query)}
                 >
-                  <Search className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <Search className="h-4 w-4 mr-2" />
                   <span className="text-sm">{query}</span>
                 </Button>
               ))}

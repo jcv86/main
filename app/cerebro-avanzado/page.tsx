@@ -1,10 +1,17 @@
 import { AdvancedBrainInterface } from "@/components/advanced-brain-interface"
-
-export const metadata = {
-  title: "Cerebro Avanzado - Búsqueda Semántica",
-  description: "Sistema de búsqueda inteligente con IA y contenido expandido",
-}
+import { Suspense } from "react"
+import { Loader2 } from "lucide-react"
 
 export default function CerebroAvanzadoPage() {
-  return <AdvancedBrainInterface />
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+        </div>
+      }
+    >
+      <AdvancedBrainInterface />
+    </Suspense>
+  )
 }
