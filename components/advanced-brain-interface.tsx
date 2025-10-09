@@ -1,73 +1,66 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Brain,
-  Search,
-  Sparkles,
-  BookOpen,
-  Globe,
-  TrendingUp,
-  Lightbulb,
-  Send,
-  Loader2,
-  CheckCircle,
-} from "lucide-react"
+import { Loader2, Send, Brain, BookOpen, LinkIcon, TrendingUp } from "lucide-react"
 
 interface Message {
-  role: "user" | "assistant"
+  id: string
+  type: "user" | "assistant"
   content: string
-  sources?: any[]
-  confidence?: number
-  keyInsights?: string[]
   timestamp: Date
-  searchTimeMs?: number
-}
-
-interface SearchStats {
-  totalQueries: number
-  avgConfidence: number
-  avgSearchTime: number
-  topCategories: string[]
+  confidence?: number
+  sources?: Array<{
+    title: string
+    author: string
+    category: string
+    similarity: number
+    excerpt: string
+    sourceType: string
+    identifier: string
+  }>
+  keywords?: string[]
 }
 
 export function AdvancedBrainInterface() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "1",
+      type: "assistant",
+      content:
+        "¡Hola! Soy tu asistente inteligente con acceso a más de 120 libros de desarrollo profesional y recursos web. Puedo ayudarte con temas de liderazgo, productividad, emprendimiento, y mucho más. ¿Qué te gustaría aprender hoy?",
+      timestamp: new Date(),
+      confidence: 1.0,
+    },
+  ])
   const [input, setInput] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [stats, setStats] = useState<SearchStats>({
+  const [isLoading, setIsLoading] = useState(false)
+  const [stats, setStats] = useState({
     totalQueries: 0,
     avgConfidence: 0,
-    avgSearchTime: 0,
-    topCategories: [],
+    avgProcessingTime: 0,
   })
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim() || loading) return
+    if (!input.trim() || isLoading) return
 
     const userMessage: Message = {
-      role: "user",
+      id: Date.now().toString(),
+      type: "user",
       content: input,
       timestamp: new Date(),
     }
 
     setMessages((prev) => [...prev, userMessage])
     setInput("")
-    setLoading(true)
+    setIsLoading(true)
 
     try {
       const response = await fetch("/api/brain-semantic", {
@@ -75,8 +68,8 @@ export function AdvancedBrainInterface() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: input,
-          limit: 5,
           similarityThreshold: 0.7,
+          limit: 5,
         }),
       })
 
@@ -84,234 +77,185 @@ export function AdvancedBrainInterface() {
 
       if (data.success) {
         const assistantMessage: Message = {
-          role: "assistant",
+          id: (Date.now() + 1).toString(),
+          type: "assistant",
           content: data.answer,
-          sources: data.sources,
-          confidence: data.confidence,
-          keyInsights: data.keyInsights,
           timestamp: new Date(),
-          searchTimeMs: data.searchTimeMs,
+          confidence: data.confidence,
+          sources: data.sources,
+          keywords: data.keywords,
         }
 
         setMessages((prev) => [...prev, assistantMessage])
 
-        setStats((prev) => {
-          const newTotal = prev.totalQueries + 1
-          const categories = data.sources?.map((s: any) => s.category) || []
-          return {
-            totalQueries: newTotal,
-            avgConfidence: (prev.avgConfidence * prev.totalQueries + data.confidence) / newTotal,
-            avgSearchTime: (prev.avgSearchTime * prev.totalQueries + data.searchTimeMs) / newTotal,
-            topCategories: Array.from(new Set([...prev.topCategories, ...categories])).slice(0, 5),
-          }
-        })
+        // Actualizar estadísticas
+        setStats((prev) => ({
+          totalQueries: prev.totalQueries + 1,
+          avgConfidence: (prev.avgConfidence * prev.totalQueries + data.confidence) / (prev.totalQueries + 1),
+          avgProcessingTime:
+            (prev.avgProcessingTime * prev.totalQueries + data.processingTime) / (prev.totalQueries + 1),
+        }))
       } else {
-        throw new Error(data.message || "Search failed")
+        throw new Error(data.message || "Error al procesar la consulta")
       }
     } catch (error) {
       const errorMessage: Message = {
-        role: "assistant",
-        content: `❌ Error: ${error instanceof Error ? error.message : "Unknown error occurred"}`,
+        id: (Date.now() + 1).toString(),
+        type: "assistant",
+        content: "Lo siento, ocurrió un error al procesar tu consulta. Por favor, intenta de nuevo.",
         timestamp: new Date(),
         confidence: 0,
       }
       setMessages((prev) => [...prev, errorMessage])
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const suggestedQueries = [
-    "¿Cómo puedo mejorar mi productividad diaria?",
-    "Estrategias efectivas de liderazgo",
-    "Técnicas de negociación exitosas",
-    "Cómo formar hábitos duraderos",
-    "Principios de comunicación efectiva",
+  const suggestedQuestions = [
+    "¿Cómo puedo mejorar mi productividad?",
+    "¿Qué son los hábitos atómicos?",
+    "Técnicas de liderazgo efectivo",
+    "¿Cómo crear una startup exitosa?",
+    "Estrategias de comunicación efectiva",
   ]
 
   return (
-    <div className="container mx-auto p-4 max-w-7xl">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Card className="h-[800px] flex flex-col">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-purple-600" />
-                <CardTitle>Cerebro Inteligente con Búsqueda Semántica</CardTitle>
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-12rem)]">
+      {/* Panel Principal de Chat */}
+      <Card className="lg:col-span-3 flex flex-col">
+        <CardHeader className="border-b">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Brain className="h-6 w-6 text-primary" />
+              <div>
+                <CardTitle>Cerebro Avanzado</CardTitle>
+                <CardDescription>Búsqueda semántica con IA</CardDescription>
               </div>
-              <CardDescription>
-                Búsqueda avanzada con IA en {stats.totalQueries > 0 ? "120+" : "100+"} libros y recursos
-              </CardDescription>
-            </CardHeader>
+            </div>
+            {stats.totalQueries > 0 && (
+              <div className="flex gap-4 text-sm">
+                <div className="text-center">
+                  <div className="font-semibold">{stats.totalQueries}</div>
+                  <div className="text-muted-foreground">Consultas</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-semibold">{Math.round(stats.avgConfidence * 100)}%</div>
+                  <div className="text-muted-foreground">Confianza</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-semibold">{Math.round(stats.avgProcessingTime)}ms</div>
+                  <div className="text-muted-foreground">Tiempo</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardHeader>
 
-            <CardContent className="flex-1 flex flex-col p-4">
-              <ScrollArea className="flex-1 pr-4 mb-4" ref={scrollRef}>
-                {messages.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                    <Sparkles className="h-16 w-16 text-purple-400 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">¡Bienvenido al Cerebro Mejorado!</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Ahora con búsqueda semántica avanzada y contenido expandido de libros profesionales
-                    </p>
-                    <div className="grid grid-cols-1 gap-2 w-full max-w-md">
-                      {suggestedQueries.slice(0, 3).map((query, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          className="justify-start text-left bg-transparent"
-                          onClick={() => setInput(query)}
-                        >
-                          <Search className="h-4 w-4 mr-2" />
-                          {query}
-                        </Button>
+        <ScrollArea className="flex-1 p-4">
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[80%] rounded-lg p-4 ${
+                    message.type === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap">{message.content}</div>
+
+                  {message.confidence !== undefined && message.type === "assistant" && (
+                    <div className="mt-3 flex items-center gap-2 text-xs">
+                      <TrendingUp className="h-3 w-3" />
+                      <span>Confianza: {Math.round(message.confidence * 100)}%</span>
+                    </div>
+                  )}
+
+                  {message.keywords && message.keywords.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {message.keywords.map((keyword) => (
+                        <Badge key={keyword} variant="secondary" className="text-xs">
+                          {keyword}
+                        </Badge>
                       ))}
                     </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {messages.map((message, index) => (
-                      <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                        <div
-                          className={`max-w-[85%] rounded-lg p-4 ${
-                            message.role === "user" ? "bg-purple-600 text-white" : "bg-muted"
-                          }`}
-                        >
-                          <div className="whitespace-pre-wrap">{message.content}</div>
+                  )}
 
-                          {message.role === "assistant" && (
-                            <>
-                              {message.confidence !== undefined && (
-                                <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/50 text-sm">
-                                  <div className="flex items-center gap-1">
-                                    <TrendingUp className="h-4 w-4" />
-                                    <span>{message.confidence.toFixed(1)}% confianza</span>
-                                  </div>
-                                  {message.searchTimeMs && (
-                                    <div className="text-muted-foreground">{message.searchTimeMs}ms</div>
-                                  )}
-                                </div>
+                  {message.sources && message.sources.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <div className="text-xs font-semibold mb-2">Fuentes consultadas:</div>
+                      <div className="space-y-2">
+                        {message.sources.slice(0, 3).map((source, idx) => (
+                          <div key={idx} className="text-xs">
+                            <div className="flex items-center gap-2">
+                              {source.sourceType === "book" ? (
+                                <BookOpen className="h-3 w-3" />
+                              ) : (
+                                <LinkIcon className="h-3 w-3" />
                               )}
-
-                              {message.sources && message.sources.length > 0 && (
-                                <div className="mt-3 space-y-2">
-                                  <div className="text-sm font-semibold">Fuentes consultadas:</div>
-                                  {message.sources.map((source, idx) => (
-                                    <div key={idx} className="flex items-center gap-2 text-sm">
-                                      {source.sourceType === "book" ? (
-                                        <BookOpen className="h-4 w-4" />
-                                      ) : (
-                                        <Globe className="h-4 w-4" />
-                                      )}
-                                      <span className="font-medium">{source.title}</span>
-                                      <Badge variant="outline" className="text-xs">
-                                        {(source.similarityScore * 100).toFixed(0)}%
-                                      </Badge>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </>
-                          )}
-
-                          <div className="text-xs text-muted-foreground mt-2">
-                            {message.timestamp.toLocaleTimeString()}
+                              <span className="font-medium">{source.title}</span>
+                              <Badge variant="outline" className="text-xs">
+                                {Math.round(source.similarity * 100)}%
+                              </Badge>
+                            </div>
+                            <div className="text-muted-foreground mt-1">{source.author}</div>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </ScrollArea>
-
-              <form onSubmit={handleSubmit} className="flex gap-2">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Pregunta algo sobre desarrollo profesional..."
-                  disabled={loading}
-                  className="flex-1"
-                />
-                <Button type="submit" disabled={loading || !input.trim()} size="icon">
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Estadísticas</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="text-2xl font-bold">{stats.totalQueries}</div>
-                <div className="text-sm text-muted-foreground">Consultas realizadas</div>
-              </div>
-
-              {stats.totalQueries > 0 && (
-                <>
-                  <div>
-                    <div className="text-2xl font-bold">{stats.avgConfidence.toFixed(1)}%</div>
-                    <div className="text-sm text-muted-foreground">Confianza promedio</div>
-                  </div>
-
-                  <div>
-                    <div className="text-2xl font-bold">{stats.avgSearchTime.toFixed(0)}ms</div>
-                    <div className="text-sm text-muted-foreground">Tiempo promedio</div>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Capacidades</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                <div>
-                  <div className="font-semibold">Búsqueda Semántica</div>
-                  <div className="text-muted-foreground">Entiende el significado</div>
+                    </div>
+                  )}
                 </div>
               </div>
+            ))}
 
-              <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                <div>
-                  <div className="font-semibold">Contenido Expandido</div>
-                  <div className="text-muted-foreground">20k+ caracteres por libro</div>
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-muted rounded-lg p-4">
+                  <Loader2 className="h-5 w-5 animate-spin" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
+        </ScrollArea>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="h-5 w-5" />
-                Preguntas Sugeridas
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {suggestedQueries.map((query, index) => (
-                <Button
-                  key={index}
-                  variant="ghost"
-                  className="w-full justify-start text-left h-auto py-2"
-                  onClick={() => setInput(query)}
-                >
-                  <Search className="h-4 w-4 mr-2" />
-                  <span className="text-sm">{query}</span>
-                </Button>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+        <CardContent className="border-t p-4">
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Hazme una pregunta sobre desarrollo profesional..."
+              disabled={isLoading}
+              className="flex-1"
+            />
+            <Button type="submit" disabled={isLoading || !input.trim()}>
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      {/* Panel Lateral de Sugerencias */}
+      <Card className="lg:col-span-1">
+        <CardHeader>
+          <CardTitle className="text-lg">Preguntas Sugeridas</CardTitle>
+          <CardDescription>Explora estos temas</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {suggestedQuestions.map((question, idx) => (
+              <Button
+                key={idx}
+                variant="outline"
+                size="sm"
+                className="w-full justify-start text-left h-auto py-3 px-3 bg-transparent"
+                onClick={() => setInput(question)}
+                disabled={isLoading}
+              >
+                {question}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

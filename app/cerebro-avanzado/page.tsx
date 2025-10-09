@@ -1,17 +1,20 @@
 import { AdvancedBrainInterface } from "@/components/advanced-brain-interface"
-import { Suspense } from "react"
-import { Loader2 } from "lucide-react"
+
+export const metadata = {
+  title: "Cerebro Avanzado | DTC Platform",
+  description: "Sistema inteligente de búsqueda semántica con IA",
+}
 
 export default function CerebroAvanzadoPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-        </div>
-      }
-    >
+    <div className="container mx-auto py-8">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-2">Cerebro Avanzado</h1>
+        <p className="text-muted-foreground">
+          Haz preguntas y obtén respuestas basadas en más de 120 libros de desarrollo profesional
+        </p>
+      </div>
       <AdvancedBrainInterface />
-    </Suspense>
+    </div>
   )
 }

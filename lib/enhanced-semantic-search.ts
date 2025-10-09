@@ -3,250 +3,252 @@ import { generateEmbedding } from "./embeddings"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-export interface ContentChunk {
-  content: string
-  startIndex: number
-  endIndex: number
-  chunkIndex: number
-}
-
-export interface EnhancedSearchResult {
-  sourceType: "book" | "web_resource"
+export interface SearchResult {
   id: number
   title: string
   category: string
   author: string
-  tags: string[]
+  content: string
+  similarity: number
+  sourceType: "book" | "web_resource"
   identifier: string
-  fullContent: string
-  relevantChunks: ContentChunk[]
-  similarityScore: number
-  readCount?: number
 }
 
-export interface SearchOptions {
-  query: string
-  limit?: number
-  similarityThreshold?: number
-  sourceTypeFilter?: "book" | "web_resource"
-  categoryFilter?: string
-  includeFullContent?: boolean
-  chunkSize?: number
+export interface BrainResponse {
+  answer: string
+  confidence: number
+  sources: Array<{
+    title: string
+    author: string
+    category: string
+    similarity: number
+    excerpt: string
+    sourceType: string
+    identifier: string
+  }>
+  keywords: string[]
+  processingTime: number
 }
 
 /**
- * Split content into overlapping chunks for better context
+ * Divide el contenido en chunks más pequeños con overlap
  */
-function splitIntoChunks(content: string, chunkSize = 2000, overlap = 200): ContentChunk[] {
-  const chunks: ContentChunk[] = []
-  let startIndex = 0
-  let chunkIndex = 0
+function chunkContent(content: string, chunkSize = 1000, overlap = 200): string[] {
+  const chunks: string[] = []
+  let start = 0
 
-  while (startIndex < content.length) {
-    const endIndex = Math.min(startIndex + chunkSize, content.length)
-    const chunk = content.slice(startIndex, endIndex)
-
-    chunks.push({
-      content: chunk,
-      startIndex,
-      endIndex,
-      chunkIndex: chunkIndex++,
-    })
-
-    startIndex += chunkSize - overlap
+  while (start < content.length) {
+    const end = Math.min(start + chunkSize, content.length)
+    chunks.push(content.slice(start, end))
+    start = end - overlap
   }
 
   return chunks
 }
 
 /**
- * Find most relevant chunks based on query
+ * Encuentra los chunks más relevantes basados en keywords
  */
-function findRelevantChunks(chunks: ContentChunk[], query: string, maxChunks = 3): ContentChunk[] {
-  const queryLower = query.toLowerCase()
-  const queryWords = queryLower.split(/\s+/)
+function findRelevantChunks(chunks: string[], query: string, maxChunks = 3): string[] {
+  const queryWords = query.toLowerCase().split(/\s+/)
 
-  const scoredChunks = chunks.map((chunk) => {
-    const chunkLower = chunk.content.toLowerCase()
-    let score = 0
-
-    queryWords.forEach((word) => {
-      if (word.length > 3) {
-        const matches = (chunkLower.match(new RegExp(word, "g")) || []).length
-        score += matches
-      }
-    })
-
-    if (queryWords.every((word) => chunkLower.includes(word))) {
-      score += 10
-    }
-
+  const scored = chunks.map((chunk) => {
+    const chunkLower = chunk.toLowerCase()
+    const score = queryWords.reduce((acc, word) => {
+      const matches = (chunkLower.match(new RegExp(word, "g")) || []).length
+      return acc + matches
+    }, 0)
     return { chunk, score }
   })
 
-  return scoredChunks
+  return scored
     .sort((a, b) => b.score - a.score)
     .slice(0, maxChunks)
     .map((item) => item.chunk)
 }
 
 /**
- * Perform enhanced semantic search with chunking and relevance scoring
+ * Extrae keywords de la query
  */
-export async function enhancedSemanticSearch(options: SearchOptions): Promise<EnhancedSearchResult[]> {
-  const {
-    query,
-    limit = 10,
-    similarityThreshold = 0.7,
-    sourceTypeFilter,
-    categoryFilter,
-    includeFullContent = true,
-    chunkSize = 2000,
-  } = options
-
-  try {
-    const queryEmbedding = await generateEmbedding(query)
-
-    const { data, error } = await supabase.rpc("search_brain_semantic", {
-      query_embedding: queryEmbedding,
-      similarity_threshold: similarityThreshold,
-      source_type_filter: sourceTypeFilter || null,
-      limit_results: limit,
-    })
-
-    if (error) {
-      console.error("Semantic search error:", error)
-      throw error
-    }
-
-    if (!data || data.length === 0) {
-      return []
-    }
-
-    const enhancedResults: EnhancedSearchResult[] = await Promise.all(
-      data.map(async (item: any) => {
-        let fullContent = ""
-        let readCount = 0
-
-        if (item.source_type === "book") {
-          const { data: bookData } = await supabase
-            .from("knowledge_base")
-            .select("content, read_count")
-            .eq("id", item.id)
-            .single()
-          fullContent = bookData?.content || ""
-          readCount = bookData?.read_count || 0
-        } else {
-          const { data: resourceData } = await supabase
-            .from("web_resources")
-            .select("content, access_count")
-            .eq("id", item.id)
-            .single()
-          fullContent = resourceData?.content || ""
-          readCount = resourceData?.access_count || 0
-        }
-
-        const chunks = splitIntoChunks(fullContent, chunkSize)
-        const relevantChunks = findRelevantChunks(chunks, query)
-
-        return {
-          sourceType: item.source_type,
-          id: item.id,
-          title: item.title,
-          category: item.category,
-          author: item.author,
-          tags: item.tags || [],
-          identifier: item.identifier,
-          fullContent: includeFullContent ? fullContent : "",
-          relevantChunks,
-          similarityScore: item.similarity_score,
-          readCount,
-        }
-      }),
-    )
-
-    let filteredResults = enhancedResults
-    if (categoryFilter) {
-      filteredResults = enhancedResults.filter((result) =>
-        result.category.toLowerCase().includes(categoryFilter.toLowerCase()),
-      )
-    }
-
-    return filteredResults
-  } catch (error) {
-    console.error("Error in enhancedSemanticSearch:", error)
-    throw error
-  }
+function extractKeywords(query: string): string[] {
+  const stopWords = new Set([
+    "el",
+    "la",
+    "de",
+    "y",
+    "a",
+    "en",
+    "que",
+    "es",
+    "por",
+    "para",
+    "con",
+    "como",
+    "qué",
+    "cómo",
+  ])
+  return query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length > 3 && !stopWords.has(word))
+    .slice(0, 5)
 }
 
 /**
- * Generate AI response based on enhanced search results
+ * Genera una respuesta basada en los resultados de búsqueda
  */
-export async function generateEnhancedBrainResponse(
+function generateAnswer(query: string, results: SearchResult[]): string {
+  if (results.length === 0) {
+    return "No encontré información relevante sobre ese tema en la biblioteca. ¿Podrías reformular tu pregunta?"
+  }
+
+  const topResult = results[0]
+  const chunks = chunkContent(topResult.content)
+  const relevantChunks = findRelevantChunks(chunks, query)
+
+  let answer = `Basándome en "${topResult.title}" de ${topResult.author}, aquí está lo que encontré:\n\n`
+  answer += relevantChunks.join("\n\n")
+
+  if (results.length > 1) {
+    answer += `\n\nTambién encontré información relevante en:\n`
+    results.slice(1, 3).forEach((result) => {
+      answer += `- "${result.title}" de ${result.author}\n`
+    })
+  }
+
+  return answer
+}
+
+/**
+ * Calcula la confianza de la respuesta
+ */
+function calculateConfidence(results: SearchResult[]): number {
+  if (results.length === 0) return 0
+
+  const avgSimilarity = results.reduce((sum, r) => sum + r.similarity, 0) / results.length
+  const countBonus = Math.min(results.length / 5, 0.2)
+
+  return Math.min(avgSimilarity + countBonus, 1.0)
+}
+
+/**
+ * Búsqueda semántica mejorada con generación de respuestas
+ */
+export async function enhancedSemanticSearch(
   query: string,
-  searchResults: EnhancedSearchResult[],
-): Promise<{
-  answer: string
-  sources: EnhancedSearchResult[]
-  confidence: number
-  keyInsights: string[]
-}> {
-  if (searchResults.length === 0) {
-    return {
-      answer:
-        "No encontré información específica en mi base de conocimientos. ¿Podrías reformular tu pregunta con más detalles?",
-      sources: [],
-      confidence: 0,
-      keyInsights: [],
-    }
-  }
+  options: {
+    similarityThreshold?: number
+    limit?: number
+    sourceType?: "book" | "web_resource" | null
+  } = {},
+): Promise<BrainResponse> {
+  const startTime = Date.now()
+  const { similarityThreshold = 0.7, limit = 5, sourceType = null } = options
 
-  const keyInsights: string[] = []
-  const categories = new Set<string>()
+  try {
+    // 1. Generar embedding de la consulta
+    const queryEmbedding = await generateEmbedding(query)
 
-  searchResults.slice(0, 3).forEach((result) => {
-    categories.add(result.category)
-    result.relevantChunks.forEach((chunk, index) => {
-      if (index === 0 && chunk.content.length > 100) {
-        const sentences = chunk.content.split(/[.!?]+/)
-        const insight = sentences.slice(0, 2).join(". ").trim()
-        if (insight.length > 50) {
-          keyInsights.push(insight)
-        }
+    // 2. Buscar en libros
+    let bookResults: SearchResult[] = []
+    if (sourceType === null || sourceType === "book") {
+      const { data: books, error: bookError } = await supabase.rpc("search_knowledge_semantic", {
+        query_embedding: queryEmbedding,
+        similarity_threshold: similarityThreshold,
+        limit_results: limit,
+      })
+
+      if (!bookError && books) {
+        bookResults = books.map((book: any) => ({
+          id: book.id,
+          title: book.title,
+          category: book.category,
+          author: book.author,
+          content: book.content_preview || "",
+          similarity: book.similarity_score,
+          sourceType: "book" as const,
+          identifier: book.slug,
+        }))
       }
-    })
-  })
-
-  let answer = `🧠 **Respuesta del Cerebro Mejorado**\n\n`
-  answer += `He encontrado información relevante en **${searchResults.length} fuentes** sobre **${Array.from(categories).join(", ")}**.\n\n`
-
-  searchResults.slice(0, 3).forEach((result, index) => {
-    const sourceIcon = result.sourceType === "book" ? "📚" : "🌐"
-    answer += `**${index + 1}. ${sourceIcon} "${result.title}"** - *${result.author}*\n`
-    answer += `*Categoría: ${result.category}*\n\n`
-
-    if (result.relevantChunks.length > 0) {
-      const chunk = result.relevantChunks[0]
-      const preview = chunk.content.substring(0, 300).trim()
-      answer += `> ${preview}${chunk.content.length > 300 ? "..." : ""}\n\n`
     }
-  })
 
-  if (keyInsights.length > 0) {
-    answer += `\n**💡 Insights Clave:**\n`
-    keyInsights.slice(0, 3).forEach((insight, index) => {
-      answer += `${index + 1}. ${insight}\n`
-    })
-  }
+    // 3. Buscar en recursos web
+    let resourceResults: SearchResult[] = []
+    if (sourceType === null || sourceType === "web_resource") {
+      const { data: resources, error: resourceError } = await supabase.rpc("search_web_resources_semantic", {
+        query_embedding: queryEmbedding,
+        similarity_threshold: similarityThreshold,
+        limit_results: limit,
+      })
 
-  const avgSimilarity = searchResults.reduce((sum, r) => sum + r.similarityScore, 0) / searchResults.length
-  const resultCountFactor = Math.min(searchResults.length / 5, 1)
-  const confidence = Math.min(avgSimilarity * resultCountFactor * 100, 95)
+      if (!resourceError && resources) {
+        resourceResults = resources.map((resource: any) => ({
+          id: resource.id,
+          title: resource.title,
+          category: resource.category,
+          author: resource.author,
+          content: resource.content_preview || "",
+          similarity: resource.similarity_score,
+          sourceType: "web_resource" as const,
+          identifier: resource.url,
+        }))
+      }
+    }
 
-  return {
-    answer,
-    sources: searchResults,
-    confidence,
-    keyInsights: keyInsights.slice(0, 5),
+    // 4. Combinar y ordenar resultados
+    const allResults = [...bookResults, ...resourceResults].sort((a, b) => b.similarity - a.similarity).slice(0, limit)
+
+    // 5. Obtener contenido completo de los top 3 resultados
+    const enrichedResults = await Promise.all(
+      allResults.slice(0, 3).map(async (result) => {
+        if (result.sourceType === "book") {
+          const { data } = await supabase.from("knowledge_base").select("content").eq("id", result.id).single()
+
+          if (data) {
+            result.content = data.content
+          }
+        } else {
+          const { data } = await supabase
+            .from("web_resources")
+            .select("content, description")
+            .eq("id", result.id)
+            .single()
+
+          if (data) {
+            result.content = data.content || data.description || ""
+          }
+        }
+        return result
+      }),
+    )
+
+    // 6. Generar respuesta
+    const answer = generateAnswer(query, enrichedResults)
+    const confidence = calculateConfidence(allResults)
+    const keywords = extractKeywords(query)
+
+    // 7. Formatear fuentes
+    const sources = allResults.map((result) => ({
+      title: result.title,
+      author: result.author,
+      category: result.category,
+      similarity: Math.round(result.similarity * 100) / 100,
+      excerpt: result.content.slice(0, 200) + "...",
+      sourceType: result.sourceType,
+      identifier: result.identifier,
+    }))
+
+    const processingTime = Date.now() - startTime
+
+    return {
+      answer,
+      confidence,
+      sources,
+      keywords,
+      processingTime,
+    }
+  } catch (error) {
+    console.error("Error en búsqueda semántica:", error)
+    throw error
   }
 }
