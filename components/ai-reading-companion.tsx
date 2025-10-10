@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import { generateText } from "ai"
 import { openai } from "@ai-sdk/openai"
+import { supabase } from "@/lib/supabase"
 
 interface ReadingInsight {
   id: string
@@ -72,7 +73,7 @@ export default function AIReadingCompanion() {
   const [selectedBook, setSelectedBook] = useState<string>("")
   const [loading, setLoading] = useState(true)
 
-  const userEmail = "demo@example.com"
+  const [userEmail, setUserEmail] = useState("")
 
   useEffect(() => {
     loadAICompanionData()
@@ -82,108 +83,45 @@ export default function AIReadingCompanion() {
     try {
       setLoading(true)
 
-      // Generate mock insights
-      const mockInsights: ReadingInsight[] = [
-        {
-          id: "1",
-          type: "summary",
-          title: "Resumen Inteligente",
-          content:
-            "Los 7 hábitos se centran en el desarrollo del carácter personal antes que en las técnicas de personalidad. Covey enfatiza la importancia de los principios universales como base para la efectividad.",
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          confidence: 92,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          type: "question",
-          title: "Pregunta de Reflexión",
-          content:
-            '¿Cómo puedes aplicar el concepto de "Círculo de Influencia vs Círculo de Preocupación" en tu situación laboral actual?',
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          confidence: 88,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "3",
-          type: "connection",
-          title: "Conexión con Otros Libros",
-          content:
-            'Este concepto se relaciona directamente con "Mindset" de Carol Dweck sobre la mentalidad de crecimiento y la importancia de enfocarse en lo que podemos controlar.',
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          confidence: 85,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: "4",
-          type: "application",
-          title: "Aplicación Práctica",
-          content:
-            "Implementa la Matriz de Eisenhower para priorizar tareas: Urgente/Importante, Importante/No Urgente, Urgente/No Importante, Ni Urgente/Ni Importante.",
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          confidence: 94,
-          created_at: new Date().toISOString(),
-        },
-      ]
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        setUserEmail(user.email || "")
+      }
 
-      // Generate mock study plans
-      const mockStudyPlans: StudyPlan[] = [
-        {
-          id: "1",
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          total_sessions: 8,
-          completed_sessions: 3,
-          current_session: {
-            title: "Hábito 4: Pensar Ganar-Ganar",
-            objectives: [
-              "Comprender el paradigma Ganar-Ganar",
-              "Identificar situaciones de competencia vs colaboración",
-              "Desarrollar habilidades de negociación colaborativa",
-            ],
-            estimated_time: 45,
-            key_concepts: ["Paradigmas de interacción", "Cuenta bancaria emocional", "Acuerdos ganar-ganar"],
-          },
-          next_session: {
-            title: "Hábito 5: Buscar Primero Entender",
-            preview: "Exploraremos la escucha empática y cómo comprender antes de ser comprendido",
-          },
-        },
-      ]
+      const { data: insightsData } = await supabase
+        .from("reading_insights")
+        .select("*")
+        .eq("user_email", user?.email)
+        .order("created_at", { ascending: false })
+        .limit(10)
 
-      // Generate mock recommendations
-      const mockRecommendations: PersonalizedRecommendation[] = [
-        {
-          book_id: 5,
-          title: "Mindset: La Actitud del Éxito",
-          author: "Carol Dweck",
-          reason:
-            "Basado en tu interés en desarrollo personal y liderazgo, este libro complementa perfectamente los conceptos de crecimiento personal.",
-          match_score: 95,
-          category: "Desarrollo Personal",
-        },
-        {
-          book_id: 6,
-          title: "Deep Work",
-          author: "Cal Newport",
-          reason:
-            "Tu historial de lectura en productividad sugiere que te interesará este enfoque sobre el trabajo profundo y la concentración.",
-          match_score: 88,
-          category: "Productividad",
-        },
-        {
-          book_id: 7,
-          title: "The Power of Habit",
-          author: "Charles Duhigg",
-          reason:
-            "Complementa tu lectura actual sobre hábitos efectivos con una perspectiva científica sobre la formación de hábitos.",
-          match_score: 92,
-          category: "Desarrollo Personal",
-        },
-      ]
+      if (insightsData) {
+        setInsights(insightsData)
+      }
 
-      setInsights(mockInsights)
-      setStudyPlans(mockStudyPlans)
-      setRecommendations(mockRecommendations)
+      const { data: plansData } = await supabase
+        .from("study_plans")
+        .select("*")
+        .eq("user_email", user?.email)
+        .order("created_at", { ascending: false })
+
+      if (plansData) {
+        setStudyPlans(plansData)
+      }
+
+      const { data: recsData } = await supabase
+        .from("book_recommendations")
+        .select("*")
+        .eq("user_email", user?.email)
+        .order("match_score", { ascending: false })
+        .limit(10)
+
+      if (recsData) {
+        setRecommendations(recsData)
+      }
 
       // Initialize chat with welcome message
       setChatMessages([

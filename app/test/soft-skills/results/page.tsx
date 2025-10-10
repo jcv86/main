@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -38,127 +38,7 @@ import {
 } from "recharts"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { AiCoachChat } from "@/components/ai-coach-chat"
-
-// Mock data for demonstration
-const mockTestResult = {
-  id: "soft-skills-001",
-  user_email: "demo@example.com",
-  test_type: "soft-skills",
-  results: {
-    overall_score: 78,
-    category_scores: {
-      comunicacion: 85,
-      liderazgo: 72,
-      trabajo_equipo: 88,
-      resolucion_problemas: 75,
-      adaptabilidad: 80,
-      inteligencia_emocional: 82,
-      gestion_tiempo: 68,
-      pensamiento_critico: 76,
-    },
-    strengths: ["trabajo_equipo", "comunicacion", "inteligencia_emocional"],
-    areas_for_improvement: ["gestion_tiempo", "liderazgo", "resolucion_problemas"],
-    detailed_analysis: {
-      comunicacion: {
-        score: 85,
-        feedback: "Excelente capacidad de comunicación verbal y escrita. Demuestra claridad en la expresión de ideas.",
-        examples: ["Presentaciones efectivas", "Comunicación asertiva", "Escucha activa"],
-      },
-      liderazgo: {
-        score: 72,
-        feedback: "Muestra potencial de liderazgo con oportunidades de crecimiento en la toma de decisiones.",
-        examples: ["Coordinación de equipos", "Delegación básica", "Motivación de compañeros"],
-      },
-      trabajo_equipo: {
-        score: 88,
-        feedback: "Sobresaliente en colaboración y trabajo en equipo. Facilita la cohesión grupal.",
-        examples: ["Colaboración efectiva", "Resolución de conflictos", "Apoyo a compañeros"],
-      },
-      resolucion_problemas: {
-        score: 75,
-        feedback: "Buen enfoque analítico con espacio para desarrollar creatividad en las soluciones.",
-        examples: ["Análisis sistemático", "Identificación de causas", "Implementación de soluciones"],
-      },
-      adaptabilidad: {
-        score: 80,
-        feedback: "Buena capacidad de adaptación a cambios y nuevas situaciones.",
-        examples: ["Flexibilidad ante cambios", "Aprendizaje rápido", "Gestión de incertidumbre"],
-      },
-      inteligencia_emocional: {
-        score: 82,
-        feedback: "Alta conciencia emocional propia y de otros. Maneja bien las relaciones interpersonales.",
-        examples: ["Autoconciencia", "Empatía", "Regulación emocional"],
-      },
-      gestion_tiempo: {
-        score: 68,
-        feedback: "Área de oportunidad importante. Necesita mejorar la organización y priorización.",
-        examples: ["Planificación básica", "Cumplimiento de plazos", "Organización personal"],
-      },
-      pensamiento_critico: {
-        score: 76,
-        feedback: "Buen nivel de análisis crítico con potencial para profundizar en la evaluación de información.",
-        examples: ["Análisis de información", "Evaluación de opciones", "Toma de decisiones"],
-      },
-    },
-  },
-  score: 78,
-  completed_at: new Date().toISOString(),
-  created_at: new Date().toISOString(),
-}
-
-const mockOpenResponses = [
-  {
-    id: 1,
-    user_email: "demo@example.com",
-    test_type: "soft-skills",
-    question_id: 1,
-    question: "¿Cómo manejas situaciones de conflicto en el trabajo?",
-    response:
-      "Cuando me enfrento a un conflicto en el trabajo, primero trato de entender todas las perspectivas involucradas. Escucho activamente a cada parte, mantengo la calma y busco puntos en común. Luego propongo soluciones que beneficien a todos los involucrados y hago seguimiento para asegurar que el conflicto se resuelva completamente.",
-    ai_analysis: {
-      score: 85,
-      feedback:
-        "Respuesta que demuestra madurez emocional y habilidades de mediación. Muestra un enfoque estructurado y empático para la resolución de conflictos.",
-      strengths: ["Escucha activa", "Pensamiento sistémico", "Orientación a soluciones"],
-      improvements: ["Podría incluir técnicas específicas de negociación"],
-    },
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    user_email: "demo@example.com",
-    test_type: "soft-skills",
-    question_id: 2,
-    question: "Describe una situación donde tuviste que liderar un equipo.",
-    response:
-      "Recientemente lideré un proyecto de migración de sistemas que involucró a 5 personas de diferentes departamentos. Establecí objetivos claros desde el inicio, asigné tareas según las fortalezas de cada miembro y mantuve reuniones semanales de seguimiento. Cuando surgieron obstáculos, facilité sesiones de brainstorming y tomé decisiones rápidas para mantener el proyecto en curso. El proyecto se completó a tiempo y dentro del presupuesto.",
-    ai_analysis: {
-      score: 88,
-      feedback:
-        "Excelente ejemplo de liderazgo organizacional y gestión de equipos. Demuestra habilidades de planificación, comunicación y toma de decisiones.",
-      strengths: ["Planificación estratégica", "Gestión de equipos", "Orientación a resultados"],
-      improvements: ["Podría profundizar en el desarrollo del equipo"],
-    },
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    user_email: "demo@example.com",
-    test_type: "soft-skills",
-    question_id: 3,
-    question: "¿Cómo te adaptas a cambios inesperados en el trabajo?",
-    response:
-      "Cuando se presentan cambios inesperados, primero evalúo rápidamente la nueva situación y sus implicaciones. Mantengo una actitud positiva y veo los cambios como oportunidades de aprendizaje. Reorganizo mis prioridades, comunico los cambios a mi equipo si es necesario, y ajusto mis planes de trabajo. También busco recursos adicionales o capacitación si el cambio requiere nuevas habilidades.",
-    ai_analysis: {
-      score: 82,
-      feedback:
-        "Demuestra alta adaptabilidad y resiliencia profesional. Muestra un enfoque proactivo y positivo hacia el cambio.",
-      strengths: ["Flexibilidad mental", "Comunicación proactiva", "Orientación al aprendizaje"],
-      improvements: ["Podría incluir estrategias de gestión del estrés"],
-    },
-    created_at: new Date().toISOString(),
-  },
-]
+import { supabase } from "@/lib/supabase"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -194,10 +74,91 @@ const categoryNames = {
 }
 
 export default function SoftSkillsResults() {
-  const [testResult, setTestResult] = useState(mockTestResult)
-  const [openResponses, setOpenResponses] = useState(mockOpenResponses)
-  const [loading, setLoading] = useState(false)
+  const [testResult, setTestResult] = useState<any>(null)
+  const [openResponses, setOpenResponses] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
+
+  useEffect(() => {
+    loadResults()
+  }, [])
+
+  const loadResults = async () => {
+    try {
+      setLoading(true)
+
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        console.error("No user found")
+        setLoading(false)
+        return
+      }
+
+      // Fetch test results from database
+      const { data: results, error } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", user.email)
+        .eq("test_type", "soft-skills")
+        .order("completed_at", { ascending: false })
+        .limit(1)
+        .single()
+
+      if (error) {
+        console.error("Error loading results:", error)
+        setLoading(false)
+        return
+      }
+
+      if (results) {
+        setTestResult(results)
+      }
+
+      // Fetch open responses if available
+      const { data: responses } = await supabase
+        .from("test_responses")
+        .select("*")
+        .eq("user_email", user.email)
+        .eq("test_type", "soft-skills")
+        .order("created_at", { ascending: false })
+
+      if (responses) {
+        setOpenResponses(responses)
+      }
+    } catch (error) {
+      console.error("Error loading soft skills results:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando resultados...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!testResult) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Habilidades Blandas</h1>
+            <p className="text-xl text-gray-600">No se encontraron resultados para esta evaluación.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const results = testResult.results
   const categoryScores = results.category_scores || {}
@@ -237,17 +198,6 @@ export default function SoftSkillsResults() {
     if (score >= 80) return "bg-green-100 text-green-800"
     if (score >= 60) return "bg-yellow-100 text-yellow-800"
     return "bg-red-100 text-red-800"
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando resultados...</p>
-        </div>
-      </div>
-    )
   }
 
   return (

@@ -26,6 +26,7 @@ import {
   Zap,
 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
+import { supabase } from "@/lib/supabase"
 
 interface TestResults {
   overall_score: number
@@ -157,37 +158,34 @@ export default function EmotionalIntelligenceResults() {
 
   const loadResults = async () => {
     try {
-      // Try to get results from API first
-      const response = await fetch("/api/test-results?type=emotional-intelligence&latest=true")
-      if (response.ok) {
-        const data = await response.json()
-        if (data.results) {
-          setResults(data.results)
-          setLoading(false)
-          return
-        }
+      setLoading(true)
+
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        setLoading(false)
+        return
       }
 
-      // Fallback to localStorage
-      const storedResults = localStorage.getItem("emotional_intelligence_results")
-      if (storedResults) {
-        const parsed = JSON.parse(storedResults)
-        setResults(parsed)
-      } else {
-        // Generate mock results for demo
-        const mockResults: TestResults = {
-          overall_score: 78,
-          competency_scores: {
-            self_awareness: 82,
-            self_regulation: 75,
-            motivation: 85,
-            empathy: 72,
-            social_skills: 76,
-          },
-          completed_at: new Date().toISOString(),
-          duration: 23,
-        }
-        setResults(mockResults)
+      const { data: testResults, error } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", user.email)
+        .eq("test_type", "emotional-intelligence")
+        .order("completed_at", { ascending: false })
+        .limit(1)
+        .single()
+
+      if (error) {
+        console.error("Error loading results:", error)
+        setLoading(false)
+        return
+      }
+
+      if (testResults && testResults.results) {
+        setResults(testResults.results)
       }
     } catch (error) {
       console.error("Error loading results:", error)

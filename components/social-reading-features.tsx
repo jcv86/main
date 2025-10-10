@@ -32,6 +32,7 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 interface BookClub {
   id: number
@@ -74,8 +75,8 @@ export default function SocialReadingFeatures() {
   const [selectedBook, setSelectedBook] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const userEmail = "demo@example.com"
-  const userName = "Demo User"
+  const [userEmail, setUserEmail] = useState("")
+  const [userName, setUserName] = useState("")
 
   useEffect(() => {
     loadSocialData()
@@ -85,105 +86,39 @@ export default function SocialReadingFeatures() {
     try {
       setLoading(true)
 
-      // Load book clubs (mock data for now)
-      const mockBookClubs: BookClub[] = [
-        {
-          id: 1,
-          name: "Líderes del Futuro",
-          description: "Club de lectura enfocado en libros de liderazgo y desarrollo profesional",
-          member_count: 24,
-          current_book: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          privacy: "public",
-          created_by: "admin@example.com",
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: 2,
-          name: "Productividad Máxima",
-          description: "Exploramos técnicas y estrategias para maximizar la productividad",
-          member_count: 18,
-          current_book: "Atomic Habits",
-          privacy: "public",
-          created_by: "travis@nuanu.com",
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: 3,
-          name: "Emprendedores Unidos",
-          description: "Lecturas sobre emprendimiento y desarrollo de negocios",
-          member_count: 31,
-          current_book: "The Lean Startup",
-          privacy: "private",
-          created_by: "demo@despegaturcarrera.com",
-          created_at: new Date().toISOString(),
-        },
-      ]
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        setUserEmail(user.email || "")
+        setUserName(user.user_metadata?.full_name || "User")
+      }
 
-      // Load discussions (mock data)
-      const mockDiscussions: Discussion[] = [
-        {
-          id: 1,
-          book_id: 1,
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          user_email: "travis@nuanu.com",
-          user_name: "Travis",
-          content:
-            "¿Qué opinan del concepto de 'Primero lo primero'? Me ha cambiado completamente la forma de priorizar mis tareas.",
-          likes: 12,
-          replies: 5,
-          created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          is_spoiler: false,
-        },
-        {
-          id: 2,
-          book_id: 2,
-          book_title: "Atomic Habits",
-          user_email: "demo@despegaturcarrera.com",
-          user_name: "Demo Despega",
-          content: "La regla de los 2 minutos es increíble. He logrado crear 3 nuevos hábitos este mes aplicándola.",
-          likes: 8,
-          replies: 3,
-          created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          is_spoiler: false,
-        },
-        {
-          id: 3,
-          book_id: 1,
-          book_title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          user_email: "demo@example.com",
-          user_name: "Demo User",
-          content:
-            "El capítulo sobre la escucha empática me hizo reflexionar mucho sobre mis relaciones interpersonales.",
-          likes: 15,
-          replies: 7,
-          created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          is_spoiler: false,
-        },
-      ]
+      const { data: clubs } = await supabase.from("book_clubs").select("*").order("created_at", { ascending: false })
 
-      // Load reading groups (mock data)
-      const mockReadingGroups: ReadingGroup[] = [
-        {
-          id: 1,
-          name: "Desafío 12 Libros",
-          description: "Meta de leer 12 libros este año",
-          members: ["demo@example.com", "travis@nuanu.com", "demo@despegaturcarrera.com"],
-          current_challenge: "Leer 1 libro por mes",
-          progress: 75,
-        },
-        {
-          id: 2,
-          name: "Maratón de Productividad",
-          description: "Enfoque en libros de productividad y eficiencia",
-          members: ["demo@example.com", "travis@nuanu.com"],
-          current_challenge: "5 libros de productividad en 3 meses",
-          progress: 60,
-        },
-      ]
+      if (clubs) {
+        setBookClubs(clubs)
+      }
 
-      setBookClubs(mockBookClubs)
-      setDiscussions(mockDiscussions)
-      setReadingGroups(mockReadingGroups)
+      const { data: discussionsData } = await supabase
+        .from("book_discussions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20)
+
+      if (discussionsData) {
+        setDiscussions(discussionsData)
+      }
+
+      const { data: groups } = await supabase
+        .from("reading_groups")
+        .select("*")
+        .order("created_at", { ascending: false })
+
+      if (groups) {
+        setReadingGroups(groups)
+      }
     } catch (error) {
       console.error("Error loading social data:", error)
     } finally {

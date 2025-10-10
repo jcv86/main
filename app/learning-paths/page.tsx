@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -9,61 +9,70 @@ import { Button } from "@/components/ui/button"
 import { LearningPathCard } from "@/components/learning-path-card"
 import { SkillGapAnalysis } from "@/components/skill-gap-analysis"
 import { Sparkles, Search, TrendingUp, Target, BookOpen, Filter, Award } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 export default function LearningPathsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTab, setSelectedTab] = useState("recommended")
-  const userEmail = "demo-user" // In production, get from auth
+  const [userEmail, setUserEmail] = useState("")
+  const [recommendedPaths, setRecommendedPaths] = useState<any[]>([])
+  const [myPaths, setMyPaths] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Mock data - replace with actual API calls
-  const recommendedPaths = [
-    {
-      id: 1,
-      title: "Liderazgo Efectivo en el Siglo XXI",
-      description:
-        "Desarrolla habilidades de liderazgo moderno: influencia, comunicación y gestión de equipos remotos.",
-      category: "Liderazgo",
-      difficulty_level: "intermediate",
-      estimated_hours: 20,
-      skills_covered: ["Comunicación Efectiva", "Gestión de Equipos", "Inteligencia Emocional", "Toma de Decisiones"],
-      completion_rate: 78,
-      popularity_score: 85,
-      match_score: 92,
-      match_reason: "Aborda tus brechas de habilidades en liderazgo y comunicación",
-    },
-    {
-      id: 2,
-      title: "Productividad Personal: Del Caos a la Excelencia",
-      description: "Sistema completo para dominar tu tiempo, energía y atención en la era digital.",
-      category: "Productividad",
-      difficulty_level: "intermediate",
-      estimated_hours: 15,
-      skills_covered: ["Gestión del Tiempo", "Organización Personal", "Focus y Concentración", "Hábitos Atómicos"],
-      completion_rate: 85,
-      popularity_score: 92,
-      match_score: 88,
-      match_reason: "Popular entre profesionales con objetivos similares",
-    },
-  ]
+  useEffect(() => {
+    loadLearningPaths()
+  }, [])
 
-  const myPaths = [
-    {
-      id: 2,
-      title: "Productividad Personal: Del Caos a la Excelencia",
-      description: "Sistema completo para dominar tu tiempo, energía y atención en la era digital.",
-      category: "Productividad",
-      difficulty_level: "intermediate",
-      estimated_hours: 15,
-      skills_covered: ["Gestión del Tiempo", "Organización Personal", "Focus y Concentración", "Hábitos Atómicos"],
-      completion_rate: 85,
-      popularity_score: 92,
-      userProgress: {
-        completion_percentage: 45,
-        streak_days: 7,
-        status: "in_progress",
-      },
-    },
-  ]
+  const loadLearningPaths = async () => {
+    try {
+      setLoading(true)
+
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        setUserEmail(user.email || "")
+      }
+
+      const { data: paths } = await supabase
+        .from("learning_paths")
+        .select("*")
+        .order("popularity_score", { ascending: false })
+
+      if (paths) {
+        setRecommendedPaths(paths)
+      }
+
+      if (user) {
+        const { data: userPaths } = await supabase
+          .from("user_learning_paths")
+          .select(`
+            *,
+            learning_paths (*)
+          `)
+          .eq("user_email", user.email)
+          .eq("status", "in_progress")
+
+        if (userPaths) {
+          setMyPaths(
+            userPaths.map((up: any) => ({
+              ...up.learning_paths,
+              userProgress: {
+                completion_percentage: up.completion_percentage,
+                streak_days: up.streak_days,
+                status: up.status,
+              },
+            })),
+          )
+        }
+      }
+    } catch (error) {
+      console.error("Error loading learning paths:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -85,7 +94,7 @@ export default function LearningPathsPage() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <Sparkles className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                <p className="text-2xl font-bold">5</p>
+                <p className="text-2xl font-bold">{recommendedPaths.length}</p>
                 <p className="text-xs text-muted-foreground">Rutas Disponibles</p>
               </div>
             </CardContent>
@@ -95,7 +104,7 @@ export default function LearningPathsPage() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <TrendingUp className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                <p className="text-2xl font-bold">1</p>
+                <p className="text-2xl font-bold">{myPaths.length}</p>
                 <p className="text-xs text-muted-foreground">En Progreso</p>
               </div>
             </CardContent>
@@ -105,7 +114,9 @@ export default function LearningPathsPage() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <Award className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                <p className="text-2xl font-bold">7</p>
+                <p className="text-2xl font-bold">
+                  {myPaths.reduce((total, path) => total + path.userProgress.streak_days, 0)}
+                </p>
                 <p className="text-xs text-muted-foreground">Días de Racha</p>
               </div>
             </CardContent>
@@ -115,7 +126,15 @@ export default function LearningPathsPage() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <Target className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                <p className="text-2xl font-bold">45%</p>
+                <p className="text-2xl font-bold">
+                  {myPaths.length > 0
+                    ? Math.round(
+                        myPaths.reduce((total, path) => total + path.userProgress.completion_percentage, 0) /
+                          myPaths.length,
+                      )
+                    : "0%"}
+                  %
+                </p>
                 <p className="text-xs text-muted-foreground">Progreso Total</p>
               </div>
             </CardContent>
@@ -152,14 +171,14 @@ export default function LearningPathsPage() {
             <Sparkles className="h-4 w-4 mr-2" />
             Recomendadas
             <Badge variant="secondary" className="ml-2">
-              2
+              {recommendedPaths.length}
             </Badge>
           </TabsTrigger>
           <TabsTrigger value="my-paths">
             <BookOpen className="h-4 w-4 mr-2" />
             Mis Rutas
             <Badge variant="secondary" className="ml-2">
-              1
+              {myPaths.length}
             </Badge>
           </TabsTrigger>
           <TabsTrigger value="all">
@@ -235,7 +254,7 @@ export default function LearningPathsPage() {
 
         <TabsContent value="all" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[...recommendedPaths].map((path) => (
+            {recommendedPaths.map((path) => (
               <LearningPathCard key={path.id} path={path} onStart={() => console.log("Start path", path.id)} />
             ))}
           </div>
