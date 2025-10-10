@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -25,6 +25,9 @@ import {
   Lightbulb,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { DailyCareerTip } from "@/components/daily-career-tip"
+import { AchievementBadge } from "@/components/achievement-badge"
+import { GoalTracker } from "@/components/goal-tracker"
 
 interface TestResult {
   id: string
@@ -134,6 +137,25 @@ export function DashboardContent() {
     },
   ]
 
+  const [userAchievements, setUserAchievements] = useState<any[]>([])
+  const [loadingAchievements, setLoadingAchievements] = useState(true)
+
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const response = await fetch(`/api/user-achievements?email=${userProfile.email}`)
+        const data = await response.json()
+        setUserAchievements(data.achievements || [])
+      } catch (error) {
+        console.error("Error fetching achievements:", error)
+      } finally {
+        setLoadingAchievements(false)
+      }
+    }
+
+    fetchAchievements()
+  }, [userProfile.email])
+
   const achievements = [
     {
       title: "Primer Test Completado",
@@ -210,6 +232,8 @@ export function DashboardContent() {
           </div>
         </div>
 
+        <DailyCareerTip careerStage="intermediate" />
+
         {/* Progress Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="border-border bg-card">
@@ -239,8 +263,8 @@ export function DashboardContent() {
               <CardTitle className="text-sm font-medium text-mutedForeground">Logros Obtenidos</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">{achievements.filter((a) => a.earned).length}</div>
-              <div className="text-sm text-mutedForeground">de {achievements.length} disponibles</div>
+              <div className="text-2xl font-bold text-foreground">{userAchievements.length}</div>
+              <div className="text-sm text-mutedForeground">logros desbloqueados</div>
             </CardContent>
           </Card>
 
@@ -254,6 +278,33 @@ export function DashboardContent() {
             </CardContent>
           </Card>
         </div>
+
+        <GoalTracker userId={userProfile.email} />
+
+        {userAchievements.length > 0 && (
+          <Card className="border-border bg-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-yellow-600" />
+                Logros Recientes
+              </CardTitle>
+              <CardDescription>Tus últimos logros desbloqueados</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {userAchievements.slice(0, 5).map((achievement) => (
+                  <AchievementBadge
+                    key={achievement.id}
+                    name={achievement.achievement_name}
+                    description={achievement.achievement_description}
+                    icon={achievement.badge_icon}
+                    size="md"
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="tests" className="space-y-4">

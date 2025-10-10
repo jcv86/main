@@ -158,6 +158,114 @@ export default function Home() {
       <main itemScope itemType="https://schema.org/WebPage">
         <LandingPageOptimized />
 
+        <section className="bg-white py-20 border-t border-gray-200">
+          <div className="container mx-auto px-4 max-w-7xl">
+            {/* Stats Section */}
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                Más de 10,000 profesionales confían en nosotros
+              </h2>
+              <p className="text-xl text-gray-600">Resultados comprobados en desarrollo profesional</p>
+            </div>
+
+            <div className="grid md:grid-cols-4 gap-8 mb-20">
+              <div className="text-center">
+                <div className="text-5xl font-bold text-purple-600 mb-2">10,000+</div>
+                <p className="text-gray-600 font-medium">Profesionales Activos</p>
+              </div>
+              <div className="text-center">
+                <div className="text-5xl font-bold text-blue-600 mb-2">50,000+</div>
+                <p className="text-gray-600 font-medium">Tests Completados</p>
+              </div>
+              <div className="text-center">
+                <div className="text-5xl font-bold text-emerald-600 mb-2">120+</div>
+                <p className="text-gray-600 font-medium">Libros Disponibles</p>
+              </div>
+              <div className="text-center">
+                <div className="text-5xl font-bold text-orange-600 mb-2">95%</div>
+                <p className="text-gray-600 font-medium">Satisfacción</p>
+              </div>
+            </div>
+
+            {/* Testimonials */}
+            <div className="mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-center mb-12 text-gray-900">
+                Lo que dicen nuestros usuarios
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4 leading-relaxed">
+                    "Los tests me ayudaron a entender mis fortalezas y el Coach IA me dio recomendaciones específicas
+                    para mi carrera. En 3 meses logré el ascenso que buscaba."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center">
+                      <span className="text-purple-700 font-bold text-lg">MG</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">María González</p>
+                      <p className="text-sm text-gray-600">Gerente de Marketing</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-2xl p-8 border border-blue-100">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4 leading-relaxed">
+                    "La biblioteca es increíble. Leí 5 libros en 2 meses y apliqué las técnicas en mi trabajo. Mi
+                    productividad aumentó notablemente y mi equipo lo notó."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center">
+                      <span className="text-blue-700 font-bold text-lg">CR</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Carlos Rojas</p>
+                      <p className="text-sm text-gray-600">Ingeniero de Software</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-emerald-50 to-purple-50 rounded-2xl p-8 border border-emerald-100">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4 leading-relaxed">
+                    "Como líder de equipo, los tests me ayudaron a entender mejor a mi equipo. Ahora puedo asignar
+                    tareas según las fortalezas de cada persona."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center">
+                      <span className="text-emerald-700 font-bold text-lg">AS</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Andrea Silva</p>
+                      <p className="text-sm text-gray-600">Team Lead</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* SEO-optimized content section with cards and better visual design */}
         <section className="bg-gradient-to-b from-white to-gray-50 border-t border-gray-200">
           <div className="container mx-auto px-4 py-20 max-w-7xl">

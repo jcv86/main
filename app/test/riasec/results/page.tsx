@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -45,6 +45,7 @@ import {
   Tooltip,
   Cell,
   Legend,
+  PieChart,
   Pie,
 } from "recharts"
 
@@ -55,19 +56,20 @@ interface RIASECResults {
   S: number
   E: number
   C: number
-  total_score: number
-  max_score: number
-  percentage: number
   holland_code: string
-  top_categories: string[]
-  career_matches: string[]
-  strengths: string[]
-  development_areas: string[]
-  reflective_responses: Record<string, string>
+  overall_score: number // Changed from total_score and percentage
+  top_categories: string[] // Kept for potential future use, but not used in current display
+  career_matches: string[] // Kept for potential future use, but not used in current display
+  strengths: string[] // Kept for potential future use, but not used in current display
+  development_areas: string[] // Kept for potential future use, but not used in current display
+  reflective_responses: Record<string, string> // Kept for potential future use, but not used in current display
 }
 
 export default function RIASECResults() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isDemoMode = searchParams.get("demo") === "true"
+
   const [results, setResults] = useState<RIASECResults | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
@@ -78,17 +80,43 @@ export default function RIASECResults() {
 
   const loadResults = async () => {
     try {
+      const localResults = localStorage.getItem("riasec_results")
+      if (localResults) {
+        setResults(JSON.parse(localResults))
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from("test_results")
         .select("*")
-        .eq("user_email", "travis@example.com")
         .eq("test_type", "riasec")
         .order("completed_at", { ascending: false })
         .limit(1)
         .single()
 
-      if (error) throw error
-      setResults(data.results as RIASECResults)
+      if (!error && data) {
+        // Ensure the data structure matches the updated interface
+        const processedResults: RIASECResults = {
+          R: data.results.R,
+          I: data.results.I,
+          A: data.results.A,
+          S: data.results.S,
+          E: data.results.E,
+          C: data.results.C,
+          holland_code: data.results.holland_code,
+          overall_score: data.results.percentage || 0, // Use 'percentage' or default to 0
+          // Assign empty arrays or default values for fields not present in the database
+          top_categories: data.results.top_categories || [],
+          career_matches: data.results.career_matches || [],
+          strengths: data.results.strengths || [],
+          development_areas: data.results.development_areas || [],
+          reflective_responses: data.results.reflective_responses || {},
+        }
+        setResults(processedResults)
+      } else if (error) {
+        console.error("Error loading results from Supabase:", error)
+      }
     } catch (error) {
       console.error("Error loading results:", error)
     } finally {
@@ -110,12 +138,12 @@ export default function RIASECResults() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      R: "#ef4444", // red
-      I: "#3b82f6", // blue
-      A: "#8b5cf6", // purple
-      S: "#10b981", // green
-      E: "#f59e0b", // orange
-      C: "#6b7280", // gray
+      R: "#ef4444",
+      I: "#3b82f6",
+      A: "#8b5cf6",
+      S: "#10b981",
+      E: "#f59e0b",
+      C: "#6b7280",
     }
     return colors[category as keyof typeof colors] || "#6b7280"
   }
@@ -135,12 +163,12 @@ export default function RIASECResults() {
   const getRadarData = () => {
     if (!results) return []
     return [
-      { category: "Realista", value: results.R, fullMark: 15 },
-      { category: "Investigativo", value: results.I, fullMark: 15 },
-      { category: "Artístico", value: results.A, fullMark: 15 },
-      { category: "Social", value: results.S, fullMark: 15 },
-      { category: "Emprendedor", value: results.E, fullMark: 15 },
-      { category: "Convencional", value: results.C, fullMark: 15 },
+      { category: "Realista", value: results.R, fullMark: 100 },
+      { category: "Investigativo", value: results.I, fullMark: 100 },
+      { category: "Artístico", value: results.A, fullMark: 100 },
+      { category: "Social", value: results.S, fullMark: 100 },
+      { category: "Emprendedor", value: results.E, fullMark: 100 },
+      { category: "Convencional", value: results.C, fullMark: 100 },
     ]
   }
 
@@ -170,12 +198,24 @@ export default function RIASECResults() {
 
   const getHollandCodeDescription = (code: string) => {
     const descriptions: Record<string, string> = {
-      IEA: "Innovador Emprendedor Artístico - Combinas la investigación científica con el liderazgo empresarial y la creatividad. Eres ideal para roles que requieren innovación, análisis estratégico y visión creativa.",
-      EIA: "Emprendedor Investigativo Artístico - Lideras con base científica y toque creativo. Excelente para dirigir equipos de innovación y desarrollo de productos disruptivos.",
-      AIE: "Artístico Investigativo Emprendedor - Tu creatividad se fundamenta en investigación sólida y visión empresarial. Perfecto para industrias creativas con componente tecnológico.",
-      ISE: "Investigativo Social Emprendedor - Combinas análisis profundo con impacto social y liderazgo. Ideal para organizaciones que buscan soluciones basadas en evidencia.",
-      ESI: "Emprendedor Social Investigativo - Lideras iniciativas de impacto social con rigor analítico. Excelente para empresas B-Corp y organizaciones de cambio social.",
-      ASI: "Artístico Social Investigativo - Usas la creatividad para generar impacto social basado en investigación. Perfecto para proyectos de innovación social.",
+      RIE: "Ingeniero Práctico - Combinas habilidades técnicas con análisis y liderazgo. Ideal para ingeniería, desarrollo de productos y gestión técnica.",
+      RIA: "Artesano Creativo - Mezclas habilidades manuales con creatividad y análisis. Perfecto para diseño industrial, arquitectura y artes aplicadas.",
+      RIS: "Técnico Social - Combinas habilidades prácticas con servicio a otros. Excelente para terapia ocupacional, educación técnica y servicios de salud.",
+      IAS: "Investigador Creativo - Análisis profundo con creatividad y empatía. Ideal para investigación UX, psicología y ciencias sociales aplicadas.",
+      IAE: "Innovador Estratégico - Investigación con creatividad y visión empresarial. Perfecto para consultoría de innovación y desarrollo de productos.",
+      IES: "Consultor Analítico - Análisis con liderazgo y orientación social. Excelente para consultoría estratégica y gestión de cambio organizacional.",
+      AES: "Emprendedor Creativo - Creatividad con liderazgo y orientación social. Ideal para startups creativas, marketing y gestión cultural.",
+      AEI: "Director Creativo - Creatividad con visión empresarial y análisis. Perfecto para dirección de arte, branding y estrategia creativa.",
+      ASE: "Comunicador Creativo - Creatividad con orientación social y liderazgo. Excelente para comunicación corporativa y relaciones públicas.",
+      SEI: "Líder Educativo - Orientación social con liderazgo y análisis. Ideal para gestión educativa, capacitación corporativa y desarrollo organizacional.",
+      SEA: "Facilitador Creativo - Servicio a otros con liderazgo y creatividad. Perfecto para coaching, facilitación y desarrollo de talento.",
+      SIA: "Consejero Analítico - Orientación social con análisis y creatividad. Excelente para psicología, trabajo social y consejería.",
+      ECS: "Gerente Organizacional - Liderazgo con organización y orientación social. Ideal para gestión de operaciones y recursos humanos.",
+      ECI: "Ejecutivo Estratégico - Liderazgo con organización y análisis. Perfecto para dirección general y consultoría de negocios.",
+      ESC: "Líder de Equipos - Liderazgo con orientación social y organización. Excelente para gestión de proyectos y coordinación de equipos.",
+      CSE: "Administrador Estratégico - Organización con orientación social y liderazgo. Ideal para administración pública y gestión de servicios.",
+      CES: "Coordinador Ejecutivo - Organización con liderazgo y orientación social. Perfecto para gestión administrativa y coordinación institucional.",
+      CIS: "Analista de Sistemas - Organización con análisis y orientación social. Excelente para análisis de procesos y mejora continua.",
     }
     return (
       descriptions[code] ||
@@ -183,31 +223,224 @@ export default function RIASECResults() {
     )
   }
 
-  const getCareerPaths = (code: string) => {
-    const paths: Record<string, { immediate: string[]; medium: string[]; long: string[] }> = {
-      IEA: {
-        immediate: ["Analista de Datos", "Desarrollador Junior", "Asistente de Investigación", "Diseñador UX/UI"],
-        medium: ["Product Manager", "Consultor de Tecnología", "Líder de Proyecto", "Arquitecto de Sistemas"],
-        long: ["Director de Innovación", "CTO", "Fundador de Startup", "Consultor Senior"],
-      },
-      EIA: {
-        immediate: ["Coordinador de Proyectos", "Analista de Negocios", "Asistente de Gerencia", "Investigador Jr"],
-        medium: ["Gerente de Producto", "Consultor de Estrategia", "Director de Operaciones", "Líder de Innovación"],
-        long: ["CEO", "Director General", "Consultor Ejecutivo", "Inversionista"],
-      },
-      AIE: {
-        immediate: ["Diseñador Gráfico", "Asistente Creativo", "Desarrollador Frontend", "Content Creator"],
-        medium: ["Director de Arte", "Creative Director", "Diseñador de Productos", "Brand Manager"],
-        long: ["Director Creativo Senior", "Fundador de Agencia", "Director de Marca", "Consultor de Diseño"],
-      },
+  const getCareerRecommendations = (code: string): string[] => {
+    const careers: Record<string, string[]> = {
+      RIE: [
+        "Ingeniero de Software",
+        "Ingeniero Mecánico",
+        "Arquitecto de Sistemas",
+        "Ingeniero de Datos",
+        "Gerente Técnico",
+      ],
+      RIA: [
+        "Diseñador Industrial",
+        "Arquitecto",
+        "Diseñador de Producto",
+        "Carpintero de Precisión",
+        "Restaurador de Arte",
+      ],
+      RIS: [
+        "Terapeuta Ocupacional",
+        "Educador Técnico",
+        "Técnico de Laboratorio",
+        "Asistente Médico",
+        "Ortesista/Protesista",
+      ],
+      IAS: [
+        "Científico de Datos",
+        "Investigador UX",
+        "Psicólogo Investigador",
+        "Analista de Comportamiento",
+        "Diseñador de Investigación",
+      ],
+      IAE: [
+        "Consultor de Innovación",
+        "Especialista en Desarrollo de Producto",
+        "Gerente de Tecnología",
+        "Analista de Mercados",
+        "Arquitecto de Soluciones",
+      ],
+      IES: [
+        "Consultor de Estrategia",
+        "Analista de Negocios Senior",
+        "Gestor de Proyectos de TI",
+        "Líder de Transformación Digital",
+        "Especialista en Gestión del Cambio",
+      ],
+      AES: [
+        "Director Creativo",
+        "Fundador de Startup Creativa",
+        "Productor de Contenido",
+        "Consultor de Marca",
+        "Diseñador de Experiencias",
+      ],
+      AEI: [
+        "Director de Arte",
+        "Gerente de Marca",
+        "Estratega de Marketing Digital",
+        "Diseñador de Comunicación",
+        "Líder de Contenido",
+      ],
+      ASE: [
+        "Especialista en Relaciones Públicas",
+        "Gerente de Comunicaciones Corporativas",
+        "Asesor de Imagen",
+        "Portavoz",
+        "Consultor de Crisis",
+      ],
+      SEI: [
+        "Director de Capacitación",
+        "Consultor Educativo",
+        "Coach Ejecutivo",
+        "Gerente de Desarrollo de Talento",
+        "Facilitador",
+      ],
+      SEA: [
+        "Coach Profesional",
+        "Facilitador de Talleres",
+        "Consultor de Desarrollo Personal",
+        "Orador Motivacional",
+        "Terapeuta de Grupo",
+      ],
+      SIA: [
+        "Psicólogo Clínico",
+        "Trabajador Social",
+        "Consejero Vocacional",
+        "Analista de Políticas Sociales",
+        "Investigador Social",
+      ],
+      ECS: [
+        "Gerente de Operaciones",
+        "Director de Proyectos",
+        "Gerente de RRHH",
+        "Consultor Organizacional",
+        "Gerente de Calidad",
+      ],
+      ECI: [
+        "Director General (CEO)",
+        "Consultor de Gestión",
+        "Gerente de Planificación Estratégica",
+        "Director de Operaciones",
+        "Analista Financiero Senior",
+      ],
+      ESC: [
+        "Líder de Equipo",
+        "Supervisor de Producción",
+        "Coordinador de Proyectos",
+        "Gerente de Turno",
+        "Jefe de Departamento",
+      ],
+      CSE: [
+        "Administrador Público",
+        "Gerente de Servicios Comunitarios",
+        "Analista de Políticas Públicas",
+        "Coordinador de Programas",
+        "Director de ONG",
+      ],
+      CES: [
+        "Gerente Administrativo",
+        "Coordinador de Eventos",
+        "Asistente Ejecutivo Senior",
+        "Gerente de Oficina",
+        "Coordinador de Logística",
+      ],
+      CIS: [
+        "Analista de Sistemas de Información",
+        "Analista de Procesos",
+        "Especialista en Optimización",
+        "Gerente de Proyectos de TI",
+        "Consultor de Eficiencia",
+      ],
     }
     return (
-      paths[code] || {
-        immediate: ["Analista", "Asistente", "Coordinador", "Especialista Jr"],
-        medium: ["Gerente", "Consultor", "Líder de Equipo", "Especialista Sr"],
-        long: ["Director", "Consultor Senior", "Ejecutivo", "Fundador"],
-      }
+      careers[code] || [
+        "Consultor Profesional",
+        "Especialista en tu área",
+        "Gerente de Proyectos",
+        "Analista Senior",
+        "Coordinador de Equipos",
+        "Líder de Innovación",
+      ]
     )
+  }
+
+  const getStrengths = (code: string): string[] => {
+    const strengthsMap: Record<string, string[]> = {
+      R: [
+        "Habilidades técnicas y prácticas",
+        "Resolución de problemas concretos",
+        "Trabajo con herramientas y tecnología",
+        "Orientación a la acción y resultados tangibles",
+      ],
+      I: [
+        "Pensamiento analítico",
+        "Investigación y análisis de datos",
+        "Resolución de problemas complejos",
+        "Curiosidad intelectual",
+        "Habilidad para identificar patrones",
+      ],
+      A: [
+        "Creatividad e innovación",
+        "Expresión artística",
+        "Pensamiento original",
+        "Sensibilidad estética",
+        "Flexibilidad y adaptabilidad",
+      ],
+      S: [
+        "Empatía y comprensión",
+        "Trabajo en equipo",
+        "Comunicación interpersonal",
+        "Habilidad para escuchar",
+        "Orientación al servicio",
+      ],
+      E: [
+        "Liderazgo y toma de decisiones",
+        "Visión estratégica",
+        "Persuasión y negociación",
+        "Iniciativa y proactividad",
+        "Resiliencia ante el fracaso",
+      ],
+      C: [
+        "Organización y planificación",
+        "Atención al detalle",
+        "Gestión de procesos",
+        "Cumplimiento de normas",
+        "Eficiencia y método",
+      ],
+    }
+
+    const topCategories = code.split("")
+    const strengths: string[] = []
+    topCategories.forEach((cat) => {
+      strengths.push(...(strengthsMap[cat] || []))
+    })
+    // Return a maximum of 6 strengths, ensuring no duplicates
+    return Array.from(new Set(strengths)).slice(0, 6)
+  }
+
+  const getDevelopmentAreas = (results: RIASECResults): string[] => {
+    const scores = [
+      { cat: "R", score: results.R },
+      { cat: "I", score: results.I },
+      { cat: "A", value: results.A },
+      { cat: "S", score: results.S },
+      { cat: "E", score: results.E },
+      { cat: "C", score: results.C },
+    ]
+
+    // Sort by score in ascending order and take the top 2 (lowest scores)
+    const lowest = scores.sort((a, b) => (a.score || a.value || 0) - (b.score || b.value || 0)).slice(0, 2)
+
+    const developmentMap: Record<string, string> = {
+      R: "Desarrollar habilidades técnicas y prácticas aplicadas a la resolución de problemas concretos.",
+      I: "Fortalecer capacidades de análisis e investigación, profundizando en metodologías y herramientas.",
+      A: "Cultivar la creatividad y la expresión artística, explorando nuevas formas de innovación y diseño.",
+      S: "Mejorar habilidades interpersonales y de trabajo en equipo, enfocándose en la empatía y la comunicación efectiva.",
+      E: "Desarrollar liderazgo y habilidades empresariales, buscando oportunidades para tomar decisiones y persuadir.",
+      C: "Mejorar organización y atención al detalle, implementando sistemas de gestión y planificación eficientes.",
+    }
+
+    return lowest.map((item) => developmentMap[item.cat])
   }
 
   if (loading) {
@@ -227,7 +460,7 @@ export default function RIASECResults() {
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
             <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
@@ -240,24 +473,33 @@ export default function RIASECResults() {
     )
   }
 
+  const careerRecommendations = getCareerRecommendations(results.holland_code)
+  const strengths = getStrengths(results.holland_code)
+  const developmentAreas = getDevelopmentAreas(results)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <Card className="mb-6">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-3xl font-bold text-blue-900 mb-2">
                   Resultados Test RIASEC
                   <Badge className="ml-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
                     Código Holland: {results.holland_code}
                   </Badge>
+                  {isDemoMode && (
+                    <Badge variant="outline" className="ml-2">
+                      Modo Demo
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription className="text-lg">{getHollandCodeDescription(results.holland_code)}</CardDescription>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold text-blue-600">{results.percentage}%</div>
+                <div className="text-3xl font-bold text-blue-600">{results.overall_score}%</div>
                 <div className="text-sm text-gray-500">Puntuación General</div>
               </div>
             </div>
@@ -268,30 +510,30 @@ export default function RIASECResults() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <Award className="h-4 w-4" />
-                  Resumen
+                  <span className="hidden sm:inline">Resumen</span>
                 </TabsTrigger>
                 <TabsTrigger value="charts" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
-                  Gráficos
+                  <span className="hidden sm:inline">Gráficos</span>
                 </TabsTrigger>
                 <TabsTrigger value="analysis" className="flex items-center gap-2">
                   <Brain className="h-4 w-4" />
-                  Análisis
-                </TabsTrigger>
-                <TabsTrigger value="reflective" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Reflexiones
-                </TabsTrigger>
-                <TabsTrigger value="coach" className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4" />
-                  Coach IA
+                  <span className="hidden sm:inline">Análisis</span>
                 </TabsTrigger>
                 <TabsTrigger value="career" className="flex items-center gap-2">
                   <Briefcase className="h-4 w-4" />
-                  Carrera
+                  <span className="hidden sm:inline">Carrera</span>
+                </TabsTrigger>
+                <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
+                  <Sparkles className="h-4 w-4" />
+                  Coach IA
+                </TabsTrigger>
+                <TabsTrigger value="action" className="flex items-center gap-2 hidden lg:flex">
+                  <Target className="h-4 w-4" />
+                  Plan
                 </TabsTrigger>
               </TabsList>
             </CardContent>
@@ -313,7 +555,7 @@ export default function RIASECResults() {
                     {results.holland_code.split("").map((letter, index) => {
                       const IconComponent = getCategoryIcon(letter)
                       const score = results[letter as keyof typeof results] as number
-                      const percentage = Math.round((score / 15) * 100)
+                      const percentage = Math.round((score / 100) * 100) // Assuming score is out of 100 now
                       return (
                         <div key={letter} className="flex items-center gap-3">
                           <div
@@ -326,7 +568,7 @@ export default function RIASECResults() {
                             <div className="flex items-center gap-2 mb-1">
                               <IconComponent className="h-4 w-4" style={{ color: getCategoryColor(letter) }} />
                               <span className="font-semibold">{getCategoryName(letter)}</span>
-                              <Badge variant="outline">{score}/15 puntos</Badge>
+                              <Badge variant="outline">{score}/100 puntos</Badge>
                             </div>
                             <Progress value={percentage} className="h-2" />
                           </div>
@@ -347,7 +589,7 @@ export default function RIASECResults() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {results.strengths.slice(0, 4).map((strength, index) => (
+                    {strengths.slice(0, 4).map((strength, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                         <span className="text-sm text-gray-700">{strength}</span>
@@ -358,12 +600,12 @@ export default function RIASECResults() {
               </Card>
             </div>
 
-            {/* Career Matches */}
+            {/* Career Matches (now Recommendations) */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Briefcase className="h-5 w-5 text-purple-600" />
-                  Carreras Compatibles
+                  Carreras Sugeridas
                 </CardTitle>
                 <CardDescription>
                   Basado en tu código Holland {results.holland_code}, estas carreras son altamente compatibles con tu
@@ -372,7 +614,7 @@ export default function RIASECResults() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {results.career_matches.map((career, index) => (
+                  {careerRecommendations.map((career, index) => (
                     <div
                       key={index}
                       className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
@@ -400,7 +642,7 @@ export default function RIASECResults() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {results.development_areas.map((area, index) => (
+                  {developmentAreas.map((area, index) => (
                     <div
                       key={index}
                       className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200"
@@ -432,7 +674,7 @@ export default function RIASECResults() {
                       <RadarChart data={getRadarData()}>
                         <PolarGrid />
                         <PolarAngleAxis dataKey="category" />
-                        <PolarRadiusAxis angle={90} domain={[0, 15]} />
+                        <PolarRadiusAxis angle={90} domain={[0, 100]} /> {/* domain updated to 100 */}
                         <RechartsRadar
                           name="Puntuación"
                           dataKey="value"
@@ -462,7 +704,7 @@ export default function RIASECResults() {
                       <BarChart data={getBarData()}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
-                        <YAxis domain={[0, 15]} />
+                        <YAxis domain={[0, 100]} /> {/* domain updated to 100 */}
                         <Tooltip formatter={(value, name) => [`${value} puntos`, getCategoryName(name as string)]} />
                         <Bar dataKey="value" fill="#8884d8">
                           {getBarData().map((entry, index) => (
@@ -488,7 +730,7 @@ export default function RIASECResults() {
               <CardContent>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPieChart>
+                    <PieChart>
                       <Pie
                         data={getPieData()}
                         cx="50%"
@@ -505,7 +747,7 @@ export default function RIASECResults() {
                       </Pie>
                       <Tooltip />
                       <Legend />
-                    </RechartsPieChart>
+                    </PieChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
@@ -534,7 +776,7 @@ export default function RIASECResults() {
                   <div>
                     <h4 className="font-semibold mb-2">Fortalezas Clave</h4>
                     <div className="space-y-2">
-                      {results.strengths.map((strength, index) => (
+                      {strengths.map((strength, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <Star className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
                           <span className="text-sm text-gray-700">{strength}</span>
@@ -546,7 +788,7 @@ export default function RIASECResults() {
                   <div>
                     <h4 className="font-semibold mb-2">Oportunidades de Crecimiento</h4>
                     <div className="space-y-2">
-                      {results.development_areas.map((area, index) => (
+                      {developmentAreas.map((area, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <TrendingUp className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                           <span className="text-sm text-gray-700">{area}</span>
@@ -569,10 +811,10 @@ export default function RIASECResults() {
                   <div className="space-y-4">
                     {Object.entries(results)
                       .filter(([key]) => ["R", "I", "A", "S", "E", "C"].includes(key))
-                      .sort(([, a], [, b]) => (b as number) - (a as number))
+                      .sort(([, a], [, b]) => (b as number) - (a as number)) // Sort descending
                       .map(([category, score], index) => {
                         const IconComponent = getCategoryIcon(category)
-                        const percentage = Math.round(((score as number) / 15) * 100)
+                        const percentage = Math.round(((score as number) / 100) * 100) // Assuming score is out of 100
                         const isTop3 = index < 3
                         return (
                           <div key={category} className="space-y-2">
@@ -587,7 +829,7 @@ export default function RIASECResults() {
                                 )}
                               </div>
                               <div className="text-right">
-                                <div className="font-semibold">{score}/15</div>
+                                <div className="font-semibold">{score}/100</div>
                                 <div className="text-xs text-gray-500">{percentage}%</div>
                               </div>
                             </div>
@@ -615,21 +857,22 @@ export default function RIASECResults() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {Object.entries(results.reflective_responses).map(([questionKey, response]) => {
-                    const questionTexts: Record<string, string> = {
-                      q31: "¿Qué tipo de actividades te motivan más en el trabajo?",
-                      q32: "¿Cómo te ves profesionalmente en 5 años?",
-                      q33: "¿Cuál ha sido tu mayor logro personal o profesional?",
-                      q34: "¿Cómo sueles enfrentar los desafíos o problemas?",
-                      q35: "¿De qué manera contribuyes mejor en un equipo de trabajo?",
-                    }
-                    return (
-                      <div key={questionKey} className="p-4 bg-gray-50 rounded-lg border">
-                        <h4 className="font-semibold text-gray-900 mb-2">{questionTexts[questionKey]}</h4>
-                        <p className="text-gray-700 text-sm leading-relaxed">{response}</p>
-                      </div>
-                    )
-                  })}
+                  {results.reflective_responses &&
+                    Object.entries(results.reflective_responses).map(([questionKey, response]) => {
+                      const questionTexts: Record<string, string> = {
+                        q31: "¿Qué tipo de actividades te motivan más en el trabajo?",
+                        q32: "¿Cómo te ves profesionalmente en 5 años?",
+                        q33: "¿Cuál ha sido tu mayor logro personal o profesional?",
+                        q34: "¿Cómo sueles enfrentar los desafíos o problemas?",
+                        q35: "¿De qué manera contribuyes mejor en un equipo de trabajo?",
+                      }
+                      return (
+                        <div key={questionKey} className="p-4 bg-gray-50 rounded-lg border">
+                          <h4 className="font-semibold text-gray-900 mb-2">{questionTexts[questionKey]}</h4>
+                          <p className="text-gray-700 text-sm leading-relaxed">{response}</p>
+                        </div>
+                      )
+                    })}
                 </div>
               </CardContent>
             </Card>
@@ -638,7 +881,7 @@ export default function RIASECResults() {
           {/* Coach IA Tab */}
           <TabsContent value="coach" className="space-y-6">
             <AiCoachChat
-              userEmail="travis@example.com"
+              userEmail={isDemoMode ? "demo@example.com" : "travis@example.com"} // Use demo email if in demo mode
               initialContext={`Código Holland ${results.holland_code}: ${getHollandCodeDescription(results.holland_code)}`}
               suggestedQuestions={[
                 `¿Cómo puedo aprovechar mi perfil ${results.holland_code}?`,
@@ -664,15 +907,20 @@ export default function RIASECResults() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {getCareerPaths(results.holland_code).immediate.map((career, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 p-2 bg-green-50 rounded border border-green-200"
-                      >
-                        <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-                        <span className="text-sm text-green-800">{career}</span>
-                      </div>
-                    ))}
+                    {careerRecommendations.slice(0, 2).map(
+                      (
+                        career,
+                        index, // Display first 2 as immediate
+                      ) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-2 bg-green-50 rounded border border-green-200"
+                        >
+                          <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                          <span className="text-sm text-green-800">{career}</span>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -688,15 +936,20 @@ export default function RIASECResults() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {getCareerPaths(results.holland_code).medium.map((career, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 p-2 bg-blue-50 rounded border border-blue-200"
-                      >
-                        <ArrowRight className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                        <span className="text-sm text-blue-800">{career}</span>
-                      </div>
-                    ))}
+                    {careerRecommendations.slice(2, 4).map(
+                      (
+                        career,
+                        index, // Display next 2 as medium
+                      ) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-2 bg-blue-50 rounded border border-blue-200"
+                        >
+                          <ArrowRight className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                          <span className="text-sm text-blue-800">{career}</span>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -712,15 +965,20 @@ export default function RIASECResults() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {getCareerPaths(results.holland_code).long.map((career, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 p-2 bg-purple-50 rounded border border-purple-200"
-                      >
-                        <Star className="h-4 w-4 text-purple-600 flex-shrink-0" />
-                        <span className="text-sm text-purple-800">{career}</span>
-                      </div>
-                    ))}
+                    {careerRecommendations.slice(4).map(
+                      (
+                        career,
+                        index, // Display remaining as long term
+                      ) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-2 bg-purple-50 rounded border border-purple-200"
+                        >
+                          <Star className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                          <span className="text-sm text-purple-800">{career}</span>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -742,29 +1000,70 @@ export default function RIASECResults() {
                   <div>
                     <h4 className="font-semibold mb-3">Habilidades a Desarrollar</h4>
                     <div className="space-y-2">
-                      {[
-                        "Análisis de datos y metodologías de investigación",
-                        "Liderazgo de equipos multidisciplinarios",
-                        "Pensamiento creativo y design thinking",
-                        "Comunicación estratégica y presentaciones",
-                        "Gestión de proyectos de innovación",
-                      ].map((skill, index) => (
+                      {developmentAreas.map((area, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{skill}</span>
+                          <span className="text-sm text-gray-700">{area}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-3">Próximos Pasos</h4>
+                    <h4 className="font-semibold mb-3">Próximos Pasos Sugeridos</h4>
                     <div className="space-y-2">
                       {[
-                        "Buscar roles que combinen análisis e innovación",
-                        "Desarrollar portfolio de proyectos creativos",
-                        "Networking en industrias tecnológicas",
-                        "Considerar certificaciones en gestión de productos",
-                        "Explorar oportunidades de liderazgo de equipos",
+                        "Investigar programas de formación o certificaciones relevantes.",
+                        "Buscar mentores en las áreas de interés profesional.",
+                        "Participar en proyectos que permitan aplicar y desarrollar nuevas habilidades.",
+                        "Asistir a conferencias o webinars del sector.",
+                        "Explorar oportunidades de voluntariado o prácticas en campos relacionados.",
+                      ].map((step, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <ArrowRight className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{step}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Action Plan Tab (for the hidden lg:flex trigger) */}
+          <TabsContent value="action" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-orange-600" />
+                  Plan de Acción Personalizado
+                </CardTitle>
+                <CardDescription>
+                  Pasos concretos para desarrollar tu carrera según tu perfil {results.holland_code}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-3">Habilidades a Desarrollar</h4>
+                    <div className="space-y-2">
+                      {developmentAreas.map((area, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{area}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-3">Próximos Pasos Sugeridos</h4>
+                    <div className="space-y-2">
+                      {[
+                        "Investigar programas de formación o certificaciones relevantes.",
+                        "Buscar mentores en las áreas de interés profesional.",
+                        "Participar en proyectos que permitan aplicar y desarrollar nuevas habilidades.",
+                        "Asistir a conferencias o webinars del sector.",
+                        "Explorar oportunidades de voluntariado o prácticas en campos relacionados.",
                       ].map((step, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <ArrowRight className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
@@ -786,8 +1085,8 @@ export default function RIASECResults() {
               <Button onClick={() => router.push("/dashboard")} variant="outline">
                 Volver al Dashboard
               </Button>
-              <Button onClick={() => router.push("/test/riasec")} variant="outline">
-                Repetir Test
+              <Button onClick={() => router.push("/test")} variant="outline">
+                Ver Todos los Tests
               </Button>
               <Button onClick={() => window.print()} variant="outline">
                 Imprimir Resultados
@@ -796,7 +1095,7 @@ export default function RIASECResults() {
                 onClick={() => router.push("/test/soft-skills")}
                 className="bg-gradient-to-r from-green-600 to-emerald-600"
               >
-                Siguiente Test: Soft Skills
+                Siguiente: Test de Soft Skills
               </Button>
             </div>
           </CardContent>
