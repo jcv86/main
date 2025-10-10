@@ -2,29 +2,10 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import OpenAI from "openai"
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-})
-
-function chunkText(text: string, maxLength = 1000, overlap = 200): string[] {
-  const chunks: string[] = []
-  let start = 0
-
-  while (start < text.length) {
-    const end = Math.min(start + maxLength, text.length)
-    const chunk = text.slice(start, end)
-    chunks.push(chunk)
-    start = end - overlap
-    if (start >= text.length - overlap) break
-  }
-
-  return chunks
-}
-
-function extractKeywords(text: string): string[] {
-  const words = text.toLowerCase().split(/\W+/)
+function extractKeywords(query: string): string[] {
   const stopWords = new Set([
     "el",
     "la",
@@ -37,68 +18,137 @@ function extractKeywords(text: string): string[] {
     "ser",
     "se",
     "no",
-    "hay",
+    "haber",
     "por",
     "con",
     "su",
     "para",
     "como",
-    "está",
-    "lo",
-    "pero",
-    "sus",
+    "estar",
+    "tener",
     "le",
-    "ya",
+    "lo",
+    "todo",
+    "pero",
+    "más",
+    "hacer",
     "o",
-    "fue",
+    "poder",
+    "decir",
     "este",
-    "ha",
+    "ir",
+    "otro",
+    "ese",
     "si",
+    "me",
+    "ya",
+    "ver",
     "porque",
-    "esta",
-    "son",
-    "entre",
+    "dar",
     "cuando",
+    "él",
     "muy",
     "sin",
+    "vez",
+    "mucho",
+    "saber",
+    "qué",
     "sobre",
+    "mi",
+    "alguno",
+    "mismo",
+    "yo",
     "también",
-    "me",
     "hasta",
-    "donde",
-    "quien",
+    "año",
+    "dos",
+    "querer",
+    "entre",
+    "así",
+    "primero",
     "desde",
-    "todos",
-    "durante",
-    "ese",
-    "esa",
+    "grande",
+    "eso",
+    "ni",
+    "nos",
+    "llegar",
+    "pasar",
+    "tiempo",
+    "ella",
+    "sí",
+    "día",
+    "uno",
+    "bien",
+    "poco",
+    "deber",
+    "entonces",
+    "poner",
+    "cosa",
+    "tanto",
+    "hombre",
+    "parecer",
+    "nuestro",
+    "tan",
+    "donde",
+    "ahora",
+    "parte",
+    "después",
+    "vida",
+    "quedar",
+    "siempre",
+    "creer",
+    "hablar",
+    "llevar",
+    "dejar",
+    "nada",
+    "cada",
+    "seguir",
+    "menos",
+    "nuevo",
+    "encontrar",
+    "algo",
+    "solo",
+    "cual",
+    "hay",
   ])
 
-  const wordFreq = new Map<string, number>()
-  words.forEach((word) => {
-    if (word.length > 3 && !stopWords.has(word)) {
-      wordFreq.set(word, (wordFreq.get(word) || 0) + 1)
-    }
-  })
-
-  return Array.from(wordFreq.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map((entry) => entry[0])
+  return query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length > 3 && !stopWords.has(word))
 }
 
-function calculateRelevanceScore(query: string, content: string): number {
-  const queryWords = query.toLowerCase().split(/\W+/)
-  const contentLower = content.toLowerCase()
-  let matches = 0
+function findRelevantChunk(content: string, keywords: string[], chunkSize = 500): string {
+  if (!content) return ""
 
-  queryWords.forEach((word) => {
-    if (word.length > 3 && contentLower.includes(word)) {
-      matches++
-    }
+  const sentences = content.split(/[.!?]+/).filter((s) => s.trim().length > 0)
+
+  const scoredSentences = sentences.map((sentence, idx) => {
+    const lowerSentence = sentence.toLowerCase()
+    const score = keywords.reduce((sum, keyword) => {
+      return sum + (lowerSentence.includes(keyword) ? 1 : 0)
+    }, 0)
+
+    return { sentence, score, idx }
   })
 
-  return matches / Math.max(queryWords.length, 1)
+  scoredSentences.sort((a, b) => b.score - a.score)
+
+  const topSentences = scoredSentences.slice(0, 3)
+  const indices = topSentences.map((s) => s.idx).sort((a, b) => a - b)
+
+  let chunk = ""
+  for (const idx of indices) {
+    const start = Math.max(0, idx - 1)
+    const end = Math.min(sentences.length, idx + 2)
+    const sentenceGroup = sentences.slice(start, end).join(". ")
+
+    if (chunk.length + sentenceGroup.length < chunkSize) {
+      chunk += (chunk ? " " : "") + sentenceGroup
+    }
+  }
+
+  return chunk || content.substring(0, chunkSize)
 }
 
 export async function POST(request: NextRequest) {
@@ -107,124 +157,147 @@ export async function POST(request: NextRequest) {
     const { query, similarityThreshold = 0.7, limit = 5 } = body
 
     if (!query || typeof query !== "string") {
-      return NextResponse.json({ success: false, message: "Query is required" }, { status: 400 })
+      return NextResponse.json({ success: false, error: "Query is required and must be a string" }, { status: 400 })
     }
 
+    const openaiApiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY
+    if (!openaiApiKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "OpenAI API key not configured",
+          message: "Please add OPENAI_API_KEY to your environment variables",
+        },
+        { status: 500 },
+      )
+    }
+
+    const openai = new OpenAI({ apiKey: openaiApiKey })
+
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Supabase not configured",
+          message: "Please configure Supabase environment variables",
+        },
+        { status: 500 },
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
     const embeddingResponse = await openai.embeddings.create({
-      model: "text-embedding-3-small",
+      model: "text-embedding-ada-002",
       input: query,
     })
 
     const queryEmbedding = embeddingResponse.data[0].embedding
 
-    const { data: results, error } = await supabase.rpc("match_knowledge_base", {
+    const { data: matches, error: matchError } = await supabase.rpc("match_knowledge_base", {
       query_embedding: queryEmbedding,
       match_threshold: similarityThreshold,
       match_count: limit,
     })
 
-    if (error) {
-      console.error("Supabase error:", error)
-      return NextResponse.json({ success: false, message: "Database query failed" }, { status: 500 })
+    if (matchError) {
+      console.error("Match error:", matchError)
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Database search failed",
+          message: matchError.message,
+        },
+        { status: 500 },
+      )
     }
 
-    if (!results || results.length === 0) {
+    if (!matches || matches.length === 0) {
       return NextResponse.json({
         success: true,
         answer:
-          "No encontré información específica sobre esa pregunta en mi base de conocimientos. ¿Podrías reformular tu pregunta o preguntarme sobre otro tema?",
+          "Lo siento, no encontré información relevante en mi base de conocimiento para responder tu pregunta. Por favor, intenta reformular tu pregunta o pregunta sobre temas de desarrollo profesional, liderazgo, productividad o emprendimiento.",
         confidence: 0,
         sources: [],
-        keywords: [],
       })
     }
 
-    const enrichedSources = results.map((result: any) => {
-      const chunks = chunkText(result.content || "", 1000, 200)
-      const relevantChunk =
-        chunks
-          .map((chunk) => ({
-            chunk,
-            score: calculateRelevanceScore(query, chunk),
-          }))
-          .sort((a, b) => b.score - a.score)[0]?.chunk || result.content
+    const keywords = extractKeywords(query)
+    const contextChunks = matches.map((match: any) => {
+      const content = match.content || ""
+      const relevantChunk = findRelevantChunk(content, keywords)
 
       return {
-        title: result.title,
-        author: result.author || "Autor desconocido",
-        category: result.category,
-        similarity: result.similarity,
-        excerpt: relevantChunk.substring(0, 500),
-        sourceType: result.source_type || "book",
-        content: result.content,
+        title: match.title,
+        author: match.author,
+        category: match.category,
+        similarity: match.similarity,
+        excerpt: relevantChunk,
+        sourceType: match.source_type || "book",
       }
     })
 
-    const contextParts = enrichedSources.map(
-      (source, idx) => `[Fuente ${idx + 1}: ${source.title} por ${source.author}]\n${source.excerpt}\n---\n`,
-    )
-
-    const contextText = contextParts.join("\n")
-
-    const systemPrompt = `Eres un asistente experto en desarrollo profesional, liderazgo, productividad y emprendimiento. 
-
-Tu trabajo es proporcionar respuestas útiles, prácticas y basadas en las fuentes de conocimiento proporcionadas.
-
-Características de tus respuestas:
-- Concisas pero completas (2-3 párrafos)
-- Prácticas y accionables
-- Basadas en las fuentes proporcionadas
-- En español claro y profesional
-- Incluye ejemplos cuando sea relevante
-- Si las fuentes no tienen información suficiente, dilo honestamente
-
-Contexto de las fuentes:
-${contextText}`
+    const context = contextChunks
+      .map((chunk, idx) => `Fuente ${idx + 1} (${chunk.title} por ${chunk.author}):\n${chunk.excerpt}\n`)
+      .join("\n\n")
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: query },
+        {
+          role: "system",
+          content: `Eres un experto coach de desarrollo profesional. Responde preguntas basándote ÚNICAMENTE en el contexto proporcionado. 
+
+Instrucciones:
+- Proporciona respuestas claras, prácticas y accionables
+- Cita los libros o autores cuando sea relevante
+- Si el contexto no contiene información suficiente, indícalo claramente
+- Usa un tono profesional pero amigable
+- Estructura tu respuesta en párrafos claros
+- Incluye ejemplos concretos cuando sea posible`,
+        },
+        {
+          role: "user",
+          content: `Contexto de la base de conocimiento:\n\n${context}\n\nPregunta del usuario: ${query}\n\nPor favor, responde basándote en el contexto proporcionado.`,
+        },
       ],
       temperature: 0.7,
-      max_tokens: 500,
+      max_tokens: 800,
     })
 
     const answer = completion.choices[0].message.content || "No pude generar una respuesta."
 
-    const avgSimilarity = enrichedSources.reduce((sum, s) => sum + s.similarity, 0) / enrichedSources.length
-
-    const confidence = Math.min(avgSimilarity * 100, 100)
-
-    const keywords = extractKeywords(query)
+    const avgSimilarity = contextChunks.reduce((sum, chunk) => sum + chunk.similarity, 0) / contextChunks.length
+    const confidence = Math.round(avgSimilarity * 100)
 
     return NextResponse.json({
       success: true,
       answer,
       confidence,
-      sources: enrichedSources.map((s) => ({
-        title: s.title,
-        author: s.author,
-        category: s.category,
-        similarity: s.similarity,
-        excerpt: s.excerpt,
-        sourceType: s.sourceType,
-      })),
-      keywords,
-      metadata: {
-        resultsCount: results.length,
-        avgSimilarity,
-      },
+      sources: contextChunks,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Brain semantic error:", error)
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : "Internal server error",
+        error: error.message || "Internal server error",
+        message: "Failed to process query. Please check server logs.",
       },
       { status: 500 },
     )
   }
+}
+
+export async function GET() {
+  return NextResponse.json({
+    success: true,
+    message: "Brain Semantic Search API is running",
+    endpoints: {
+      POST: "Send a query to get semantic search results",
+    },
+    requiredEnv: ["OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"],
+  })
 }

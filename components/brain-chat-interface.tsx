@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
   Brain,
   Send,
@@ -21,6 +21,7 @@ import {
   MessageSquare,
   Lightbulb,
   Target,
+  AlertCircle,
 } from "lucide-react"
 
 interface Message {
@@ -60,6 +61,7 @@ export function BrainChatInterface() {
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [stats, setStats] = useState<SessionStats>({
     queriesCount: 0,
     avgConfidence: 0,
@@ -96,6 +98,7 @@ export function BrainChatInterface() {
     setMessages((prev) => [...prev, userMessage])
     setInput("")
     setIsLoading(true)
+    setError(null)
 
     const startTime = Date.now()
 
@@ -110,53 +113,51 @@ export function BrainChatInterface() {
         }),
       })
 
-      if (!response.ok) {
-        throw new Error("Error en la respuesta del servidor")
-      }
-
       const data = await response.json()
 
-      if (data.success) {
-        const processingTime = Date.now() - startTime
-
-        const assistantMessage: Message = {
-          id: `assistant-${Date.now()}`,
-          role: "assistant",
-          content: data.answer,
-          timestamp: new Date(),
-          confidence: data.confidence,
-          processingTime,
-          sources: data.sources,
-        }
-
-        setMessages((prev) => [...prev, assistantMessage])
-
-        const categories = data.sources?.map((s: any) => s.category).filter(Boolean) || []
-
-        setStats((prev) => {
-          const newCount = prev.queriesCount + 1
-          const newAvgConfidence = (prev.avgConfidence * prev.queriesCount + data.confidence) / newCount
-          const newAvgTime = (prev.avgTime * prev.queriesCount + processingTime) / newCount
-          const allCategories = [...prev.topCategories, ...categories]
-          const uniqueCategories = Array.from(new Set(allCategories)).slice(0, 5)
-
-          return {
-            queriesCount: newCount,
-            avgConfidence: newAvgConfidence,
-            avgTime: newAvgTime,
-            topCategories: uniqueCategories,
-          }
-        })
-      } else {
-        throw new Error(data.message || "Error al procesar la consulta")
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || data.error || "Error en la respuesta del servidor")
       }
+
+      const processingTime = Date.now() - startTime
+
+      const assistantMessage: Message = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: data.answer,
+        timestamp: new Date(),
+        confidence: data.confidence,
+        processingTime,
+        sources: data.sources,
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+
+      const categories = data.sources?.map((s: any) => s.category).filter(Boolean) || []
+
+      setStats((prev) => {
+        const newCount = prev.queriesCount + 1
+        const newAvgConfidence = (prev.avgConfidence * prev.queriesCount + data.confidence) / newCount
+        const newAvgTime = (prev.avgTime * prev.queriesCount + processingTime) / newCount
+        const allCategories = [...prev.topCategories, ...categories]
+        const uniqueCategories = Array.from(new Set(allCategories)).slice(0, 5)
+
+        return {
+          queriesCount: newCount,
+          avgConfidence: newAvgConfidence,
+          avgTime: newAvgTime,
+          topCategories: uniqueCategories,
+        }
+      })
     } catch (error) {
       console.error("Error:", error)
+      const errorMsg = error instanceof Error ? error.message : "Error desconocido"
+      setError(errorMsg)
+
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: "assistant",
-        content:
-          "Lo siento, tuve un problema al procesar tu pregunta. Por favor, intenta reformularla o pregunta algo diferente.",
+        content: `❌ Lo siento, hubo un problema: ${errorMsg}\n\nPor favor, verifica que:\n1. Los embeddings estén generados (/admin/embeddings)\n2. La API de OpenAI esté configurada\n3. La base de datos esté correctamente configurada`,
         timestamp: new Date(),
         confidence: 0,
       }
@@ -201,6 +202,13 @@ export function BrainChatInterface() {
               )}
             </div>
           </CardHeader>
+
+          {error && (
+            <Alert variant="destructive" className="m-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
           <ScrollArea ref={scrollRef} className="flex-1 p-6">
             <div className="space-y-6 max-w-4xl mx-auto">
