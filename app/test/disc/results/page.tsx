@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
 import { createClient } from "@supabase/supabase-js"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -49,6 +49,9 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 export default function DISCResultsPage() {
   const { user } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isDemoMode = searchParams.get("demo") === "true"
+
   const [discResult, setDiscResult] = useState<DISCResult | null>(null)
   const [aiInterpretation, setAiInterpretation] = useState<string>("")
   const [loading, setLoading] = useState(true)
@@ -59,14 +62,33 @@ export default function DISCResultsPage() {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isDemoMode) {
       router.push("/")
       return
     }
     loadResults()
-  }, [user, router])
+  }, [user, router, isDemoMode])
 
   const loadResults = async () => {
+    if (isDemoMode) {
+      setDiscResult({
+        d_score: 75,
+        i_score: 65,
+        s_score: 45,
+        c_score: 85,
+        primary_type: "Compliance",
+        analysis:
+          "Tu estilo principal es Compliance con puntuaciones: D=75%, I=65%, S=45%, C=85%. Eres analítico, preciso y orientado a la calidad.",
+        recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
+        created_at: new Date().toISOString(),
+      })
+      setAiInterpretation(
+        "Basado en tu perfil DISC, muestras un fuerte enfoque en Compliance (85%) y Dominancia (75%). Esto indica que eres una persona que valora la precisión, la calidad y los resultados. Tu combinación de alta C y alta D te hace excelente para roles que requieren tanto atención al detalle como capacidad de toma de decisiones.\n\nTus fortalezas incluyen:\n- Pensamiento analítico y sistemático\n- Orientación a resultados y eficiencia\n- Alta calidad en el trabajo\n- Capacidad de liderazgo basada en datos\n\nÁreas de desarrollo:\n- Flexibilidad en situaciones ambiguas\n- Paciencia con procesos menos estructurados\n- Delegación y confianza en otros\n- Balance entre perfección y pragmatismo",
+      )
+      setLoading(false)
+      return
+    }
+
     if (!user) return
 
     try {
@@ -141,7 +163,7 @@ export default function DISCResultsPage() {
   }
 
   const sendChatMessage = async () => {
-    if (!chatInput.trim() || !user || !discResult) return
+    if (!chatInput.trim() || (!user && !isDemoMode) || !discResult) return
 
     setChatLoading(true)
     const userMessage = chatInput.trim()
@@ -221,8 +243,8 @@ export default function DISCResultsPage() {
               <Brain className="h-4 w-4 mr-2" />
               Realizar Test DISC
             </Button>
-            <Button variant="outline" onClick={() => router.push("/dashboard")} className="w-full">
-              Volver al Dashboard
+            <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")} className="w-full">
+              {isDemoMode ? "Volver al Inicio" : "Volver al Dashboard"}
             </Button>
           </CardContent>
         </Card>
@@ -303,11 +325,16 @@ export default function DISCResultsPage() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+          <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
+            {isDemoMode ? "Volver al Inicio" : "Volver al Dashboard"}
           </Button>
           <div className="flex items-center space-x-2">
+            {isDemoMode && (
+              <Badge variant="secondary" className="mr-2">
+                Modo Demo
+              </Badge>
+            )}
             <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Descargar PDF

@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Query is required and must be a string" }, { status: 400 })
     }
 
-    const openaiApiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY
+    const openaiApiKey = process.env.OPENAI_API_KEY
     if (!openaiApiKey) {
       return NextResponse.json(
         {
