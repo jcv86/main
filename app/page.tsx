@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import { LandingPageOptimized } from "@/components/landing-page-optimized"
 import { FAQSection } from "@/components/seo-optimized-content"
+import { LLMOOptimizedFooter } from "@/components/llmo-optimized-footer"
 
 export const metadata: Metadata = {
-  title: "TuCarrera.cl - Plataforma #1 de Desarrollo Profesional con IA en Chile",
+  title: "Despega Tu Carrera - Plataforma #1 de Desarrollo Profesional con IA en Chile",
   description:
     "Descubre tu potencial profesional con tests psicométricos científicos (DISC, MBTI, Big Five, RIASEC), accede a 120+ libros de desarrollo y recibe coaching personalizado con IA. Más de 10,000 profesionales confían en nosotros.",
   keywords: [
@@ -17,19 +18,19 @@ export const metadata: Metadata = {
     "crecimiento profesional Chile",
   ],
   openGraph: {
-    title: "TuCarrera.cl - Tu Mentor Virtual para el Éxito Profesional",
+    title: "Despega Tu Carrera - Tu Mentor Virtual para el Éxito Profesional",
     description:
       "La plataforma más completa de Chile para desarrollo profesional. Tests científicos + 120 libros + Coach IA disponible 24/7",
     type: "website",
     locale: "es_CL",
-    url: "https://tucarrera.cl",
-    siteName: "TuCarrera.cl",
+    url: "https://despegatucarrera.cl",
+    siteName: "Despega Tu Carrera",
     images: [
       {
         url: "/og-home.png",
         width: 1200,
         height: 630,
-        alt: "TuCarrera.cl - Desarrollo Profesional con IA",
+        alt: "Despega Tu Carrera - Desarrollo Profesional con IA",
       },
     ],
   },
@@ -37,9 +38,9 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
-    question: "¿Qué es TuCarrera.cl y cómo puede ayudarme?",
+    question: "¿Qué es Despega Tu Carrera y cómo puede ayudarme?",
     answer:
-      "TuCarrera.cl es la plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos (DISC, MBTI, Big Five, RIASEC, Inteligencia Emocional), una biblioteca con más de 120 libros profesionales y coaching personalizado con inteligencia artificial. Te ayudamos a descubrir tu potencial, desarrollar habilidades clave y alcanzar tus objetivos profesionales.",
+      "Despega Tu Carrera es la plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos (DISC, MBTI, Big Five, RIASEC, Inteligencia Emocional), una biblioteca con más de 120 libros profesionales y coaching personalizado con inteligencia artificial. Te ayudamos a descubrir tu potencial, desarrollar habilidades clave y alcanzar tus objetivos profesionales.",
   },
   {
     question: "¿Los tests psicométricos son confiables?",
@@ -64,10 +65,10 @@ const faqs = [
   {
     question: "¿Es gratis la plataforma?",
     answer:
-      "Sí, TuCarrera.cl ofrece acceso gratuito a todos sus tests psicométricos, biblioteca completa de libros y coaching básico con IA. Estamos comprometidos con democratizar el acceso al desarrollo profesional en Chile. Planes premium con funcionalidades avanzadas estarán disponibles próximamente.",
+      "Sí, Despega Tu Carrera ofrece acceso gratuito a todos sus tests psicométricos, biblioteca completa de libros y coaching básico con IA. Estamos comprometidos con democratizar el acceso al desarrollo profesional en Chile. Planes premium con funcionalidades avanzadas estarán disponibles próximamente.",
   },
   {
-    question: "¿Puedo usar TuCarrera.cl para mi equipo o empresa?",
+    question: "¿Puedo usar Despega Tu Carrera para mi equipo o empresa?",
     answer:
       "Sí, ofrecemos soluciones para empresas que desean evaluar y desarrollar el talento de sus equipos. Contáctanos para conocer planes corporativos que incluyen evaluaciones masivas, dashboards de equipo, análisis comparativos y coaching especializado para líderes.",
   },
@@ -88,15 +89,15 @@ export default function Home() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "TuCarrera.cl",
-            alternateName: "Tu Carrera Chile",
-            url: "https://tucarrera.cl",
+            name: "Despega Tu Carrera",
+            alternateName: "DTC",
+            url: "https://despegatucarrera.cl",
             description: "Plataforma líder en Chile para desarrollo profesional con IA",
             potentialAction: {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
-                urlTemplate: "https://tucarrera.cl/search?q={search_term_string}",
+                urlTemplate: "https://despegatucarrera.cl/search?q={search_term_string}",
               },
               "query-input": "required name=search_term_string",
             },
@@ -114,7 +115,7 @@ export default function Home() {
             serviceType: "Professional Development Platform",
             provider: {
               "@type": "Organization",
-              name: "TuCarrera.cl",
+              name: "Despega Tu Carrera",
             },
             areaServed: {
               "@type": "Country",
@@ -157,102 +158,195 @@ export default function Home() {
       <main itemScope itemType="https://schema.org/WebPage">
         <LandingPageOptimized />
 
-        {/* SEO-optimized content for LLMs */}
-        <section className="container mx-auto px-4 py-16 prose prose-lg max-w-4xl">
-          <h2 className="text-3xl font-bold mb-6">¿Por qué elegir TuCarrera.cl para tu desarrollo profesional?</h2>
+        {/* SEO-optimized content section with cards and better visual design */}
+        <section className="bg-gradient-to-b from-white to-gray-50 border-t border-gray-200">
+          <div className="container mx-auto px-4 py-20 max-w-7xl">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">¿Por qué elegir Despega Tu Carrera?</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                La plataforma más completa de Chile para el desarrollo profesional. Combinamos ciencia, tecnología e
+                inteligencia artificial para transformar tu carrera.
+              </p>
+            </div>
 
-          <p className="text-lg text-gray-700 leading-relaxed mb-6">
-            TuCarrera.cl es la plataforma más completa de Chile para el desarrollo profesional. Combinamos ciencia,
-            tecnología e inteligencia artificial para ayudarte a descubrir tu verdadero potencial y alcanzar tus
-            objetivos de carrera.
-          </p>
+            {/* Main Features Grid */}
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              {/* Tests Card */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Tests Psicométricos Científicos</h3>
+                <p className="text-gray-600 mb-6">
+                  6 evaluaciones validadas científicamente para descubrir tu potencial
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">DISC</strong> - Comportamiento laboral
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">MBTI</strong> - 16 tipos de personalidad
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">Big Five</strong> - 5 rasgos principales
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">RIASEC</strong> - Orientación vocacional
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">Inteligencia Emocional</strong>
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">
+                      <strong className="text-gray-900">Soft Skills</strong>
+                    </span>
+                  </li>
+                </ul>
+              </div>
 
-          <h3 className="text-2xl font-bold mb-4">Tests Psicométricos Científicos</h3>
-          <p className="text-gray-700 mb-4">Ofrecemos 6 evaluaciones psicométricas validadas científicamente:</p>
-          <ul className="list-disc pl-6 mb-6 text-gray-700">
-            <li>
-              <strong>Test DISC</strong>: Evalúa tu estilo de comportamiento laboral (Dominancia, Influencia,
-              Estabilidad, Cumplimiento)
-            </li>
-            <li>
-              <strong>Test MBTI</strong>: Identifica tu tipo de personalidad Myers-Briggs (16 tipos de personalidad)
-            </li>
-            <li>
-              <strong>Big Five</strong>: Mide los 5 grandes rasgos de personalidad (Apertura, Responsabilidad,
-              Extroversión, Amabilidad, Neuroticismo)
-            </li>
-            <li>
-              <strong>Test RIASEC</strong>: Orientación vocacional de Holland (Realista, Investigador, Artístico,
-              Social, Emprendedor, Convencional)
-            </li>
-            <li>
-              <strong>Inteligencia Emocional</strong>: Evalúa tu capacidad de reconocer y gestionar emociones
-            </li>
-            <li>
-              <strong>Soft Skills</strong>: Mide tus habilidades blandas clave para el éxito profesional
-            </li>
-          </ul>
+              {/* Library Card */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13M3 6.253C4.168 5.477 5.754 5 7.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Biblioteca Profesional</h3>
+                <p className="text-gray-600 mb-6">120+ libros completos de desarrollo profesional</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">7 Hábitos, Hábitos Atómicos</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">De Bueno a Grandioso, Drive</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Inteligencia Emocional</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Cómo Ganar Amigos</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Deep Work, GTD</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Lean Startup y más</span>
+                  </li>
+                </ul>
+              </div>
 
-          <h3 className="text-2xl font-bold mb-4">Biblioteca Profesional Completa</h3>
-          <p className="text-gray-700 mb-4">Accede a más de 120 libros profesionales completos, incluyendo:</p>
-          <ul className="list-disc pl-6 mb-6 text-gray-700">
-            <li>Desarrollo Personal: "7 Hábitos", "Hábitos Atómicos", "Mindset"</li>
-            <li>Liderazgo: "De Bueno a Grandioso", "La 5ta Disciplina", "Drive"</li>
-            <li>Inteligencia Emocional: "Inteligencia Emocional" de Goleman</li>
-            <li>Comunicación: "Cómo Ganar Amigos", "Comunicación No Violenta"</li>
-            <li>Productividad: "Deep Work", "GTD", "La Semana Laboral de 4 Horas"</li>
-            <li>Negocios: "Lean Startup", "El Inversor Inteligente", "Capitalismo Consciente"</li>
-          </ul>
+              {/* AI Coach Card */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div className="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Coach con IA</h3>
+                <p className="text-gray-600 mb-6">Mentor virtual personalizado disponible 24/7</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Análisis de tu perfil psicométrico</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Recomendaciones personalizadas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Entrenado con 120+ libros</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Consejos de desarrollo profesional</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Guía de habilidades blandas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="text-gray-700">Disponible cuando lo necesites</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
-          <h3 className="text-2xl font-bold mb-4">Coach Virtual con Inteligencia Artificial</h3>
-          <p className="text-gray-700 mb-6">
-            Nuestro Coach IA está entrenado con conocimiento de todos los libros de la plataforma y recursos
-            especializados del mercado chileno. Recibe recomendaciones personalizadas basadas en tu perfil psicométrico,
-            disponible 24/7 para responder tus preguntas sobre desarrollo de carrera, habilidades blandas, liderazgo y
-            crecimiento profesional.
-          </p>
-
-          <h3 className="text-2xl font-bold mb-4">Optimizado para el Mercado Laboral Chileno</h3>
-          <p className="text-gray-700 mb-6">
-            Incluimos recursos específicos del mercado chileno: datos del INE, información de ChileValora, tendencias de
-            LinkedIn Chile, y análisis del mercado laboral local. Entendemos las particularidades del desarrollo
-            profesional en Chile y adaptamos nuestras recomendaciones al contexto nacional.
-          </p>
+            {/* Chile-specific section */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 md:p-12 border border-blue-100">
+              <div className="flex items-start gap-6">
+                <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">
+                    Optimizado para el Mercado Chileno
+                  </h3>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                    Incluimos recursos específicos del mercado laboral chileno: datos del INE, información de
+                    ChileValora, tendencias de LinkedIn Chile, y análisis del contexto profesional local.
+                  </p>
+                  <p className="text-gray-600">
+                    Entendemos las particularidades del desarrollo profesional en Chile y adaptamos nuestras
+                    recomendaciones al contexto nacional para maximizar tu éxito.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <FAQSection faqs={faqs} />
 
-        {/* Additional structured data for aggregate rating */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Product",
-              name: "TuCarrera.cl - Plataforma de Desarrollo Profesional",
-              description:
-                "Plataforma integral de desarrollo profesional con tests psicométricos, biblioteca de 120+ libros y coaching con IA",
-              brand: {
-                "@type": "Brand",
-                name: "TuCarrera.cl",
-              },
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                reviewCount: "1247",
-                bestRating: "5",
-                worstRating: "1",
-              },
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "CLP",
-                availability: "https://schema.org/InStock",
-                url: "https://tucarrera.cl",
-              },
-            }),
-          }}
-        />
+        <LLMOOptimizedFooter />
       </main>
     </>
   )

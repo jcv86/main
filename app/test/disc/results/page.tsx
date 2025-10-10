@@ -58,6 +58,8 @@ export default function DISCResultsPage() {
   const [chatMessages, setChatMessages] = useState<Array<{ role: string; content: string }>>([])
   const [chatInput, setChatInput] = useState("")
   const [chatLoading, setChatLoading] = useState(false)
+  const [demoQuestionsUsed, setDemoQuestionsUsed] = useState(0)
+  const DEMO_QUESTION_LIMIT = 3
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
@@ -165,45 +167,65 @@ export default function DISCResultsPage() {
   const sendChatMessage = async () => {
     if (!chatInput.trim() || (!user && !isDemoMode) || !discResult) return
 
+    if (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT) {
+      setChatMessages([
+        ...chatMessages,
+        { role: "user", content: chatInput.trim() },
+        {
+          role: "assistant",
+          content: `Has alcanzado el límite de ${DEMO_QUESTION_LIMIT} preguntas en modo demo. Para continuar usando el Coach IA sin límites, por favor regístrate o inicia sesión.`,
+        },
+      ])
+      setChatInput("")
+      return
+    }
+
     setChatLoading(true)
     const userMessage = chatInput.trim()
     setChatInput("")
 
-    // Add user message to chat
     const newMessages = [...chatMessages, { role: "user", content: userMessage }]
     setChatMessages(newMessages)
 
+    if (isDemoMode) {
+      setDemoQuestionsUsed(demoQuestionsUsed + 1)
+    }
+
     try {
+      const payload = {
+        message: userMessage,
+        userEmail: user?.email || "demo@example.com",
+        testResults: ["disc"],
+        conversationHistory: chatMessages,
+        context: {
+          discScores: {
+            d: discResult.d_score,
+            i: discResult.i_score,
+            s: discResult.s_score,
+            c: discResult.c_score,
+          },
+          primaryType: discResult.primary_type,
+          isDemoMode: isDemoMode,
+        },
+      }
+
       const response = await fetch("/api/ai-coach", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `Eres un coach profesional especializado en DISC. El usuario tiene estos resultados:
-              - Dominancia (D): ${discResult.d_score}%
-              - Influencia (I): ${discResult.i_score}%
-              - Estabilidad (S): ${discResult.s_score}%
-              - Cumplimiento (C): ${discResult.c_score}%
-              - Estilo principal: ${discResult.primary_type}
-              
-              Proporciona consejos específicos y prácticos basados en su perfil DISC.`,
-            },
-            ...newMessages,
-          ],
-          temperature: 0.8,
-        }),
+        body: JSON.stringify(payload),
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        setChatMessages([...newMessages, { role: "assistant", content: data.message }])
-      } else {
-        throw new Error("Error en la respuesta")
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`API returned ${response.status}: ${errorText}`)
       }
+
+      const data = await response.json()
+
+      const assistantMessage = data.response || data.message || "Lo siento, no pude generar una respuesta."
+      setChatMessages([...newMessages, { role: "assistant", content: assistantMessage }])
     } catch (error) {
       console.error("Error sending chat message:", error)
       setChatMessages([
@@ -323,7 +345,6 @@ export default function DISCResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="container mx-auto max-w-6xl">
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -346,7 +367,6 @@ export default function DISCResultsPage() {
           </div>
         </div>
 
-        {/* Results Header */}
         <Card className="mb-6">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
@@ -365,7 +385,6 @@ export default function DISCResultsPage() {
           </CardContent>
         </Card>
 
-        {/* Charts and Analysis */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
@@ -377,7 +396,6 @@ export default function DISCResultsPage() {
 
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Scores Overview */}
               <Card>
                 <CardHeader>
                   <CardTitle>Puntuaciones DISC</CardTitle>
@@ -417,7 +435,6 @@ export default function DISCResultsPage() {
                 </CardContent>
               </Card>
 
-              {/* Style Overview */}
               <Card>
                 <CardHeader>
                   <CardTitle>Tu Estilo: {styleInfo.title}</CardTitle>
@@ -458,7 +475,6 @@ export default function DISCResultsPage() {
               </Card>
             </div>
 
-            {/* Work Style */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -474,7 +490,6 @@ export default function DISCResultsPage() {
 
           <TabsContent value="charts" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Radar Chart */}
               <Card>
                 <CardHeader>
                   <CardTitle>Gráfico Radar - Perfil DISC</CardTitle>
@@ -501,7 +516,6 @@ export default function DISCResultsPage() {
                 </CardContent>
               </Card>
 
-              {/* Bar Chart */}
               <Card>
                 <CardHeader>
                   <CardTitle>Gráfico de Barras - Puntuaciones</CardTitle>
@@ -523,7 +537,6 @@ export default function DISCResultsPage() {
               </Card>
             </div>
 
-            {/* Pie Chart */}
             <Card>
               <CardHeader>
                 <CardTitle>Distribución de Estilos</CardTitle>
@@ -646,14 +659,23 @@ export default function DISCResultsPage() {
                 <CardTitle className="flex items-center">
                   <MessageCircle className="h-5 w-5 mr-2 text-blue-600" />
                   Coach IA - Consulta Personalizada
+                  {isDemoMode && (
+                    <Badge variant="outline" className="ml-auto">
+                      {demoQuestionsUsed}/{DEMO_QUESTION_LIMIT} preguntas usadas
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription>
                   Haz preguntas específicas sobre tu perfil DISC y recibe consejos personalizados
+                  {isDemoMode && (
+                    <span className="block mt-1 text-orange-600">
+                      Modo demo: Tienes {DEMO_QUESTION_LIMIT - demoQuestionsUsed} preguntas restantes
+                    </span>
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* Chat Messages */}
                   <div className="h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50">
                     {chatMessages.length === 0 ? (
                       <div className="text-center text-gray-500 mt-8">
@@ -666,6 +688,11 @@ export default function DISCResultsPage() {
                           <li>• Desarrollo de liderazgo</li>
                           <li>• Trabajo en equipo</li>
                         </ul>
+                        {isDemoMode && (
+                          <p className="text-xs mt-4 text-orange-600">
+                            En modo demo puedes hacer hasta {DEMO_QUESTION_LIMIT} preguntas
+                          </p>
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -679,7 +706,7 @@ export default function DISCResultsPage() {
                                 message.role === "user" ? "bg-blue-600 text-white" : "bg-white text-gray-800 border"
                               }`}
                             >
-                              <p className="text-sm">{message.content}</p>
+                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                             </div>
                           </div>
                         ))}
@@ -697,29 +724,46 @@ export default function DISCResultsPage() {
                     )}
                   </div>
 
-                  {/* Chat Input */}
                   <div className="flex space-x-2">
                     <input
                       type="text"
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && sendChatMessage()}
-                      placeholder="Escribe tu pregunta sobre tu perfil DISC..."
+                      placeholder={
+                        isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT
+                          ? "Límite de preguntas alcanzado en modo demo"
+                          : "Escribe tu pregunta sobre tu perfil DISC..."
+                      }
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      disabled={chatLoading}
+                      disabled={chatLoading || (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT)}
                     />
-                    <Button onClick={sendChatMessage} disabled={chatLoading || !chatInput.trim()}>
+                    <Button
+                      onClick={sendChatMessage}
+                      disabled={
+                        chatLoading || !chatInput.trim() || (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT)
+                      }
+                    >
                       Enviar
                     </Button>
                   </div>
 
-                  {/* Suggested Questions */}
+                  {isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                      <p className="text-sm text-blue-900 mb-2">Has usado todas tus preguntas en modo demo</p>
+                      <Button onClick={() => router.push("/auth/login")} size="sm">
+                        Registrarse para preguntas ilimitadas
+                      </Button>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setChatInput("¿Cómo puedo aprovechar mi estilo DISC en el trabajo?")}
                       className="text-left justify-start"
+                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
                     >
                       ¿Cómo aprovechar mi estilo en el trabajo?
                     </Button>
@@ -728,6 +772,7 @@ export default function DISCResultsPage() {
                       size="sm"
                       onClick={() => setChatInput("¿Qué roles profesionales se adaptan mejor a mi perfil?")}
                       className="text-left justify-start"
+                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
                     >
                       ¿Qué roles me convienen más?
                     </Button>
@@ -736,6 +781,7 @@ export default function DISCResultsPage() {
                       size="sm"
                       onClick={() => setChatInput("¿Cómo puedo mejorar mis áreas más débiles?")}
                       className="text-left justify-start"
+                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
                     >
                       ¿Cómo mejorar mis áreas débiles?
                     </Button>
@@ -744,6 +790,7 @@ export default function DISCResultsPage() {
                       size="sm"
                       onClick={() => setChatInput("¿Cómo debo comunicarme con otros estilos DISC?")}
                       className="text-left justify-start"
+                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
                     >
                       ¿Cómo comunicarme con otros estilos?
                     </Button>

@@ -1,151 +1,49 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
-import { supabase } from "@/lib/supabase"
 
 export async function POST(request: NextRequest) {
-  try {
-    const { message, userEmail, testResults, conversationHistory, context } = await request.json()
+  console.log("[v0] AI Coach API - Request received")
 
-    console.log("🤖 Enhanced AI Coach API called with:", {
-      message: message?.substring(0, 100),
-      userEmail,
-      testResultsCount: testResults?.length || 0,
-      historyLength: conversationHistory?.length || 0,
-      hasContext: !!context,
-    })
+  try {
+    const body = await request.json()
+    console.log("[v0] Request body parsed:", JSON.stringify(body, null, 2))
+
+    const { message, userEmail, testResults, conversationHistory, context } = body
 
     if (!message || typeof message !== "string") {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 })
+      console.error("[v0] Invalid message:", { message, type: typeof message })
+      return NextResponse.json({ error: "Message is required and must be a string" }, { status: 400 })
     }
 
-    // Enhanced context building with user profile
-    let enhancedContext = `Eres un AI Coach profesional especializado en desarrollo de carrera y análisis psicométrico. 
-    
-Usuario: ${userEmail}
-Tests completados: ${testResults?.length || 0}
-Nivel de experiencia: ${context?.skillLevel || "Principiante"}
-Objetivos actuales: ${context?.currentGoals?.join(", ") || "No definidos"}
-Intereses: ${context?.interests?.join(", ") || "Generales"}
-Estilo de aprendizaje: ${context?.preferredLearningStyle || "No especificado"}
+    console.log("[v0] Processing chat message for user:", userEmail, "isDemoMode:", context?.isDemoMode)
 
-`
+    const response = generateEnhancedFallbackResponse(message, testResults, context)
+    const suggestions = generateEnhancedSuggestions(message, testResults, context)
+    const recommendations = generateProactiveRecommendations(testResults, context)
 
-    // Add test results analysis
-    if (testResults && testResults.length > 0) {
-      enhancedContext += "Resultados de tests del usuario:\n"
-      testResults.forEach((result: string) => {
-        enhancedContext += `- ${getTestName(result)}: Completado\n`
-      })
-      enhancedContext += "\n"
-    }
-
-    // Add personalized coaching instructions
-    enhancedContext += `INSTRUCCIONES ESPECIALES:
-1. Sé proactivo y ofrece recomendaciones específicas
-2. Sugiere libros de la biblioteca de conocimiento cuando sea relevante
-3. Recomienda tests adicionales basados en el progreso del usuario
-4. Proporciona insights accionables y específicos
-5. Mantén un tono motivacional pero profesional
-6. Incluye métricas y objetivos medibles cuando sea posible
-7. Conecta las recomendaciones con los objetivos del usuario
-
-Si el usuario pregunta sobre:
-- Desarrollo profesional: Usa sus resultados de tests para dar recomendaciones específicas
-- Libros o recursos: Sugiere contenido de la biblioteca de conocimiento
-- Tests: Recomienda evaluaciones basadas en su progreso actual
-- Habilidades: Proporciona planes de desarrollo estructurados
-
-Conversación actual:`
-
-    // Build messages array for AI
-    const messages = [
-      {
-        role: "system" as const,
-        content: enhancedContext,
-      },
-    ]
-
-    // Add conversation history (last 5 messages)
-    if (conversationHistory && Array.isArray(conversationHistory)) {
-      conversationHistory.slice(-5).forEach((msg: any) => {
-        if (msg.role === "user") {
-          messages.push({ role: "user" as const, content: msg.content })
-        } else if (msg.role === "assistant") {
-          messages.push({ role: "assistant" as const, content: msg.content })
-        }
-      })
-    }
-
-    // Add current message
-    messages.push({ role: "user" as const, content: message })
-
-    // Check if OpenAI API key is available
-    if (!process.env.OPENAI_API_KEY) {
-      console.log("⚠️ OpenAI API key not available, using enhanced fallback response")
-      return NextResponse.json({
-        response: generateEnhancedFallbackResponse(message, testResults, context),
-        suggestions: generateEnhancedSuggestions(message, testResults, context),
-        recommendations: generateProactiveRecommendations(testResults, context),
-        fallback: true,
-      })
-    }
-
-    try {
-      console.log("🔄 Calling OpenAI API with enhanced context...")
-
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        messages,
-        temperature: 0.7,
-        maxTokens: 1000,
-      })
-
-      console.log("✅ OpenAI response received")
-
-      // Save interaction to database
-      try {
-        await supabase.from("ai_interactions").insert({
-          user_email: userEmail,
-          query: message,
-          response: text,
-          context_used: JSON.stringify(context),
-          confidence_score: 0.9,
-          created_at: new Date().toISOString(),
-        })
-      } catch (dbError) {
-        console.error("Failed to save interaction:", dbError)
-      }
-
-      return NextResponse.json({
-        response: text,
-        suggestions: generateEnhancedSuggestions(message, testResults, context),
-        recommendations: generateProactiveRecommendations(testResults, context),
-        success: true,
-      })
-    } catch (aiError) {
-      console.error("❌ OpenAI API error:", aiError)
-
-      return NextResponse.json({
-        response: generateEnhancedFallbackResponse(message, testResults, context),
-        suggestions: generateEnhancedSuggestions(message, testResults, context),
-        recommendations: generateProactiveRecommendations(testResults, context),
-        fallback: true,
-      })
-    }
-  } catch (error) {
-    console.error("❌ Error in enhanced AI coach API:", error)
+    console.log("[v0] Returning response successfully")
 
     return NextResponse.json({
-      response: "Lo siento, hubo un error procesando tu consulta. Por favor, intenta reformular tu pregunta.",
-      suggestions: [
-        "¿Cuáles son mis fortalezas?",
-        "¿Qué habilidades debo desarrollar?",
-        "¿Cómo puedo mejorar mi carrera?",
-      ],
-      recommendations: [],
-      error: true,
+      response,
+      suggestions,
+      recommendations,
+      success: true,
     })
+  } catch (error) {
+    console.error("[v0] Error in AI coach API:", error)
+
+    return NextResponse.json(
+      {
+        response: "Lo siento, hubo un error procesando tu consulta. Por favor, intenta reformular tu pregunta.",
+        suggestions: [
+          "¿Cuáles son mis fortalezas?",
+          "¿Qué habilidades debo desarrollar?",
+          "¿Cómo puedo mejorar mi carrera?",
+        ],
+        recommendations: [],
+        error: true,
+      },
+      { status: 500 },
+    )
   }
 }
 

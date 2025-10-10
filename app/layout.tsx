@@ -8,10 +8,10 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tucarrera.cl"),
+  metadataBase: new URL("https://despegatucarrera.cl"),
   title: {
-    default: "TuCarrera.cl - Plataforma de Desarrollo Profesional con IA | Tests Psicométricos y Coaching",
-    template: "%s | TuCarrera.cl",
+    default: "Despega Tu Carrera - Plataforma de Desarrollo Profesional con IA | Tests Psicométricos y Coaching",
+    template: "%s | Despega Tu Carrera",
   },
   description:
     "Plataforma líder en Chile para desarrollo profesional. Descubre tu potencial con tests psicométricos (DISC, MBTI, Big Five), accede a 120+ libros profesionales y recibe coaching personalizado con IA. Aprende de expertos en liderazgo, productividad e inteligencia emocional.",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     "planificación carrera",
     "empleabilidad Chile",
   ],
-  authors: [{ name: "TuCarrera.cl", url: "https://tucarrera.cl" }],
-  creator: "TuCarrera.cl",
-  publisher: "TuCarrera.cl",
+  authors: [{ name: "Despega Tu Carrera", url: "https://despegatucarrera.cl" }],
+  creator: "Despega Tu Carrera",
+  publisher: "Despega Tu Carrera",
   formatDetection: {
     email: false,
     address: false,
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://tucarrera.cl",
-    siteName: "TuCarrera.cl",
-    title: "TuCarrera.cl - Desarrollo Profesional con IA y Tests Psicométricos",
+    url: "https://despegatucarrera.cl",
+    siteName: "Despega Tu Carrera",
+    title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
     description:
       "Transforma tu carrera con evaluaciones psicométricas científicas, 120+ libros profesionales y coaching personalizado con inteligencia artificial. La plataforma #1 en Chile para desarrollo profesional.",
     images: [
@@ -58,16 +58,16 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "TuCarrera.cl - Plataforma de Desarrollo Profesional",
+        alt: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TuCarrera.cl - Desarrollo Profesional con IA",
+    title: "Despega Tu Carrera - Desarrollo Profesional con IA",
     description: "Tests psicométricos, 120+ libros profesionales y coaching con IA. Impulsa tu carrera hoy.",
     images: ["/twitter-image.png"],
-    creator: "@tucarreracl",
+    creator: "@despegatucarrera",
   },
   robots: {
     index: true,
@@ -81,10 +81,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://tucarrera.cl",
+    canonical: "https://despegatucarrera.cl",
     languages: {
-      "es-CL": "https://tucarrera.cl",
-      es: "https://tucarrera.cl/es",
+      "es-CL": "https://despegatucarrera.cl",
+      es: "https://despegatucarrera.cl/es",
     },
   },
   verification: {
@@ -127,15 +127,15 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "EducationalOrganization",
-              name: "TuCarrera.cl",
+              name: "Despega Tu Carrera",
               description:
                 "Plataforma líder en Chile para desarrollo profesional con IA, tests psicométricos y coaching personalizado",
-              url: "https://tucarrera.cl",
-              logo: "https://tucarrera.cl/logo.png",
+              url: "https://despegatucarrera.cl",
+              logo: "https://despegatucarrera.cl/logo.png",
               sameAs: [
-                "https://www.linkedin.com/company/tucarrera",
-                "https://twitter.com/tucarreracl",
-                "https://www.facebook.com/tucarreracl",
+                "https://www.linkedin.com/company/despegatucarrera",
+                "https://twitter.com/despegatucarrera",
+                "https://www.facebook.com/despegatucarrera",
               ],
               address: {
                 "@type": "PostalAddress",

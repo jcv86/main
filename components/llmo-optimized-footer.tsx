@@ -1,166 +1,302 @@
 "use client"
 
 import Link from "next/link"
-import { Brain, Mail, Linkedin, Twitter, Facebook } from "lucide-react"
+import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export function LLMOOptimizedFooter() {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-auto">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Brain className="h-6 w-6 text-purple-400" />
-              <span className="text-white font-bold text-lg">TuCarrera.cl</span>
-            </div>
-            <p className="text-sm mb-4">
-              Plataforma líder en Chile para desarrollo profesional. Tests psicométricos científicos, 120+ libros
-              profesionales y coaching con IA.
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
+      <div className="container mx-auto px-4 py-16">
+        {/* Newsletter Section */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
+          <div className="max-w-3xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-white mb-3">Mantente actualizado con nuestros recursos</h3>
+            <p className="text-purple-100 mb-6">
+              Recibe tips de desarrollo profesional, nuevos libros y recursos exclusivos cada semana
             </p>
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <Input
+                type="email"
+                placeholder="tu@email.com"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white"
+              />
+              <Button className="bg-white text-purple-600 hover:bg-gray-100 font-semibold whitespace-nowrap">
+                Suscribirse
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          {/* About Column */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <Brain className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-white font-bold text-xl">Despega Tu Carrera</span>
+            </div>
+            <p className="text-sm mb-6 text-gray-400 leading-relaxed">
+              La plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos, acceso
+              a 120+ libros profesionales y coaching personalizado con IA para transformar tu carrera.
+            </p>
+
+            {/* Contact Info */}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center gap-3 text-sm">
+                <Mail className="h-4 w-4 text-purple-400" />
+                <a href="mailto:contacto@despegatucarrera.cl" className="hover:text-purple-400 transition-colors">
+                  contacto@despegatucarrera.cl
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Phone className="h-4 w-4 text-purple-400" />
+                <span>+56 9 1234 5678</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <MapPin className="h-4 w-4 text-purple-400" />
+                <span>Santiago, Chile</span>
+              </div>
+            </div>
+
+            {/* Social Links */}
             <div className="flex gap-3">
-              <a href="https://linkedin.com/company/tucarrera" aria-label="LinkedIn" className="hover:text-purple-400">
+              <a
+                href="https://linkedin.com/company/despegatucarrera"
+                aria-label="LinkedIn"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="https://twitter.com/tucarreracl" aria-label="Twitter" className="hover:text-purple-400">
+              <a
+                href="https://twitter.com/despegatucarrera"
+                aria-label="Twitter"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="https://facebook.com/tucarreracl" aria-label="Facebook" className="hover:text-purple-400">
+              <a
+                href="https://facebook.com/despegatucarrera"
+                aria-label="Facebook"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
+              </a>
+              <a
+                href="https://instagram.com/despegatucarrera"
+                aria-label="Instagram"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="https://youtube.com/@despegatucarrera"
+                aria-label="YouTube"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <Youtube className="h-5 w-5" />
               </a>
             </div>
           </div>
 
-          {/* Tests */}
+          {/* Tests Column */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Tests Psicométricos</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="text-white font-semibold mb-4 text-lg">Tests Psicométricos</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/test/disc" className="hover:text-purple-400">
+                <Link href="/test/disc" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Test DISC
                 </Link>
               </li>
               <li>
-                <Link href="/test/mbti" className="hover:text-purple-400">
+                <Link href="/test/mbti" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Test MBTI
                 </Link>
               </li>
               <li>
-                <Link href="/test/big-five" className="hover:text-purple-400">
-                  Big Five Personalidad
+                <Link href="/test/big-five" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  Big Five
                 </Link>
               </li>
               <li>
-                <Link href="/test/riasec" className="hover:text-purple-400">
+                <Link href="/test/riasec" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Test RIASEC
                 </Link>
               </li>
               <li>
-                <Link href="/test/emotional-intelligence" className="hover:text-purple-400">
+                <Link
+                  href="/test/emotional-intelligence"
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Inteligencia Emocional
                 </Link>
               </li>
               <li>
-                <Link href="/test/soft-skills" className="hover:text-purple-400">
+                <Link
+                  href="/test/soft-skills"
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Soft Skills
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Resources Column */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Recursos</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="text-white font-semibold mb-4 text-lg">Recursos</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/biblioteca" className="hover:text-purple-400">
-                  Biblioteca (120+ libros)
+                <Link href="/biblioteca" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  Biblioteca
                 </Link>
               </li>
               <li>
-                <Link href="/cerebro" className="hover:text-purple-400">
+                <Link href="/cerebro" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Coach con IA
                 </Link>
               </li>
               <li>
-                <Link href="/learning-paths" className="hover:text-purple-400">
+                <Link
+                  href="/learning-paths"
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Rutas de Aprendizaje
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="hover:text-purple-400">
-                  Oportunidades Laborales
+                <Link href="/careers" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  Oportunidades
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-purple-400">
+                <Link href="/blog" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/webinars" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  Webinars
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Company Column */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Contacto</h3>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <a href="mailto:contacto@tucarrera.cl" className="hover:text-purple-400">
-                  contacto@tucarrera.cl
-                </a>
-              </li>
+            <h3 className="text-white font-semibold mb-4 text-lg">Empresa</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/about" className="hover:text-purple-400">
+                <Link href="/about" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Sobre Nosotros
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-purple-400">
-                  Política de Privacidad
+                <Link href="/empresas" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Para Empresas
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-purple-400">
-                  Términos de Uso
+                <Link href="/instituciones" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Instituciones
                 </Link>
               </li>
               <li>
-                <Link href="/empresas" className="hover:text-purple-400">
-                  Soluciones para Empresas
+                <Link href="/partners" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Partners
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Privacidad
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Términos
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
-          <p>© 2025 TuCarrera.cl. Todos los derechos reservados.</p>
-          <p className="mt-2">Plataforma de desarrollo profesional con IA | Santiago, Chile</p>
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+            <p>© 2025 Despega Tu Carrera. Todos los derechos reservados.</p>
+            <div className="flex items-center gap-6">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Sistema Operativo
+              </span>
+              <span>
+                powered IA first by{" "}
+                <a
+                  href="https://www.n3uralia.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-400 hover:text-purple-300 transition-colors font-medium"
+                >
+                  n3uralia
+                </a>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Structured Data for Organization */}
+      {/* Structured Data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "TuCarrera.cl",
-            url: "https://tucarrera.cl",
-            logo: "https://tucarrera.cl/logo.png",
+            name: "Despega Tu Carrera",
+            url: "https://despegatucarrera.cl",
+            logo: "https://despegatucarrera.cl/logo.png",
+            description:
+              "Plataforma líder en Chile para desarrollo profesional con tests psicométricos, biblioteca de 120+ libros y coaching con IA",
             contactPoint: {
               "@type": "ContactPoint",
-              email: "contacto@tucarrera.cl",
+              email: "contacto@despegatucarrera.cl",
+              telephone: "+56-9-1234-5678",
               contactType: "Customer Service",
               areaServed: "CL",
-              availableLanguage: "Spanish",
+              availableLanguage: ["Spanish"],
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Santiago",
+              addressCountry: "CL",
             },
             sameAs: [
-              "https://www.linkedin.com/company/tucarrera",
-              "https://twitter.com/tucarreracl",
-              "https://www.facebook.com/tucarreracl",
+              "https://www.linkedin.com/company/despegatucarrera",
+              "https://twitter.com/despegatucarrera",
+              "https://www.facebook.com/despegatucarrera",
+              "https://www.instagram.com/despegatucarrera",
+              "https://www.youtube.com/@despegatucarrera",
             ],
           }),
         }}
