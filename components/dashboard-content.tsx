@@ -173,6 +173,7 @@ export function DashboardContent() {
       try {
         const response = await fetch("/api/user-profile")
         const data = await response.json()
+        console.log("[v0] Fetched user profile:", data)
         if (data.user) {
           setUserId(data.user.id)
           setUserProfile((prev) => ({
@@ -182,7 +183,7 @@ export function DashboardContent() {
           }))
         }
       } catch (error) {
-        console.error("Error fetching user:", error)
+        console.error("[v0] Error fetching user:", error)
       }
     }
 
@@ -191,12 +192,15 @@ export function DashboardContent() {
 
   useEffect(() => {
     const fetchAchievements = async () => {
+      if (!userProfile.email) return
+
       try {
         const response = await fetch(`/api/user-achievements?email=${userProfile.email}`)
         const data = await response.json()
+        console.log("[v0] Fetched achievements:", data)
         setUserAchievements(data.achievements || [])
       } catch (error) {
-        console.error("Error fetching achievements:", error)
+        console.error("[v0] Error fetching achievements:", error)
       } finally {
         setLoadingAchievements(false)
       }

@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     const { data: profile, error } = await supabase.from("user_profiles").select("*").eq("email", user.email).single()
 
     if (error && error.code !== "PGRST116") {
-      console.error("Error fetching user profile:", error)
+      console.error("[v0] Error fetching user profile:", error)
     }
 
     return NextResponse.json({
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       profile,
     })
   } catch (error) {
-    console.error("Error in user profile API:", error)
+    console.error("[v0] Error in user profile API:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
