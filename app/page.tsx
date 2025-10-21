@@ -6,7 +6,7 @@ import { LLMOOptimizedFooter } from "@/components/llmo-optimized-footer"
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Plataforma #1 de Desarrollo Profesional con IA en Chile",
   description:
-    "Descubre tu potencial profesional con tests psicométricos científicos (DISC, MBTI, Big Five, RIASEC), accede a 120+ libros de desarrollo y recibe coaching personalizado con IA. Más de 10,000 profesionales confían en nosotros.",
+    "Descubre tu potencial profesional con tests psicométricos científicos (Despega Cerebral, Mapa de Personalidad, 5 Dimensiones, Brújula Vocacional), accede a 120+ libros de desarrollo y recibe coaching personalizado con IA. Más de 10,000 profesionales confían en nosotros.",
   keywords: [
     "plataforma desarrollo profesional Chile",
     "tests psicométricos online",
@@ -40,12 +40,12 @@ const faqs = [
   {
     question: "¿Qué es Despega Tu Carrera y cómo puede ayudarme?",
     answer:
-      "Despega Tu Carrera es la plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos (DISC, MBTI, Big Five, RIASEC, Inteligencia Emocional), una biblioteca con más de 120 libros profesionales y coaching personalizado con inteligencia artificial. Te ayudamos a descubrir tu potencial, desarrollar habilidades clave y alcanzar tus objetivos profesionales.",
+      "Despega Tu Carrera es la plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos (Despega Cerebral, Mapa de Personalidad, 5 Dimensiones, Brújula Vocacional, Inteligencia Emocional), una biblioteca con más de 120 libros profesionales y coaching personalizado con inteligencia artificial. Te ayudamos a descubrir tu potencial, desarrollar habilidades clave y alcanzar tus objetivos profesionales.",
   },
   {
     question: "¿Los tests psicométricos son confiables?",
     answer:
-      "Sí, utilizamos tests psicométricos validados científicamente y reconocidos internacionalmente. Nuestros tests incluyen DISC (comportamiento laboral), MBTI (tipos de personalidad), Big Five (rasgos de personalidad), RIASEC (orientación vocacional) e Inteligencia Emocional. Miles de empresas y profesionales confían en estas evaluaciones para tomar decisiones informadas.",
+      "Sí, utilizamos tests psicométricos validados científicamente y reconocidos internacionalmente. Nuestros tests incluyen Despega Cerebral (comportamiento laboral), Mapa de Personalidad (tipos de personalidad), 5 Dimensiones (rasgos de personalidad), Brújula Vocacional (orientación vocacional) e Inteligencia Emocional. Miles de empresas y profesionales confían en estas evaluaciones para tomar decisiones informadas.",
   },
   {
     question: "¿Cómo funciona el coaching con inteligencia artificial?",
@@ -60,7 +60,7 @@ const faqs = [
   {
     question: "¿Cuánto tiempo toma completar los tests?",
     answer:
-      "Cada test toma entre 10-20 minutos. DISC: 15 min, MBTI: 20 min, Big Five: 15 min, RIASEC: 20 min, Inteligencia Emocional: 15 min, Soft Skills: 15 min. Puedes tomarlos en cualquier momento y desde cualquier dispositivo. Los resultados están disponibles inmediatamente después de completar cada evaluación.",
+      "Cada test toma entre 10-20 minutos. Despega Cerebral: 15 min, Mapa de Personalidad: 20 min, 5 Dimensiones: 15 min, Brújula Vocacional: 20 min, Inteligencia Emocional: 15 min, Competencias: 15 min. Puedes tomarlos en cualquier momento y desde cualquier dispositivo. Los resultados están disponibles inmediatamente después de completar cada evaluación.",
   },
   {
     question: "¿Es gratis la plataforma?",
@@ -130,7 +130,8 @@ export default function Home() {
                   itemOffered: {
                     "@type": "Service",
                     name: "Tests Psicométricos",
-                    description: "DISC, MBTI, Big Five, RIASEC, Inteligencia Emocional",
+                    description:
+                      "Despega Cerebral, Mapa de Personalidad, 5 Dimensiones, Brújula Vocacional, Inteligencia Emocional",
                   },
                 },
                 {
@@ -300,37 +301,37 @@ export default function Home() {
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">DISC</strong> - Comportamiento laboral
+                      <strong className="text-gray-900">Despega Cerebral</strong> - Comportamiento laboral
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">MBTI</strong> - 16 tipos de personalidad
+                      <strong className="text-gray-900">Mapa de Personalidad</strong> - 16 tipos de personalidad
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">Big Five</strong> - 5 rasgos principales
+                      <strong className="text-gray-900">5 Dimensiones</strong> - 5 rasgos principales
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">RIASEC</strong> - Orientación vocacional
+                      <strong className="text-gray-900">Brújula Vocacional</strong> - Orientación vocacional
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">Inteligencia Emocional</strong>
+                      <strong className="text-gray-900">Inteligencia Emocional Despega</strong>
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 bg-purple-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span className="text-gray-700">
-                      <strong className="text-gray-900">Soft Skills</strong>
+                      <strong className="text-gray-900">Competencias Despega</strong>
                     </span>
                   </li>
                 </ul>

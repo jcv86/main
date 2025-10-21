@@ -157,28 +157,28 @@ export function LandingPageOptimized() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">DISC & MBTI</p>
+                    <p className="font-medium">Despega Cerebral & Mapa de Personalidad</p>
                     <p className="text-sm text-muted-foreground">Comportamiento y personalidad</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Big Five & RIASEC</p>
+                    <p className="font-medium">5 Dimensiones & Brújula Vocacional</p>
                     <p className="text-sm text-muted-foreground">Rasgos y orientación vocacional</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Inteligencia Emocional</p>
+                    <p className="font-medium">Inteligencia Emocional Despega</p>
                     <p className="text-sm text-muted-foreground">Gestión de emociones</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Soft Skills</p>
+                    <p className="font-medium">Competencias Despega</p>
                     <p className="text-sm text-muted-foreground">Habilidades blandas clave</p>
                   </div>
                 </li>
