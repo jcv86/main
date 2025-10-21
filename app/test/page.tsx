@@ -42,8 +42,8 @@ interface Test {
 const tests: Test[] = [
   {
     id: "disc",
-    title: "DISC Assessment",
-    description: "Discover your behavioral style and communication preferences in professional settings.",
+    title: "Despega Cerebral™",
+    description: "Descubre tu estilo de comportamiento y preferencias de comunicación en entornos profesionales.",
     icon: Target,
     duration: "10-15 min",
     questions: 15,
@@ -54,8 +54,8 @@ const tests: Test[] = [
   },
   {
     id: "emotional-intelligence",
-    title: "Emotional Intelligence",
-    description: "Assess your ability to recognize, understand, and manage emotions effectively.",
+    title: "Inteligencia Emocional Despega™",
+    description: "Evalúa tu capacidad para reconocer, entender y gestionar emociones de manera efectiva.",
     icon: Heart,
     duration: "10-15 min",
     questions: 20,
@@ -66,8 +66,8 @@ const tests: Test[] = [
   },
   {
     id: "mbti",
-    title: "MBTI Assessment",
-    description: "Identify your psychological preferences and personality type based on Myers-Briggs theory.",
+    title: "Mapa de Personalidad Despega™",
+    description: "Identifica tus preferencias psicológicas y tipo de personalidad.",
     icon: Brain,
     duration: "15-20 min",
     questions: 25,
@@ -79,8 +79,9 @@ const tests: Test[] = [
   },
   {
     id: "big-five",
-    title: "Big Five Personality",
-    description: "Comprehensive personality assessment covering five major dimensions of human personality.",
+    title: "5 Dimensiones Despega™",
+    description:
+      "Evaluación integral de personalidad que cubre cinco dimensiones principales del comportamiento humano.",
     icon: Users,
     duration: "15-20 min",
     questions: 30,
@@ -92,8 +93,8 @@ const tests: Test[] = [
   },
   {
     id: "riasec",
-    title: "Career Interests (RIASEC)",
-    description: "Discover your career interests and find professions that match your personality.",
+    title: "Brújula Vocacional Despega™",
+    description: "Descubre tus intereses profesionales y encuentra carreras que se alineen con tu personalidad.",
     icon: Palette,
     duration: "12-18 min",
     questions: 36,
@@ -105,8 +106,8 @@ const tests: Test[] = [
   },
   {
     id: "soft-skills",
-    title: "Soft Skills Assessment",
-    description: "Evaluate your interpersonal and professional soft skills for career development.",
+    title: "Competencias Despega™",
+    description: "Evalúa tus habilidades interpersonales y competencias profesionales para el desarrollo de carrera.",
     icon: Star,
     duration: "15-20 min",
     questions: 30,

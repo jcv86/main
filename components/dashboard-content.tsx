@@ -46,8 +46,36 @@ interface UserProfile {
   points: number
 }
 
+const TEST_NAMES = {
+  disc: {
+    name: "Despega Cerebral™",
+    description: "Descubre tu estilo de comportamiento y preferencias de comunicación profesional",
+  },
+  emotionalIntelligence: {
+    name: "Inteligencia Emocional Despega™",
+    description: "Evalúa tu capacidad para reconocer, entender y gestionar emociones",
+  },
+  mbti: {
+    name: "Mapa de Personalidad Despega™",
+    description: "Identifica tu tipo de personalidad y preferencias psicológicas",
+  },
+  bigFive: {
+    name: "5 Dimensiones Despega™",
+    description: "Evaluación integral de personalidad en cinco dimensiones principales",
+  },
+  riasec: {
+    name: "Brújula Vocacional Despega™",
+    description: "Descubre tus intereses profesionales y carreras compatibles",
+  },
+  softSkills: {
+    name: "Competencias Despega™",
+    description: "Evalúa tus habilidades interpersonales y competencias profesionales",
+  },
+}
+
 export function DashboardContent() {
   const router = useRouter()
+  const [userId, setUserId] = useState<string | null>(null)
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
     email: "usuario@ejemplo.com",
@@ -60,14 +88,14 @@ export function DashboardContent() {
   const [recentResults, setRecentResults] = useState<TestResult[]>([
     {
       id: "disc",
-      name: "Evaluación DISC",
+      name: TEST_NAMES.disc.name,
       score: 85,
       completedAt: "2024-01-15",
       insights: ["Estilo dominante", "Orientado a resultados", "Líder natural"],
     },
     {
       id: "big-five",
-      name: "Big Five",
+      name: TEST_NAMES.bigFive.name,
       score: 78,
       completedAt: "2024-01-10",
       insights: ["Alta apertura", "Consciencioso", "Extrovertido"],
@@ -77,8 +105,8 @@ export function DashboardContent() {
   const availableTests = [
     {
       id: "disc",
-      name: "Evaluación DISC",
-      description: "Descubre tu estilo de comportamiento y comunicación",
+      name: TEST_NAMES.disc.name,
+      description: TEST_NAMES.disc.description,
       duration: "10-15 min",
       icon: Users,
       color: "bg-blue-500",
@@ -87,8 +115,8 @@ export function DashboardContent() {
     },
     {
       id: "emotional-intelligence",
-      name: "Inteligencia Emocional",
-      description: "Evalúa tu capacidad de gestionar emociones",
+      name: TEST_NAMES.emotionalIntelligence.name,
+      description: TEST_NAMES.emotionalIntelligence.description,
       duration: "12-18 min",
       icon: Heart,
       color: "bg-pink-500",
@@ -97,8 +125,8 @@ export function DashboardContent() {
     },
     {
       id: "mbti",
-      name: "Indicador MBTI",
-      description: "Identifica tu tipo de personalidad psicológica",
+      name: TEST_NAMES.mbti.name,
+      description: TEST_NAMES.mbti.description,
       duration: "15-20 min",
       icon: Brain,
       color: "bg-purple-500",
@@ -107,8 +135,8 @@ export function DashboardContent() {
     },
     {
       id: "big-five",
-      name: "Big Five",
-      description: "Análisis completo de los cinco grandes rasgos",
+      name: TEST_NAMES.bigFive.name,
+      description: TEST_NAMES.bigFive.description,
       duration: "12-18 min",
       icon: Star,
       color: "bg-yellow-500",
@@ -117,8 +145,8 @@ export function DashboardContent() {
     },
     {
       id: "riasec",
-      name: "Intereses Profesionales",
-      description: "Descubre tus intereses vocacionales y carreras afines",
+      name: TEST_NAMES.riasec.name,
+      description: TEST_NAMES.riasec.description,
       duration: "10-15 min",
       icon: Target,
       color: "bg-green-500",
@@ -127,8 +155,8 @@ export function DashboardContent() {
     },
     {
       id: "soft-skills",
-      name: "Habilidades Blandas",
-      description: "Evalúa tus competencias interpersonales",
+      name: TEST_NAMES.softSkills.name,
+      description: TEST_NAMES.softSkills.description,
       duration: "15-20 min",
       icon: Lightbulb,
       color: "bg-orange-500",
@@ -139,6 +167,27 @@ export function DashboardContent() {
 
   const [userAchievements, setUserAchievements] = useState<any[]>([])
   const [loadingAchievements, setLoadingAchievements] = useState(true)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/user-profile")
+        const data = await response.json()
+        if (data.user) {
+          setUserId(data.user.id)
+          setUserProfile((prev) => ({
+            ...prev,
+            email: data.user.email || prev.email,
+            name: data.user.full_name || prev.name,
+          }))
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error)
+      }
+    }
+
+    fetchUser()
+  }, [])
 
   useEffect(() => {
     const fetchAchievements = async () => {
@@ -279,7 +328,7 @@ export function DashboardContent() {
           </Card>
         </div>
 
-        <GoalTracker userId={userProfile.email} />
+        {userId && <GoalTracker userId={userId} />}
 
         {userAchievements.length > 0 && (
           <Card className="border-border bg-card">

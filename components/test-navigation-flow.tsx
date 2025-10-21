@@ -36,8 +36,8 @@ interface TestInfo {
 const tests: TestInfo[] = [
   {
     id: "disc",
-    name: "DISC Assessment",
-    description: "Discover your behavioral style and communication preferences",
+    name: "Despega Cerebral™",
+    description: "Descubre tu estilo de comportamiento y preferencias de comunicación",
     duration: "10-15 min",
     questions: 15,
     difficulty: "Beginner",
@@ -47,8 +47,8 @@ const tests: TestInfo[] = [
   },
   {
     id: "emotional-intelligence",
-    name: "Emotional Intelligence",
-    description: "Assess your ability to understand and manage emotions",
+    name: "Inteligencia Emocional Despega™",
+    description: "Evalúa tu capacidad para entender y gestionar emociones",
     duration: "10-15 min",
     questions: 20,
     difficulty: "Beginner",
@@ -58,8 +58,8 @@ const tests: TestInfo[] = [
   },
   {
     id: "mbti",
-    name: "MBTI Personality",
-    description: "Identify your personality type and preferences",
+    name: "Mapa de Personalidad Despega™",
+    description: "Identifica tu tipo de personalidad y preferencias",
     duration: "15-20 min",
     questions: 25,
     difficulty: "Intermediate",
@@ -70,8 +70,8 @@ const tests: TestInfo[] = [
   },
   {
     id: "big-five",
-    name: "Big Five Personality",
-    description: "Comprehensive personality assessment across five dimensions",
+    name: "5 Dimensiones Despega™",
+    description: "Evaluación integral de personalidad en cinco dimensiones",
     duration: "15-20 min",
     questions: 30,
     difficulty: "Intermediate",
@@ -82,8 +82,8 @@ const tests: TestInfo[] = [
   },
   {
     id: "riasec",
-    name: "RIASEC Career Interests",
-    description: "Discover your career interests and compatible fields",
+    name: "Brújula Vocacional Despega™",
+    description: "Descubre tus intereses profesionales y carreras compatibles",
     duration: "12-18 min",
     questions: 36,
     difficulty: "Intermediate",
@@ -94,8 +94,8 @@ const tests: TestInfo[] = [
   },
   {
     id: "soft-skills",
-    name: "Soft Skills Assessment",
-    description: "Evaluate your interpersonal and professional competencies",
+    name: "Competencias Despega™",
+    description: "Evalúa tus habilidades interpersonales y competencias profesionales",
     duration: "15-20 min",
     questions: 30,
     difficulty: "Advanced",
@@ -157,22 +157,22 @@ export default function TestNavigationFlow() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5" />
-            Assessment Progress
+            Progreso de Evaluación
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Overall Completion</span>
+              <span className="text-sm font-medium">Completado General</span>
               <span className="text-sm text-gray-600">
-                {completedTests.length}/{tests.length} tests
+                {completedTests.length}/{tests.length} evaluaciones
               </span>
             </div>
             <Progress value={overallProgress} className="h-2" />
             <div className="flex items-center justify-between text-sm text-gray-600">
-              <span>Start</span>
-              <span>{overallProgress}% complete</span>
-              <span>Complete</span>
+              <span>Inicio</span>
+              <span>{overallProgress}% completado</span>
+              <span>Completo</span>
             </div>
           </div>
         </CardContent>
@@ -184,7 +184,7 @@ export default function TestNavigationFlow() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-900">
               <PlayCircle className="h-5 w-5" />
-              Recommended Next Test
+              Evaluación Recomendada Siguiente
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -201,7 +201,7 @@ export default function TestNavigationFlow() {
                       <Clock className="h-3 w-3" />
                       {recommendedTest.duration}
                     </span>
-                    <span>{recommendedTest.questions} questions</span>
+                    <span>{recommendedTest.questions} preguntas</span>
                     <Badge variant="outline" className="text-xs">
                       {recommendedTest.difficulty}
                     </Badge>
@@ -209,7 +209,7 @@ export default function TestNavigationFlow() {
                 </div>
               </div>
               <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue-600 hover:bg-blue-700">
-                Start Test
+                Iniciar Evaluación
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
@@ -261,14 +261,14 @@ export default function TestNavigationFlow() {
                       <Clock className="h-3 w-3" />
                       {test.duration}
                     </span>
-                    <span>{test.questions} questions</span>
+                    <span>{test.questions} preguntas</span>
                   </div>
                 </div>
 
                 {progress > 0 && progress < 100 && (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span>Progress</span>
+                      <span>Progreso</span>
                       <span>{progress}%</span>
                     </div>
                     <Progress value={progress} className="h-1" />
@@ -277,7 +277,7 @@ export default function TestNavigationFlow() {
 
                 {test.prerequisites && !isCompleted && (
                   <div className="text-xs text-gray-500">
-                    <span className="font-medium">Prerequisites:</span>{" "}
+                    <span className="font-medium">Prerrequisitos:</span>{" "}
                     {test.prerequisites.map((prereq) => {
                       const prereqTest = tests.find((t) => t.id === prereq)
                       const isPrereqCompleted = completedTests.includes(prereq)
@@ -299,21 +299,21 @@ export default function TestNavigationFlow() {
                       onClick={() => router.push(`${test.path}/results`)}
                       className="flex-1"
                     >
-                      View Results
+                      Ver Resultados
                     </Button>
                   ) : isAvailable ? (
                     <Button size="sm" onClick={() => startTest(test.id)} className="flex-1">
-                      {progress > 0 ? "Continue" : "Start Test"}
+                      {progress > 0 ? "Continuar" : "Iniciar Evaluación"}
                     </Button>
                   ) : (
                     <Button variant="outline" size="sm" disabled className="flex-1 bg-transparent">
-                      Complete Prerequisites
+                      Completar Prerrequisitos
                     </Button>
                   )}
 
                   {isCompleted && (
                     <Button variant="ghost" size="sm" onClick={() => startTest(test.id)}>
-                      Retake
+                      Volver a Intentar
                     </Button>
                   )}
                 </div>
@@ -328,13 +328,13 @@ export default function TestNavigationFlow() {
         <Card className="border-green-200 bg-green-50">
           <CardContent className="p-6 text-center">
             <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-green-900 mb-2">🎉 All Assessments Complete!</h3>
+            <h3 className="text-xl font-semibold text-green-900 mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
             <p className="text-green-700 mb-4">
-              You've completed all personality and career assessments. Visit your dashboard to see your comprehensive
-              profile.
+              Has completado todas las evaluaciones de personalidad y carrera. Visita tu panel de control para ver tu
+              perfil completo.
             </p>
             <Button onClick={() => router.push("/dashboard")} className="bg-green-600 hover:bg-green-700">
-              View Complete Profile
+              Ver Perfil Completo
             </Button>
           </CardContent>
         </Card>

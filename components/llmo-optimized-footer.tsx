@@ -109,25 +109,24 @@ export function LLMOOptimizedFooter() {
               <li>
                 <Link href="/test/disc" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                  Test DISC
+                  Despega Cerebral™
                 </Link>
               </li>
               <li>
                 <Link href="/test/mbti" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                  Test MBTI
+                  Mapa de Personalidad
                 </Link>
               </li>
               <li>
                 <Link href="/test/big-five" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                  Big Five
+                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>5 Dimensiones
                 </Link>
               </li>
               <li>
                 <Link href="/test/riasec" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                  Test RIASEC
+                  Brújula Vocacional
                 </Link>
               </li>
               <li>
@@ -145,7 +144,7 @@ export function LLMOOptimizedFooter() {
                   className="hover:text-purple-400 transition-colors flex items-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                  Soft Skills
+                  Competencias Profesionales
                 </Link>
               </li>
             </ul>
