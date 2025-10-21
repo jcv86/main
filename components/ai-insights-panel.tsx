@@ -14,6 +14,10 @@ interface Insight {
   description: string
   confidence: number
   priority: "high" | "medium" | "low"
+  source: string
+  personalizedContext?: string
+  actionableSteps?: string[]
+  reasoningSource?: string
 }
 
 interface Recommendation {
@@ -49,7 +53,15 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/ai-insights", {
+      const localSession = localStorage.getItem("dtc_session")
+      let userId = ""
+
+      if (localSession) {
+        const sessionData = JSON.parse(localSession)
+        userId = sessionData.user?.id || sessionData.user?.email || ""
+      }
+
+      const response = await fetch("/api/post-test-insights", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,10 +70,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
           testType,
           results,
           responses,
+          userId,
         }),
       })
 
       const data = await response.json()
+
+      console.log("[v0] Hybrid insights received:", data)
 
       setInsights(data.insights || [])
       setRecommendations(data.recommendations || [])
@@ -78,6 +93,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
             "Muestras un desarrollo equilibrado en la mayoría de las competencias evaluadas, con particular fortaleza en trabajo en equipo e inteligencia emocional.",
           confidence: 0.85,
           priority: "high",
+          source: "hybrid",
         },
         {
           category: "Áreas de Oportunidad",
@@ -86,6 +102,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
             "Existe potencial para desarrollar más tu capacidad creativa y de innovación. Considera explorar nuevas metodologías y enfoques.",
           confidence: 0.78,
           priority: "medium",
+          source: "hybrid",
         },
       ])
 
@@ -140,6 +157,31 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
     }
   }
 
+  const getSourceBadge = (source: string) => {
+    switch (source) {
+      case "openai":
+        return (
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 text-xs">
+            OpenAI
+          </Badge>
+        )
+      case "cerebro":
+        return (
+          <Badge variant="outline" className="bg-purple-50 text-purple-700 text-xs">
+            Cerebro
+          </Badge>
+        )
+      case "hybrid":
+        return (
+          <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
+            Híbrido
+          </Badge>
+        )
+      default:
+        return null
+    }
+  }
+
   if (isLoading) {
     return (
       <Card>
@@ -167,7 +209,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Brain className="h-5 w-5" />
-          Análisis IA Personalizado
+          Análisis IA Híbrido (OpenAI + Cerebro)
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -187,6 +229,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-sm font-medium">{insight.title}</CardTitle>
                         <div className="flex items-center gap-2">
+                          {getSourceBadge(insight.source)}
                           <Badge className={getPriorityColor(insight.priority)}>{insight.priority}</Badge>
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 text-yellow-500" />
@@ -197,10 +240,27 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       <Badge variant="outline" className="w-fit text-xs">
                         {insight.category}
                       </Badge>
+                      {insight.personalizedContext && (
+                        <p className="text-xs text-purple-600 italic mt-1">{insight.personalizedContext}</p>
+                      )}
                     </CardHeader>
                     <CardContent className="pt-0">
                       <p className="text-sm text-gray-700">{insight.description}</p>
+                      {insight.actionableSteps && insight.actionableSteps.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-gray-600 mb-1">Pasos Accionables:</p>
+                          <ul className="space-y-1">
+                            {insight.actionableSteps.map((step: string, i: number) => (
+                              <li key={i} className="text-xs text-gray-600 flex items-start gap-1">
+                                <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                {step}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                       <Progress value={insight.confidence * 100} className="mt-2 h-2" />
+                      <p className="text-xs text-gray-500 mt-1">Fuente: {insight.reasoningSource}</p>
                     </CardContent>
                   </Card>
                 ))}

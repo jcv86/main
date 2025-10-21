@@ -102,7 +102,7 @@ importers:
         specifier: latest
         version: 8.18.3
       zod:
-        specifier: latest
+        specifier: 4.1.12
         version: 4.1.12
     devDependencies:
       '@types/node':
