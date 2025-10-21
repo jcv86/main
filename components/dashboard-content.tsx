@@ -23,6 +23,8 @@ import {
   Zap,
   Heart,
   Lightbulb,
+  Sparkles,
+  TrendingUp,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
@@ -168,6 +170,10 @@ export function DashboardContent() {
   const [userAchievements, setUserAchievements] = useState<any[]>([])
   const [loadingAchievements, setLoadingAchievements] = useState(true)
 
+  // State for hybrid AI recommendations
+  const [recommendations, setRecommendations] = useState<any[]>([])
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true)
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -209,6 +215,51 @@ export function DashboardContent() {
     fetchAchievements()
   }, [userProfile.email])
 
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        setLoadingRecommendations(true)
+        console.log("[v0] Fetching recommendations for userId:", userId)
+
+        const url = userId ? `/api/recommendations?userId=${userId}` : `/api/recommendations`
+
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout
+
+        const response = await fetch(url, { signal: controller.signal })
+        clearTimeout(timeoutId)
+
+        const data = await response.json()
+
+        console.log("[v0] Recommendations response:", data)
+
+        if (data.success && data.recommendations) {
+          const recs = data.recommendations.map((rec: any) => ({
+            title: rec.title,
+            description: rec.description,
+            action: rec.action || "Ver más",
+            icon: getCategoryIcon(rec.category),
+            source: rec.source,
+            confidence: rec.confidence,
+          }))
+          setRecommendations(recs)
+          console.log("[v0] Set", recs.length, "recommendations")
+        } else {
+          console.log("[v0] No recommendations in response, using fallback")
+          setRecommendations(getFallbackRecommendations())
+        }
+      } catch (error) {
+        console.error("[v0] Error fetching recommendations:", error)
+        setRecommendations(getFallbackRecommendations())
+      } finally {
+        setLoadingRecommendations(false)
+        console.log("[v0] Finished loading recommendations")
+      }
+    }
+
+    fetchRecommendations()
+  }, [userId])
+
   const achievements = [
     {
       title: "Primer Test Completado",
@@ -233,27 +284,6 @@ export function DashboardContent() {
     },
   ]
 
-  const recommendations = [
-    {
-      title: "Desarrolla tu Liderazgo",
-      description: "Basado en tu perfil DISC, te recomendamos explorar habilidades de liderazgo",
-      action: "Ver Recursos",
-      icon: Users,
-    },
-    {
-      title: "Inteligencia Emocional",
-      description: "Completa la evaluación de IE para obtener insights sobre tu gestión emocional",
-      action: "Realizar Test",
-      icon: Heart,
-    },
-    {
-      title: "Planificación de Carrera",
-      description: "Usa tus resultados para crear un plan de desarrollo profesional",
-      action: "Crear Plan",
-      icon: Target,
-    },
-  ]
-
   const handleStartTest = (testRoute: string) => {
     router.push(testRoute)
   }
@@ -263,6 +293,50 @@ export function DashboardContent() {
   }
 
   const completionPercentage = Math.round((userProfile.completedTests / userProfile.totalTests) * 100)
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "assessment":
+        return Brain
+      case "skill_development":
+        return Lightbulb
+      case "learning":
+        return BookOpen
+      case "coaching":
+        return MessageSquare
+      case "career_planning":
+        return Target
+      default:
+        return TrendingUp
+    }
+  }
+
+  const getFallbackRecommendations = () => [
+    {
+      title: "Completa tus Evaluaciones",
+      description: "Realiza los tests pendientes para obtener insights personalizados",
+      action: "Ver Tests",
+      icon: Brain,
+      source: "system",
+      confidence: 0.9,
+    },
+    {
+      title: "Consulta el Coach IA",
+      description: "Obtén orientación profesional personalizada con Cerebro",
+      action: "Hablar con Coach",
+      icon: MessageSquare,
+      source: "cerebro",
+      confidence: 0.85,
+    },
+    {
+      title: "Explora la Biblioteca",
+      description: "Accede a recursos de desarrollo profesional curados",
+      action: "Ver Recursos",
+      icon: BookOpen,
+      source: "system",
+      confidence: 0.8,
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
@@ -502,28 +576,89 @@ export function DashboardContent() {
 
           {/* Recommendations */}
           <TabsContent value="recommendations" className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Recomendaciones Personalizadas</h2>
-
-            <div className="grid gap-4">
-              {recommendations.map((rec, index) => (
-                <Card key={index} className="border-border bg-card">
-                  <CardHeader>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                        <rec.icon className="h-5 w-5 text-foreground" />
-                      </div>
-                      <div className="flex-1">
-                        <CardTitle className="text-foreground">{rec.title}</CardTitle>
-                        <CardDescription className="text-mutedForeground">{rec.description}</CardDescription>
-                      </div>
-                      <Button variant="outline" size="sm" className="border-border bg-transparent">
-                        {rec.action}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                </Card>
-              ))}
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-foreground">Recomendaciones Personalizadas</h2>
+              <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                <Sparkles className="h-3 w-3 mr-1" />
+                Powered by Cerebro + OpenAI
+              </Badge>
             </div>
+
+            {loadingRecommendations ? (
+              <Card className="border-border bg-card">
+                <CardContent className="text-center py-8">
+                  <Brain className="h-12 w-12 text-mutedForeground mx-auto mb-4 animate-pulse" />
+                  <p className="text-mutedForeground">Generando recomendaciones personalizadas...</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4">
+                {recommendations.map((rec, index) => (
+                  <Card key={index} className="border-border bg-card hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+                          <rec.icon className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CardTitle className="text-foreground">{rec.title}</CardTitle>
+                            {rec.source && (
+                              <Badge variant="outline" className="text-xs">
+                                {rec.source === "openai" && "🤖 OpenAI"}
+                                {rec.source === "cerebro" && "🧠 Cerebro"}
+                                {rec.source === "hybrid" && "✨ Hybrid"}
+                              </Badge>
+                            )}
+                          </div>
+                          <CardDescription className="text-mutedForeground">{rec.description}</CardDescription>
+                          {rec.confidence && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <Progress value={rec.confidence * 100} className="h-1 w-20" />
+                              <span className="text-xs text-mutedForeground">
+                                {Math.round(rec.confidence * 100)}% confianza
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <Button variant="outline" size="sm" className="border-border bg-transparent">
+                          {rec.action}
+                        </Button>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* Refresh button for recommendations */}
+            <Button
+              variant="outline"
+              className="w-full border-border bg-transparent"
+              onClick={() => {
+                setLoadingRecommendations(true)
+                // Refetch recommendations
+                fetch(`/api/recommendations?userId=${userId}`)
+                  .then((res) => res.json())
+                  .then((data) => {
+                    if (data.success && data.recommendations) {
+                      const recs = data.recommendations.map((rec: any) => ({
+                        title: rec.title,
+                        description: rec.description,
+                        action: rec.action || "Ver más",
+                        icon: getCategoryIcon(rec.category),
+                        source: rec.source,
+                        confidence: rec.confidence,
+                      }))
+                      setRecommendations(recs)
+                    }
+                  })
+                  .finally(() => setLoadingRecommendations(false))
+              }}
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              Actualizar Recomendaciones
+            </Button>
           </TabsContent>
 
           {/* Achievements */}
