@@ -13,10 +13,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email required" }, { status: 400 })
     }
 
-    // First, get the user_id from email
-    const { data: profile } = await supabase.from("user_profiles").select("id").eq("user_email", email).single()
+    const { data: profile, error: profileError } = await supabase
+      .from("user_profiles")
+      .select("id")
+      .eq("user_email", email)
+      .maybeSingle()
 
+    if (profileError) {
+      console.error("[v0] Error fetching user profile:", profileError)
+      return NextResponse.json({ error: "Failed to fetch user profile" }, { status: 500 })
+    }
+
+    // If no user found, return empty activities array
     if (!profile) {
+      console.log("[v0] No user profile found for email:", email)
       return NextResponse.json({ activities: [] })
     }
 
@@ -55,7 +65,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const { data: profile } = await supabase.from("user_profiles").select("id").eq("user_email", user_email).single()
+    const { data: profile, error: profileError } = await supabase
+      .from("user_profiles")
+      .select("id")
+      .eq("user_email", user_email)
+      .maybeSingle()
+
+    if (profileError) {
+      console.error("[v0] Error fetching user profile:", profileError)
+      return NextResponse.json({ error: "Failed to fetch user profile" }, { status: 500 })
+    }
 
     if (!profile) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })

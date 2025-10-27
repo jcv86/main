@@ -82,7 +82,7 @@ export function DashboardContent() {
   const [userId, setUserId] = useState<string | null>(null)
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
-    email: "usuario@ejemplo.com",
+    email: "", // Initialize as empty string instead of hardcoded email
     completedTests: 3,
     totalTests: 6,
     level: "Explorador",
@@ -186,8 +186,8 @@ export function DashboardContent() {
           setUserId(data.user.id)
           setUserProfile((prev) => ({
             ...prev,
-            email: data.user.email || prev.email,
-            name: data.user.full_name || prev.name,
+            email: data.user.email || data.user.user_email || prev.email,
+            name: data.user.full_name || data.user.name || prev.name,
           }))
         }
       } catch (error) {
@@ -200,7 +200,10 @@ export function DashboardContent() {
 
   useEffect(() => {
     const fetchAchievements = async () => {
-      if (!userProfile.email) return
+      if (!userProfile.email) {
+        console.log("[v0] Skipping achievements fetch - no email yet")
+        return
+      }
 
       try {
         const response = await fetch(`/api/user-achievements?email=${userProfile.email}`)
@@ -676,7 +679,16 @@ export function DashboardContent() {
                 WhatsApp Activo
               </Badge>
             </div>
-            <ActivityCalendar userEmail={userProfile.email} />
+            {userProfile.email ? (
+              <ActivityCalendar userEmail={userProfile.email} />
+            ) : (
+              <Card className="border-border bg-card">
+                <CardContent className="text-center py-8">
+                  <Calendar className="h-12 w-12 text-mutedForeground mx-auto mb-4 animate-pulse" />
+                  <p className="text-mutedForeground">Cargando calendario...</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Achievements */}
