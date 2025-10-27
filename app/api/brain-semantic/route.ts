@@ -174,8 +174,8 @@ export async function POST(request: NextRequest) {
 
     const openai = new OpenAI({ apiKey: openaiApiKey })
 
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     if (!supabaseUrl || !supabaseKey) {
       return NextResponse.json(
         {
@@ -298,6 +298,6 @@ export async function GET() {
     endpoints: {
       POST: "Send a query to get semantic search results",
     },
-    requiredEnv: ["OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"],
+    requiredEnv: ["OPENAI_API_KEY", "NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"],
   })
 }
