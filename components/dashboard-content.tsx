@@ -25,11 +25,13 @@ import {
   Lightbulb,
   Sparkles,
   TrendingUp,
+  Calendar,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
 import { AchievementBadge } from "@/components/achievement-badge"
 import { GoalTracker } from "@/components/goal-tracker"
+import { ActivityCalendar } from "@/components/activity-calendar" // Import ActivityCalendar component
 
 interface TestResult {
   id: string
@@ -435,7 +437,9 @@ export function DashboardContent() {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="tests" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 bg-muted">
+          <TabsList className="grid w-full grid-cols-5 bg-muted">
+            {" "}
+            {/* Changed from grid-cols-4 to grid-cols-5 */}
             <TabsTrigger value="tests" className="data-[state=active]:bg-background">
               Tests
             </TabsTrigger>
@@ -444,6 +448,9 @@ export function DashboardContent() {
             </TabsTrigger>
             <TabsTrigger value="recommendations" className="data-[state=active]:bg-background">
               Recomendaciones
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className="data-[state=active]:bg-background">
+              Calendario
             </TabsTrigger>
             <TabsTrigger value="achievements" className="data-[state=active]:bg-background">
               Logros
@@ -659,6 +666,17 @@ export function DashboardContent() {
               <Sparkles className="h-4 w-4 mr-2" />
               Actualizar Recomendaciones
             </Button>
+          </TabsContent>
+
+          <TabsContent value="calendar" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-foreground">Mi Calendario de Actividades</h2>
+              <Badge variant="secondary" className="bg-green-100 text-green-800">
+                <Calendar className="h-3 w-3 mr-1" />
+                WhatsApp Activo
+              </Badge>
+            </div>
+            <ActivityCalendar userEmail={userProfile.email} />
           </TabsContent>
 
           {/* Achievements */}
