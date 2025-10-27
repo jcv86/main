@@ -13,6 +13,7 @@ interface SessionContextType {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<boolean>
+  signup: (email: string, password: string, name: string) => Promise<boolean>
   logout: () => void
 }
 
@@ -101,12 +102,48 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     }
   }
 
+  const signup = async (email: string, password: string, name: string): Promise<boolean> => {
+    try {
+      setIsLoading(true)
+
+      // Simple demo signup - in production, use proper authentication
+      if (email && password && name) {
+        const userData = {
+          id: `user-${Date.now()}`,
+          email: email,
+          name: name,
+        }
+
+        setUser(userData)
+        localStorage.setItem(
+          "dtc_session",
+          JSON.stringify({
+            authenticated: true,
+            user: userData,
+            timestamp: Date.now(),
+          }),
+        )
+
+        return true
+      }
+
+      return false
+    } catch (error) {
+      console.error("Signup error:", error)
+      return false
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const logout = () => {
     setUser(null)
     localStorage.removeItem("dtc_session")
   }
 
-  return <SessionContext.Provider value={{ user, isLoading, login, logout }}>{children}</SessionContext.Provider>
+  return (
+    <SessionContext.Provider value={{ user, isLoading, login, signup, logout }}>{children}</SessionContext.Provider>
+  )
 }
 
 export function useSession() {
@@ -118,6 +155,7 @@ export function useSession() {
       user: null,
       isLoading: true,
       login: async () => false,
+      signup: async () => false,
       logout: () => {},
     }
   }

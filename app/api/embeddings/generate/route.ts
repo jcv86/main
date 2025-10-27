@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { generateAllEmbeddings, getEmbeddingStatistics, isOpenAIConfigured } from "@/lib/embeddings"
 
 export const runtime = "nodejs"
-export const maxDuration = 300
+export const maxDuration = 60
 
 export async function POST(request: NextRequest) {
   try {
