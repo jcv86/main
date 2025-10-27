@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Clock, MapPin, Plus, Bell, MessageCircle } from "lucide-react"
+import { Calendar, Clock, Plus, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -10,12 +10,9 @@ interface Activity {
   id: string
   title: string
   description: string
-  activity_type: "meeting" | "sport" | "study" | "personal" | "work"
+  event_type: "meeting" | "sport" | "study" | "personal" | "work" // renamed from activity_type to event_type
   start_time: string
   end_time: string
-  location?: string
-  reminder_minutes: number
-  status: "scheduled" | "completed" | "cancelled"
 }
 
 const activityTypeColors = {
@@ -140,12 +137,12 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className={`w-3 h-3 rounded-full ${activityTypeColors[activity.activity_type]}`} />
+                        <div className={`w-3 h-3 rounded-full ${activityTypeColors[activity.event_type]}`} />
                         <h4 className="font-medium">{activity.title}</h4>
                       </div>
                       <p className="text-sm text-muted-foreground">{activity.description}</p>
                     </div>
-                    <Badge variant="outline">{activityTypeLabels[activity.activity_type]}</Badge>
+                    <Badge variant="outline">{activityTypeLabels[activity.event_type]}</Badge>
                   </div>
 
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -153,18 +150,6 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
                       <Clock className="w-4 h-4" />
                       {formatTime(activity.start_time)} - {formatTime(activity.end_time)}
                     </div>
-                    {activity.location && (
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {activity.location}
-                      </div>
-                    )}
-                    {activity.reminder_minutes > 0 && (
-                      <div className="flex items-center gap-1">
-                        <Bell className="w-4 h-4" />
-                        {activity.reminder_minutes} min antes
-                      </div>
-                    )}
                   </div>
                 </div>
               ))}
@@ -189,7 +174,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
               {upcomingActivities.map((activity) => (
                 <div key={activity.id} className="p-3 border rounded-lg hover:bg-accent transition-colors">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className={`w-2 h-2 rounded-full ${activityTypeColors[activity.activity_type]}`} />
+                    <div className={`w-2 h-2 rounded-full ${activityTypeColors[activity.event_type]}`} />
                     <h4 className="font-medium text-sm">{activity.title}</h4>
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -205,7 +190,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       {/* Activity Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {Object.entries(activityTypeLabels).map(([type, label]) => {
-          const count = activities.filter((a) => a.activity_type === type).length
+          const count = activities.filter((a) => a.event_type === type).length
           return (
             <Card key={type} className="p-4">
               <div

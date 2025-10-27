@@ -13,10 +13,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email required" }, { status: 400 })
     }
 
+    // First, get the user_id from email
+    const { data: profile } = await supabase.from("user_profiles").select("id").eq("user_email", email).single()
+
+    if (!profile) {
+      return NextResponse.json({ activities: [] })
+    }
+
     let query = supabase
-      .from("user_activities")
+      .from("calendar_events")
       .select("*")
-      .eq("user_email", email)
+      .eq("user_id", profile.id)
       .order("start_time", { ascending: true })
 
     if (date) {
@@ -42,24 +49,27 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { user_email, title, description, activity_type, start_time, end_time, location, reminder_minutes } = body
+    const { user_email, title, description, event_type, start_time, end_time } = body
 
-    if (!user_email || !title || !activity_type || !start_time || !end_time) {
+    if (!user_email || !title || !event_type || !start_time || !end_time) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    const { data: profile } = await supabase.from("user_profiles").select("id").eq("user_email", user_email).single()
+
+    if (!profile) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
     const { data: activity, error } = await supabase
-      .from("user_activities")
+      .from("calendar_events")
       .insert({
-        user_email,
+        user_id: profile.id,
         title,
         description,
-        activity_type,
+        event_type,
         start_time,
         end_time,
-        location,
-        reminder_minutes: reminder_minutes || 30,
-        status: "scheduled",
       })
       .select()
       .single()
