@@ -46,6 +46,7 @@ import {
 } from "recharts"
 import { AiCoachChat } from "@/components/ai-coach-chat"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
+import { MultiTestInsights } from "@/components/multi-test-insights"
 
 interface TestResult {
   id: number
@@ -548,12 +549,15 @@ export default function BigFiveResults() {
 
           {/* AI Analysis Tab */}
           <TabsContent value="ai-analysis">
-            <AiInsightsPanel
-              testType="Big Five"
-              testResults={results}
-              aiInterpretation={aiInterpretation?.interpretation}
-              userEmail={userEmail}
-            />
+            <div className="space-y-6">
+              <MultiTestInsights userEmail={userEmail} currentTestType="Big Five" />
+              <AiInsightsPanel
+                testType="Big Five"
+                testResults={results}
+                aiInterpretation={aiInterpretation?.interpretation}
+                userEmail={userEmail}
+              />
+            </div>
           </TabsContent>
 
           {/* Coach Tab */}

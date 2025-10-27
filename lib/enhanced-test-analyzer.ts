@@ -133,7 +133,7 @@ export class EnhancedTestAnalyzer {
   private async getUserTestResults(userId: string): Promise<TestResult[]> {
     const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
 
-    if (!profile) return []
+    if (!profile?.email) return []
 
     const { data, error } = await this.supabase
       .from("test_results")
@@ -243,8 +243,15 @@ Enfócate en:
    */
   private async storeCrossTestAnalysis(userId: string, testResults: TestResult[], analysis: CrossTestAnalysis) {
     try {
+      const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+
+      if (!profile?.email) {
+        console.error("User profile not found")
+        return
+      }
+
       await this.supabase.from("cerebro_cross_test_analysis").insert({
-        user_id: userId,
+        user_email: profile.email,
         test_types: testResults.map((t) => t.testType),
         combined_profile: {
           summary: analysis.profileSummary,
@@ -307,10 +314,14 @@ Enfócate en:
    * Get latest cross-test analysis for user
    */
   async getLatestCrossTestAnalysis(userId: string): Promise<CrossTestAnalysis | null> {
+    const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+
+    if (!profile?.email) return null
+
     const { data, error } = await this.supabase
       .from("cerebro_cross_test_analysis")
       .select("*")
-      .eq("user_id", userId)
+      .eq("user_email", profile.email)
       .order("generated_at", { ascending: false })
       .limit(1)
       .single()

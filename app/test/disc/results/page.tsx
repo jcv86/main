@@ -27,6 +27,7 @@ import {
   Pie,
   Cell,
 } from "recharts"
+import { MultiTestInsights } from "@/components/multi-test-insights"
 
 interface DISCResult {
   d_score: number
@@ -620,6 +621,8 @@ export default function DISCResultsPage() {
           </TabsContent>
 
           <TabsContent value="ai-analysis" className="space-y-6">
+            <MultiTestInsights userEmail={user?.email || ""} currentTestType="DISC" />
+
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
