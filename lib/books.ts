@@ -204,10 +204,27 @@ export async function getBookById(bookId: number): Promise<Book | null> {
 
 export async function getBookBySlug(slug: string): Promise<Book | null> {
   try {
-    const { data, error } = await supabase.from("knowledge_base").select("*").eq("slug", slug).single()
+    if (!isNaN(Number(slug))) {
+      const id = Number(slug)
+      const { data, error } = await supabase.from("knowledge_base").select("*").eq("id", id).single()
+
+      if (error) {
+        console.error("Error fetching book by ID:", error)
+        throw error
+      }
+
+      return data
+    }
+
+    const { data, error } = await supabase
+      .from("knowledge_base")
+      .select("*")
+      .ilike("title", `%${slug.replace(/-/g, " ")}%`)
+      .limit(1)
+      .single()
 
     if (error) {
-      console.error("Error fetching book by slug:", error)
+      console.error("Error fetching book by title:", error)
       throw error
     }
 
