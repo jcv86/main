@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
 
@@ -182,7 +181,7 @@ ${context}
 Respond thoughtfully, showing your reasoning when appropriate, and provide actionable guidance.`
 
   const { text } = await generateText({
-    model: openai("gpt-4o"),
+    model: "openai/gpt-4o",
     system: systemPrompt,
     prompt: query,
     temperature: 0.7,

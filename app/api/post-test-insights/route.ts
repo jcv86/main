@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateObject } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { z } from "zod"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
@@ -113,10 +112,11 @@ Enfócate en:
 - Contexto del mercado laboral chileno`
 
   const { object } = await generateObject({
-    model: openai("gpt-4o"),
+    model: "openai/gpt-4o",
     schema: InsightSchema,
     prompt,
     temperature: 0.7,
+    mode: "json",
   })
 
   // Mark all insights as from OpenAI
@@ -173,10 +173,11 @@ Genera insights altamente personalizados que:
 Enfócate en personalización profunda y recomendaciones contextualizadas.`
 
   const { object } = await generateObject({
-    model: openai("gpt-4o"),
+    model: "openai/gpt-4o",
     schema: InsightSchema,
     prompt,
     temperature: 0.8,
+    mode: "json",
   })
 
   // Mark all insights as from Cerebro and add personalized context

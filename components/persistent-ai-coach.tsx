@@ -63,6 +63,7 @@ export function PersistentAICoach() {
   const recognitionRef = useRef<any>(null)
   const isListeningRef = useRef(false)
   const noSpeechRetriesRef = useRef(0)
+  const isTogglingRef = useRef(false)
   const maxRetries = 3
   const listeningTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const maxListeningTime = 30000 // 30 segundos máximo
@@ -424,15 +425,25 @@ export function PersistentAICoach() {
   const toggleListening = () => {
     if (!recognitionRef.current) return
 
+    if (isTogglingRef.current) {
+      console.log("[v0] Toggle already in progress, ignoring")
+      return
+    }
+
+    isTogglingRef.current = true
+
     if (isListening) {
       console.log("[v0] Stopping recognition manually")
       isListeningRef.current = false
-      noSpeechRetriesRef.current = maxRetries // Prevenir reintentos después de detener manualmente
+      noSpeechRetriesRef.current = maxRetries
       setIsListening(false)
       recognitionRef.current.stop()
       if (listeningTimeoutRef.current) {
         clearTimeout(listeningTimeoutRef.current)
       }
+      setTimeout(() => {
+        isTogglingRef.current = false
+      }, 300)
     } else {
       console.log("[v0] Starting recognition")
       noSpeechRetriesRef.current = 0
@@ -440,10 +451,14 @@ export function PersistentAICoach() {
       setIsListening(true)
       try {
         recognitionRef.current.start()
+        setTimeout(() => {
+          isTogglingRef.current = false
+        }, 300)
       } catch (e) {
         console.error("[v0] Error starting recognition:", e)
         isListeningRef.current = false
         setIsListening(false)
+        isTogglingRef.current = false
       }
     }
   }
@@ -589,7 +604,7 @@ export function PersistentAICoach() {
                     {speechSupported && (
                       <Button
                         onClick={toggleListening}
-                        disabled={isLoading}
+                        disabled={isLoading || isTogglingRef.current}
                         variant={isListening ? "destructive" : "outline"}
                         className={isListening ? "animate-pulse" : ""}
                         title={isListening ? "Detener grabación" : "Iniciar grabación de voz"}

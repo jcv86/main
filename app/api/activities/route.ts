@@ -13,27 +13,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email required" }, { status: 400 })
     }
 
-    const { data: profile, error: profileError } = await supabase
-      .from("user_profiles")
-      .select("id")
-      .eq("user_email", email)
-      .maybeSingle()
+    const { data: user, error: userError } = await supabase.from("users").select("id").eq("email", email).maybeSingle()
 
-    if (profileError) {
-      console.error("[v0] Error fetching user profile:", profileError)
-      return NextResponse.json({ error: "Failed to fetch user profile" }, { status: 500 })
+    if (userError) {
+      console.error("[v0] Error fetching user:", userError)
+      return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 })
     }
 
-    // If no user found, return empty activities array
-    if (!profile) {
-      console.log("[v0] No user profile found for email:", email)
+    // If no user found in users table, return empty activities
+    if (!user) {
+      console.log("[v0] User not found in users table:", email)
       return NextResponse.json({ activities: [] })
     }
 
     let query = supabase
       .from("calendar_events")
       .select("*")
-      .eq("user_id", profile.id)
+      .eq("user_id", user.id)
       .order("start_time", { ascending: true })
 
     if (date) {
@@ -65,25 +61,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const { data: profile, error: profileError } = await supabase
-      .from("user_profiles")
+    const { data: user, error: userError } = await supabase
+      .from("users")
       .select("id")
-      .eq("user_email", user_email)
+      .eq("email", user_email)
       .maybeSingle()
 
-    if (profileError) {
-      console.error("[v0] Error fetching user profile:", profileError)
-      return NextResponse.json({ error: "Failed to fetch user profile" }, { status: 500 })
+    if (userError) {
+      console.error("[v0] Error fetching user:", userError)
+      return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 })
     }
 
-    if (!profile) {
+    if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const { data: activity, error } = await supabase
       .from("calendar_events")
       .insert({
-        user_id: profile.id,
+        user_id: user.id,
         title,
         description,
         event_type,

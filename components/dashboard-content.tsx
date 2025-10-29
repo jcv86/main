@@ -31,7 +31,8 @@ import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
 import { AchievementBadge } from "@/components/achievement-badge"
 import { GoalTracker } from "@/components/goal-tracker"
-import { ActivityCalendar } from "@/components/activity-calendar" // Import ActivityCalendar component
+import { ActivityCalendar } from "@/components/activity-calendar"
+import { useSession } from "@/components/session-wrapper"
 
 interface TestResult {
   id: string
@@ -79,10 +80,11 @@ const TEST_NAMES = {
 
 export function DashboardContent() {
   const router = useRouter()
+  const { user: sessionUser } = useSession()
   const [userId, setUserId] = useState<string | null>(null)
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
-    email: "", // Initialize as empty string instead of hardcoded email
+    email: "",
     completedTests: 3,
     totalTests: 6,
     level: "Explorador",
@@ -177,28 +179,26 @@ export function DashboardContent() {
   const [loadingRecommendations, setLoadingRecommendations] = useState(true)
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("/api/user-profile")
-        const data = await response.json()
-        console.log("[v0] Fetched user profile:", data)
-        if (data.user) {
-          setUserId(data.user.id)
-          setUserProfile((prev) => ({
-            ...prev,
-            email: data.user.email || data.user.user_email || prev.email,
-            name: data.user.full_name || data.user.name || prev.name,
-          }))
-        }
-      } catch (error) {
-        console.error("[v0] Error fetching user:", error)
-      }
-    }
+    console.log("[v0] DashboardContent mounted")
+    console.log("[v0] sessionUser:", sessionUser)
 
-    fetchUser()
-  }, [])
+    if (sessionUser) {
+      console.log("[v0] Loading user from session:", sessionUser)
+      setUserId(sessionUser.id)
+      setUserProfile((prev) => ({
+        ...prev,
+        email: sessionUser.email,
+        name: sessionUser.name || sessionUser.email.split("@")[0],
+      }))
+      console.log("[v0] User profile updated with email:", sessionUser.email)
+    } else {
+      console.log("[v0] No session user found")
+    }
+  }, [sessionUser])
 
   useEffect(() => {
+    console.log("[v0] Achievements effect triggered, email:", userProfile.email)
+
     const fetchAchievements = async () => {
       if (!userProfile.email) {
         console.log("[v0] Skipping achievements fetch - no email yet")
@@ -206,14 +206,17 @@ export function DashboardContent() {
       }
 
       try {
+        console.log("[v0] Fetching achievements for:", userProfile.email)
         const response = await fetch(`/api/user-achievements?email=${userProfile.email}`)
         const data = await response.json()
         console.log("[v0] Fetched achievements:", data)
         setUserAchievements(data.achievements || [])
       } catch (error) {
         console.error("[v0] Error fetching achievements:", error)
+        setUserAchievements([]) // Set empty array on error
       } finally {
         setLoadingAchievements(false)
+        console.log("[v0] Achievements loading complete")
       }
     }
 
@@ -221,21 +224,39 @@ export function DashboardContent() {
   }, [userProfile.email])
 
   useEffect(() => {
+    console.log("[v0] Recommendations effect triggered, email:", userProfile.email)
+
     const fetchRecommendations = async () => {
+      if (!userProfile.email) {
+        console.log("[v0] Skipping recommendations - no email yet")
+        setLoadingRecommendations(false)
+        setRecommendations(getFallbackRecommendations())
+        return
+      }
+
       try {
         setLoadingRecommendations(true)
-        console.log("[v0] Fetching recommendations for userId:", userId)
+        console.log("[v0] Fetching recommendations for userEmail:", userProfile.email)
 
-        const url = userId ? `/api/recommendations?userId=${userId}` : `/api/recommendations`
+        const url = `/api/recommendations?userEmail=${encodeURIComponent(userProfile.email)}`
+        console.log("[v0] Recommendations URL:", url)
 
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout
+        const timeoutId = setTimeout(() => {
+          console.log("[v0] Recommendations request timed out")
+          controller.abort()
+        }, 10000)
 
         const response = await fetch(url, { signal: controller.signal })
         clearTimeout(timeoutId)
 
-        const data = await response.json()
+        console.log("[v0] Recommendations response status:", response.status)
 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const data = await response.json()
         console.log("[v0] Recommendations response:", data)
 
         if (data.success && data.recommendations) {
@@ -263,7 +284,7 @@ export function DashboardContent() {
     }
 
     fetchRecommendations()
-  }, [userId])
+  }, [userProfile.email])
 
   const achievements = [
     {
@@ -401,20 +422,6 @@ export function DashboardContent() {
           </Card>
 
           <Card className="border-border bg-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-mutedForeground">Última Actividad</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">Hoy</div>
-              <div className="text-sm text-mutedForeground">Evaluación DISC</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {userId && <GoalTracker userId={userId} />}
-
-        {userAchievements.length > 0 && (
-          <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-yellow-600" />
@@ -436,7 +443,9 @@ export function DashboardContent() {
               </div>
             </CardContent>
           </Card>
-        )}
+        </div>
+
+        {userId && <GoalTracker userId={userId} />}
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="tests" className="space-y-4">
@@ -648,7 +657,7 @@ export function DashboardContent() {
               onClick={() => {
                 setLoadingRecommendations(true)
                 // Refetch recommendations
-                fetch(`/api/recommendations?userId=${userId}`)
+                fetch(`/api/recommendations?userEmail=${encodeURIComponent(userProfile.email)}`)
                   .then((res) => res.json())
                   .then((data) => {
                     if (data.success && data.recommendations) {

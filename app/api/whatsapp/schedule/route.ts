@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     // Obtener perfil del usuario con número de teléfono
     const { data: profile, error: profileError } = await supabase
       .from("user_profiles")
-      .select("id, phone_number")
+      .select("id, phone")
       .eq("user_email", userEmail)
       .maybeSingle()
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    if (!profile.phone_number) {
+    if (!profile.phone) {
       return NextResponse.json(
         {
           error: "Phone number not configured",
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Programar recordatorio
     const whatsappService = WhatsAppService.getInstance()
-    const success = await whatsappService.sendReminder(activity, profile.phone_number)
+    const success = await whatsappService.sendReminder(activity, profile.phone)
 
     return NextResponse.json({
       success,

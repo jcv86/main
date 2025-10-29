@@ -303,7 +303,14 @@ export class CerebroIntelligence {
         .eq("user_id", userId)
         .single()
 
-      if (error) throw error
+      if (error) {
+        // Table doesn't exist yet, return null gracefully
+        if (error.code === "42P01") {
+          console.log("cerebro_user_context table doesn't exist yet")
+          return null
+        }
+        throw error
+      }
       return data
     } catch (error) {
       console.error("Error getting user context:", error)

@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     const { data: profile, error } = await supabase
       .from("user_profiles")
-      .select("phone_number, whatsapp_enabled")
+      .select("phone, whatsapp_enabled")
       .eq("user_email", email)
       .maybeSingle()
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       enabled: profile?.whatsapp_enabled || false,
-      phone_number: profile?.phone_number || "",
+      phone_number: profile?.phone || "",
     })
   } catch (error) {
     console.error("[v0] Error in WhatsApp config API:", error)
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase
       .from("user_profiles")
       .update({
-        phone_number,
+        phone: phone_number,
         whatsapp_enabled: enabled,
       })
       .eq("user_email", email)

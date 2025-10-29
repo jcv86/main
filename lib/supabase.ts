@@ -29,20 +29,45 @@ const createMockClient = () => ({
     getSession: async () => ({ data: { session: null }, error: null }),
     getUser: async () => ({ data: { user: null }, error: null }),
     signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
-      // Mock successful login for demo purposes
-      if (email.includes("demo") || email.includes("test") || email.includes("travis")) {
+      const validCredentials: Record<string, string> = {
+        "travis@nuanu.com": "travis123",
+        "demo@despegaturcarrera.com": "demo123",
+        "test@dtc.com": "test123",
+        "admin@dtc.com": "admin123",
+      }
+
+      const expectedPassword = validCredentials[email]
+
+      if (expectedPassword && expectedPassword === password) {
         return {
           data: {
             user: {
-              id: "demo-user",
+              id:
+                email === "travis@nuanu.com"
+                  ? "2"
+                  : email === "demo@despegaturcarrera.com"
+                    ? "1"
+                    : email === "test@dtc.com"
+                      ? "3"
+                      : "4",
               email,
-              user_metadata: { name: "Demo User" },
+              user_metadata: {
+                name:
+                  email === "travis@nuanu.com"
+                    ? "Travis Herrera"
+                    : email === "demo@despegaturcarrera.com"
+                      ? "Ana García"
+                      : email === "test@dtc.com"
+                        ? "Carlos Mendoza"
+                        : "María López",
+              },
             },
             session: { access_token: "mock-token" },
           },
           error: null,
         }
       }
+
       return { data: { user: null, session: null }, error: { message: "Invalid credentials" } }
     },
     signUp: async ({ email, password, options }: any) => ({
@@ -287,6 +312,62 @@ function getMockUserProfile(email: string) {
         },
         created_at: "2024-01-01T00:00:00Z",
         updated_at: "2024-01-15T09:15:00Z",
+      },
+      error: null,
+    },
+    "admin@dtc.com": {
+      data: {
+        id: "4",
+        email: "admin@dtc.com",
+        name: "María López",
+        user_category: "admin",
+        preferences: {
+          communicationStyle: "direct",
+          learningStyle: "visual",
+          careerGoals: ["gestión de usuarios", "administración de sistemas", "seguridad"],
+          interests: ["tecnología", "gestión", "seguridad"],
+          skillLevel: "expert",
+          timeAvailability: "high",
+        },
+        conversation_history: {
+          totalMessages: 30,
+          topics: ["administración", "seguridad", "tecnología"],
+          lastActive: "2024-01-15T12:00:00Z",
+          commonQuestions: ["Seguridad de sistemas", "Gestión de usuarios"],
+          progressTracking: {
+            system_administration: { currentLevel: 9, targetLevel: 10 },
+            security: { currentLevel: 10, targetLevel: 10 },
+          },
+        },
+        personality_insights: {
+          strengths: ["Organización", "Comunicación clara", "Resolución de problemas"],
+          growthAreas: ["Liderazgo asertivo", "Gestión de riesgos"],
+          workStyle: "estructurado",
+          motivators: ["Cumplir objetivos", "Desarrollo personal", "Logro de resultados"],
+          stressors: ["Conflictos", "Plazos"],
+          communicationPreferences: ["Claro", "Directo", "Estructurado"],
+        },
+        career_profile: {
+          currentRole: "System Administrator",
+          industry: "Tecnología",
+          experience: "expert",
+          aspirations: ["IT Manager", "Security Specialist", "Tech Lead"],
+          skillGaps: ["Gestión financiera", "Comunicación con stakeholders"],
+          networkingStyle: "técnico-profesional",
+        },
+        learning_profile: {
+          completedBooks: [
+            "The Web Application Hacker's Handbook",
+            "Securing Web Applications",
+            "Cybersecurity Essentials",
+          ],
+          currentReading: ["The Art of Deception", "Hacking: The Art of Exploitation"],
+          preferredFormats: ["digital", "technical", "interactive"],
+          learningPace: "intensive",
+          retentionStyle: "hands-on-practical",
+        },
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-15T12:00:00Z",
       },
       error: null,
     },

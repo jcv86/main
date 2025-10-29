@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    const { data, error } = await supabase.from("users").select("phone_number").eq("email", email).single()
+    const { data, error } = await supabase.from("users").select("phone").eq("email", email).single()
 
     if (error) {
       console.error("[v0] Error fetching phone number:", error)
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      phone_number: data?.phone_number || "",
+      phone_number: data?.phone || "",
     })
   } catch (error) {
     console.error("[v0] Error fetching phone number:", error)
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email and phone number are required" }, { status: 400 })
     }
 
-    const { error } = await supabase.from("users").update({ phone_number }).eq("email", email)
+    const { error } = await supabase.from("users").update({ phone: phone_number }).eq("email", email)
 
     if (error) {
       console.error("[v0] Error updating phone number:", error)

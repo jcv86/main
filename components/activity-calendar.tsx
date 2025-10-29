@@ -5,6 +5,16 @@ import { Calendar, Clock, Plus, MessageCircle, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { WhatsAppService } from "@/lib/whatsapp-service"
 
 interface Activity {
@@ -39,6 +49,9 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [showWhatsAppDialog, setShowWhatsAppDialog] = useState(false)
+  const [tempPhoneNumber, setTempPhoneNumber] = useState("")
+  const [savingPhone, setSavingPhone] = useState(false)
 
   useEffect(() => {
     if (userEmail) {
@@ -113,6 +126,47 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
     const whatsappService = WhatsAppService.getInstance()
     whatsappService.sendMotivationalInsight(phoneNumber)
+  }
+
+  const savePhoneNumber = async () => {
+    if (!tempPhoneNumber.trim()) {
+      alert("Por favor ingresa un número de teléfono válido")
+      return
+    }
+
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/
+    if (!phoneRegex.test(tempPhoneNumber.replace(/\s/g, ""))) {
+      alert("Por favor ingresa un número de teléfono válido con código de país (ej: +56912345678)")
+      return
+    }
+
+    setSavingPhone(true)
+    try {
+      const response = await fetch("/api/user/phone", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          phone_number: tempPhoneNumber.replace(/\s/g, ""),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al guardar el número de teléfono")
+      }
+
+      setPhoneNumber(tempPhoneNumber.replace(/\s/g, ""))
+      setShowWhatsAppDialog(false)
+      setTempPhoneNumber("")
+      alert("✅ Número de WhatsApp configurado correctamente")
+    } catch (error) {
+      console.error("[v0] Error saving phone number:", error)
+      alert("❌ Error al guardar el número de teléfono. Por favor intenta de nuevo.")
+    } finally {
+      setSavingPhone(false)
+    }
   }
 
   const formatTime = (dateString: string) => {
@@ -230,10 +284,17 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
               </>
             )}
           </div>
-          <Button variant="outline" size="sm" onClick={sendDailySummary} disabled={!phoneNumber}>
-            <Bell className="w-4 h-4 mr-2" />
-            Resumen del Día
-          </Button>
+          {phoneNumber ? (
+            <Button variant="outline" size="sm" onClick={sendDailySummary}>
+              <Bell className="w-4 h-4 mr-2" />
+              Resumen del Día
+            </Button>
+          ) : (
+            <Button size="sm" onClick={() => setShowWhatsAppDialog(true)} className="bg-yellow-600 hover:bg-yellow-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Configurar
+            </Button>
+          )}
         </div>
       </Card>
 
@@ -337,6 +398,41 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
           )
         })}
       </div>
+
+      {/* WhatsApp Configuration Dialog */}
+      <Dialog open={showWhatsAppDialog} onOpenChange={setShowWhatsAppDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Configurar Número de WhatsApp</DialogTitle>
+            <DialogDescription>
+              Ingresa tu número de WhatsApp con código de país para recibir recordatorios automáticos.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="phone">Número de WhatsApp</Label>
+              <Input
+                id="phone"
+                placeholder="+56912345678"
+                value={tempPhoneNumber}
+                onChange={(e) => setTempPhoneNumber(e.target.value)}
+                type="tel"
+              />
+              <p className="text-xs text-muted-foreground">
+                Incluye el código de país (ej: +56 para Chile, +1 para USA)
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowWhatsAppDialog(false)} disabled={savingPhone}>
+              Cancelar
+            </Button>
+            <Button onClick={savePhoneNumber} disabled={savingPhone}>
+              {savingPhone ? "Guardando..." : "Guardar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

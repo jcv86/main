@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { createClient } from "@/lib/supabase"
 import { semanticSearch } from "@/lib/embeddings"
 
@@ -112,7 +111,7 @@ Mantén las respuestas útiles y bien estructuradas (máximo 400 palabras).
 `
 
     const { text } = await generateText({
-      model: openai("gpt-4o"),
+      model: "openai/gpt-4o",
       system: systemPrompt,
       prompt: message,
       temperature: 0.7,
