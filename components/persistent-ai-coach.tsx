@@ -8,7 +8,20 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Progress } from "@/components/ui/progress"
-import { Send, Bot, User, Lightbulb, TrendingUp, Target, MessageSquare, Sparkles, Brain, ArrowLeft } from "lucide-react"
+import {
+  Send,
+  Bot,
+  User,
+  Lightbulb,
+  TrendingUp,
+  Target,
+  MessageSquare,
+  Sparkles,
+  Brain,
+  ArrowLeft,
+  Mic,
+  MicOff,
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface Message {
@@ -45,12 +58,16 @@ export function PersistentAICoach() {
   const [activeTab, setActiveTab] = useState("chat")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
   // Initialize with welcome message and sample data
   useEffect(() => {
     const welcomeMessage: Message = {
       id: "1",
       content:
-        "Hello! I'm your AI Career Coach. I'm here to help you with career guidance, skill development, and professional growth. I can analyze your assessment results, provide personalized recommendations, and help you create action plans. How can I assist you today?",
+        "¡Hola! Soy tu Coach de Carrera IA. Estoy aquí para ayudarte con orientación de carrera, desarrollo de habilidades y crecimiento profesional. Puedo analizar tus resultados de evaluación, proporcionar recomendaciones personalizadas y ayudarte a crear planes de acción. ¿En qué puedo asistirte hoy?",
       sender: "ai",
       timestamp: new Date(),
       type: "question",
@@ -61,31 +78,31 @@ export function PersistentAICoach() {
     setSuggestions([
       {
         id: "1",
-        text: "Consider developing your leadership skills through online courses or mentorship programs",
+        text: "Considera desarrollar tus habilidades de liderazgo a través de cursos en línea o programas de mentoría",
         category: "skills",
         priority: "high",
       },
       {
         id: "2",
-        text: "Explore networking opportunities in your industry to expand your professional connections",
+        text: "Explora oportunidades de networking en tu industria para expandir tus conexiones profesionales",
         category: "career",
         priority: "medium",
       },
       {
         id: "3",
-        text: "Set up regular one-on-ones with your manager to discuss career progression",
+        text: "Establece reuniones regulares con tu jefe para discutir tu progreso de carrera",
         category: "development",
         priority: "high",
       },
       {
         id: "4",
-        text: "Update your LinkedIn profile to reflect your recent achievements and skills",
+        text: "Actualiza tu perfil de LinkedIn para reflejar tus logros recientes y habilidades",
         category: "career",
         priority: "medium",
       },
       {
         id: "5",
-        text: "Consider pursuing a professional certification in your field",
+        text: "Considera obtener una certificación profesional en tu campo",
         category: "development",
         priority: "low",
       },
@@ -95,36 +112,36 @@ export function PersistentAICoach() {
     setInsights([
       {
         id: "1",
-        title: "Strong Analytical Thinking",
+        title: "Fuerte Pensamiento Analítico",
         description:
-          "Based on your assessment results, you demonstrate excellent analytical and problem-solving capabilities. This is a valuable asset in leadership roles and strategic positions.",
+          "Basado en tus resultados de evaluación, demuestras excelentes capacidades de análisis y resolución de problemas. Esta es una valiosa asset en roles de liderazgo y posiciones estratégicas.",
         category: "personality",
         confidence: 92,
         actionable: true,
       },
       {
         id: "2",
-        title: "Leadership Potential",
+        title: "Potencial de Liderazgo",
         description:
-          "Your communication style and decision-making approach suggest strong leadership potential. Consider seeking opportunities to lead projects or mentor junior colleagues.",
+          "Tu estilo de comunicación y toma de decisiones sugieren fuerte potencial de liderazgo. Considera buscar oportunidades para liderar proyectos o mentorizar a colegas más jóvenes.",
         category: "career",
         confidence: 87,
         actionable: true,
       },
       {
         id: "3",
-        title: "Collaborative Work Style",
+        title: "Estilo de Trabajo Colaborativo",
         description:
-          "You show a preference for collaborative environments and team-based problem solving. This makes you well-suited for cross-functional roles and team leadership positions.",
+          "Demuestras una preferencia por entornos colaborativos y resolución de problemas en equipo. Esto te hace bien adaptado para roles interfuncionales y liderazgo de equipos.",
         category: "skills",
         confidence: 89,
         actionable: true,
       },
       {
         id: "4",
-        title: "Growth Mindset",
+        title: "Mente Abierta al Crecimiento",
         description:
-          "Your responses indicate a strong growth mindset and willingness to learn. This is crucial for career advancement and adapting to changing industry demands.",
+          "Tus respuestas indican una fuerte mente abierta al crecimiento y disposición para aprender. Esto es crucial para el avance de la carrera y adaptarse a los demandas cambiantes del mercado laboral.",
         category: "personality",
         confidence: 94,
         actionable: false,
@@ -136,6 +153,39 @@ export function PersistentAICoach() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      if (SpeechRecognition) {
+        setSpeechSupported(true)
+        const recognition = new SpeechRecognition()
+        recognition.continuous = false
+        recognition.interimResults = true
+        recognition.lang = "es-ES" // Spanish language
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0])
+            .map((result) => result.transcript)
+            .join("")
+
+          setInputMessage(transcript)
+        }
+
+        recognition.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error)
+          setIsListening(false)
+        }
+
+        recognition.onend = () => {
+          setIsListening(false)
+        }
+
+        recognitionRef.current = recognition
+      }
+    }
+  }, [])
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return
@@ -172,35 +222,35 @@ export function PersistentAICoach() {
 
     // Career-related responses
     if (lowerInput.includes("career") || lowerInput.includes("job") || lowerInput.includes("promotion")) {
-      return "Great question about career development! Based on your profile, I'd recommend focusing on three key areas: 1) Building your leadership skills through stretch assignments, 2) Expanding your network within and outside your organization, and 3) Developing expertise in emerging technologies relevant to your field. Would you like me to elaborate on any of these areas?"
+      return "¡Buen pregunta sobre el desarrollo de carrera! Basado en tu perfil, te recomiendo enfocarte en tres áreas clave: 1) Desarrollar tus habilidades de liderazgo a través de asignaciones de crecimiento, 2) Expandir tu red dentro y fuera de tu organización, y 3) Desarrollar experticia en tecnologías emergentes relevantes para tu campo. ¿Te gustaría que me detallara más alguna de estas áreas?"
     }
 
     // Skills development responses
     if (lowerInput.includes("skill") || lowerInput.includes("learn") || lowerInput.includes("develop")) {
-      return "Skill development is crucial for career growth! Your assessment results show strong analytical abilities, which is excellent. I'd suggest focusing on complementary skills like communication, project management, and strategic thinking. Consider online courses, workshops, or finding a mentor in these areas. What specific skills are you most interested in developing?"
+      return "El desarrollo de habilidades es crucial para el avance de la carrera ¡Tus resultados de evaluación muestran fuertes habilidades analíticas, lo cual es excelente. Te recomiendo enfocarte en habilidades complementarias como comunicación, gestión de proyectos y pensamiento estratégico. Considera cursos en línea, talleres o encontrar un mentor en estos áreas. ¿Qué habilidades específicas te interesa desarrollar?"
     }
 
     // Assessment-related responses
     if (lowerInput.includes("test") || lowerInput.includes("assessment") || lowerInput.includes("result")) {
-      return "Your assessment results provide valuable insights into your work style and preferences. They show you have strong problem-solving abilities and work well in collaborative environments. These strengths position you well for leadership roles. I can help you understand how to leverage these insights for career planning. Which aspect of your results would you like to explore further?"
+      return "¡Los resultados de tu evaluación proporcionan valiosos insights en tu estilo de trabajo y preferencias! Muestran que tienes fuertes habilidades de resolución de problemas y trabajas bien en entornos colaborativos. Estas fortalezas te posicionan bien para roles de liderazgo. Puedo ayudarte a entender cómo aprovechar estos insights para planificación de carrera. ¿Qué aspecto de tus resultados te gustaría explorar más?"
     }
 
     // Leadership responses
     if (lowerInput.includes("leader") || lowerInput.includes("manage") || lowerInput.includes("team")) {
-      return "Leadership is a key area where you show great potential! Your communication style and collaborative approach are strong foundations. To develop further, consider: 1) Seeking feedback from team members, 2) Taking on cross-functional projects, 3) Finding a leadership mentor, and 4) Practicing active listening and delegation skills. What leadership challenges are you currently facing?"
+      return "¡El liderazgo es un área donde demuestras gran potencial! Tu estilo de comunicación y trabajo colaborativo son sólidos fundamentos. Para desarrollarlo más, considera: 1) Solicitar retroalimentación de tus compañeros de equipo, 2) Asumir proyectos interfuncionales, 3) Encontrar un mentor de liderazgo y 4) Practicar la escucha activa y la delegación de tareas. ¿Cuáles desafíos de liderazgo estás enfrentando actualmente?"
     }
 
     // Networking responses
     if (lowerInput.includes("network") || lowerInput.includes("connect") || lowerInput.includes("relationship")) {
-      return "Networking is essential for career growth! Here are some strategies tailored to your profile: 1) Attend industry conferences and meetups, 2) Engage actively on LinkedIn with thoughtful comments and posts, 3) Reach out to alumni from your school, 4) Join professional associations in your field. Quality connections are more valuable than quantity. What networking goals would you like to set?"
+      return "¡El networking es esencial para el avance de la carrera! Aquí tienes algunas estrategias adaptadas a tu perfil: 1) Asiste a conferencias y meetups de la industria, 2) Engaja activamente en LinkedIn con comentarios y publicaciones significativas, 3) Ponte en contacto con colegas de tu escuela, 4) Únete a asociaciones profesionales en tu campo. Las conexiones de calidad son más valiosas que la cantidad. ¿Qué objetivos de networking te gustaría establecer?"
     }
 
     // Default responses
     const defaultResponses = [
-      "That's an excellent question! Based on your assessment results and career profile, I can see several opportunities for growth. Your analytical strengths and collaborative nature are valuable assets. Let me help you create a specific action plan. What's your primary career goal right now?",
-      "I understand your concern, and it's something many professionals face. Your assessment shows you have the capabilities to overcome this challenge. Let's break it down into manageable steps and create a development plan that leverages your strengths.",
-      "This is a great area to focus on! Your personality profile suggests you'd excel in this direction. I recommend starting with small, achievable goals and building momentum. What specific outcome are you hoping to achieve?",
-      "Based on your results, you have strong potential in this area. I'd suggest combining your natural strengths with targeted skill development. Let's explore some specific strategies that align with your work style and career aspirations.",
+      "¡Esa es una excelente pregunta! Basado en tus resultados de evaluación y perfil de carrera, puedo ver varias oportunidades de crecimiento. Tus habilidades analíticas y estilo de trabajo colaborativo son activos valiosos. Permíteme ayudarte a crear un plan de acción específico. ¿Cuál es tu objetivo de carrera principal en este momento?",
+      "Entiendo tu preocupación, y es algo que muchos profesionales enfrentan. Tus resultados de evaluación muestran que tienes las capacidades para superar este desafío. Vamos a desglosarlo en pasos manejables y crear un plan de desarrollo que aproveche tus fortalezas.",
+      "¡Esta es una área excelente en la que enfocarte! Tu perfil de personalidad sugiere que te desempeñarías bien en esta dirección. Te recomiendo empezar con pequeños objetivos alcanzables y construir momentum. ¿Qué resultado específico estás buscando alcanzar?",
+      "Basado en tus resultados, tienes fuerte potencial en esta área. Te recomiendo combinar tus fortalezas naturales con un desarrollo de habilidades dirigido. Vamos a explorar estrategias específicas que se alineen con tu estilo de trabajo y aspiraciones de carrera.",
     ]
 
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)]
@@ -209,7 +259,7 @@ export function PersistentAICoach() {
   const handleSuggestionClick = (suggestion: Suggestion) => {
     const message: Message = {
       id: Date.now().toString(),
-      content: `Tell me more about: ${suggestion.text}`,
+      content: `Dime más sobre: ${suggestion.text}`,
       sender: "user",
       timestamp: new Date(),
     }
@@ -231,16 +281,16 @@ export function PersistentAICoach() {
   const generateSuggestionResponse = (suggestion: Suggestion): string => {
     switch (suggestion.category) {
       case "skills":
-        return "Excellent choice! Leadership skills are crucial for career advancement. I recommend starting with these specific actions: 1) Volunteer to lead a small project or initiative, 2) Take an online leadership course (I can recommend some), 3) Find a mentor who exemplifies the leadership style you admire, 4) Practice giving presentations to build confidence. Would you like me to help you create a 90-day leadership development plan?"
+        return "¡Excelente elección! Las habilidades de liderazgo son cruciales para el avance de la carrera. Te recomiendo empezar con estas acciones específicas: 1) Voluntariarte para liderar un pequeño proyecto o iniciativa, 2) Tomar un curso en línea de liderazgo (puedo recomendarte algunos), 3) Encontrar un mentor que ejemplifique el estilo de liderazgo que admiras, 4) Practicar dar presentaciones para construir confianza. ¿Te gustaría que te ayudara a crear un plan de desarrollo de liderazgo específico de 90 días?"
 
       case "career":
-        return "Networking is one of the most effective career strategies! Here's a practical approach: 1) Set a goal to make 2-3 new professional connections per month, 2) Attend industry events or virtual meetups, 3) Engage meaningfully on LinkedIn by commenting on posts in your field, 4) Reach out to colleagues for informational interviews. Your collaborative nature will be a huge asset in networking. What industry events or groups interest you most?"
+        return "¡El networking es uno de los métodos más efectivos para el avance de la carrera! Aquí tienes un enfoque práctico: 1) Establecer un objetivo de hacer 2-3 nuevas conexiones profesionales al mes, 2) Asistir a eventos de la industria o meetups virtuales, 3) Engajar significativamente en LinkedIn comentando en publicaciones de tu campo, 4) Ponerte en contacto con colegas para entrevistas informativas. Tu estilo de trabajo colaborativo será un gran activo en el networking. ¿Qué eventos de la industria o grupos te interesan más?"
 
       case "development":
-        return "Regular check-ins with your manager are incredibly valuable for career growth! Here's how to make them most effective: 1) Prepare an agenda with your goals and challenges, 2) Ask for specific feedback on your performance, 3) Discuss your career aspirations and get their input, 4) Request stretch assignments or new responsibilities. Your analytical skills will help you prepare well for these conversations. When was your last meaningful career conversation with your manager?"
+        return "¡Las reuniones regulares con tu jefe son increíblemente valiosas para el avance de la carrera! Aquí tienes cómo hacerlas más efectivas: 1) Preparar una agenda con tus objetivos y desafíos, 2) Pedir retroalimentación específica sobre tu rendimiento, 3) Discutir tus aspiraciones de carrera y obtener su opinión, 4) Solicitar asignaciones de crecimiento o nuevas responsabilidades. Tus habilidades analíticas te ayudarán a prepararte bien para estas reuniones. ¿Cuándo fue tu última reunión significativa de carrera con tu jefe?"
 
       default:
-        return "That's a great area to focus on! Based on your profile, you have the right foundation to succeed in this. Let me help you create a specific action plan with measurable goals and timelines. What's your biggest challenge in this area right now?"
+        return "¡Esta es una área excelente en la que enfocarte! Basado en tu perfil, tienes la base correcta para tener éxito en esta. Permíteme ayudarte a crear un plan de acción específico con objetivos y líneas de tiempo medibles. ¿Cuál es tu mayor desafío en esta área en este momento?"
     }
   }
 
@@ -273,13 +323,25 @@ export function PersistentAICoach() {
   }
 
   const quickStartQuestions = [
-    "How can I advance in my current role?",
-    "What skills should I develop next?",
-    "Help me understand my assessment results",
-    "How can I improve my leadership abilities?",
-    "What career paths suit my personality?",
-    "How do I build a professional network?",
+    "¿Cómo puedo avanzar en mi rol actual?",
+    "¿Qué habilidades debería desarrollar a continuación?",
+    "Ayúdame a entender mis resultados de evaluación",
+    "¿Cómo puedo mejorar mis habilidades de liderazgo?",
+    "¿Qué carreras se ajustan a mi personalidad?",
+    "¿Cómo construyo una red profesional?",
   ]
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return
+
+    if (isListening) {
+      recognitionRef.current.stop()
+      setIsListening(false)
+    } else {
+      recognitionRef.current.start()
+      setIsListening(true)
+    }
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-4">
@@ -288,17 +350,17 @@ export function PersistentAICoach() {
         <div className="flex items-center justify-between mb-4">
           <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-muted">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
+            Volver al Inicio
           </Button>
           <Badge variant="secondary" className="bg-muted text-mutedForeground">
             <Bot className="h-3 w-3 mr-1" />
-            AI Powered
+            Potenciado por IA
           </Badge>
         </div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">AI Career Coach</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Coach de Carrera IA</h1>
         <p className="text-mutedForeground">
-          Get personalized career guidance, insights, and actionable recommendations based on your unique profile and
-          assessment results.
+          Obtén orientación profesional personalizada, insights y recomendaciones accionables basadas en tu perfil único
+          y resultados de evaluación.
         </p>
       </div>
 
@@ -310,7 +372,7 @@ export function PersistentAICoach() {
           </TabsTrigger>
           <TabsTrigger value="suggestions" className="data-[state=active]:bg-background">
             <Lightbulb className="h-4 w-4 mr-2" />
-            Suggestions ({suggestions.length})
+            Sugerencias ({suggestions.length})
           </TabsTrigger>
           <TabsTrigger value="insights" className="data-[state=active]:bg-background">
             <Sparkles className="h-4 w-4 mr-2" />
@@ -323,7 +385,7 @@ export function PersistentAICoach() {
             <CardHeader>
               <CardTitle className="flex items-center text-foreground">
                 <Bot className="h-5 w-5 mr-2" />
-                Career Coaching Session
+                Sesión de Coaching de Carrera
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -374,7 +436,7 @@ export function PersistentAICoach() {
                               style={{ animationDelay: "0.2s" }}
                             ></div>
                           </div>
-                          <span className="text-sm text-mutedForeground">AI is thinking...</span>
+                          <span className="text-sm text-mutedForeground">IA está pensando...</span>
                         </div>
                       </div>
                     </div>
@@ -386,7 +448,7 @@ export function PersistentAICoach() {
               {/* Quick Start Questions */}
               {messages.length <= 1 && (
                 <div className="mb-4">
-                  <p className="text-sm text-mutedForeground mb-3">Quick start questions:</p>
+                  <p className="text-sm text-mutedForeground mb-3">Preguntas rápidas para comenzar:</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {quickStartQuestions.map((question, index) => (
                       <Button
@@ -404,26 +466,49 @@ export function PersistentAICoach() {
                 </div>
               )}
 
-              <div className="flex space-x-2">
-                <Textarea
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="Ask me about your career, skills, or professional development..."
-                  className="flex-1 min-h-[60px] resize-none border-border focus:border-foreground"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage()
-                    }
-                  }}
-                />
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!inputMessage.trim() || isLoading}
-                  className="bg-foreground text-background hover:bg-foreground/90"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
+              <div className="space-y-2">
+                <div className="flex space-x-2">
+                  <Textarea
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    placeholder="Pregúntame sobre tu carrera, habilidades o desarrollo profesional..."
+                    className="flex-1 min-h-[60px] resize-none border-border focus:border-foreground"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault()
+                        handleSendMessage()
+                      }
+                    }}
+                  />
+                  <div className="flex flex-col gap-2">
+                    {speechSupported && (
+                      <Button
+                        onClick={toggleListening}
+                        disabled={isLoading}
+                        variant={isListening ? "destructive" : "outline"}
+                        className={isListening ? "animate-pulse" : ""}
+                      >
+                        {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                      </Button>
+                    )}
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim() || isLoading}
+                      className="bg-foreground text-background hover:bg-foreground/90"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-xs text-mutedForeground">
+                  <span>Presiona Enter para enviar, Shift+Enter para nueva línea</span>
+                  {speechSupported && (
+                    <span className="flex items-center gap-1">
+                      <Mic className="h-3 w-3" />
+                      {isListening ? "Escuchando..." : "Haz clic en el micrófono para hablar"}
+                    </span>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -434,10 +519,10 @@ export function PersistentAICoach() {
             <CardHeader>
               <CardTitle className="flex items-center text-foreground">
                 <Lightbulb className="h-5 w-5 mr-2" />
-                Personalized Suggestions
+                Sugerencias Personalizadas
               </CardTitle>
               <p className="text-sm text-mutedForeground mt-2">
-                AI-generated recommendations based on your assessment results and career profile
+                Recomendaciones generadas por IA basadas en tus resultados de evaluación y perfil de carrera
               </p>
             </CardHeader>
             <CardContent>
@@ -460,7 +545,7 @@ export function PersistentAICoach() {
                                 {suggestion.category}
                               </Badge>
                               <Badge className={getPriorityColor(suggestion.priority)}>
-                                {suggestion.priority} priority
+                                {suggestion.priority} prioridad
                               </Badge>
                             </div>
                           </div>
@@ -474,7 +559,7 @@ export function PersistentAICoach() {
                             handleSuggestionClick(suggestion)
                           }}
                         >
-                          Discuss
+                          Discutir
                         </Button>
                       </div>
                     </div>
@@ -490,10 +575,10 @@ export function PersistentAICoach() {
             <CardHeader>
               <CardTitle className="flex items-center text-foreground">
                 <Sparkles className="h-5 w-5 mr-2" />
-                AI-Generated Insights
+                Insights Generados por IA
               </CardTitle>
               <p className="text-sm text-mutedForeground mt-2">
-                Deep analysis of your assessment results and professional profile
+                Análisis profundo de tus resultados de evaluación y perfil profesional
               </p>
             </CardHeader>
             <CardContent>
@@ -518,7 +603,7 @@ export function PersistentAICoach() {
                               </Badge>
                               {insight.actionable && (
                                 <Badge className="bg-foreground/10 text-foreground border-foreground/20">
-                                  Actionable
+                                  Accionable
                                 </Badge>
                               )}
                             </div>
@@ -526,7 +611,7 @@ export function PersistentAICoach() {
                           <p className="text-mutedForeground mb-4 leading-relaxed">{insight.description}</p>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <span className="text-sm text-mutedForeground">Confidence:</span>
+                              <span className="text-sm text-mutedForeground">Confianza:</span>
                               <Progress value={insight.confidence} className="w-24 h-2" />
                               <span className="text-sm font-medium text-foreground">{insight.confidence}%</span>
                             </div>
@@ -534,13 +619,13 @@ export function PersistentAICoach() {
                               <Button
                                 size="sm"
                                 onClick={() => {
-                                  const message = `How can I leverage my ${insight.title.toLowerCase()} for career growth?`
+                                  const message = `¿Cómo puedo aprovechar mi ${insight.title.toLowerCase()} para el crecimiento de mi carrera?`
                                   setInputMessage(message)
                                   setActiveTab("chat")
                                 }}
                                 className="bg-foreground text-background hover:bg-foreground/90"
                               >
-                                Create Action Plan
+                                Crear Plan de Acción
                               </Button>
                             )}
                           </div>

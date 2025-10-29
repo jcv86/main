@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Send, Save, Star } from "lucide-react"
+import { Send, Save, Star, Mic, MicOff } from "lucide-react"
 
 interface Message {
   id: string
@@ -30,6 +30,10 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
   const [rating, setRating] = useState<number | null>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
   // Initial welcome message
   useEffect(() => {
     const welcomeMessage: Message = {
@@ -42,6 +46,39 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
     setMessages([welcomeMessage])
   }, [])
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      if (SpeechRecognition) {
+        setSpeechSupported(true)
+        const recognition = new SpeechRecognition()
+        recognition.continuous = false
+        recognition.interimResults = true
+        recognition.lang = "es-ES" // Spanish language
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0])
+            .map((result) => result.transcript)
+            .join("")
+
+          setInput(transcript)
+        }
+
+        recognition.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error)
+          setIsListening(false)
+        }
+
+        recognition.onend = () => {
+          setIsListening(false)
+        }
+
+        recognitionRef.current = recognition
+      }
+    }
+  }, [])
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -51,6 +88,18 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
       }
     }
   }, [messages])
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return
+
+    if (isListening) {
+      recognitionRef.current.stop()
+      setIsListening(false)
+    } else {
+      recognitionRef.current.start()
+      setIsListening(true)
+    }
+  }
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return
@@ -225,7 +274,6 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
           </div>
         )}
 
-        {/* Input Section */}
         <div className="p-4 border-t">
           <div className="flex items-center space-x-2">
             <Input
@@ -236,11 +284,30 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
               disabled={isLoading}
               className="flex-1"
             />
+            {speechSupported && (
+              <Button
+                onClick={toggleListening}
+                disabled={isLoading}
+                variant={isListening ? "destructive" : "outline"}
+                size="sm"
+                className={isListening ? "animate-pulse" : ""}
+              >
+                {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </Button>
+            )}
             <Button onClick={sendMessage} disabled={!input.trim() || isLoading} size="sm">
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-gray-500">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+            {speechSupported && (
+              <p className="text-xs text-gray-500 flex items-center gap-1">
+                <Mic className="h-3 w-3" />
+                {isListening ? "Escuchando..." : "Habla con el micrófono"}
+              </p>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

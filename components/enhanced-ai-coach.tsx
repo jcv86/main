@@ -26,6 +26,8 @@ import {
   ThumbsDown,
   MoreVertical,
   BookOpen,
+  Mic,
+  MicOff,
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
@@ -61,6 +63,10 @@ export default function EnhancedAICoach({ testType, testResults, userProfile, cl
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
   const userEmail = "demo@example.com" // In real app, get from auth
 
   useEffect(() => {
@@ -71,6 +77,51 @@ export default function EnhancedAICoach({ testType, testResults, userProfile, cl
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      if (SpeechRecognition) {
+        setSpeechSupported(true)
+        const recognition = new SpeechRecognition()
+        recognition.continuous = false
+        recognition.interimResults = true
+        recognition.lang = "es-ES" // Spanish language
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0])
+            .map((result) => result.transcript)
+            .join("")
+
+          setInput(transcript)
+        }
+
+        recognition.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error)
+          setIsListening(false)
+        }
+
+        recognition.onend = () => {
+          setIsListening(false)
+        }
+
+        recognitionRef.current = recognition
+      }
+    }
+  }, [])
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return
+
+    if (isListening) {
+      recognitionRef.current.stop()
+      setIsListening(false)
+    } else {
+      recognitionRef.current.start()
+      setIsListening(true)
+    }
+  }
 
   const initializeChat = () => {
     const welcomeMessage: Message = {
@@ -553,20 +604,39 @@ ${
                   disabled={isLoading}
                   className="flex-1"
                 />
+                {speechSupported && (
+                  <Button
+                    onClick={toggleListening}
+                    disabled={isLoading}
+                    variant={isListening ? "destructive" : "outline"}
+                    size="sm"
+                    className={isListening ? "animate-pulse" : ""}
+                  >
+                    {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </Button>
+                )}
                 <Button onClick={handleSendMessage} disabled={isLoading || !input.trim()} size="sm">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </div>
 
-              <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                <Brain className="h-3 w-3" />
-                <span>
-                  {connectionStatus === "online"
-                    ? "Conectado al cerebro completo de la plataforma con 15+ fuentes especializadas"
-                    : connectionStatus === "fallback"
-                      ? "Funcionando en modo básico - algunas funciones pueden estar limitadas"
-                      : "Sin conexión - intenta de nuevo en unos momentos"}
-                </span>
+              <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2">
+                  <Brain className="h-3 w-3" />
+                  <span>
+                    {connectionStatus === "online"
+                      ? "Conectado al cerebro completo de la plataforma con 15+ fuentes especializadas"
+                      : connectionStatus === "fallback"
+                        ? "Funcionando en modo básico - algunas funciones pueden estar limitadas"
+                        : "Sin conexión - intenta de nuevo en unos momentos"}
+                  </span>
+                </div>
+                {speechSupported && (
+                  <div className="flex items-center gap-1">
+                    <Mic className="h-3 w-3" />
+                    <span>{isListening ? "Escuchando..." : "Habla con el micrófono"}</span>
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
