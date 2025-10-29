@@ -81,7 +81,7 @@ export default function BibliotecaPage() {
 
         setBooks(transformedBooks)
       } catch (error) {
-        console.error("Error loading books:", error)
+        console.error("Error al cargar libros:", error)
         setBooks([])
       } finally {
         setLoading(false)
