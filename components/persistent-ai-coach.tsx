@@ -160,25 +160,55 @@ export function PersistentAICoach() {
       if (SpeechRecognition) {
         setSpeechSupported(true)
         const recognition = new SpeechRecognition()
-        recognition.continuous = false
-        recognition.interimResults = true
+        recognition.continuous = true // Keep listening until manually stopped
+        recognition.interimResults = true // Show results as user speaks
         recognition.lang = "es-ES" // Spanish language
+        recognition.maxAlternatives = 1
+
+        let finalTranscript = ""
+
+        recognition.onstart = () => {
+          console.log("[v0] Speech recognition started")
+          finalTranscript = ""
+        }
 
         recognition.onresult = (event: any) => {
-          const transcript = Array.from(event.results)
-            .map((result: any) => result[0])
-            .map((result) => result.transcript)
-            .join("")
+          let interimTranscript = ""
 
-          setInputMessage(transcript)
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript + " "
+            } else {
+              interimTranscript += transcript
+            }
+          }
+
+          // Update input with final + interim results
+          setInputMessage(finalTranscript + interimTranscript)
         }
 
         recognition.onerror = (event: any) => {
-          console.error("Speech recognition error:", event.error)
+          console.log("[v0] Speech recognition error:", event.error)
+
+          if (event.error === "no-speech") {
+            // Don't show error for no-speech, just stop listening
+            console.log("[v0] No speech detected, stopping recognition")
+          } else if (event.error === "audio-capture") {
+            alert("No se pudo acceder al micrófono. Por favor verifica los permisos.")
+          } else if (event.error === "not-allowed") {
+            alert(
+              "Permiso de micrófono denegado. Por favor permite el acceso al micrófono en la configuración de tu navegador.",
+            )
+          } else {
+            console.error("[v0] Speech recognition error:", event.error)
+          }
+
           setIsListening(false)
         }
 
         recognition.onend = () => {
+          console.log("[v0] Speech recognition ended")
           setIsListening(false)
         }
 
@@ -338,8 +368,14 @@ export function PersistentAICoach() {
       recognitionRef.current.stop()
       setIsListening(false)
     } else {
-      recognitionRef.current.start()
-      setIsListening(true)
+      try {
+        setInputMessage("")
+        recognitionRef.current.start()
+        setIsListening(true)
+      } catch (error) {
+        console.error("[v0] Error starting speech recognition:", error)
+        setIsListening(false)
+      }
     }
   }
 
@@ -486,7 +522,8 @@ export function PersistentAICoach() {
                         onClick={toggleListening}
                         disabled={isLoading}
                         variant={isListening ? "destructive" : "outline"}
-                        className={isListening ? "animate-pulse" : ""}
+                        className={isListening ? "animate-pulse border-2 border-destructive" : ""}
+                        title={isListening ? "Haz clic para detener" : "Haz clic para hablar"}
                       >
                         {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                       </Button>
@@ -505,7 +542,11 @@ export function PersistentAICoach() {
                   {speechSupported && (
                     <span className="flex items-center gap-1">
                       <Mic className="h-3 w-3" />
-                      {isListening ? "Escuchando..." : "Haz clic en el micrófono para hablar"}
+                      {isListening ? (
+                        <span className="text-destructive font-medium">Escuchando... (haz clic para detener)</span>
+                      ) : (
+                        "Haz clic en el micrófono para hablar"
+                      )}
                     </span>
                   )}
                 </div>
