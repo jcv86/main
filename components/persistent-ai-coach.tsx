@@ -61,8 +61,12 @@ export function PersistentAICoach() {
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
+  const isListeningRef = useRef(false)
+  const noSpeechRetriesRef = useRef(0)
+  const maxRetries = 3
+  const listeningTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const maxListeningTime = 30000 // 30 segundos máximo
 
-  // Initialize with welcome message and sample data
   useEffect(() => {
     const welcomeMessage: Message = {
       id: "1",
@@ -149,7 +153,6 @@ export function PersistentAICoach() {
     ])
   }, [])
 
-  // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
@@ -160,29 +163,116 @@ export function PersistentAICoach() {
       if (SpeechRecognition) {
         setSpeechSupported(true)
         const recognition = new SpeechRecognition()
-        recognition.continuous = false // Detener después de detectar silencio
-        recognition.interimResults = true // Mostrar resultados mientras habla
+        recognition.continuous = false
+        recognition.interimResults = true
         recognition.lang = "es-ES"
+        recognition.maxAlternatives = 1
+
+        recognition.onstart = () => {
+          console.log("[v0] Speech recognition started")
+          noSpeechRetriesRef.current = 0
+
+          // Establecer timeout máximo de escucha
+          listeningTimeoutRef.current = setTimeout(() => {
+            console.log("[v0] Max listening time reached, stopping")
+            if (recognitionRef.current && isListeningRef.current) {
+              isListeningRef.current = false
+              setIsListening(false)
+              recognitionRef.current.stop()
+            }
+          }, maxListeningTime)
+        }
 
         recognition.onresult = (event: any) => {
+          console.log("[v0] Speech recognition result received")
           const transcript = Array.from(event.results)
             .map((result: any) => result[0])
             .map((result) => result.transcript)
             .join("")
 
+          console.log("[v0] Transcript:", transcript)
           setInputMessage(transcript)
+
+          // Si obtuvimos un resultado final, detener
+          if (event.results[event.results.length - 1].isFinal) {
+            console.log("[v0] Final result received, stopping")
+            isListeningRef.current = false
+            setIsListening(false)
+            if (listeningTimeoutRef.current) {
+              clearTimeout(listeningTimeoutRef.current)
+            }
+          }
         }
 
         recognition.onerror = (event: any) => {
-          console.error("Speech recognition error:", event.error)
+          console.log("[v0] Speech recognition error:", event.error)
+
+          // Manejar el error "no-speech" de manera especial
+          if (event.error === "no-speech") {
+            console.log("[v0] No speech detected, retry count:", noSpeechRetriesRef.current)
+            console.log("[v0] Is listening ref:", isListeningRef.current)
+
+            // Reintentar automáticamente si no hemos excedido el límite Y todavía estamos escuchando
+            if (noSpeechRetriesRef.current < maxRetries && isListeningRef.current) {
+              noSpeechRetriesRef.current++
+              console.log("[v0] Retrying... attempt", noSpeechRetriesRef.current)
+
+              // Pequeña pausa antes de reintentar
+              setTimeout(() => {
+                if (isListeningRef.current && recognitionRef.current) {
+                  try {
+                    console.log("[v0] Restarting recognition")
+                    recognitionRef.current.start()
+                  } catch (e) {
+                    console.log("[v0] Error restarting:", e)
+                    isListeningRef.current = false
+                    setIsListening(false)
+                  }
+                }
+              }, 100)
+              return // No ejecutar el código de limpieza abajo
+            } else {
+              console.log("[v0] Max retries reached or not listening, stopping")
+            }
+          } else if (event.error === "aborted") {
+            // El usuario detuvo manualmente, no hacer nada
+            console.log("[v0] Recognition aborted by user")
+          } else {
+            // Otros errores (not-allowed, network, etc.)
+            console.error("[v0] Speech recognition error:", event.error)
+          }
+
+          // Limpiar estado
+          isListeningRef.current = false
           setIsListening(false)
+          if (listeningTimeoutRef.current) {
+            clearTimeout(listeningTimeoutRef.current)
+          }
         }
 
         recognition.onend = () => {
-          setIsListening(false)
+          console.log("[v0] Speech recognition ended")
+          console.log("[v0] Retry count:", noSpeechRetriesRef.current)
+          console.log("[v0] Is listening ref:", isListeningRef.current)
+
+          if (noSpeechRetriesRef.current >= maxRetries || !isListeningRef.current) {
+            console.log("[v0] Cleaning up listening state")
+            isListeningRef.current = false
+            setIsListening(false)
+            if (listeningTimeoutRef.current) {
+              clearTimeout(listeningTimeoutRef.current)
+            }
+          }
         }
 
         recognitionRef.current = recognition
+      }
+    }
+
+    // Cleanup
+    return () => {
+      if (listeningTimeoutRef.current) {
+        clearTimeout(listeningTimeoutRef.current)
       }
     }
   }, [])
@@ -335,11 +425,26 @@ export function PersistentAICoach() {
     if (!recognitionRef.current) return
 
     if (isListening) {
-      recognitionRef.current.stop()
+      console.log("[v0] Stopping recognition manually")
+      isListeningRef.current = false
+      noSpeechRetriesRef.current = maxRetries // Prevenir reintentos después de detener manualmente
       setIsListening(false)
+      recognitionRef.current.stop()
+      if (listeningTimeoutRef.current) {
+        clearTimeout(listeningTimeoutRef.current)
+      }
     } else {
-      recognitionRef.current.start()
+      console.log("[v0] Starting recognition")
+      noSpeechRetriesRef.current = 0
+      isListeningRef.current = true
       setIsListening(true)
+      try {
+        recognitionRef.current.start()
+      } catch (e) {
+        console.error("[v0] Error starting recognition:", e)
+        isListeningRef.current = false
+        setIsListening(false)
+      }
     }
   }
 
@@ -486,8 +591,8 @@ export function PersistentAICoach() {
                         onClick={toggleListening}
                         disabled={isLoading}
                         variant={isListening ? "destructive" : "outline"}
-                        className={isListening ? "animate-pulse border-2 border-destructive" : ""}
-                        title={isListening ? "Haz clic para detener" : "Haz clic para hablar"}
+                        className={isListening ? "animate-pulse" : ""}
+                        title={isListening ? "Detener grabación" : "Iniciar grabación de voz"}
                       >
                         {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                       </Button>
