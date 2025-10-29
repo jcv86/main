@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Clock, Plus, MessageCircle } from "lucide-react"
+import { Calendar, Clock, Plus, MessageCircle, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { WhatsAppService } from "@/lib/whatsapp-service"
 
 interface Activity {
   id: string
@@ -36,21 +37,82 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
   const [loading, setLoading] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [showAddModal, setShowAddModal] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchActivities()
-  }, [selectedDate])
+    if (userEmail) {
+      console.log("[v0] ActivityCalendar: Fetching activities for email:", userEmail)
+      fetchActivities()
+      fetchPhoneNumber()
+    } else {
+      console.log("[v0] ActivityCalendar: No userEmail provided")
+      setLoading(false)
+    }
+  }, [selectedDate, userEmail])
 
   const fetchActivities = async () => {
     try {
+      setError(null)
+      console.log("[v0] Fetching activities for:", userEmail, "date:", selectedDate.toISOString())
       const response = await fetch(`/api/activities?email=${userEmail}&date=${selectedDate.toISOString()}`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
       const data = await response.json()
+      console.log("[v0] Activities fetched:", data)
       setActivities(data.activities || [])
     } catch (error) {
       console.error("[v0] Error fetching activities:", error)
+      setError(error instanceof Error ? error.message : "Error al cargar actividades")
     } finally {
       setLoading(false)
     }
+  }
+
+  const fetchPhoneNumber = async () => {
+    try {
+      const response = await fetch(`/api/user/phone?email=${userEmail}`)
+      if (response.ok) {
+        const data = await response.json()
+        setPhoneNumber(data.phone_number || "")
+        console.log("[v0] Phone number fetched:", data.phone_number)
+      }
+    } catch (error) {
+      console.error("[v0] Error fetching phone number:", error)
+    }
+  }
+
+  const scheduleReminder = (activity: Activity) => {
+    if (!phoneNumber) {
+      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      return
+    }
+
+    const whatsappService = WhatsAppService.getInstance()
+    whatsappService.sendReminder(activity, phoneNumber)
+  }
+
+  const sendDailySummary = () => {
+    if (!phoneNumber) {
+      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      return
+    }
+
+    const whatsappService = WhatsAppService.getInstance()
+    whatsappService.sendDailySummary(phoneNumber, activities)
+  }
+
+  const sendMotivation = () => {
+    if (!phoneNumber) {
+      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      return
+    }
+
+    const whatsappService = WhatsAppService.getInstance()
+    whatsappService.sendMotivationalInsight(phoneNumber)
   }
 
   const formatTime = (dateString: string) => {
@@ -81,11 +143,49 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
     })
     .slice(0, 5)
 
+  if (error) {
+    return (
+      <Card className="p-6">
+        <div className="text-center py-8">
+          <Calendar className="w-12 h-12 mx-auto mb-4 text-destructive opacity-50" />
+          <h3 className="text-lg font-medium text-foreground mb-2">Error al cargar calendario</h3>
+          <p className="text-sm text-muted-foreground mb-4">{error}</p>
+          <Button
+            onClick={() => {
+              setError(null)
+              setLoading(true)
+              fetchActivities()
+            }}
+          >
+            Reintentar
+          </Button>
+        </div>
+      </Card>
+    )
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-sm text-muted-foreground">Cargando calendario...</p>
+        </div>
       </div>
+    )
+  }
+
+  if (!userEmail) {
+    return (
+      <Card className="p-6">
+        <div className="text-center py-8">
+          <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+          <h3 className="text-lg font-medium text-foreground mb-2">Inicia sesión para ver tu calendario</h3>
+          <p className="text-sm text-muted-foreground">
+            Necesitas estar autenticado para acceder a tu calendario de actividades
+          </p>
+        </div>
+      </Card>
     )
   }
 
@@ -95,24 +195,44 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Mi Calendario</h2>
-          <p className="text-muted-foreground">Organiza tus actividades y recibe recordatorios inteligentes</p>
+          <p className="text-muted-foreground">Organiza tus actividades y recibe recordatorios por WhatsApp</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Nueva Actividad
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={sendMotivation} disabled={!phoneNumber}>
+            <MessageCircle className="w-4 h-4 mr-2" />
+            Motivación
+          </Button>
+          <Button onClick={() => setShowAddModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Nueva Actividad
+          </Button>
+        </div>
       </div>
 
       {/* WhatsApp Status */}
-      <Card className="p-4 bg-green-50 border-green-200">
+      <Card className={`p-4 ${phoneNumber ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"}`}>
         <div className="flex items-center gap-3">
-          <MessageCircle className="w-5 h-5 text-green-600" />
+          <MessageCircle className={`w-5 h-5 ${phoneNumber ? "text-green-600" : "text-yellow-600"}`} />
           <div className="flex-1">
-            <p className="font-medium text-green-900">Recordatorios por WhatsApp Activos</p>
-            <p className="text-sm text-green-700">Recibirás mensajes motivacionales e insights personalizados</p>
+            {phoneNumber ? (
+              <>
+                <p className="font-medium text-green-900">WhatsApp Web Configurado</p>
+                <p className="text-sm text-green-700">
+                  Número: {phoneNumber} • Haz clic en "Recordar" para enviar mensajes por WhatsApp Web
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-medium text-yellow-900">Configura tu Número de WhatsApp</p>
+                <p className="text-sm text-yellow-700">
+                  Agrega tu número para recibir recordatorios automáticos por WhatsApp Web
+                </p>
+              </>
+            )}
           </div>
-          <Button variant="outline" size="sm">
-            Configurar
+          <Button variant="outline" size="sm" onClick={sendDailySummary} disabled={!phoneNumber}>
+            <Bell className="w-4 h-4 mr-2" />
+            Resumen del Día
           </Button>
         </div>
       </Card>
@@ -129,6 +249,10 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
             <div className="text-center py-8 text-muted-foreground">
               <Calendar className="w-12 h-12 mx-auto mb-2 opacity-50" />
               <p>No tienes actividades programadas para hoy</p>
+              <Button variant="outline" size="sm" className="mt-4 bg-transparent" onClick={() => setShowAddModal(true)}>
+                <Plus className="w-4 h-4 mr-2" />
+                Agregar Actividad
+              </Button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -145,11 +269,22 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
                     <Badge variant="outline">{activityTypeLabels[activity.event_type]}</Badge>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {formatTime(activity.start_time)} - {formatTime(activity.end_time)}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {formatTime(activity.start_time)} - {formatTime(activity.end_time)}
+                      </div>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => scheduleReminder(activity)}
+                      disabled={!phoneNumber}
+                    >
+                      <MessageCircle className="w-4 h-4 mr-1" />
+                      Recordar
+                    </Button>
                   </div>
                 </div>
               ))}
