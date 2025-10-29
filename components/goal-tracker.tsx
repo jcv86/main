@@ -30,7 +30,7 @@ interface Goal {
   created_at: string
 }
 
-export function GoalTracker({ userId }: { userId: string }) {
+export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: string }) {
   const [goals, setGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -65,6 +65,7 @@ export function GoalTracker({ userId }: { userId: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId,
+          userEmail,
           ...newGoal,
         }),
       })

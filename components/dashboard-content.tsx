@@ -445,7 +445,7 @@ export function DashboardContent() {
           </Card>
         </div>
 
-        {userId && <GoalTracker userId={userId} />}
+        {userId && userProfile.email && <GoalTracker userId={userId} userEmail={userProfile.email} />}
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="tests" className="space-y-4">
