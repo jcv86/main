@@ -160,55 +160,25 @@ export function PersistentAICoach() {
       if (SpeechRecognition) {
         setSpeechSupported(true)
         const recognition = new SpeechRecognition()
-        recognition.continuous = true // Keep listening until manually stopped
-        recognition.interimResults = true // Show results as user speaks
-        recognition.lang = "es-ES" // Spanish language
-        recognition.maxAlternatives = 1
-
-        let finalTranscript = ""
-
-        recognition.onstart = () => {
-          console.log("[v0] Speech recognition started")
-          finalTranscript = ""
-        }
+        recognition.continuous = false // Detener después de detectar silencio
+        recognition.interimResults = true // Mostrar resultados mientras habla
+        recognition.lang = "es-ES"
 
         recognition.onresult = (event: any) => {
-          let interimTranscript = ""
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0])
+            .map((result) => result.transcript)
+            .join("")
 
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript
-            if (event.results[i].isFinal) {
-              finalTranscript += transcript + " "
-            } else {
-              interimTranscript += transcript
-            }
-          }
-
-          // Update input with final + interim results
-          setInputMessage(finalTranscript + interimTranscript)
+          setInputMessage(transcript)
         }
 
         recognition.onerror = (event: any) => {
-          console.log("[v0] Speech recognition error:", event.error)
-
-          if (event.error === "no-speech") {
-            // Don't show error for no-speech, just stop listening
-            console.log("[v0] No speech detected, stopping recognition")
-          } else if (event.error === "audio-capture") {
-            alert("No se pudo acceder al micrófono. Por favor verifica los permisos.")
-          } else if (event.error === "not-allowed") {
-            alert(
-              "Permiso de micrófono denegado. Por favor permite el acceso al micrófono en la configuración de tu navegador.",
-            )
-          } else {
-            console.error("[v0] Speech recognition error:", event.error)
-          }
-
+          console.error("Speech recognition error:", event.error)
           setIsListening(false)
         }
 
         recognition.onend = () => {
-          console.log("[v0] Speech recognition ended")
           setIsListening(false)
         }
 
@@ -368,14 +338,8 @@ export function PersistentAICoach() {
       recognitionRef.current.stop()
       setIsListening(false)
     } else {
-      try {
-        setInputMessage("")
-        recognitionRef.current.start()
-        setIsListening(true)
-      } catch (error) {
-        console.error("[v0] Error starting speech recognition:", error)
-        setIsListening(false)
-      }
+      recognitionRef.current.start()
+      setIsListening(true)
     }
   }
 

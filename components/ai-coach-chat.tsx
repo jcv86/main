@@ -52,9 +52,9 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
       if (SpeechRecognition) {
         setSpeechSupported(true)
         const recognition = new SpeechRecognition()
-        recognition.continuous = false
-        recognition.interimResults = true
-        recognition.lang = "es-ES" // Spanish language
+        recognition.continuous = false // Detener después de detectar silencio
+        recognition.interimResults = true // Mostrar resultados mientras habla
+        recognition.lang = "es-ES"
 
         recognition.onresult = (event: any) => {
           const transcript = Array.from(event.results)
@@ -280,7 +280,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Escribe tu pregunta aquí..."
+              placeholder="Escribe tu pregunta o usa el micrófono..."
               disabled={isLoading}
               className="flex-1"
             />
@@ -289,13 +289,14 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
                 onClick={toggleListening}
                 disabled={isLoading}
                 variant={isListening ? "destructive" : "outline"}
-                size="sm"
+                size="icon"
                 className={isListening ? "animate-pulse" : ""}
+                title={isListening ? "Detener grabación" : "Iniciar grabación de voz"}
               >
                 {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </Button>
             )}
-            <Button onClick={sendMessage} disabled={!input.trim() || isLoading} size="sm">
+            <Button onClick={sendMessage} disabled={!input.trim() || isLoading} size="icon">
               <Send className="h-4 w-4" />
             </Button>
           </div>
@@ -304,7 +305,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
             {speechSupported && (
               <p className="text-xs text-gray-500 flex items-center gap-1">
                 <Mic className="h-3 w-3" />
-                {isListening ? "Escuchando..." : "Habla con el micrófono"}
+                {isListening ? "Escuchando..." : "Click para hablar"}
               </p>
             )}
           </div>

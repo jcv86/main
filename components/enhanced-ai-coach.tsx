@@ -84,9 +84,9 @@ export default function EnhancedAICoach({ testType, testResults, userProfile, cl
       if (SpeechRecognition) {
         setSpeechSupported(true)
         const recognition = new SpeechRecognition()
-        recognition.continuous = false
-        recognition.interimResults = true
-        recognition.lang = "es-ES" // Spanish language
+        recognition.continuous = false // Detener después de detectar silencio
+        recognition.interimResults = true // Mostrar resultados mientras habla
+        recognition.lang = "es-ES"
 
         recognition.onresult = (event: any) => {
           const transcript = Array.from(event.results)
@@ -609,13 +609,14 @@ ${
                     onClick={toggleListening}
                     disabled={isLoading}
                     variant={isListening ? "destructive" : "outline"}
-                    size="sm"
+                    size="icon"
                     className={isListening ? "animate-pulse" : ""}
+                    title={isListening ? "Detener grabación" : "Iniciar grabación de voz"}
                   >
                     {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
                 )}
-                <Button onClick={handleSendMessage} disabled={isLoading || !input.trim()} size="sm">
+                <Button onClick={handleSendMessage} disabled={isLoading || !input.trim()} size="icon">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </div>
@@ -625,16 +626,16 @@ ${
                   <Brain className="h-3 w-3" />
                   <span>
                     {connectionStatus === "online"
-                      ? "Conectado al cerebro completo de la plataforma con 15+ fuentes especializadas"
+                      ? "Conectado al cerebro completo de la plataforma"
                       : connectionStatus === "fallback"
-                        ? "Funcionando en modo básico - algunas funciones pueden estar limitadas"
-                        : "Sin conexión - intenta de nuevo en unos momentos"}
+                        ? "Funcionando en modo básico"
+                        : "Sin conexión - intenta de nuevo"}
                   </span>
                 </div>
                 {speechSupported && (
                   <div className="flex items-center gap-1">
                     <Mic className="h-3 w-3" />
-                    <span>{isListening ? "Escuchando..." : "Habla con el micrófono"}</span>
+                    <span>{isListening ? "Escuchando..." : "Click para hablar"}</span>
                   </div>
                 )}
               </div>
