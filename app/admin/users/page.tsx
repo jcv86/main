@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Search, Edit, Trash2, Users, TrendingUp, UserCheck, Calendar } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Users, TrendingUp, UserCheck, Calendar, Shield } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -38,6 +38,8 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [filteredUsers, setFilteredUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [checkingAdmin, setCheckingAdmin] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -56,12 +58,14 @@ export default function AdminUsersPage() {
   })
 
   useEffect(() => {
-    loadUsers()
+    checkAdminAccess()
   }, [])
 
   useEffect(() => {
-    filterUsers()
-  }, [users, searchTerm])
+    if (isAdmin) {
+      loadUsers()
+    }
+  }, [isAdmin])
 
   const loadUsers = async () => {
     try {
@@ -243,6 +247,42 @@ export default function AdminUsersPage() {
   }
 
   const stats = getStats()
+
+  const checkAdminAccess = async () => {
+    try {
+      const response = await fetch("/api/admin/check")
+      const data = await response.json()
+      setIsAdmin(data.isAdmin)
+    } catch (error) {
+      console.error("Error checking admin access:", error)
+      setIsAdmin(false)
+    } finally {
+      setCheckingAdmin(false)
+    }
+  }
+
+  if (checkingAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Shield className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <p>Verificando permisos...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Shield className="h-12 w-12 mx-auto mb-4 text-red-600" />
+          <h2 className="text-2xl font-bold mb-2">Acceso Denegado</h2>
+          <p className="text-gray-600">No tienes permisos para acceder a esta página.</p>
+        </div>
+      </div>
+    )
+  }
 
   if (loading) {
     return (

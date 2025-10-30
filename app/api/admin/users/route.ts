@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const userId = crypto.randomUUID()
 
     // Create new user
-    const { data: newUser, error } = await adminClient
+    const { data: newUser, error: userError } = await adminClient
       .from("users")
       .insert({
         id: userId,
@@ -74,9 +74,28 @@ export async function POST(request: NextRequest) {
       .select()
       .single()
 
-    if (error) {
-      console.error("[Admin Users API] Error creating user:", error)
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    if (userError) {
+      console.error("[Admin Users API] Error creating user:", userError)
+      return NextResponse.json({ success: false, error: userError.message }, { status: 500 })
+    }
+
+    // Create corresponding profile to satisfy calendar_events foreign key constraint
+    const { error: profileError } = await adminClient.from("profiles").insert({
+      id: userId,
+      email,
+      full_name: full_name || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+
+    if (profileError) {
+      console.error("[Admin Users API] Error creating profile:", profileError)
+      // Rollback: delete the user we just created
+      await adminClient.from("users").delete().eq("id", userId)
+      return NextResponse.json(
+        { success: false, error: `Failed to create profile: ${profileError.message}` },
+        { status: 500 },
+      )
     }
 
     return NextResponse.json({ success: true, user: newUser })
