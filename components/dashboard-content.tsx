@@ -26,6 +26,7 @@ import {
   Sparkles,
   TrendingUp,
   Calendar,
+  Shield,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
@@ -178,6 +179,9 @@ export function DashboardContent() {
   const [recommendations, setRecommendations] = useState<any[]>([])
   const [loadingRecommendations, setLoadingRecommendations] = useState(true)
 
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [checkingAdmin, setCheckingAdmin] = useState(true)
+
   useEffect(() => {
     console.log("[v0] DashboardContent mounted")
     console.log("[v0] sessionUser:", sessionUser)
@@ -286,6 +290,34 @@ export function DashboardContent() {
     fetchRecommendations()
   }, [userProfile.email])
 
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!userProfile.email) {
+        console.log("[v0] No email yet, skipping admin check")
+        setCheckingAdmin(false)
+        return
+      }
+
+      try {
+        console.log("[v0] Checking admin status for:", userProfile.email)
+        const response = await fetch(`/api/admin/check?email=${encodeURIComponent(userProfile.email)}`)
+        const data = await response.json()
+        console.log("[v0] Admin check result:", data)
+        console.log("[v0] Setting isAdmin to:", data.isAdmin)
+        setIsAdmin(data.isAdmin)
+        console.log("[v0] isAdmin state updated")
+      } catch (error) {
+        console.error("[v0] Error checking admin status:", error)
+        setIsAdmin(false)
+      } finally {
+        setCheckingAdmin(false)
+        console.log("[v0] Admin check complete, checkingAdmin set to false")
+      }
+    }
+
+    checkAdminStatus()
+  }, [userProfile.email])
+
   const achievements = [
     {
       title: "Primer Test Completado",
@@ -364,6 +396,8 @@ export function DashboardContent() {
     },
   ]
 
+  console.log("[v0] Rendering dashboard, isAdmin:", isAdmin, "checkingAdmin:", checkingAdmin)
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -374,6 +408,17 @@ export function DashboardContent() {
             <p className="text-mutedForeground">Bienvenido de vuelta, {userProfile.name}</p>
           </div>
           <div className="flex gap-2">
+            {console.log("[v0] Should show admin button?", isAdmin)}
+            {isAdmin && (
+              <Button
+                variant="outline"
+                onClick={() => router.push("/admin/users")}
+                className="border-red-500 text-red-600 hover:bg-red-50"
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Admin
+              </Button>
+            )}
             <Button variant="outline" onClick={() => router.push("/ai-coach")} className="border-border bg-transparent">
               <MessageSquare className="h-4 w-4 mr-2" />
               Coach IA

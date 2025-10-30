@@ -39,10 +39,17 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, full_name, bio, phone, location, linkedin_url, github_url, whatsapp_phone } = body
+    const { email, password, full_name, bio, phone, location, linkedin_url, github_url, whatsapp_phone } = body
 
     if (!email) {
       return NextResponse.json({ success: false, error: "Email is required" }, { status: 400 })
+    }
+
+    if (!password || password.length < 6) {
+      return NextResponse.json(
+        { success: false, error: "Password is required and must be at least 6 characters" },
+        { status: 400 },
+      )
     }
 
     const adminClient = createAdminClient()
@@ -53,9 +60,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "User with this email already exists" }, { status: 409 })
     }
 
-    const userId = crypto.randomUUID()
+    console.log("[v0] Creating Supabase Auth account for:", email)
+    const { data: authUser, error: authError } = await adminClient.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true, // Auto-confirm email so user can login immediately
+      user_metadata: {
+        full_name: full_name || null,
+      },
+    })
 
-    // Create new user
+    if (authError) {
+      console.error("[Admin Users API] Error creating auth user:", authError)
+      return NextResponse.json({ success: false, error: `Auth error: ${authError.message}` }, { status: 500 })
+    }
+
+    if (!authUser.user) {
+      return NextResponse.json({ success: false, error: "Failed to create auth user" }, { status: 500 })
+    }
+
+    const userId = authUser.user.id
+    console.log("[v0] Auth account created with ID:", userId)
+
+    // Create new user in database
     const { data: newUser, error: userError } = await adminClient
       .from("users")
       .insert({
@@ -76,6 +103,7 @@ export async function POST(request: NextRequest) {
 
     if (userError) {
       console.error("[Admin Users API] Error creating user:", userError)
+      await adminClient.auth.admin.deleteUser(userId)
       return NextResponse.json({ success: false, error: userError.message }, { status: 500 })
     }
 
@@ -90,14 +118,15 @@ export async function POST(request: NextRequest) {
 
     if (profileError) {
       console.error("[Admin Users API] Error creating profile:", profileError)
-      // Rollback: delete the user we just created
       await adminClient.from("users").delete().eq("id", userId)
+      await adminClient.auth.admin.deleteUser(userId)
       return NextResponse.json(
         { success: false, error: `Failed to create profile: ${profileError.message}` },
         { status: 500 },
       )
     }
 
+    console.log("[v0] User created successfully with auth account")
     return NextResponse.json({ success: true, user: newUser })
   } catch (error) {
     console.error("[Admin Users API] Unexpected error:", error)

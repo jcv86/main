@@ -49,6 +49,7 @@ export default function AdminUsersPage() {
   const [formData, setFormData] = useState({
     email: "",
     full_name: "",
+    password: "",
     bio: "",
     phone: "",
     location: "",
@@ -209,6 +210,7 @@ export default function AdminUsersPage() {
     setFormData({
       email: user.email || "",
       full_name: user.full_name || "",
+      password: "",
       bio: user.bio || "",
       phone: user.phone || "",
       location: user.location || "",
@@ -223,6 +225,7 @@ export default function AdminUsersPage() {
     setFormData({
       email: "",
       full_name: "",
+      password: "",
       bio: "",
       phone: "",
       location: "",
@@ -250,8 +253,28 @@ export default function AdminUsersPage() {
 
   const checkAdminAccess = async () => {
     try {
-      const response = await fetch("/api/admin/check")
+      const sessionStr = localStorage.getItem("dtc_session")
+      if (!sessionStr) {
+        console.log("[v0] No session found in localStorage")
+        setIsAdmin(false)
+        setCheckingAdmin(false)
+        return
+      }
+
+      const session = JSON.parse(sessionStr)
+      const userEmail = session.user?.email // Access email from user object
+
+      if (!userEmail) {
+        console.log("[v0] No email in session")
+        setIsAdmin(false)
+        setCheckingAdmin(false)
+        return
+      }
+
+      console.log("[v0] Checking admin access for:", userEmail)
+      const response = await fetch(`/api/admin/check?email=${encodeURIComponent(userEmail)}`)
       const data = await response.json()
+      console.log("[v0] Admin check result:", data)
       setIsAdmin(data.isAdmin)
     } catch (error) {
       console.error("Error checking admin access:", error)
@@ -326,6 +349,19 @@ export default function AdminUsersPage() {
                   placeholder="usuario@ejemplo.com"
                   required
                 />
+              </div>
+              <div>
+                <Label htmlFor="password">Contraseña *</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Mínimo 6 caracteres"
+                  required
+                  minLength={6}
+                />
+                <p className="text-xs text-gray-500 mt-1">Esta contraseña se usará para que el usuario inicie sesión</p>
               </div>
               <div>
                 <Label htmlFor="full_name">Nombre Completo</Label>
