@@ -107,17 +107,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: userError.message }, { status: 500 })
     }
 
-    // Create corresponding profile to satisfy calendar_events foreign key constraint
-    const { error: profileError } = await adminClient.from("profiles").insert({
-      id: userId,
-      email,
-      full_name: full_name || null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
+    const { error: profileError } = await adminClient.from("profiles").upsert(
+      {
+        id: userId,
+        email,
+        full_name: full_name || null,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "id",
+      },
+    )
 
     if (profileError) {
-      console.error("[Admin Users API] Error creating profile:", profileError)
+      console.error("[Admin Users API] Error upserting profile:", profileError)
       await adminClient.from("users").delete().eq("id", userId)
       await adminClient.auth.admin.deleteUser(userId)
       return NextResponse.json(
