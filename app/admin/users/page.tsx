@@ -68,6 +68,10 @@ export default function AdminUsersPage() {
     }
   }, [isAdmin])
 
+  useEffect(() => {
+    filterUsers()
+  }, [users, searchTerm])
+
   const loadUsers = async () => {
     try {
       setLoading(true)
