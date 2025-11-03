@@ -16,6 +16,7 @@ import {
   Award,
   Clock,
   Shield,
+  MessageSquare,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -47,6 +48,16 @@ export function LandingPageOptimized() {
               >
                 Comenzar Demo Gratuito
                 <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link href="/documents">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-transparent border-purple-200 hover:bg-purple-50"
+              >
+                Chat con Documentos
+                <MessageSquare className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/biblioteca">
@@ -352,6 +363,16 @@ export function LandingPageOptimized() {
                   >
                     Comenzar Ahora Gratis
                     <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/documents">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="bg-transparent border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto"
+                  >
+                    Chat con Documentos
+                    <MessageSquare className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/biblioteca">
