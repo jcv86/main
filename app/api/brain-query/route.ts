@@ -76,12 +76,18 @@ export async function POST(request: NextRequest) {
       userEmail,
     } = await request.json()
 
+    console.log("[v0] POST /api/brain-query - message:", message.substring(0, 50))
+    console.log("[v0] userEmail:", userEmail)
+
     const supabase = createClient()
     let userContext: any = {}
 
     if (userEmail) {
+      console.log("[v0] Fetching user context for:", userEmail)
+
       // Get user profile
       const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
+      console.log("[v0] Profile fetched:", !!profile)
 
       // Get test results
       const { data: testResults } = await supabase
@@ -89,6 +95,7 @@ export async function POST(request: NextRequest) {
         .select("*")
         .eq("user_email", userEmail)
         .order("completed_at", { ascending: false })
+      console.log("[v0] Test results count:", testResults?.length || 0)
 
       // Get personality assessments
       const { data: personality } = await supabase
@@ -98,6 +105,7 @@ export async function POST(request: NextRequest) {
         .order("completed_at", { ascending: false })
         .limit(1)
         .single()
+      console.log("[v0] Personality data:", !!personality)
 
       userContext = {
         profile: profile || {},
@@ -106,6 +114,14 @@ export async function POST(request: NextRequest) {
         hasCompletedTests: (testResults?.length || 0) > 0,
         hasPersonalityData: !!personality,
       }
+
+      console.log("[v0] User context summary:", {
+        hasProfile: !!profile,
+        testCount: testResults?.length || 0,
+        hasPersonality: !!personality,
+      })
+    } else {
+      console.log("[v0] No userEmail provided, skipping context fetch")
     }
 
     const personality: CoachPersonality = selectPersonality(message, userContext)
@@ -149,6 +165,13 @@ export async function POST(request: NextRequest) {
       const apiKey = process.env.OPENAI_API_KEY
       const hasValidKey = apiKey && apiKey.startsWith("sk-") && apiKey.length > 40
 
+      console.log("[v0] OpenAI API key check:", {
+        exists: !!apiKey,
+        startsWithSk: apiKey?.startsWith("sk-"),
+        length: apiKey?.length,
+        hasValidKey,
+      })
+
       if (!hasValidKey) {
         throw new Error("OpenAI API key not configured")
       }
@@ -178,6 +201,8 @@ export async function POST(request: NextRequest) {
         contextDescription += `\n\nObjetivos de carrera: ${userContext.profile.career_goals}`
       }
 
+      console.log("[v0] Context description length:", contextDescription.length)
+
       const systemPrompt = `${coachConfig.systemPrompt}
 
 ${knowledgeContext}
@@ -186,17 +211,24 @@ Contexto del usuario: ${contextDescription}
 
 Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.`
 
+      console.log("[v0] Calling OpenAI with model: openai/gpt-4o")
+
       const result = await generateText({
-        model: "openai/gpt-4o-mini",
+        model: "openai/gpt-4o",
         system: systemPrompt,
         prompt: message,
         temperature: personality === "sofia" ? 0.8 : 0.6,
-        maxOutputTokens: 400,
+        maxTokens: 400,
       })
+
       text = result.text
+      console.log("[v0] OpenAI response received, length:", text.length)
     } catch (aiError: any) {
+      console.error("[v0] AI generation error:", aiError.message || aiError)
+      console.error("[v0] Full error:", aiError)
       text = generateStructuredResponse(personality, message, userContext)
       usedFallback = true
+      console.log("[v0] Using fallback response")
     }
 
     let enhancedResponse = text

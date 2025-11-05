@@ -23,6 +23,7 @@ import {
   MicOff,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase"
 
 interface Message {
   id: string
@@ -74,10 +75,16 @@ export function PersistentAICoach() {
   useEffect(() => {
     const getUserEmail = async () => {
       try {
-        const response = await fetch("/api/auth/session")
-        const data = await response.json()
-        if (data?.user?.email) {
-          setUserEmail(data.user.email)
+        const supabase = createClient()
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        if (session?.user?.email) {
+          console.log("[v0] User email from session:", session.user.email)
+          setUserEmail(session.user.email)
+        } else {
+          console.log("[v0] No user session found")
         }
       } catch (error) {
         console.log("[v0] Could not fetch user email:", error)
