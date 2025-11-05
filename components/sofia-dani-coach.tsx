@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Send, Sparkles, Lightbulb, Target } from "lucide-react"
 import { CoachingFeedbackDialog } from "@/components/coaching-feedback-dialog"
+import { getPromptForUser, trackPromptUsage } from "@/lib/ai/prompts"
 
 interface Message {
   id: string
@@ -32,41 +33,61 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
   const [sessionId, setSessionId] = useState<string>("")
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
   const [messageCount, setMessageCount] = useState(0)
+  const [promptVariantId, setPromptVariantId] = useState<string>("")
+  const [promptVersion, setPromptVersion] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setSessionId(`session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
+    setSessionId(crypto.randomUUID())
 
-    // Determine which coach and welcome message based on category
-    const getWelcomeMessage = () => {
-      if (conversationCategory === "autoconocimiento") {
-        return {
-          coach: "sofia" as const,
-          content: `¡Hola! Soy Sofía, tu coach de autoconocimiento. He analizado tus resultados del test ${testType} y estoy aquí para ayudarte a entender mejor tu perfil. ¿Qué te gustaría explorar sobre ti mismo?`,
-        }
-      } else if (conversationCategory === "desarrollo_habilidades") {
-        return {
-          coach: "dani" as const,
-          content: `¡Hola! Soy Dani, tu coach de desarrollo de habilidades. Basándome en tus resultados del test ${testType}, puedo ayudarte a identificar y desarrollar las habilidades clave para tu crecimiento profesional. ¿En qué área te gustaría enfocarte?`,
-        }
-      } else {
-        return {
-          coach: "dani" as const,
-          content: `¡Hola! Soy Dani, tu coach de orientación de carrera. He revisado tus resultados del test ${testType} y puedo ayudarte a explorar opciones de carrera que se alineen con tu perfil. ¿Qué aspectos de tu carrera te gustaría discutir?`,
+    const initializeCoach = async () => {
+      const coachType = conversationCategory === "autoconocimiento" ? "sofia" : "dani"
+      const promptData = await getPromptForUser(userEmail, coachType, conversationCategory)
+
+      setPromptVariantId(promptData.variantId)
+      setPromptVersion(promptData.version)
+
+      console.log("[v0] Using prompt variant:", promptData.version, "for", coachType)
+
+      // Determine welcome message based on category
+      const getWelcomeMessage = () => {
+        if (conversationCategory === "autoconocimiento") {
+          return {
+            coach: "sofia" as const,
+            content: `¡Hola! Soy Sofía, tu coach de autoconocimiento. He analizado tus resultados del test ${testType} y estoy aquí para ayudarte a entender mejor tu perfil. ¿Qué te gustaría explorar sobre ti mismo?`,
+          }
+        } else if (conversationCategory === "desarrollo_habilidades") {
+          return {
+            coach: "dani" as const,
+            content: `¡Hola! Soy Dani, tu coach de desarrollo de habilidades. Basándome en tus resultados del test ${testType}, puedo ayudarte a identificar y desarrollar las habilidades clave para tu crecimiento profesional. ¿En qué área te gustaría enfocarte?`,
+          }
+        } else {
+          return {
+            coach: "dani" as const,
+            content: `¡Hola! Soy Dani, tu coach de orientación de carrera. He revisado tus resultados del test ${testType} y puedo ayudarte a explorar opciones de carrera que se alineen con tu perfil. ¿Qué aspectos de tu carrera te gustaría discutir?`,
+          }
         }
       }
+
+      const welcomeMsg = getWelcomeMessage()
+      const welcomeMessage: Message = {
+        id: "1",
+        content: welcomeMsg.content,
+        sender: "ai",
+        timestamp: new Date(),
+        coach: welcomeMsg.coach,
+      }
+      setMessages([welcomeMessage])
     }
 
-    const welcomeMsg = getWelcomeMessage()
-    const welcomeMessage: Message = {
-      id: "1",
-      content: welcomeMsg.content,
-      sender: "ai",
-      timestamp: new Date(),
-      coach: welcomeMsg.coach,
+    initializeCoach()
+  }, [testType, conversationCategory, userEmail])
+
+  useEffect(() => {
+    if (sessionId && promptVariantId && userEmail) {
+      trackPromptUsage(sessionId, promptVariantId, userEmail)
     }
-    setMessages([welcomeMessage])
-  }, [testType, conversationCategory])
+  }, [sessionId, promptVariantId, userEmail])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -115,6 +136,8 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
           testType: testType,
           testResults: testResults,
           conversationCategory: conversationCategory,
+          promptVariantId: promptVariantId,
+          promptVersion: promptVersion,
         }),
       })
 
