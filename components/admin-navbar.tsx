@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Settings, BarChart3, Home, BookOpen, Brain, MessageSquare } from "lucide-react"
+import { Settings, BarChart3, Home, BookOpen, Brain, MessageSquare, Users, FileText } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,9 +63,27 @@ export function AdminNavbar() {
                 <DropdownMenuLabel>Admin</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/test-metrics" className="cursor-pointer">
+                  <Link href="/admin/coaching-analytics" className="cursor-pointer">
                     <BarChart3 className="h-4 w-4 mr-2" />
+                    Análisis de Coaching
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/admin/prompt-management" className="cursor-pointer">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Gestión de Prompts
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/test-metrics" className="cursor-pointer">
+                    <Settings className="h-4 w-4 mr-2" />
                     Métricas de Coaching
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/admin/users" className="cursor-pointer">
+                    <Users className="h-4 w-4 mr-2" />
+                    Usuarios
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
