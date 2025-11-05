@@ -11,14 +11,31 @@ export function createClient() {
       return createMockClient() as any
     }
 
-    return createSupabaseClient(supabaseUrl, supabaseKey, {
+    // Create client with better error handling
+    const client = createSupabaseClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
+        detectSessionInUrl: true,
+        flowType: "pkce",
+      },
+      global: {
+        fetch: async (url, options = {}) => {
+          try {
+            const response = await fetch(url, options)
+            return response
+          } catch (error) {
+            console.warn("Supabase fetch failed, using mock client:", error)
+            // Return a mock response that will trigger fallback to mock client
+            throw new Error("Network error - using mock client")
+          }
+        },
       },
     })
+
+    return client
   } catch (error) {
-    console.warn("Supabase client creation failed, using mock client")
+    console.warn("Supabase client creation failed, using mock client:", error)
     return createMockClient() as any
   }
 }

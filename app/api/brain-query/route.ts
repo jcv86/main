@@ -121,7 +121,6 @@ export async function POST(request: NextRequest) {
         console.log("[v0] User UUID:", actualUserId)
       } else {
         console.log("[v0] User not found in users table, trying user_profiles")
-        // Fallback to user_profiles if users table doesn't have the user
         const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
 
         if (profile) {
@@ -130,7 +129,6 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Get test results
       const { data: testResults } = await supabase
         .from("test_results")
         .select("*")
@@ -146,8 +144,8 @@ export async function POST(request: NextRequest) {
           .eq("user_id", actualUserId)
           .order("completed_at", { ascending: false })
           .limit(1)
-          .single()
-        personality = personalityData
+
+        personality = personalityData?.[0] || null
         console.log("[v0] Personality data:", !!personality)
       } else {
         console.log("[v0] Skipping personality query - no valid user UUID")
@@ -193,52 +191,18 @@ export async function POST(request: NextRequest) {
     })
 
     const relevantKnowledge: any[] = []
-    const knowledgeContext = ""
-
-    // Semantic search is optional and not critical for Sofia & Dani chat
-    // It will be re-enabled once OpenAI API key is properly configured
-    /*
-    const apiKey = process.env.OPENAI_API_KEY
-    const hasValidKey = apiKey && apiKey.startsWith("sk-") && apiKey.length > 40
-
-    if (hasValidKey) {
-      try {
-        relevantKnowledge = await semanticSearch(message, {
-          similarityThreshold: 0.75,
-          limit: 3,
-        })
-
-        if (relevantKnowledge.length > 0) {
-          knowledgeContext = "\n\nConocimiento relevante disponible:\n"
-          relevantKnowledge.forEach((item, index) => {
-            knowledgeContext += `${index + 1}. "${item.title}" por ${item.author} - ${item.contentPreview.substring(0, 150)}...\n`
-          })
-          knowledgeContext += "\nPuedes mencionar estas fuentes si son relevantes para tu respuesta.\n"
-        }
-      } catch (searchError) {
-        // Silently skip semantic search if it fails
-      }
-    }
-    */
 
     let text = ""
     let usedFallback = false
 
     try {
       const apiKey = process.env.OPENAI_API_KEY
-      const hasValidKey = apiKey && apiKey.startsWith("sk-") && apiKey.length > 40
 
-      console.log("[v0] OpenAI API key check:", {
-        exists: !!apiKey,
-        startsWithSk: apiKey?.startsWith("sk-"),
-        length: apiKey?.length,
-        hasValidKey,
-      })
-
-      if (!hasValidKey) {
+      if (!apiKey || !apiKey.startsWith("sk-") || apiKey.length < 40) {
         throw new Error("OpenAI API key not configured")
       }
 
+      // Build context description
       let contextDescription = "Usuario buscando orientación profesional en Chile"
 
       if (userContext.hasCompletedTests) {
@@ -264,30 +228,8 @@ export async function POST(request: NextRequest) {
         contextDescription += `\n\nObjetivos de carrera: ${userContext.profile.career_goals}`
       }
 
-      console.log("[v0] Context description length:", contextDescription.length)
-
-      let systemPrompt = coachConfig.systemPrompt
-
-      if (promptInfo && categoryInfo) {
-        systemPrompt += `\n\nCONTEXTO DE INTENCIÓN DETECTADA:
-- Categoría: ${categoryInfo.name} (${categoryInfo.description})
-- Confianza de detección: ${(intentionResult.confidence * 100).toFixed(0)}%
-- Palabras clave identificadas: ${intentionResult.matchedKeywords.join(", ")}
-
-ESTRUCTURA DE RESPUESTA SUGERIDA:
-1. ${promptInfo.response_structure.step1}
-2. ${promptInfo.response_structure.step2}
-3. ${promptInfo.response_structure.step3}
-
-ENFOQUE RECOMENDADO PARA ${personality.toUpperCase()}:
-${personality === "sofia" ? promptInfo.sofia_approach : promptInfo.dani_approach}
-
-Usa esta estructura como guía, pero mantén tu personalidad y tono natural.`
-      }
-
-      const fullPrompt = `${systemPrompt}
-
-${knowledgeContext}
+      // Build the complete prompt
+      const prompt = `${coachConfig.systemPrompt}
 
 Contexto del usuario: ${contextDescription}
 
@@ -295,15 +237,16 @@ Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. U
 
 Usuario: ${message}`
 
-      console.log("[v0] Calling OpenAI with model: openai/gpt-4o")
+      console.log("[v0] Calling OpenAI with simplified pattern")
 
-      const { text: generatedText } = await generateText({
+      // Use exact same pattern as working analyze-response route
+      const { text: responseText } = await generateText({
         model: "openai/gpt-4o",
-        prompt: fullPrompt,
-        temperature: personality === "sofia" ? 0.8 : 0.6,
+        prompt,
+        temperature: 0.7,
       })
 
-      text = generatedText
+      text = responseText
       console.log("[v0] OpenAI response received, length:", text.length)
     } catch (aiError: any) {
       console.error("[v0] AI generation error:", aiError.message || aiError)

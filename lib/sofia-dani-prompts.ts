@@ -227,7 +227,7 @@ export const CV_MARCA_PERSONAL_PROMPTS: PromptTemplate[] = [
 3) **Añade logros medibles**: "Aumenté ventas 30%" vs "Responsable de ventas"
 4) **Ajusta keywords** según tu industria
 
-¿Quieres que analice tu CV actual? Te puedo sugerir rutas de reconversión según tu industria.`,
+¿Quieres que analice tu CV actual? Te puedo sugerir rutas de reconversión profesional según tu industria.`,
     keywords: ["mejorar cv", "curriculum", "cv"],
     expectedMetrics: {
       engagementMin: 0.75,
@@ -395,12 +395,42 @@ Dame datos: ¿cuántas postulaciones has hecho? ¿cuántas entrevistas has tenid
 export function selectPersonality(message: string, userContext?: any, intention?: string): CoachPersonality {
   const lowerMessage = message.toLowerCase()
 
+  const technicalTopics = [
+    "cv",
+    "curriculum",
+    "hoja de vida",
+    "linkedin",
+    "entrevista",
+    "postular",
+    "postulación",
+    "búsqueda de empleo",
+    "búsqueda de trabajo",
+    "salario",
+    "sueldo",
+    "aumento",
+    "negociar",
+    "networking",
+    "contactos profesionales",
+    "marca personal",
+    "perfil profesional",
+    "portafolio",
+    "referencias laborales",
+  ]
+
+  const hasTechnicalTopic = technicalTopics.some((topic) => lowerMessage.includes(topic))
+
+  // Si es un tema técnico, SIEMPRE usar Dani (incluso con carga emocional)
+  if (hasTechnicalTopic) {
+    return "dani"
+  }
+
+  // Intenciones específicas
   if (intention === "motivation_support") {
     return "sofia"
   }
 
   if (intention === "job_search" || intention === "skill_development") {
-    // Pero si el mensaje tiene carga emocional, usar Sofia
+    // Pero si el mensaje tiene carga emocional Y NO es tema técnico, usar Sofia
     const emotionalKeywords = [
       "siento",
       "miedo",
@@ -428,8 +458,8 @@ export function selectPersonality(message: string, userContext?: any, intention?
     "perdido",
     "confundido",
     "ayuda",
-    "no sé",
-    "duda",
+    "no sé qué hacer",
+    "duda existencial",
     "inseguro",
     "nervioso",
     "preocupado",
@@ -439,8 +469,8 @@ export function selectPersonality(message: string, userContext?: any, intention?
     "estresado",
     "abrumado",
     "vergüenza",
-    "difícil",
-    "complicado",
+    "difícil emocionalmente",
+    "complicado emocionalmente",
   ]
 
   // Palabras clave estratégicas -> Dani
@@ -462,6 +492,8 @@ export function selectPersonality(message: string, userContext?: any, intention?
     "métricas",
     "resultados",
     "objetivo",
+    "meta",
+    "kpi",
   ]
 
   const hasEmotionalKeywords = emotionalKeywords.some((keyword) => lowerMessage.includes(keyword))
