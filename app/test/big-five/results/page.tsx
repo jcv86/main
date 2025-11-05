@@ -44,9 +44,9 @@ import {
   Legend,
   Pie, // Import Pie from recharts
 } from "recharts"
-import { AiCoachChat } from "@/components/ai-coach-chat"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { MultiTestInsights } from "@/components/multi-test-insights"
+import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 
 interface TestResult {
   id: number
@@ -562,18 +562,15 @@ export default function BigFiveResults() {
 
           {/* Coach Tab */}
           <TabsContent value="coach">
-            <AiCoachChat
-              testType="Big Five"
-              testResults={results}
-              userEmail={userEmail}
-              context={{
-                testName: "Big Five",
+            <SofiaDaniCoach
+              conversationCategory="autoconocimiento"
+              userContext={{
+                testType: "Big Five",
+                testResults: results,
+                userEmail: userEmail,
                 completedAt: testResult.completed_at,
-                score: testResult.score,
-                strengths: results.strengths || [],
-                developmentAreas: results.development_areas || [],
-                personalityTraits: results.primary_traits || [],
               }}
+              suggestedAction={`Explora el test RIASEC para descubrir carreras alineadas con tu personalidad`}
             />
           </TabsContent>
 

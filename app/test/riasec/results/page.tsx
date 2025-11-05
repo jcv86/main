@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { supabase } from "@/lib/supabase"
-import { AiCoachChat } from "@/components/ai-coach-chat"
+import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import {
   Target,
   Brain,
@@ -529,7 +529,7 @@ export default function RIASECResults() {
                 </TabsTrigger>
                 <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
                   <Sparkles className="h-4 w-4" />
-                  Coach IA
+                  Coach Dani
                 </TabsTrigger>
                 <TabsTrigger value="action" className="flex items-center gap-2 hidden lg:flex">
                   <Target className="h-4 w-4" />
@@ -878,18 +878,17 @@ export default function RIASECResults() {
             </Card>
           </TabsContent>
 
-          {/* Coach IA Tab */}
+          {/* Coach Dani Tab */}
           <TabsContent value="coach" className="space-y-6">
-            <AiCoachChat
-              userEmail={isDemoMode ? "demo@example.com" : "travis@example.com"} // Use demo email if in demo mode
-              initialContext={`Código Holland ${results.holland_code}: ${getHollandCodeDescription(results.holland_code)}`}
-              suggestedQuestions={[
-                `¿Cómo puedo aprovechar mi perfil ${results.holland_code}?`,
-                "¿Qué carreras específicas me recomiendas?",
-                "¿Cómo puedo desarrollar mis áreas de mejora?",
-                "¿Qué habilidades debería priorizar?",
-                "¿Cómo puedo destacar en entrevistas de trabajo?",
-              ]}
+            <SofiaDaniCoach
+              conversationCategory="orientacion_carrera"
+              userContext={{
+                testType: "RIASEC",
+                testResults: results,
+                userEmail: isDemoMode ? "demo@example.com" : "user@example.com",
+                completedAt: new Date().toISOString(),
+              }}
+              suggestedAction={`Investiga las carreras sugeridas: ${careerRecommendations.slice(0, 2).join(", ")}`}
             />
           </TabsContent>
 

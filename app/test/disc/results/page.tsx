@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles, MessageCircle } from "lucide-react"
+import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles } from "lucide-react"
 import {
   RadarChart,
   PolarGrid,
@@ -28,6 +28,7 @@ import {
   Cell,
 } from "recharts"
 import { MultiTestInsights } from "@/components/multi-test-insights"
+import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 
 interface DISCResult {
   d_score: number
@@ -56,9 +57,6 @@ export default function DISCResultsPage() {
   const [discResult, setDiscResult] = useState<DISCResult | null>(null)
   const [aiInterpretation, setAiInterpretation] = useState<string>("")
   const [loading, setLoading] = useState(true)
-  const [chatMessages, setChatMessages] = useState<Array<{ role: string; content: string }>>([])
-  const [chatInput, setChatInput] = useState("")
-  const [chatLoading, setChatLoading] = useState(false)
   const [demoQuestionsUsed, setDemoQuestionsUsed] = useState(0)
   const DEMO_QUESTION_LIMIT = 3
 
@@ -162,83 +160,6 @@ export default function DISCResultsPage() {
       console.error("Error loading results:", error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const sendChatMessage = async () => {
-    if (!chatInput.trim() || (!user && !isDemoMode) || !discResult) return
-
-    if (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT) {
-      setChatMessages([
-        ...chatMessages,
-        { role: "user", content: chatInput.trim() },
-        {
-          role: "assistant",
-          content: `Has alcanzado el límite de ${DEMO_QUESTION_LIMIT} preguntas en modo demo. Para continuar usando el Coach IA sin límites, por favor regístrate o inicia sesión.`,
-        },
-      ])
-      setChatInput("")
-      return
-    }
-
-    setChatLoading(true)
-    const userMessage = chatInput.trim()
-    setChatInput("")
-
-    const newMessages = [...chatMessages, { role: "user", content: userMessage }]
-    setChatMessages(newMessages)
-
-    if (isDemoMode) {
-      setDemoQuestionsUsed(demoQuestionsUsed + 1)
-    }
-
-    try {
-      const payload = {
-        message: userMessage,
-        userEmail: user?.email || "demo@example.com",
-        testResults: ["disc"],
-        conversationHistory: chatMessages,
-        context: {
-          discScores: {
-            d: discResult.d_score,
-            i: discResult.i_score,
-            s: discResult.s_score,
-            c: discResult.c_score,
-          },
-          primaryType: discResult.primary_type,
-          isDemoMode: isDemoMode,
-        },
-      }
-
-      const response = await fetch("/api/ai-coach", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`API returned ${response.status}: ${errorText}`)
-      }
-
-      const data = await response.json()
-
-      const assistantMessage = data.response || data.message || "Lo siento, no pude generar una respuesta."
-      setChatMessages([...newMessages, { role: "assistant", content: assistantMessage }])
-    } catch (error) {
-      console.error("Error sending chat message:", error)
-      setChatMessages([
-        ...newMessages,
-        {
-          role: "assistant",
-          content:
-            "Lo siento, hubo un error al procesar tu mensaje. Como coach, te recomiendo que reflexiones sobre cómo puedes aplicar tu estilo DISC en situaciones específicas de trabajo.",
-        },
-      ])
-    } finally {
-      setChatLoading(false)
     }
   }
 
@@ -657,150 +578,16 @@ export default function DISCResultsPage() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MessageCircle className="h-5 w-5 mr-2 text-blue-600" />
-                  Coach IA - Consulta Personalizada
-                  {isDemoMode && (
-                    <Badge variant="outline" className="ml-auto">
-                      {demoQuestionsUsed}/{DEMO_QUESTION_LIMIT} preguntas usadas
-                    </Badge>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  Haz preguntas específicas sobre tu perfil DISC y recibe consejos personalizados
-                  {isDemoMode && (
-                    <span className="block mt-1 text-orange-600">
-                      Modo demo: Tienes {DEMO_QUESTION_LIMIT - demoQuestionsUsed} preguntas restantes
-                    </span>
-                  )}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50">
-                    {chatMessages.length === 0 ? (
-                      <div className="text-center text-gray-500 mt-8">
-                        <Brain className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                        <p className="mb-4">¡Hola! Soy tu coach IA especializado en DISC.</p>
-                        <p className="text-sm">Puedes preguntarme sobre:</p>
-                        <ul className="text-sm mt-2 space-y-1">
-                          <li>• Cómo aplicar tu estilo en el trabajo</li>
-                          <li>• Estrategias de comunicación</li>
-                          <li>• Desarrollo de liderazgo</li>
-                          <li>• Trabajo en equipo</li>
-                        </ul>
-                        {isDemoMode && (
-                          <p className="text-xs mt-4 text-orange-600">
-                            En modo demo puedes hacer hasta {DEMO_QUESTION_LIMIT} preguntas
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {chatMessages.map((message, index) => (
-                          <div
-                            key={index}
-                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                          >
-                            <div
-                              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                                message.role === "user" ? "bg-blue-600 text-white" : "bg-white text-gray-800 border"
-                              }`}
-                            >
-                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                            </div>
-                          </div>
-                        ))}
-                        {chatLoading && (
-                          <div className="flex justify-start">
-                            <div className="bg-white text-gray-800 border px-4 py-2 rounded-lg">
-                              <div className="flex items-center space-x-2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                                <span className="text-sm">Pensando...</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && sendChatMessage()}
-                      placeholder={
-                        isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT
-                          ? "Límite de preguntas alcanzado en modo demo"
-                          : "Escribe tu pregunta sobre tu perfil DISC..."
-                      }
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      disabled={chatLoading || (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT)}
-                    />
-                    <Button
-                      onClick={sendChatMessage}
-                      disabled={
-                        chatLoading || !chatInput.trim() || (isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT)
-                      }
-                    >
-                      Enviar
-                    </Button>
-                  </div>
-
-                  {isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                      <p className="text-sm text-blue-900 mb-2">Has usado todas tus preguntas en modo demo</p>
-                      <Button onClick={() => router.push("/auth/login")} size="sm">
-                        Registrarse para preguntas ilimitadas
-                      </Button>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setChatInput("¿Cómo puedo aprovechar mi estilo DISC en el trabajo?")}
-                      className="text-left justify-start"
-                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
-                    >
-                      ¿Cómo aprovechar mi estilo en el trabajo?
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setChatInput("¿Qué roles profesionales se adaptan mejor a mi perfil?")}
-                      className="text-left justify-start"
-                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
-                    >
-                      ¿Qué roles me convienen más?
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setChatInput("¿Cómo puedo mejorar mis áreas más débiles?")}
-                      className="text-left justify-start"
-                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
-                    >
-                      ¿Cómo mejorar mis áreas débiles?
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setChatInput("¿Cómo debo comunicarme con otros estilos DISC?")}
-                      className="text-left justify-start"
-                      disabled={isDemoMode && demoQuestionsUsed >= DEMO_QUESTION_LIMIT}
-                    >
-                      ¿Cómo comunicarme con otros estilos?
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <SofiaDaniCoach
+              conversationCategory="autoconocimiento"
+              userContext={{
+                testType: "DISC",
+                testResults: discResult,
+                userEmail: user?.email || "demo@example.com",
+                completedAt: discResult.created_at,
+              }}
+              suggestedAction={`Completa el test de Soft Skills para desarrollar tus habilidades de comunicación`}
+            />
           </TabsContent>
         </Tabs>
       </div>

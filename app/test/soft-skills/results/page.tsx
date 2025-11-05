@@ -37,7 +37,7 @@ import {
   Cell,
 } from "recharts"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
-import { AiCoachChat } from "@/components/ai-coach-chat"
+import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { supabase } from "@/lib/supabase"
 
 const categoryIcons = {
@@ -511,17 +511,16 @@ export default function SoftSkillsResults() {
             <AiInsightsPanel testType="soft-skills" results={results} responses={openResponses} />
           </TabsContent>
 
-          <TabsContent value="coach">
-            <AiCoachChat
-              context={{
-                testType: "soft-skills",
-                results: results,
-                userProfile: {
-                  overallScore: results.overall_score,
-                  strengths: results.strengths,
-                  improvements: results.areas_for_improvement,
-                },
+          <TabsContent value="coach" className="space-y-6">
+            <SofiaDaniCoach
+              conversationCategory="desarrollo_habilidades"
+              userContext={{
+                testType: "Soft Skills",
+                testResults: results,
+                userEmail: testResult.user_email || "",
+                completedAt: testResult.completed_at,
               }}
+              suggestedAction={`Practica tus habilidades de liderazgo en un proyecto real`}
             />
           </TabsContent>
         </Tabs>

@@ -26,7 +26,7 @@ import {
   Cell,
 } from "recharts"
 import { ChartContainer } from "@/components/ui/chart"
-import AICoachChat from "@/components/ai-coach-chat"
+import SofiaDaniCoach from "@/components/sofia-dani-coach"
 import { aiCoach } from "@/lib/ai-coach"
 import {
   ArrowLeft,
@@ -819,7 +819,16 @@ function MBTIResultsContent() {
           {/* AI Coach Tab */}
           <TabsContent value="ai-coach" className="space-y-6">
             {!isDemo ? (
-              <AICoachChat userEmail={userEmail} initialContext={JSON.stringify(results)} />
+              <SofiaDaniCoach
+                conversationCategory="autoconocimiento"
+                userContext={{
+                  testType: "MBTI",
+                  testResults: results,
+                  userEmail: userEmail,
+                  completedAt: new Date().toISOString(),
+                }}
+                suggestedAction={`Completa el test DISC para conocer tu estilo de comunicación`}
+              />
             ) : (
               <Card>
                 <CardContent className="p-6 text-center">
