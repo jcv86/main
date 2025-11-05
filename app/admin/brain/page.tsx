@@ -90,20 +90,60 @@ export default function AdminBrainPage() {
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log("[v0] ========== UPLOAD START ==========")
+
     const formData = new FormData(e.currentTarget)
+
+    console.log("[v0] Form data contents:")
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`[v0]   ${key}:`, {
+          name: value.name,
+          type: value.type,
+          size: value.size,
+        })
+      } else {
+        console.log(`[v0]   ${key}:`, value)
+      }
+    }
 
     setIsUploading(true)
     try {
+      console.log("[v0] Sending upload request to /api/admin/brain/upload...")
+
       const response = await fetch("/api/admin/brain/upload", {
         method: "POST",
         body: formData,
       })
 
-      const data = await response.json()
+      console.log("[v0] Response received:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        headers: Object.fromEntries(response.headers.entries()),
+      })
+
+      const responseText = await response.text()
+      console.log("[v0] Response text:", responseText)
+
+      let data
+      try {
+        data = JSON.parse(responseText)
+        console.log("[v0] Parsed JSON data:", data)
+      } catch (parseError) {
+        console.error("[v0] ERROR: Failed to parse response as JSON")
+        console.error("[v0] Parse error:", parseError)
+        console.error("[v0] Response was:", responseText)
+        throw new Error(`Server returned invalid JSON: ${responseText.substring(0, 100)}`)
+      }
 
       if (!response.ok) {
+        console.error("[v0] ERROR: Response not OK")
+        console.error("[v0] Error data:", data)
         throw new Error(data.error || "Error al subir documento")
       }
+
+      console.log("[v0] ✓ Upload successful!")
 
       toast({
         title: "Documento Subido",
@@ -112,7 +152,14 @@ export default function AdminBrainPage() {
 
       loadDocuments()
       e.currentTarget.reset()
+
+      console.log("[v0] ========== UPLOAD SUCCESS ==========")
     } catch (error: any) {
+      console.error("[v0] ========== UPLOAD ERROR ==========")
+      console.error("[v0] Error type:", error.constructor?.name)
+      console.error("[v0] Error message:", error.message)
+      console.error("[v0] Full error:", error)
+
       toast({
         title: "Error",
         description: error.message,

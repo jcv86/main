@@ -30,6 +30,7 @@ interface Message {
   sender: "user" | "ai"
   timestamp: Date
   type?: "suggestion" | "insight" | "question"
+  coach?: "sofia" | "dani" // Added coach type to track which personality responded
 }
 
 interface Suggestion {
@@ -58,6 +59,8 @@ export function PersistentAICoach() {
   const [activeTab, setActiveTab] = useState("chat")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  const [userEmail, setUserEmail] = useState<string>("")
+
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
@@ -69,6 +72,19 @@ export function PersistentAICoach() {
   const maxListeningTime = 30000 // 30 segundos máximo
 
   useEffect(() => {
+    const getUserEmail = async () => {
+      try {
+        const response = await fetch("/api/auth/session")
+        const data = await response.json()
+        if (data?.user?.email) {
+          setUserEmail(data.user.email)
+        }
+      } catch (error) {
+        console.log("[v0] Could not fetch user email:", error)
+      }
+    }
+    getUserEmail()
+
     const welcomeMessage: Message = {
       id: "1",
       content:
@@ -289,62 +305,52 @@ export function PersistentAICoach() {
     }
 
     setMessages((prev) => [...prev, userMessage])
+    const currentMessage = inputMessage
     setInputMessage("")
     setIsLoading(true)
 
-    // Simulate AI response with more realistic delay
-    setTimeout(
-      () => {
-        const aiResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          content: generateAIResponse(inputMessage),
-          sender: "ai",
-          timestamp: new Date(),
-        }
-        setMessages((prev) => [...prev, aiResponse])
-        setIsLoading(false)
-      },
-      1500 + Math.random() * 1000,
-    ) // 1.5-2.5 second delay
-  }
+    try {
+      const response = await fetch("/api/brain-query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: currentMessage,
+          conversationHistory: messages.slice(-5).map((m) => ({
+            role: m.sender === "user" ? "user" : "assistant",
+            content: m.content,
+          })),
+          userEmail: userEmail || undefined,
+        }),
+      })
 
-  const generateAIResponse = (userInput: string): string => {
-    const lowerInput = userInput.toLowerCase()
+      if (!response.ok) {
+        throw new Error("Failed to get AI response")
+      }
 
-    // Career-related responses
-    if (lowerInput.includes("career") || lowerInput.includes("job") || lowerInput.includes("promotion")) {
-      return "¡Buen pregunta sobre el desarrollo de carrera! Basado en tu perfil, te recomiendo enfocarte en tres áreas clave: 1) Desarrollar tus habilidades de liderazgo a través de asignaciones de crecimiento, 2) Expandir tu red dentro y fuera de tu organización, y 3) Desarrollar experticia en tecnologías emergentes relevantes para tu campo. ¿Te gustaría que me detallara más alguna de estas áreas?"
+      const data = await response.json()
+
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: data.response, // This is now a simple string
+        sender: "ai",
+        timestamp: new Date(),
+        coach: data.coach, // Track which coach responded
+      }
+      setMessages((prev) => [...prev, aiResponse])
+    } catch (error) {
+      console.error("[v0] Error getting AI response:", error)
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "Lo siento, tuve un problema al procesar tu mensaje. Por favor, intenta de nuevo en un momento.",
+        sender: "ai",
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
     }
-
-    // Skills development responses
-    if (lowerInput.includes("skill") || lowerInput.includes("learn") || lowerInput.includes("develop")) {
-      return "El desarrollo de habilidades es crucial para el avance de la carrera ¡Tus resultados de evaluación muestran fuertes habilidades analíticas, lo cual es excelente. Te recomiendo enfocarte en habilidades complementarias como comunicación, gestión de proyectos y pensamiento estratégico. Considera cursos en línea, talleres o encontrar un mentor en estos áreas. ¿Qué habilidades específicas te interesa desarrollar?"
-    }
-
-    // Assessment-related responses
-    if (lowerInput.includes("test") || lowerInput.includes("assessment") || lowerInput.includes("result")) {
-      return "¡Los resultados de tu evaluación proporcionan valiosos insights en tu estilo de trabajo y preferencias! Muestran que tienes fuertes habilidades de resolución de problemas y trabajas bien en entornos colaborativos. Estas fortalezas te posicionan bien para roles de liderazgo. Puedo ayudarte a entender cómo aprovechar estos insights para planificación de carrera. ¿Qué aspecto de tus resultados te gustaría explorar más?"
-    }
-
-    // Leadership responses
-    if (lowerInput.includes("leader") || lowerInput.includes("manage") || lowerInput.includes("team")) {
-      return "¡El liderazgo es un área donde demuestras gran potencial! Tu estilo de comunicación y trabajo colaborativo son sólidos fundamentos. Para desarrollarlo más, considera: 1) Solicitar retroalimentación de tus compañeros de equipo, 2) Asumir proyectos interfuncionales, 3) Encontrar un mentor de liderazgo y 4) Practicar la escucha activa y la delegación de tareas. ¿Cuáles desafíos de liderazgo estás enfrentando actualmente?"
-    }
-
-    // Networking responses
-    if (lowerInput.includes("network") || lowerInput.includes("connect") || lowerInput.includes("relationship")) {
-      return "¡El networking es esencial para el avance de la carrera! Aquí tienes algunas estrategias adaptadas a tu perfil: 1) Asiste a conferencias y meetups de la industria, 2) Engaja activamente en LinkedIn con comentarios y publicaciones significativas, 3) Ponte en contacto con colegas de tu escuela, 4) Únete a asociaciones profesionales en tu campo. Las conexiones de calidad son más valiosas que la cantidad. ¿Qué objetivos de networking te gustaría establecer?"
-    }
-
-    // Default responses
-    const defaultResponses = [
-      "¡Esa es una excelente pregunta! Basado en tus resultados de evaluación y perfil de carrera, puedo ver varias oportunidades de crecimiento. Tus habilidades analíticas y estilo de trabajo colaborativo son activos valiosos. Permíteme ayudarte a crear un plan de acción específico. ¿Cuál es tu objetivo de carrera principal en este momento?",
-      "Entiendo tu preocupación, y es algo que muchos profesionales enfrentan. Tus resultados de evaluación muestran que tienes las capacidades para superar este desafío. Vamos a desglosarlo en pasos manejables y crear un plan de desarrollo que aproveche tus fortalezas.",
-      "¡Esta es una área excelente en la que enfocarte! Tu perfil de personalidad sugiere que te desempeñarías bien en esta dirección. Te recomiendo empezar con pequeños objetivos alcanzables y construir momentum. ¿Qué resultado específico estás buscando alcanzar?",
-      "Basado en tus resultados, tienes fuerte potencial en esta área. Te recomiendo combinar tus fortalezas naturales con un desarrollo de habilidades dirigido. Vamos a explorar estrategias específicas que se alineen con tu estilo de trabajo y aspiraciones de carrera.",
-    ]
-
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)]
   }
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
@@ -357,32 +363,38 @@ export function PersistentAICoach() {
     setMessages((prev) => [...prev, message])
     setActiveTab("chat")
 
-    // Auto-generate AI response for the suggestion
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: generateSuggestionResponse(suggestion),
-        sender: "ai",
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, aiResponse])
-    }, 1000)
-  }
-
-  const generateSuggestionResponse = (suggestion: Suggestion): string => {
-    switch (suggestion.category) {
-      case "skills":
-        return "¡Excelente elección! Las habilidades de liderazgo son cruciales para el avance de la carrera. Te recomiendo empezar con estas acciones específicas: 1) Voluntariarte para liderar un pequeño proyecto o iniciativa, 2) Tomar un curso en línea de liderazgo (puedo recomendarte algunos), 3) Encontrar un mentor que ejemplifique el estilo de liderazgo que admiras, 4) Practicar dar presentaciones para construir confianza. ¿Te gustaría que te ayudara a crear un plan de desarrollo de liderazgo específico de 90 días?"
-
-      case "career":
-        return "¡El networking es uno de los métodos más efectivos para el avance de la carrera! Aquí tienes un enfoque práctico: 1) Establecer un objetivo de hacer 2-3 nuevas conexiones profesionales al mes, 2) Asistir a eventos de la industria o meetups virtuales, 3) Engajar significativamente en LinkedIn comentando en publicaciones de tu campo, 4) Ponerte en contacto con colegas para entrevistas informativas. Tu estilo de trabajo colaborativo será un gran activo en el networking. ¿Qué eventos de la industria o grupos te interesan más?"
-
-      case "development":
-        return "¡Las reuniones regulares con tu jefe son increíblemente valiosas para el avance de la carrera! Aquí tienes cómo hacerlas más efectivas: 1) Preparar una agenda con tus objetivos y desafíos, 2) Pedir retroalimentación específica sobre tu rendimiento, 3) Discutir tus aspiraciones de carrera y obtener su opinión, 4) Solicitar asignaciones de crecimiento o nuevas responsabilidades. Tus habilidades analíticas te ayudarán a prepararte bien para estas reuniones. ¿Cuándo fue tu última reunión significativa de carrera con tu jefe?"
-
-      default:
-        return "¡Esta es una área excelente en la que enfocarte! Basado en tu perfil, tienes la base correcta para tener éxito en esta. Permíteme ayudarte a crear un plan de acción específico con objetivos y líneas de tiempo medibles. ¿Cuál es tu mayor desafío en esta área en este momento?"
-    }
+    setIsLoading(true)
+    fetch("/api/brain-query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: `Dime más sobre: ${suggestion.text}`,
+        conversationHistory: messages.slice(-5).map((m) => ({
+          role: m.sender === "user" ? "user" : "assistant",
+          content: m.content,
+        })),
+        userEmail: userEmail || undefined,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: data.response, // Simple string
+          sender: "ai",
+          timestamp: new Date(),
+          coach: data.coach,
+        }
+        setMessages((prev) => [...prev, aiResponse])
+      })
+      .catch((error) => {
+        console.error("[v0] Error getting suggestion response:", error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   const getPriorityColor = (priority: string) => {
@@ -524,7 +536,23 @@ export function PersistentAICoach() {
                         }`}
                       >
                         <div className="flex items-start space-x-3">
-                          {message.sender === "ai" && <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />}
+                          {message.sender === "ai" && (
+                            <div className="flex flex-col items-center gap-1">
+                              <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                              {message.coach && (
+                                <Badge
+                                  variant="secondary"
+                                  className={`text-[10px] px-1 py-0 ${
+                                    message.coach === "sofia"
+                                      ? "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300"
+                                      : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                                  }`}
+                                >
+                                  {message.coach === "sofia" ? "Sofía" : "Dani"}
+                                </Badge>
+                              )}
+                            </div>
+                          )}
                           {message.sender === "user" && <User className="h-4 w-4 mt-0.5 flex-shrink-0" />}
                           <div className="flex-1">
                             <p className="text-sm leading-relaxed">{message.content}</p>

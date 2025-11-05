@@ -1,7 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import { semanticSearch } from "./embeddings"
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
@@ -63,7 +62,7 @@ export class AdvancedBrainEngine {
     urgencyLevel: "low" | "medium" | "high"
   }> {
     const { text } = await generateText({
-      model: openai("gpt-4o"),
+      model: "openai/gpt-4o",
       prompt: `Analiza esta consulta del usuario y extrae:
 1. Intención principal (por ejemplo: "buscar consejos", "resolver problema", "aprender habilidad")
 2. Temas clave (máximo 5)
@@ -464,7 +463,7 @@ Proporciona una respuesta altamente personalizada y accionable que:
 
     // Step 5: Generate AI response
     const { text } = await generateText({
-      model: openai("gpt-4o"),
+      model: "openai/gpt-4o",
       system: systemPrompt,
       prompt: query,
       temperature: 0.7,

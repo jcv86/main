@@ -1,4 +1,3 @@
-import { openai } from "@ai-sdk/openai"
 import { embed } from "ai"
 import { createClient } from "@supabase/supabase-js"
 
@@ -40,24 +39,31 @@ export function isOpenAIConfigured(): boolean {
 /**
  * Generate embedding for a text using OpenAI's text-embedding-3-small model
  */
-export async function generateEmbedding(text: string): Promise<number[]> {
+export async function generateEmbedding(text: string): Promise<number[] | null> {
   if (!isOpenAIConfigured()) {
-    throw new Error("OpenAI API key is not configured. Please add OPENAI_API_KEY to your environment variables.")
+    return null
   }
 
   try {
+    if (!text || text.trim().length === 0) {
+      return null
+    }
+
     const { embedding } = await embed({
-      model: openai.embedding("text-embedding-3-small"),
-      value: text,
+      model: "openai/text-embedding-3-small",
+      value: text.trim(),
     })
+
+    if (!embedding || !Array.isArray(embedding)) {
+      return null
+    }
 
     return embedding
   } catch (error) {
-    console.error("Error generating embedding:", error)
-    if (error instanceof Error && error.message.includes("401")) {
-      throw new Error("Invalid OpenAI API key. Please check your OPENAI_API_KEY environment variable.")
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error generating embedding:", error)
     }
-    throw error
+    return null
   }
 }
 
@@ -273,13 +279,17 @@ export async function semanticSearch(
   } = {},
 ): Promise<SemanticSearchResult[]> {
   if (!isOpenAIConfigured()) {
-    throw new Error("OpenAI API key is not configured. Semantic search is unavailable.")
+    return []
   }
 
   try {
     const { similarityThreshold = 0.7, sourceTypeFilter, limit = 10 } = options
 
     const queryEmbedding = await generateEmbedding(query)
+
+    if (!queryEmbedding) {
+      return []
+    }
 
     const { data, error } = await supabase.rpc("search_brain_semantic", {
       query_embedding: queryEmbedding,
@@ -289,8 +299,10 @@ export async function semanticSearch(
     })
 
     if (error) {
-      console.error("Semantic search error:", error)
-      throw error
+      if (process.env.NODE_ENV === "development") {
+        console.error("Semantic search error:", error)
+      }
+      return []
     }
 
     return (data || []).map((item: any) => ({
@@ -305,8 +317,10 @@ export async function semanticSearch(
       similarityScore: item.similarity_score,
     }))
   } catch (error) {
-    console.error("Error in semanticSearch:", error)
-    throw error
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error in semanticSearch:", error)
+    }
+    return []
   }
 }
 

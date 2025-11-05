@@ -24,7 +24,6 @@ import {
   Volume2,
 } from "lucide-react"
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { supabase } from "@/lib/supabase"
 
 interface ReadingInsight {
@@ -148,7 +147,7 @@ export default function AIReadingCompanion() {
 
     try {
       const { text } = await generateText({
-        model: openai("gpt-4o"),
+        model: "openai/gpt-4o",
         system: `Eres un compañero de lectura inteligente especializado en desarrollo profesional y personal. 
         Ayudas a los usuarios a:
         - Comprender conceptos complejos de libros
@@ -191,7 +190,7 @@ export default function AIReadingCompanion() {
       }
 
       const { text } = await generateText({
-        model: openai("gpt-4o"),
+        model: "openai/gpt-4o",
         system:
           "Eres un experto en desarrollo profesional y personal que ayuda a los lectores a obtener insights profundos de sus libros.",
         prompt: prompts[type as keyof typeof prompts],

@@ -1,63 +1,49 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase-server"
+import type { NextRequest } from "next/server"
+import { createAdminClient } from "@/lib/supabase-server"
 import { streamText } from "ai"
-import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: NextRequest) {
   try {
     console.log("[v0] [Document Chat API] Starting chat request...")
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
-    // Get user from session
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+    const { message, documentIds = [], bookIds = [] } = await request.json()
 
-    if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const { message, documentIds = [], bookIds = [], conversationId } = await request.json()
+    console.log("[v0] Received request:", { message, documentIds, bookIds })
 
     if (!message || (documentIds.length === 0 && bookIds.length === 0)) {
-      return NextResponse.json(
-        { error: "Message and at least one source (document or book) are required" },
-        { status: 400 },
+      return new Response(
+        JSON.stringify({ error: "Message and at least one source (document or book) are required" }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
       )
     }
 
     console.log("[v0] Chat request for documents:", documentIds, "and books:", bookIds)
 
-    // Get user ID
-    const { data: userData } = await supabase.from("users").select("id").eq("email", user.email).single()
-
-    if (!userData) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 })
-    }
-
     let context = ""
 
     if (documentIds.length > 0) {
+      console.log("[v0] Fetching document chunks...")
       const { data: chunks, error: chunksError } = await supabase
         .from("document_chunks")
         .select("id, document_id, content, page_number")
         .in("document_id", documentIds)
-        .limit(5)
+        .order("chunk_index", { ascending: true })
+        .limit(10)
 
       if (chunksError) {
         console.error("[v0] Error fetching chunks:", chunksError)
       } else {
+        console.log("[v0] Found", chunks?.length || 0, "document chunks")
         const docContext =
           chunks?.map((chunk, i) => `[Documento - Página ${chunk.page_number}]\n${chunk.content}`).join("\n\n") || ""
         context += docContext
       }
-
-      console.log("[v0] Found", chunks?.length || 0, "document chunks")
     }
 
     if (bookIds.length > 0) {
+      console.log("[v0] Fetching books...")
       const { data: books, error: booksError } = await supabase
         .from("knowledge_base")
         .select("id, title, author, content")
@@ -66,45 +52,25 @@ export async function POST(request: NextRequest) {
       if (booksError) {
         console.error("[v0] Error fetching books:", booksError)
       } else {
+        console.log("[v0] Found", books?.length || 0, "books")
         const bookContext =
           books
-            ?.map((book, i) => `[Libro: "${book.title}" por ${book.author}]\n${book.content.substring(0, 3000)}`)
+            ?.map((book, i) => `[Libro: "${book.title}" por ${book.author}]\n${book.content.substring(0, 5000)}`)
             .join("\n\n") || ""
         if (context) context += "\n\n"
         context += bookContext
       }
-
-      console.log("[v0] Found", books?.length || 0, "books")
     }
 
-    // Create or update conversation
-    let finalConversationId = conversationId
-
-    if (!conversationId) {
-      const { data: newConversation, error: convError } = await supabase
-        .from("document_conversations")
-        .insert({
-          user_id: userData.id,
-          document_ids: [...documentIds, ...bookIds.map((id) => `book_${id}`)],
-          title: message.slice(0, 100),
-        })
-        .select()
-        .single()
-
-      if (convError) {
-        console.error("[v0] Error creating conversation:", convError)
-        return NextResponse.json({ error: "Failed to create conversation" }, { status: 500 })
-      }
-
-      finalConversationId = newConversation.id
+    if (!context) {
+      console.error("[v0] No context found for the selected sources")
+      return new Response(JSON.stringify({ error: "No content found for selected sources" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      })
     }
 
-    // Save user message
-    await supabase.from("document_messages").insert({
-      conversation_id: finalConversationId,
-      role: "user",
-      content: message,
-    })
+    console.log("[v0] Context length:", context.length, "characters")
 
     const systemPrompt = `Eres un asistente experto en análisis de documentos y libros. Tu trabajo es responder preguntas basándote ÚNICAMENTE en el contexto proporcionado.
 
@@ -119,29 +85,17 @@ Reglas importantes:
 Contexto de las fuentes:
 ${context}`
 
+    console.log("[v0] Generating AI response...")
+
     const result = await streamText({
-      model: openai("gpt-4-turbo"),
+      model: "openai/gpt-4-turbo",
       system: systemPrompt,
       messages: [{ role: "user", content: message }],
     })
 
-    // Convert stream to text for storage
-    let fullResponse = ""
-    const stream = result.toAIStream({
-      onFinal: async (completion) => {
-        fullResponse = completion
+    const stream = result.toAIStream()
 
-        // Save assistant message
-        await supabase.from("document_messages").insert({
-          conversation_id: finalConversationId,
-          role: "assistant",
-          content: fullResponse,
-          sources: [], // Could add source tracking here
-        })
-
-        console.log("[v0] Assistant response saved")
-      },
-    })
+    console.log("[v0] Streaming response to client")
 
     return new Response(stream, {
       headers: {
@@ -152,6 +106,9 @@ ${context}`
     })
   } catch (error) {
     console.error("[v0] [Document Chat API] Error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return new Response(JSON.stringify({ error: "Internal server error", details: String(error) }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 }

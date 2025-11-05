@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { generateObject } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { z } from "zod"
 
 export interface TestResult {
@@ -229,7 +228,7 @@ Enfócate en:
 - Timeframes concretos`
 
     const { object } = await generateObject({
-      model: openai("gpt-4o"),
+      model: "openai/gpt-4o",
       schema: CrossTestAnalysisSchema,
       prompt,
       temperature: 0.7,

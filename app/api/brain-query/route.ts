@@ -1,7 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
 import { createClient } from "@/lib/supabase"
-import { semanticSearch } from "@/lib/embeddings"
+import {
+  selectPersonality,
+  COACH_PERSONALITIES,
+  type CoachPersonality,
+  generateStructuredResponse, // Import fallback response generator
+} from "@/lib/sofia-dani-prompts"
 
 export const runtime = "nodejs"
 
@@ -59,69 +64,144 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Send message and get AI response with semantic search
+// POST - Send message and get AI response with user context
 export async function POST(request: NextRequest) {
   try {
-    const { message, userId = "demo-user", conversationId, context } = await request.json()
+    const {
+      message,
+      userId = "demo-user",
+      conversationId,
+      context,
+      conversationHistory,
+      userEmail,
+    } = await request.json()
 
-    // Perform semantic search to find relevant knowledge
-    let relevantKnowledge: any[] = []
-    let knowledgeContext = ""
+    const supabase = createClient()
+    let userContext: any = {}
 
-    try {
-      relevantKnowledge = await semanticSearch(message, {
-        similarityThreshold: 0.75,
-        limit: 3,
-      })
+    if (userEmail) {
+      // Get user profile
+      const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
 
-      if (relevantKnowledge.length > 0) {
-        knowledgeContext = "\n\n**Conocimiento Relevante Encontrado:**\n"
-        relevantKnowledge.forEach((item, index) => {
-          knowledgeContext += `\n${index + 1}. **${item.title}** por ${item.author} (${item.category})\n`
-          knowledgeContext += `   ${item.contentPreview.substring(0, 200)}...\n`
-        })
+      // Get test results
+      const { data: testResults } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", userEmail)
+        .order("completed_at", { ascending: false })
+
+      // Get personality assessments
+      const { data: personality } = await supabase
+        .from("personality_assessments")
+        .select("*")
+        .eq("user_id", userId)
+        .order("completed_at", { ascending: false })
+        .limit(1)
+        .single()
+
+      userContext = {
+        profile: profile || {},
+        testResults: testResults || [],
+        personality: personality || {},
+        hasCompletedTests: (testResults?.length || 0) > 0,
+        hasPersonalityData: !!personality,
       }
-    } catch (searchError) {
-      console.error("Semantic search error:", searchError)
-      // Continue without semantic search results
     }
 
-    // Create enhanced context-aware prompt
-    const systemPrompt = `
-Eres un coach de carrera profesional especializado en desarrollo de habilidades blandas y crecimiento profesional. 
-Tu nombre es Coach IA y ayudas a las personas a desarrollar sus competencias profesionales.
+    const personality: CoachPersonality = selectPersonality(message, userContext)
+    const coachConfig = COACH_PERSONALITIES[personality]
 
-Tienes acceso a una base de conocimiento de más de 120 libros profesionales y 100 recursos web especializados.
+    console.log("[v0] Selected coach:", personality, "for message:", message.substring(0, 50))
+
+    const relevantKnowledge: any[] = []
+    const knowledgeContext = ""
+
+    // Semantic search is optional and not critical for Sofia & Dani chat
+    // It will be re-enabled once OpenAI API key is properly configured
+    /*
+    const apiKey = process.env.OPENAI_API_KEY
+    const hasValidKey = apiKey && apiKey.startsWith("sk-") && apiKey.length > 40
+
+    if (hasValidKey) {
+      try {
+        relevantKnowledge = await semanticSearch(message, {
+          similarityThreshold: 0.75,
+          limit: 3,
+        })
+
+        if (relevantKnowledge.length > 0) {
+          knowledgeContext = "\n\nConocimiento relevante disponible:\n"
+          relevantKnowledge.forEach((item, index) => {
+            knowledgeContext += `${index + 1}. "${item.title}" por ${item.author} - ${item.contentPreview.substring(0, 150)}...\n`
+          })
+          knowledgeContext += "\nPuedes mencionar estas fuentes si son relevantes para tu respuesta.\n"
+        }
+      } catch (searchError) {
+        // Silently skip semantic search if it fails
+      }
+    }
+    */
+
+    let text = ""
+    let usedFallback = false
+
+    try {
+      const apiKey = process.env.OPENAI_API_KEY
+      const hasValidKey = apiKey && apiKey.startsWith("sk-") && apiKey.length > 40
+
+      if (!hasValidKey) {
+        throw new Error("OpenAI API key not configured")
+      }
+
+      let contextDescription = "Usuario buscando orientación profesional en Chile"
+
+      if (userContext.hasCompletedTests) {
+        contextDescription += "\n\nResultados de evaluaciones del usuario:"
+        userContext.testResults.slice(0, 3).forEach((test: any) => {
+          contextDescription += `\n- ${test.test_name}: Score ${test.score}/100`
+          if (test.results) {
+            contextDescription += ` - ${JSON.stringify(test.results).substring(0, 200)}`
+          }
+        })
+      }
+
+      if (userContext.hasPersonalityData) {
+        const p = userContext.personality
+        contextDescription += "\n\nPerfil de personalidad:"
+        if (p.personality_type) contextDescription += `\n- Tipo: ${p.personality_type}`
+        if (p.strengths) contextDescription += `\n- Fortalezas: ${p.strengths.join(", ")}`
+        if (p.growth_areas) contextDescription += `\n- Áreas de desarrollo: ${p.growth_areas.join(", ")}`
+        if (p.career_suggestions) contextDescription += `\n- Carreras sugeridas: ${p.career_suggestions.join(", ")}`
+      }
+
+      if (userContext.profile?.career_goals) {
+        contextDescription += `\n\nObjetivos de carrera: ${userContext.profile.career_goals}`
+      }
+
+      const systemPrompt = `${coachConfig.systemPrompt}
 
 ${knowledgeContext}
 
-Contexto del usuario: ${context ? JSON.stringify(context) : "Usuario buscando orientación profesional"}
+Contexto del usuario: ${contextDescription}
 
-Responde de manera:
-- Profesional pero amigable y cercana
-- Específica y accionable con pasos concretos
-- Motivadora y constructiva
-- En español chileno cuando sea apropiado
-- Con ejemplos prácticos aplicables al contexto laboral chileno
-- Citando las fuentes del conocimiento relevante cuando sea apropiado
+Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.`
 
-Si tienes conocimiento relevante disponible, refiérelo en tu respuesta para que el usuario sepa de dónde viene la información.
+      const result = await generateText({
+        model: "openai/gpt-4o-mini",
+        system: systemPrompt,
+        prompt: message,
+        temperature: personality === "sofia" ? 0.8 : 0.6,
+        maxOutputTokens: 400,
+      })
+      text = result.text
+    } catch (aiError: any) {
+      text = generateStructuredResponse(personality, message, userContext)
+      usedFallback = true
+    }
 
-Mantén las respuestas útiles y bien estructuradas (máximo 400 palabras).
-`
-
-    const { text } = await generateText({
-      model: "openai/gpt-4o",
-      system: systemPrompt,
-      prompt: message,
-      temperature: 0.7,
-      maxTokens: 600,
-    })
-
-    // Add sources information if we found relevant knowledge
     let enhancedResponse = text
 
-    if (relevantKnowledge.length > 0) {
+    if (relevantKnowledge.length > 0 && !usedFallback) {
       enhancedResponse += "\n\n📚 **Fuentes Consultadas:**\n"
       relevantKnowledge.forEach((item, index) => {
         const sourceIcon = item.sourceType === "book" ? "📖" : "🌐"
@@ -129,11 +209,12 @@ Mantén las respuestas útiles y bien estructuradas (máximo 400 palabras).
       })
     }
 
-    const aiResponse = {
-      id: Date.now().toString(),
-      role: "assistant" as const,
-      content: enhancedResponse,
-      timestamp: new Date().toISOString(),
+    return NextResponse.json({
+      response: enhancedResponse,
+      coach: personality,
+      coachName: personality === "sofia" ? "Sofia" : "Dani",
+      conversationId: conversationId || `conv_${Date.now()}`,
+      sourcesFound: relevantKnowledge.length,
       sources: relevantKnowledge.map((item) => ({
         id: item.id,
         title: item.title,
@@ -142,73 +223,22 @@ Mantén las respuestas útiles y bien estructuradas (máximo 400 palabras).
         sourceType: item.sourceType,
         similarityScore: item.similarityScore,
       })),
-    }
-
-    const userMessage = {
-      id: (Date.now() - 1).toString(),
-      role: "user" as const,
-      content: message,
-      timestamp: new Date().toISOString(),
-    }
-
-    // Try to save to database
-    const supabase = createClient()
-    const finalConversationId = conversationId || `conv_${Date.now()}`
-
-    try {
-      if (conversationId) {
-        // Update existing conversation
-        const { data: existingConv } = await supabase
-          .from("ai_conversations")
-          .select("messages")
-          .eq("id", conversationId)
-          .single()
-
-        const updatedMessages = [...(existingConv?.messages || []), userMessage, aiResponse]
-
-        await supabase
-          .from("ai_conversations")
-          .update({
-            messages: updatedMessages,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", conversationId)
-      } else {
-        // Create new conversation
-        await supabase.from("ai_conversations").insert({
-          id: finalConversationId,
-          user_id: userId,
-          title: message.substring(0, 50) + "...",
-          messages: [userMessage, aiResponse],
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-      }
-    } catch (dbError) {
-      console.error("Database save error:", dbError)
-      // Continue without saving to database
-    }
-
-    return NextResponse.json({
-      response: aiResponse,
-      conversationId: finalConversationId,
-      sourcesFound: relevantKnowledge.length,
+      usedFallback,
     })
   } catch (error) {
-    console.error("Error in POST /api/brain-query:", error)
+    console.error("[v0] Error in POST /api/brain-query:", error)
 
-    // Fallback response
+    const personality: CoachPersonality = "sofia"
+    const fallbackText = generateStructuredResponse(personality, "ayuda general", {})
+
     return NextResponse.json({
-      response: {
-        id: Date.now().toString(),
-        role: "assistant" as const,
-        content:
-          "Gracias por tu pregunta. Como coach de carrera, te recomiendo enfocarte en el desarrollo continuo de tus habilidades. ¿Hay alguna competencia específica en la que te gustaría trabajar?",
-        timestamp: new Date().toISOString(),
-        sources: [],
-      },
+      response: fallbackText,
+      coach: personality,
+      coachName: "Sofia",
       conversationId: `conv_${Date.now()}`,
       sourcesFound: 0,
+      sources: [],
+      usedFallback: true,
     })
   }
 }

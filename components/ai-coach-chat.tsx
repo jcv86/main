@@ -15,6 +15,8 @@ interface Message {
   role: "user" | "assistant"
   content: string
   timestamp: string
+  coach?: string // Add coach info to message
+  coachName?: string
 }
 
 interface AiCoachChatProps {
@@ -28,6 +30,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
   const [isLoading, setIsLoading] = useState(false)
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [rating, setRating] = useState<number | null>(null)
+  const [currentCoach, setCurrentCoach] = useState<string | null>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
   const [isListening, setIsListening] = useState(false)
@@ -131,7 +134,13 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
 
       const data = await response.json()
 
+      console.log("[v0] Response from API:", data)
+
       if (data.response) {
+        if (data.coachUsed) {
+          setCurrentCoach(data.coachUsed)
+        }
+
         setMessages((prev) => [...prev, data.response])
         if (data.conversationId && !conversationId) {
           setConversationId(data.conversationId)
@@ -207,6 +216,11 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Coach IA Personal</CardTitle>
           <div className="flex items-center gap-2">
+            {currentCoach && (
+              <Badge variant="outline" className="text-xs">
+                {currentCoach === "sofia" ? "🌟 Sofia" : "🎯 Dani"}
+              </Badge>
+            )}
             <Badge variant="secondary" className="text-xs">
               En línea
             </Badge>
@@ -229,6 +243,11 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
                     message.role === "user" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-900"
                   }`}
                 >
+                  {message.role === "assistant" && message.coachName && (
+                    <p className="text-xs font-semibold mb-1 text-blue-600">
+                      {message.coachName === "Sofia" ? "🌟 Sofia" : "🎯 Dani"}
+                    </p>
+                  )}
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   <p className="text-xs opacity-70 mt-1">{new Date(message.timestamp).toLocaleTimeString()}</p>
                 </div>
