@@ -81,13 +81,18 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient()
     let userContext: any = {}
+    let actualUserId = userId
 
     if (userEmail) {
       console.log("[v0] Fetching user context for:", userEmail)
 
-      // Get user profile
       const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
       console.log("[v0] Profile fetched:", !!profile)
+
+      if (profile?.user_id) {
+        actualUserId = profile.user_id
+        console.log("[v0] User UUID:", actualUserId)
+      }
 
       // Get test results
       const { data: testResults } = await supabase
@@ -97,11 +102,10 @@ export async function POST(request: NextRequest) {
         .order("completed_at", { ascending: false })
       console.log("[v0] Test results count:", testResults?.length || 0)
 
-      // Get personality assessments
       const { data: personality } = await supabase
         .from("personality_assessments")
         .select("*")
-        .eq("user_id", userId)
+        .eq("user_id", actualUserId)
         .order("completed_at", { ascending: false })
         .limit(1)
         .single()
@@ -203,25 +207,25 @@ export async function POST(request: NextRequest) {
 
       console.log("[v0] Context description length:", contextDescription.length)
 
-      const systemPrompt = `${coachConfig.systemPrompt}
+      const systemAndPrompt = `${coachConfig.systemPrompt}
 
 ${knowledgeContext}
 
 Contexto del usuario: ${contextDescription}
 
-Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.`
+Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.
+
+Usuario: ${message}`
 
       console.log("[v0] Calling OpenAI with model: openai/gpt-4o")
 
-      const result = await generateText({
+      const { text: generatedText } = await generateText({
         model: "openai/gpt-4o",
-        system: systemPrompt,
-        prompt: message,
+        prompt: systemAndPrompt,
         temperature: personality === "sofia" ? 0.8 : 0.6,
-        maxTokens: 400,
       })
 
-      text = result.text
+      text = generatedText
       console.log("[v0] OpenAI response received, length:", text.length)
     } catch (aiError: any) {
       console.error("[v0] AI generation error:", aiError.message || aiError)
