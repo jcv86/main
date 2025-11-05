@@ -5,8 +5,9 @@ import {
   selectPersonality,
   COACH_PERSONALITIES,
   type CoachPersonality,
-  generateStructuredResponse, // Import fallback response generator
+  generateStructuredResponse,
 } from "@/lib/sofia-dani-prompts"
+import { detectIntention, getPromptForIntention, getCategoryInfo, trackEngagement } from "@/lib/intention-detector"
 
 export const runtime = "nodejs"
 
@@ -80,18 +81,53 @@ export async function POST(request: NextRequest) {
     console.log("[v0] userEmail:", userEmail)
 
     const supabase = createClient()
+    if (userEmail) {
+      await supabase.from("brain_analytics_events").insert({
+        event_type: "query_received",
+        event_category: "coaching",
+        user_email: userEmail,
+        session_id: conversationId || `session_${Date.now()}`,
+        event_data: { message_length: message.length },
+      })
+    }
+
+    const intentionResult = detectIntention(message)
+    console.log("[v0] Detected intention:", {
+      intention: intentionResult.intention,
+      confidence: intentionResult.confidence,
+      keywords: intentionResult.matchedKeywords,
+    })
+
+    const promptInfo = getPromptForIntention(intentionResult.intention, intentionResult.suggestedPromptId)
+    const categoryInfo = getCategoryInfo(intentionResult.intention)
+
+    if (promptInfo) {
+      console.log("[v0] Matched prompt:", promptInfo.id)
+    }
+    if (categoryInfo) {
+      console.log("[v0] Category:", categoryInfo.name)
+    }
+
     let userContext: any = {}
     let actualUserId = userId
 
     if (userEmail) {
       console.log("[v0] Fetching user context for:", userEmail)
 
-      const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
-      console.log("[v0] Profile fetched:", !!profile)
+      const { data: user } = await supabase.from("users").select("id").eq("email", userEmail).single()
 
-      if (profile?.user_id) {
-        actualUserId = profile.user_id
+      if (user?.id) {
+        actualUserId = user.id
         console.log("[v0] User UUID:", actualUserId)
+      } else {
+        console.log("[v0] User not found in users table, trying user_profiles")
+        // Fallback to user_profiles if users table doesn't have the user
+        const { data: profile } = await supabase.from("user_profiles").select("*").eq("user_email", userEmail).single()
+
+        if (profile) {
+          console.log("[v0] Profile found in user_profiles")
+          userContext.profile = profile
+        }
       }
 
       // Get test results
@@ -102,17 +138,23 @@ export async function POST(request: NextRequest) {
         .order("completed_at", { ascending: false })
       console.log("[v0] Test results count:", testResults?.length || 0)
 
-      const { data: personality } = await supabase
-        .from("personality_assessments")
-        .select("*")
-        .eq("user_id", actualUserId)
-        .order("completed_at", { ascending: false })
-        .limit(1)
-        .single()
-      console.log("[v0] Personality data:", !!personality)
+      let personality = null
+      if (actualUserId !== "demo-user") {
+        const { data: personalityData } = await supabase
+          .from("personality_assessments")
+          .select("*")
+          .eq("user_id", actualUserId)
+          .order("completed_at", { ascending: false })
+          .limit(1)
+          .single()
+        personality = personalityData
+        console.log("[v0] Personality data:", !!personality)
+      } else {
+        console.log("[v0] Skipping personality query - no valid user UUID")
+      }
 
       userContext = {
-        profile: profile || {},
+        ...userContext,
         testResults: testResults || [],
         personality: personality || {},
         hasCompletedTests: (testResults?.length || 0) > 0,
@@ -120,7 +162,7 @@ export async function POST(request: NextRequest) {
       }
 
       console.log("[v0] User context summary:", {
-        hasProfile: !!profile,
+        hasProfile: !!userContext.profile,
         testCount: testResults?.length || 0,
         hasPersonality: !!personality,
       })
@@ -128,10 +170,27 @@ export async function POST(request: NextRequest) {
       console.log("[v0] No userEmail provided, skipping context fetch")
     }
 
-    const personality: CoachPersonality = selectPersonality(message, userContext)
+    const personality: CoachPersonality = selectPersonality(message, userContext, intentionResult.intention)
     const coachConfig = COACH_PERSONALITIES[personality]
 
-    console.log("[v0] Selected coach:", personality, "for message:", message.substring(0, 50))
+    console.log("[v0] Selected coach:", personality, "for intention:", intentionResult.intention)
+
+    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+    await trackEngagement({
+      userId: actualUserId,
+      sessionId,
+      timestamp: new Date(),
+      eventType: "message_sent",
+      intention: intentionResult.intention,
+      coachPersonality: personality,
+      metadata: {
+        messageLength: message.length,
+        confidence: intentionResult.confidence,
+        promptId: promptInfo?.id,
+        matchedKeywords: intentionResult.matchedKeywords,
+      },
+    })
 
     const relevantKnowledge: any[] = []
     const knowledgeContext = ""
@@ -207,7 +266,26 @@ export async function POST(request: NextRequest) {
 
       console.log("[v0] Context description length:", contextDescription.length)
 
-      const systemAndPrompt = `${coachConfig.systemPrompt}
+      let systemPrompt = coachConfig.systemPrompt
+
+      if (promptInfo && categoryInfo) {
+        systemPrompt += `\n\nCONTEXTO DE INTENCIÓN DETECTADA:
+- Categoría: ${categoryInfo.name} (${categoryInfo.description})
+- Confianza de detección: ${(intentionResult.confidence * 100).toFixed(0)}%
+- Palabras clave identificadas: ${intentionResult.matchedKeywords.join(", ")}
+
+ESTRUCTURA DE RESPUESTA SUGERIDA:
+1. ${promptInfo.response_structure.step1}
+2. ${promptInfo.response_structure.step2}
+3. ${promptInfo.response_structure.step3}
+
+ENFOQUE RECOMENDADO PARA ${personality.toUpperCase()}:
+${personality === "sofia" ? promptInfo.sofia_approach : promptInfo.dani_approach}
+
+Usa esta estructura como guía, pero mantén tu personalidad y tono natural.`
+      }
+
+      const fullPrompt = `${systemPrompt}
 
 ${knowledgeContext}
 
@@ -221,7 +299,7 @@ Usuario: ${message}`
 
       const { text: generatedText } = await generateText({
         model: "openai/gpt-4o",
-        prompt: systemAndPrompt,
+        prompt: fullPrompt,
         temperature: personality === "sofia" ? 0.8 : 0.6,
       })
 
@@ -233,6 +311,34 @@ Usuario: ${message}`
       text = generateStructuredResponse(personality, message, userContext)
       usedFallback = true
       console.log("[v0] Using fallback response")
+    }
+
+    await trackEngagement({
+      userId: actualUserId,
+      sessionId,
+      timestamp: new Date(),
+      eventType: "response_received",
+      intention: intentionResult.intention,
+      coachPersonality: personality,
+      metadata: {
+        responseLength: text.length,
+        usedFallback,
+        sourcesFound: relevantKnowledge.length,
+      },
+    })
+
+    if (userEmail) {
+      await supabase.from("brain_analytics_events").insert({
+        event_type: "response_sent",
+        event_category: "coaching",
+        user_email: userEmail,
+        session_id: conversationId || sessionId,
+        event_data: {
+          coach: personality,
+          used_fallback: usedFallback,
+          response_length: text.length,
+        },
+      })
     }
 
     let enhancedResponse = text
@@ -260,6 +366,9 @@ Usuario: ${message}`
         similarityScore: item.similarityScore,
       })),
       usedFallback,
+      intention: intentionResult.intention,
+      intentionConfidence: intentionResult.confidence,
+      sessionId,
     })
   } catch (error) {
     console.error("[v0] Error in POST /api/brain-query:", error)
@@ -275,6 +384,8 @@ Usuario: ${message}`
       sourcesFound: 0,
       sources: [],
       usedFallback: true,
+      intention: "general_question",
+      intentionConfidence: 0.5,
     })
   }
 }
