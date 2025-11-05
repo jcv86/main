@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase"
+import { CoachingFeedbackDialog } from "@/components/coaching-feedback-dialog"
 
 interface Message {
   id: string
@@ -62,6 +63,10 @@ export function PersistentAICoach() {
 
   const [userEmail, setUserEmail] = useState<string>("")
 
+  const [sessionId, setSessionId] = useState<string>("")
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
+  const [messageCount, setMessageCount] = useState(0)
+
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
@@ -92,6 +97,8 @@ export function PersistentAICoach() {
     }
     getUserEmail()
 
+    setSessionId(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
+
     const welcomeMessage: Message = {
       id: "1",
       content:
@@ -102,7 +109,6 @@ export function PersistentAICoach() {
     }
     setMessages([welcomeMessage])
 
-    // Sample suggestions based on user profile
     setSuggestions([
       {
         id: "1",
@@ -136,7 +142,6 @@ export function PersistentAICoach() {
       },
     ])
 
-    // Sample insights based on assessment results
     setInsights([
       {
         id: "1",
@@ -196,7 +201,6 @@ export function PersistentAICoach() {
           console.log("[v0] Speech recognition started")
           noSpeechRetriesRef.current = 0
 
-          // Establecer timeout máximo de escucha
           listeningTimeoutRef.current = setTimeout(() => {
             console.log("[v0] Max listening time reached, stopping")
             if (recognitionRef.current && isListeningRef.current) {
@@ -217,7 +221,6 @@ export function PersistentAICoach() {
           console.log("[v0] Transcript:", transcript)
           setInputMessage(transcript)
 
-          // Si obtuvimos un resultado final, detener
           if (event.results[event.results.length - 1].isFinal) {
             console.log("[v0] Final result received, stopping")
             isListeningRef.current = false
@@ -231,17 +234,14 @@ export function PersistentAICoach() {
         recognition.onerror = (event: any) => {
           console.log("[v0] Speech recognition error:", event.error)
 
-          // Manejar el error "no-speech" de manera especial
           if (event.error === "no-speech") {
             console.log("[v0] No speech detected, retry count:", noSpeechRetriesRef.current)
             console.log("[v0] Is listening ref:", isListeningRef.current)
 
-            // Reintentar automáticamente si no hemos excedido el límite Y todavía estamos escuchando
             if (noSpeechRetriesRef.current < maxRetries && isListeningRef.current) {
               noSpeechRetriesRef.current++
               console.log("[v0] Retrying... attempt", noSpeechRetriesRef.current)
 
-              // Pequeña pausa antes de reintentar
               setTimeout(() => {
                 if (isListeningRef.current && recognitionRef.current) {
                   try {
@@ -254,19 +254,16 @@ export function PersistentAICoach() {
                   }
                 }
               }, 100)
-              return // No ejecutar el código de limpieza abajo
+              return
             } else {
               console.log("[v0] Max retries reached or not listening, stopping")
             }
           } else if (event.error === "aborted") {
-            // El usuario detuvo manualmente, no hacer nada
             console.log("[v0] Recognition aborted by user")
           } else {
-            // Otros errores (not-allowed, network, etc.)
             console.error("[v0] Speech recognition error:", event.error)
           }
 
-          // Limpiar estado
           isListeningRef.current = false
           setIsListening(false)
           if (listeningTimeoutRef.current) {
@@ -293,13 +290,24 @@ export function PersistentAICoach() {
       }
     }
 
-    // Cleanup
     return () => {
       if (listeningTimeoutRef.current) {
         clearTimeout(listeningTimeoutRef.current)
       }
     }
   }, [])
+
+  useEffect(() => {
+    const userMessages = messages.filter((m) => m.sender === "user").length
+    setMessageCount(userMessages)
+
+    if (userMessages >= 2 && !showFeedbackDialog) {
+      const timer = setTimeout(() => {
+        setShowFeedbackDialog(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [messages])
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return
@@ -340,10 +348,10 @@ export function PersistentAICoach() {
 
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.response, // This is now a simple string
+        content: data.response,
         sender: "ai",
         timestamp: new Date(),
-        coach: data.coach, // Track which coach responded
+        coach: data.coach,
       }
       setMessages((prev) => [...prev, aiResponse])
     } catch (error) {
@@ -389,7 +397,7 @@ export function PersistentAICoach() {
       .then((data) => {
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
-          content: data.response, // Simple string
+          content: data.response,
           sender: "ai",
           timestamp: new Date(),
           coach: data.coach,
@@ -484,7 +492,6 @@ export function PersistentAICoach() {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-muted">
@@ -600,7 +607,6 @@ export function PersistentAICoach() {
                 <div ref={messagesEndRef} />
               </ScrollArea>
 
-              {/* Quick Start Questions */}
               {messages.length <= 1 && (
                 <div className="mb-4">
                   <p className="text-sm text-mutedForeground mb-3">Preguntas rápidas para comenzar:</p>
@@ -799,6 +805,18 @@ export function PersistentAICoach() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <CoachingFeedbackDialog
+        open={showFeedbackDialog}
+        onOpenChange={setShowFeedbackDialog}
+        sessionId={sessionId}
+        userEmail={userEmail}
+        messageCount={messageCount}
+        conversationSummary={messages
+          .slice(-4)
+          .map((m) => `${m.sender === "user" ? "Usuario" : "Coach"}: ${m.content.substring(0, 100)}...`)
+          .join("\n")}
+      />
     </div>
   )
 }

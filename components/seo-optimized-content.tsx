@@ -27,27 +27,38 @@ interface FAQSectionProps {
 
 export function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
   return (
-    <section className="py-12" itemScope itemType="https://schema.org/FAQPage">
-      <h2 className="text-3xl font-bold mb-8 text-center">{title}</h2>
-      <div className="max-w-4xl mx-auto space-y-6">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
-            itemScope
-            itemProp="mainEntity"
-            itemType="https://schema.org/Question"
-          >
-            <h3 className="text-xl font-semibold mb-3 text-gray-900" itemProp="name">
-              {faq.question}
-            </h3>
-            <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-              <div itemProp="text" className="text-gray-700 leading-relaxed">
-                {faq.answer}
+    <section className="py-20 bg-white border-t border-gray-200" itemScope itemType="https://schema.org/FAQPage">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{title}</h2>
+          <p className="text-lg text-gray-600 mb-6">Respuestas a las preguntas más comunes sobre Despega Tu Carrera</p>
+          <a href="/faq" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
+            Ver todas las preguntas frecuentes
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+        <div className="max-w-4xl mx-auto space-y-6">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+              itemScope
+              itemProp="mainEntity"
+              itemType="https://schema.org/Question"
+            >
+              <h3 className="text-xl font-semibold mb-3 text-gray-900" itemProp="name">
+                {faq.question}
+              </h3>
+              <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                <div itemProp="text" className="text-gray-700 leading-relaxed">
+                  {faq.answer}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* JSON-LD for FAQs */}
