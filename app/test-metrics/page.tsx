@@ -1,22 +1,41 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CoachingFeedbackDialog } from "@/components/coaching-feedback-dialog"
 import { CoachingMetricsDashboard } from "@/components/coaching-metrics-dashboard"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MessageSquare, BarChart3 } from "lucide-react"
+import { MessageSquare, BarChart3, TestTube } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
 export default function TestMetricsPage() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [sessionId] = useState(() => crypto.randomUUID())
   const [messageCount, setMessageCount] = useState(0)
+  const [promptAssignment, setPromptAssignment] = useState<any>(null)
+  const [loadingAssignment, setLoadingAssignment] = useState(true)
+
+  useEffect(() => {
+    fetchPromptAssignment()
+  }, [])
+
+  const fetchPromptAssignment = async () => {
+    try {
+      setLoadingAssignment(true)
+      const response = await fetch("/api/prompt-assignment?coachType=sofia&category=autoconocimiento")
+      const data = await response.json()
+      setPromptAssignment(data)
+    } catch (error) {
+      console.error("Error fetching prompt assignment:", error)
+    } finally {
+      setLoadingAssignment(false)
+    }
+  }
 
   const simulateConversation = () => {
     setMessageCount((prev) => prev + 1)
     if (messageCount + 1 >= 2) {
-      // Mostrar feedback después de 2 mensajes del usuario
       setTimeout(() => setShowFeedback(true), 1000)
     }
   }
@@ -31,10 +50,14 @@ export default function TestMetricsPage() {
       </div>
 
       <Tabs defaultValue="test" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 max-w-md">
+        <TabsList className="grid w-full grid-cols-3 max-w-2xl">
           <TabsTrigger value="test" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
             Probar Sistema
+          </TabsTrigger>
+          <TabsTrigger value="ab-testing" className="flex items-center gap-2">
+            <TestTube className="h-4 w-4" />
+            A/B Testing
           </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
@@ -98,6 +121,69 @@ export default function TestMetricsPage() {
               <Button onClick={() => setShowFeedback(true)} variant="outline" className="w-full">
                 Abrir Dialog de Feedback
               </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ab-testing" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Estado del A/B Testing</CardTitle>
+              <CardDescription>Verifica qué variante de prompt está asignada a tu usuario</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {loadingAssignment ? (
+                <div className="text-center py-8 text-muted-foreground">Cargando asignación...</div>
+              ) : promptAssignment ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-muted rounded-lg">
+                      <p className="text-xs text-muted-foreground mb-1">Coach</p>
+                      <p className="font-semibold capitalize">{promptAssignment.coachType}</p>
+                    </div>
+                    <div className="p-4 bg-muted rounded-lg">
+                      <p className="text-xs text-muted-foreground mb-1">Categoría</p>
+                      <p className="font-semibold capitalize">{promptAssignment.category}</p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 border rounded-lg space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium">Versión Asignada</p>
+                      <Badge variant={promptAssignment.isControl ? "secondary" : "default"}>
+                        {promptAssignment.isControl ? "Control" : "Variante"}
+                      </Badge>
+                    </div>
+                    <p className="text-lg font-bold">{promptAssignment.version}</p>
+                    {promptAssignment.variantName && (
+                      <p className="text-sm text-muted-foreground">{promptAssignment.variantName}</p>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-2">System Prompt (primeros 200 caracteres)</p>
+                    <p className="text-sm font-mono bg-background p-2 rounded">
+                      {promptAssignment.systemPrompt.substring(0, 200)}...
+                    </p>
+                  </div>
+
+                  <Button onClick={fetchPromptAssignment} variant="outline" className="w-full bg-transparent">
+                    Recargar Asignación
+                  </Button>
+
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-2 text-sm">Cómo funciona el A/B Testing:</h3>
+                    <ul className="text-xs space-y-1 text-muted-foreground">
+                      <li>• Cada usuario es asignado consistentemente a una variante</li>
+                      <li>• Las métricas se trackean por variante para comparar performance</li>
+                      <li>• Los admins pueden activar/desactivar variantes desde Gestión de Prompts</li>
+                      <li>• La variante ganadora puede publicarse como nueva versión control</li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">No se pudo cargar la asignación de prompt</div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
