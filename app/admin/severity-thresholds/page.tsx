@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Switch } from "@/components/ui/switch"
+import { Checkbox } from "@/components/ui/checkbox"
 import { AlertTriangle, CheckCircle, Settings, TrendingUp } from "lucide-react"
 
 interface Threshold {
@@ -249,7 +249,7 @@ export default function SeverityThresholdsPage() {
                           </div>
                           <div className="space-y-2">
                             <label className="text-xs text-muted-foreground">Activo</label>
-                            <Switch
+                            <Checkbox
                               checked={editValues.is_active}
                               onCheckedChange={(checked) => setEditValues({ ...editValues, is_active: checked })}
                             />
