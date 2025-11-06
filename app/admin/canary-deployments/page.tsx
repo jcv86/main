@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Dialog,
   DialogContent,
@@ -191,10 +190,12 @@ export default function CanaryDeploymentsPage() {
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <input
+                  type="checkbox"
                   id="auto_rollback"
                   checked={formData.auto_rollback_enabled}
-                  onCheckedChange={(checked) => setFormData({ ...formData, auto_rollback_enabled: checked as boolean })}
+                  onChange={(e) => setFormData({ ...formData, auto_rollback_enabled: e.target.checked })}
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                 />
                 <Label htmlFor="auto_rollback">Habilitar rollback automático</Label>
               </div>
