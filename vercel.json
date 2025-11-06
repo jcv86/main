@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/bimonthly-analysis",
+      "schedule": "0 0 1 */2 *"
+    },
+    {
+      "path": "/api/cron/daily-metrics-summary",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
