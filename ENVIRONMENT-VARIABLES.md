@@ -17,9 +17,6 @@
 \`\`\`bash
 # ✅ CORRECTO - Solo en servidor
 CRON_SECRET=your-secret-here
-
-# ❌ INCORRECTO - NO USAR
-# NEXT_PUBLIC_CRON_SECRET=your-secret-here  # ¡NUNCA HAGAS ESTO!
 \`\`\`
 
 **Uso correcto:**
@@ -33,11 +30,11 @@ export async function GET(request: Request) {
   // ... resto del código
 }
 
-// ❌ En componente cliente
+// ❌ En componente cliente - NUNCA hagas esto
 'use client'
 export function Component() {
-  // ¡NUNCA hagas esto!
-  const secret = process.env.NEXT_PUBLIC_CRON_SECRET
+  // Los secretos NO deben usarse en el cliente
+  // Usa Server Actions en su lugar
 }
 \`\`\`
 
@@ -70,30 +67,27 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_xxx...
 
 ---
 
-## 🔧 Cómo Arreglar el Error de Deployment
+## 🔧 Cómo Arreglar Errores de Deployment
 
-Si ves el error:
-\`\`\`
-The sensitive environment variable NEXT_PUBLIC_CRON_SECRET is exposed in the client
-\`\`\`
+Si ves errores sobre variables sensibles expuestas al cliente:
 
-### Paso 1: Eliminar la variable pública
+### Paso 1: Eliminar variables públicas sensibles
 En Vercel Dashboard:
 1. Ve a tu proyecto → Settings → Environment Variables
-2. Elimina `NEXT_PUBLIC_CRON_SECRET`
-3. Asegúrate de que solo existe `CRON_SECRET` (sin NEXT_PUBLIC_)
+2. Elimina cualquier variable con `NEXT_PUBLIC_` que contenga secretos
+3. Asegúrate de que los secretos solo existen sin el prefijo `NEXT_PUBLIC_`
 
 ### Paso 2: Actualizar el código
-Si tienes código que usa el secreto en el cliente, muévelo al servidor:
+Si tienes código que usa secretos en el cliente, muévelo al servidor:
 
 \`\`\`typescript
-// ❌ ANTES (componente cliente)
+// ❌ ANTES (componente cliente con secreto)
 'use client'
 export function TriggerCron() {
   const handleTrigger = async () => {
     await fetch('/api/cron/my-job', {
       headers: {
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`
+        'Authorization': `Bearer ${process.env.SECRET_KEY}` // ❌ Expuesto
       }
     })
   }
@@ -106,7 +100,7 @@ export function TriggerCron() {
 export async function triggerCron() {
   const response = await fetch('https://your-domain.com/api/cron/my-job', {
     headers: {
-      'Authorization': `Bearer ${process.env.CRON_SECRET}`
+      'Authorization': `Bearer ${process.env.CRON_SECRET}` // ✅ Seguro en servidor
     }
   })
   return response.ok
@@ -129,7 +123,7 @@ export function TriggerCron() {
 ## ✅ Checklist de Seguridad
 
 - [ ] Ninguna variable con `NEXT_PUBLIC_` contiene secretos sensibles
-- [ ] `CRON_SECRET` existe sin el prefijo `NEXT_PUBLIC_`
+- [ ] `CRON_SECRET` existe sin el prefijo público
 - [ ] API keys solo se usan en servidor (API routes, Server Actions)
 - [ ] Tokens de autenticación nunca se exponen al cliente
 - [ ] Service role keys de Supabase solo en servidor
