@@ -28,13 +28,17 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(data)
       }
     } catch (dbError) {
-      console.log("Database not available, using mock data")
+      console.log("Database not available, using demo data")
     }
 
-    // Fallback to mock data
     if (testType === "emotional-intelligence" && latest === "true") {
       const mockResult = generateMockEIResult()
-      return NextResponse.json(mockResult)
+      return NextResponse.json({
+        ...mockResult,
+        is_demo: true,
+        demo_warning:
+          "⚠️ RESULTADOS DE DEMOSTRACIÓN - Estos son resultados de ejemplo para previsualizar el formato del test. Para obtener resultados reales basados en tu perfil, completa el test de Inteligencia Emocional.",
+      })
     }
 
     return NextResponse.json({ error: "No results found" }, { status: 404 })
@@ -95,7 +99,10 @@ function generateMockEIResult() {
     id: 1,
     user_email: "demo@example.com",
     test_type: "emotional-intelligence",
-    test_name: "Test de Inteligencia Emocional",
+    test_name: "Test de Inteligencia Emocional (DEMO)",
+    is_demo: true,
+    demo_warning:
+      "⚠️ RESULTADOS DE DEMOSTRACIÓN - Estos son resultados de ejemplo para previsualizar el formato del test. Para obtener resultados reales basados en tu perfil, completa el test de Inteligencia Emocional.",
     results: {
       overall_score: 78,
       competency_scores: {

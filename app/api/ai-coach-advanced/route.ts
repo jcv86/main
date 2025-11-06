@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase"
+import { OPENAI_API_KEY } from "@/lib/config"
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,8 +25,7 @@ export async function POST(request: NextRequest) {
     // Build comprehensive context for AI
     const aiContext = buildAIContext(userProfile, conversationHistory, context)
 
-    // Generate AI response using mock AI (instead of OpenAI)
-    const aiResponse = await generateMockAIResponse(message, userProfile, aiContext)
+    const aiResponse = await generateRealAIResponse(message, userProfile, aiContext)
 
     // Generate suggested actions based on user profile and message
     const suggestedActions = generateSuggestedActions(message, userProfile, aiResponse)
@@ -74,499 +74,70 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function generateMockAIResponse(message: string, userProfile: any, context: string): Promise<string> {
-  // Simulate AI processing delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+async function generateRealAIResponse(message: string, userProfile: any, context: string): Promise<string> {
+  const apiKey = OPENAI_API_KEY
 
-  const userName = userProfile.name
-  const userCategory = userProfile.userCategory
-  const categoryBadge = getCategoryBadge(userCategory)
-  const lowerMessage = message.toLowerCase()
-
-  // Category-specific responses
-  const categoryPrefix = getCategorySpecificPrefix(userCategory)
-
-  // Generate contextual response based on message content
-  if (lowerMessage.includes("test") || lowerMessage.includes("evaluación") || lowerMessage.includes("assessment")) {
-    return `${categoryPrefix}
-
-¡Excelente pregunta sobre evaluaciones, ${userName}! 📊
-
-**Tests recomendados para tu perfil ${categoryBadge}:**
-
-🎯 **Evaluaciones Prioritarias:**
-• **DISC Assessment** - Analiza tu estilo de comunicación y liderazgo
-• **Big Five** - Evalúa tus rasgos de personalidad fundamentales
-• **RIASEC (Holland Code)** - Identifica tus intereses profesionales
-• **Inteligencia Emocional** - Mide tu capacidad de gestión emocional
-
-${getCategorySpecificTestRecommendations(userCategory)}
-
-**📈 Próximos pasos:**
-1. Comienza con el test DISC para entender tu estilo de trabajo
-2. Continúa con Big Five para un análisis profundo de personalidad
-3. Completa RIASEC para alinear intereses con oportunidades profesionales
-
-¿Te gustaría que te guíe hacia algún test específico o tienes preguntas sobre alguna evaluación en particular?`
+  if (!apiKey) {
+    console.error("OpenAI API key not configured")
+    return "Lo siento, el servicio de AI Coach no está disponible en este momento. Por favor, contacta al administrador."
   }
 
-  if (lowerMessage.includes("carrera") || lowerMessage.includes("trabajo") || lowerMessage.includes("profesional")) {
-    return `${categoryPrefix}
-
-¡Perfecto, ${userName}! Hablemos de tu desarrollo profesional 🚀
-
-**Análisis de tu perfil ${categoryBadge}:**
-
-🎯 **Fortalezas identificadas:**
-${
-  userProfile.personalityInsights?.strengths
-    ?.slice(0, 3)
-    .map((s: string) => `• ${s}`)
-    .join("\n") || "• Análisis pendiente - completa más evaluaciones"
-}
-
-🔍 **Oportunidades de crecimiento:**
-${
-  userProfile.personalityInsights?.growthAreas
-    ?.slice(0, 2)
-    .map((a: string) => `• ${a}`)
-    .join("\n") || "• Evaluación en progreso"
-}
-
-${getCategorySpecificCareerAdvice(userCategory, userProfile)}
-
-**🎯 Plan de acción inmediato:**
-1. **Corto plazo (1-3 meses)**: ${getShortTermGoal(userCategory)}
-2. **Mediano plazo (6 meses)**: ${getMediumTermGoal(userCategory)}
-3. **Largo plazo (1 año)**: ${getLongTermGoal(userCategory)}
-
-¿Hay algún aspecto específico de tu carrera en el que te gustaría profundizar?`
-  }
-
-  if (lowerMessage.includes("habilidad") || lowerMessage.includes("skill") || lowerMessage.includes("competencia")) {
-    return `${categoryPrefix}
-
-¡Excelente enfoque en el desarrollo de habilidades, ${userName}! 💪
-
-**Mapa de habilidades para tu perfil ${categoryBadge}:**
-
-🌟 **Habilidades core actuales:**
-• Nivel: ${userProfile.preferences?.skillLevel || "Intermedio"}
-• Experiencia: ${userProfile.careerProfile?.experience || "En desarrollo"}
-• Estilo de aprendizaje: ${userProfile.preferences?.learningStyle || "Visual"}
-
-${getCategorySpecificSkillRecommendations(userCategory)}
-
-**📚 Recursos de desarrollo:**
-• **Libros recomendados**: Accede a nuestra biblioteca especializada
-• **Cursos online**: Plataformas certificadas según tu nivel
-• **Práctica aplicada**: Proyectos reales para consolidar conocimientos
-• **Mentoring**: Conexión con expertos en tu área
-
-**🎯 Ruta de aprendizaje personalizada:**
-1. **Fundamentos** → Consolida bases sólidas
-2. **Especialización** → Profundiza en tu área de interés
-3. **Liderazgo** → Desarrolla habilidades de gestión
-4. **Innovación** → Mantente actualizado con tendencias
-
-¿Qué habilidad específica te gustaría desarrollar primero?`
-  }
-
-  if (lowerMessage.includes("libro") || lowerMessage.includes("leer") || lowerMessage.includes("lectura")) {
-    return `${categoryPrefix}
-
-¡Fantástico interés en la lectura, ${userName}! 📚
-
-**Biblioteca personalizada para tu perfil ${categoryBadge}:**
-
-📖 **Libros recomendados según tu perfil:**
-${getCategorySpecificBookRecommendations(userCategory)}
-
-**📊 Tu progreso de lectura:**
-• Libros completados: ${userProfile.learningProfile?.completedBooks?.length || 0}
-• Ritmo de lectura: ${userProfile.learningProfile?.learningPace || "Moderado"}
-• Estilo preferido: ${userProfile.preferences?.learningStyle || "Visual"}
-
-**🎯 Plan de lectura sugerido:**
-1. **Semana 1-2**: Libro de fundamentos (base sólida)
-2. **Semana 3-4**: Especialización técnica
-3. **Semana 5-6**: Liderazgo y soft skills
-4. **Semana 7-8**: Innovación y tendencias
-
-**💡 Funciones disponibles:**
-• Seguimiento de progreso automático
-• Notas y highlights sincronizados
-• Discusiones con la comunidad
-• Recomendaciones basadas en IA
-
-¿Te gustaría que te recomiende un libro específico para comenzar?`
-  }
-
-  if (lowerMessage.includes("liderazgo") || lowerMessage.includes("líder") || lowerMessage.includes("gestión")) {
-    return `${categoryPrefix}
-
-¡Excelente enfoque en liderazgo, ${userName}! 👑
-
-**Desarrollo de liderazgo para tu perfil ${categoryBadge}:**
-
-🎯 **Estilo de liderazgo identificado:**
-• Comunicación: ${userProfile.preferences?.communicationStyle || "Colaborativo"}
-• Motivadores: ${userProfile.personalityInsights?.motivators?.join(", ") || "Logro, autonomía, propósito"}
-• Fortalezas: ${userProfile.personalityInsights?.strengths?.slice(0, 2).join(", ") || "Análisis, creatividad"}
-
-${getCategorySpecificLeadershipAdvice(userCategory)}
-
-**🚀 Competencias de liderazgo a desarrollar:**
-1. **Comunicación efectiva** - Transmitir visión e inspirar equipos
-2. **Toma de decisiones** - Análisis estratégico bajo presión
-3. **Gestión de equipos** - Motivar y desarrollar talento
-4. **Innovación** - Liderar cambio y transformación
-5. **Inteligencia emocional** - Gestionar relaciones y conflictos
-
-**📈 Plan de desarrollo ejecutivo:**
-• **Mes 1**: Assessment 360° y feedback estructurado
-• **Mes 2-3**: Coaching personalizado y mentoring
-• **Mes 4-6**: Proyecto de liderazgo aplicado
-• **Mes 7-12**: Consolidación y expansión de responsabilidades
-
-¿Qué aspecto del liderazgo te resulta más desafiante actualmente?`
-  }
-
-  // Default general response
-  return `${categoryPrefix}
-
-¡Hola ${userName}! 👋 Gracias por tu mensaje.
-
-Como tu AI Career Coach personalizado ${categoryBadge}, estoy aquí para ayudarte en tu desarrollo profesional.
-
-**🧠 Contexto de nuestra conversación:**
-• Mensajes previos: ${userProfile.conversationHistory?.totalMessages || 0}
-• Temas explorados: ${userProfile.conversationHistory?.topics?.join(", ") || "Iniciando conversación"}
-• Tu nivel: ${userProfile.preferences?.skillLevel || "Intermedio"}
-
-**🎯 ¿En qué puedo ayudarte específicamente?**
-
-• **Evaluaciones**: Tests de personalidad y habilidades
-• **Desarrollo profesional**: Planificación de carrera y objetivos
-• **Habilidades**: Identificación y desarrollo de competencias
-• **Lectura**: Recomendaciones de libros y recursos
-• **Liderazgo**: Estrategias de gestión y comunicación
-
-${getCategorySpecificGeneralAdvice(userCategory)}
-
-**💡 Sugerencia**: Para darte consejos más específicos, cuéntame sobre:
-- Tus objetivos profesionales actuales
-- Desafíos que estás enfrentando
-- Habilidades que quieres desarrollar
-- Área específica donde necesitas orientación
-
-¿Hay algo específico en lo que te gustaría que te ayude hoy?`
-}
-
-function getCategoryBadge(category: string): string {
-  switch (category) {
-    case "premium":
-      return "Premium 👑"
-    case "enterprise":
-      return "Enterprise 🏢"
-    default:
-      return "Estándar"
-  }
-}
-
-function getCategorySpecificPrefix(category: string): string {
-  switch (category) {
-    case "premium":
-      return `🌟 **Acceso Premium Activado** 👑
-
-Como usuario Premium, tienes acceso a análisis avanzados, recursos exclusivos y consultoría personalizada de alto nivel.`
-
-    case "enterprise":
-      return `🚀 **Acceso Enterprise Activado** 🏢
-
-Como usuario Enterprise, tienes acceso completo a consultoría estratégica, análisis organizacional y liderazgo ejecutivo.`
-
-    default:
-      return `📚 **Coaching Profesional Estándar**
-
-Acceso a desarrollo profesional fundamental con recursos efectivos y estrategias probadas.`
-  }
-}
-
-function getCategorySpecificTestRecommendations(category: string): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Evaluaciones Premium adicionales:**
-• **360° Leadership Assessment** - Feedback multifuente para líderes
-• **Emotional Intelligence Advanced** - Análisis profundo de competencias emocionales
-• **Innovation Style Indicator** - Identifica tu perfil innovador
-• **Strategic Thinking Assessment** - Evalúa capacidades de pensamiento estratégico`
-
-    case "enterprise":
-      return `**🚀 Evaluaciones Enterprise exclusivas:**
-• **Executive Leadership Profile** - Assessment nivel C-Suite
-• **Organizational Culture Assessment** - Análisis de fit cultural
-• **Digital Transformation Readiness** - Preparación para cambio tecnológico
-• **Board Readiness Assessment** - Evaluación para posiciones de junta directiva`
-
-    default:
-      return `**📚 Evaluaciones complementarias:**
-• **Soft Skills Assessment** - Habilidades interpersonales
-• **Career Values Inventory** - Alineación de valores profesionales
-• **Learning Style Assessment** - Optimiza tu método de aprendizaje`
-  }
-}
-
-function getCategorySpecificCareerAdvice(category: string, userProfile: any): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Estrategia Premium de carrera:**
-
-🎯 **Posicionamiento de liderazgo:**
-• Desarrollo de marca personal ejecutiva
-• Networking estratégico con C-Suite
-• Preparación para roles de Director/VP
-• Especialización en gestión de P&L
-
-**💼 Oportunidades Premium:**
-• Consultoría estratégica en tu industria
-• Roles de transformación digital
-• Posiciones de liderazgo en startups unicornio
-• Board advisor en empresas emergentes`
-
-    case "enterprise":
-      return `**🚀 Estrategia Enterprise de carrera:**
-
-🎯 **Trayectoria ejecutiva:**
-• Preparación para roles C-Level (CEO, CTO, COO)
-• Liderazgo de transformación organizacional
-• Gestión de portfolios de innovación
-• Desarrollo de ecosistemas empresariales
-
-**🏢 Oportunidades Enterprise:**
-• Chief Technology Officer en Fortune 500
-• VP of Digital Transformation
-• Innovation Director en corporaciones
-• Founder/Co-founder de ventures corporativos`
-
-    default:
-      return `**📚 Estrategia de desarrollo profesional:**
-
-🎯 **Crecimiento estructurado:**
-• Certificaciones profesionales relevantes
-• Desarrollo de habilidades técnicas core
-• Construcción de portfolio de proyectos
-• Networking en comunidades profesionales
-
-**💼 Oportunidades de crecimiento:**
-• Senior roles en tu área actual
-• Especialización técnica avanzada
-• Team lead o project manager
-• Consultor independiente en tu expertise`
-  }
-}
-
-function getCategorySpecificSkillRecommendations(category: string): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Habilidades Premium prioritarias:**
-
-🎯 **Liderazgo ejecutivo:**
-• Strategic thinking y visión a largo plazo
-• Change management y transformación
-• Executive communication y storytelling
-• Financial acumen y business intelligence
-• Innovation leadership y design thinking
-
-**💼 Habilidades de gestión avanzada:**
-• P&L management y ROI optimization
-• Stakeholder management ejecutivo
-• Crisis leadership y decision making
-• Talent development y succession planning`
-
-    case "enterprise":
-      return `**🚀 Habilidades Enterprise críticas:**
-
-🎯 **Liderazgo organizacional:**
-• Organizational design y architecture
-• Digital transformation strategy
-• Ecosystem thinking y partnerships
-• Board communication y governance
-• M&A integration y due diligence
-
-**🏢 Competencias tecnológicas ejecutivas:**
-• AI/ML strategy y implementation
-• Cloud architecture y scalability
-• Cybersecurity governance
-• Data strategy y analytics leadership`
-
-    default:
-      return `**📚 Habilidades fundamentales:**
-
-🎯 **Competencias técnicas:**
-• Certificaciones en tu área de expertise
-• Project management (PMP, Agile, Scrum)
-• Data analysis y visualization
-• Digital literacy y automation tools
-• Quality assurance y process improvement
-
-**💼 Soft skills esenciales:**
-• Communication y presentation skills
-• Problem solving y critical thinking
-• Time management y productivity
-• Teamwork y collaboration`
-  }
-}
-
-function getCategorySpecificBookRecommendations(category: string): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Biblioteca Premium:**
-
-📚 **Liderazgo estratégico:**
-• "Good Strategy Bad Strategy" - Richard Rumelt
-• "The Innovator's Dilemma" - Clayton Christensen
-• "Multipliers" - Liz Wiseman
-• "The Culture Code" - Daniel Coyle
-
-📈 **Gestión ejecutiva:**
-• "High Output Management" - Andy Grove
-• "The Hard Thing About Hard Things" - Ben Horowitz
-• "Radical Candor" - Kim Scott`
-
-    case "enterprise":
-      return `**🚀 Biblioteca Enterprise:**
-
-📚 **Liderazgo C-Level:**
-• "Zero to One" - Peter Thiel
-• "The Lean Startup" - Eric Ries
-• "Crossing the Chasm" - Geoffrey Moore
-• "Platform Revolution" - Parker, Van Alstyne, Choudary
-
-🏢 **Transformación organizacional:**
-• "Leading Change" - John Kotter
-• "The Fifth Discipline" - Peter Senge
-• "Exponential Organizations" - Salim Ismail`
-
-    default:
-      return `**📚 Biblioteca Fundamental:**
-
-📖 **Desarrollo profesional:**
-• "Atomic Habits" - James Clear
-• "Deep Work" - Cal Newport
-• "The 7 Habits of Highly Effective People" - Stephen Covey
-• "Mindset" - Carol Dweck
-
-💼 **Habilidades técnicas:**
-• "The Pragmatic Programmer" - Hunt & Thomas
-• "Getting Things Done" - David Allen`
-  }
-}
-
-function getCategorySpecificLeadershipAdvice(category: string): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Liderazgo Premium:**
-
-👑 **Desarrollo ejecutivo acelerado:**
-• Executive coaching personalizado 1:1
-• Mentoring con C-Suite de Fortune 500
-• Leadership circles exclusivos
-• Board readiness preparation
-
-**🎯 Competencias de liderazgo Premium:**
-• Visionary leadership y strategic foresight
-• Stakeholder capitalism y ESG leadership
-• Digital-first leadership mindset
-• Global team management y cultural intelligence`
-
-    case "enterprise":
-      return `**🚀 Liderazgo Enterprise:**
-
-🏢 **Transformación organizacional:**
-• Chief Executive development program
-• Organizational psychology aplicada
-• Systems thinking y complexity management
-• Innovation ecosystem leadership
-
-**🎯 Competencias Enterprise:**
-• Board governance y fiduciary responsibility
-• Investor relations y capital markets
-• M&A leadership y integration
-• Regulatory compliance y risk management`
-
-    default:
-      return `**📚 Liderazgo Fundamental:**
-
-💼 **Desarrollo de liderazgo estructurado:**
-• Team leadership certification
-• Management fundamentals
-• Communication skills workshop
-• Conflict resolution training
-
-**🎯 Competencias básicas:**
-• People management y motivation
-• Project leadership y delivery
-• Cross-functional collaboration
-• Performance management`
-  }
-}
-
-function getCategorySpecificGeneralAdvice(category: string): string {
-  switch (category) {
-    case "premium":
-      return `**🌟 Recursos Premium disponibles:**
-• Consultoría estratégica personalizada
-• Acceso a red de mentores ejecutivos
-• Análisis de mercado y tendencias
-• Preparación para roles de liderazgo`
-
-    case "enterprise":
-      return `**🚀 Recursos Enterprise disponibles:**
-• Consultoría C-Level especializada
-• Análisis de ecosistemas empresariales
-• Estrategia de transformación digital
-• Preparación para board positions`
-
-    default:
-      return `**📚 Recursos disponibles:**
-• Planes de desarrollo estructurados
-• Biblioteca de recursos gratuitos
-• Comunidad de aprendizaje
-• Seguimiento de progreso personalizado`
-  }
-}
-
-function getShortTermGoal(category: string): string {
-  switch (category) {
-    case "premium":
-      return "Completar assessment 360° y definir plan de liderazgo ejecutivo"
-    case "enterprise":
-      return "Desarrollar estrategia de transformación organizacional"
-    default:
-      return "Completar certificación profesional en área core"
-  }
-}
-
-function getMediumTermGoal(category: string): string {
-  switch (category) {
-    case "premium":
-      return "Implementar proyecto de innovación con impacto P&L"
-    case "enterprise":
-      return "Liderar iniciativa de transformación digital"
-    default:
-      return "Asumir rol de liderazgo de equipo o proyecto"
-  }
-}
-
-function getLongTermGoal(category: string): string {
-  switch (category) {
-    case "premium":
-      return "Posicionarse para rol VP/Director en organización target"
-    case "enterprise":
-      return "Prepararse para posición C-Level o board advisor"
-    default:
-      return "Alcanzar posición senior con responsabilidades de gestión"
+  try {
+    const userName = userProfile.name || "Usuario"
+    const userCategory = userProfile.userCategory || "standard"
+    const categoryBadge = getCategoryBadge(userCategory)
+
+    const systemPrompt = `Eres un AI Career Coach profesional y empático especializado en desarrollo profesional y orientación de carrera.
+
+CONTEXTO DEL USUARIO:
+- Nombre: ${userName}
+- Categoría: ${categoryBadge}
+- Perfil: ${JSON.stringify(userProfile, null, 2)}
+
+${context}
+
+INSTRUCCIONES:
+- Proporciona consejos personalizados basados en el perfil del usuario
+- Sé específico, práctico y accionable
+- Usa un tono profesional pero cercano
+- Incluye ejemplos concretos cuando sea relevante
+- Estructura tus respuestas con emojis y formato claro
+- Adapta el nivel de profundidad según la categoría del usuario (${userCategory})
+- Siempre termina con una pregunta para continuar la conversación
+
+FORMATO DE RESPUESTA:
+- Usa emojis relevantes para secciones
+- Estructura con títulos claros
+- Incluye listas con bullets
+- Proporciona pasos accionables numerados
+- Mantén un tono motivador y constructivo`
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message },
+        ],
+        temperature: 0.7,
+        max_tokens: 1000,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    return data.choices[0]?.message?.content || "Lo siento, no pude generar una respuesta en este momento."
+  } catch (error) {
+    console.error("Error calling OpenAI API:", error)
+    return "Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta nuevamente."
   }
 }
 
@@ -708,4 +279,15 @@ function identifyContextUsed(userProfile: any, message: string): string[] {
   contextUsed.push(userProfile.userCategory || "standard")
 
   return contextUsed
+}
+
+function getCategoryBadge(category: string): string {
+  switch (category) {
+    case "premium":
+      return "Premium 👑"
+    case "enterprise":
+      return "Enterprise 🏢"
+    default:
+      return "Estándar"
+  }
 }
