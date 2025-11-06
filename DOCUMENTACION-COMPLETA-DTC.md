@@ -253,7 +253,7 @@ Página central para navegar entre todos los tests disponibles.
 
 **Características:**
 - Análisis combinado de múltiples tests
-- Insights cruzados entre personalidad y competencias
+- Insights cruzados entre personality y competencias
 - Recomendaciones integradas
 - Visualización de patrones
 
@@ -1966,9 +1966,10 @@ POSTGRES_HOST=                          # Host
 ### OpenAI
 
 \`\`\`bash
-OPENAI_API_KEY=                         # API key de OpenAI
-NEXT_PUBLIC_OPENAI_API_KEY=             # API key pública (si es necesario)
+OPENAI_API_KEY=                         # API key de OpenAI (solo servidor)
 \`\`\`
+
+**Nota de Seguridad:** La API key de OpenAI debe usarse SOLO en el servidor. Nunca uses el prefijo `NEXT_PUBLIC_` para API keys o secretos sensibles.
 
 ---
 
@@ -1983,9 +1984,10 @@ BLOB_READ_WRITE_TOKEN=                  # Token de Vercel Blob
 ### Cron Jobs
 
 \`\`\`bash
-CRON_SECRET=                            # Secret para autenticar cron jobs
-NEXT_PUBLIC_CRON_SECRET=                # Secret público (si es necesario)
+CRON_SECRET=                            # Secret para autenticar cron jobs (solo servidor)
 \`\`\`
+
+**Nota de Seguridad:** Nunca uses el prefijo `NEXT_PUBLIC_` para secretos sensibles como CRON_SECRET, ya que esto los expondría al navegador del cliente.
 
 ---
 
@@ -2271,5 +2273,8 @@ DOCUMENTACION-COMPLETA-DTC.md # Este documento
 ---
 
 **FIN DE LA DOCUMENTACIÓN**
+
+*Este documento es un recurso vivo y se actualiza constantemente con nuevas funcionalidades y mejoras.*
+
 
 *Este documento es un recurso vivo y se actualiza constantemente con nuevas funcionalidades y mejoras.*

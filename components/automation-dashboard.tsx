@@ -14,11 +14,13 @@ export default function AutomationDashboard() {
   const runCronJob = async (jobName: string, endpoint: string) => {
     setLoading(jobName)
     try {
-      const response = await fetch(endpoint, {
-        method: "GET",
+      // Call through our secure API route instead of directly
+      const response = await fetch("/api/admin/trigger-cron", {
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || "dev-secret"}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ endpoint }),
       })
 
       const data = await response.json()

@@ -426,12 +426,10 @@ despegartuccarrera/
 
 ### OpenAI
 - \`OPENAI_API_KEY\`
-- \`NEXT_PUBLIC_OPENAI_API_KEY\`
 
 ### Vercel
 - \`BLOB_READ_WRITE_TOKEN\`
-- \`CRON_SECRET\`
-- \`NEXT_PUBLIC_CRON_SECRET\`
+- \`CRON_SECRET\` (solo servidor, nunca usar NEXT_PUBLIC_)
 
 ### PostgreSQL
 - \`POSTGRES_URL\`
