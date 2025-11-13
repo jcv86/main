@@ -57,7 +57,7 @@ export function WhitepaperClient() {
               <strong className="text-white">Project Owner & Funding:</strong> Joaquin Covarrubias
             </p>
             <p className="text-lg">
-              <strong className="text-white">Date:</strong> January 2025
+              <strong className="text-white">Publication Date:</strong> September 26, 2025
             </p>
             <p className="text-lg">
               <strong className="text-white">Launch Target:</strong> Q1 2026
@@ -859,7 +859,7 @@ export function WhitepaperClient() {
         {/* Footer */}
         <footer className="mt-12 text-center text-gray-600 border-t border-gray-200 pt-8">
           <p className="mb-2">
-            <strong>Document Version:</strong> 1.0 | <strong>Last Updated:</strong> January 2025
+            <strong>Document Version:</strong> 1.0 | <strong>Published:</strong> September 26, 2025
           </p>
           <p className="mb-4">
             <strong>Developed by:</strong> Travis Comber, Fullstack Developer | <strong>Project Owner:</strong> Joaquin
