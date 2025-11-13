@@ -86,6 +86,8 @@ export default function RIASECTest() {
   const router = useRouter()
   const { user, isLoading } = useSession()
 
+  const currentAnswer = answers[riasecQuestions[currentQuestion].id]
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -198,9 +200,10 @@ export default function RIASECTest() {
     )
   }
 
-  const progress = ((currentQuestion + 1) / riasecQuestions.length) * 100
+  const progress = currentAnswer
+    ? ((currentQuestion + 1) / riasecQuestions.length) * 100
+    : (currentQuestion / riasecQuestions.length) * 100
   const question = riasecQuestions[currentQuestion]
-  const currentAnswer = answers[question.id]
 
   return (
     <div className="min-h-screen bg-gray-50">

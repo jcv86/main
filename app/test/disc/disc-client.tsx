@@ -343,7 +343,10 @@ export default function DISCTestClient() {
     )
   }
 
-  const progress = ((currentQuestion + 1) / discQuestions.length) * 100
+  const progress = answers[discQuestions[currentQuestion].id]
+    ? ((currentQuestion + 1) / discQuestions.length) * 100
+    : (currentQuestion / discQuestions.length) * 100
+
   const question = discQuestions[currentQuestion]
   const currentAnswer = answers[question.id]
 
@@ -488,7 +491,7 @@ export default function DISCTestClient() {
             </div>
             <Progress value={progress} className="mb-2" />
             <div className="flex justify-between text-xs text-gray-500">
-              <span>Start</span>
+              <span>{currentQuestion === 0 && !answers[discQuestions[0].id] ? "Ready to start" : "In progress"}</span>
               <span>{Math.round(progress)}% complete</span>
               <span>Finish</span>
             </div>

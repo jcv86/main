@@ -378,6 +378,12 @@ export default function MBTITest() {
     }
   }
 
+  const question = mbtiQuestions[currentQuestion]
+  const canProceed = answers[question.id] !== undefined
+  const progress = canProceed
+    ? ((currentQuestion + 1) / mbtiQuestions.length) * 100
+    : (currentQuestion / mbtiQuestions.length) * 100
+
   if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -398,10 +404,6 @@ export default function MBTITest() {
       </div>
     )
   }
-
-  const progress = ((currentQuestion + 1) / mbtiQuestions.length) * 100
-  const question = mbtiQuestions[currentQuestion]
-  const canProceed = answers[question.id] !== undefined
 
   return (
     <div className="min-h-screen bg-gray-50">
