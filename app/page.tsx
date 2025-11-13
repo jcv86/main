@@ -163,28 +163,26 @@ export default function Home() {
           <div className="container mx-auto px-4 max-w-7xl">
             {/* Stats Section */}
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-                Más de 10,000 profesionales confían en nosotros
-              </h2>
-              <p className="text-xl text-gray-600">Resultados comprobados en desarrollo profesional</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Lanzamiento Oficial en Q1 2026</h2>
+              <p className="text-xl text-gray-600">Descubre tu potencial profesional con Despega Tu Carrera</p>
             </div>
 
             <div className="grid md:grid-cols-4 gap-8 mb-20">
               <div className="text-center">
-                <div className="text-5xl font-bold text-purple-600 mb-2">10,000+</div>
-                <p className="text-gray-600 font-medium">Profesionales Activos</p>
+                <div className="text-5xl font-bold text-purple-600 mb-2">Q1 2026</div>
+                <p className="text-gray-600 font-medium">Lanzamiento Oficial</p>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-bold text-blue-600 mb-2">50,000+</div>
-                <p className="text-gray-600 font-medium">Tests Completados</p>
+                <div className="text-5xl font-bold text-blue-600 mb-2">6</div>
+                <p className="text-gray-600 font-medium">Tests Psicométricos</p>
               </div>
               <div className="text-center">
                 <div className="text-5xl font-bold text-emerald-600 mb-2">120+</div>
-                <p className="text-gray-600 font-medium">Libros Disponibles</p>
+                <p className="text-gray-600 font-medium">Libros Profesionales</p>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-bold text-orange-600 mb-2">95%</div>
-                <p className="text-gray-600 font-medium">Satisfacción</p>
+                <div className="text-5xl font-bold text-orange-600 mb-2">24/7</div>
+                <p className="text-gray-600 font-medium">Coach IA Disponible</p>
               </div>
             </div>
 
@@ -431,7 +429,7 @@ export default function Home() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>

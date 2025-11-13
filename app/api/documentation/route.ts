@@ -24,7 +24,7 @@ const DOCUMENTATION_CONTENT = `# 📚 DOCUMENTACIÓN COMPLETA - DESPEGARTUCCARRE
 12. [Cron Jobs y Automatización](#cron-jobs)
 13. [Variables de Entorno](#variables-de-entorno)
 14. [Métricas y KPIs](#métricas-y-kpis)
-15. [Roadmap 2025-2026](#roadmap)
+15. [Roadmap 2025-2027](#roadmap)
 
 ---
 
@@ -456,7 +456,7 @@ despegartuccarrera/
 
 ---
 
-## 🚀 ROADMAP 2025-2026
+## 🚀 ROADMAP 2025-2027
 
 ### Q1 2025
 - ✅ Sistema Sofia & Dani completo
@@ -473,13 +473,37 @@ despegartuccarrera/
 - Alianzas universitarias
 - Expansión de contenidos
 
+### Q1 2026
+- ✅ Platform Launch & Public Release
+- ✅ Core Features: 6 Psychometric Tests + 120+ Books + AI Coach
+- ✅ GDPR Compliance & Security Systems
+- ✅ 15+ Administrative Systems Operational
+
+### Q2 2026
+- 📱 Native iOS and Android mobile applications
+- 🎤 Voice conversations with AI coach for hands-free guidance
+- 🤝 Professional networking features to connect with peers
+- 📊 Enhanced analytics dashboards with predictive insights
+
+### Q3-Q4 2026
+- 🏢 Enterprise features (team dashboards, bulk assessments, comparative analytics)
+- 🛒 Marketplace for premium content and specialized courses
+- 🌍 Multi-language support: English and Portuguese for LATAM expansion
+- 🎯 Predictive analytics based on Chilean job market trends
+
+### 2027
+- 🤖 Advanced AI features (career path simulation, skill gap predictions)
+- 💼 Full career services: resume building, job matching with Chilean companies
+- 🎓 Structured learning paths with professional certifications
+- 📈 Integration with major Chilean HR platforms and recruitment systems
+
 ---
 
 ## 📝 NOTAS FINALES
 
 **Última actualización:** Enero 2025  
 **Versión:** 2025.1.1.04-SUPREMO  
-**Estado:** Producción  
+**Estado:** Pre-Launch (Q1 2026)
 **Mantenido por:** Equipo DTC
 
 Para más información, contactar: soporte@despegartuccarrera.cl
