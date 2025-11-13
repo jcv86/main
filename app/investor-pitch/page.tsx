@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Investor Pitch - Despega Tu Carrera | Professional Development Platform",
+  title: "Presentación para Inversionistas - Despega Tu Carrera | Plataforma de Desarrollo Profesional",
   description:
-    "Investment opportunity: AI-powered professional development platform revolutionizing career growth in Latin America",
+    "Oportunidad de inversión: Plataforma de desarrollo profesional impulsada por IA revolucionando el crecimiento profesional en América Latina",
   robots: {
     index: false,
     follow: false,
@@ -18,9 +18,9 @@ export default function InvestorPitch() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold text-purple-600 hover:text-purple-700">
-            ← Back to Home
+            ← Volver al Inicio
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">Investor Pitch Sheet</h1>
+          <h1 className="text-xl font-bold text-gray-900">Presentación para Inversionistas</h1>
         </div>
       </header>
 
@@ -30,24 +30,24 @@ export default function InvestorPitch() {
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
             <div className="text-purple-100 text-sm font-semibold mb-2 uppercase tracking-wide">
-              Investment Opportunity
+              Oportunidad de Inversión
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Despega Tu Carrera</h1>
             <p className="text-2xl text-purple-100 mb-6">
-              Democratizing Professional Development in Latin America through AI
+              Democratizando el Desarrollo Profesional en América Latina mediante IA
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Launch Date</div>
+                <div className="text-sm text-purple-100">Fecha de Lanzamiento</div>
                 <div className="text-2xl font-bold">Q1 2026</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Market</div>
+                <div className="text-sm text-purple-100">Mercado</div>
                 <div className="text-2xl font-bold">Chile (LATAM)</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Stage</div>
-                <div className="text-2xl font-bold">Pre-Launch</div>
+                <div className="text-sm text-purple-100">Etapa</div>
+                <div className="text-2xl font-bold">Pre-Lanzamiento</div>
               </div>
             </div>
           </div>
@@ -58,28 +58,28 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">🎯</span>
-              The Problem
+              El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-6 border border-red-100">
-                <h3 className="font-bold text-lg mb-3 text-gray-900">Limited Access</h3>
+                <h3 className="font-bold text-lg mb-3 text-gray-900">Acceso Limitado</h3>
                 <p className="text-gray-700">
-                  Professional development tools are expensive and inaccessible to most Chilean professionals. Career
-                  coaching costs $100-300+ per session.
+                  Las herramientas de desarrollo profesional son caras e inaccesibles para la mayoría de los
+                  profesionales chilenos. La coaching de carrera cuesta $100-300+ por sesión.
                 </p>
               </div>
               <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 border border-orange-100">
-                <h3 className="font-bold text-lg mb-3 text-gray-900">Fragmented Solutions</h3>
+                <h3 className="font-bold text-lg mb-3 text-gray-900">Soluciones Fragmentadas</h3>
                 <p className="text-gray-700">
-                  Tests, books, and coaching are scattered across multiple platforms. No unified solution exists for
-                  comprehensive career development.
+                  Las pruebas, libros y coaching están dispersos en múltiples plataformas. No existe una solución
+                  unificada para un desarrollo de carrera completo.
                 </p>
               </div>
               <div className="bg-gradient-to-br from-yellow-50 to-red-50 rounded-xl p-6 border border-yellow-100">
-                <h3 className="font-bold text-lg mb-3 text-gray-900">No Personalization</h3>
+                <h3 className="font-bold text-lg mb-3 text-gray-900">Sin Personalización</h3>
                 <p className="text-gray-700">
-                  Generic advice doesn't consider individual personalities, strengths, or local market conditions in
-                  Chile and LATAM.
+                  El consejo genérico no considera las personalidades individuales, las fortalezas o las condiciones del
+                  mercado local en Chile y América Latina.
                 </p>
               </div>
             </div>
@@ -93,33 +93,33 @@ export default function InvestorPitch() {
               <span className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">
                 ✨
               </span>
-              Our Solution
+              Nuestra Solución
             </h2>
             <p className="text-xl text-purple-100 mb-8">
-              An all-in-one AI-powered professional development platform that combines scientifically-validated
-              assessments, world-class content, and personalized coaching - accessible to everyone.
+              Una plataforma de desarrollo profesional impulsada por IA que combina pruebas psicométricas validadas
+              científicamente, contenido de clase mundial y coaching personalizado - accesible para todos.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">🧠</div>
-                <h3 className="font-bold text-lg mb-2">Cerebro AI System</h3>
+                <h3 className="font-bold text-lg mb-2">Sistema Cerebro AI</h3>
                 <p className="text-purple-100 text-sm">
-                  GPT-4 powered coach with semantic search across 120+ books and 100+ Chilean market resources
+                  Coach impulsado por GPT-4 con búsqueda semántica en 120+ libros y 100+ recursos del mercado chileno
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">📊</div>
-                <h3 className="font-bold text-lg mb-2">6 Psychometric Tests</h3>
+                <h3 className="font-bold text-lg mb-2">6 Pruebas Psicométricas</h3>
                 <p className="text-purple-100 text-sm">
-                  DISC, MBTI, Big Five, RIASEC, EQ, and Soft Skills assessments with AI-generated insights
+                  Pruebas DISC, MBTI, Big Five, RIASEC, EQ y Soft Skills con insights generados por IA
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">📚</div>
-                <h3 className="font-bold text-lg mb-2">Professional Library</h3>
+                <h3 className="font-bold text-lg mb-2">Biblioteca Profesional</h3>
                 <p className="text-purple-100 text-sm">
-                  120+ full-text books on leadership, productivity, EQ, and career development
+                  120+ libros completos en texto sobre liderazgo, productividad, EQ y desarrollo de carrera
                 </p>
               </div>
             </div>
@@ -131,65 +131,65 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl">📈</span>
-              Market Opportunity
+              Oportunidad de Mercado
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl p-6 border border-emerald-100">
-                <h3 className="font-bold text-2xl mb-4 text-gray-900">Chile Market</h3>
+                <h3 className="font-bold text-2xl mb-4 text-gray-900">Mercado de Chile</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>9.5M+ professionals</strong> in Chilean workforce
+                      <strong>9.5M+ profesionales</strong> en el trabajo chileno
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>$2.4B+</strong> professional development market size
+                      <strong>$2.4B+ tamaño del mercado</strong> de desarrollo profesional
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>73% internet penetration</strong> with growing digital adoption
+                      <strong>73% penetración de internet</strong> con creciente adopción digital
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>High education rate</strong> - 60%+ university-educated
+                      <strong>Tasa de educación alta</strong> - 60%+ con educación universitaria
                     </span>
                   </li>
                 </ul>
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
-                <h3 className="font-bold text-2xl mb-4 text-gray-900">LATAM Expansion</h3>
+                <h3 className="font-bold text-2xl mb-4 text-gray-900">Expansión en LATAM</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>280M+ professionals</strong> across LATAM region
+                      <strong>280M+ profesionales</strong> en la región de América Latina
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>$65B+ market</strong> for professional training in LATAM
+                      <strong>$65B+ mercado</strong> para capacitación profesional en LATAM
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>15% CAGR</strong> in e-learning and digital education
+                      <strong>15% CAGR</strong> en e-learning y educación digital
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
                     <span>
-                      <strong>Shared language & culture</strong> enables rapid expansion
+                      <strong>Idioma y cultura compartidos</strong> facilitan la expansión rápida
                     </span>
                   </li>
                 </ul>
@@ -197,19 +197,21 @@ export default function InvestorPitch() {
             </div>
 
             <div className="bg-purple-50 rounded-xl p-6 border border-purple-100">
-              <h3 className="font-bold text-xl mb-3 text-gray-900">Growth Trends</h3>
+              <h3 className="font-bold text-xl mb-3 text-gray-900">Tendencias de Crecimiento</h3>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-1">AI-First</div>
-                  <p className="text-sm text-gray-600">Gen Z & Millennials demand AI-powered solutions</p>
+                  <div className="text-3xl font-bold text-purple-600 mb-1">Primero en IA</div>
+                  <p className="text-sm text-gray-600">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">Remote Work</div>
-                  <p className="text-sm text-gray-600">Increased need for self-directed professional development</p>
+                  <div className="text-3xl font-bold text-blue-600 mb-1">Trabajo Remoto</div>
+                  <p className="text-sm text-gray-600">Mayor necesidad de desarrollo profesional autodirigido</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-emerald-600 mb-1">Skills Gap</div>
-                  <p className="text-sm text-gray-600">Companies investing heavily in employee upskilling</p>
+                  <div className="text-3xl font-bold text-emerald-600 mb-1">Brecha de Habilidades</div>
+                  <p className="text-sm text-gray-600">
+                    Empresas invirtiendo fuertemente en el reforzamiento de empleados
+                  </p>
                 </div>
               </div>
             </div>
@@ -221,46 +223,48 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl">💰</span>
-              Business Model
+              Modelo de Negocio
             </h2>
 
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-100">
-                <h3 className="font-bold text-xl mb-4 text-gray-900">Freemium (Launch)</h3>
+                <h3 className="font-bold text-xl mb-4 text-gray-900">Freemium (Lanzamiento)</h3>
                 <div className="text-3xl font-bold text-purple-600 mb-2">$0</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
-                  <li>✓ All 6 psychometric tests</li>
-                  <li>✓ Full library access (120+ books)</li>
-                  <li>✓ Basic AI coaching</li>
-                  <li>✓ Results & insights</li>
+                  <li>✓ Todas las 6 pruebas psicométricas</li>
+                  <li>✓ Acceso completo a la biblioteca (120+ libros)</li>
+                  <li>✓ Coaching básico de IA</li>
+                  <li>✓ Resultados e insights</li>
                 </ul>
-                <p className="text-xs text-gray-600">Builds user base & gathers data for product-market fit</p>
+                <p className="text-xs text-gray-600">
+                  Construye base de usuarios y recopila datos para ajuste producto-mercado
+                </p>
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-xl p-6 border border-blue-100">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Premium Individual</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$29/mo</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">$29/mes</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
-                  <li>✓ Everything in Free</li>
-                  <li>✓ Unlimited AI coaching sessions</li>
-                  <li>✓ Advanced analytics & tracking</li>
-                  <li>✓ Career path simulations</li>
-                  <li>✓ Priority support</li>
+                  <li>✓ Todo en Gratuito</li>
+                  <li>✓ Sesiones de coaching de IA ilimitadas</li>
+                  <li>✓ Análisis avanzados y seguimiento</li>
+                  <li>✓ Simulaciones de trayectoria de carrera</li>
+                  <li>✓ Soporte prioritario</li>
                 </ul>
-                <p className="text-xs text-gray-600">Target: 5-10% conversion from free users</p>
+                <p className="text-xs text-gray-600">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
               <div className="bg-gradient-to-br from-emerald-50 to-purple-50 rounded-xl p-6 border border-emerald-100">
-                <h3 className="font-bold text-xl mb-4 text-gray-900">Enterprise (B2B)</h3>
-                <div className="text-3xl font-bold text-emerald-600 mb-2">Custom</div>
+                <h3 className="font-bold text-xl mb-4 text-gray-900">Empresarial (B2B)</h3>
+                <div className="text-3xl font-bold text-emerald-600 mb-2">Personalizado</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
-                  <li>✓ Team dashboards & analytics</li>
-                  <li>✓ Bulk assessments</li>
-                  <li>✓ White-label options</li>
-                  <li>✓ Integration with HR systems</li>
-                  <li>✓ Dedicated support</li>
+                  <li>✓ Dashboards y análisis de equipo</li>
+                  <li>✓ Evaluaciones masivas</li>
+                  <li>✓ Opciones de marca blanca</li>
+                  <li>✓ Integración con sistemas HR</li>
+                  <li>✓ Soporte dedicado</li>
                 </ul>
-                <p className="text-xs text-gray-600">Target large Chilean companies & HR consultancies</p>
+                <p className="text-xs text-gray-600">Objetivo: grandes empresas chilenas y consultorías de HR</p>
               </div>
             </div>
           </div>
@@ -271,58 +275,59 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl">🚀</span>
-              Competitive Advantage
+              Ventaja Competitiva
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="bg-purple-50 rounded-lg p-5 border border-purple-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">🧠 Advanced AI Technology</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">🧠 Tecnología AI Avanzada</h3>
                   <p className="text-gray-700 text-sm">
-                    Proprietary Cerebro system with semantic search across 120+ books. Competitors offer basic chatbots
-                    without personalized knowledge bases.
+                    Sistema Cerebro propio con búsqueda semántica en 120+ libros. Los competidores ofrecen chatbots
+                    básicos sin bases de conocimiento personalizadas.
                   </p>
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-5 border border-blue-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">🇨🇱 Chilean Market Expertise</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">🇨🇱 Expertise en el Mercado de Chile</h3>
                   <p className="text-gray-700 text-sm">
-                    Built specifically for Chilean professionals with local job market data, INE statistics, and
-                    ChileValora integration. Global competitors lack local context.
+                    Construido específicamente para profesionales chilenos con datos del mercado laboral chileno,
+                    estadísticas de INE e integración con ChileValora. Los competidores globales carecen de contexto
+                    local.
                   </p>
                 </div>
 
                 <div className="bg-emerald-50 rounded-lg p-5 border border-emerald-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">📊 Complete Assessment Suite</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">📊 Conjunto Completo de Evaluaciones</h3>
                   <p className="text-gray-700 text-sm">
-                    6 scientifically-validated tests in one platform. Competitors typically offer 1-2 tests, requiring
-                    users to use multiple platforms.
+                    6 pruebas validadas científicamente en una plataforma. Los competidores suelen ofrecer 1-2 pruebas,
+                    requiriendo que los usuarios utilicen múltiples plataformas.
                   </p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-orange-50 rounded-lg p-5 border border-orange-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">💡 All-in-One Platform</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">💡 Plataforma Todo en Uno</h3>
                   <p className="text-gray-700 text-sm">
-                    Tests + Library + AI Coaching in a single platform. Users currently need 3-4 different subscriptions
-                    costing $100+ total monthly.
+                    Pruebas + Biblioteca + Coaching de IA en una sola plataforma. Los usuarios actualmente necesitan 3-4
+                    suscripciones diferentes con un costo total de $100+ mensual.
                   </p>
                 </div>
 
                 <div className="bg-pink-50 rounded-lg p-5 border border-pink-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">⚡ Modern Tech Stack</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">⚡ Stack Tecnológico Moderno</h3>
                   <p className="text-gray-700 text-sm">
-                    Built with Next.js 15, React 19, PostgreSQL with pgvector. Competitors use outdated technology with
-                    slower, less intelligent systems.
+                    Construido con Next.js 15, React 19, PostgreSQL con pgvector. Los competidores utilizan tecnología
+                    obsoleta con sistemas más lentos y menos inteligentes.
                   </p>
                 </div>
 
                 <div className="bg-indigo-50 rounded-lg p-5 border border-indigo-100">
-                  <h3 className="font-bold text-lg mb-2 text-gray-900">🎯 Freemium Access</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">🎯 Acceso Freemium</h3>
                   <p className="text-gray-700 text-sm">
-                    Full access to core features for free. Competitors charge $50-300 upfront, limiting accessibility
-                    and market penetration.
+                    Acceso completo a las características principales de forma gratuita. Los competidores cobran $50-300
+                    al inicio, limitando la accesibilidad y la penetración del mercado.
                   </p>
                 </div>
               </div>
@@ -335,50 +340,50 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">📅</span>
-              Development & Roadmap
+              Desarrollo y Roadmap
             </h2>
 
             <div className="space-y-6">
               <div className="border-l-4 border-green-600 pl-6 bg-green-50 py-4 rounded-r-xl">
-                <h3 className="font-bold text-xl mb-2 text-gray-900">✅ Completed (Current State)</h3>
+                <h3 className="font-bold text-xl mb-2 text-gray-900">✅ Completado (Estado Actual)</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Full platform development complete - 185 database tables</li>
-                  <li>• 6 psychometric tests with AI-powered analysis</li>
-                  <li>• Cerebro AI system with semantic search operational</li>
-                  <li>• 120+ books integrated with full-text access</li>
-                  <li>• GDPR-compliant infrastructure</li>
-                  <li>• 15+ administrative monitoring systems</li>
+                  <li>• Desarrollo completo de la plataforma - 185 tablas de base de datos</li>
+                  <li>• 6 pruebas psicométricas con análisis impulsado por IA</li>
+                  <li>• Sistema Cerebro AI con búsqueda semántica operativo</li>
+                  <li>• 120+ libros integrados con acceso completo a texto</li>
+                  <li>• Infraestructura conforme a GDPR</li>
+                  <li>• 15+ sistemas de monitoreo administrativo</li>
                 </ul>
               </div>
 
               <div className="border-l-4 border-purple-600 pl-6 py-4">
-                <h3 className="font-bold text-xl mb-2 text-gray-900">Q1 2026 - Official Launch</h3>
+                <h3 className="font-bold text-xl mb-2 text-gray-900">Q1 2026 - Lanzamiento Oficial</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Public platform release in Chile</li>
-                  <li>• Marketing campaign & SEO optimization</li>
-                  <li>• User acquisition: Target 1,000 users in 3 months</li>
-                  <li>• Gather product-market fit data</li>
+                  <li>• Lanzamiento público de la plataforma en Chile</li>
+                  <li>• Campaña de marketing y optimización SEO</li>
+                  <li>• Adquisición de usuarios: objetivo 1,000 usuarios en 3 meses</li>
+                  <li>• Recopila datos de ajuste producto-mercado</li>
                 </ul>
               </div>
 
               <div className="border-l-4 border-blue-600 pl-6 py-4">
                 <h3 className="font-bold text-xl mb-2 text-gray-900">Q2-Q4 2026</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Launch Premium Individual tier ($29/mo)</li>
-                  <li>• Mobile apps (iOS & Android)</li>
-                  <li>• Enterprise B2B product development</li>
-                  <li>• Begin conversations with major Chilean companies</li>
-                  <li>• Target: 10,000 free users, 500 paid users</li>
+                  <li>• Lanzamiento de la capa Premium Individual ($29/mes)</li>
+                  <li>• Aplicaciones móviles (iOS & Android)</li>
+                  <li>• Desarrollo del producto empresarial B2B</li>
+                  <li>• Comienza conversaciones con grandes empresas chilenas</li>
+                  <li>• Objetivo: 10,000 usuarios gratuitos, 500 usuarios pagos</li>
                 </ul>
               </div>
 
               <div className="border-l-4 border-emerald-600 pl-6 py-4">
-                <h3 className="font-bold text-xl mb-2 text-gray-900">2027 - LATAM Expansion</h3>
+                <h3 className="font-bold text-xl mb-2 text-gray-900">2027 - Expansión en LATAM</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Expand to Argentina, Peru, Colombia, Mexico</li>
-                  <li>• Multi-language support (Portuguese for Brazil)</li>
-                  <li>• Enterprise contracts with Fortune 500 LATAM subsidiaries</li>
-                  <li>• Target: 100,000 users, $2M ARR</li>
+                  <li>• Expande a Argentina, Perú, Colombia, México</li>
+                  <li>• Soporte multilingüe (portugués para Brasil)</li>
+                  <li>• Contratos empresariales con subsidiarias LATAM de Fortune 500</li>
+                  <li>• Objetivo: 100,000 usuarios, $2M ARR</li>
                 </ul>
               </div>
             </div>
@@ -390,7 +395,7 @@ export default function InvestorPitch() {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">👥</span>
-              Team
+              Equipo
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -399,17 +404,20 @@ export default function InvestorPitch() {
                   JC
                 </div>
                 <h3 className="font-bold text-2xl mb-2 text-gray-900">Joaquin Covarrubias</h3>
-                <div className="text-purple-600 font-semibold mb-3">Founder & CEO</div>
+                <div className="text-purple-600 font-semibold mb-3">Fundador y CEO</div>
                 <p className="text-gray-700 mb-4">
-                  Visionary entrepreneur with deep understanding of the Chilean professional development market. Secured
-                  initial funding and provided strategic direction for platform development.
+                  Emprendedor visionario con comprensión profunda del mercado de desarrollo profesional chileno. Ha
+                  conseguido financiamiento inicial y ha proporcionado dirección estratégica para el desarrollo de la
+                  plataforma.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
-                    Business Strategy
+                    Estrategia de Negocio
                   </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Market Research</span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Fundraising</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                    Investigación de Mercado
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Financiamiento</span>
                 </div>
               </div>
 
@@ -418,17 +426,18 @@ export default function InvestorPitch() {
                   TC
                 </div>
                 <h3 className="font-bold text-2xl mb-2 text-gray-900">Travis Comber</h3>
-                <div className="text-blue-600 font-semibold mb-3">CTO & Lead Developer</div>
+                <div className="text-blue-600 font-semibold mb-3">CTO y Desarrollador Líder</div>
                 <p className="text-gray-700 mb-4">
-                  Fullstack developer who architected and built the entire platform from scratch. Expert in Next.js,
-                  React, AI integration, and scalable system design. Responsible for all technical implementation.
+                  Desarrollador Fullstack que diseñó y construyó toda la plataforma desde cero. Experto en Next.js,
+                  React, integración de IA y diseño de sistemas escalables. Responsable de toda la implementación
+                  técnica.
                 </p>
                 <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Desarrollo Fullstack</span>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Integración de IA</span>
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                    Fullstack Development
+                    Diseño de Arquitectura de Sistema
                   </span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">AI Integration</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">System Architecture</span>
                 </div>
               </div>
             </div>
@@ -438,74 +447,77 @@ export default function InvestorPitch() {
         {/* The Ask */}
         <section className="mb-12">
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-white shadow-xl">
-            <h2 className="text-4xl font-bold mb-6">Investment Opportunity</h2>
+            <h2 className="text-4xl font-bold mb-6">Oportunidad de Inversión</h2>
             <p className="text-xl text-purple-100 mb-8">
-              We're seeking strategic investors to accelerate growth, expand our team, and scale across LATAM.
+              Buscamos inversores estratégicos para acelerar el crecimiento, expandir nuestro equipo y escalar en
+              América Latina.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="font-bold text-2xl mb-2">Use of Funds</h3>
+                <h3 className="font-bold text-2xl mb-2">Uso de Fondos</h3>
                 <ul className="space-y-2 text-purple-100 text-sm">
-                  <li>• Marketing & user acquisition (40%)</li>
-                  <li>• Team expansion (30%)</li>
-                  <li>• Product development (20%)</li>
-                  <li>• Operations & infrastructure (10%)</li>
+                  <li>• Marketing y adquisición de usuarios (40%)</li>
+                  <li>• Expansión del equipo (30%)</li>
+                  <li>• Desarrollo del producto (20%)</li>
+                  <li>• Operaciones e infraestructura (10%)</li>
                 </ul>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="font-bold text-2xl mb-2">12-Month Targets</h3>
+                <h3 className="font-bold text-2xl mb-2">Objetivos a 12 Meses</h3>
                 <ul className="space-y-2 text-purple-100 text-sm">
-                  <li>• 25,000 registered users</li>
-                  <li>• 2,000 paying subscribers</li>
-                  <li>• 10 enterprise clients</li>
+                  <li>• 25,000 usuarios registrados</li>
+                  <li>• 2,000 suscriptores pagos</li>
+                  <li>• 10 clientes empresariales</li>
                   <li>• $500K ARR</li>
                 </ul>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="font-bold text-2xl mb-2">Exit Strategy</h3>
+                <h3 className="font-bold text-2xl mb-2">Estrategia de Salida</h3>
                 <ul className="space-y-2 text-purple-100 text-sm">
-                  <li>• Acquisition by EdTech leader</li>
-                  <li>• HR Tech acquisition target</li>
-                  <li>• Potential strategic buyers: LinkedIn, Coursera, Udemy</li>
+                  <li>• Adquisición por líder de EdTech</li>
+                  <li>• Objetivo de adquisición en HR Tech</li>
+                  <li>• Posibles compradores estratégicos: LinkedIn, Coursera, Udemy</li>
                 </ul>
               </div>
             </div>
 
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
-              <h3 className="text-2xl font-bold mb-4">Why Invest Now?</h3>
+              <h3 className="text-2xl font-bold mb-4">¿Por Qué Invertir Ahora?</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✓</span>
                   <div>
-                    <div className="font-bold mb-1">Fully Built Platform</div>
+                    <div className="font-bold mb-1">Plataforma Completa Construida</div>
                     <div className="text-purple-100 text-sm">
-                      No development risk - ready to launch and scale immediately
+                      Sin riesgo de desarrollo - lista para lanzar y escalar de inmediato
                     </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✓</span>
                   <div>
-                    <div className="font-bold mb-1">Large Addressable Market</div>
-                    <div className="text-purple-100 text-sm">$65B+ LATAM market with 15% annual growth</div>
+                    <div className="font-bold mb-1">Mercado Dirigible Grande</div>
+                    <div className="text-purple-100 text-sm">$65B+ mercado LATAM con crecimiento anual del 15%</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✓</span>
                   <div>
-                    <div className="font-bold mb-1">Clear Monetization</div>
-                    <div className="text-purple-100 text-sm">Proven freemium model with B2B enterprise opportunity</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
-                  <div>
-                    <div className="font-bold mb-1">AI-First Advantage</div>
+                    <div className="font-bold mb-1">Monetización Clara</div>
                     <div className="text-purple-100 text-sm">
-                      Proprietary AI technology that competitors will take years to replicate
+                      Modelo freemium probado con oportunidad empresarial B2B
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">✓</span>
+                  <div>
+                    <div className="font-bold mb-1">Ventaja Primero en IA</div>
+                    <div className="text-purple-100 text-sm">
+                      Tecnología AI propia que los competidores llevarán años en replicar
                     </div>
                   </div>
                 </div>
@@ -517,22 +529,22 @@ export default function InvestorPitch() {
         {/* Contact */}
         <section className="text-center">
           <div className="bg-white rounded-2xl p-12 shadow-lg border border-gray-200">
-            <h2 className="text-3xl font-bold mb-4 text-gray-900">Let's Talk</h2>
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">Hablemos</h2>
             <p className="text-xl text-gray-600 mb-8">
-              Interested in learning more? We'd love to discuss this opportunity with you.
+              ¿Interesado en aprender más? Nos encantaría discutir esta oportunidad contigo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:joaquin@despegatucarrera.cl"
                 className="px-8 py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors"
               >
-                Contact Joaquin (CEO)
+                Contacta a Joaquin (CEO)
               </a>
               <Link
                 href="/whitepaper"
                 className="px-8 py-4 bg-gray-100 text-gray-900 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
               >
-                View Technical Whitepaper
+                Ver Whitepaper Técnico
               </Link>
             </div>
           </div>
@@ -542,9 +554,9 @@ export default function InvestorPitch() {
       {/* Footer */}
       <footer className="mt-12 py-8 text-center text-gray-600 border-t border-gray-200">
         <p className="mb-2">
-          <strong>Despega Tu Carrera</strong> - Democratizing Professional Development in LATAM
+          <strong>Despega Tu Carrera</strong> - Democratizando el Desarrollo Profesional en LATAM
         </p>
-        <p>Joaquin Covarrubias (Founder & CEO) • Travis Comber (CTO & Lead Developer)</p>
+        <p>Joaquin Covarrubias (Fundador y CEO) • Travis Comber (CTO y Desarrollador Líder)</p>
       </footer>
     </div>
   )

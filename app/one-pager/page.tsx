@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import OnePagerClient from "./one-pager-client"
 
 export const metadata: Metadata = {
-  title: "One-Page Summary - Despega Tu Carrera",
-  description: "Comprehensive one-page summary of the Despega Tu Carrera platform and value proposition",
+  title: "Resumen Ejecutivo - Despega Tu Carrera",
+  description: "Resumen ejecutivo completo de la plataforma Despega Tu Carrera y propuesta de valor",
   robots: {
     index: false,
     follow: false,
