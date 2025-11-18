@@ -91,9 +91,14 @@ export default function DISCResultsPage() {
   const [aiInterpretation, setAiInterpretation] = useState<string>("")
   const [hybridInsights, setHybridInsights] = useState<HybridInsightsResponse | null>(null)
   const [loadingInsights, setLoadingInsights] = useState(false)
+  const [insightsError, setInsightsError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [demoQuestionsUsed, setDemoQuestionsUsed] = useState(0)
   const DEMO_QUESTION_LIMIT = 3
+
+  const [recommendedBooks, setRecommendedBooks] = useState<any[]>([])
+  const [loadingBooks, setLoadingBooks] = useState(false)
+
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
@@ -104,6 +109,12 @@ export default function DISCResultsPage() {
     }
     loadResults()
   }, [user, router, isDemoMode])
+
+  useEffect(() => {
+    if (discResult) {
+      loadRecommendedBooks()
+    }
+  }, [discResult])
 
   const loadResults = async () => {
     if (isDemoMode) {
@@ -199,10 +210,48 @@ export default function DISCResultsPage() {
     }
   }
 
+  const loadRecommendedBooks = async () => {
+    if (!discResult) return
+    
+    setLoadingBooks(true)
+    try {
+      console.log('[v0] Loading books for DISC type:', discResult.primary_type)
+      const response = await fetch('/api/books')
+      if (response.ok) {
+        const allBooks = await response.json()
+        console.log('[v0] Total books fetched:', allBooks.length)
+        
+        const filtered = allBooks.filter((book: any) => {
+          const tags = (book.tags || []).map((t: string) => t.toLowerCase())
+          
+          if (discResult.primary_type === 'Dominance') {
+            return tags.some((t: string) => ['liderazgo', 'productividad', 'estrategia', 'poder', 'decisiones'].includes(t))
+          } else if (discResult.primary_type === 'Influence') {
+            return tags.some((t: string) => ['comunicación', 'relaciones', 'influencia', 'networking', 'persuasión'].includes(t))
+          } else if (discResult.primary_type === 'Steadiness') {
+            return tags.some((t: string) => ['colaboración', 'equipo', 'estabilidad', 'empatía', 'paciencia'].includes(t))
+          } else if (discResult.primary_type === 'Compliance') {
+            return tags.some((t: string) => ['análisis', 'calidad', 'sistemas', 'precisión', 'datos'].includes(t))
+          }
+          return false
+        }).slice(0, 6)
+        
+        console.log('[v0] Filtered books for', discResult.primary_type, ':', filtered.length)
+        setRecommendedBooks(filtered)
+      }
+    } catch (error) {
+      console.error('[v0] Error loading books:', error)
+    } finally {
+      setLoadingBooks(false)
+    }
+  }
+
+
   const loadHybridInsights = async (discData: DISCResult) => {
     if (!user || isDemoMode) return
 
     setLoadingInsights(true)
+    setInsightsError(null)
     try {
       const response = await fetch('/api/post-test-insights', {
         method: 'POST',
@@ -224,11 +273,21 @@ export default function DISCResultsPage() {
       if (response.ok) {
         const data = await response.json()
         setHybridInsights(data)
+      } else {
+        const errorData = await response.json()
+        setInsightsError(errorData.message || 'Error al generar insights')
       }
     } catch (error) {
       console.error('Error loading hybrid insights:', error)
+      setInsightsError('No se pudieron cargar los insights. Por favor, intenta de nuevo.')
     } finally {
       setLoadingInsights(false)
+    }
+  }
+
+  const retryLoadInsights = () => {
+    if (discResult) {
+      loadHybridInsights(discResult)
     }
   }
 
@@ -394,198 +453,487 @@ export default function DISCResultsPage() {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">Resumen</TabsTrigger>
-            <TabsTrigger value="charts">Gráficos</TabsTrigger>
-            <TabsTrigger value="analysis">Análisis</TabsTrigger>
-            <TabsTrigger value="hybrid-insights">
+        <Tabs defaultValue="resumen-ejecutivo" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-7 gap-1">
+            <TabsTrigger value="resumen-ejecutivo">
+              <Sparkles className="h-4 w-4 mr-1" />
+              Resumen Ejecutivo
+            </TabsTrigger>
+            <TabsTrigger value="plan-90-dias">
+              <Target className="h-4 w-4 mr-1" />
+              Plan 90 Días
+            </TabsTrigger>
+            <TabsTrigger value="biblioteca-dtc">
+              <BookOpen className="h-4 w-4 mr-1" />
+              Biblioteca DTC
+            </TabsTrigger>
+            <TabsTrigger value="metas">
+              <TrendingUp className="h-4 w-4 mr-1" />
+              Metas DTC
+            </TabsTrigger>
+            <TabsTrigger value="overview">Análisis Detallado</TabsTrigger>
+            <TabsTrigger value="cerebro-gpt">
               <Brain className="h-4 w-4 mr-1" />
               Cerebro + GPT
             </TabsTrigger>
-            <TabsTrigger value="ai-analysis">Análisis IA</TabsTrigger>
             <TabsTrigger value="coach">Coach IA</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Puntuaciones DISC</CardTitle>
-                  <CardDescription>Tus puntuaciones en cada dimensión</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">Dominancia (D)</span>
-                        <span className="text-sm text-gray-600">{discResult.d_score}%</span>
-                      </div>
-                      <Progress value={discResult.d_score} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">Influencia (I)</span>
-                        <span className="text-sm text-gray-600">{discResult.i_score}%</span>
-                      </div>
-                      <Progress value={discResult.i_score} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">Estabilidad (S)</span>
-                        <span className="text-sm text-gray-600">{discResult.s_score}%</span>
-                      </div>
-                      <Progress value={discResult.s_score} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">Cumplimiento (C)</span>
-                        <span className="text-sm text-gray-600">{discResult.c_score}%</span>
-                      </div>
-                      <Progress value={discResult.c_score} className="h-2" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Tu Estilo: {styleInfo.title}</CardTitle>
-                  <CardDescription>Características principales</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2 flex items-center">
-                        <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
-                        Fortalezas
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        {styleInfo.strengths.map((strength, index) => (
-                          <li key={index} className="flex items-center">
-                            <div className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2"></div>
-                            {strength}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2 flex items-center">
-                        <Target className="h-4 w-4 mr-2 text-orange-600" />
-                        Áreas de Desarrollo
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        {styleInfo.challenges.map((challenge, index) => (
-                          <li key={index} className="flex items-center">
-                            <div className="w-1.5 h-1.5 bg-orange-600 rounded-full mr-2"></div>
-                            {challenge}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card>
+          <TabsContent value="resumen-ejecutivo" className="space-y-6">
+            <Card className="border-l-4 border-l-purple-500">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Users className="h-5 w-5 mr-2" />
-                  Estilo de Trabajo Preferido
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-purple-600" />
+                  Resumen Ejecutivo DTC - Tu Perfil Creativo
                 </CardTitle>
+                <CardDescription>
+                  Tu mapa profesional completo en 2 páginas
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">{styleInfo.workStyle}</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="charts" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Gráfico Radar - Perfil DISC</CardTitle>
-                  <CardDescription>Visualización completa de tu perfil</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart data={radarData}>
-                        <PolarGrid />
-                        <PolarAngleAxis dataKey="subject" />
-                        <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                        <Radar
-                          name="DISC"
-                          dataKey="A"
-                          stroke="#0088FE"
-                          fill="#0088FE"
-                          fillOpacity={0.3}
-                          strokeWidth={2}
-                        />
-                      </RadarChart>
-                    </ResponsiveContainer>
+              <CardContent className="space-y-6">
+                {/* 1. Foto rápida del perfil */}
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-bold mb-2">Perfil: Creativo Estratégico</h3>
+                  <p className="text-lg italic text-gray-700 mb-4">
+                    "Cuestiona con criterio y transforma ideas en soluciones concretas"
+                  </p>
+                  <div className="grid md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-semibold text-green-700 mb-2">✓ 4 Fortalezas Clave</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Alta capacidad analítica y sistemática (C: {discResult.c_score}%)</li>
+                        <li>• Firmeza en decisiones y orientación a resultados (D: {discResult.d_score}%)</li>
+                        <li>• Pensamiento crítico y cuestionamiento constructivo</li>
+                        <li>• Transformación de ideas complejas en planes accionables</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-orange-700 mb-2">⚠ 4 Riesgos Ciegos</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Intensidad percibida como agresividad por otros</li>
+                        <li>• Perfeccionismo que puede paralizar la acción</li>
+                        <li>• Baja empatía emocional en situaciones de equipo</li>
+                        <li>• Impaciencia con procesos menos estructurados</li>
+                      </ul>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Gráfico de Barras - Puntuaciones</CardTitle>
-                  <CardDescription>Comparación de puntuaciones por dimensión</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={barData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis domain={[0, 100]} />
-                        <Tooltip />
-                        <Bar dataKey="value" fill="#0088FE" />
-                      </BarChart>
-                    </ResponsiveContainer>
+                {/* 2. Mapa DISC simplificado */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Mapa DISC Adaptado a DTC</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="p-4 bg-red-50 rounded-lg text-center">
+                      <div className="text-3xl font-bold text-red-600">{discResult.d_score}%</div>
+                      <div className="font-semibold mt-1">Dominancia</div>
+                      <div className="text-xs text-gray-600 mt-1">Directo, decisivo, orientado a resultados</div>
+                    </div>
+                    <div className="p-4 bg-yellow-50 rounded-lg text-center">
+                      <div className="text-3xl font-bold text-yellow-600">{discResult.i_score}%</div>
+                      <div className="font-semibold mt-1">Influencia</div>
+                      <div className="text-xs text-gray-600 mt-1">Comunicativo, entusiasta, persuasivo</div>
+                    </div>
+                    <div className="p-4 bg-green-50 rounded-lg text-center">
+                      <div className="text-3xl font-bold text-green-600">{discResult.s_score}%</div>
+                      <div className="font-semibold mt-1">Estabilidad</div>
+                      <div className="text-xs text-gray-600 mt-1">Paciente, leal, colaborativo</div>
+                    </div>
+                    <div className="p-4 bg-blue-50 rounded-lg text-center">
+                      <div className="text-3xl font-bold text-blue-600">{discResult.c_score}%</div>
+                      <div className="font-semibold mt-1">Cumplimiento</div>
+                      <div className="text-xs text-gray-600 mt-1">Analítico, preciso, sistemático</div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Distribución de Estilos</CardTitle>
-                <CardDescription>Proporción de cada estilo en tu perfil</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+                {/* 3. Top 5 ideas clave para tu carrera */}
+                <div className="bg-white p-6 rounded-lg border-2 border-purple-200">
+                  <h3 className="text-lg font-semibold mb-4">Top 5 Ideas Clave para Tu Carrera</h3>
+                  <ol className="space-y-3">
+                    <li className="flex gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">1</span>
+                      <div>
+                        <strong>Cómo tomas decisiones:</strong> Combinas datos duros (C alta) con firmeza ejecutiva (D alta). Analizas a fondo, pero decides rápido una vez tienes la info.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">2</span>
+                      <div>
+                        <strong>Cómo te ven los demás:</strong> Jefe: "Exigente pero confiable". Pares: "Brillante pero a veces difícil". Clientes: "Técnicamente impecable".
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">3</span>
+                      <div>
+                        <strong>Dónde generas más valor:</strong> Proyectos complejos que requieren análisis profundo + ejecución rápida. Resolución de problemas técnicos críticos.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">4</span>
+                      <div>
+                        <strong>Tu riesgo #1:</strong> Alienar al equipo por intensidad + perfeccionismo. Resultado: proyectos perfectos pero equipos desmotivados.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">5</span>
+                      <div>
+                        <strong>Upside máximo:</strong> Roles técnico-estratégicos (CTO, Arquitecto Senior, Director de Innovación). Donde expertise + vision estratégica son críticas.
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+
+                {/* 4. Plan DTC en una página */}
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Tu Plan DTC en Una Página</h3>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <h4 className="font-semibold text-blue-800 mb-2">3 Metas de Desarrollo</h4>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex gap-2"><span className="text-blue-600">→</span>Modular intensidad sin perder firmeza</li>
+                        <li className="flex gap-2"><span className="text-blue-600">→</span>Flexibilizar perfeccionismo (80% vs 100%)</li>
+                        <li className="flex gap-2"><span className="text-blue-600">→</span>Aumentar conexión emocional con equipo</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-green-800 mb-2">3 Hábitos 30 Días</h4>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex gap-2"><span className="text-green-600">✓</span>Pausa 5 seg antes de responder en tensión</li>
+                        <li className="flex gap-2"><span className="text-green-600">✓</span>Definir "siguiente paso mínimo" en 5 min</li>
+                        <li className="flex gap-2"><span className="text-green-600">✓</span>Check-in emocional 1-2 min al inicio reuniones</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-purple-800 mb-2">3 Recursos DTC</h4>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex gap-2"><span className="text-purple-600">📖</span>Test: Inteligencia Emocional</li>
+                        <li className="flex gap-2"><span className="text-purple-600">📖</span>Libros: Comunicación Asertiva</li>
+                        <li className="flex gap-2"><span className="text-purple-600">📖</span>Plantilla: Prep Conversaciones Difíciles</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="analysis" className="space-y-6">
+          <TabsContent value="plan-90-dias" className="space-y-6">
+            <Card className="border-l-4 border-l-orange-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Target className="h-6 w-6 text-orange-600" />
+                  Tu Plan de Acción DTC de 90 Días
+                </CardTitle>
+                <CardDescription>
+                  Una hoja de ruta práctica para potenciar tu perfil y superar desafíos
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-orange-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Mes 1: Fundamentos Estratégicos</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-orange-800 mb-2">🎯 Meta Principal</h4>
+                      <p className="text-sm">Refinar la comunicación en situaciones de alta presión.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-orange-800 mb-2">✅ Hábitos Clave</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Practicar escucha activa en reuniones (5 min).</li>
+                        <li>• Documentar 'por qué' de decisiones clave (1 párrafo).</li>
+                        <li>• Identificar 1-2 momentos de tensión y cómo reaccionaste.</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-orange-800 mb-2">📚 Recursos DTC</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Artículos: 'Gestión de Conflictos Constructivos'.</li>
+                        <li>• Videos: 'Técnicas de Persuasión Ética'.</li>
+                        <li>• Ejercicios: 'Análisis de Causas Raíz'.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Mes 2: Optimización y Colaboración</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-blue-800 mb-2">🎯 Meta Principal</h4>
+                      <p className="text-sm">Fomentar la colaboración y la empatía en el equipo.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-blue-800 mb-2">✅ Hábitos Clave</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Realizar "check-ins emocionales" al inicio de reuniones de equipo.</li>
+                        <li>• Delegar tareas identificando puntos fuertes del equipo.</li>
+                        <li>• Buscar feedback constructivo sobre tu estilo de liderazgo.</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-blue-800 mb-2">📚 Recursos DTC</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Curso: 'Inteligencia Emocional Aplicada'.</li>
+                        <li>• Libros: 'La 5ª Disciplina' (Senge).</li>
+                        <li>• Plantilla: 'Matriz de Habilidades del Equipo'.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-green-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Mes 3: Crecimiento Sostenido</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-green-800 mb-2">🎯 Meta Principal</h4>
+                      <p className="text-sm">Consolidar el perfeccionismo productivo y la visión a largo plazo.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-green-800 mb-2">✅ Hábitos Clave</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Establecer criterios de "suficientemente bueno" para proyectos.</li>
+                        <li>• Dedicar tiempo a la reflexión estratégica semanal.</li>
+                        <li>• Mentorizar a un miembro del equipo en áreas analíticas.</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-green-800 mb-2">📚 Recursos DTC</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Herramientas: 'Gestión de Proyectos Ágil'.</li>
+                        <li>• Lecturas: 'Liderazgo Visionario'.</li>
+                        <li>• Taller: 'Pensamiento Sistémico Avanzado'.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="biblioteca-dtc" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <BookOpen className="h-6 w-6 text-green-600" />
+                  Biblioteca DTC: Recursos Curados para tu Perfil
+                </CardTitle>
+                <CardDescription>
+                  120+ libros seleccionados por expertos para potenciar tu desarrollo profesional
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {loadingBooks ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-blue-600 mr-3" />
+                    <p className="text-gray-600">Cargando libros recomendados...</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg">
+                      <h3 className="text-lg font-semibold mb-3">📚 Por qué estos libros para tu perfil {styleInfo.title}</h3>
+                      <p className="text-sm text-gray-700 mb-4">
+                        Hemos seleccionado estos recursos basándonos en tu perfil DISC y las áreas específicas donde puedes generar mayor impacto.
+                        Cada libro ha sido escogido para fortalecer tus fortalezas naturales y desarrollar competencias complementarias.
+                      </p>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-white p-4 rounded border-l-4 border-l-green-500">
+                          <strong className="text-green-700">Fortalezas a potenciar:</strong>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            {styleInfo.strengths.map((strength, idx) => (
+                              <li key={idx}>• {strength}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="bg-white p-4 rounded border-l-4 border-l-orange-500">
+                          <strong className="text-orange-700">Áreas de desarrollo:</strong>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            {styleInfo.challenges.map((challenge, idx) => (
+                              <li key={idx}>• {challenge}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Libros Recomendados para Ti</h3>
+                      {recommendedBooks.length > 0 ? (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {recommendedBooks.map((book) => (
+                            <Card key={book.id} className="hover:shadow-lg transition-shadow">
+                              <CardHeader>
+                                <CardTitle className="text-base">{book.title}</CardTitle>
+                                <CardDescription className="text-sm">{book.author}</CardDescription>
+                              </CardHeader>
+                              <CardContent className="space-y-3">
+                                <div>
+                                  <Badge variant="outline">{book.category}</Badge>
+                                  <div className="flex items-center gap-1 mt-2">
+                                    <span className="text-yellow-500">★</span>
+                                    <span className="text-sm text-gray-600">Leído por {book.read_count || 0} usuarios</span>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-600 line-clamp-2">{book.content?.substring(0, 100)}...</p>
+                                <div className="flex gap-2 flex-wrap">
+                                  {book.tags?.slice(0, 3).map((tag: string, idx: number) => (
+                                    <Badge key={idx} variant="secondary" className="text-xs">{tag}</Badge>
+                                  ))}
+                                </div>
+                                <Button size="sm" className="w-full" onClick={() => router.push(`/biblioteca/${book.id}`)}>
+                                  <BookOpen className="h-4 w-4 mr-2" />
+                                  Leer Ahora
+                                </Button>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 bg-gray-50 rounded-lg">
+                          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                          <p className="text-gray-600">No hay libros disponibles en este momento.</p>
+                          <Button variant="outline" className="mt-4" onClick={() => router.push('/biblioteca')}>
+                            Explorar Biblioteca Completa
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="bg-purple-50 p-6 rounded-lg">
+                      <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                        <Target className="h-5 w-5 text-purple-600" />
+                        Mini-Desafíos de Lectura (30 días)
+                      </h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <div className="bg-white p-4 rounded shadow-sm">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">1</div>
+                            <strong className="text-sm">Semana 1-2</strong>
+                          </div>
+                          <p className="text-sm text-gray-700">Lee 1 capítulo diario del libro sobre {styleInfo.title}. Toma notas de 3 ideas clave por día.</p>
+                          <Badge className="mt-2 bg-purple-600">+50 tokens DTC</Badge>
+                        </div>
+                        <div className="bg-white p-4 rounded shadow-sm">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">2</div>
+                            <strong className="text-sm">Semana 3</strong>
+                          </div>
+                          <p className="text-sm text-gray-700">Aplica 1 técnica del libro en tu trabajo diario. Documenta resultados en tu diario DTC.</p>
+                          <Badge className="mt-2 bg-purple-600">+75 tokens DTC</Badge>
+                        </div>
+                        <div className="bg-white p-4 rounded shadow-sm">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">3</div>
+                            <strong className="text-sm">Semana 4</strong>
+                          </div>
+                          <p className="text-sm text-gray-700">Comparte 2 insights con la comunidad DTC. Comenta en foros y conecta con otros lectores.</p>
+                          <Badge className="mt-2 bg-purple-600">+100 tokens DTC</Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1">¿Listo para empezar?</h3>
+                        <p className="text-sm opacity-90">Explora toda nuestra biblioteca de 120+ libros curados para tu carrera</p>
+                      </div>
+                      <Button variant="secondary" size="lg" onClick={() => router.push('/biblioteca')}>
+                        Ir a Biblioteca Completa
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="metas" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <TrendingUp className="h-6 w-6 text-blue-600" />
+                  Tus Metas DTC: Trayectoria de Crecimiento
+                </CardTitle>
+                <CardDescription>
+                  Define y sigue tus objetivos de desarrollo profesional
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-8">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Metas de Corto Plazo (Próximos 3 Meses)</h3>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Card className="border-l-4 border-l-blue-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Mejorar la gestión de la intensidad en reuniones</p>
+                          <Badge variant="secondary" className="text-xs">En Progreso</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-l-4 border-l-blue-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Delegar tareas complejas eficazmente</p>
+                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Media</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-l-4 border-l-blue-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Buscar feedback constructivo semanalmente</p>
+                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Media</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Metas de Mediano Plazo (3-9 Meses)</h3>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Card className="border-l-4 border-l-green-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Desarrollar un estilo de liderazgo más empático</p>
+                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-l-4 border-l-green-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Integrar perfeccionismo con pragmatismo</p>
+                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Media</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Metas de Largo Plazo (9-18 Meses)</h3>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Card className="border-l-4 border-l-purple-400">
+                        <CardContent className="p-4 space-y-2">
+                          <p className="text-sm font-semibold">Asumir roles de mayor influencia estratégica</p>
+                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
+                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
+                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="overview" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Análisis Detallado</CardTitle>
-                <CardDescription>Interpretación profunda de tus resultados</CardDescription>
+                <CardDescription>Interpretación profunda de tus resultados DISC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="bg-blue-50 p-4 rounded-lg">
@@ -632,7 +980,7 @@ export default function DISCResultsPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="hybrid-insights" className="space-y-6">
+          <TabsContent value="cerebro-gpt" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -649,9 +997,34 @@ export default function DISCResultsPage() {
                     <Loader2 className="h-8 w-8 animate-spin text-blue-600 mr-3" />
                     <p className="text-gray-600">Generando insights personalizados con IA híbrida...</p>
                   </div>
+                ) : insightsError ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Brain className="h-8 w-8 text-red-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Error al cargar insights</h3>
+                    <p className="text-gray-600 mb-4">{insightsError}</p>
+                    <Button onClick={retryLoadInsights} className="mr-2">
+                      Intentar de nuevo
+                    </Button>
+                    <Button variant="outline" onClick={() => router.push('/coach-ia')}>
+                      Hablar con Coach IA
+                    </Button>
+                  </div>
                 ) : hybridInsights ? (
                   <div className="space-y-6">
-                    {/* Metadata */}
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={retryLoadInsights}
+                        disabled={loadingInsights}
+                      >
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Regenerar Insights
+                      </Button>
+                    </div>
+
                     {hybridInsights.metadata && (
                       <div className="flex gap-4 p-4 bg-blue-50 rounded-lg">
                         <div className="text-center">
@@ -669,7 +1042,6 @@ export default function DISCResultsPage() {
                       </div>
                     )}
 
-                    {/* Insights */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <Lightbulb className="h-5 w-5 text-yellow-600" />
@@ -696,7 +1068,7 @@ export default function DISCResultsPage() {
                               </CardHeader>
                               <CardContent className="space-y-3">
                                 <p className="text-sm text-gray-700">{insight.description}</p>
-                                
+
                                 {insight.personalizedContext && (
                                   <div className="bg-blue-50 p-3 rounded text-sm">
                                     <strong>Contexto:</strong> {insight.personalizedContext}
@@ -727,7 +1099,6 @@ export default function DISCResultsPage() {
                       </div>
                     </div>
 
-                    {/* Recommendations */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <BookOpen className="h-5 w-5 text-green-600" />
@@ -758,7 +1129,6 @@ export default function DISCResultsPage() {
                       </div>
                     </div>
 
-                    {/* Development Plan */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <Target className="h-5 w-5 text-orange-600" />

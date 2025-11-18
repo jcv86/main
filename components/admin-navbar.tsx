@@ -2,24 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {
-  Settings,
-  BarChart3,
-  Home,
-  BookOpen,
-  Brain,
-  MessageSquare,
-  Users,
-  FileText,
-  AlertTriangle,
-  ClipboardList,
-  Trophy,
-  Target,
-  Briefcase,
-  Database,
-  Book,
-  HelpCircle,
-} from "lucide-react"
+import { Settings, BarChart3, Home, BookOpen, Brain, MessageSquare, Users, FileText, AlertTriangle, ClipboardList, Trophy, Target, Briefcase, Database, Book, HelpCircle } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +18,7 @@ export function AdminNavbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+          <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white text-sm">DTC</span>
             </div>
@@ -44,12 +27,6 @@ export function AdminNavbar() {
 
           {/* Navigation Links */}
           <div className="flex items-center gap-2">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <Home className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Inicio</span>
-              </Button>
-            </Link>
             <Link href="/test">
               <Button variant="ghost" size="sm">
                 <Brain className="h-4 w-4 mr-2" />

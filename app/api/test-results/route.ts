@@ -1,12 +1,21 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase-server"
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const testType = searchParams.get("type")
     const latest = searchParams.get("latest")
-    const userEmail = "demo@example.com" // In real app, get from auth
+    const userEmail = user.email
+
+    console.log("[v0] Fetching test results for user:", userEmail)
 
     // Try database first
     try {
@@ -50,9 +59,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await request.json()
     const { testType, testName, results, answers, duration } = body
-    const userEmail = "demo@example.com" // In real app, get from auth
+    const userEmail = user.email
+
+    console.log("[v0] Saving test results for user:", userEmail)
 
     // Calculate overall score
     const overallScore = results.overall_score || 0
