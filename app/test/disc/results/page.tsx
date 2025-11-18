@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from "@/components/session-wrapper"
 import { createClient } from "@supabase/supabase-js"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles } from "lucide-react"
+import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles, Loader2, Lightbulb, BookOpen } from 'lucide-react'
 import {
   RadarChart,
   PolarGrid,
@@ -46,6 +46,39 @@ interface AIInterpretation {
   generated_at: string
 }
 
+interface HybridInsight {
+  source: 'openai' | 'cerebro' | 'hybrid'
+  category: string
+  title: string
+  description: string
+  confidence: number
+  priority: 'high' | 'medium' | 'low'
+  reasoningSource: string
+  personalizedContext?: string
+  actionableSteps: string[]
+}
+
+interface HybridInsightsResponse {
+  insights: HybridInsight[]
+  recommendations: Array<{
+    title: string
+    description: string
+    timeframe: string
+    difficulty: string
+    source: 'openai' | 'cerebro' | 'hybrid'
+  }>
+  developmentPlan: {
+    shortTerm: string[]
+    mediumTerm: string[]
+    longTerm: string[]
+  }
+  metadata?: {
+    openaiInsightsCount: number
+    cerebroInsightsCount: number
+    totalInsights: number
+  }
+}
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 
 export default function DISCResultsPage() {
@@ -56,6 +89,8 @@ export default function DISCResultsPage() {
 
   const [discResult, setDiscResult] = useState<DISCResult | null>(null)
   const [aiInterpretation, setAiInterpretation] = useState<string>("")
+  const [hybridInsights, setHybridInsights] = useState<HybridInsightsResponse | null>(null)
+  const [loadingInsights, setLoadingInsights] = useState(false)
   const [loading, setLoading] = useState(true)
   const [demoQuestionsUsed, setDemoQuestionsUsed] = useState(0)
   const DEMO_QUESTION_LIMIT = 3
@@ -136,6 +171,7 @@ export default function DISCResultsPage() {
 
       if (discData) {
         setDiscResult(discData)
+        await loadHybridInsights(discData)
       } else {
         // Create demo data if no results found
         setDiscResult({
@@ -160,6 +196,39 @@ export default function DISCResultsPage() {
       console.error("Error loading results:", error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadHybridInsights = async (discData: DISCResult) => {
+    if (!user || isDemoMode) return
+
+    setLoadingInsights(true)
+    try {
+      const response = await fetch('/api/post-test-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          testType: 'DISC',
+          results: {
+            d_score: discData.d_score,
+            i_score: discData.i_score,
+            s_score: discData.s_score,
+            c_score: discData.c_score,
+            primary_type: discData.primary_type,
+          },
+          userId: user.id,
+          testResponses: discData,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setHybridInsights(data)
+      }
+    } catch (error) {
+      console.error('Error loading hybrid insights:', error)
+    } finally {
+      setLoadingInsights(false)
     }
   }
 
@@ -264,6 +333,24 @@ export default function DISCResultsPage() {
 
   const styleInfo = getStyleDescription(discResult.primary_type)
 
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'destructive'
+      case 'medium': return 'default'
+      case 'low': return 'secondary'
+      default: return 'outline'
+    }
+  }
+
+  const getSourceBadge = (source: string) => {
+    switch (source) {
+      case 'openai': return { label: 'GPT-4', color: 'bg-purple-100 text-purple-800' }
+      case 'cerebro': return { label: 'Cerebro', color: 'bg-blue-100 text-blue-800' }
+      case 'hybrid': return { label: 'Híbrido', color: 'bg-green-100 text-green-800' }
+      default: return { label: 'IA', color: 'bg-gray-100 text-gray-800' }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="container mx-auto max-w-6xl">
@@ -308,10 +395,14 @@ export default function DISCResultsPage() {
         </Card>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="charts">Gráficos</TabsTrigger>
             <TabsTrigger value="analysis">Análisis</TabsTrigger>
+            <TabsTrigger value="hybrid-insights">
+              <Brain className="h-4 w-4 mr-1" />
+              Cerebro + GPT
+            </TabsTrigger>
             <TabsTrigger value="ai-analysis">Análisis IA</TabsTrigger>
             <TabsTrigger value="coach">Coach IA</TabsTrigger>
           </TabsList>
@@ -537,6 +628,204 @@ export default function DISCResultsPage() {
                       ))}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="hybrid-insights" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-6 w-6 text-blue-600" />
+                  Análisis Híbrido: Cerebro + GPT-4
+                </CardTitle>
+                <CardDescription>
+                  Insights personalizados generados por el Cerebro (búsqueda semántica en 120+ libros) + GPT-4
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loadingInsights ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-blue-600 mr-3" />
+                    <p className="text-gray-600">Generando insights personalizados con IA híbrida...</p>
+                  </div>
+                ) : hybridInsights ? (
+                  <div className="space-y-6">
+                    {/* Metadata */}
+                    {hybridInsights.metadata && (
+                      <div className="flex gap-4 p-4 bg-blue-50 rounded-lg">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-blue-600">{hybridInsights.metadata.totalInsights}</div>
+                          <div className="text-xs text-gray-600">Total Insights</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-purple-600">{hybridInsights.metadata.openaiInsightsCount}</div>
+                          <div className="text-xs text-gray-600">GPT-4</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-blue-600">{hybridInsights.metadata.cerebroInsightsCount}</div>
+                          <div className="text-xs text-gray-600">Cerebro</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Insights */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Lightbulb className="h-5 w-5 text-yellow-600" />
+                        Insights Clave
+                      </h3>
+                      <div className="grid gap-4">
+                        {hybridInsights.insights.map((insight, index) => {
+                          const sourceBadge = getSourceBadge(insight.source)
+                          return (
+                            <Card key={index} className="border-l-4 border-l-blue-500">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-start justify-between gap-2">
+                                  <CardTitle className="text-base">{insight.title}</CardTitle>
+                                  <div className="flex gap-2">
+                                    <Badge className={sourceBadge.color}>{sourceBadge.label}</Badge>
+                                    <Badge variant={getPriorityColor(insight.priority)}>
+                                      {insight.priority}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <CardDescription className="text-xs">
+                                  {insight.category} • Confianza: {(insight.confidence * 100).toFixed(0)}%
+                                </CardDescription>
+                              </CardHeader>
+                              <CardContent className="space-y-3">
+                                <p className="text-sm text-gray-700">{insight.description}</p>
+                                
+                                {insight.personalizedContext && (
+                                  <div className="bg-blue-50 p-3 rounded text-sm">
+                                    <strong>Contexto:</strong> {insight.personalizedContext}
+                                  </div>
+                                )}
+
+                                {insight.actionableSteps.length > 0 && (
+                                  <div>
+                                    <p className="text-sm font-semibold mb-2">Pasos Accionables:</p>
+                                    <ul className="space-y-1">
+                                      {insight.actionableSteps.map((step, i) => (
+                                        <li key={i} className="text-sm flex items-start gap-2">
+                                          <span className="text-blue-600 font-bold">{i + 1}.</span>
+                                          <span>{step}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+
+                                <p className="text-xs text-gray-500 italic">
+                                  Fuente: {insight.reasoningSource}
+                                </p>
+                              </CardContent>
+                            </Card>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Recommendations */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <BookOpen className="h-5 w-5 text-green-600" />
+                        Recomendaciones
+                      </h3>
+                      <div className="grid gap-3">
+                        {hybridInsights.recommendations.map((rec, index) => {
+                          const sourceBadge = getSourceBadge(rec.source)
+                          return (
+                            <Card key={index}>
+                              <CardContent className="p-4">
+                                <div className="flex items-start justify-between gap-2 mb-2">
+                                  <h4 className="font-semibold text-sm">{rec.title}</h4>
+                                  <Badge className={sourceBadge.color} variant="outline">
+                                    {sourceBadge.label}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-gray-700 mb-2">{rec.description}</p>
+                                <div className="flex gap-2 text-xs text-gray-500">
+                                  <span>📅 {rec.timeframe}</span>
+                                  <span>•</span>
+                                  <span>🎯 {rec.difficulty}</span>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Development Plan */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Target className="h-5 w-5 text-orange-600" />
+                        Plan de Desarrollo
+                      </h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-sm">Corto Plazo (1-3 meses)</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {hybridInsights.developmentPlan.shortTerm.map((item, i) => (
+                                <li key={i} className="text-sm flex gap-2">
+                                  <span className="text-green-600">✓</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-sm">Mediano Plazo (3-6 meses)</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {hybridInsights.developmentPlan.mediumTerm.map((item, i) => (
+                                <li key={i} className="text-sm flex gap-2">
+                                  <span className="text-blue-600">→</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-sm">Largo Plazo (6-12 meses)</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {hybridInsights.developmentPlan.longTerm.map((item, i) => (
+                                <li key={i} className="text-sm flex gap-2">
+                                  <span className="text-purple-600">★</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Brain className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 mb-4">
+                      Los insights híbridos no están disponibles en modo demo.
+                    </p>
+                    <Button onClick={() => router.push('/test/disc')}>
+                      Realizar Test Real
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

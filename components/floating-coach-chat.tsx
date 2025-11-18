@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Send, ArrowLeft } from "lucide-react"
+import { Send, ArrowLeft } from 'lucide-react'
 import { getEnhancedSystemPrompt, SUGGESTED_QUESTIONS } from "@/lib/ai/enhanced-prompts"
 import { PROMPT_CATEGORIES, type PromptCategoryId } from "@/lib/ai/prompt-categories"
 
@@ -33,6 +33,18 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const categoryData = PROMPT_CATEGORIES[categoryId]
+  
+  if (!categoryData) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
+        <p className="text-lg text-muted-foreground mb-4">
+          Lo sentimos, esta categoría no está disponible.
+        </p>
+        <Button onClick={onBack}>Volver</Button>
+      </div>
+    )
+  }
+
   const coach = categoryData.coach === "sofia" ? "sofia" : categoryData.coach === "dani" ? "dani" : "sofia"
   const conversationCategory = categoryId
 

@@ -156,16 +156,19 @@ export const AUTOCONOCIMIENTO_PROMPTS: PromptTemplate[] = [
     userInput: "Me siento perdido con mi carrera, ¿cómo descubro qué me gusta realmente?",
     sofiaResponse: `Te entiendo, a muchos les pasa lo mismo cuando están empezando. Es totalmente normal sentirse así. Te propongo tres pasos simples:
 
-1) **Primero**, reflexiona sobre las tareas que más disfrutas: ¿qué te hace sentir realizado?
-2) **Segundo**, revisa tus logros y en qué habilidades se repiten: ahí está tu patrón
-3) **Tercero**, usa el test DISC de DTC para identificar tu estilo natural. ¿Quieres que te lo active ahora?`,
+1) **Primero**, haz el test DISC (15 min) para identificar tu estilo de comportamiento profesional
+2) **Segundo**, completa el test de Inteligencia Emocional (10 min) para entender cómo gestionas emociones
+3) **Tercero**, cuando termines, analizaremos juntos tus resultados y veremos qué patrones emergen
+
+¿Quieres que te active el test DISC ahora mismo para empezar?`,
     daniResponse: `Perfecto. Haz esto:
 
-1. **Lista tus principales logros** de los últimos 2 años
-2. **Identifica patrones**: ¿qué habilidades usaste en cada uno?
-3. **Cruza resultados** con áreas laborales donde esas habilidades son valoradas
+1. **Completa el test DISC** (15 min) - identifica tu perfil D-I-S-C
+2. **Haz el test MBTI** (20 min) - descubre tu tipo de personalidad
+3. **Analiza tus resultados** - te daré un reporte personalizado con áreas profesionales que calzan contigo
+4. **Cruza con el test RIASEC** (18 min) - validaremos carreras específicas
 
-Si quieres, puedo analizar tu CV y sugerirte keywords según tu industria. ¿Cuáles son tus 3 logros más importantes?`,
+¿Quieres empezar con el test DISC? Es el más rápido y te da insights inmediatos.`,
     keywords: ["perdido", "carrera", "descubro", "gusta"],
     expectedMetrics: {
       engagementMin: 2,
@@ -174,26 +177,31 @@ Si quieres, puedo analizar tu CV y sugerirte keywords según tu industria. ¿Cu�
   },
   {
     id: "autoconocimiento_002",
-    userInput: "No sé si estoy en la carrera correcta",
-    sofiaResponse: `Esa duda es común y muestra autoconocimiento. Evalúa si es el contenido o el entorno de trabajo. Si dos de tres cosas no funcionan (contenido, ambiente, valores), puede ser momento de explorar nuevas opciones.
+    userInput: "Ya hice el test DISC, ¿qué significa mi resultado?",
+    sofiaResponse: `¡Excelente que hayas completado el test! Vamos a analizar tu perfil juntos:
 
-Pregúntate:
-- ¿Qué parte específica no te gusta?
-- ¿Es temporal o estructural?
-- ¿Qué te gustaría estar haciendo en su lugar?
+Tu resultado DISC muestra tu estilo natural de comportamiento. Déjame preguntarte:
+- ¿Cuál fue tu dimensión dominante? (D, I, S o C)
+- ¿Te sorprendió algo del resultado?
 
-Podemos trabajar juntos en clarificar esto. ¿Quieres que conversemos más sobre cada punto?`,
-    daniResponse: `Usemos un enfoque analítico:
+Basándome en tu perfil, te puedo recomendar:
+1) **Tests complementarios**: MBTI o Big Five para profundizar
+2) **Áreas profesionales** que calzan con tu estilo
+3) **Libros de la biblioteca** (tenemos 120+ libros) específicos para tu perfil
 
-1) **Evalúa tu situación actual**: contenido del trabajo, ambiente, proyección
-2) **Proyecta tu industria**: ¿tiene futuro o está en declive?
-3) **Identifica habilidades transferibles**: qué puedes llevar a otro campo
+¿Te gustaría que busquemos libros sobre tu tipo de personalidad en nuestra biblioteca?`,
+    daniResponse: `Ok, analicemos tu resultado DISC estratégicamente:
 
-Te puedo guiar con un plan de reconversión profesional si decides cambiar. ¿Cuántos años llevas en tu carrera actual?`,
-    keywords: ["carrera correcta", "duda", "cambiar"],
+1. **Identifica tu patrón dominante**: D (Dominancia), I (Influencia), S (Estabilidad), o C (Cumplimiento)
+2. **Cruza con carreras**: te mostraré áreas profesionales que se alinean con tu perfil
+3. **Valida con RIASEC**: haz el test vocacional (18 min) para confirmar intereses específicos
+4. **Lee contenido relevante**: tenemos 120+ libros en la biblioteca filtrados por tu perfil
+
+¿Cuál fue tu dimensión más alta? Eso define tu estrategia de carrera.`,
+    keywords: ["test disc", "resultado", "significa", "perfil"],
     expectedMetrics: {
-      engagementMin: 0.6,
-      satisfactionMin: 4.0,
+      engagementMin: 0.8,
+      satisfactionMin: 4.6,
     },
   },
 ]

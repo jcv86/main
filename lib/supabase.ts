@@ -1,7 +1,14 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
-// Create client with proper error handling
+let supabaseInstance: SupabaseClient | null = null
+
 export function createClient() {
+  // Si ya existe una instancia, retornarla
+  if (supabaseInstance) {
+    return supabaseInstance
+  }
+
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -11,13 +18,14 @@ export function createClient() {
       return createMockClient() as any
     }
 
-    // Create client with better error handling
-    const client = createSupabaseClient(supabaseUrl, supabaseKey, {
+    // Crear instancia única del cliente
+    supabaseInstance = createSupabaseClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
         flowType: "pkce",
+        storage: typeof window !== "undefined" ? window.localStorage : undefined,
       },
       global: {
         fetch: async (url, options = {}) => {
@@ -26,14 +34,13 @@ export function createClient() {
             return response
           } catch (error) {
             console.warn("Supabase fetch failed, using mock client:", error)
-            // Return a mock response that will trigger fallback to mock client
             throw new Error("Network error - using mock client")
           }
         },
       },
     })
 
-    return client
+    return supabaseInstance
   } catch (error) {
     console.warn("Supabase client creation failed, using mock client:", error)
     return createMockClient() as any
