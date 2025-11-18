@@ -1,11 +1,12 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter } from 'next/font/google'
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
 import { AdminNavbar } from "@/components/admin-navbar"
 import { FloatingCoachWidget } from "@/components/floating-coach-widget"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -123,6 +124,8 @@ export default function RootLayout({
           <Toaster />
           <FloatingCoachWidget />
         </SessionWrapper>
+
+        <SpeedInsights />
 
         {/* JSON-LD Structured Data */}
         <script
