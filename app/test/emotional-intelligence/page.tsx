@@ -1,15 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Heart, CheckCircle, Clock } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { ArrowLeft, ArrowRight, Heart, CheckCircle, Clock } from 'lucide-react'
 import { useSession } from "@/components/session-wrapper"
+import { saveTestResult } from "@/lib/test-storage"
 
 interface Question {
   id: number
@@ -254,6 +256,7 @@ export default function EmotionalIntelligenceTest() {
 
   const router = useRouter()
   const { user, isLoading } = useSession()
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -270,63 +273,16 @@ export default function EmotionalIntelligenceTest() {
     setSelectedAnswer(answers[emotionalIntelligenceQuestions[currentQuestion]?.id] || null)
   }, [currentQuestion, answers])
 
-  const calculateResults = () => {
-    const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0)
-    const maxScore = emotionalIntelligenceQuestions.length * 5
-    const percentage = Math.round((totalScore / maxScore) * 100)
-
-    return {
-      total_score: totalScore,
-      max_score: maxScore,
-      percentage,
-      level: percentage >= 80 ? "High" : percentage >= 60 ? "Moderate" : percentage >= 40 ? "Developing" : "Low",
-    }
-  }
-
-  const submitTest = async () => {
-    if (Object.keys(answers).length < emotionalIntelligenceQuestions.length) {
-      alert("Please answer all questions before continuing.")
-      return
-    }
-
-    setIsSubmitting(true)
-    const endTime = Date.now()
-    const duration = Math.round((endTime - startTime) / 60000)
-    const results = calculateResults()
-
-    const testResults = {
-      ...results,
-      duration_minutes: duration,
-      completion_date: new Date().toISOString(),
-      answers: answers,
-    }
-
-    try {
-      // Save to localStorage for demo
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("emotional-intelligence")) {
-        completedTests.push("emotional-intelligence")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
-      }
-
-      localStorage.setItem("emotional_intelligence_results", JSON.stringify(testResults))
-      router.push("/test/emotional-intelligence/results")
-    } catch (error) {
-      console.error("Error submitting test:", error)
-      alert("Error saving results. Please try again.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   const handleNext = () => {
     if (selectedAnswer !== null) {
-      setAnswers((prev) => ({ ...prev, [emotionalIntelligenceQuestions[currentQuestion].id]: selectedAnswer }))
+      const updatedAnswers = { ...answers, [emotionalIntelligenceQuestions[currentQuestion].id]: selectedAnswer }
+      setAnswers(updatedAnswers)
 
       if (currentQuestion < emotionalIntelligenceQuestions.length - 1) {
         setCurrentQuestion((prev) => prev + 1)
       } else {
-        submitTest()
+        // Submit test with updated answers immediately
+        submitTestWithAnswers(updatedAnswers)
       }
     }
   }
@@ -334,6 +290,89 @@ export default function EmotionalIntelligenceTest() {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1)
+    }
+  }
+
+  const submitTestWithAnswers = async (finalAnswers: Record<number, number>) => {
+    if (Object.keys(finalAnswers).length < emotionalIntelligenceQuestions.length) {
+      alert("Please answer all questions before continuing.")
+      return
+    }
+
+    setIsSubmitting(true)
+    const endTime = Date.now()
+    const duration = Math.round((endTime - startTime) / 60000)
+    
+    const totalScore = Object.values(finalAnswers).reduce((sum, score) => sum + score, 0)
+    const maxScore = emotionalIntelligenceQuestions.length * 5
+    const percentage = Math.round((totalScore / maxScore) * 100)
+
+    const results = {
+      total_score: totalScore,
+      max_score: maxScore,
+      percentage,
+      level: percentage >= 80 ? "High" : percentage >= 60 ? "Moderate" : percentage >= 40 ? "Developing" : "Low",
+    }
+
+    const testResults = {
+      ...results,
+      duration_minutes: duration,
+      completion_date: new Date().toISOString(),
+      answers: finalAnswers,
+      competency_scores: {
+        self_awareness: Math.round(((finalAnswers[1] + finalAnswers[6] + finalAnswers[11] + finalAnswers[16]) / 20) * 100),
+        self_regulation: Math.round(((finalAnswers[3] + finalAnswers[8] + finalAnswers[13] + finalAnswers[19]) / 20) * 100),
+        motivation: Math.round(((finalAnswers[4] + finalAnswers[9] + finalAnswers[14]) / 15) * 100),
+        empathy: Math.round(((finalAnswers[2] + finalAnswers[7] + finalAnswers[12] + finalAnswers[17]) / 20) * 100),
+        social_skills: Math.round(((finalAnswers[5] + finalAnswers[10] + finalAnswers[15] + finalAnswers[20]) / 20) * 100),
+      },
+      overall_score: percentage,
+    }
+
+    try {
+      console.log("[v0] Saving EI test results...")
+      console.log("[v0] User email:", user?.email)
+      console.log("[v0] Test results:", testResults)
+
+      const saveResult = await saveTestResult({
+        testType: "emotional-intelligence",
+        testName: "Inteligencia Emocional",
+        results: testResults,
+        score: percentage,
+        durationMinutes: duration,
+        completedAt: new Date().toISOString(),
+      })
+      
+      if (!saveResult.success || !saveResult.savedToDatabase) {
+        console.error("[v0] ❌ Failed to save to database:", saveResult.error)
+        toast({
+          title: "⚠️ Error Crítico de Guardado",
+          description: `No se pudieron guardar tus resultados en la base de datos: ${saveResult.error || 'Error desconocido'}. Tus datos están temporalmente en cache. Por favor contacta soporte o intenta completar el test nuevamente.`,
+          variant: "destructive",
+          duration: 10000,
+        })
+        setIsSubmitting(false)
+        return
+      }
+
+      console.log("[v0] ✓✓✓ Results saved successfully to DATABASE")
+      toast({
+        title: "✓ Test Completado",
+        description: "Tus resultados han sido guardados correctamente en la base de datos.",
+        duration: 3000,
+      })
+      
+      router.push("/test/emotional-intelligence/results")
+    } catch (error: any) {
+      console.error("[v0] ❌ Error submitting test:", error)
+      toast({
+        title: "❌ Error al Guardar Resultados",
+        description: `No se pudieron guardar tus resultados: ${error.message || 'Error de red'}. Por favor contacta soporte o intenta de nuevo.`,
+        variant: "destructive",
+        duration: 10000,
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 

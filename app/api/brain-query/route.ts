@@ -239,10 +239,10 @@ Usuario: ${message}`
 
       console.log("[v0] Calling OpenAI with simplified pattern")
 
-      // Use exact same pattern as working analyze-response route
       const { text: responseText } = await generateText({
-        model: "openai/gpt-4o",
+        model: "openai/gpt-4o-mini",
         prompt,
+        maxOutputTokens: 800,
         temperature: 0.7,
       })
 

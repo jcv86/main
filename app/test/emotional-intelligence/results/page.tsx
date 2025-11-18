@@ -1,32 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Brain,
-  Heart,
-  Users,
-  Target,
-  Lightbulb,
-  ArrowRight,
-  TrendingUp,
-  Star,
-  Award,
-  BookOpen,
-  Download,
-  Share2,
-  BarChart3,
-  PieChart,
-  Activity,
-  Zap,
-} from "lucide-react"
+import { Brain, Heart, Users, Target, Lightbulb, ArrowRight, TrendingUp, Star, Award, BookOpen, Download, Share2, BarChart3, PieChart, Activity, Zap } from 'lucide-react'
 import { toast } from "@/hooks/use-toast"
-import { supabase } from "@/lib/supabase"
+import { loadTestResult } from "@/lib/test-storage"
+import { useSession } from "@/components/session-wrapper"
 
 interface TestResults {
   overall_score: number
@@ -151,44 +135,31 @@ export default function EmotionalIntelligenceResults() {
   const router = useRouter()
   const [results, setResults] = useState<TestResults | null>(null)
   const [loading, setLoading] = useState(true)
+  const { user } = useSession()
 
   useEffect(() => {
     loadResults()
-  }, [])
+  }, [user])
 
   const loadResults = async () => {
     try {
       setLoading(true)
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        setLoading(false)
-        return
-      }
+      console.log("[v0] Loading EI test results...")
+      console.log("[v0] User email:", user?.email)
 
-      const { data: testResults, error } = await supabase
-        .from("test_results")
-        .select("*")
-        .eq("user_email", user.email)
-        .eq("test_type", "emotional-intelligence")
-        .order("completed_at", { ascending: false })
-        .limit(1)
-        .single()
-
-      if (error) {
-        console.error("Error loading results:", error)
-        setLoading(false)
-        return
+      const loadedResults = await loadTestResult("emotional-intelligence")
+      
+      if (loadedResults) {
+        console.log("[v0] Found results:", loadedResults)
+        // Handle both wrapped and direct results
+        const resultsData = loadedResults.results || loadedResults
+        setResults(resultsData)
+      } else {
+        console.log("[v0] No test results found")
       }
-
-      if (testResults && testResults.results) {
-        setResults(testResults.results)
-      }
-    } catch (error) {
-      console.error("Error loading results:", error)
+    } catch (error: any) {
+      console.error("[v0] Error loading results:", error)
       toast({
         title: "Error",
         description: "No se pudieron cargar los resultados",
@@ -240,7 +211,7 @@ export default function EmotionalIntelligenceResults() {
           <CardContent className="text-center p-8">
             <Heart className="h-16 w-16 mx-auto mb-6 text-red-500" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">No se encontraron resultados</h2>
-            <p className="text-gray-600 mb-6">Parece que aún no has completado el test de Inteligencia Emocional.</p>
+            <p className="text-xl text-gray-600 mb-6">Parece que aún no has completado el test de Inteligencia Emocional.</p>
             <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red-500 hover:bg-red-600">
               Realizar Test
             </Button>

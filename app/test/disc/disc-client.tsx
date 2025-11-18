@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 import { useSession } from "@/components/session-wrapper"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,9 +10,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock, Hand, Smartphone } from "lucide-react"
+import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock, Hand, Smartphone } from 'lucide-react'
 import { Breadcrumbs, TestStructuredData } from "@/components/seo-optimized-content"
 import { TestNavigationFlow } from "@/components/test-navigation-flow"
+import { UnifiedTestSystem } from '@/lib/unified-test-system'
+import { toast } from "@/components/ui/use-toast"
 
 const breadcrumbItems = [
   { name: "Inicio", url: "/" },
@@ -285,7 +287,14 @@ export default function DISCTestClient() {
   }
 
   const submitTest = async () => {
-    if (!user) return
+    if (!user) {
+      toast({
+        title: 'Error de autenticación',
+        description: 'Debes iniciar sesión para guardar tus resultados',
+        variant: 'destructive'
+      })
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -304,19 +313,42 @@ export default function DISCTestClient() {
         touch_enabled: touchSupport,
       }
 
-      // Save to localStorage for demo
+      console.log('[v0] Saving DISC test results with unified system...')
+      
+      const result = await UnifiedTestSystem.saveTestResult({
+        userEmail: user.email!,
+        testType: 'DISC Assessment',
+        testResults: testResults,
+        durationMinutes: duration
+      })
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to save results')
+      }
+
+      console.log('[v0] DISC results saved successfully to database via unified system')
+      
+      // Mark test as completed
       const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
       if (!completedTests.includes("disc")) {
         completedTests.push("disc")
         localStorage.setItem("completed_tests", JSON.stringify(completedTests))
       }
 
-      localStorage.setItem("disc_results", JSON.stringify(testResults))
-      handleGestureUsed("Test results saved and submitted")
+      toast({
+        title: '¡Test completado!',
+        description: 'Tus resultados han sido guardados correctamente'
+      })
 
+      handleGestureUsed("Test results saved and submitted")
       router.push("/test/disc/results")
     } catch (error) {
-      console.error("Error submitting test:", error)
+      console.error("[v0] Error submitting test:", error)
+      toast({
+        title: 'Error al guardar resultados',
+        description: 'Hubo un problema guardando tus resultados. Por favor, contacta soporte.',
+        variant: 'destructive'
+      })
     } finally {
       setIsSubmitting(false)
     }

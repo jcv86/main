@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles, Loader2, Lightbulb, BookOpen } from 'lucide-react'
+import { ArrowLeft, Brain, Download, Share2, TrendingUp, Users, Target, Sparkles, Loader2, Lightbulb, BookOpen, Check, Calendar, ArrowRight } from 'lucide-react'
 import {
   RadarChart,
   PolarGrid,
@@ -29,6 +29,12 @@ import {
 } from "recharts"
 import { MultiTestInsights } from "@/components/multi-test-insights"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { useToast } from "@/hooks/use-toast"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Separator } from "@/components/ui/separator"
+import { loadTestResult } from '@/lib/test-storage'
+import { UnifiedTestSystem } from '@/lib/unified-test-system'
+
 
 interface DISCResult {
   d_score: number
@@ -86,6 +92,8 @@ export default function DISCResultsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get("demo") === "true"
+  const { toast } = useToast()
+
 
   const [discResult, setDiscResult] = useState<DISCResult | null>(null)
   const [aiInterpretation, setAiInterpretation] = useState<string>("")
@@ -98,6 +106,10 @@ export default function DISCResultsPage() {
 
   const [recommendedBooks, setRecommendedBooks] = useState<any[]>([])
   const [loadingBooks, setLoadingBooks] = useState(false)
+
+  const [userGoals, setUserGoals] = useState<any[]>([])
+  const [isLoadingGoals, setIsLoadingGoals] = useState(false)
+  const [isSavingGoal, setIsSavingGoal] = useState(false)
 
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -115,6 +127,13 @@ export default function DISCResultsPage() {
       loadRecommendedBooks()
     }
   }, [discResult])
+
+  useEffect(() => {
+    if (user?.email) {
+      loadUserGoals()
+    }
+  }, [user?.email])
+
 
   const loadResults = async () => {
     if (isDemoMode) {
@@ -139,72 +158,50 @@ export default function DISCResultsPage() {
     if (!user) return
 
     try {
-      // Load DISC results
-      const { data: discData, error: discError } = await supabase
-        .from("disc_results")
-        .select("*")
-        .eq("user_email", user.email)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single()
-
-      if (discError && discError.code !== "PGRST116") {
-        console.error("Error loading DISC results:", discError)
-      }
-
-      // Load AI interpretation
-      const { data: aiData, error: aiError } = await supabase
-        .from("ai_interpretations")
-        .select("*")
-        .eq("user_email", user.email)
-        .eq("test_name", "DISC Assessment")
-        .order("generated_at", { ascending: false })
-        .limit(1)
-        .single()
-
-      if (aiError && aiError.code !== "PGRST116") {
-        console.error("Error loading AI interpretation:", aiError)
-      }
-
-      // Load test results for additional AI interpretation
-      const { data: testData, error: testError } = await supabase
-        .from("test_results")
-        .select("*")
-        .eq("user_email", user.email)
-        .eq("test_name", "DISC Assessment")
-        .order("completed_at", { ascending: false })
-        .limit(1)
-        .single()
-
-      if (testError && testError.code !== "PGRST116") {
-        console.error("Error loading test results:", testError)
-      }
-
-      if (discData) {
-        setDiscResult(discData)
-        await loadHybridInsights(discData)
-      } else {
-        // Create demo data if no results found
+      console.log('[v0] Loading DISC results for user:', user.email)
+      
+      const result = await UnifiedTestSystem.loadTestResult(user.email!, 'DISC Assessment')
+      
+      if (result.success && result.data) {
+        console.log('[v0] DISC results loaded from database via unified system')
+        const scores = result.data.results
+        
         setDiscResult({
-          d_score: 75,
-          i_score: 65,
-          s_score: 45,
-          c_score: 85,
-          primary_type: "Compliance",
-          analysis: "Tu estilo principal es Compliance con puntuaciones: D=75%, I=65%, S=45%, C=85%",
-          recommendations: "Continúa desarrollando tus fortalezas naturales mientras trabajas en áreas de crecimiento.",
-          created_at: new Date().toISOString(),
+          d_score: scores.D || 0,
+          i_score: scores.I || 0,
+          s_score: scores.S || 0,
+          c_score: scores.C || 0,
+          primary_type: scores.primary_style || 'Compliance',
+          analysis: scores.analysis || `Tu estilo principal es ${scores.primary_style}`,
+          recommendations: scores.recommendations || 'Continúa desarrollando tus fortalezas',
+          created_at: result.data.completed_at || new Date().toISOString(),
+        })
+        
+        await loadHybridInsights({
+          d_score: scores.D || 0,
+          i_score: scores.I || 0,
+          s_score: scores.S || 0,
+          c_score: scores.C || 0,
+          primary_type: scores.primary_style || 'Compliance',
+          analysis: '',
+          recommendations: '',
+          created_at: result.data.completed_at || new Date().toISOString(),
+        })
+      } else {
+        console.log('[v0] No DISC results found:', result.error)
+        toast({
+          title: 'No hay resultados',
+          description: 'No se encontraron resultados del test DISC',
+          variant: 'destructive'
         })
       }
-
-      // Set AI interpretation from multiple sources
-      if (aiData?.interpretation) {
-        setAiInterpretation(aiData.interpretation)
-      } else if (testData?.results?.ai_interpretation) {
-        setAiInterpretation(testData.results.ai_interpretation)
-      }
     } catch (error) {
-      console.error("Error loading results:", error)
+      console.error("[v0] Error loading results:", error)
+      toast({
+        title: 'Error',
+        description: 'Hubo un problema cargando tus resultados',
+        variant: 'destructive'
+      })
     } finally {
       setLoading(false)
     }
@@ -290,6 +287,118 @@ export default function DISCResultsPage() {
       loadHybridInsights(discResult)
     }
   }
+
+  const loadUserGoals = async () => {
+    if (!user?.email) return
+    
+    setIsLoadingGoals(true)
+    try {
+      const response = await fetch(`/api/goals?userEmail=${encodeURIComponent(user.email)}`)
+      const data = await response.json()
+      
+      if (response.ok) {
+        setUserGoals(data.goals || [])
+        console.log('[v0] Loaded user goals:', data.goals?.length || 0)
+      } else {
+        console.error('[v0] Error loading goals:', data.error)
+      }
+    } catch (error) {
+      console.error('[v0] Failed to load goals:', error)
+    } finally {
+      setIsLoadingGoals(false)
+    }
+  }
+
+  const saveGoalToDatabase = async (goal: any) => {
+    if (!user?.email) {
+      toast({ title: 'Debes iniciar sesión para guardar metas', variant: 'destructive' })
+      return
+    }
+
+    setIsSavingGoal(true)
+    try {
+      const response = await fetch('/api/goals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail: user.email,
+          title: goal.goal,
+          description: goal.description || '',
+          timeframe: goal.timeframe,
+          priority: goal.priority || 'medium',
+          targetDate: goal.deadline || null,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        toast({ title: '¡Meta guardada!', description: 'Tu meta ha sido guardada en tu dashboard' })
+        await loadUserGoals()
+      } else {
+        toast({ title: 'Error al guardar meta', description: data.error, variant: 'destructive' })
+      }
+    } catch (error) {
+      console.error('[v0] Failed to save goal:', error)
+      toast({ title: 'Error', description: 'No se pudo guardar la meta', variant: 'destructive' })
+    } finally {
+      setIsSavingGoal(false)
+    }
+  }
+
+  const getPersonalizedGoals = (timeframe: 'short' | 'medium' | 'long') => {
+    const baseGoals = {
+      short: [
+        {
+          goal: 'Modular intensidad en reuniones',
+          description: 'Practicar pausa de 5 segundos antes de responder en situaciones tensas',
+          steps: [
+            'Identificar triggers de intensidad',
+            'Practicar técnica de respiración 4-7-8',
+            'Pedir feedback semanal al equipo'
+          ],
+          priority: 'high'
+        },
+        {
+          goal: 'Definir "siguiente paso mínimo"',
+          description: 'Establecer criterios de "suficientemente bueno" para avanzar',
+          steps: [
+            'Listar tareas críticas vs opcionales',
+            'Establecer timeboxing de 5 min para decisiones',
+            'Documentar criterios de aceptación'
+          ],
+          priority: 'high'
+        }
+      ],
+      medium: [
+        {
+          goal: 'Flexibilizar perfeccionismo',
+          description: 'Aprender a trabajar con 80% de calidad cuando es apropiado',
+          steps: [
+            'Identificar proyectos donde 80% es suficiente',
+            'Practicar delegación con feedback constructivo',
+            'Medir impacto de decisiones rápidas vs perfectas'
+          ],
+          priority: 'medium'
+        }
+      ],
+      long: [
+        {
+          goal: 'Aumentar conexión emocional con equipo',
+          description: 'Desarrollar inteligencia emocional y empatía en liderazgo',
+          steps: [
+            'Realizar check-ins emocionales semanales',
+            'Completar test de Inteligencia Emocional DTC',
+            'Buscar mentoría en liderazgo empático'
+          ],
+          priority: 'medium'
+        }
+      ]
+    }
+    
+    return baseGoals[timeframe] || []
+  }
+
 
   if (loading) {
     return (
@@ -454,7 +563,7 @@ export default function DISCResultsPage() {
         </Card>
 
         <Tabs defaultValue="resumen-ejecutivo" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7 gap-1">
+          <TabsList className="grid w-full grid-cols-8 gap-1">
             <TabsTrigger value="resumen-ejecutivo">
               <Sparkles className="h-4 w-4 mr-1" />
               Resumen Ejecutivo
@@ -470,6 +579,10 @@ export default function DISCResultsPage() {
             <TabsTrigger value="metas">
               <TrendingUp className="h-4 w-4 mr-1" />
               Metas DTC
+            </TabsTrigger>
+            <TabsTrigger value="siguientes-pasos">
+              <ArrowRight className="h-4 w-4 mr-1" />
+              Siguientes Pasos
             </TabsTrigger>
             <TabsTrigger value="overview">Análisis Detallado</TabsTrigger>
             <TabsTrigger value="cerebro-gpt">
@@ -744,7 +857,7 @@ export default function DISCResultsPage() {
                             ))}
                           </ul>
                         </div>
-                        <div className="bg-white p-4 rounded border-l-4 border-l-orange-500">
+                        <div className="bg-white p-4 rounded border-l-4 border-orange-500">
                           <strong className="text-orange-700">Áreas de desarrollo:</strong>
                           <ul className="mt-2 space-y-1 text-sm">
                             {styleInfo.challenges.map((challenge, idx) => (
@@ -854,76 +967,219 @@ export default function DISCResultsPage() {
                   Tus Metas DTC: Trayectoria de Crecimiento
                 </CardTitle>
                 <CardDescription>
-                  Define y sigue tus objetivos de desarrollo profesional
+                  Define y sigue tus objetivos de desarrollo profesional basados en tu perfil {discResult?.primary_type}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Metas de Corto Plazo (Próximos 3 Meses)</h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <Card className="border-l-4 border-l-blue-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Mejorar la gestión de la intensidad en reuniones</p>
-                          <Badge variant="secondary" className="text-xs">En Progreso</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
-                      <Card className="border-l-4 border-l-blue-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Delegar tareas complejas eficazmente</p>
-                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Media</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
-                      <Card className="border-l-4 border-l-blue-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Buscar feedback constructivo semanalmente</p>
-                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Media</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
-                    </div>
+              <CardContent className="space-y-6">
+                {isLoadingGoals ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                    Cargando tus metas...
                   </div>
+                ) : userGoals.length > 0 ? (
+                  <>
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Metas Activas ({userGoals.filter((g: any) => g.status === 'active').length})</h3>
+                      {userGoals
+                        .filter((g: any) => g.status === 'active')
+                        .map((goal: any) => (
+                          <Card key={goal.id} className="border-l-4 border-l-blue-500">
+                            <CardContent className="pt-6 space-y-2">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold">{goal.title}</h4>
+                                  {goal.description && (
+                                    <p className="text-sm text-muted-foreground mt-1">{goal.description}</p>
+                                  )}
+                                  <div className="flex items-center gap-4 mt-3 text-sm">
+                                    <Badge variant="outline">{goal.category}</Badge>
+                                    <Badge variant={goal.priority === 'high' ? 'destructive' : 'secondary'}>
+                                      {goal.priority === 'high' ? 'Alta' : goal.priority === 'medium' ? 'Media' : 'Baja'} prioridad
+                                    </Badge>
+                                    {goal.target_date && (
+                                      <span className="text-muted-foreground flex items-center gap-1">
+                                        <Calendar className="h-3 w-3" />
+                                        {new Date(goal.target_date).toLocaleDateString('es-CL')}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <div className="text-2xl font-bold text-blue-600">{goal.progress}%</div>
+                                  <div className="text-xs text-muted-foreground">Progreso</div>
+                                </div>
+                              </div>
+                              <div className="w-full bg-secondary rounded-full h-2 mt-3">
+                                <div
+                                  className="bg-blue-600 h-2 rounded-full transition-all"
+                                  style={{ width: `${goal.progress}%` }}
+                                />
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                    </div>
 
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Metas de Mediano Plazo (3-9 Meses)</h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <Card className="border-l-4 border-l-green-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Desarrollar un estilo de liderazgo más empático</p>
-                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
-                      <Card className="border-l-4 border-l-green-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Integrar perfeccionismo con pragmatismo</p>
-                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Media</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
+                    <Separator />
 
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Metas de Largo Plazo (9-18 Meses)</h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <Card className="border-l-4 border-l-purple-400">
-                        <CardContent className="p-4 space-y-2">
-                          <p className="text-sm font-semibold">Asumir roles de mayor influencia estratégica</p>
-                          <Badge variant="outline" className="text-xs">Pendiente</Badge>
-                          <div className="text-xs text-gray-500">Prioridad: Alta</div>
-                          <Button variant="outline" size="sm" className="mt-2">Ver Detalles</Button>
-                        </CardContent>
-                      </Card>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-4">Metas Completadas ({userGoals.filter((g: any) => g.status === 'completed').length})</h3>
+                      <div className="space-y-2">
+                        {userGoals
+                          .filter((g: any) => g.status === 'completed')
+                          .map((goal: any) => (
+                            <div key={goal.id} className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+                              <Check className="h-5 w-5 text-green-600" />
+                              <div className="flex-1">
+                                <p className="font-medium text-green-900 dark:text-green-100">{goal.title}</p>
+                                <p className="text-sm text-green-700 dark:text-green-300">
+                                  Completada el {new Date(goal.updated_at).toLocaleDateString('es-CL')}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
                     </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground mb-4">Aún no tienes metas guardadas</p>
+                    <p className="text-sm text-muted-foreground">Guarda las metas recomendadas abajo para empezar</p>
                   </div>
+                )}
+
+                <Separator />
+
+                <div>
+                  <h3 className="font-semibold text-lg mb-4">Metas Recomendadas para tu Perfil</h3>
+                  <Accordion type="single" collapsible className="space-y-4">
+                    <AccordionItem value="short-term">
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-3">
+                          <Calendar className="h-5 w-5 text-green-600" />
+                          <span>Corto Plazo (1-3 meses)</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-4">
+                        {getPersonalizedGoals('short').map((goal: any, index: number) => (
+                          <Card key={index} className="border-l-4 border-l-green-500">
+                            <CardContent className="pt-6 space-y-3">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold">{goal.goal}</h4>
+                                  {goal.description && (
+                                    <p className="text-sm text-muted-foreground mt-1">{goal.description}</p>
+                                  )}
+                                  {goal.steps && goal.steps.length > 0 && (
+                                    <ul className="mt-3 space-y-1">
+                                      {goal.steps.map((step: string, i: number) => (
+                                        <li key={i} className="text-sm flex items-start gap-2">
+                                          <ArrowRight className="h-4 w-4 mt-0.5 text-green-600 flex-shrink-0" />
+                                          <span>{step}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveGoalToDatabase({ ...goal, timeframe: 'short' })}
+                                  disabled={isSavingGoal}
+                                >
+                                  {isSavingGoal ? 'Guardando...' : 'Guardar Meta'}
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="medium-term">
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-3">
+                          <TrendingUp className="h-5 w-5 text-blue-600" />
+                          <span>Mediano Plazo (3-6 meses)</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-4">
+                        {getPersonalizedGoals('medium').map((goal: any, index: number) => (
+                          <Card key={index} className="border-l-4 border-l-blue-500">
+                            <CardContent className="pt-6 space-y-3">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold">{goal.goal}</h4>
+                                  {goal.description && (
+                                    <p className="text-sm text-muted-foreground mt-1">{goal.description}</p>
+                                  )}
+                                  {goal.steps && goal.steps.length > 0 && (
+                                    <ul className="mt-3 space-y-1">
+                                      {goal.steps.map((step: string, i: number) => (
+                                        <li key={i} className="text-sm flex items-start gap-2">
+                                          <ArrowRight className="h-4 w-4 mt-0.5 text-blue-600 flex-shrink-0" />
+                                          <span>{step}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveGoalToDatabase({ ...goal, timeframe: 'medium' })}
+                                  disabled={isSavingGoal}
+                                >
+                                  {isSavingGoal ? 'Guardando...' : 'Guardar Meta'}
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="long-term">
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-3">
+                          <Target className="h-5 w-5 text-purple-600" />
+                          <span>Largo Plazo (6-12 meses)</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-4">
+                        {getPersonalizedGoals('long').map((goal: any, index: number) => (
+                          <Card key={index} className="border-l-4 border-l-purple-500">
+                            <CardContent className="pt-6 space-y-3">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold">{goal.goal}</h4>
+                                  {goal.description && (
+                                    <p className="text-sm text-muted-foreground mt-1">{goal.description}</p>
+                                  )}
+                                  {goal.steps && goal.steps.length > 0 && (
+                                    <ul className="mt-3 space-y-1">
+                                      {goal.steps.map((step: string, i: number) => (
+                                        <li key={i} className="text-sm flex items-start gap-2">
+                                          <ArrowRight className="h-4 w-4 mt-0.5 text-purple-600 flex-shrink-0" />
+                                          <span>{step}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveGoalToDatabase({ ...goal, timeframe: 'long' })}
+                                  disabled={isSavingGoal}
+                                >
+                                  {isSavingGoal ? 'Guardando...' : 'Guardar Meta'}
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
               </CardContent>
             </Card>
@@ -1196,6 +1452,246 @@ export default function DISCResultsPage() {
                     </Button>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="siguientes-pasos" className="space-y-6">
+            <Card className="border-l-4 border-l-indigo-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <ArrowRight className="h-6 w-6 text-indigo-600" />
+                  Siguientes Pasos en Tu Journey DTC
+                </CardTitle>
+                <CardDescription>
+                  Continúa tu desarrollo profesional explorando otros aspectos de tu perfil
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">🎯 Tu Ruta Personalizada de Desarrollo</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Basado en tu perfil DISC {discResult.primary_type}, estos son los tests recomendados para completar tu análisis profesional.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
+                  {/* Inteligencia Emocional - Recomendado #1 */}
+                  <Card className="border-2 border-red-300 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 text-xs font-bold rounded-bl">
+                      RECOMENDADO
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                          ❤️
+                        </div>
+                        Test de Inteligencia Emocional
+                      </CardTitle>
+                      <CardDescription>15 min • Nivel: Fundamental</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Por qué después de DISC:</strong> Tu perfil {discResult.primary_type} muestra {discResult.c_score}% en Cumplimiento y {discResult.d_score}% en Dominancia. 
+                        La inteligencia emocional te ayudará a {discResult.c_score > 70 ? 'conectar mejor emocionalmente con equipos mientras mantienes tu rigor analítico' : 'balancear tu enfoque directo con empatía'}.
+                      </p>
+                      <div className="bg-red-50 p-3 rounded">
+                        <p className="text-sm font-semibold text-red-800 mb-2">Qué aprenderás:</p>
+                        <ul className="space-y-1 text-sm text-red-700">
+                          <li>• Autoconciencia emocional y autorregulación</li>
+                          <li>• Empatía y habilidades sociales</li>
+                          <li>• Gestión de emociones en situaciones de presión</li>
+                          <li>• Conexión emocional con equipos</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        className="w-full bg-red-500 hover:bg-red-600" 
+                        onClick={() => router.push('/test/emotional-intelligence')}
+                      >
+                        Hacer Test de Inteligencia Emocional
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* MBTI */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          🧠
+                        </div>
+                        Test MBTI - Personalidad
+                      </CardTitle>
+                      <CardDescription>20 min • Nivel: Fundamental</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Complementa tu DISC:</strong> Mientras DISC mide comportamiento en el trabajo, MBTI revela tu estilo cognitivo y preferencias de personalidad.
+                      </p>
+                      <div className="bg-blue-50 p-3 rounded">
+                        <p className="text-sm font-semibold text-blue-800 mb-2">Qué aprenderás:</p>
+                        <ul className="space-y-1 text-sm text-blue-700">
+                          <li>• Cómo procesas información (Sensing vs Intuition)</li>
+                          <li>• Tu estilo de toma de decisiones (Thinking vs Feeling)</li>
+                          <li>• Energía social (Introversión vs Extroversión)</li>
+                          <li>• Enfoque de vida (Judging vs Perceiving)</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        className="w-full" 
+                        onClick={() => router.push('/test/mbti')}
+                      >
+                        Hacer Test MBTI
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Big Five */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                          ⭐
+                        </div>
+                        Test Big Five - 5 Dimensiones de Personalidad
+                      </CardTitle>
+                      <CardDescription>15 min • Nivel: Intermedio • Requiere: DISC + Int. Emocional</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Profundiza tu autoconocimiento:</strong> Big Five es el modelo más científicamente validado de personalidad, usado en investigación psicológica global.
+                      </p>
+                      <div className="bg-purple-50 p-3 rounded">
+                        <p className="text-sm font-semibold text-purple-800 mb-2">Qué aprenderás:</p>
+                        <ul className="space-y-1 text-sm text-purple-700">
+                          <li>• Apertura a experiencias nuevas</li>
+                          <li>• Responsabilidad y organización</li>
+                          <li>• Extroversión y energía social</li>
+                          <li>• Amabilidad y cooperación</li>
+                          <li>• Neuroticismo y estabilidad emocional</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        className="w-full" 
+                        onClick={() => router.push('/test/big-five')}
+                      >
+                        Hacer Test Big Five
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* RIASEC */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                          💼
+                        </div>
+                        Test RIASEC - Intereses Vocacionales
+                      </CardTitle>
+                      <CardDescription>15 min • Nivel: Intermedio • Requiere: MBTI</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Descubre tu vocación:</strong> RIASEC identifica qué tipos de trabajos y ambientes laborales se alinean con tus intereses naturales.
+                      </p>
+                      <div className="bg-green-50 p-3 rounded">
+                        <p className="text-sm font-semibold text-green-800 mb-2">Qué aprenderás:</p>
+                        <ul className="space-y-1 text-sm text-green-700">
+                          <li>• Realista: trabajo con objetos, herramientas, maquinas</li>
+                          <li>• Investigativo: análisis, investigación, ciencia</li>
+                          <li>• Artístico: creatividad, expresión, diseño</li>
+                          <li>• Social: ayudar, enseñar, cuidar personas</li>
+                          <li>• Emprendedor: liderar, persuadir, gestionar</li>
+                          <li>• Convencional: organizar, administrar, datos</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        className="w-full" 
+                        onClick={() => router.push('/test/riasec')}
+                      >
+                        Hacer Test RIASEC
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Soft Skills */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                          💡
+                        </div>
+                        Test de Soft Skills
+                      </CardTitle>
+                      <CardDescription>20 min • Nivel: Avanzado • Requiere: Big Five + RIASEC</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Evalúa competencias clave:</strong> Mide 10+ habilidades blandas críticas para el éxito profesional en el mercado laboral chileno.
+                      </p>
+                      <div className="bg-yellow-50 p-3 rounded">
+                        <p className="text-sm font-semibold text-yellow-800 mb-2">Qué aprenderás:</p>
+                        <ul className="space-y-1 text-sm text-yellow-700">
+                          <li>• Comunicación efectiva y asertiva</li>
+                          <li>• Trabajo en equipo y colaboración</li>
+                          <li>• Resolución de problemas complejos</li>
+                          <li>• Adaptabilidad y aprendizaje continuo</li>
+                          <li>• Pensamiento crítico y creatividad</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        className="w-full" 
+                        onClick={() => router.push('/test/soft-skills')}
+                      >
+                        Hacer Test de Soft Skills
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">🚀 Ecosistema Completo DTC</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Completar los 6 tests te da acceso a análisis multi-dimensional, correlaciones entre perfiles, 
+                    y recomendaciones hiper-personalizadas de la Biblioteca DTC con búsqueda semántica en 120+ libros.
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Check className="h-4 w-4" />
+                      <span>✅ DISC</span>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <div className="h-4 w-4 border-2 border-white rounded" />
+                      <span>Int. Emocional</span>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <div className="h-4 w-4 border-2 border-white rounded" />
+                      <span>MBTI</span>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <div className="h-4 w-4 border-2 border-white rounded" />
+                      <span>Big Five</span>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <div className="h-4 w-4 border-2 border-white rounded" />
+                      <span>RIASEC</span>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <div className="h-4 w-4 border-2 border-white rounded" />
+                      <span>Soft Skills</span>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

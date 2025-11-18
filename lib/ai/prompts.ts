@@ -25,7 +25,7 @@ export async function getPromptForUser(
     })
 
     if (!response.ok) {
-      console.error("[v0] Failed to fetch prompt variant, using fallback")
+      console.log("[v0] Using fallback prompt (A/B testing not configured)")
       return getFallbackPrompt(coachType, conversationCategory)
     }
 
@@ -36,7 +36,7 @@ export async function getPromptForUser(
       version: data.version,
     }
   } catch (error) {
-    console.error("[v0] Error fetching prompt variant:", error)
+    console.log("[v0] Using fallback prompt:", error instanceof Error ? error.message : "Unknown error")
     return getFallbackPrompt(coachType, conversationCategory)
   }
 }

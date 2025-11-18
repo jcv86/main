@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { LandingPageOptimized } from "@/components/landing-page-optimized"
 import { FAQSection } from "@/components/seo-optimized-content"
 import { LLMOOptimizedFooter } from "@/components/llmo-optimized-footer"
+import { AuthRedirect } from "@/components/auth-redirect"
 
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Plataforma #1 de Desarrollo Profesional con IA en Chile",
@@ -82,6 +83,8 @@ const faqs = [
 export default function Home() {
   return (
     <>
+      <AuthRedirect />
+      
       {/* Structured Data for Organization */}
       <script
         type="application/ld+json"
