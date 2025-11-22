@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.1.3",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@vercel/analytics": "latest",
     "@vercel/blob": "latest",
     "@vercel/speed-insights": "latest",
     "ai": "latest",

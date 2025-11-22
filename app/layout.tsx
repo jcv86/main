@@ -6,6 +6,7 @@ import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
 import { AdminNavbar } from "@/components/admin-navbar"
 import { FloatingCoachWidget } from "@/components/floating-coach-widget"
+import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -125,6 +126,7 @@ export default function RootLayout({
           <FloatingCoachWidget />
         </SessionWrapper>
 
+        <Analytics />
         <SpeedInsights />
 
         {/* JSON-LD Structured Data */}

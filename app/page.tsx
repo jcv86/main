@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
-import { LandingPageOptimized } from "@/components/landing-page-optimized"
-import { FAQSection } from "@/components/seo-optimized-content"
-import { LLMOOptimizedFooter } from "@/components/llmo-optimized-footer"
-import { AuthRedirect } from "@/components/auth-redirect"
+import LandingPageOptimized from "@/components/landing-page-optimized"
+import FAQSection from "@/components/seo-optimized-content"
+import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 
 export const metadata: Metadata = {
-  title: "Despega Tu Carrera - Plataforma #1 de Desarrollo Profesional con IA en Chile",
+  title: "Despega Tu Carrera - Tu plataforma de desarrollo profesional",
   description:
-    "Descubre tu potencial profesional con tests psicométricos científicos (Despega Cerebral, Mapa de Personalidad, 5 Dimensiones, Brújula Vocacional), accede a 120+ libros de desarrollo y recibe coaching personalizado con IA. Más de 10,000 profesionales confían en nosotros.",
+    "Descubre tus fortalezas, desarrolla tus habilidades y alcanza tus objetivos profesionales con nuestra plataforma integral de desarrollo de carrera.",
   keywords: [
     "plataforma desarrollo profesional Chile",
     "tests psicométricos online",
@@ -81,10 +80,10 @@ const faqs = [
 ]
 
 export default function Home() {
+  // Landing page loads instantly for everyone
+
   return (
     <>
-      <AuthRedirect />
-      
       {/* Structured Data for Organization */}
       <script
         type="application/ld+json"

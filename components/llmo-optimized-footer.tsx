@@ -303,3 +303,5 @@ export function LLMOOptimizedFooter() {
     </footer>
   )
 }
+
+export default LLMOOptimizedFooter

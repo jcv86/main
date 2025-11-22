@@ -165,3 +165,5 @@ export function TestStructuredData({ name, description, duration, questions }: T
     />
   )
 }
+
+export default FAQSection
