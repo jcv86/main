@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, ArrowRight, Heart, CheckCircle, Clock } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import TestIntroScreen from "@/components/test-intro-screen"
+import TestCompletionScreen from "@/components/test-completion-screen"
 
 interface Question {
   id: number
@@ -248,11 +250,14 @@ const emotionalIntelligenceQuestions: Question[] = [
 
 export default function EmotionalIntelligenceTest() {
   const [mounted, setMounted] = useState(false)
+  const [showIntro, setShowIntro] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionResults, setCompletionResults] = useState<any>(null)
 
   const router = useRouter()
   const { user, isLoading } = useSession()
@@ -338,7 +343,12 @@ export default function EmotionalIntelligenceTest() {
         throw new Error("No user email found")
       }
 
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Emotional Intelligence", results, duration)
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Inteligencia Emocional Despega",
+        results,
+        duration,
+      )
 
       if (!saveResult.success || !saveResult.savedToDatabase) {
         console.error("[v0] Failed to save to database:", saveResult.error)
@@ -353,13 +363,10 @@ export default function EmotionalIntelligenceTest() {
       }
 
       console.log("[v0] Results saved successfully to database")
-      toast({
-        title: "Test Completado",
-        description: "Tus resultados han sido guardados correctamente.",
-        duration: 3000,
-      })
 
-      router.push("/test/emotional-intelligence/results")
+      setCompletionResults(results)
+      setShowCompletion(true)
+      setIsSubmitting(false)
     } catch (error: any) {
       console.error("[v0] Error submitting test:", error)
       toast({
@@ -370,6 +377,50 @@ export default function EmotionalIntelligenceTest() {
       })
       setIsSubmitting(false)
     }
+  }
+
+  if (showIntro) {
+    return (
+      <TestIntroScreen
+        testName="Inteligencia Emocional Despega"
+        testDescription="Mide tu capacidad para reconocer, comprender y gestionar emociones propias y ajenas."
+        whatItMeasures={[
+          "Autoconciencia emocional",
+          "Autorregulación y control de impulsos",
+          "Motivación intrínseca",
+          "Empatía y comprensión social",
+          "Habilidades sociales y gestión de relaciones",
+        ]}
+        whyRelevant="La inteligencia emocional es el predictor #1 de éxito profesional y personal. Desarrollarla te permite tomar mejores decisiones, construir relaciones más fuertes y liderar con efectividad."
+        estimatedTime={5}
+        questionCount={20}
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionResults) {
+    const getInsight = (score: number) => {
+      if (score >= 80)
+        return "Tienes una inteligencia emocional excepcional. Eres capaz de navegar situaciones complejas con empatía y autorregulación."
+      if (score >= 60)
+        return "Tienes buenas habilidades emocionales. Con práctica enfocada, puedes alcanzar niveles excepcionales."
+      if (score >= 40)
+        return "Estás desarrollando tus habilidades emocionales. Hay un gran potencial de crecimiento con entrenamiento estructurado."
+      return "Tienes una oportunidad única de transformar tu vida desarrollando tu inteligencia emocional de forma sistemática."
+    }
+
+    return (
+      <TestCompletionScreen
+        testName="Inteligencia Emocional Despega"
+        score={completionResults.overall_score}
+        level={completionResults.level}
+        insight={getInsight(completionResults.overall_score)}
+        onViewFullReport={() => router.push("/test/emotional-intelligence/results")}
+        onTalkToCoach={() => router.push("/coach")}
+      />
+    )
   }
 
   if (!mounted || isLoading) {
@@ -411,10 +462,10 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Emotional Intelligence Assessment</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Inteligencia Emocional Despega</h1>
               <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
                 <Heart className="h-4 w-4" />
-                <span>Understanding and managing emotions</span>
+                <span>Reconocer, comprender y gestionar emociones</span>
               </div>
             </div>
             <Badge variant="secondary">

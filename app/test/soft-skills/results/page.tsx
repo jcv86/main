@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -20,6 +21,7 @@ import {
   ArrowRight,
   BarChart3,
   PieChart,
+  ArrowLeft,
 } from "lucide-react"
 import {
   BarChart,
@@ -38,7 +40,9 @@ import {
 } from "recharts"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
-import { supabase } from "@/lib/supabase"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useSession } from "@/components/session-wrapper"
+import { useToast } from "@/hooks/use-toast"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -78,58 +82,48 @@ export default function SoftSkillsResults() {
   const [openResponses, setOpenResponses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
+  const { session } = useSession()
+  const { toast } = useToast()
+  const router = useRouter()
+  const user = session?.user
 
   useEffect(() => {
     loadResults()
-  }, [])
+  }, [user])
 
   const loadResults = async () => {
     try {
       setLoading(true)
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        console.error("No user found")
+      const email = user?.email
+      if (!email) {
+        toast({
+          title: "No autenticado",
+          description: "Debes iniciar sesión para ver tus resultados.",
+          variant: "destructive",
+        })
         setLoading(false)
         return
       }
 
-      // Fetch test results from database
-      const { data: results, error } = await supabase
-        .from("test_results")
-        .select("*")
-        .eq("user_email", user.email)
-        .eq("test_type", "soft-skills")
-        .order("completed_at", { ascending: false })
-        .limit(1)
-        .single()
+      const result = await UnifiedTestSystem.loadTestResult(email, "Competencias Blandas Despega")
 
-      if (error) {
-        console.error("Error loading results:", error)
-        setLoading(false)
-        return
-      }
-
-      if (results) {
-        setTestResult(results)
-      }
-
-      // Fetch open responses if available
-      const { data: responses } = await supabase
-        .from("test_responses")
-        .select("*")
-        .eq("user_email", user.email)
-        .eq("test_type", "soft-skills")
-        .order("created_at", { ascending: false })
-
-      if (responses) {
-        setOpenResponses(responses)
+      if (result.success && result.data) {
+        setTestResult(result.data)
+      } else {
+        toast({
+          title: "No se encontraron resultados",
+          description: "No tienes resultados guardados para este test.",
+          variant: "destructive",
+        })
       }
     } catch (error) {
-      console.error("Error loading soft skills results:", error)
+      console.error("[v0] Error loading soft skills results:", error)
+      toast({
+        title: "Error al cargar resultados",
+        description: "Hubo un problema cargando tus resultados.",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
@@ -152,7 +146,7 @@ export default function SoftSkillsResults() {
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Habilidades Blandas</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Competencias Blandas Despega</h1>
             <p className="text-xl text-gray-600">No se encontraron resultados para esta evaluación.</p>
           </div>
         </div>
@@ -201,20 +195,25 @@ export default function SoftSkillsResults() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-8">
+      <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Habilidades Blandas</h1>
-          <p className="text-xl text-gray-600">Análisis completo de tus competencias profesionales</p>
-          <div className="flex items-center justify-center gap-4 mt-4">
-            <Badge variant="secondary" className="text-sm">
-              Evaluación completada: {new Date(testResult.completed_at).toLocaleDateString()}
-            </Badge>
-            <Badge variant="outline" className="text-sm">
-              {Object.keys(categoryScores).length} competencias evaluadas
-            </Badge>
-          </div>
+        <div className="flex items-center justify-between mb-8">
+          <Button variant="outline" onClick={() => router.push("/test")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver a Tests
+          </Button>
+          <Badge variant="secondary" className="text-sm">
+            Competencias Blandas Despega
+          </Badge>
+        </div>
+
+        {/* Title */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Resultados: Competencias Blandas Despega</h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Tu perfil completo de competencias interpersonales y profesionales
+          </p>
         </div>
 
         {/* Overall Score Card */}

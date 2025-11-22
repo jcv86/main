@@ -24,6 +24,7 @@ import {
   PieChart,
   Activity,
   Zap,
+  ArrowLeft,
 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
@@ -151,50 +152,45 @@ const getRecommendations = (competencyScores: any) => {
 export default function EmotionalIntelligenceResults() {
   const router = useRouter()
   const [results, setResults] = useState<TestResults | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const { user } = useSession()
 
   useEffect(() => {
+    const loadResults = async () => {
+      if (!user?.email) return
+
+      try {
+        setIsLoading(true)
+        console.log("[v0] Loading EI results...")
+
+        const testResult = await UnifiedTestSystem.loadTestResult(user.email, "Inteligencia Emocional Despega")
+
+        if (testResult.success && testResult.data) {
+          console.log("[v0] Found results:", testResult.data)
+          setResults(testResult.data.results)
+        } else {
+          console.log("[v0] No test results found:", testResult.error)
+        }
+      } catch (error: any) {
+        console.error("[v0] Error loading results:", error)
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los resultados",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadResults()
   }, [user])
-
-  const loadResults = async () => {
-    try {
-      setLoading(true)
-
-      console.log("[v0] Loading EI test results from database...")
-
-      if (!user?.email) {
-        console.log("[v0] No user email available")
-        setLoading(false)
-        return
-      }
-
-      const result = await UnifiedTestSystem.loadTestResult(user.email, "Emotional Intelligence")
-
-      if (result.success && result.data) {
-        console.log("[v0] Found results:", result.data)
-        setResults(result.data.results)
-      } else {
-        console.log("[v0] No test results found:", result.error)
-      }
-    } catch (error: any) {
-      console.error("[v0] Error loading results:", error)
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar los resultados",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: "Mis Resultados de Inteligencia Emocional",
-        text: `He completado el test de Inteligencia Emocional con una puntuación de ${results?.overall_score}%`,
+        title: "Mis Resultados de Inteligencia Emocional Despega",
+        text: `He completado el test de Inteligencia Emocional Despega con una puntuación de ${results?.overall_score}%`,
         url: window.location.href,
       })
     } else {
@@ -213,7 +209,7 @@ export default function EmotionalIntelligenceResults() {
     })
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
         <div className="text-center">
@@ -232,7 +228,7 @@ export default function EmotionalIntelligenceResults() {
             <Heart className="h-16 w-16 mx-auto mb-6 text-red-500" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">No se encontraron resultados</h2>
             <p className="text-xl text-gray-600 mb-6">
-              Parece que aún no has completado el test de Inteligencia Emocional.
+              Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
             <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red-500 hover:bg-red-600">
               Realizar Test
@@ -247,19 +243,18 @@ export default function EmotionalIntelligenceResults() {
   const recommendations = getRecommendations(results.competency_scores)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="p-6 bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg">
-              <Heart className="h-16 w-16 text-white" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Resultados de Inteligencia Emocional</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Tu perfil emocional completo con análisis detallado y recomendaciones personalizadas
-          </p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Button variant="outline" onClick={() => router.push("/test")} className="mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Volver a Tests
+        </Button>
+
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            Inteligencia Emocional Despega
+          </h1>
+          <p className="text-gray-600">Tus resultados del test de Inteligencia Emocional</p>
         </div>
 
         {/* Overall Score */}

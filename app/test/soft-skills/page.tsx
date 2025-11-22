@@ -2,17 +2,19 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Star, CheckCircle, Clock, MessageSquare } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/hooks/use-toast"
 import { useSession } from "@/components/session-wrapper"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
-import { useToast } from "@/hooks/use-toast"
+import TestIntroScreen from "@/components/test-intro-screen"
+import TestCompletionScreen from "@/components/test-completion-screen"
+import { ArrowLeft, ArrowRight, CheckCircle, Clock, MessageSquare, Star } from "lucide-react"
 
 interface Question {
   id: number
@@ -255,6 +257,9 @@ const likertOptions = [
 ]
 
 export default function SoftSkillsTest() {
+  const [showIntro, setShowIntro] = useState(true)
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionData, setCompletionData] = useState<any>(null)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number | string>>({})
   const [startTime, setStartTime] = useState<Date>(new Date())
@@ -341,7 +346,7 @@ export default function SoftSkillsTest() {
   const submitTest = async () => {
     if (Object.keys(answers).length < softSkillsQuestions.length) {
       toast({
-        title: "Incomplete Test",
+        title: "Test Incompleto",
         description: "Por favor responde todas las preguntas antes de continuar.",
         variant: "destructive",
       })
@@ -350,7 +355,7 @@ export default function SoftSkillsTest() {
 
     if (!user?.email) {
       toast({
-        title: "Authentication Required",
+        title: "Autenticación Requerida",
         description: "Debes estar autenticado para guardar los resultados.",
         variant: "destructive",
       })
@@ -376,22 +381,35 @@ export default function SoftSkillsTest() {
 
     try {
       console.log("[v0] Submitting Soft Skills test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Competencias Despega", results, duration)
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Competencias Blandas Despega",
+        results,
+        duration,
+      )
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
       }
 
       console.log("[v0] Soft Skills test results saved successfully to database")
-      toast({
-        title: "Test Completed!",
-        description: "Your Soft Skills results have been saved successfully.",
+
+      const topSkill = Object.entries(skillScores).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+      setCompletionData({
+        overallScore,
+        topSkill: topSkill.replace(/_/g, " "),
+        skillCount: Object.keys(skillScores).length,
       })
-      router.push("/test/soft-skills/results")
+      setShowCompletion(true)
+
+      toast({
+        title: "Test Completado",
+        description: "Tus resultados han sido guardados exitosamente.",
+      })
     } catch (error) {
       console.error("[v0] Error submitting Soft Skills test:", error)
       toast({
-        title: "Error saving results",
+        title: "Error al guardar resultados",
         description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
         variant: "destructive",
       })
@@ -403,21 +421,48 @@ export default function SoftSkillsTest() {
   if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Soft Skills assessment...</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     )
   }
 
   if (!user) {
+    return null
+  }
+
+  if (showIntro) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
-        </div>
-      </div>
+      <TestIntroScreen
+        testName="Competencias Blandas Despega"
+        description="Evalúa tus habilidades interpersonales y profesionales clave para el éxito en cualquier entorno."
+        whatItMeasures={[
+          "Comunicación efectiva y escucha activa",
+          "Liderazgo y capacidad de motivar equipos",
+          "Trabajo en equipo y colaboración",
+          "Resolución de problemas complejos",
+          "Adaptabilidad al cambio",
+          "Gestión del tiempo y prioridades",
+          "Inteligencia emocional",
+          "Creatividad e innovación",
+        ]}
+        whyRelevant="Las competencias blandas son el factor diferenciador en tu desarrollo profesional y personal, determinando tu capacidad de liderar, colaborar y crear impacto real en cualquier contexto."
+        duration="20-25 minutos"
+        questionCount={30}
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionData) {
+    return (
+      <TestCompletionScreen
+        testName="Competencias Blandas Despega"
+        summary={`Has completado el test evaluando ${completionData.skillCount} competencias clave para tu desarrollo integral.`}
+        highlightedInsight={`Tu competencia más desarrollada es ${completionData.topSkill}, con una puntuación de ${completionData.overallScore}%.`}
+        onViewFullReport={() => router.push("/test/soft-skills/results")}
+        onTalkToCoach={() => router.push("/coach?context=soft-skills")}
+      />
     )
   }
 
@@ -433,11 +478,11 @@ export default function SoftSkillsTest() {
         <div className="flex items-center justify-between mb-8">
           <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Tests
+            Volver a Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Star className="h-4 w-4 mr-1" />
-            Soft Skills Assessment
+            Competencias Blandas Despega
           </Badge>
         </div>
 
@@ -446,14 +491,14 @@ export default function SoftSkillsTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Soft Skills Assessment</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Competencias Blandas Despega</h2>
                 <p className="text-gray-600">
-                  Question {currentQuestion + 1} of {softSkillsQuestions.length}
+                  Pregunta {currentQuestion + 1} de {softSkillsQuestions.length}
                 </p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Clock className="h-4 w-4" />
-                <span>~20 minutes</span>
+                <span>~20 minutos</span>
               </div>
             </div>
             <Progress value={progress} className="h-2" />
@@ -473,22 +518,22 @@ export default function SoftSkillsTest() {
                   {question.type === "open_ended" ? (
                     <>
                       <MessageSquare className="h-3 w-3 mr-1" />
-                      Open Response
+                      Respuesta Abierta
                     </>
                   ) : question.type === "scenario" ? (
-                    "Scenario"
+                    "Escenario"
                   ) : (
-                    "Rating Scale"
+                    "Escala de Calificación"
                   )}
                 </Badge>
               </div>
             </div>
             <CardDescription>
               {question.type === "open_ended"
-                ? "Provide a detailed response describing your experience (minimum 50 characters)"
+                ? "Proporciona una respuesta detallada describiendo tu experiencia (mínimo 50 caracteres)"
                 : question.type === "scenario"
-                  ? "Choose the approach that best matches your typical response"
-                  : "Rate how often this describes your behavior"}
+                  ? "Elige la respuesta que mejor se ajuste a tu respuesta típica"
+                  : "Evalúa cuánto te describen este comportamiento"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -531,17 +576,17 @@ export default function SoftSkillsTest() {
             {question.type === "open_ended" && (
               <div className="space-y-4">
                 <Textarea
-                  placeholder="Describe your experience in detail..."
+                  placeholder="Describe tu experiencia en detalle..."
                   value={(currentAnswer as string) || ""}
                   onChange={(e) => handleTextAnswer(question.id, e.target.value)}
                   className="min-h-[120px] resize-none"
                 />
                 <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>{((currentAnswer as string) || "").length} characters (minimum 50 required)</span>
+                  <span>{((currentAnswer as string) || "").length} caracteres (mínimo 50 requeridos)</span>
                   {((currentAnswer as string) || "").length >= 50 && (
                     <Badge variant="secondary" className="bg-green-100 text-green-700">
                       <CheckCircle className="h-3 w-3 mr-1" />
-                      Complete
+                      Completo
                     </Badge>
                   )}
                 </div>
@@ -558,7 +603,7 @@ export default function SoftSkillsTest() {
             disabled={currentQuestion === 0}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Previous
+            Anterior
           </Button>
 
           {currentQuestion === softSkillsQuestions.length - 1 ? (
@@ -570,12 +615,12 @@ export default function SoftSkillsTest() {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Processing...
+                  Procesando...
                 </>
               ) : (
                 <>
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Complete Test
+                  Completar Test
                 </>
               )}
             </Button>
@@ -585,7 +630,7 @@ export default function SoftSkillsTest() {
               disabled={!canProceed}
               className="bg-gray-900 hover:bg-gray-800"
             >
-              Next
+              Siguiente
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           )}
@@ -608,23 +653,23 @@ export default function SoftSkillsTest() {
             ))}
           </div>
           <p className="text-sm text-gray-600 mt-2">
-            {Object.keys(answers).length} of {softSkillsQuestions.length} questions answered
+            {Object.keys(answers).length} de {softSkillsQuestions.length} preguntas respondidas
           </p>
         </div>
 
         {/* Skills Info */}
         <Card className="mt-8">
           <CardContent className="pt-6">
-            <h3 className="font-semibold mb-4">Skills Being Assessed:</h3>
+            <h3 className="font-semibold mb-4">Competencias Evaluadas:</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
-              <div className="p-2 bg-blue-50 rounded text-blue-900">Communication</div>
-              <div className="p-2 bg-purple-50 rounded text-purple-900">Leadership</div>
-              <div className="p-2 bg-green-50 rounded text-green-900">Teamwork</div>
-              <div className="p-2 bg-orange-50 rounded text-orange-900">Problem Solving</div>
-              <div className="p-2 bg-pink-50 rounded text-pink-900">Adaptability</div>
-              <div className="p-2 bg-yellow-50 rounded text-yellow-900">Time Management</div>
-              <div className="p-2 bg-red-50 rounded text-red-900">Emotional Intelligence</div>
-              <div className="p-2 bg-indigo-50 rounded text-indigo-900">Creativity</div>
+              <div className="p-2 bg-blue-50 rounded text-blue-900">Comunicación</div>
+              <div className="p-2 bg-purple-50 rounded text-purple-900">Liderazgo</div>
+              <div className="p-2 bg-green-50 rounded text-green-900">Trabajo en Equipo</div>
+              <div className="p-2 bg-orange-50 rounded text-orange-900">Resolución de Problemas</div>
+              <div className="p-2 bg-pink-50 rounded text-pink-900">Adaptabilidad</div>
+              <div className="p-2 bg-yellow-50 rounded text-yellow-900">Gestión del Tiempo</div>
+              <div className="p-2 bg-red-50 rounded text-red-900">Inteligencia Emocional</div>
+              <div className="p-2 bg-indigo-50 rounded text-indigo-900">Creatividad</div>
             </div>
           </CardContent>
         </Card>

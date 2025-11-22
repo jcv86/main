@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
+import { useUser } from "@/hooks/use-user" // Import useUser hook
 import {
   ArrowLeft,
   Brain,
@@ -23,8 +24,6 @@ import {
   Sparkles,
   CheckCircle,
   AlertCircle,
-  Download,
-  Share2,
 } from "lucide-react"
 import {
   RadarChart,
@@ -47,6 +46,9 @@ import {
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { MultiTestInsights } from "@/components/multi-test-insights"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useSession } from "@/components/session-wrapper"
+import { useToast } from "@/hooks/use-toast"
 
 interface TestResult {
   id: number
@@ -93,72 +95,58 @@ export default function BigFiveResults() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("summary")
 
+  const { session } = useSession()
+  const { toast } = useToast()
   const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const { user } = useUser() // Use user hook
 
   useEffect(() => {
     loadResults()
-  }, [])
+  }, [user])
 
   const loadResults = async () => {
+    if (!user?.email) {
+      router.push("/auth")
+      return
+    }
+
+    setLoading(true)
     try {
-      // Get user session
-      const localSession = localStorage.getItem("dtc_session")
-      let email = ""
+      const email = user.email
+      const result = await UnifiedTestSystem.loadTestResult(email, "5 Dimensiones Despega")
 
-      if (localSession) {
-        const sessionData = JSON.parse(localSession)
-        email = sessionData.user?.email || ""
-      }
+      if (result.success && result.data) {
+        setTestResult(result.data)
 
-      if (!email) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        email = user?.email || ""
-      }
+        const { data: aiData, error: aiError } = await supabase
+          .from("ai_interpretations")
+          .select("*")
+          .eq("user_email", email)
+          .eq("test_name", "5 Dimensiones Despega")
+          .order("generated_at", { ascending: false })
+          .limit(1)
 
-      if (!email) {
-        router.push("/auth")
-        return
-      }
-
-      setUserEmail(email)
-
-      // Load test results
-      const { data: results, error: resultsError } = await supabase
-        .from("test_results")
-        .select("*")
-        .eq("user_email", email)
-        .eq("test_name", "Big Five")
-        .order("completed_at", { ascending: false })
-        .limit(1)
-
-      if (resultsError) {
-        console.error("Error loading test results:", resultsError)
-        return
-      }
-
-      if (results && results.length > 0) {
-        setTestResult(results[0])
-      }
-
-      // Load AI interpretation
-      const { data: aiData, error: aiError } = await supabase
-        .from("ai_interpretations")
-        .select("*")
-        .eq("user_email", email)
-        .eq("test_name", "Big Five")
-        .order("generated_at", { ascending: false })
-        .limit(1)
-
-      if (aiError) {
-        console.error("Error loading AI interpretation:", aiError)
-      } else if (aiData && aiData.length > 0) {
-        setAiInterpretation(aiData[0])
+        if (aiError) {
+          console.error("Error loading AI interpretation:", aiError)
+        } else if (aiData && aiData.length > 0) {
+          setAiInterpretation(aiData[0])
+        }
+      } else {
+        toast({
+          title: "No se encontraron resultados",
+          description: "No tienes resultados guardados para este test.",
+          variant: "destructive",
+        })
+        router.push("/test/big-five")
       }
     } catch (error) {
-      console.error("Error loading results:", error)
+      console.error("[v0] Error loading results:", error)
+      toast({
+        title: "Error al cargar resultados",
+        description: "Hubo un problema cargando tus resultados.",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
@@ -221,70 +209,21 @@ export default function BigFiveResults() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Button variant="outline" onClick={() => router.push("/dashboard")}>
+          <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al Dashboard
+            Back to Tests
           </Button>
-          <div className="flex items-center gap-4">
-            <Badge variant="secondary" className="text-sm">
-              <Brain className="h-4 w-4 mr-1" />
-              Resultados Big Five
-            </Badge>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Descargar PDF
-              </Button>
-              <Button variant="outline" size="sm">
-                <Share2 className="h-4 w-4 mr-2" />
-                Compartir
-              </Button>
-            </div>
-          </div>
+          <Badge variant="secondary">
+            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
+          </Badge>
         </div>
 
-        {/* Results Header */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold text-purple-800 mb-2">Resultados del Test Big Five</h1>
-                <p className="text-purple-600">
-                  Completado el {new Date(testResult.completed_at).toLocaleDateString("es-ES")} • Duración:{" "}
-                  {testResult.duration_minutes} minutos
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-purple-800 mb-1">{testResult.score}%</div>
-                <Badge variant="secondary" className="bg-purple-100 text-purple-700">
-                  Puntuación General
-                </Badge>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Badge variant="outline" className="bg-green-100 text-green-700">
-                <CheckCircle className="h-3 w-3 mr-1" />
-                Test Completado
-              </Badge>
-              {aiInterpretation && (
-                <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                  <Sparkles className="h-3 w-3 mr-1" />
-                  Análisis IA Disponible
-                </Badge>
-              )}
-              <Badge variant="outline" className="bg-purple-100 text-purple-700">
-                <MessageSquare className="h-3 w-3 mr-1" />
-                Coach IA Activo
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: 5 Dimensiones Despega</h1>
+        <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
-        {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="summary" className="flex items-center gap-2">
@@ -313,10 +252,8 @@ export default function BigFiveResults() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Summary Tab */}
           <TabsContent value="summary" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Factor Scores */}
               {Object.entries(factorNames).map(([key, name]) => {
                 const score = key === "N" ? 100 - results[key] : results[key]
                 const displayName = key === "N" ? "Estabilidad Emocional" : name
@@ -351,7 +288,6 @@ export default function BigFiveResults() {
               })}
             </div>
 
-            {/* Traits Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -392,10 +328,8 @@ export default function BigFiveResults() {
             </div>
           </TabsContent>
 
-          {/* Charts Tab */}
           <TabsContent value="charts" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Radar Chart */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -423,7 +357,6 @@ export default function BigFiveResults() {
                 </CardContent>
               </Card>
 
-              {/* Bar Chart */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -446,7 +379,6 @@ export default function BigFiveResults() {
               </Card>
             </div>
 
-            {/* Pie Chart */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -480,10 +412,8 @@ export default function BigFiveResults() {
             </Card>
           </TabsContent>
 
-          {/* Analysis Tab */}
           <TabsContent value="analysis" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Detailed Analysis */}
               <Card>
                 <CardHeader>
                   <CardTitle>Análisis Detallado por Factor</CardTitle>
@@ -504,7 +434,6 @@ export default function BigFiveResults() {
                 </CardContent>
               </Card>
 
-              {/* Open Responses */}
               <Card>
                 <CardHeader>
                   <CardTitle>Respuestas Abiertas</CardTitle>
@@ -526,7 +455,6 @@ export default function BigFiveResults() {
               </Card>
             </div>
 
-            {/* Development Areas */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -547,7 +475,6 @@ export default function BigFiveResults() {
             </Card>
           </TabsContent>
 
-          {/* AI Analysis Tab */}
           <TabsContent value="ai-analysis">
             <div className="space-y-6">
               <MultiTestInsights userEmail={userEmail} currentTestType="Big Five" />
@@ -560,7 +487,6 @@ export default function BigFiveResults() {
             </div>
           </TabsContent>
 
-          {/* Coach Tab */}
           <TabsContent value="coach">
             <SofiaDaniCoach
               conversationCategory="autoconocimiento"
@@ -574,10 +500,8 @@ export default function BigFiveResults() {
             />
           </TabsContent>
 
-          {/* Career Tab */}
           <TabsContent value="career" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Career Recommendations */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -598,7 +522,6 @@ export default function BigFiveResults() {
                 </CardContent>
               </Card>
 
-              {/* Personality Summary */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -622,7 +545,6 @@ export default function BigFiveResults() {
               </Card>
             </div>
 
-            {/* Action Plan */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

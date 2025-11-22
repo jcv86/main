@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,16 +10,19 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock, Hand, Smartphone } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Brain, CheckCircle, Clock, Hand } from "lucide-react"
 import { Breadcrumbs, TestStructuredData } from "@/components/seo-optimized-content"
 import { TestNavigationFlow } from "@/components/test-navigation-flow"
-import { UnifiedTestSystem } from '@/lib/unified-test-system'
-import { toast } from "@/components/ui/use-toast"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
+import { discQuestions } from "./disc-questions"
+import TestIntroScreen from "@/components/test-intro-screen"
+import TestCompletionScreen from "@/components/test-completion-screen"
 
 const breadcrumbItems = [
   { name: "Inicio", url: "/" },
   { name: "Tests", url: "/test" },
-  { name: "Test DISC", url: "/test/disc" },
+  { name: "Test Despega Cerebral", url: "/test/disc" },
 ]
 
 interface Question {
@@ -30,185 +33,22 @@ interface Question {
   category: "D" | "I" | "S" | "C"
 }
 
-const discQuestions: Question[] = [
-  {
-    id: 1,
-    type: "multiple_choice",
-    question: "¿Cómo prefieres abordar los desafíos en el trabajo?",
-    options: [
-      "Tomo el control y actúo rápidamente",
-      "Busco involucrar a otros y generar entusiasmo",
-      "Analizo cuidadosamente antes de actuar",
-      "Sigo procedimientos establecidos y busco precisión",
-    ],
-    category: "D",
-  },
-  {
-    id: 2,
-    type: "multiple_choice",
-    question: "En una reunión de equipo, tiendes a:",
-    options: [
-      "Liderar la discusión y tomar decisiones",
-      "Motivar al grupo y compartir ideas creativas",
-      "Escuchar atentamente y apoyar a otros",
-      "Hacer preguntas detalladas y verificar información",
-    ],
-    category: "I",
-  },
-  {
-    id: 3,
-    type: "scenario",
-    question:
-      "Tu equipo enfrenta una fecha límite muy ajustada. ¿Cuál sería tu enfoque principal para asegurar que se complete el proyecto a tiempo?",
-    options: [
-      "Reorganizar prioridades y eliminar tareas no esenciales",
-      "Motivar al equipo y mantener la moral alta",
-      "Trabajar horas extra y apoyar a quien lo necesite",
-      "Crear un plan detallado con pasos específicos",
-    ],
-    category: "D",
-  },
-  {
-    id: 4,
-    type: "multiple_choice",
-    question: "¿Cómo manejas los conflictos en el equipo?",
-    options: [
-      "Los abordo directamente y busco resolución rápida",
-      "Trato de mediar y encontrar puntos en común",
-      "Prefiero evitar confrontaciones y buscar armonía",
-      "Analizo los hechos antes de tomar una posición",
-    ],
-    category: "S",
-  },
-  {
-    id: 5,
-    type: "open_ended",
-    question:
-      "Describe una situación donde tuviste que persuadir a alguien. ¿Qué estrategia utilizaste y cuál fue el resultado?",
-    category: "I",
-  },
-  {
-    id: 6,
-    type: "multiple_choice",
-    question: "¿Qué te motiva más en el trabajo?",
-    options: [
-      "Lograr resultados y superar objetivos",
-      "Trabajar con personas y crear conexiones",
-      "Contribuir al bienestar del equipo",
-      "Hacer las cosas correctamente y con precisión",
-    ],
-    category: "C",
-  },
-  {
-    id: 7,
-    type: "scenario",
-    question: "Se te asigna un proyecto completamente nuevo sin instrucciones claras. ¿Cuál es tu primera reacción?",
-    options: [
-      "Empiezo inmediatamente y ajusto sobre la marcha",
-      "Busco colaboradores y lluvia de ideas",
-      "Pido más información antes de comenzar",
-      "Investigo proyectos similares y creo un plan detallado",
-    ],
-    category: "D",
-  },
-  {
-    id: 8,
-    type: "multiple_choice",
-    question: "En tu tiempo libre, prefieres:",
-    options: [
-      "Actividades competitivas o desafiantes",
-      "Socializar y conocer gente nueva",
-      "Actividades relajantes con familia/amigos cercanos",
-      "Hobbies que requieren precisión o aprendizaje",
-    ],
-    category: "I",
-  },
-  {
-    id: 9,
-    type: "open_ended",
-    question: "¿Cómo defines el éxito en tu carrera profesional? Describe tus objetivos a largo plazo.",
-    category: "S",
-  },
-  {
-    id: 10,
-    type: "multiple_choice",
-    question: "¿Cuándo trabajas en equipo, tu rol natural es:",
-    options: [
-      "El líder que toma decisiones finales",
-      "El motivador que mantiene la energía alta",
-      "El mediador que asegura que todos participen",
-      "El analista que verifica la calidad del trabajo",
-    ],
-    category: "C",
-  },
-  {
-    id: 11,
-    type: "scenario",
-    question: "Tu jefe te pide feedback sobre un colega que no está rindiendo bien. ¿Cómo respondes?",
-    options: [
-      "Doy feedback directo y específico sobre los problemas",
-      "Enfoco en aspectos positivos pero menciono áreas de mejora",
-      "Sugiero apoyo adicional y entrenamiento",
-      "Proporciono datos específicos y ejemplos documentados",
-    ],
-    category: "D",
-  },
-  {
-    id: 12,
-    type: "multiple_choice",
-    question: "¿Cómo prefieres recibir reconocimiento por tu trabajo?",
-    options: [
-      "Reconocimiento público de logros y resultados",
-      "Celebración grupal y reconocimiento social",
-      "Agradecimiento personal y privado",
-      "Reconocimiento por la calidad y precisión del trabajo",
-    ],
-    category: "I",
-  },
-  {
-    id: 13,
-    type: "open_ended",
-    question: "Describe tu ambiente de trabajo ideal. ¿Qué características tendría y por qué son importantes para ti?",
-    category: "S",
-  },
-  {
-    id: 14,
-    type: "multiple_choice",
-    question: "Ante cambios organizacionales importantes, tu reacción típica es:",
-    options: [
-      "Veo oportunidades y me adapto rápidamente",
-      "Me enfoco en mantener la moral del equipo",
-      "Necesito tiempo para procesar y adaptarme",
-      "Analizo el impacto y busco entender todos los detalles",
-    ],
-    category: "C",
-  },
-  {
-    id: 15,
-    type: "scenario",
-    question: "Tienes que presentar un proyecto importante a la alta dirección. ¿Cuál es tu enfoque de preparación?",
-    options: [
-      "Me enfoco en resultados clave y impacto en el negocio",
-      "Preparo una presentación engaging con historias y ejemplos",
-      "Me aseguro de conocer bien a la audiencia y sus expectativas",
-      "Preparo datos detallados y anticipo todas las preguntas posibles",
-    ],
-    category: "C",
-  },
-]
-
 export default function DISCTestClient() {
   const { user, isLoading } = useSession()
   const router = useRouter()
+  const [showIntro, setShowIntro] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: string }>({})
   const [isCompleted, setIsCompleted] = useState(false)
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionData, setCompletionData] = useState<any>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
   const [mounted, setMounted] = useState(false)
   const [gestureLog, setGestureLog] = useState<string[]>([])
   const [touchSupport, setTouchSupport] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1)
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -221,7 +61,6 @@ export default function DISCTestClient() {
     }
   }, [user, router, isLoading, mounted])
 
-  // Gesture handling
   const handleGestureUsed = (gesture: string) => {
     const timestamp = new Date().toLocaleTimeString()
     setGestureLog((prev) => [`[${timestamp}] ${gesture}`, ...prev.slice(0, 4)])
@@ -289,9 +128,9 @@ export default function DISCTestClient() {
   const submitTest = async () => {
     if (!user) {
       toast({
-        title: 'Error de autenticación',
-        description: 'Debes iniciar sesión para guardar tus resultados',
-        variant: 'destructive'
+        title: "Error de autenticación",
+        description: "Debes iniciar sesión para guardar tus resultados",
+        variant: "destructive",
       })
       return
     }
@@ -313,45 +152,82 @@ export default function DISCTestClient() {
         touch_enabled: touchSupport,
       }
 
-      console.log('[v0] Saving DISC test results with unified system...')
-      
+      console.log("[v0] Saving Despega Cerebral test results with unified system...")
+
       const result = await UnifiedTestSystem.saveTestResult({
         userEmail: user.email!,
-        testType: 'DISC Assessment',
-        testResults: testResults,
-        durationMinutes: duration
+        testType: "Despega Cerebral",
+        testResults,
+        durationMinutes: duration,
       })
 
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to save results')
-      }
-
-      console.log('[v0] DISC results saved successfully to database via unified system')
-      
-      // Mark test as completed
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("disc")) {
-        completedTests.push("disc")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
+      if (!result.savedToDatabase) {
+        toast({
+          title: "Error Crítico",
+          description:
+            result.error || "No se pudieron guardar los resultados en la base de datos. Por favor contacta soporte.",
+          variant: "destructive",
+        })
+        return
       }
 
       toast({
-        title: '¡Test completado!',
-        description: 'Tus resultados han sido guardados correctamente'
+        title: "Test completado",
+        description: "Tus resultados han sido guardados exitosamente",
       })
 
-      handleGestureUsed("Test results saved and submitted")
-      router.push("/test/disc/results")
+      setCompletionData({
+        primaryStyle,
+        scores,
+        duration,
+      })
+      setShowCompletion(true)
     } catch (error) {
       console.error("[v0] Error submitting test:", error)
       toast({
-        title: 'Error al guardar resultados',
-        description: 'Hubo un problema guardando tus resultados. Por favor, contacta soporte.',
-        variant: 'destructive'
+        title: "Error",
+        description: "Hubo un error al procesar tus resultados. Por favor intenta nuevamente.",
+        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (showIntro) {
+    return (
+      <TestIntroScreen
+        testName="Despega Cerebral"
+        testDescription="Tu Perfil de Comportamiento Profesional"
+        whatItMeasures="Tu estilo de comportamiento natural en el trabajo basado en 4 dimensiones: Dominancia, Influencia, Estabilidad y Cumplimiento."
+        whyRelevant="Entender tu estilo DISC te ayuda a comunicarte mejor, elegir roles que se alineen con tus fortalezas naturales y desarrollar competencias complementarias."
+        estimatedTime={15}
+        totalQuestions={discQuestions.length}
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionData) {
+    const styleLabels: Record<string, string> = {
+      Dominance: "Dominancia",
+      Influence: "Influencia",
+      Steadiness: "Estabilidad",
+      Compliance: "Cumplimiento",
+    }
+
+    return (
+      <TestCompletionScreen
+        testName="Despega Cerebral"
+        userName={user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Usuario"}
+        quickSummary={`Tu estilo principal es ${styleLabels[completionData.primaryStyle] || completionData.primaryStyle}. Este perfil refleja tu forma natural de actuar en entornos profesionales.`}
+        highlightedInsight={`Puntaje ${styleLabels[completionData.primaryStyle]}: ${completionData.scores[completionData.primaryStyle.charAt(0)]}%`}
+        completionTime={completionData.duration}
+        onViewFullReport={() => router.push("/test/disc/results")}
+        onTalkToCoach={() => router.push("/coach")}
+      />
+    )
   }
 
   if (!mounted || isLoading) {
@@ -359,7 +235,7 @@ export default function DISCTestClient() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading DISC assessment...</p>
+          <p className="text-gray-600">Loading Despega Cerebral assessment...</p>
         </div>
       </div>
     )
@@ -390,48 +266,12 @@ export default function DISCTestClient() {
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <CardTitle className="text-2xl">¡Test DISC Completado!</CardTitle>
+            <CardTitle className="text-2xl">¡Test Despega Cerebral Completado!</CardTitle>
             <CardDescription>Has respondido todas las preguntas. Ahora procesaremos tus resultados.</CardDescription>
           </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">Resumen de tu evaluación:</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Preguntas respondidas:</span>
-                  <p>
-                    {Object.keys(answers).length} de {discQuestions.length}
-                  </p>
-                </div>
-                <div>
-                  <span className="font-medium">Tiempo empleado:</span>
-                  <p>{Math.round((Date.now() - startTime) / 60000)} minutos</p>
-                </div>
-                {touchSupport && (
-                  <div className="col-span-2">
-                    <span className="font-medium">Interacciones gestuales:</span>
-                    <p>{gestureLog.length} gestos detectados</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
+          <CardContent className="space-y-4">
             <Button onClick={submitTest} disabled={isSubmitting} className="w-full" size="lg">
-              {isSubmitting ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Procesando resultados...
-                </>
-              ) : (
-                <>
-                  <Brain className="h-4 w-4 mr-2" />
-                  Ver Mis Resultados
-                </>
-              )}
-            </Button>
-
-            <Button variant="outline" onClick={() => router.push("/test")} className="w-full">
-              Volver a Tests
+              {isSubmitting ? "Procesando..." : "Ver Mis Resultados"}
             </Button>
           </CardContent>
         </Card>
@@ -440,10 +280,9 @@ export default function DISCTestClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 touch-none select-none" style={{ fontSize: `${zoomLevel}rem` }}>
-      <div className="container mx-auto max-w-4xl">
-        {/* Header with Gesture Support */}
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
           <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tests
@@ -462,93 +301,29 @@ export default function DISCTestClient() {
           </div>
         </div>
 
-        {/* SEO Optimized Content */}
         <Breadcrumbs items={breadcrumbItems} />
         <TestStructuredData
-          name="Test DISC - Evaluación de Comportamiento Profesional"
+          name="Despega Cerebral - Evaluación de Comportamiento Profesional"
           description="Evaluación psicométrica DISC para identificar tu estilo de comportamiento en el trabajo"
           duration={15}
           questions={28}
         />
 
         <article className="prose lg:prose-xl max-w-4xl mx-auto mb-8">
-          <h1>Test DISC: Descubre tu Estilo de Comportamiento Profesional</h1>
-
-          <p className="lead">
-            El test DISC es una de las evaluaciones de comportamiento más utilizadas en el mundo profesional. Te ayuda a
-            entender cómo interactúas con otros, cómo manejas desafíos y qué te motiva en el trabajo.
-          </p>
-
-          <h2>¿Qué es el Test DISC?</h2>
-          <p>DISC es un modelo de comportamiento que identifica cuatro estilos principales de personalidad:</p>
-          <ul>
-            <li>
-              <strong>D - Dominancia</strong>: Orientado a resultados, directo, decisivo
-            </li>
-            <li>
-              <strong>I - Influencia</strong>: Comunicativo, entusiasta, persuasivo
-            </li>
-            <li>
-              <strong>S - Estabilidad</strong>: Cooperativo, confiable, paciente
-            </li>
-            <li>
-              <strong>C - Cumplimiento</strong>: Analítico, preciso, sistemático
-            </li>
-          </ul>
-
-          <h2>¿Por qué hacer el Test DISC?</h2>
-          <ul>
-            <li>Mejora tu autoconocimiento profesional</li>
-            <li>Optimiza tu comunicación con colegas y superiores</li>
-            <li>Identifica tu estilo de liderazgo natural</li>
-            <li>Descubre las mejores áreas profesionales para tu perfil</li>
-            <li>Desarrolla estrategias para trabajar mejor en equipo</li>
-          </ul>
-
-          <h2>¿Cómo funciona?</h2>
-          <p>
-            Nuestro test DISC consta de 28 preguntas que evalúan tus preferencias de comportamiento. Toma
-            aproximadamente 15 minutos completarlo y recibirás resultados detallados inmediatamente.
-          </p>
+          <h1>Despega Cerebral: Descubre tu Estilo de Comportamiento Profesional</h1>
         </article>
 
-        {/* Progress */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Test Progress</span>
-              <span className="text-sm text-gray-600">
-                {currentQuestion + 1} of {discQuestions.length}
-              </span>
-            </div>
-            <Progress value={progress} className="mb-2" />
-            <div className="flex justify-between text-xs text-gray-500">
-              <span>{currentQuestion === 0 && !answers[discQuestions[0].id] ? "Ready to start" : "In progress"}</span>
-              <span>{Math.round(progress)}% complete</span>
-              <span>Finish</span>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-2xl font-bold">Despega Cerebral</h2>
+            <span className="text-sm font-medium text-gray-600">
+              {currentQuestion + 1} of {discQuestions.length}
+            </span>
+          </div>
+          <Progress value={progress} className="h-2" />
+          <p className="text-xs text-gray-500 mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
+        </div>
 
-        {/* Gesture Instructions for Touch Devices */}
-        {touchSupport && (
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Smartphone className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-900">Gesture Controls Available</span>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-blue-800">
-                <div>← Swipe right: Previous</div>
-                <div>Swipe left: Next →</div>
-                <div>🤏 Pinch: Zoom text</div>
-                <div>👆 Long press: Context</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Question */}
         <Card className="transition-all duration-300" style={{ transform: `scale(${Math.min(zoomLevel, 1.1)})` }}>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -596,7 +371,6 @@ export default function DISCTestClient() {
               </div>
             )}
 
-            {/* Navigation */}
             <div className="flex justify-between pt-6">
               <Button variant="outline" onClick={prevQuestion} disabled={currentQuestion === 0} size="lg">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -620,7 +394,6 @@ export default function DISCTestClient() {
           </CardContent>
         </Card>
 
-        {/* Gesture Activity Log */}
         {gestureLog.length > 0 && (
           <Card className="mt-6 border-purple-200 bg-purple-50">
             <CardHeader className="pb-3">
@@ -641,17 +414,16 @@ export default function DISCTestClient() {
           </Card>
         )}
 
-        {/* Test Info */}
         <Card className="mt-6">
           <CardContent className="pt-6">
             <div className="flex items-start space-x-3">
               <Brain className="h-5 w-5 text-blue-600 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-sm">About the DISC Assessment</h3>
+                <h3 className="font-semibold text-sm">About the Despega Cerebral Assessment</h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  The DISC assessment evaluates four behavioral dimensions: Dominance (D), Influence (I), Steadiness
-                  (S), and Compliance (C). Your responses will help identify your natural behavioral style and
-                  communication preferences in professional settings.
+                  The Despega Cerebral assessment evaluates four behavioral dimensions: Dominance (D), Influence (I),
+                  Steadiness (S), and Compliance (C). Your responses will help identify your natural behavioral style
+                  and communication preferences in professional settings.
                   {touchSupport && " This version includes gesture support for enhanced mobile interaction."}
                 </p>
               </div>
@@ -659,7 +431,6 @@ export default function DISCTestClient() {
           </CardContent>
         </Card>
 
-        {/* Test Navigation Flow */}
         <TestNavigationFlow testType="disc" />
       </div>
     </div>

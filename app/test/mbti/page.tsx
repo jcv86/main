@@ -12,6 +12,8 @@ import { Lightbulb, Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-rea
 import { useSession } from "@/components/session-wrapper"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
+import { TestIntroScreen } from "@/components/test-intro-screen"
+import { TestCompletionScreen } from "@/components/test-completion-screen"
 
 interface Question {
   id: number
@@ -287,6 +289,9 @@ const mbtiQuestions: Question[] = [
 ]
 
 export default function MBTITest() {
+  const [showIntro, setShowIntro] = useState(true)
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionData, setCompletionData] = useState<any>(null)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [startTime, setStartTime] = useState<Date>(new Date())
@@ -338,7 +343,7 @@ export default function MBTITest() {
   const submitTest = async () => {
     if (Object.keys(answers).length < mbtiQuestions.length) {
       toast({
-        title: "Incomplete Test",
+        title: "Test Incompleto",
         description: "Por favor responde todas las preguntas antes de continuar.",
         variant: "destructive",
       })
@@ -347,7 +352,7 @@ export default function MBTITest() {
 
     if (!user?.email) {
       toast({
-        title: "Authentication Required",
+        title: "Autenticación Requerida",
         description: "Debes estar autenticado para guardar los resultados.",
         variant: "destructive",
       })
@@ -393,15 +398,17 @@ export default function MBTITest() {
       }
 
       console.log("[v0] MBTI test results saved successfully to database")
-      toast({
-        title: "Test Completed!",
-        description: "Your MBTI results have been saved successfully.",
+      setCompletionData({
+        type,
+        scores,
+        overallScore,
+        duration,
       })
-      router.push("/test/mbti/results")
+      setShowCompletion(true)
     } catch (error) {
       console.error("[v0] Error submitting MBTI test:", error)
       toast({
-        title: "Error saving results",
+        title: "Error al guardar resultados",
         description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
         variant: "destructive",
       })
@@ -421,7 +428,7 @@ export default function MBTITest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading MBTI assessment...</p>
+          <p className="text-gray-600">Cargando evaluación...</p>
         </div>
       </div>
     )
@@ -431,9 +438,65 @@ export default function MBTITest() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-gray-600">Redirigiendo...</p>
         </div>
       </div>
+    )
+  }
+
+  if (showIntro) {
+    return (
+      <TestIntroScreen
+        testName="Mapa de Personalidad Despega"
+        testDescription="Descubre tu tipo de personalidad MBTI y comprende cómo procesas información, tomas decisiones e interactúas con el mundo"
+        whatItMeasures={[
+          "Extraversión vs Introversión (E/I) - Tu fuente de energía",
+          "Sensorial vs Intuitivo (S/N) - Cómo procesas información",
+          "Pensamiento vs Sentimiento (T/F) - Cómo tomas decisiones",
+          "Juicio vs Percepción (J/P) - Tu estilo de vida",
+        ]}
+        whyRelevant="Tu tipo MBTI te ayuda a entender tus fortalezas naturales, preferencias de comunicación, y cómo trabajas mejor. Es fundamental para el autoconocimiento y desarrollo personal integral."
+        estimatedTime={18}
+        questionsCount={mbtiQuestions.length}
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionData) {
+    const { type, scores, overallScore, duration } = completionData
+
+    const typeInsights: Record<string, string> = {
+      INTJ: "Eres un estratega natural con visión a largo plazo y capacidad analítica excepcional",
+      INTP: "Tu mente es como un laboratorio constante, siempre explorando ideas y conceptos complejos",
+      ENTJ: "Eres un líder nato con capacidad para organizar sistemas y dirigir hacia objetivos ambiciosos",
+      ENTP: "Tu creatividad e ingenio te permiten ver posibilidades que otros no perciben",
+      INFJ: "Tienes una profunda comprensión de las personas y una visión inspiradora del futuro",
+      INFP: "Tus valores profundos y creatividad te guían hacia causas significativas",
+      ENFJ: "Inspiras a otros naturalmente y tienes un don para desarrollar el potencial en las personas",
+      ENFP: "Tu entusiasmo contagioso y creatividad abren puertas a nuevas posibilidades",
+      ISTJ: "Tu confiabilidad y atención al detalle son pilares fundamentales en cualquier equipo",
+      ISFJ: "Tu dedicación y cuidado por otros crean ambientes de apoyo y estabilidad",
+      ESTJ: "Tu capacidad organizativa y practicidad hacen que las cosas se logren eficientemente",
+      ESFJ: "Tu calidez y habilidad para conectar con personas fortalece cualquier comunidad",
+      ISTP: "Tu habilidad práctica y pensamiento lógico te hacen excelente solucionando problemas",
+      ISFP: "Tu sensibilidad estética y valores personales te guían hacia experiencias auténticas",
+      ESTP: "Tu energía y capacidad para actuar en el momento presente son admirables",
+      ESFP: "Tu espontaneidad y don para disfrutar la vida inspiran a otros a vivir plenamente",
+    }
+
+    return (
+      <TestCompletionScreen
+        testName="Mapa de Personalidad Despega"
+        completionMessage="Has completado exitosamente tu Mapa de Personalidad Despega"
+        quickSummary={`Tu tipo de personalidad es ${type}`}
+        keyInsight={typeInsights[type] || "Tu personalidad única es tu mayor fortaleza"}
+        score={overallScore}
+        duration={duration}
+        onViewFullReport={() => router.push("/test/mbti/results")}
+        onTalkToCoach={() => router.push("/test/mbti/results#coach")}
+      />
     )
   }
 
@@ -444,11 +507,11 @@ export default function MBTITest() {
         <div className="flex items-center justify-between mb-8">
           <Button variant="outline" onClick={() => router.push("/test")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Tests
+            Volver a Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Lightbulb className="h-4 w-4 mr-1" />
-            MBTI Test
+            Mapa de Personalidad
           </Badge>
         </div>
 
@@ -457,14 +520,14 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">MBTI Personality Test</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Mapa de Personalidad Despega</h2>
                 <p className="text-gray-600">
-                  Question {currentQuestion + 1} of {mbtiQuestions.length}
+                  Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Clock className="h-4 w-4" />
-                <span>~18 minutes</span>
+                <span>~18 minutos</span>
               </div>
             </div>
             <Progress value={progress} className="h-2" />

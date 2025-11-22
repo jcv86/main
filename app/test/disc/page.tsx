@@ -2,22 +2,22 @@ import type { Metadata } from "next"
 import DISCTestClient from "./disc-client"
 
 export const metadata: Metadata = {
-  title: "Test DISC - Evaluación de Estilo de Comportamiento Profesional | TuCarrera.cl",
+  title: "Despega Cerebral - Evaluación de Estilo de Comportamiento | Despega Tu Carrera",
   description:
-    "Descubre tu perfil DISC (Dominancia, Influencia, Estabilidad, Cumplimiento) con nuestro test psicométrico profesional. Conoce tu estilo de trabajo, fortalezas y áreas de desarrollo. Resultados instantáneos y gratuitos.",
+    "Descubre tu perfil de comportamiento profesional con Despega Cerebral. Conoce tu estilo de trabajo, fortalezas y áreas de desarrollo. Resultados instantáneos basados en el modelo DISC.",
   keywords: [
-    "test DISC",
+    "despega cerebral",
     "test DISC Chile",
-    "evaluación DISC gratis",
+    "evaluación comportamiento",
     "perfil comportamiento laboral",
     "test personalidad trabajo",
-    "DISC Dominancia Influencia",
+    "desarrollo profesional",
     "evaluación estilo trabajo",
-    "test psicométrico DISC",
+    "despega tu carrera",
   ],
   openGraph: {
-    title: "Test DISC Profesional - Descubre tu Estilo de Comportamiento",
-    description: "Evaluación DISC completa y gratuita. Conoce tu perfil profesional en 15 minutos.",
+    title: "Despega Cerebral - Descubre tu Estilo de Comportamiento",
+    description: "Evaluación completa y gratuita de tu perfil de comportamiento profesional en 15 minutos.",
     type: "website",
     url: "https://tucarrera.cl/test/disc",
   },

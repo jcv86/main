@@ -13,6 +13,8 @@ import { Brain, Clock, ArrowLeft, ArrowRight, CheckCircle, Sparkles, MessageSqua
 import { useSession } from "@/components/session-wrapper"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
+import TestIntroScreen from "@/components/test-intro-screen"
+import TestCompletionScreen from "@/components/test-completion-screen"
 
 interface Question {
   id: number
@@ -104,6 +106,9 @@ export default function BigFiveTest() {
   const [startTime, setStartTime] = useState<Date>(new Date())
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [showIntro, setShowIntro] = useState(true)
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionData, setCompletionData] = useState<any>(null)
 
   const router = useRouter()
   const { user, isLoading } = useSession()
@@ -196,21 +201,22 @@ export default function BigFiveTest() {
     }
 
     try {
-      console.log("[v0] Submitting Big Five test results to database...")
+      console.log("[v0] Submitting 5 Dimensiones Despega test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "5 Dimensiones Despega", results, duration)
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
       }
 
-      console.log("[v0] Big Five test results saved successfully to database")
-      toast({
-        title: "Test Completed!",
-        description: "Your Big Five results have been saved successfully.",
+      console.log("[v0] 5 Dimensiones Despega test results saved successfully to database")
+      setCompletionData({
+        scores,
+        overallScore,
+        duration,
       })
-      router.push("/test/big-five/results")
+      setShowCompletion(true)
     } catch (error) {
-      console.error("[v0] Error submitting Big Five test:", error)
+      console.error("[v0] Error submitting 5 Dimensiones test:", error)
       toast({
         title: "Error saving results",
         description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
@@ -226,7 +232,7 @@ export default function BigFiveTest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Big Five assessment...</p>
+          <p className="text-gray-600">Loading 5 Dimensiones Despega...</p>
         </div>
       </div>
     )
@@ -239,6 +245,65 @@ export default function BigFiveTest() {
           <p className="text-gray-600">Redirecting...</p>
         </div>
       </div>
+    )
+  }
+
+  if (showIntro) {
+    return (
+      <TestIntroScreen
+        testName="5 Dimensiones Despega"
+        testDescription="Descubre tu perfil de personalidad completo"
+        whatItMeasures="Este test evalúa cinco dimensiones fundamentales de tu personalidad:"
+        dimensions={[
+          {
+            name: "Apertura a la Experiencia",
+            description: "Tu curiosidad intelectual, creatividad e interés por nuevas ideas",
+          },
+          {
+            name: "Responsabilidad",
+            description: "Tu nivel de organización, autodisciplina y orientación a objetivos",
+          },
+          {
+            name: "Extraversión",
+            description: "Tu energía social, asertividad y nivel de actividad",
+          },
+          {
+            name: "Amabilidad",
+            description: "Tu cooperación, empatía y consideración hacia otros",
+          },
+          {
+            name: "Estabilidad Emocional",
+            description: "Tu capacidad para manejar el estrés y mantener la calma",
+          },
+        ]}
+        whyRelevant="Entender tus rasgos de personalidad te ayuda a identificar tus fortalezas naturales, áreas de desarrollo, y cómo te relacionas con otros en diferentes contextos personales y profesionales."
+        estimatedTime="20 minutos"
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionData) {
+    const highestDimension = Object.entries(completionData.scores).reduce((a, b) =>
+      (a[1] as number) > (b[1] as number) ? a : b,
+    )
+    const dimensionNames = {
+      O: "Apertura a la Experiencia",
+      C: "Responsabilidad",
+      E: "Extraversión",
+      A: "Amabilidad",
+      N: "Neuroticismo (bajo = Estabilidad Emocional)",
+    }
+
+    return (
+      <TestCompletionScreen
+        testName="5 Dimensiones Despega"
+        quickSummary={`Tu puntuación general es ${completionData.overallScore}%. Tu dimensión más desarrollada es ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} con ${highestDimension[1]}%.`}
+        keyInsight={`Tu perfil de personalidad muestra una combinación única de rasgos. Tu alta ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} te permite destacar en situaciones que requieren estas características, mientras que las otras dimensiones complementan tu forma de ser en diferentes contextos.`}
+        onViewFullReport={() => router.push("/test/big-five/results")}
+        onTalkToCoach={() => router.push("/coach")}
+      />
     )
   }
 
@@ -256,8 +321,7 @@ export default function BigFiveTest() {
             Back to Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
-            <Brain className="h-4 w-4 mr-1" />
-            Big Five Assessment
+            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
           </Badge>
         </div>
 
@@ -266,14 +330,14 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Big Five Personality Test</h2>
+                <h2 className="text-2xl font-bold text-gray-900">5 Dimensiones Despega</h2>
                 <p className="text-gray-600">
                   Question {currentQuestion + 1} of {bigFiveQuestions.length}
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Clock className="h-4 w-4" />
+                  <Clock className="h-4 w-4 mr-1" />
                   <span>~20 minutes</span>
                 </div>
                 <Badge variant="outline" className="bg-blue-100 text-blue-700">

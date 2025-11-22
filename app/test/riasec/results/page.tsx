@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
-import { supabase } from "@/lib/supabase"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import {
   Target,
@@ -48,6 +47,9 @@ import {
   PieChart,
   Pie,
 } from "recharts"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useSession } from "@/components/session-wrapper"
+import { useToast } from "@/hooks/use-toast"
 
 interface RIASECResults {
   R: number
@@ -69,6 +71,8 @@ export default function RIASECResults() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get("demo") === "true"
+  const { session } = useSession()
+  const { toast } = useToast()
 
   const [results, setResults] = useState<RIASECResults | null>(null)
   const [loading, setLoading] = useState(true)
@@ -80,45 +84,52 @@ export default function RIASECResults() {
 
   const loadResults = async () => {
     try {
-      const localResults = localStorage.getItem("riasec_results")
-      if (localResults) {
-        setResults(JSON.parse(localResults))
+      const email = session?.user?.email
+      if (!email) {
+        toast({
+          title: "No autenticado",
+          description: "Debes iniciar sesión para ver tus resultados.",
+          variant: "destructive",
+        })
         setLoading(false)
         return
       }
 
-      const { data, error } = await supabase
-        .from("test_results")
-        .select("*")
-        .eq("test_type", "riasec")
-        .order("completed_at", { ascending: false })
-        .limit(1)
-        .single()
+      const result = await UnifiedTestSystem.loadTestResult(email, "Brújula Vocacional Despega")
 
-      if (!error && data) {
+      if (result.success && result.data) {
         // Ensure the data structure matches the updated interface
         const processedResults: RIASECResults = {
-          R: data.results.R,
-          I: data.results.I,
-          A: data.results.A,
-          S: data.results.S,
-          E: data.results.E,
-          C: data.results.C,
-          holland_code: data.results.holland_code,
-          overall_score: data.results.percentage || 0, // Use 'percentage' or default to 0
+          R: result.data.results.R,
+          I: result.data.results.I,
+          A: result.data.results.A,
+          S: result.data.results.S,
+          E: result.data.results.E,
+          C: result.data.results.C,
+          holland_code: result.data.results.holland_code,
+          overall_score: result.data.results.percentage || 0, // Use 'percentage' or default to 0
           // Assign empty arrays or default values for fields not present in the database
-          top_categories: data.results.top_categories || [],
-          career_matches: data.results.career_matches || [],
-          strengths: data.results.strengths || [],
-          development_areas: data.results.development_areas || [],
-          reflective_responses: data.results.reflective_responses || {},
+          top_categories: result.data.results.top_categories || [],
+          career_matches: result.data.results.career_matches || [],
+          strengths: result.data.results.strengths || [],
+          development_areas: result.data.results.development_areas || [],
+          reflective_responses: result.data.results.reflective_responses || {},
         }
         setResults(processedResults)
-      } else if (error) {
-        console.error("Error loading results from Supabase:", error)
+      } else {
+        toast({
+          title: "No se encontraron resultados",
+          description: "No tienes resultados guardados para este test.",
+          variant: "destructive",
+        })
       }
     } catch (error) {
-      console.error("Error loading results:", error)
+      console.error("[v0] Error loading results:", error)
+      toast({
+        title: "Error al cargar resultados",
+        description: "Hubo un problema cargando tus resultados.",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
@@ -450,7 +461,7 @@ export default function RIASECResults() {
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-              <span>Cargando resultados RIASEC...</span>
+              <span>Cargando resultados Brújula Vocacional Despega...</span>
             </div>
           </CardContent>
         </Card>
@@ -465,8 +476,8 @@ export default function RIASECResults() {
           <CardContent className="p-6 text-center">
             <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-600 mb-4">Parece que aún no has completado el test RIASEC.</p>
-            <Button onClick={() => router.push("/test/riasec")}>Realizar Test RIASEC</Button>
+            <p className="text-gray-600 mb-4">Parece que aún no has completado el test Brújula Vocacional Despega.</p>
+            <Button onClick={() => router.push("/test/riasec")}>Realizar Test Brújula Vocacional Despega</Button>
           </CardContent>
         </Card>
       </div>
@@ -486,7 +497,7 @@ export default function RIASECResults() {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-3xl font-bold text-blue-900 mb-2">
-                  Resultados Test RIASEC
+                  Resultados Brújula Vocacional Despega
                   <Badge className="ml-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
                     Código Holland: {results.holland_code}
                   </Badge>
@@ -883,7 +894,7 @@ export default function RIASECResults() {
             <SofiaDaniCoach
               conversationCategory="orientacion_carrera"
               userContext={{
-                testType: "RIASEC",
+                testType: "Brújula Vocacional Despega",
                 testResults: results,
                 userEmail: isDemoMode ? "demo@example.com" : "user@example.com",
                 completedAt: new Date().toISOString(),

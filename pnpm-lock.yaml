@@ -76,7 +76,10 @@ importers:
         version: 1.2.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(vue-router@4.6.3(vue@3.5.24(typescript@5.0.2)))(vue@3.5.24(typescript@5.0.2))
       ai:
         specifier: latest
-        version: 5.0.98(zod@4.1.12)
+        version: 5.0.99(zod@4.1.12)
+      canvas-confetti:
+        specifier: latest
+        version: 1.9.4
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1740,8 +1743,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  ai@5.0.98:
-    resolution: {integrity: sha512-RpMnwnml68Swblobvk6IdF7HLZrog72Ve6H5J3aN+A/JPg4y5CjCXeQyK1N4wJStyuTa6AoKYfJR5F4e/aVpHQ==}
+  ai@5.0.99:
+    resolution: {integrity: sha512-omnQLLi5yNQWLLJAaQdACsgBSj+c9LTCWwl9z+6albiqlATNF3AGdpr1ZMTJosGkupwswZc6LDIMa3cfHR4x/g==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -1905,6 +1908,9 @@ packages:
 
   caniuse-lite@1.0.30001746:
     resolution: {integrity: sha512-eA7Ys/DGw+pnkWWSE/id29f2IcPHVoE8wxtvE5JdvD2V28VTDPy1yEeo11Guz0sJ4ZeGRcm3uaTcAqK1LXaphA==}
+
+  canvas-confetti@1.9.4:
+    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -5228,7 +5234,7 @@ snapshots:
 
   acorn@8.15.0: {}
 
-  ai@5.0.98(zod@4.1.12):
+  ai@5.0.99(zod@4.1.12):
     dependencies:
       '@ai-sdk/gateway': 2.0.13(zod@4.1.12)
       '@ai-sdk/provider': 2.0.0
@@ -5420,6 +5426,8 @@ snapshots:
   caniuse-lite@1.0.30001741: {}
 
   caniuse-lite@1.0.30001746: {}
+
+  canvas-confetti@1.9.4: {}
 
   ccount@2.0.1: {}
 

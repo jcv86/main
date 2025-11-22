@@ -12,6 +12,8 @@ import { ArrowLeft, ArrowRight, Palette, CheckCircle, Clock } from "lucide-react
 import { useSession } from "@/components/session-wrapper"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
+import TestIntroScreen from "@/components/test-intro-screen"
+import TestCompletionScreen from "@/components/test-completion-screen"
 
 interface Question {
   id: number
@@ -84,6 +86,9 @@ export default function RIASECTest() {
   const [startTime, setStartTime] = useState<Date>(new Date())
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [showIntro, setShowIntro] = useState(true)
+  const [showCompletion, setShowCompletion] = useState(false)
+  const [completionData, setCompletionData] = useState<any>(null)
 
   const router = useRouter()
   const { user, isLoading } = useSession()
@@ -141,6 +146,18 @@ export default function RIASECTest() {
     return sortedScores.join("")
   }
 
+  const getCategoryName = (category: string) => {
+    const names = {
+      R: "Realista",
+      I: "Investigativo",
+      A: "Artístico",
+      S: "Social",
+      E: "Emprendedor",
+      C: "Convencional",
+    }
+    return names[category as keyof typeof names] || category
+  }
+
   const submitTest = async () => {
     if (Object.keys(answers).length < riasecQuestions.length) {
       toast({
@@ -193,11 +210,13 @@ export default function RIASECTest() {
       }
 
       console.log("[v0] RIASEC test results saved successfully to database")
-      toast({
-        title: "Test Completed!",
-        description: "Your RIASEC results have been saved successfully.",
+      const topCategory = Object.entries(scores).sort(([, a], [, b]) => b - a)[0]
+      setCompletionData({
+        summary: `Tu código Holland es ${hollandCode}`,
+        keyInsight: `Tu orientación principal es ${getCategoryName(topCategory[0])} con ${topCategory[1]}% de afinidad`,
+        duration,
       })
-      router.push("/test/riasec/results")
+      setShowCompletion(true)
     } catch (error) {
       console.error("[v0] Error submitting RIASEC test:", error)
       toast({
@@ -215,7 +234,7 @@ export default function RIASECTest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading RIASEC assessment...</p>
+          <p className="text-gray-600">Cargando Brújula Vocacional Despega...</p>
         </div>
       </div>
     )
@@ -228,6 +247,40 @@ export default function RIASECTest() {
           <p className="text-gray-600">Redirecting...</p>
         </div>
       </div>
+    )
+  }
+
+  if (showIntro) {
+    return (
+      <TestIntroScreen
+        testName="Brújula Vocacional Despega"
+        description="Descubre tus intereses vocacionales basados en el modelo RIASEC de Holland"
+        whatItMeasures={[
+          "Realista: Trabajo práctico con herramientas y maquinaria",
+          "Investigativo: Investigación, análisis y resolución de problemas",
+          "Artístico: Creatividad y expresión artística",
+          "Social: Ayudar, enseñar y servir a otros",
+          "Emprendedor: Liderar, persuadir y gestionar",
+          "Convencional: Organización y gestión de datos",
+        ]}
+        whyRelevant="Identificar tus intereses vocacionales te ayuda a tomar decisiones informadas sobre tu carrera profesional y encontrar trabajos que realmente disfrutes."
+        estimatedTime={15}
+        onStart={() => setShowIntro(false)}
+        onBack={() => router.push("/test")}
+      />
+    )
+  }
+
+  if (showCompletion && completionData) {
+    return (
+      <TestCompletionScreen
+        testName="Brújula Vocacional Despega"
+        summary={completionData.summary}
+        keyInsight={completionData.keyInsight}
+        completionTime={completionData.duration}
+        onViewFullReport={() => router.push("/test/riasec/results")}
+        onTalkToCoach={() => router.push("/coach")}
+      />
     )
   }
 
@@ -247,7 +300,7 @@ export default function RIASECTest() {
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Palette className="h-4 w-4 mr-1" />
-            RIASEC Career Interests
+            Brújula Vocacional Despega
           </Badge>
         </div>
 
@@ -256,7 +309,7 @@ export default function RIASECTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">RIASEC Career Interest Assessment</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Brújula Vocacional Despega</h2>
                 <p className="text-gray-600">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>
@@ -367,15 +420,15 @@ export default function RIASECTest() {
           <CardContent className="pt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
               <div className="p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-1">Realistic (R)</h4>
+                <h4 className="font-semibold text-blue-900 mb-1">Realista (R)</h4>
                 <p className="text-blue-700">Hands-on, practical work with tools and machinery</p>
               </div>
               <div className="p-3 bg-purple-50 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-1">Investigative (I)</h4>
+                <h4 className="font-semibold text-purple-900 mb-1">Investigativo (I)</h4>
                 <p className="text-purple-700">Research, analysis, and problem-solving activities</p>
               </div>
               <div className="p-3 bg-pink-50 rounded-lg">
-                <h4 className="font-semibold text-pink-900 mb-1">Artistic (A)</h4>
+                <h4 className="font-semibold text-pink-900 mb-1">Artístico (A)</h4>
                 <p className="text-pink-700">Creative, expressive, and artistic activities</p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
@@ -383,11 +436,11 @@ export default function RIASECTest() {
                 <p className="text-green-700">Helping, teaching, and serving others</p>
               </div>
               <div className="p-3 bg-orange-50 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-1">Enterprising (E)</h4>
+                <h4 className="font-semibold text-orange-900 mb-1">Emprendedor (E)</h4>
                 <p className="text-orange-700">Leading, persuading, and managing others</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-1">Conventional (C)</h4>
+                <h4 className="font-semibold text-gray-900 mb-1">Convencional (C)</h4>
                 <p className="text-gray-700">Organizing, data management, and detail work</p>
               </div>
             </div>
