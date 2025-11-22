@@ -1,16 +1,30 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
 import { createClient } from "@supabase/supabase-js"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Target, Sparkles, Loader2, Lightbulb, BookOpen, Check, Calendar, ArrowRight } from 'lucide-react'
+import {
+  ArrowLeft,
+  Brain,
+  Download,
+  Share2,
+  TrendingUp,
+  Target,
+  Sparkles,
+  Loader2,
+  Lightbulb,
+  BookOpen,
+  Check,
+  Calendar,
+  ArrowRight,
+} from "lucide-react"
 import { MultiTestInsights } from "@/components/multi-test-insights"
-import { Sofia DaniCoach } from "@/components/sofia-dani-coach"
+import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Separator } from "@/components/ui/separator"
@@ -841,9 +855,7 @@ export default function DISCResultsPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">
-                    🎯 Por qué estas oportunidades son relevantes para ti
-                  </h3>
+                  <h3 className="text-lg font-semibold mb-3">🎯 Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu perfil {discResult.primary_type} con D:{discResult.d_score}%, I:{discResult.i_score}%, S:
                     {discResult.s_score}%, C:{discResult.c_score}% revela patrones únicos de fortalezas y áreas de
@@ -887,8 +899,8 @@ export default function DISCResultsPage() {
                         <li className="flex gap-3">
                           <span className="text-blue-600 font-bold">→</span>
                           <div>
-                            <strong>Ejercicio de Valores:</strong> Lista tus 5 valores fundamentales y evalúa cuánto
-                            tu vida actual los refleja (escala 1-10).
+                            <strong>Ejercicio de Valores:</strong> Lista tus 5 valores fundamentales y evalúa cuánto tu
+                            vida actual los refleja (escala 1-10).
                           </div>
                         </li>
                         <li className="flex gap-3">
@@ -994,8 +1006,8 @@ export default function DISCResultsPage() {
                         <li className="flex gap-3">
                           <span className="text-purple-600 font-bold">→</span>
                           <div>
-                            <strong>Ritual Matutino (15 min):</strong> Meditación, movimiento o lectura antes de
-                            revisar el celular.
+                            <strong>Ritual Matutino (15 min):</strong> Meditación, movimiento o lectura antes de revisar
+                            el celular.
                           </div>
                         </li>
                         <li className="flex gap-3">
@@ -1008,8 +1020,8 @@ export default function DISCResultsPage() {
                         <li className="flex gap-3">
                           <span className="text-purple-600 font-bold">→</span>
                           <div>
-                            <strong>Actividad Física Regular:</strong> 3 sesiones/semana de ejercicio que disfrutes
-                            (no que "debas" hacer).
+                            <strong>Actividad Física Regular:</strong> 3 sesiones/semana de ejercicio que disfrutes (no
+                            que "debas" hacer).
                           </div>
                         </li>
                       </ul>
@@ -1040,22 +1052,22 @@ export default function DISCResultsPage() {
                         <li className="flex gap-3">
                           <span className="text-orange-600 font-bold">→</span>
                           <div>
-                            <strong>Declaración de Propósito:</strong> Escribe en una frase: "Existo para..." y
-                            revísala mensualmente.
+                            <strong>Declaración de Propósito:</strong> Escribe en una frase: "Existo para..." y revísala
+                            mensualmente.
                           </div>
                         </li>
                         <li className="flex gap-3">
                           <span className="text-orange-600 font-bold">→</span>
                           <div>
-                            <strong>Voluntariado o Mentoría:</strong> Dedica 2 horas/mes a ayudar a alguien sin
-                            esperar nada a cambio.
+                            <strong>Voluntariado o Mentoría:</strong> Dedica 2 horas/mes a ayudar a alguien sin esperar
+                            nada a cambio.
                           </div>
                         </li>
                         <li className="flex gap-3">
                           <span className="text-orange-600 font-bold">→</span>
                           <div>
-                            <strong>Legado Intencional:</strong> Pregúntate: "¿Qué quiero que la gente recuerde de mí
-                            en 20 años?"
+                            <strong>Legado Intencional:</strong> Pregúntate: "¿Qué quiero que la gente recuerde de mí en
+                            20 años?"
                           </div>
                         </li>
                       </ul>
@@ -1092,9 +1104,9 @@ export default function DISCResultsPage() {
                 <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">🔗 El Ecosistema Completo de Autoconocimiento</h3>
                   <p className="text-sm text-gray-700 mb-4">
-                    Despega Cerebral (DISC) es tu punto de partida, pero es solo una pieza del rompecabezas completo. Cada
-                    test revela una dimensión diferente de quién eres, y juntos crean un mapa integral de tu desarrollo
-                    personal y profesional.
+                    Despega Cerebral (DISC) es tu punto de partida, pero es solo una pieza del rompecabezas completo.
+                    Cada test revela una dimensión diferente de quién eres, y juntos crean un mapa integral de tu
+                    desarrollo personal y profesional.
                   </p>
                 </div>
 
@@ -1134,7 +1146,7 @@ export default function DISCResultsPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="w-full"
+                            className="w-full bg-transparent"
                             onClick={() => router.push("/test/emotional-intelligence")}
                           >
                             Hacer Test IE
@@ -1166,7 +1178,7 @@ export default function DISCResultsPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="w-full"
+                            className="w-full bg-transparent"
                             onClick={() => router.push("/test/mbti")}
                           >
                             Hacer Test MBTI
@@ -1192,13 +1204,13 @@ export default function DISCResultsPage() {
                             </p>
                           </div>
                           <div className="text-sm">
-                            <strong>Ejemplo:</strong> Alto C en DISC + alta Conscientiousness en Big Five = Perfeccionista
-                            analítico. Alto C + baja Conscientiousness = Analítico flexible.
+                            <strong>Ejemplo:</strong> Alto C en DISC + alta Conscientiousness en Big Five =
+                            Perfeccionista analítico. Alto C + baja Conscientiousness = Analítico flexible.
                           </div>
                           <Button
                             size="sm"
                             variant="outline"
-                            className="w-full"
+                            className="w-full bg-transparent"
                             onClick={() => router.push("/test/big-five")}
                           >
                             Hacer Test Big Five
@@ -1220,7 +1232,8 @@ export default function DISCResultsPage() {
                           <div className="bg-green-50 p-3 rounded text-sm">
                             <strong className="text-green-900">Conexión:</strong>
                             <p className="text-green-800 mt-1">
-                              DISC te dice <em>cómo trabajas</em>, RIASEC te dice <em>qué tipo de trabajo</em> te motiva.
+                              DISC te dice <em>cómo trabajas</em>, RIASEC te dice <em>qué tipo de trabajo</em> te
+                              motiva.
                             </p>
                           </div>
                           <div className="text-sm">
@@ -1230,7 +1243,7 @@ export default function DISCResultsPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="w-full"
+                            className="w-full bg-transparent"
                             onClick={() => router.push("/test/riasec")}
                           >
                             Hacer Test RIASEC
@@ -1256,13 +1269,13 @@ export default function DISCResultsPage() {
                             </p>
                           </div>
                           <div className="text-sm">
-                            <strong>Ejemplo:</strong> Bajo I en DISC no significa mala comunicación. Soft Skills te
-                            dirá si has desarrollado la habilidad a pesar de tu preferencia natural.
+                            <strong>Ejemplo:</strong> Bajo I en DISC no significa mala comunicación. Soft Skills te dirá
+                            si has desarrollado la habilidad a pesar de tu preferencia natural.
                           </div>
                           <Button
                             size="sm"
                             variant="outline"
-                            className="w-full"
+                            className="w-full bg-transparent"
                             onClick={() => router.push("/test/soft-skills")}
                           >
                             Hacer Test Soft Skills
@@ -1303,30 +1316,54 @@ export default function DISCResultsPage() {
                     <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Líder Analítico</h4>
                       <ul className="space-y-1 text-sm">
-                        <li>• <strong>DISC:</strong> Alto D + Alto C = Decisivo pero perfeccionista</li>
-                        <li>• <strong>IE:</strong> Baja empatía emocional = Riesgo de alienar equipo</li>
-                        <li>• <strong>MBTI:</strong> INTJ = Visionario estratégico pero poco social</li>
-                        <li>• <strong>Acción DTC:</strong> Desarrollar IE para liderar con firmeza Y empatía</li>
+                        <li>
+                          • <strong>DISC:</strong> Alto D + Alto C = Decisivo pero perfeccionista
+                        </li>
+                        <li>
+                          • <strong>IE:</strong> Baja empatía emocional = Riesgo de alienar equipo
+                        </li>
+                        <li>
+                          • <strong>MBTI:</strong> INTJ = Visionario estratégico pero poco social
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Desarrollar IE para liderar con firmeza Y empatía
+                        </li>
                       </ul>
                     </div>
 
                     <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 2: El Comunicador Disperso</h4>
                       <ul className="space-y-1 text-sm">
-                        <li>• <strong>DISC:</strong> Alto I + Bajo C = Entusiasta pero poco detallista</li>
-                        <li>• <strong>Big Five:</strong> Baja Conscientiousness = Dificultad para terminar proyectos</li>
-                        <li>• <strong>Soft Skills:</strong> Alta comunicación, baja gestión del tiempo</li>
-                        <li>• <strong>Acción DTC:</strong> Entrenar hábitos de follow-through sin perder creatividad</li>
+                        <li>
+                          • <strong>DISC:</strong> Alto I + Bajo C = Entusiasta pero poco detallista
+                        </li>
+                        <li>
+                          • <strong>Big Five:</strong> Baja Conscientiousness = Dificultad para terminar proyectos
+                        </li>
+                        <li>
+                          • <strong>Soft Skills:</strong> Alta comunicación, baja gestión del tiempo
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Entrenar hábitos de follow-through sin perder creatividad
+                        </li>
                       </ul>
                     </div>
 
                     <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 3: El Colaborador Invisible</h4>
                       <ul className="space-y-1 text-sm">
-                        <li>• <strong>DISC:</strong> Alto S + Bajo D = Leal pero poco asertivo</li>
-                        <li>• <strong>RIASEC:</strong> Alto Social = Quiere ayudar pero no se atreve a liderar</li>
-                        <li>• <strong>IE:</strong> Alta empatía, baja autoafirmación</li>
-                        <li>• <strong>Acción DTC:</strong> Desarrollar asertividad sin perder tu esencia colaborativa</li>
+                        <li>
+                          • <strong>DISC:</strong> Alto S + Bajo D = Leal pero poco asertivo
+                        </li>
+                        <li>
+                          • <strong>RIASEC:</strong> Alto Social = Quiere ayudar pero no se atreve a liderar
+                        </li>
+                        <li>
+                          • <strong>IE:</strong> Alta empatía, baja autoafirmación
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Desarrollar asertividad sin perder tu esencia colaborativa
+                        </li>
                       </ul>
                     </div>
                   </CardContent>
@@ -1353,9 +1390,7 @@ export default function DISCResultsPage() {
                   <Lightbulb className="h-6 w-6 text-pink-600" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
-                <CardDescription>
-                  Explora tu autoconocimiento más allá de los resultados del test
-                </CardDescription>
+                <CardDescription>Explora tu autoconocimiento más allá de los resultados del test</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
@@ -1585,7 +1620,8 @@ export default function DISCResultsPage() {
                             11. ¿En qué momentos de mi vida he actuado fuera de mi perfil DISC natural? ¿Qué aprendí?
                           </h4>
                           <p className="text-sm text-gray-600">
-                            La flexibilidad conductual es una habilidad. Reconoce cuando has adaptado tu estilo con éxito.
+                            La flexibilidad conductual es una habilidad. Reconoce cuando has adaptado tu estilo con
+                            éxito.
                           </p>
                           <textarea
                             placeholder="Escribe tu reflexión aquí..."
@@ -1600,8 +1636,8 @@ export default function DISCResultsPage() {
                             12. ¿Qué mentor, líder o referente admiro que tenga un perfil DISC diferente al mío?
                           </h4>
                           <p className="text-sm text-gray-600">
-                            Estudiar perfiles complementarios te enseña lo que no ves naturalmente. Alto D puede aprender
-                            de un líder Alto S sobre paciencia estratégica.
+                            Estudiar perfiles complementarios te enseña lo que no ves naturalmente. Alto D puede
+                            aprender de un líder Alto S sobre paciencia estratégica.
                           </p>
                           <textarea
                             placeholder="Escribe tu reflexión aquí..."
