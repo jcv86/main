@@ -1,15 +1,32 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Brain, Heart, Users, Target, Lightbulb, ArrowRight, TrendingUp, Star, Award, BookOpen, Download, Share2, BarChart3, PieChart, Activity, Zap } from 'lucide-react'
+import {
+  Brain,
+  Heart,
+  Users,
+  Target,
+  Lightbulb,
+  ArrowRight,
+  TrendingUp,
+  Star,
+  Award,
+  BookOpen,
+  Download,
+  Share2,
+  BarChart3,
+  PieChart,
+  Activity,
+  Zap,
+} from "lucide-react"
 import { toast } from "@/hooks/use-toast"
-import { loadTestResult } from "@/lib/test-storage"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 
 interface TestResults {
@@ -145,18 +162,21 @@ export default function EmotionalIntelligenceResults() {
     try {
       setLoading(true)
 
-      console.log("[v0] Loading EI test results...")
-      console.log("[v0] User email:", user?.email)
+      console.log("[v0] Loading EI test results from database...")
 
-      const loadedResults = await loadTestResult("emotional-intelligence")
-      
-      if (loadedResults) {
-        console.log("[v0] Found results:", loadedResults)
-        // Handle both wrapped and direct results
-        const resultsData = loadedResults.results || loadedResults
-        setResults(resultsData)
+      if (!user?.email) {
+        console.log("[v0] No user email available")
+        setLoading(false)
+        return
+      }
+
+      const result = await UnifiedTestSystem.loadTestResult(user.email, "Emotional Intelligence")
+
+      if (result.success && result.data) {
+        console.log("[v0] Found results:", result.data)
+        setResults(result.data.results)
       } else {
-        console.log("[v0] No test results found")
+        console.log("[v0] No test results found:", result.error)
       }
     } catch (error: any) {
       console.error("[v0] Error loading results:", error)
@@ -211,7 +231,9 @@ export default function EmotionalIntelligenceResults() {
           <CardContent className="text-center p-8">
             <Heart className="h-16 w-16 mx-auto mb-6 text-red-500" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">No se encontraron resultados</h2>
-            <p className="text-xl text-gray-600 mb-6">Parece que aún no has completado el test de Inteligencia Emocional.</p>
+            <p className="text-xl text-gray-600 mb-6">
+              Parece que aún no has completado el test de Inteligencia Emocional.
+            </p>
             <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red-500 hover:bg-red-600">
               Realizar Test
             </Button>

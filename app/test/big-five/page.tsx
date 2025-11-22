@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { Brain, Clock, ArrowLeft, ArrowRight, CheckCircle, Sparkles, MessageSquare } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
 
 interface Question {
   id: number
@@ -105,6 +107,7 @@ export default function BigFiveTest() {
 
   const router = useRouter()
   const { user, isLoading } = useSession()
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -158,7 +161,21 @@ export default function BigFiveTest() {
 
   const submitTest = async () => {
     if (Object.keys(answers).length < bigFiveQuestions.length) {
-      alert("Por favor responde todas las preguntas antes de continuar.")
+      toast({
+        title: "Incomplete Test",
+        description: "Por favor responde todas las preguntas antes de continuar.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!user?.email) {
+      toast({
+        title: "Authentication Required",
+        description: "Debes estar autenticado para guardar los resultados.",
+        variant: "destructive",
+      })
+      router.push("/auth")
       return
     }
 
@@ -175,21 +192,30 @@ export default function BigFiveTest() {
       completion_date: endTime.toISOString(),
       total_questions: bigFiveQuestions.length,
       answered_questions: Object.keys(answers).length,
+      answers,
     }
 
     try {
-      // Save to localStorage for demo
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("big-five")) {
-        completedTests.push("big-five")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
+      console.log("[v0] Submitting Big Five test results to database...")
+      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "5 Dimensiones Despega", results, duration)
+
+      if (!saveResult.success) {
+        throw new Error(saveResult.error || "Failed to save results")
       }
 
-      localStorage.setItem("big_five_results", JSON.stringify(results))
+      console.log("[v0] Big Five test results saved successfully to database")
+      toast({
+        title: "Test Completed!",
+        description: "Your Big Five results have been saved successfully.",
+      })
       router.push("/test/big-five/results")
     } catch (error) {
-      console.error("Error submitting test:", error)
-      alert("Error al guardar los resultados. Por favor intenta de nuevo.")
+      console.error("[v0] Error submitting Big Five test:", error)
+      toast({
+        title: "Error saving results",
+        description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
+        variant: "destructive",
+      })
     } finally {
       setIsSubmitting(false)
     }

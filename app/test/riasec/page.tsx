@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ArrowRight, Palette, CheckCircle, Clock } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
 
 interface Question {
   id: number
@@ -85,6 +87,7 @@ export default function RIASECTest() {
 
   const router = useRouter()
   const { user, isLoading } = useSession()
+  const { toast } = useToast()
 
   const currentAnswer = answers[riasecQuestions[currentQuestion].id]
 
@@ -140,7 +143,21 @@ export default function RIASECTest() {
 
   const submitTest = async () => {
     if (Object.keys(answers).length < riasecQuestions.length) {
-      alert("Por favor responde todas las preguntas antes de continuar.")
+      toast({
+        title: "Incomplete Test",
+        description: "Por favor responde todas las preguntas antes de continuar.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!user?.email) {
+      toast({
+        title: "Authentication Required",
+        description: "Debes estar autenticado para guardar los resultados.",
+        variant: "destructive",
+      })
+      router.push("/auth")
       return
     }
 
@@ -159,21 +176,35 @@ export default function RIASECTest() {
       duration_minutes: duration,
       total_questions: riasecQuestions.length,
       answered_questions: Object.keys(answers).length,
+      answers,
     }
 
     try {
-      // Save to localStorage for demo
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("riasec")) {
-        completedTests.push("riasec")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
+      console.log("[v0] Submitting RIASEC test results to database...")
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Brújula Vocacional Despega",
+        results,
+        duration,
+      )
+
+      if (!saveResult.success) {
+        throw new Error(saveResult.error || "Failed to save results")
       }
 
-      localStorage.setItem("riasec_results", JSON.stringify(results))
+      console.log("[v0] RIASEC test results saved successfully to database")
+      toast({
+        title: "Test Completed!",
+        description: "Your RIASEC results have been saved successfully.",
+      })
       router.push("/test/riasec/results")
     } catch (error) {
-      console.error("Error submitting test:", error)
-      alert("Error al guardar los resultados. Por favor intenta de nuevo.")
+      console.error("[v0] Error submitting RIASEC test:", error)
+      toast({
+        title: "Error saving results",
+        description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
+        variant: "destructive",
+      })
     } finally {
       setIsSubmitting(false)
     }

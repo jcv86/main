@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ArrowRight, Star, CheckCircle, Clock, MessageSquare } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
 
 interface Question {
   id: number
@@ -261,6 +263,7 @@ export default function SoftSkillsTest() {
 
   const router = useRouter()
   const { user, isLoading } = useSession()
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -337,7 +340,21 @@ export default function SoftSkillsTest() {
 
   const submitTest = async () => {
     if (Object.keys(answers).length < softSkillsQuestions.length) {
-      alert("Por favor responde todas las preguntas antes de continuar.")
+      toast({
+        title: "Incomplete Test",
+        description: "Por favor responde todas las preguntas antes de continuar.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!user?.email) {
+      toast({
+        title: "Authentication Required",
+        description: "Debes estar autenticado para guardar los resultados.",
+        variant: "destructive",
+      })
+      router.push("/auth")
       return
     }
 
@@ -354,21 +371,30 @@ export default function SoftSkillsTest() {
       duration_minutes: duration,
       total_questions: softSkillsQuestions.length,
       answered_questions: Object.keys(answers).length,
+      answers,
     }
 
     try {
-      // Save to localStorage for demo
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("soft-skills")) {
-        completedTests.push("soft-skills")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
+      console.log("[v0] Submitting Soft Skills test results to database...")
+      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Competencias Despega", results, duration)
+
+      if (!saveResult.success) {
+        throw new Error(saveResult.error || "Failed to save results")
       }
 
-      localStorage.setItem("soft_skills_results", JSON.stringify(results))
+      console.log("[v0] Soft Skills test results saved successfully to database")
+      toast({
+        title: "Test Completed!",
+        description: "Your Soft Skills results have been saved successfully.",
+      })
       router.push("/test/soft-skills/results")
     } catch (error) {
-      console.error("Error submitting test:", error)
-      alert("Error al guardar los resultados. Por favor intenta de nuevo.")
+      console.error("[v0] Error submitting Soft Skills test:", error)
+      toast({
+        title: "Error saving results",
+        description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
+        variant: "destructive",
+      })
     } finally {
       setIsSubmitting(false)
     }

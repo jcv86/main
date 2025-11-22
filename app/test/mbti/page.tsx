@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { Lightbulb, Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
 import { useSession } from "@/components/session-wrapper"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
 
 interface Question {
   id: number
@@ -293,6 +295,7 @@ export default function MBTITest() {
 
   const router = useRouter()
   const { user, isLoading } = useSession()
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -334,7 +337,21 @@ export default function MBTITest() {
 
   const submitTest = async () => {
     if (Object.keys(answers).length < mbtiQuestions.length) {
-      alert("Por favor responde todas las preguntas antes de continuar.")
+      toast({
+        title: "Incomplete Test",
+        description: "Por favor responde todas las preguntas antes de continuar.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!user?.email) {
+      toast({
+        title: "Authentication Required",
+        description: "Debes estar autenticado para guardar los resultados.",
+        variant: "destructive",
+      })
+      router.push("/auth")
       return
     }
 
@@ -358,21 +375,36 @@ export default function MBTITest() {
       completion_date: endTime.toISOString(),
       total_questions: mbtiQuestions.length,
       answered_questions: Object.keys(answers).length,
+      duration_minutes: duration,
+      answers,
     }
 
     try {
-      // Save to localStorage for demo
-      const completedTests = JSON.parse(localStorage.getItem("completed_tests") || "[]")
-      if (!completedTests.includes("mbti")) {
-        completedTests.push("mbti")
-        localStorage.setItem("completed_tests", JSON.stringify(completedTests))
+      console.log("[v0] Submitting MBTI test results to database...")
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Mapa de Personalidad Despega",
+        results,
+        duration,
+      )
+
+      if (!saveResult.success) {
+        throw new Error(saveResult.error || "Failed to save results")
       }
 
-      localStorage.setItem("mbti_results", JSON.stringify(results))
+      console.log("[v0] MBTI test results saved successfully to database")
+      toast({
+        title: "Test Completed!",
+        description: "Your MBTI results have been saved successfully.",
+      })
       router.push("/test/mbti/results")
     } catch (error) {
-      console.error("Error submitting test:", error)
-      alert("Error al guardar los resultados. Por favor intenta de nuevo.")
+      console.error("[v0] Error submitting MBTI test:", error)
+      toast({
+        title: "Error saving results",
+        description: "No se pudieron guardar tus resultados en la base de datos. Por favor contacta soporte.",
+        variant: "destructive",
+      })
     } finally {
       setIsSubmitting(false)
     }
