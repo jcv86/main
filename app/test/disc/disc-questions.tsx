@@ -121,3 +121,5 @@ export const discQuestions = [
     dimension: "C",
   },
 ]
+
+export default discQuestions

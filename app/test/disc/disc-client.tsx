@@ -15,7 +15,7 @@ import { Breadcrumbs, TestStructuredData } from "@/components/seo-optimized-cont
 import { TestNavigationFlow } from "@/components/test-navigation-flow"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
-import { discQuestions } from "./disc-questions.tsx" // Fixed import extension from .ts to .tsx
+import { discQuestions } from "./disc-questions" // Fixed imports - using correct paths and named import for discQuestions
 import TestIntroScreen from "@/components/test-intro-screen"
 import TestCompletionScreen from "@/components/test-completion-screen"
 
@@ -199,12 +199,16 @@ export default function DISCTestClient() {
       <TestIntroScreen
         testName="Despega Cerebral"
         testDescription="Tu Perfil de Comportamiento Profesional"
-        whatItMeasures="Tu estilo de comportamiento natural en el trabajo basado en 4 dimensiones: Dominancia, Influencia, Estabilidad y Cumplimiento."
+        whatItMeasures={[
+          "Tu estilo de comportamiento natural en el trabajo",
+          "Preferencias de comunicación y toma de decisiones",
+          "4 dimensiones clave: Dominancia, Influencia, Estabilidad y Cumplimiento",
+          "Fortalezas naturales y áreas de desarrollo",
+        ]}
         whyRelevant="Entender tu estilo DISC te ayuda a comunicarte mejor, elegir roles que se alineen con tus fortalezas naturales y desarrollar competencias complementarias."
         estimatedTime={15}
         totalQuestions={discQuestions.length}
         onStart={() => setShowIntro(false)}
-        onBack={() => router.push("/test")}
       />
     )
   }
@@ -220,12 +224,10 @@ export default function DISCTestClient() {
     return (
       <TestCompletionScreen
         testName="Despega Cerebral"
-        userName={user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Usuario"}
         quickSummary={`Tu estilo principal es ${styleLabels[completionData.primaryStyle] || completionData.primaryStyle}. Este perfil refleja tu forma natural de actuar en entornos profesionales.`}
         highlightedInsight={`Puntaje ${styleLabels[completionData.primaryStyle]}: ${completionData.scores[completionData.primaryStyle.charAt(0)]}%`}
-        completionTime={completionData.duration}
-        onViewFullReport={() => router.push("/test/disc/results")}
-        onTalkToCoach={() => router.push("/coach")}
+        resultsPath="/test/disc/results"
+        testType="disc"
       />
     )
   }
