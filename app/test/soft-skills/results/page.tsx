@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -22,6 +22,7 @@ import {
   BarChart3,
   PieChart,
   ArrowLeft,
+  Sparkles,
 } from "lucide-react"
 import {
   BarChart,
@@ -234,7 +235,7 @@ export default function SoftSkillsResults() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-fit lg:mx-auto">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 gap-2">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Resumen
@@ -247,6 +248,9 @@ export default function SoftSkillsResults() {
               <Brain className="h-4 w-4" />
               Análisis IA
             </TabsTrigger>
+            <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
+            <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
+            <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
             <TabsTrigger value="coach" className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
               Coach IA
@@ -508,6 +512,722 @@ export default function SoftSkillsResults() {
 
           <TabsContent value="insights">
             <AiInsightsPanel testType="soft-skills" results={results} responses={openResponses} />
+          </TabsContent>
+
+          <TabsContent value="oportunidades" className="space-y-6">
+            <Card className="border-l-4 border-l-amber-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                  Oportunidades de Desarrollo en Soft Skills
+                </CardTitle>
+                <CardDescription>Cómo expandir tus competencias blandas más allá del trabajo</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">Por qué las Soft Skills trascienden lo laboral</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Las competencias blandas no son solo habilidades profesionales, son capacidades de vida que afectan
+                    tus relaciones, tu bienestar emocional y tu impacto en el mundo. Tu perfil actual muestra fortalezas
+                    en {results.strengths?.slice(0, 2).join(" y ")}, pero el desarrollo integral requiere crecer en
+                    todas las dimensiones.
+                  </p>
+                </div>
+
+                {/* Área 1: Fortalezas para Profundizar */}
+                <Card className="border-l-4 border-l-green-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Award className="h-5 w-5 text-green-600" />
+                      1. Llevar tus Fortalezas al Siguiente Nivel
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-green-800">
+                        Tus fortalezas actuales en {results.strengths?.slice(0, 2).join(" y ")} son excelentes, pero
+                        pueden evolucionar de habilidades personales a capacidades de impacto social y mentoría.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Mentoría Activa:</strong> Identifica a 2 personas que podrían beneficiarse de tus
+                            fortalezas y ofréceles mentoría informal (30 min/mes).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Enseñanza Pública:</strong> Escribe un artículo, da una charla o crea contenido
+                            sobre tus competencias más fuertes para compartir tu conocimiento.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Desafío de Maestría:</strong> En tu área más fuerte, busca un desafío 10x más
+                            difícil que tu uso actual (ejemplo: si eres buen comunicador, presenta en un TEDx).
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 2: Competencias en Desarrollo */}
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Target className="h-5 w-5 text-orange-600" />
+                      2. Acelerar Competencias en Desarrollo
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-orange-800">
+                        Las áreas de mejora ({results.areas_for_improvement?.slice(0, 2).join(", ")}) representan tus
+                        mayores oportunidades de crecimiento exponencial.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Entrenamiento Intensivo (21 días):</strong> Elige UNA competencia débil y practícala
+                            deliberadamente 15 min/día durante 21 días consecutivos.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Modelo a Seguir:</strong> Identifica a alguien que domine tu área débil y estudia
+                            sus comportamientos específicos. Imita 3 acciones concretas.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Accountability Partner:</strong> Encuentra a alguien que te rinda cuentas
+                            semanalmente sobre tu progreso en esa competencia.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 3: Integración Vida-Trabajo */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Lightbulb className="h-5 w-5 text-blue-600" />
+                      3. Integración en tu Vida Personal
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-blue-800">
+                        Las soft skills no son solo para el trabajo. Aplicarlas en tu vida personal transforma tus
+                        relaciones, tu familia y tu comunidad.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Comunicación en Casa:</strong> Aplica tus mejores habilidades de comunicación en
+                            conversaciones difíciles con familia (no solo en el trabajo).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Liderazgo Comunitario:</strong> Lidera un proyecto en tu comunidad, barrio o grupo
+                            social (voluntariado, organización de eventos, etc.).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Empatía Radical:</strong> Durante 1 semana, practica escucha activa 100% con tu
+                            pareja, amigos o familia (sin celular, sin interrupciones).
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 4: Impacto y Legado */}
+                <Card className="border-l-4 border-l-purple-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-purple-600" />
+                      4. Construcción de Impacto y Legado
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-purple-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-purple-800">
+                        Las soft skills son el vehículo para crear impacto duradero. ¿Cómo puedes usar tus competencias
+                        para dejar un legado positivo?
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Proyecto de Impacto Social:</strong> Inicia o únete a un proyecto que use tus soft
+                            skills para resolver un problema real en tu comunidad.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Sistema de Mentoría:</strong> Crea un programa informal de mentoría en tu área de
+                            expertise (puede ser online, gratis, 1 hora/mes).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Documentación de Aprendizaje:</strong> Comparte tu proceso de desarrollo de soft
+                            skills en un blog, podcast o canal de YouTube para inspirar a otros.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Elige UNA oportunidad de las 4 áreas que más resuene contigo y comprométete a trabajarla durante 30
+                    días.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => setActiveTab("coach")}>
+                    Hablar con Coach IA sobre esto
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="conexiones" className="space-y-6">
+            <Card className="border-l-4 border-l-indigo-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Brain className="h-6 w-6 text-indigo-600" />
+                  Conexión con Otros Módulos DTC
+                </CardTitle>
+                <CardDescription>Cómo Soft Skills se relaciona con los demás tests del ecosistema DTC</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">Soft Skills: Las Habilidades que Multiplican Todo</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Los otros tests te dicen QUIÉN ERES (personalidad, emociones, intereses). Soft Skills te dice QUÉ
+                    TAN BIEN PUEDES TRADUCIR ESO EN ACCIÓN EFECTIVA. Son las habilidades entrenables que convierten tu
+                    potencial en resultados reales.
+                  </p>
+                </div>
+
+                {/* Connection Map */}
+                <Card className="bg-gradient-to-br from-purple-50 to-pink-50">
+                  <CardContent className="pt-6">
+                    <div className="text-center mb-6">
+                      <div className="inline-block bg-purple-600 text-white px-6 py-3 rounded-full font-bold text-lg">
+                        Soft Skills (Competencias Entrenables)
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">Habilidades que puedes desarrollar con práctica</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* DISC Connection */}
+                      <Card className="border-2 border-blue-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-lg">
+                              🎯
+                            </div>
+                            Despega Cerebral (DISC)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-blue-50 p-3 rounded text-sm">
+                            <strong className="text-blue-900">Conexión:</strong>
+                            <p className="text-blue-800 mt-1">
+                              DISC mide tu estilo natural, Soft Skills mide cuán bien has desarrollado habilidades para
+                              adaptarte a otros estilos.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto D en DISC + alta Comunicación en Soft Skills = Líder directo
+                            pero diplomático. Alto D + baja Empatía en Soft Skills = Líder efectivo pero abrasivo.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/disc")}
+                          >
+                            Ver Test DISC
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* IE Connection */}
+                      <Card className="border-2 border-red-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-lg">
+                              ❤️
+                            </div>
+                            Inteligencia Emocional Despega
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-red-50 p-3 rounded text-sm">
+                            <strong className="text-red-900">Conexión:</strong>
+                            <p className="text-red-800 mt-1">
+                              IE mide tu capacidad emocional innata, Soft Skills mide cómo la aplicas en el mundo real.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alta IE + baja Comunicación en Soft Skills = Entiendes emociones
+                            pero no sabes expresarlas. Baja IE + alta Comunicación = Hablas bien pero sin profundidad
+                            emocional.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/emotional-intelligence")}
+                          >
+                            Ver Test IE
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* MBTI Connection */}
+                      <Card className="border-2 border-purple-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                              🧠
+                            </div>
+                            Mapa de Personalidad (MBTI)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-purple-50 p-3 rounded text-sm">
+                            <strong className="text-purple-900">Conexión:</strong>
+                            <p className="text-purple-800 mt-1">
+                              MBTI muestra tus preferencias cognitivas, Soft Skills muestra cuán flexible eres para
+                              trabajar fuera de ellas.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> INTJ + alta Colaboración en Soft Skills = Estratega que trabaja
+                            bien en equipo. ENFP + baja Gestión del Tiempo = Creativo disperso sin ejecución.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/mbti")}
+                          >
+                            Ver Test MBTI
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* Big Five Connection */}
+                      <Card className="border-2 border-green-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-lg">
+                              ⭐
+                            </div>
+                            5 Dimensiones (Big Five)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-green-50 p-3 rounded text-sm">
+                            <strong className="text-green-900">Conexión:</strong>
+                            <p className="text-green-800 mt-1">
+                              Big Five mide rasgos estables, Soft Skills mide habilidades que cambian con entrenamiento.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Baja Extraversion (Big Five) + alta Comunicación (Soft Skills) =
+                            Introvertido que aprendió a comunicar bien. Alta Neuroticism + alta Resiliencia = Persona
+                            ansiosa pero funcional.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/big-five")}
+                          >
+                            Ver Test Big Five
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* RIASEC Connection */}
+                      <Card className="border-2 border-orange-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-lg">
+                              💼
+                            </div>
+                            Brújula Vocacional (RIASEC)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-orange-50 p-3 rounded text-sm">
+                            <strong className="text-orange-900">Conexión:</strong>
+                            <p className="text-orange-800 mt-1">
+                              RIASEC muestra tus intereses vocacionales, Soft Skills muestra si tienes las competencias
+                              para ejecutarlos.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto Social (RIASEC) + baja Empatía (Soft Skills) = Quieres
+                            trabajar con gente pero te falta la habilidad. Alto Investigador + baja Colaboración =
+                            Científico brillante pero aislado.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/riasec")}
+                          >
+                            Ver Test RIASEC
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Synergy Examples */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      Casos de Sinergia: Soft Skills como Multiplicador
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 1: El Líder Técnico que No Conecta</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>DISC:</strong> Alto D+C = Decisivo y analítico
+                        </li>
+                        <li>
+                          • <strong>RIASEC:</strong> Alto Investigador = Ama resolver problemas complejos
+                        </li>
+                        <li>
+                          • <strong>Soft Skills:</strong> Baja Empatía + baja Comunicación = No logra influenciar
+                        </li>
+                        <li>
+                          • <strong>Consecuencia:</strong> Brillante técnicamente pero no asciende a liderazgo senior
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Entrenar Empatía y Comunicación para desbloquear su potencial
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 2: El Creativo Sin Estructura</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>MBTI:</strong> ENFP = Innovador y entusiasta
+                        </li>
+                        <li>
+                          • <strong>Big Five:</strong> Alta Openness + Baja Conscientiousness = Ideas sin ejecución
+                        </li>
+                        <li>
+                          • <strong>Soft Skills:</strong> Baja Gestión del Tiempo + baja Resolución de Problemas
+                        </li>
+                        <li>
+                          • <strong>Consecuencia:</strong> Muchos proyectos iniciados, pocos terminados
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Desarrollar Gestión del Tiempo para convertir ideas en realidad
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 3: El Colaborador Invisible</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>DISC:</strong> Alto S = Leal, paciente, trabajador en equipo
+                        </li>
+                        <li>
+                          • <strong>IE:</strong> Alta empatía pero baja autoafirmación
+                        </li>
+                        <li>
+                          • <strong>Soft Skills:</strong> Alta Colaboración pero baja Liderazgo + baja Comunicación
+                        </li>
+                        <li>
+                          • <strong>Consecuencia:</strong> Hace todo el trabajo pero otros reciben el crédito
+                        </li>
+                        <li>
+                          • <strong>Acción DTC:</strong> Entrenar Asertividad y Comunicación para visibilizar su valor
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">La Clave del Desarrollo Integral</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Soft Skills son las únicas que puedes entrenar directamente. Tu personalidad (MBTI, Big Five) es
+                    relativamente estable, tus intereses (RIASEC) cambian lentamente, pero tus competencias blandas
+                    pueden mejorar dramáticamente en 90 días con práctica deliberada.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => setActiveTab("oportunidades")}>
+                    Ver Oportunidades de Desarrollo
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reflexion" className="space-y-6">
+            <Card className="border-l-4 border-l-pink-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Lightbulb className="h-6 w-6 text-pink-600" />
+                  Preguntas de Reflexión Profunda
+                </CardTitle>
+                <CardDescription>Convierte tus resultados de Soft Skills en autoconocimiento aplicado</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">De Números a Narrativa Personal</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Un test te da puntuaciones, pero solo la reflexión profunda convierte esos números en transformación
+                    real. Estas preguntas te ayudarán a entender el "por qué" detrás de tus resultados y diseñar
+                    acciones específicas.
+                  </p>
+                </div>
+
+                {/* Reflexión sobre Fortalezas */}
+                <Card className="border-l-4 border-l-green-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Award className="h-5 w-5 text-green-600" />
+                      Reflexión sobre tus Fortalezas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <p className="text-sm text-green-800">
+                        Tus fortalezas principales son: <strong>{results.strengths?.slice(0, 3).join(", ")}</strong>
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold text-green-900 mb-2">
+                          1. ¿Cómo desarrollaste estas fortalezas? ¿Fueron naturales o las entrenaste?
+                        </h4>
+                        <textarea
+                          placeholder="Reflexiona sobre el origen de tus fortalezas..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-green-900 mb-2">
+                          2. ¿Cuándo fue la última vez que usaste estas fortalezas para ayudar a alguien más?
+                        </h4>
+                        <textarea
+                          placeholder="Describe una situación específica..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-green-900 mb-2">
+                          3. ¿Cómo podrías llevar estas fortalezas al siguiente nivel de maestría?
+                        </h4>
+                        <textarea
+                          placeholder="Piensa en desafíos 10x más grandes..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Reflexión sobre Áreas de Mejora */}
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-orange-600" />
+                      Reflexión sobre Áreas de Mejora
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <p className="text-sm text-orange-800">
+                        Tus mayores oportunidades de crecimiento:{" "}
+                        <strong>{results.areas_for_improvement?.slice(0, 3).join(", ")}</strong>
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold text-orange-900 mb-2">
+                          4. ¿Cuál de tus áreas débiles te ha costado más (oportunidades perdidas, conflictos, etc.)?
+                        </h4>
+                        <textarea
+                          placeholder="Sé honesto sobre el impacto real..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-orange-900 mb-2">
+                          5. ¿Qué creencias limitantes tienes sobre tu capacidad de mejorar estas áreas?
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-2">
+                          (Ejemplo: "No soy bueno para comunicar", "Nunca he sido organizado", "Eso no es para mí")
+                        </p>
+                        <textarea
+                          placeholder="Identifica tus creencias autolimitantes..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-orange-900 mb-2">
+                          6. Si dedicaras 15 minutos diarios durante 30 días a UNA competencia, ¿cuál elegirías y por
+                          qué?
+                        </h4>
+                        <textarea
+                          placeholder="Elige una y explica tu razonamiento..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Reflexión sobre Impacto */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Target className="h-5 w-5 text-blue-600" />
+                      Reflexión sobre Impacto y Propósito
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold text-blue-900 mb-2">
+                          7. ¿Cómo cambiaría tu vida si tuvieras un 10/10 en TODAS las soft skills?
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-2">
+                          (Qué lograrías, qué relaciones mejorarían, qué oportunidades aparecerían)
+                        </p>
+                        <textarea
+                          placeholder="Visualiza tu versión 10/10..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-blue-900 mb-2">
+                          8. ¿Qué competencia blanda, si la dominaras, multiplicaría más tu impacto en el mundo?
+                        </h4>
+                        <textarea
+                          placeholder="Piensa en impacto, no solo éxito personal..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-blue-900 mb-2">
+                          9. ¿Quién en tu vida podría beneficiarse más si mejoras tus soft skills? ¿Cómo?
+                        </h4>
+                        <textarea
+                          placeholder="Piensa en personas específicas..."
+                          className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Reflexión sobre Acción */}
+                <Card className="border-l-4 border-l-purple-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-purple-600" />
+                      De Reflexión a Acción
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold text-purple-900 mb-2">
+                          10. Si tuvieras que elegir UNA competencia para entrenar intensivamente los próximos 90 días,
+                          ¿cuál sería y cuál sería tu primera acción mañana?
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-2">
+                          (Sé ultra específico: no "mejorar comunicación", sino "practicar escucha activa 10 min/día con
+                          mi pareja")
+                        </p>
+                        <textarea
+                          placeholder="Compromiso específico y acción inmediata..."
+                          className="w-full min-h-[120px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-pink-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Convierte Reflexión en Acción</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Tus respuestas son solo el inicio. Compártelas con tu Coach IA para diseñar un plan de acción
+                    personalizado basado en tus reflexiones.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => setActiveTab("coach")}>
+                    Hablar con Coach IA
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">

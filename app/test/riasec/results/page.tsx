@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import {
   Target,
   Brain,
@@ -28,6 +29,10 @@ import {
   Star,
   TrendingDown,
   AlertCircle,
+  Compass,
+  Lightbulb,
+  Rocket,
+  Network,
 } from "lucide-react"
 import {
   ResponsiveContainer,
@@ -521,7 +526,7 @@ export default function RIASECResults() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6">
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-2">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <Award className="h-4 w-4" />
                   <span className="hidden sm:inline">Resumen</span>
@@ -537,6 +542,18 @@ export default function RIASECResults() {
                 <TabsTrigger value="career" className="flex items-center gap-2">
                   <Briefcase className="h-4 w-4" />
                   <span className="hidden sm:inline">Carrera</span>
+                </TabsTrigger>
+                <TabsTrigger value="oportunidades" className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="hidden sm:inline">Oportunidades</span>
+                </TabsTrigger>
+                <TabsTrigger value="conexiones" className="flex items-center gap-2">
+                  <Network className="h-4 w-4" />
+                  <span className="hidden sm:inline">Conexiones</span>
+                </TabsTrigger>
+                <TabsTrigger value="reflexion" className="flex items-center gap-2">
+                  <Lightbulb className="h-4 w-4" />
+                  <span className="hidden sm:inline">Reflexión</span>
                 </TabsTrigger>
                 <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
                   <Sparkles className="h-4 w-4" />
@@ -1035,6 +1052,791 @@ export default function RIASECResults() {
                       ))}
                     </div>
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="oportunidades" className="space-y-6">
+            <Card className="border-l-4 border-l-amber-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                  Oportunidades de Desarrollo Vocacional
+                </CardTitle>
+                <CardDescription>
+                  Áreas de crecimiento basadas en tu código Holland {results.holland_code}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Tu perfil vocacional {results.holland_code} con puntuaciones R:{results.R}, I:{results.I}, A:
+                    {results.A}, S:{results.S}, E:{results.E}, C:{results.C} indica tus intereses naturales. Estas
+                    oportunidades están diseñadas para expandir tu potencial más allá de tu zona de confort.
+                  </p>
+                </div>
+
+                {/* Área 1: Exploración de Intereses */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Compass className="h-5 w-5 text-blue-600" />
+                      1. Exploración de Intereses Complementarios
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-blue-800">
+                        {results.holland_code[0] === "R"
+                          ? "Explora el lado artístico o social de tu trabajo técnico. Considera proyectos que combinen tu habilidad práctica con creatividad."
+                          : results.holland_code[0] === "I"
+                            ? "Aplica tu capacidad analítica a contextos más prácticos o emprendedores. Busca oportunidades donde la investigación se convierta en acción."
+                            : results.holland_code[0] === "A"
+                              ? "Desarrolla estructura y método en tu creatividad. Aprende gestión de proyectos creativos o emprendimiento artístico."
+                              : results.holland_code[0] === "S"
+                                ? "Integra competencias de liderazgo o emprendimiento en tu vocación de servicio. Considera roles donde puedas iniciar programas sociales."
+                                : results.holland_code[0] === "E"
+                                  ? "Profundiza en el análisis y la planificación estratégica. Desarrolla tu lado investigativo para tomar mejores decisiones empresariales."
+                                  : "Incorpora creatividad e innovación en tu trabajo sistemático. Busca formas de aplicar tu precisión a proyectos disruptivos."}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Proyecto Híbrido (1 mes):</strong> Identifica un proyecto que combine tu interés
+                            principal con uno de tus intereses más bajos. Ejemplo: Si eres Alto R, haz un proyecto de
+                            construcción con impacto social.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Curso de Ampliación:</strong> Toma un curso de 4-8 semanas en un área vocacional
+                            diferente a tu código Holland principal.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Job Shadowing:</strong> Pasa un día observando a alguien cuyo código Holland sea tu
+                            código invertido (tu letra más baja).
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold mb-1">Recurso Recomendado DTC</p>
+                          <p className="text-sm opacity-90">
+                            Test de Soft Skills para medir competencias complementarias
+                          </p>
+                        </div>
+                        <Button size="sm" variant="secondary" onClick={() => router.push("/test/soft-skills")}>
+                          Hacer Test
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 2: Desarrollo de Carrera */}
+                <Card className="border-l-4 border-l-green-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Briefcase className="h-5 w-5 text-green-600" />
+                      2. Aceleración de Carrera
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-green-800">
+                        Identifica las 3 carreras sugeridas que más te interesan y crea un plan de desarrollo de 2 años
+                        para llegar a la primera de ellas.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Entrevistas Informacionales (5 conversaciones):</strong> Habla con 5 personas que
+                            trabajen en las carreras que te interesan. Pregúntales cómo llegaron ahí.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Mapa de Competencias:</strong> Lista las 10 habilidades clave para tu carrera
+                            objetivo. Evalúa cuáles tienes y cuáles necesitas desarrollar.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Proyecto de Portfolio:</strong> Crea un proyecto tangible que demuestre tus
+                            capacidades en el campo que quieres ingresar.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 3: Networking Estratégico */}
+                <Card className="border-l-4 border-l-purple-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Users className="h-5 w-5 text-purple-600" />
+                      3. Networking Estratégico Vocacional
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-purple-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-purple-800">
+                        Construye una red profesional en los campos que te interesan, incluso antes de trabajar en
+                        ellos.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>LinkedIn Activo:</strong> Conecta con 20 profesionales en tu campo de interés.
+                            Comenta en sus publicaciones durante 30 días.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Comunidades Profesionales:</strong> Únete a 2-3 grupos online (Slack, Discord,
+                            foros) de tu industria objetivo.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Eventos y Conferencias:</strong> Asiste a 1 evento presencial o virtual trimestral
+                            en tu área de interés vocacional.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 4: Emprendimiento Vocacional */}
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Rocket className="h-5 w-5 text-orange-600" />
+                      4. Emprendimiento Vocacional
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-orange-800">
+                        No esperes a que alguien te contrate. Crea tu propia oportunidad alineada con tu código Holland.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Proyecto Freelance:</strong> Ofrece tus servicios en Upwork, Fiverr o plataformas
+                            locales en tu área de interés vocacional.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Side Project de 90 días:</strong> Dedica 5 horas/semana a un proyecto personal que
+                            aplique tu código Holland (blog, app, consultoria, arte, etc.).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Validación de Idea:</strong> Identifica un problema en tu campo de interés y propón
+                            una solución. Valídala con 10 personas.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Elige UNA oportunidad de desarrollo vocacional y conviértela en una meta específica con plazo en la
+                    sección de Plan de Acción.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => setActiveTab("action")}>
+                    Ir a Plan de Acción
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="conexiones" className="space-y-6">
+            <Card className="border-l-4 border-l-indigo-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Brain className="h-6 w-6 text-indigo-600" />
+                  Conexión con Otros Módulos DTC
+                </CardTitle>
+                <CardDescription>
+                  Cómo la Brújula Vocacional se relaciona con los demás tests del ecosistema
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">El Ecosistema Completo de Orientación Vocacional</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    RIASEC te muestra QUÉ te interesa, pero necesitas los otros tests para saber CÓMO lo harías, CON
+                    QUIÉN trabajarías mejor, y POR QUÉ te motivaría. Juntos crean un mapa completo de tu carrera ideal.
+                  </p>
+                </div>
+
+                {/* Connection Map */}
+                <Card className="bg-gradient-to-br from-blue-50 to-purple-50">
+                  <CardContent className="pt-6">
+                    <div className="text-center mb-6">
+                      <div className="inline-block bg-green-600 text-white px-6 py-3 rounded-full font-bold text-lg">
+                        Brújula Vocacional (RIASEC)
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">Tus intereses y vocación profesional</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* DISC */}
+                      <Card className="border-2 border-blue-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-lg">
+                              🧭
+                            </div>
+                            Despega Cerebral (DISC)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-blue-50 p-3 rounded text-sm">
+                            <strong className="text-blue-900">Conexión:</strong>
+                            <p className="text-blue-800 mt-1">
+                              RIASEC te dice QUÉ tipo de trabajo te interesa, DISC te dice CÓMO te comportas en ese
+                              trabajo.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto I (Investigador) en RIASEC + Alto C en DISC = Científico
+                            meticuloso. Alto I en RIASEC + Alto D en DISC = Investigador emprendedor que lidera
+                            proyectos.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/disc")}
+                          >
+                            Hacer Test DISC
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* IE */}
+                      <Card className="border-2 border-red-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-lg">
+                              ❤️
+                            </div>
+                            Inteligencia Emocional Despega
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-red-50 p-3 rounded text-sm">
+                            <strong className="text-red-900">Conexión:</strong>
+                            <p className="text-red-800 mt-1">
+                              RIASEC muestra tus intereses, IE muestra si tienes las competencias emocionales para
+                              prosperar en ellos.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto S (Social) en RIASEC pero baja empatía en IE = necesitas
+                            desarrollar IE para trabajar efectivamente con personas.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/emotional-intelligence")}
+                          >
+                            Hacer Test IE
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* MBTI */}
+                      <Card className="border-2 border-purple-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                              🧠
+                            </div>
+                            Mapa de Personalidad Despega
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-purple-50 p-3 rounded text-sm">
+                            <strong className="text-purple-900">Conexión:</strong>
+                            <p className="text-purple-800 mt-1">
+                              RIASEC es sobre intereses externos, MBTI sobre preferencias cognitivas internas.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto A (Artístico) + INFP = Artista introspectivo. Alto A + ESFP =
+                            Artista performático que necesita audiencia.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/mbti")}
+                          >
+                            Hacer Test MBTI
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* Big Five */}
+                      <Card className="border-2 border-yellow-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center text-lg">
+                              ⭐
+                            </div>
+                            5 Dimensiones Despega
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-yellow-50 p-3 rounded text-sm">
+                            <strong className="text-yellow-900">Conexión:</strong>
+                            <p className="text-yellow-800 mt-1">
+                              Big Five predice si tendrás éxito sostenible en las carreras que RIASEC sugiere.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Alto E (Emprendedor) + baja Conscientiousness = riesgo de
+                            proyectos sin terminar. Alto E + alta Conscientiousness = emprendedor exitoso y
+                            estructurado.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/big-five")}
+                          >
+                            Hacer Test Big Five
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* Soft Skills */}
+                      <Card className="border-2 border-pink-300">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center text-lg">
+                              💡
+                            </div>
+                            Competencias Blandas Despega
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-pink-50 p-3 rounded text-sm">
+                            <strong className="text-pink-900">Conexión:</strong>
+                            <p className="text-pink-800 mt-1">
+                              RIASEC muestra intereses naturales, Soft Skills muestra habilidades entrenables que puedes
+                              desarrollar.
+                            </p>
+                          </div>
+                          <div className="text-sm">
+                            <strong>Ejemplo:</strong> Bajo S (Social) en RIASEC no significa mala comunicación. Soft
+                            Skills puede revelar que has desarrollado excelentes habilidades interpersonales a pesar de
+                            tu bajo interés por carreras sociales.
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full bg-transparent"
+                            onClick={() => router.push("/test/soft-skills")}
+                          >
+                            Hacer Test Soft Skills
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      {/* Placeholder */}
+                      <Card className="border-2 border-gray-300 opacity-60">
+                        <CardHeader>
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-lg">
+                              🔮
+                            </div>
+                            Más Tests Próximamente
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600">
+                            Próximamente: Test de Valores para alinear tu vocación con lo que realmente importa para ti.
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Synergy Examples */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      Casos de Sinergia Entre Tests
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 1: El Investigador Emprendedor</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>RIASEC:</strong> Alto I + Alto E = Interés en investigación aplicada al negocio
+                        </li>
+                        <li>
+                          • <strong>DISC:</strong> Alto D = Decide rápido, toma riesgos
+                        </li>
+                        <li>
+                          • <strong>Big Five:</strong> Alta Apertura + Alta Conscientiousness = Innovador pero
+                          estructurado
+                        </li>
+                        <li>
+                          • <strong>Carrera Ideal:</strong> Fundador de startup tech, Director de I+D, Científico de
+                          datos en startups
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 2: El Artista Realista</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>RIASEC:</strong> Alto A + Alto R = Creatividad aplicada a lo tangible
+                        </li>
+                        <li>
+                          • <strong>MBTI:</strong> ISFP = Artista sensorial práctico
+                        </li>
+                        <li>
+                          • <strong>Soft Skills:</strong> Alta resolución de problemas, baja delegación
+                        </li>
+                        <li>
+                          • <strong>Carrera Ideal:</strong> Diseñador industrial, arquitecto, artesano de lujo,
+                          diseñador UX
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 3: El Líder Social</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>
+                          • <strong>RIASEC:</strong> Alto S + Alto E = Quiere ayudar y liderar
+                        </li>
+                        <li>
+                          • <strong>IE:</strong> Alta empatía + alta influencia social
+                        </li>
+                        <li>
+                          • <strong>DISC:</strong> Alto I + Alto S = Carismático y colaborativo
+                        </li>
+                        <li>
+                          • <strong>Carrera Ideal:</strong> Director de ONG, HR Executive, Coach ejecutivo, Consultor
+                          organizacional
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Para una orientación vocacional completa, combina RIASEC (intereses) + DISC (comportamiento laboral)
+                    + Soft Skills (competencias entrenables). Esto te dará una visión integral de tu carrera ideal.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => router.push("/test")}>
+                    Ver Todos los Tests
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reflexion" className="space-y-6">
+            <Card className="border-l-4 border-l-pink-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Lightbulb className="h-6 w-6 text-pink-600" />
+                  Preguntas de Reflexión Vocacional Profunda
+                </CardTitle>
+                <CardDescription>
+                  Conecta los resultados de tu Brújula Vocacional con tu vida y propósito
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu vocación es crucial</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    RIASEC te muestra tus intereses, pero tu vocación real emerge cuando reflexionas sobre POR QUÉ te
+                    interesan, QUÉ significan para ti, y CÓMO se conectan con tu propósito de vida. Estas preguntas
+                    están diseñadas para convertir números en claridad vocacional.
+                  </p>
+                  <div className="bg-white p-4 rounded border-l-4 border-pink-500">
+                    <p className="text-sm italic text-gray-700">
+                      Tip: Responde con honestidad brutal. No escribas lo que crees que deberías sentir, sino lo que
+                      realmente sientes.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Categoría 1: Alineación Vocacional */}
+                <Accordion type="single" collapsible className="space-y-4">
+                  <AccordionItem value="alineacion">
+                    <AccordionTrigger className="bg-blue-50 px-4 rounded-lg hover:bg-blue-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🎯</span>
+                        <span className="font-semibold">Alineación Vocacional</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            1. ¿Mi trabajo actual aprovecha mi código Holland {results.holland_code}? ¿En qué
+                            porcentaje?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
+                            ¿Qué cambios puedes hacer?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            2. Si pudiera rediseñar mi trabajo para que use mi código Holland al 100%, ¿cómo se vería?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Describe tu día ideal de trabajo. Sé específico: ¿qué haces, con quién, dónde, cómo?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            3. ¿Qué actividades del último mes me dieron más energía? ¿Coinciden con mi código Holland?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            La vocación auténtica te da energía, no te la quita. Si hay desconexión, ¿por qué?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="barreras">
+                    <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🚧</span>
+                        <span className="font-semibold">Barreras y Creencias Limitantes</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            4. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Identifica si son barreras reales (falta de formación) o creencias limitantes ("no soy lo
+                            suficientemente bueno").
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            5. ¿Qué dirían mis padres/pareja sobre las carreras que me interesan? ¿Me importa su opinión
+                            más que la mía?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Muchas personas siguen carreras para complacer a otros, no a sí mismas. ¿Es tu caso?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            6. ¿Tengo miedo de seguir mi vocación real? ¿De qué tengo miedo específicamente?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            El miedo más común: "no voy a ganar suficiente dinero". Pero, ¿es eso cierto o es una
+                            excusa?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="proposito">
+                    <AccordionTrigger className="bg-purple-50 px-4 rounded-lg hover:bg-purple-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">✨</span>
+                        <span className="font-semibold">Propósito y Contribución</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            7. ¿Qué problema del mundo me gustaría resolver usando mi código Holland?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            La vocación más satisfactoria conecta tus intereses con contribución significativa. ¿Cuál es
+                            la tuya?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            8. Si tuviera éxito total en mi vocación, ¿cómo sería el mundo 10 años después?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Piensa en grande. Tu vocación no es solo un trabajo, es tu manera de dejar huella.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            9. ¿A quién admiro que tenga un código Holland similar al mío? ¿Qué puedo aprender de su
+                            carrera?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Estudiar trayectorias de éxito en tu área vocacional te muestra posibilidades que no habías
+                            considerado.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="accion">
+                    <AccordionTrigger className="bg-green-50 px-4 rounded-lg hover:bg-green-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🚀</span>
+                        <span className="font-semibold">Plan de Acción</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-green-900">
+                            10. Si tuviera que dar UN paso concreto hoy hacia mi vocación ideal, ¿cuál sería?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            No pienses en grandes cambios. ¿Qué acción pequeña puedes tomar HOY que te acerque a tu
+                            código Holland?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                <div className="bg-gradient-to-r from-pink-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Habla con tu Coach IA sobre tu vocación</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Las mejores decisiones vocacionales emergen del diálogo. Comparte tus reflexiones con Dani para
+                    obtener perspectivas y un plan de acción personalizado.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => setActiveTab("coach")}>
+                    Hablar con Coach Dani
+                  </Button>
                 </div>
               </CardContent>
             </Card>

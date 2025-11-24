@@ -15,7 +15,7 @@ import { Breadcrumbs, TestStructuredData } from "@/components/seo-optimized-cont
 import { TestNavigationFlow } from "@/components/test-navigation-flow"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
-import { discQuestions } from "./disc-questions"
+import { discQuestions } from "./disc-questions.tsx" // Fixed import extension from .ts to .tsx
 import TestIntroScreen from "@/components/test-intro-screen"
 import TestCompletionScreen from "@/components/test-completion-screen"
 

@@ -29,6 +29,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Separator } from "@/components/ui/separator"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { Progress } from "@/components/ui/progress"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface DISCResult {
   d_score: number
@@ -758,84 +760,454 @@ export default function DISCResultsPage() {
                   <Target className="h-6 w-6 text-orange-600" />
                   Tu Plan de Acción DTC de 90 Días
                 </CardTitle>
-                <CardDescription>Una hoja de ruta práctica para potenciar tu perfil y superar desafíos</CardDescription>
+                <CardDescription>
+                  Hoja de ruta personalizada para tu perfil {discResult.primary_type} con seguimiento de progreso
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-orange-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Mes 1: Fundamentos Estratégicos</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
+                {/* Progress Overview */}
+                <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h4 className="font-semibold text-orange-800 mb-2">🎯 Meta Principal</h4>
-                      <p className="text-sm">Refinar la comunicación en situaciones de alta presión.</p>
+                      <h3 className="text-lg font-semibold">Tu Progreso General</h3>
+                      <p className="text-sm text-gray-600">0 de 27 acciones completadas</p>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-orange-800 mb-2">✅ Hábitos Clave</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Practicar escucha activa en reuniones (5 min).</li>
-                        <li>• Documentar 'por qué' de decisiones clave (1 párrafo).</li>
-                        <li>• Identificar 1-2 momentos de tensión y cómo reaccionaste.</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-orange-800 mb-2">📚 Recursos DTC</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Artículos: 'Gestión de Conflictos Constructivos'.</li>
-                        <li>• Videos: 'Técnicas de Persuasión Ética'.</li>
-                        <li>• Ejercicios: 'Análisis de Causas Raíz'.</li>
-                      </ul>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-orange-600">0%</div>
+                      <p className="text-xs text-gray-600">completado</p>
                     </div>
                   </div>
+                  <Progress value={0} className="h-3" />
                 </div>
 
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Mes 2: Optimización y Colaboración</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-blue-800 mb-2">🎯 Meta Principal</h4>
-                      <p className="text-sm">Fomentar la colaboración y la empatía en el equipo.</p>
+                {/* Mes 1: Fundamentos */}
+                <Card className="border-l-4 border-l-orange-400">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl">Mes 1: Fundamentos Estratégicos (Días 1-30)</CardTitle>
+                      <Badge variant="outline">0/9 completadas</Badge>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-blue-800 mb-2">✅ Hábitos Clave</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Realizar "check-ins emocionales" al inicio de reuniones de equipo.</li>
-                        <li>• Delegar tareas identificando puntos fuertes del equipo.</li>
-                        <li>• Buscar feedback constructivo sobre tu estilo de liderazgo.</li>
-                      </ul>
+                    <CardDescription>
+                      Establece bases sólidas para tu desarrollo basado en tu perfil {discResult.primary_type}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Meta Principal del Mes */}
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-orange-900 mb-2 flex items-center gap-2">
+                        <Target className="h-5 w-5" />
+                        Meta Principal del Mes
+                      </h4>
+                      <p className="text-sm text-orange-800">
+                        {discResult.d_score > 70
+                          ? "Desarrollar paciencia estratégica y habilidades de escucha activa sin sacrificar tu decisión."
+                          : discResult.i_score > 70
+                            ? "Canalizar tu energía social hacia conversaciones profundas y seguimiento consistente."
+                            : discResult.s_score > 70
+                              ? "Practicar asertividad gradual en situaciones de bajo riesgo antes de escalar."
+                              : "Balancear tu precisión analítica con flexibilidad y comunicación empática."}
+                      </p>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-blue-800 mb-2">📚 Recursos DTC</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Curso: 'Inteligencia Emocional Aplicada'.</li>
-                        <li>• Libros: 'La 5ª Disciplina' (Senge).</li>
-                        <li>• Plantilla: 'Matriz de Habilidades del Equipo'.</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Mes 3: Crecimiento Sostenido</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-green-800 mb-2">🎯 Meta Principal</h4>
-                      <p className="text-sm">Consolidar el perfeccionismo productivo y la visión a largo plazo.</p>
+                    {/* KPIs Medibles */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-orange-800">KPI 1: Frecuencia</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-orange-600">0/20</div>
+                          <p className="text-xs text-gray-600">
+                            {discResult.d_score > 70
+                              ? "Momentos de pausa antes de responder"
+                              : discResult.i_score > 70
+                                ? "Conversaciones profundas (15+ min)"
+                                : discResult.s_score > 70
+                                  ? "Ocasiones expresando tu opinión"
+                                  : "Momentos de decisión rápida"}
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-orange-800">KPI 2: Calidad</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-orange-600">0/10</div>
+                          <p className="text-xs text-gray-600">
+                            {discResult.d_score > 70
+                              ? "Feedback positivo sobre tu comunicación"
+                              : discResult.i_score > 70
+                                ? "Follow-ups completados exitosamente"
+                                : discResult.s_score > 70
+                                  ? "Situaciones manejadas asertivamente"
+                                  : "Decisiones tomadas sin sobre-análisis"}
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-orange-800">KPI 3: Impacto</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-orange-600">N/A</div>
+                          <p className="text-xs text-gray-600">
+                            Autoevaluación de confianza (escala 1-10) al final del mes
+                          </p>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-green-800 mb-2">✅ Hábitos Clave</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Establecer criterios de "suficientemente bueno" para proyectos.</li>
-                        <li>• Dedicar tiempo a la reflexión estratégica semanal.</li>
-                        <li>• Mentorizar a un miembro del equipo en áreas analíticas.</li>
-                      </ul>
+
+                    {/* Acciones Semanales con Checkboxes */}
+                    <Accordion type="multiple" className="space-y-2">
+                      <AccordionItem value="semana-1">
+                        <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary">Semana 1</Badge>
+                            <span>Diagnóstico y Planificación (0/3)</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4 space-y-3">
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s1a1" />
+                            <label htmlFor="m1s1a1" className="text-sm cursor-pointer flex-1">
+                              <strong>Día 1-2:</strong> Completa todos los tests DTC restantes (IE, MBTI, Big Five,
+                              RIASEC, Soft Skills) para tener tu perfil 360°.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s1a2" />
+                            <label htmlFor="m1s1a2" className="text-sm cursor-pointer flex-1">
+                              <strong>Día 3-4:</strong> Lee los 3 informes completos más relevantes para ti (ej: DISC +
+                              IE + RIASEC) e identifica 3 patrones recurrentes.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s1a3" />
+                            <label htmlFor="m1s1a3" className="text-sm cursor-pointer flex-1">
+                              <strong>Día 5-7:</strong> Conversa con Sofia o Dani en el Coach IA sobre tus patrones y
+                              crea 1 meta SMART en "Mis Metas" para este mes.
+                            </label>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="semana-2">
+                        <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary">Semana 2</Badge>
+                            <span>Experimentación Inicial (0/3)</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4 space-y-3">
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s2a1" />
+                            <label htmlFor="m1s2a1" className="text-sm cursor-pointer flex-1">
+                              <strong>Hábito Diario:</strong>{" "}
+                              {discResult.d_score > 70
+                                ? "Antes de responder en reuniones, cuenta mentalmente hasta 3. Anota cómo cambia la calidad de tu respuesta."
+                                : discResult.i_score > 70
+                                  ? "Al terminar conversaciones sociales, pregúntate: '¿Aprendí algo profundo de esta persona?' Si no, ajusta."
+                                  : discResult.s_score > 70
+                                    ? "Cada día, comparte 1 opinión en situaciones de bajo riesgo (ej: qué cenar, qué película ver)."
+                                    : "Establece un límite de tiempo para decisiones pequeñas (ej: máximo 10 min para emails no críticos)."}
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s2a2" />
+                            <label htmlFor="m1s2a2" className="text-sm cursor-pointer flex-1">
+                              <strong>Observación:</strong> Lleva un diario de 5 minutos/día documentando situaciones
+                              donde aplicaste (o no) tu área de desarrollo.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s2a3" />
+                            <label htmlFor="m1s2a3" className="text-sm cursor-pointer flex-1">
+                              <strong>Recursos:</strong> Lee 2 artículos de la Biblioteca DTC relacionados con tu perfil
+                              DISC. Toma notas de 1 insight aplicable.
+                            </label>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="semana-3">
+                        <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary">Semana 3</Badge>
+                            <span>Refinamiento y Feedback (0/3)</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4 space-y-3">
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s3a1" />
+                            <label htmlFor="m1s3a1" className="text-sm cursor-pointer flex-1">
+                              <strong>Círculo de Retroalimentación:</strong> Pide a 2 personas cercanas (trabajo +
+                              personal) que te den feedback específico sobre tu área de desarrollo este mes.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s3a2" />
+                            <label htmlFor="m1s3a2" className="text-sm cursor-pointer flex-1">
+                              <strong>Ajuste de Estrategia:</strong> Revisa tu diario de la Semana 2. ¿Qué funcionó?
+                              ¿Qué no? Ajusta tu hábito diario según lo aprendido.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s3a3" />
+                            <label htmlFor="m1s3a3" className="text-sm cursor-pointer flex-1">
+                              <strong>Sesión de Coaching:</strong> Habla con Sofia o Dani sobre el feedback recibido y
+                              cómo interpretarlo constructivamente.
+                            </label>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="semana-4">
+                        <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary">Semana 4</Badge>
+                            <span>Consolidación y Evaluación (0/3)</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4 space-y-3">
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s4a1" />
+                            <label htmlFor="m1s4a1" className="text-sm cursor-pointer flex-1">
+                              <strong>Prueba de Estrés:</strong> Aplica conscientemente tu hábito en una situación de
+                              mayor presión (ej: reunión importante, conflicto). Documenta el resultado.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s4a2" />
+                            <label htmlFor="m1s4a2" className="text-sm cursor-pointer flex-1">
+                              <strong>Autoevaluación Final:</strong> Califica tu progreso en los 3 KPIs del mes y tu
+                              nivel de confianza (1-10) comparado con el inicio.
+                            </label>
+                          </div>
+                          <div className="flex items-start gap-3 p-3 bg-white rounded border">
+                            <Checkbox id="m1s4a3" />
+                            <label htmlFor="m1s4a3" className="text-sm cursor-pointer flex-1">
+                              <strong>Preparación Mes 2:</strong> Identifica 1 área complementaria para desarrollar el
+                              próximo mes (revisa "Oportunidades de Desarrollo").
+                            </label>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+
+                    {/* Recursos DTC Mes 1 */}
+                    <Card className="bg-gradient-to-r from-orange-50 to-amber-50">
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <BookOpen className="h-5 w-5 text-orange-600" />
+                          Recursos DTC Recomendados para Mes 1
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-start gap-2">
+                            <span className="text-orange-600">→</span>
+                            <span>
+                              <strong>Artículos:</strong> "Comunicación Asertiva para perfiles {discResult.primary_type}
+                              ", "El Poder de la Pausa Estratégica"
+                            </span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-orange-600">→</span>
+                            <span>
+                              <strong>Videos:</strong> "Técnicas de Escucha Activa" (8 min), "Gestión de Conflictos
+                              Constructivos" (12 min)
+                            </span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-orange-600">→</span>
+                            <span>
+                              <strong>Ejercicios:</strong> Plantilla de Diario de Autoobservación, Framework STAR para
+                              respuestas reflexivas
+                            </span>
+                          </li>
+                        </ul>
+                        <Button variant="outline" size="sm" className="w-full mt-4 bg-transparent">
+                          Ver Recursos en Biblioteca DTC
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </CardContent>
+                </Card>
+
+                {/* Mes 2: Optimización */}
+                <Card className="border-l-4 border-l-blue-400">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl">Mes 2: Optimización y Colaboración (Días 31-60)</CardTitle>
+                      <Badge variant="outline">0/9 completadas</Badge>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-green-800 mb-2">📚 Recursos DTC</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li>• Herramientas: 'Gestión de Proyectos Ágil'.</li>
-                        <li>• Lecturas: 'Liderazgo Visionario'.</li>
-                        <li>• Taller: 'Pensamiento Sistémico Avanzado'.</li>
-                      </ul>
+                    <CardDescription>
+                      Expande tu desarrollo hacia la colaboración efectiva y la influencia positiva
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Meta Principal del Mes */}
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                        <Target className="h-5 w-5" />
+                        Meta Principal del Mes
+                      </h4>
+                      <p className="text-sm text-blue-800">
+                        {discResult.d_score > 70
+                          ? "Liderar un proyecto o iniciativa usando tu influencia sin imposición, co-creando con el equipo."
+                          : discResult.i_score > 70
+                            ? "Convertir conexiones superficiales en relaciones profesionales de largo plazo con follow-up consistente."
+                            : discResult.s_score > 70
+                              ? "Iniciar una conversación difícil que has pospuesto, usando técnicas de comunicación no violenta."
+                              : "Presentar un análisis complejo de forma simple y persuasiva ante una audiencia no técnica."}
+                      </p>
                     </div>
+
+                    {/* KPIs Mes 2 */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-blue-800">KPI 1: Colaboración</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-blue-600">0/15</div>
+                          <p className="text-xs text-gray-600">
+                            {discResult.d_score > 70
+                              ? "Decisiones co-creadas con equipo"
+                              : discResult.i_score > 70
+                                ? "Follow-ups profundos realizados"
+                                : discResult.s_score > 70
+                                  ? "Conversaciones difíciles iniciadas"
+                                  : "Presentaciones simplificadas exitosas"}
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-blue-800">KPI 2: Impacto</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-blue-600">0/8</div>
+                          <p className="text-xs text-gray-600">
+                            Feedback positivo de colegas sobre tu estilo colaborativo o comunicativo
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-blue-800">KPI 3: Resultados</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-blue-600">N/A</div>
+                          <p className="text-xs text-gray-600">
+                            1 proyecto o iniciativa completada usando tu nuevo estilo
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Placeholder for weekly actions */}
+                    <div className="bg-blue-50 p-4 rounded-lg text-center">
+                      <p className="text-sm text-blue-800">
+                        Las acciones semanales detalladas para el Mes 2 se desbloquearán cuando completes el 80% del Mes
+                        1
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Mes 3: Crecimiento Sostenido */}
+                <Card className="border-l-4 border-l-green-400">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl">Mes 3: Crecimiento Sostenido (Días 61-90)</CardTitle>
+                      <Badge variant="outline">0/9 completadas</Badge>
+                    </div>
+                    <CardDescription>
+                      Consolida tu transformación y establece sistemas para crecimiento continuo
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Meta Principal del Mes */}
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
+                        <Target className="h-5 w-5" />
+                        Meta Principal del Mes
+                      </h4>
+                      <p className="text-sm text-green-800">
+                        Diseñar tu sistema personal de desarrollo continuo: cómo seguirás creciendo más allá de los 90
+                        días, integrando lo aprendido en tu rutina diaria.
+                      </p>
+                    </div>
+
+                    {/* KPIs Mes 3 */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-green-800">KPI 1: Consistencia</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-green-600">0/21</div>
+                          <p className="text-xs text-gray-600">
+                            Días aplicando conscientemente tu hábito desarrollado sin esfuerzo
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-green-800">KPI 2: Mentoría</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-green-600">0/3</div>
+                          <p className="text-xs text-gray-600">
+                            Conversaciones donde enseñaste a otros lo que aprendiste
+                          </p>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-sm font-semibold text-green-800">KPI 3: Legado</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-green-600">N/A</div>
+                          <p className="text-xs text-gray-600">
+                            Sistema personal documentado para crecimiento continuo
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Placeholder for weekly actions */}
+                    <div className="bg-green-50 p-4 rounded-lg text-center">
+                      <p className="text-sm text-green-800">
+                        Las acciones semanales detalladas para el Mes 3 se desbloquearán cuando completes el 80% del Mes
+                        2
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Call to Action */}
+                <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Empieza Ahora</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    El mejor momento para empezar es HOY. Marca tu primera acción de la Semana 1 y observa cómo pequeños
+                    cambios consistentes generan transformaciones profundas.
+                  </p>
+                  <div className="flex gap-3">
+                    <Button variant="secondary" size="sm">
+                      Crear Meta SMART para Mes 1
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={() => setActiveTab("coach")}>
+                      Hablar con Coach sobre el Plan
+                    </Button>
                   </div>
                 </div>
               </CardContent>

@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import {
   Brain,
   Heart,
@@ -25,6 +26,9 @@ import {
   Activity,
   Zap,
   ArrowLeft,
+  Eye,
+  Shield,
+  Sparkles,
 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
@@ -319,7 +323,7 @@ export default function EmotionalIntelligenceResults() {
 
         {/* Detailed Results Tabs */}
         <Tabs defaultValue="competencies" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 bg-white shadow-lg">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 gap-2 bg-white shadow-lg">
             <TabsTrigger value="competencies" className="flex items-center space-x-2">
               <PieChart className="h-4 w-4" />
               <span>Competencias</span>
@@ -335,6 +339,18 @@ export default function EmotionalIntelligenceResults() {
             <TabsTrigger value="development" className="flex items-center space-x-2">
               <TrendingUp className="h-4 w-4" />
               <span>Desarrollo</span>
+            </TabsTrigger>
+            <TabsTrigger value="oportunidades" className="flex items-center space-x-2">
+              <Target className="h-4 w-4" />
+              <span>Oportunidades</span>
+            </TabsTrigger>
+            <TabsTrigger value="conexiones" className="flex items-center space-x-2">
+              <Brain className="h-4 w-4" />
+              <span>Conexiones</span>
+            </TabsTrigger>
+            <TabsTrigger value="reflexion" className="flex items-center space-x-2">
+              <Lightbulb className="h-4 w-4" />
+              <span>Reflexión</span>
             </TabsTrigger>
           </TabsList>
 
@@ -650,6 +666,754 @@ export default function EmotionalIntelligenceResults() {
                     <Users className="h-8 w-8 text-green-500" />
                     <span className="font-semibold">Habilidades Blandas</span>
                     <span className="text-xs text-gray-500">Competencias profesionales</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="oportunidades" className="space-y-6">
+            <Card className="border-l-4 border-l-amber-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center space-x-2">
+                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                  <span>Oportunidades de Desarrollo Emocional</span>
+                </CardTitle>
+                <CardDescription>
+                  Áreas específicas donde puedes crecer emocionalmente basadas en tu perfil de IE
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Tu perfil de Inteligencia Emocional con puntuaciones específicas en cada competencia revela patrones
+                    únicos de fortalezas emocionales y áreas de crecimiento. Estas oportunidades están diseñadas para
+                    ayudarte a desarrollar una vida más consciente, equilibrada y auténtica emocionalmente.
+                  </p>
+                </div>
+
+                {/* Área 1: Autoconciencia Profunda */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center space-x-2">
+                      <Eye className="h-5 w-5 text-blue-600" />
+                      <span>1. Autoconciencia Profunda</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-blue-800">
+                        {results.competency_scores.self_awareness >= 80
+                          ? "Expandir tu ya desarrollada autoconciencia hacia la comprensión de patrones emocionales inconscientes y triggers profundos."
+                          : results.competency_scores.self_awareness >= 60
+                            ? "Profundizar tu capacidad de reconocer emociones en tiempo real y entender sus causas raíz."
+                            : "Desarrollar la habilidad fundamental de identificar y nombrar tus emociones con precisión en el momento presente."}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Escaneo Emocional (3x/día):</strong> Pausa 2 minutos en mañana, mediodía y noche
+                            para identificar qué emoción sientes y dónde la sientes en tu cuerpo.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Diario de Patrones:</strong> Cada noche, registra una emoción intensa del día: qué
+                            la causó, cómo reaccionaste, qué patrón identificas.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-blue-600 font-bold">→</span>
+                          <div>
+                            <strong>Vocabulario Emocional:</strong> Aprende 1 nueva palabra emocional por semana (ej:
+                            nostalgia, melancolía, euforia) y úsala para describir tus estados.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold mb-1">Recurso Recomendado</p>
+                          <p className="text-sm opacity-90">App de Mindfulness para práctica diaria</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 2: Regulación Emocional */}
+                <Card className="border-l-4 border-l-green-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center space-x-2">
+                      <Zap className="h-5 w-5 text-green-600" />
+                      <span>2. Regulación Emocional Efectiva</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-green-800">
+                        {results.competency_scores.self_regulation >= 80
+                          ? "Refinar tu capacidad de regulación para responder (no reaccionar) incluso en situaciones de alta presión."
+                          : results.competency_scores.self_regulation >= 60
+                            ? "Fortalecer tu habilidad de pausar antes de responder y elegir conscientemente tus reacciones."
+                            : "Construir herramientas básicas para gestionar emociones intensas sin reprimirlas ni explosionar."}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Técnica 90 Segundos:</strong> Cuando sientas una emoción intensa, respira y espera
+                            90 segundos antes de actuar (tiempo que tarda la química emocional en bajar).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Respiración 4-7-8:</strong> Inhala 4 segundos, sostén 7, exhala 8. Hazlo antes de
+                            reuniones importantes o conversaciones difíciles.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-green-600 font-bold">→</span>
+                          <div>
+                            <strong>Movimiento Consciente:</strong> Cuando estés abrumado, camina 10 minutos sin
+                            celular, sintiendo cada paso.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 3: Empatía y Conexión */}
+                <Card className="border-l-4 border-l-purple-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center space-x-2">
+                      <Heart className="h-5 w-5 text-purple-600" />
+                      <span>3. Empatía y Conexión Auténtica</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-purple-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-purple-800">
+                        {results.competency_scores.empathy >= 80
+                          ? "Expandir tu empatía desde la comprensión hacia la acción compasiva que genera cambio real."
+                          : results.competency_scores.empathy >= 60
+                            ? "Profundizar tu capacidad de sentir lo que otros sienten sin perder tu propio centro emocional."
+                            : "Desarrollar la habilidad de puterte en el lugar del otro, especialmente con quienes son diferentes a ti."}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Escucha Profunda Semanal:</strong> Cada semana, ten una conversación de 30 min donde
+                            SOLO escuches sin aconsejar ni interrumpir.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Pregunta Empática:</strong> En cada conflicto, pregúntate: "¿Qué dolor o miedo está
+                            sintiendo esta persona que la hace actuar así?"
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-purple-600 font-bold">→</span>
+                          <div>
+                            <strong>Validación Activa:</strong> Practica decir "Entiendo que sientas..." antes de dar tu
+                            opinión o solución.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Área 4: Resiliencia Emocional */}
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center space-x-2">
+                      <Shield className="h-5 w-5 text-orange-600" />
+                      <span>4. Resiliencia y Recuperación Emocional</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-orange-800">
+                        Desarrollar la capacidad de recuperarte rápidamente de adversidades emocionales y encontrar
+                        significado incluso en experiencias dolorosas.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Ritual de Cierre Diario:</strong> Antes de dormir, escribe 3 cosas por las que estás
+                            agradecido y 1 aprendizaje del día (incluso si fue difícil).
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Red de Apoyo Emocional:</strong> Identifica 3 personas a quienes puedas llamar
+                            cuando estés en crisis emocional.
+                          </div>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-orange-600 font-bold">→</span>
+                          <div>
+                            <strong>Reencuadre Activo:</strong> Ante cada problema, pregúntate: "¿Qué oportunidad de
+                            crecimiento esconde esto?"
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Elige UNA oportunidad de desarrollo emocional que resuene contigo y comprométete a practicarla
+                    durante 30 días consecutivos. La transformación emocional requiere repetición y constancia.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="conexiones" className="space-y-6">
+            <Card className="border-l-4 border-l-indigo-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center space-x-2">
+                  <Brain className="h-6 w-6 text-indigo-600" />
+                  <span>Conexión con Otros Módulos DTC</span>
+                </CardTitle>
+                <CardDescription>
+                  Cómo Inteligencia Emocional se relaciona con los demás tests del ecosistema DTC
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">El Rol de la IE en Tu Desarrollo Integral</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    La Inteligencia Emocional es el "sistema operativo" de tu vida. Mientras que DISC mide tu
+                    comportamiento, MBTI tus preferencias, y RIASEC tus intereses, la IE determina qué tan efectivamente
+                    navegas todas esas dimensiones cuando las emociones están involucradas.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* DISC Connection */}
+                  <Card className="border-2 border-blue-300">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-lg">
+                          🎯
+                        </div>
+                        Despega Cerebral (DISC)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-blue-50 p-3 rounded text-sm">
+                        <strong className="text-blue-900">Conexión:</strong>
+                        <p className="text-blue-800 mt-1">
+                          DISC muestra cómo actúas, IE muestra qué tan consciente estás de tus emociones al actuar así.
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Ejemplo:</strong> Alto D en DISC + baja Autorregulación en IE = líder impulsivo que toma
+                        decisiones rápidas sin considerar el impacto emocional.
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full bg-transparent"
+                        onClick={() => router.push("/test/disc")}
+                      >
+                        Hacer Test DISC
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* MBTI Connection */}
+                  <Card className="border-2 border-purple-300">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                          🧠
+                        </div>
+                        Mapa de Personalidad (MBTI)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-purple-50 p-3 rounded text-sm">
+                        <strong className="text-purple-900">Conexión:</strong>
+                        <p className="text-purple-800 mt-1">
+                          MBTI muestra tus preferencias cognitivas, IE muestra qué tan bien gestionas las emociones que
+                          surgen de esas preferencias.
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Ejemplo:</strong> INTJ + alta IE = líder visionario que también conecta emocionalmente.
+                        INTJ + baja IE = genio aislado.
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full bg-transparent"
+                        onClick={() => router.push("/test/mbti")}
+                      >
+                        Hacer Test MBTI
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Big Five Connection */}
+                  <Card className="border-2 border-green-300">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-lg">
+                          ⭐
+                        </div>
+                        5 Dimensiones (Big Five)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-green-50 p-3 rounded text-sm">
+                        <strong className="text-green-900">Conexión:</strong>
+                        <p className="text-green-800 mt-1">
+                          Big Five mide rasgos estables, IE mide habilidades entrenables. IE puede compensar rasgos
+                          desafiantes.
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Ejemplo:</strong> Bajo Agreeableness + alta Empatía (IE) = persona directa pero que sabe
+                        conectar cuando importa.
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full bg-transparent"
+                        onClick={() => router.push("/test/big-five")}
+                      >
+                        Hacer Test Big Five
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* RIASEC Connection */}
+                  <Card className="border-2 border-orange-300">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-lg">
+                          💼
+                        </div>
+                        Brújula Vocacional (RIASEC)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-orange-50 p-3 rounded text-sm">
+                        <strong className="text-orange-900">Conexión:</strong>
+                        <p className="text-orange-800 mt-1">
+                          RIASEC muestra qué tipo de trabajo te motiva, IE determina qué tan bien manejas el estrés y
+                          relaciones en ese trabajo.
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Ejemplo:</strong> Alto Social en RIASEC + baja IE = quieres ayudar pero te agobias con
+                        las emociones de otros.
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full bg-transparent"
+                        onClick={() => router.push("/test/riasec")}
+                      >
+                        Hacer Test RIASEC
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Soft Skills Connection */}
+                  <Card className="border-2 border-pink-300">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center text-lg">
+                          💡
+                        </div>
+                        Competencias Blandas
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="bg-pink-50 p-3 rounded text-sm">
+                        <strong className="text-pink-900">Conexión:</strong>
+                        <p className="text-pink-800 mt-1">
+                          IE es la base de TODAS las soft skills. Comunicación, liderazgo, trabajo en equipo dependen de
+                          tu inteligencia emocional.
+                        </p>
+                      </div>
+                      <div className="text-sm">
+                        <strong>Ejemplo:</strong> Alta IE + entrenamiento en comunicación = comunicador magistral que
+                        lee la sala emocionalmente.
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full bg-transparent"
+                        onClick={() => router.push("/test/soft-skills")}
+                      >
+                        Hacer Test Soft Skills
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      Casos de Sinergia con IE
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 1: El Líder Técnico que Quiere Crecer</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• DISC: Alto C+D = Analítico y decisivo</li>
+                        <li>• IE: Baja empatía, baja conciencia social = Problemas con el equipo</li>
+                        <li>• Acción DTC: Desarrollar empatía y habilidades sociales sin perder precisión técnica</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 2: La Persona Altamente Empática que se Agota</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• RIASEC: Alto Social = Vocación de ayudar</li>
+                        <li>• IE: Alta empatía, baja autorregulación = Burnout emocional</li>
+                        <li>• Acción DTC: Entrenar límites emocionales y técnicas de protección energética</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2">Caso 3: El Emprendedor Impulsivo</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• DISC: Alto D+I = Energético y persuasivo</li>
+                        <li>• IE: Baja autorregulación = Decisiones emocionales que generan caos</li>
+                        <li>• Acción DTC: Desarrollar pausa reflexiva y gestión del estrés</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    La Inteligencia Emocional es la competencia más importante para el éxito en vida y carrera. Te
+                    recomendamos completar al menos 2 tests adicionales (DISC + MBTI o RIASEC) para entender cómo tu IE
+                    impacta tu comportamiento y vocación.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => router.push("/test")}>
+                    Ver Todos los Tests
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reflexion" className="space-y-6">
+            <Card className="border-l-4 border-l-pink-500">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center space-x-2">
+                  <Lightbulb className="h-6 w-6 text-pink-600" />
+                  <span>Preguntas de Reflexión Profunda</span>
+                </CardTitle>
+                <CardDescription>Explora tu inteligencia emocional más allá de los números del test</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-3">La importancia de la reflexión emocional</h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    La verdadera inteligencia emocional no se mide solo con un test, sino con la capacidad de
+                    reflexionar honestamente sobre tu vida emocional. Estas preguntas te invitan a explorar dimensiones
+                    que ningún cuestionario puede capturar completamente.
+                  </p>
+                  <div className="bg-white p-4 rounded border-l-4 border-pink-500">
+                    <p className="text-sm italic text-gray-700">
+                      Tip: Escribe tus respuestas sin juzgarte. La honestidad emocional es el primer paso hacia la
+                      madurez emocional.
+                    </p>
+                  </div>
+                </div>
+
+                <Accordion type="single" collapsible className="space-y-4">
+                  <AccordionItem value="autoconocimiento">
+                    <AccordionTrigger className="bg-blue-50 px-4 rounded-lg hover:bg-blue-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🔍</span>
+                        <span className="font-semibold">Autoconocimiento Emocional</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            1. ¿Cuál es la emoción que más me cuesta reconocer en mí mismo?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Muchas personas evitan sentir tristeza, miedo o vergüenza. Identificar qué emoción reprimes
+                            te ayuda a recuperar partes negadas de ti.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            2. ¿En qué situaciones mi cuerpo me avisa que estoy emocionalmente sobrepasado (antes de que
+                            mi mente lo reconozca)?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            El cuerpo siempre sabe primero: tensión en hombros, nudo en el estómago, mandíbula apretada.
+                            Reconocer estas señales te da ventaja para actuar.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-blue-900">
+                            3. ¿Qué historia me cuento sobre mis emociones? (ej: "No debo sentir miedo", "La tristeza es
+                            debilidad")
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Todos tenemos creencias sobre qué emociones son "aceptables". Cuestionar esas creencias es
+                            liberador.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="regulacion">
+                    <AccordionTrigger className="bg-green-50 px-4 rounded-lg hover:bg-green-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">⚖️</span>
+                        <span className="font-semibold">Regulación y Gestión Emocional</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-green-900">
+                            4. ¿Cuándo fue la última vez que reaccioné emocionalmente y me arrepentí? ¿Qué habría hecho
+                            diferente?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Revisar errores emocionales sin culpa, solo con curiosidad, es cómo aprendes
+                            autorregulación.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-green-900">
+                            5. ¿Qué técnicas uso actualmente para calmarme cuando estoy alterado? ¿Funcionan realmente?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Diferencia entre estrategias saludables (respirar, caminar, hablar) y evasivas (alcohol,
+                            redes sociales, comer compulsivamente).
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-green-900">
+                            6. ¿Qué emoción tiendo a reprimir o evitar sistemáticamente? ¿Qué temo que pase si la siento
+                            plenamente?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Las emociones reprimidas no desaparecen, solo se acumulan. Sentirlas conscientemente las
+                            libera.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-green-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="empatia">
+                    <AccordionTrigger className="bg-purple-50 px-4 rounded-lg hover:bg-purple-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">❤️</span>
+                        <span className="font-semibold">Empatía y Conexión</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            7. ¿Con qué tipo de personas me cuesta más empatizar? ¿Por qué?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Todos tenemos "puntos ciegos" de empatía. Reconocerlos te permite expandir tu compasión.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            8. ¿Alguna vez alguien me ha dicho que "no entiendo" sus emociones? ¿Qué pasó?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Los momentos donde fallamos en empatizar son oportunidades de aprendizaje sobre nuestras
+                            limitaciones emocionales.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-purple-900">
+                            9. ¿Cómo equilibro el cuidar de otros sin perder mi propio bienestar emocional?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            La empatía sin límites lleva al agotamiento. La compasión saludable incluye autocuidado.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="impacto">
+                    <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🌊</span>
+                        <span className="font-semibold">Impacto Emocional en Otros</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 space-y-4">
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            10. ¿Cómo crees que tu estado emocional afecta a las personas más cercanas a ti?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Las emociones son contagiosas. Tu ansiedad, alegría o irritación impactan directamente a
+                            quienes te rodean.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            11. ¿Alguna vez he dañado una relación importante por no gestionar bien mis emociones?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Reconocer el daño emocional que hemos causado (sin defensas) es un acto de madurez y
+                            responsabilidad.
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardContent className="pt-6 space-y-3">
+                          <h4 className="font-semibold text-orange-900">
+                            12. ¿Qué legado emocional quiero dejar en las personas que me importan?
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Más allá de logros, ¿qué quieres que la gente sienta cuando piense en ti? ¿Seguridad?
+                            ¿Inspiración? ¿Amor?
+                          </p>
+                          <textarea
+                            placeholder="Escribe tu reflexión aquí..."
+                            className="w-full min-h-[100px] p-3 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                          />
+                        </CardContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                <div className="bg-gradient-to-r from-pink-600 to-purple-600 text-white p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Comparte tu reflexión con tu Coach IA</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Las reflexiones más profundas emergen en conversación. Habla con Sofia o Dani para explorar tus
+                    respuestas y descubrir insights que no habías considerado.
+                  </p>
+                  <Button variant="secondary" size="sm">
+                    Hablar con Coach IA
                   </Button>
                 </div>
               </CardContent>
