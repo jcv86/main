@@ -46,7 +46,7 @@ import {
 } from "recharts"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { MultiTestInsights } from "@/components/multi-test-insights"
-import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
@@ -495,16 +495,7 @@ export default function BigFiveResults() {
           </TabsContent>
 
           <TabsContent value="coach">
-            <SofiaDaniCoach
-              conversationCategory="autoconocimiento"
-              userContext={{
-                testType: "Big Five",
-                testResults: results,
-                userEmail: userEmail,
-                completedAt: testResult.completed_at,
-              }}
-              suggestedAction={`Explora el test RIASEC para descubrir carreras alineadas con tu personalidad`}
-            />
+            <EnhancedCoachFlow testType="Big Five" testResults={results} />
           </TabsContent>
 
           <TabsContent value="career" className="space-y-6">
@@ -845,7 +836,7 @@ export default function BigFiveResults() {
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Big Five mide los rasgos profundos de tu personalidad, la base sobre la cual se construyen tus
-                    comportamientos (DISC), emociones (IE), preferencias (MBTI), intereses (RIASEC) y habilidades (Soft
+                    comportamientos (DISC), emociones (IE), preferences (MBTI), intereses (RIASEC) y habilidades (Soft
                     Skills). Es la arquitectura fundamental de quién eres.
                   </p>
                 </div>

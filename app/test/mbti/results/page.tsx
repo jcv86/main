@@ -20,11 +20,11 @@ import {
   Check,
   Calendar,
 } from "lucide-react"
-import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 
 interface MBTIResult {
   type: string
@@ -1261,20 +1261,18 @@ export default function MBTIResultsPage() {
                 <CardDescription>Sofia y Dani están aquí para ayudarte a entender mejor tu tipo MBTI</CardDescription>
               </CardHeader>
               <CardContent>
-                <SofiaDaniCoach
-                  testType="Mapa de Personalidad Despega"
+                <EnhancedCoachFlow
+                  testType="MBTI"
                   testResults={{
                     type: mbtiResult.type,
-                    scores: {
-                      E: mbtiResult.e_score,
-                      I: mbtiResult.i_score,
-                      S: mbtiResult.s_score,
-                      N: mbtiResult.n_score,
-                      T: mbtiResult.t_score,
-                      F: mbtiResult.f_score,
-                      J: mbtiResult.j_score,
-                      P: mbtiResult.p_score,
-                    },
+                    e_score: mbtiResult.e_score,
+                    i_score: mbtiResult.i_score,
+                    s_score: mbtiResult.s_score,
+                    n_score: mbtiResult.n_score,
+                    t_score: mbtiResult.t_score,
+                    f_score: mbtiResult.f_score,
+                    j_score: mbtiResult.j_score,
+                    p_score: mbtiResult.p_score,
                   }}
                   userName={user?.email?.split("@")[0] || "Usuario"}
                 />

@@ -41,12 +41,12 @@ import {
   Cell,
 } from "recharts"
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
-import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -1485,16 +1485,7 @@ export default function SoftSkillsResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <SofiaDaniCoach
-              conversationCategory="desarrollo_habilidades"
-              userContext={{
-                testType: "Soft Skills",
-                testResults: results,
-                userEmail: testResult.user_email || "",
-                completedAt: testResult.completed_at,
-              }}
-              suggestedAction={`Practica tus habilidades de liderazgo en un proyecto real`}
-            />
+            <EnhancedCoachFlow testType="Soft Skills" testResults={results} />
           </TabsContent>
         </Tabs>
 

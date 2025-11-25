@@ -41,7 +41,7 @@ export function LandingPageOptimized() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/auth">
+            <Link href="/auth" prefetch={true}>
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
@@ -50,7 +50,7 @@ export function LandingPageOptimized() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/documents">
+            <Link href="/documents" prefetch={false}>
               <Button
                 size="lg"
                 variant="outline"
@@ -60,7 +60,7 @@ export function LandingPageOptimized() {
                 <MessageSquare className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/biblioteca">
+            <Link href="/biblioteca" prefetch={false}>
               <Button
                 size="lg"
                 variant="outline"

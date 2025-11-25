@@ -35,6 +35,7 @@ import {
 import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 
 interface TestResults {
   overall_score: number
@@ -47,6 +48,16 @@ interface TestResults {
   }
   completed_at: string
   duration?: number
+}
+
+// Mock data for EnhancedCoachFlow as ieResult is not defined in the original code
+const ieResult = {
+  self_awareness: 80,
+  self_regulation: 70,
+  motivation: 90,
+  empathy: 60,
+  social_skills: 75,
+  total_score: 77,
 }
 
 const competencyInfo = {
@@ -285,7 +296,7 @@ export default function EmotionalIntelligenceResults() {
               </div>
               <div className="text-center">
                 <div className="bg-white bg-opacity-20 rounded-2xl p-8">
-                  <div className="text-4xl font-bold mb-2">Nivel {overallLevel.level}</div>
+                  <div className="text-4xl font-bold mb-2">{overallLevel.level}</div>
                   <div className="text-red-100 mb-4">Inteligencia Emocional</div>
                   <div className="flex justify-center space-x-4 text-sm">
                     <div className="text-center">
@@ -357,6 +368,10 @@ export default function EmotionalIntelligenceResults() {
             <TabsTrigger value="plan-90-dias" className="flex items-center space-x-2">
               <Calendar className="h-4 w-4" />
               <span>Plan 90 Días</span>
+            </TabsTrigger>
+            <TabsTrigger value="coach" className="flex items-center space-x-2">
+              <Sparkles className="h-4 w-4" />
+              <span>Coach IA</span>
             </TabsTrigger>
           </TabsList>
 
@@ -2014,6 +2029,20 @@ export default function EmotionalIntelligenceResults() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="coach" className="space-y-6">
+            <EnhancedCoachFlow
+              testType="Inteligencia Emocional"
+              testResults={{
+                self_awareness: ieResult?.self_awareness,
+                self_regulation: ieResult?.self_regulation,
+                motivation: ieResult?.motivation,
+                empathy: ieResult?.empathy,
+                social_skills: ieResult?.social_skills,
+                total_score: ieResult?.overall_score, // Assuming total_score should map to overall_score
+              }}
+            />
           </TabsContent>
         </Tabs>
 

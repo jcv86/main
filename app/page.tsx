@@ -112,15 +112,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Cargando...</div>}>
-        <LandingPageOptimized />
-      </Suspense>
+      <LandingPageOptimized />
 
-      <Suspense fallback={<div className="py-12 text-center">Cargando preguntas frecuentes...</div>}>
+      <Suspense fallback={null}>
         <FAQSection faqs={faqs} />
       </Suspense>
 
-      <Suspense fallback={<div className="py-12 text-center">Cargando...</div>}>
+      <Suspense fallback={null}>
         <LLMOOptimizedFooter />
       </Suspense>
     </main>

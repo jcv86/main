@@ -9,30 +9,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Brain,
   Target,
-  Users,
   BookOpen,
   Award,
-  CheckCircle,
-  Clock,
   BarChart3,
   MessageSquare,
-  Star,
-  ArrowRight,
-  Play,
   Trophy,
-  Zap,
-  Heart,
   Lightbulb,
   Sparkles,
   TrendingUp,
   Calendar,
   Shield,
+  Gamepad2,
+  Library,
+  RefreshCw,
+  ChevronRight,
+  Flame,
+  CircleDot,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
-import { AchievementBadge } from "@/components/achievement-badge"
-import { GoalTracker } from "@/components/goal-tracker"
-import { ActivityCalendar } from "@/components/activity-calendar"
 import { useSession } from "@/components/session-wrapper"
 
 interface TestResult {
@@ -50,6 +45,39 @@ interface UserProfile {
   totalTests: number
   level: string
   points: number
+}
+
+interface ActiveGoal {
+  id: string
+  name: string
+  type: "personal" | "laboral" | "mixto"
+  progress: number
+  dueDate: string
+  origin: string
+}
+
+interface BookInProgress {
+  id: string
+  title: string
+  author: string
+  progress: number
+  lastRead: string
+  cover?: string
+}
+
+interface SimulationHistory {
+  id: string
+  type: string
+  scenario: string
+  score: number
+  completedAt: string
+  feedback: string
+}
+
+interface TestEvolution {
+  testId: string
+  testName: string
+  attempts: { date: string; score: number }[]
 }
 
 const TEST_NAMES = {
@@ -83,6 +111,8 @@ export function DashboardContent() {
   const router = useRouter()
   const { user: sessionUser } = useSession()
   const [userId, setUserId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState("overview")
+
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
     email: "",
@@ -92,85 +122,111 @@ export function DashboardContent() {
     points: 1250,
   })
 
+  const [activeGoals, setActiveGoals] = useState<ActiveGoal[]>([
+    {
+      id: "1",
+      name: "Mejorar comunicación asertiva",
+      type: "laboral",
+      progress: 65,
+      dueDate: "2025-02-15",
+      origin: "DISC",
+    },
+    {
+      id: "2",
+      name: "Desarrollar liderazgo situacional",
+      type: "mixto",
+      progress: 40,
+      dueDate: "2025-03-01",
+      origin: "Big Five",
+    },
+    {
+      id: "3",
+      name: "Equilibrio vida-trabajo",
+      type: "personal",
+      progress: 25,
+      dueDate: "2025-02-28",
+      origin: "IE",
+    },
+  ])
+
+  const [booksInProgress, setBooksInProgress] = useState<BookInProgress[]>([
+    {
+      id: "1",
+      title: "Comunicación No Violenta",
+      author: "Marshall Rosenberg",
+      progress: 72,
+      lastRead: "2025-01-24",
+    },
+    {
+      id: "2",
+      title: "Los 7 Hábitos",
+      author: "Stephen Covey",
+      progress: 35,
+      lastRead: "2025-01-22",
+    },
+  ])
+
+  const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([
+    {
+      id: "1",
+      type: "entrevista",
+      scenario: "Entrevista Conductual",
+      score: 78,
+      completedAt: "2025-01-23",
+      feedback: "Buen uso del método STAR",
+    },
+    {
+      id: "2",
+      type: "conversacion",
+      scenario: "Negociación Salarial",
+      score: 65,
+      completedAt: "2025-01-20",
+      feedback: "Mejorar confianza al negociar",
+    },
+  ])
+
+  const [testEvolution, setTestEvolution] = useState<TestEvolution[]>([
+    {
+      testId: "disc",
+      testName: "Despega Cerebral",
+      attempts: [
+        { date: "2024-10-15", score: 72 },
+        { date: "2025-01-15", score: 85 },
+      ],
+    },
+    {
+      testId: "emotionalIntelligence",
+      testName: "Inteligencia Emocional",
+      attempts: [
+        { date: "2024-11-01", score: 68 },
+        { date: "2025-01-10", score: 79 },
+      ],
+    },
+  ])
+
   const [recentResults, setRecentResults] = useState<TestResult[]>([
     {
       id: "disc",
       name: TEST_NAMES.disc.name,
       score: 85,
       completedAt: "2024-01-15",
-      insights: ["Estilo dominante", "Orientado a resultados", "Líder natural"],
+      insights: ["Alto en Dominancia", "Orientado a resultados"],
     },
     {
-      id: "big-five",
-      name: TEST_NAMES.bigFive.name,
-      score: 78,
+      id: "emotionalIntelligence",
+      name: TEST_NAMES.emotionalIntelligence.name,
+      score: 79,
       completedAt: "2024-01-10",
-      insights: ["Alta apertura", "Consciencioso", "Extrovertido"],
+      insights: ["Buena autoconciencia", "Mejorar regulación"],
+    },
+    {
+      id: "bigFive",
+      name: TEST_NAMES.bigFive.name,
+      score: 82,
+      completedAt: "2024-01-08",
+      insights: ["Alta apertura", "Responsabilidad moderada"],
     },
   ])
-
-  const availableTests = [
-    {
-      id: "disc",
-      name: TEST_NAMES.disc.name,
-      description: TEST_NAMES.disc.description,
-      duration: "10-15 min",
-      icon: Users,
-      color: "bg-blue-500",
-      completed: true,
-      route: "/test/disc",
-    },
-    {
-      id: "emotional-intelligence",
-      name: TEST_NAMES.emotionalIntelligence.name,
-      description: TEST_NAMES.emotionalIntelligence.description,
-      duration: "12-18 min",
-      icon: Heart,
-      color: "bg-pink-500",
-      completed: false,
-      route: "/test/emotional-intelligence",
-    },
-    {
-      id: "mbti",
-      name: TEST_NAMES.mbti.name,
-      description: TEST_NAMES.mbti.description,
-      duration: "15-20 min",
-      icon: Brain,
-      color: "bg-purple-500",
-      completed: false,
-      route: "/test/mbti",
-    },
-    {
-      id: "big-five",
-      name: TEST_NAMES.bigFive.name,
-      description: TEST_NAMES.bigFive.description,
-      duration: "12-18 min",
-      icon: Star,
-      color: "bg-yellow-500",
-      completed: true,
-      route: "/test/big-five",
-    },
-    {
-      id: "riasec",
-      name: TEST_NAMES.riasec.name,
-      description: TEST_NAMES.riasec.description,
-      duration: "10-15 min",
-      icon: Target,
-      color: "bg-green-500",
-      completed: false,
-      route: "/test/riasec",
-    },
-    {
-      id: "soft-skills",
-      name: TEST_NAMES.softSkills.name,
-      description: TEST_NAMES.softSkills.description,
-      duration: "15-20 min",
-      icon: Lightbulb,
-      color: "bg-orange-500",
-      completed: false,
-      route: "/test/soft-skills",
-    },
-  ]
 
   const [userAchievements, setUserAchievements] = useState<any[]>([])
   const [loadingAchievements, setLoadingAchievements] = useState(true)
@@ -318,6 +374,38 @@ export function DashboardContent() {
     checkAdminStatus()
   }, [userProfile.email])
 
+  // Cleaned up useEffect for sessionUser and Admin check
+  useEffect(() => {
+    if (sessionUser) {
+      setUserId(sessionUser.id || null)
+      setUserProfile((prev) => ({
+        ...prev,
+        name: sessionUser.user_metadata?.full_name || sessionUser.email?.split("@")[0] || "Usuario",
+        email: sessionUser.email || "",
+      }))
+    }
+  }, [sessionUser])
+
+  useEffect(() => {
+    async function checkAdminStatus() {
+      if (!userProfile.email) {
+        setCheckingAdmin(false)
+        return
+      }
+      try {
+        const response = await fetch(`/api/admin/check?email=${encodeURIComponent(userProfile.email)}`)
+        const data = await response.json()
+        setIsAdmin(data.isAdmin)
+      } catch (error) {
+        console.error("Error checking admin status:", error)
+        setIsAdmin(false)
+      } finally {
+        setCheckingAdmin(false)
+      }
+    }
+    checkAdminStatus()
+  }, [userProfile.email])
+
   const achievements = [
     {
       title: "Primer Test Completado",
@@ -369,6 +457,26 @@ export function DashboardContent() {
     }
   }
 
+  const getTypeBadgeColor = (type: string) => {
+    switch (type) {
+      case "personal":
+        return "bg-purple-100 text-purple-700 border-purple-200"
+      case "laboral":
+        return "bg-blue-100 text-blue-700 border-blue-200"
+      case "mixto":
+        return "bg-green-100 text-green-700 border-green-200"
+      default:
+        return "bg-gray-100 text-gray-700 border-gray-200"
+    }
+  }
+
+  const getDaysRemaining = (dueDate: string) => {
+    const today = new Date()
+    const due = new Date(dueDate)
+    const diff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    return diff
+  }
+
   const getFallbackRecommendations = () => [
     {
       title: "Completa tus Evaluaciones",
@@ -405,10 +513,9 @@ export function DashboardContent() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Panel de Control</h1>
-            <p className="text-mutedForeground">Bienvenido de vuelta, {userProfile.name}</p>
+            <p className="text-muted-foreground">Bienvenido de vuelta, {userProfile.name}</p>
           </div>
-          <div className="flex gap-2">
-            {console.log("[v0] Should show admin button?", isAdmin)}
+          <div className="flex flex-wrap gap-2">
             {isAdmin && (
               <Button
                 variant="outline"
@@ -419,9 +526,18 @@ export function DashboardContent() {
                 Admin
               </Button>
             )}
-            <Button variant="outline" onClick={() => router.push("/ai-coach")} className="border-border bg-transparent">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Coach IA
+            {/* Added new navigation buttons */}
+            <Button variant="outline" onClick={() => router.push("/metas")}>
+              <Target className="h-4 w-4 mr-2" />
+              Metas
+            </Button>
+            <Button variant="outline" onClick={() => router.push("/recursos")}>
+              <Library className="h-4 w-4 mr-2" />
+              Recursos
+            </Button>
+            <Button variant="outline" onClick={() => router.push("/simulaciones")}>
+              <Gamepad2 className="h-4 w-4 mr-2" />
+              Simulaciones
             </Button>
             <Button onClick={() => router.push("/biblioteca")} className="bg-foreground text-background">
               <BookOpen className="h-4 w-4 mr-2" />
@@ -432,413 +548,514 @@ export function DashboardContent() {
 
         <DailyCareerTip careerStage="intermediate" />
 
-        {/* Progress Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="border-border bg-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-mutedForeground">Tests Completados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {userProfile.completedTests}/{userProfile.totalTests}
-              </div>
-              <Progress value={completionPercentage} className="mt-2" />
-            </CardContent>
-          </Card>
-
-          <Card className="border-border bg-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-mutedForeground">Nivel Actual</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{userProfile.level}</div>
-              <div className="text-sm text-mutedForeground">{userProfile.points} puntos</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border bg-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-mutedForeground">Logros Obtenidos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{userAchievements.length}</div>
-              <div className="text-sm text-mutedForeground">logros desbloqueados</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border bg-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-600" />
-                Logros Recientes
-              </CardTitle>
-              <CardDescription>Tus últimos logros desbloqueados</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4 overflow-x-auto pb-2">
-                {userAchievements.slice(0, 5).map((achievement) => (
-                  <AchievementBadge
-                    key={achievement.id}
-                    name={achievement.achievement_name}
-                    description={achievement.achievement_description}
-                    icon={achievement.badge_icon}
-                    size="md"
-                  />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {userId && userProfile.email && <GoalTracker userId={userId} userEmail={userProfile.email} />}
-
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="tests" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5 bg-muted">
-            {" "}
-            {/* Changed from grid-cols-4 to grid-cols-5 */}
-            <TabsTrigger value="tests" className="data-[state=active]:bg-background">
-              Tests
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 h-auto p-1">
+            <TabsTrigger
+              value="overview"
+              className="data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Resumen
             </TabsTrigger>
-            <TabsTrigger value="results" className="data-[state=active]:bg-background">
-              Resultados
+            <TabsTrigger
+              value="goals"
+              className="data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              <Target className="h-4 w-4 mr-2" />
+              Metas
             </TabsTrigger>
-            <TabsTrigger value="recommendations" className="data-[state=active]:bg-background">
-              Recomendaciones
+            <TabsTrigger
+              value="library"
+              className="data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              <BookOpen className="h-4 w-4 mr-2" />
+              Lectura
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="data-[state=active]:bg-background">
-              Calendario
+            <TabsTrigger
+              value="simulations"
+              className="data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              <Gamepad2 className="h-4 w-4 mr-2" />
+              Simulaciones
             </TabsTrigger>
-            <TabsTrigger value="achievements" className="data-[state=active]:bg-background">
-              Logros
+            <TabsTrigger
+              value="evolution"
+              className="data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Evolución
             </TabsTrigger>
           </TabsList>
 
-          {/* Available Tests */}
-          <TabsContent value="tests" className="space-y-4">
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Progress Overview Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="border-border bg-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Tests Completados</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">
+                    {userProfile.completedTests}/{userProfile.totalTests}
+                  </div>
+                  <Progress value={completionPercentage} className="mt-2" />
+                </CardContent>
+              </Card>
+
+              <Card className="border-border bg-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Metas Activas</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">{activeGoals.length}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {activeGoals.filter((g) => g.progress >= 50).length} al 50%+
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border bg-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Libros en Curso</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">{booksInProgress.length}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {Math.round(booksInProgress.reduce((acc, b) => acc + b.progress, 0) / booksInProgress.length)}%
+                    promedio
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border bg-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Simulaciones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-foreground">{simulationHistory.length}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Puntaje promedio:{" "}
+                    {Math.round(simulationHistory.reduce((acc, s) => acc + s.score, 0) / simulationHistory.length)}%
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Recent Tests */}
+              <Card className="border-border bg-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5" />
+                    Tests Recientes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {recentResults.slice(0, 3).map((result) => (
+                    <div
+                      key={result.id}
+                      className="flex items-center justify-between p-2 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer"
+                      onClick={() => handleViewResults(result.id)}
+                    >
+                      <div>
+                        <p className="font-medium text-sm">{result.name}</p>
+                        <p className="text-xs text-muted-foreground">{result.completedAt}</p>
+                      </div>
+                      <Badge variant="secondary">{result.score}%</Badge>
+                    </div>
+                  ))}
+                  <Button variant="ghost" className="w-full" onClick={() => router.push("/test")}>
+                    Ver todos los tests
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Active Goals Preview */}
+              <Card className="border-border bg-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="h-5 w-5" />
+                    Metas Activas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {activeGoals.slice(0, 3).map((goal) => (
+                    <div key={goal.id} className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <p className="font-medium text-sm truncate flex-1">{goal.name}</p>
+                        <Badge className={getTypeBadgeColor(goal.type)} variant="outline">
+                          {goal.type}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Progress value={goal.progress} className="flex-1 h-2" />
+                        <span className="text-xs text-muted-foreground">{goal.progress}%</span>
+                      </div>
+                    </div>
+                  ))}
+                  <Button variant="ghost" className="w-full" onClick={() => router.push("/metas")}>
+                    Gestionar metas
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Books in Progress Preview */}
+              <Card className="border-border bg-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5" />
+                    Lectura Actual
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {booksInProgress.slice(0, 2).map((book) => (
+                    <div key={book.id} className="space-y-1">
+                      <p className="font-medium text-sm">{book.title}</p>
+                      <p className="text-xs text-muted-foreground">{book.author}</p>
+                      <div className="flex items-center gap-2">
+                        <Progress value={book.progress} className="flex-1 h-2" />
+                        <span className="text-xs text-muted-foreground">{book.progress}%</span>
+                      </div>
+                    </div>
+                  ))}
+                  <Button variant="ghost" className="w-full" onClick={() => router.push("/biblioteca")}>
+                    Ver biblioteca
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Achievements */}
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5" />
+                  Logros
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {achievements.map((achievement, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-lg border ${
+                        achievement.earned
+                          ? "bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200"
+                          : "bg-muted/30 border-muted opacity-60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`p-2 rounded-full ${
+                            achievement.earned ? "bg-amber-100 text-amber-600" : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          <achievement.icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{achievement.title}</p>
+                          <p className="text-xs text-muted-foreground">{achievement.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="goals" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-foreground">Evaluaciones Disponibles</h2>
-              <Badge variant="secondary" className="bg-muted text-mutedForeground">
-                {availableTests.filter((t) => !t.completed).length} pendientes
-              </Badge>
+              <h2 className="text-xl font-semibold">Mis Metas SMART</h2>
+              <Button onClick={() => router.push("/metas")}>
+                <Target className="h-4 w-4 mr-2" />
+                Crear Nueva Meta
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {availableTests.map((test) => (
-                <Card key={test.id} className="border-border bg-card hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className={`w-10 h-10 rounded-lg ${test.color} flex items-center justify-center`}>
-                        <test.icon className="h-5 w-5 text-white" />
-                      </div>
-                      {test.completed && (
-                        <Badge variant="secondary" className="bg-green-100 text-green-800">
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          Completado
+              {activeGoals.map((goal) => {
+                const daysLeft = getDaysRemaining(goal.dueDate)
+                return (
+                  <Card key={goal.id} className="border-border bg-card hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start justify-between">
+                        <CardTitle className="text-base">{goal.name}</CardTitle>
+                        <Badge className={getTypeBadgeColor(goal.type)} variant="outline">
+                          {goal.type}
                         </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="text-foreground">{test.name}</CardTitle>
-                    <CardDescription className="text-mutedForeground">{test.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-sm text-mutedForeground">
-                        <Clock className="h-4 w-4 mr-1" />
-                        {test.duration}
                       </div>
-                      <Button
-                        size="sm"
-                        onClick={() => handleStartTest(test.route)}
-                        variant={test.completed ? "outline" : "default"}
-                        className={
-                          test.completed
-                            ? "border-border bg-transparent"
-                            : "bg-foreground text-background hover:bg-foreground/90"
-                        }
-                      >
-                        {test.completed ? (
-                          <>
-                            <BarChart3 className="h-4 w-4 mr-1" />
-                            Ver Resultados
-                          </>
-                        ) : (
-                          <>
-                            <Play className="h-4 w-4 mr-1" />
-                            Comenzar
-                          </>
+                      <CardDescription className="flex items-center gap-2">
+                        <CircleDot className="h-3 w-3" />
+                        Origen: {goal.origin}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Progreso</span>
+                          <span className="font-medium">{goal.progress}%</span>
+                        </div>
+                        <Progress value={goal.progress} className="h-2" />
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {daysLeft > 0 ? `${daysLeft} días restantes` : "Vencida"}
+                        </span>
+                        {goal.progress >= 50 && (
+                          <Badge variant="secondary" className="bg-green-100 text-green-700">
+                            <Flame className="h-3 w-3 mr-1" />
+                            En camino
+                          </Badge>
                         )}
-                      </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+
+            <Card
+              className="border-dashed border-2 border-muted hover:border-foreground/50 transition-colors cursor-pointer"
+              onClick={() => router.push("/metas")}
+            >
+              <CardContent className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                <Target className="h-8 w-8 mb-2" />
+                <p className="font-medium">Agregar Nueva Meta</p>
+                <p className="text-sm">Define objetivos SMART basados en tus tests</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="library" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Libros en Progreso</h2>
+              <Button onClick={() => router.push("/biblioteca")}>
+                <BookOpen className="h-4 w-4 mr-2" />
+                Explorar Biblioteca
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {booksInProgress.map((book) => (
+                <Card key={book.id} className="border-border bg-card">
+                  <CardContent className="p-4">
+                    <div className="flex gap-4">
+                      <div className="w-16 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
+                        <BookOpen className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <h3 className="font-semibold">{book.title}</h3>
+                        <p className="text-sm text-muted-foreground">{book.author}</p>
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Progreso</span>
+                            <span>{book.progress}%</span>
+                          </div>
+                          <Progress value={book.progress} className="h-2" />
+                        </div>
+                        <p className="text-xs text-muted-foreground">Última lectura: {book.lastRead}</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </TabsContent>
 
-          {/* Recent Results */}
-          <TabsContent value="results" className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Resultados Recientes</h2>
-
-            {recentResults.length > 0 ? (
-              <div className="grid gap-4">
-                {recentResults.map((result) => (
-                  <Card key={result.id} className="border-border bg-card">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="text-foreground">{result.name}</CardTitle>
-                          <CardDescription className="text-mutedForeground">
-                            Completado el {new Date(result.completedAt).toLocaleDateString("es-ES")}
-                          </CardDescription>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-foreground">{result.score}%</div>
-                          <div className="text-sm text-mutedForeground">Puntuación</div>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <h4 className="font-medium text-foreground">Insights Clave:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {result.insights.map((insight, index) => (
-                            <Badge key={index} variant="secondary" className="bg-muted text-mutedForeground">
-                              {insight}
-                            </Badge>
-                          ))}
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewResults(result.id)}
-                          className="mt-3 border-border bg-transparent"
-                        >
-                          Ver Análisis Completo
-                          <ArrowRight className="h-4 w-4 ml-1" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <Card className="border-border bg-card">
-                <CardContent className="text-center py-8">
-                  <BarChart3 className="h-12 w-12 text-mutedForeground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-foreground mb-2">No hay resultados aún</h3>
-                  <p className="text-mutedForeground mb-4">
-                    Completa tu primera evaluación para ver tus resultados aquí
-                  </p>
-                  <Button onClick={() => handleStartTest("/test/disc")} className="bg-foreground text-background">
-                    Comenzar Primera Evaluación
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* Recommendations */}
-          <TabsContent value="recommendations" className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-foreground">Recomendaciones Personalizadas</h2>
-              <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                <Sparkles className="h-3 w-3 mr-1" />
-                Powered by Cerebro + OpenAI
-              </Badge>
-            </div>
-
-            {loadingRecommendations ? (
-              <Card className="border-border bg-card">
-                <CardContent className="text-center py-8">
-                  <Brain className="h-12 w-12 text-mutedForeground mx-auto mb-4 animate-pulse" />
-                  <p className="text-mutedForeground">Generando recomendaciones personalizadas...</p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {recommendations.map((rec, index) => (
-                  <Card key={index} className="border-border bg-card hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
-                          <rec.icon className="h-5 w-5 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <CardTitle className="text-foreground">{rec.title}</CardTitle>
-                            {rec.source && (
-                              <Badge variant="outline" className="text-xs">
-                                {rec.source === "openai" && "🤖 OpenAI"}
-                                {rec.source === "cerebro" && "🧠 Cerebro"}
-                                {rec.source === "hybrid" && "✨ Hybrid"}
-                              </Badge>
-                            )}
-                          </div>
-                          <CardDescription className="text-mutedForeground">{rec.description}</CardDescription>
-                          {rec.confidence && (
-                            <div className="mt-2 flex items-center gap-2">
-                              <Progress value={rec.confidence * 100} className="h-1 w-20" />
-                              <span className="text-xs text-mutedForeground">
-                                {Math.round(rec.confidence * 100)}% confianza
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <Button variant="outline" size="sm" className="border-border bg-transparent">
-                          {rec.action}
-                        </Button>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
-            )}
-
-            {/* Refresh button for recommendations */}
-            <Button
-              variant="outline"
-              className="w-full border-border bg-transparent"
-              onClick={() => {
-                setLoadingRecommendations(true)
-                // Refetch recommendations
-                fetch(`/api/recommendations?userEmail=${encodeURIComponent(userProfile.email)}`)
-                  .then((res) => res.json())
-                  .then((data) => {
-                    if (data.success && data.recommendations) {
-                      const recs = data.recommendations.map((rec: any) => ({
-                        title: rec.title,
-                        description: rec.description,
-                        action: rec.action || "Ver más",
-                        icon: getCategoryIcon(rec.category),
-                        source: rec.source,
-                        confidence: rec.confidence,
-                      }))
-                      setRecommendations(recs)
-                    }
-                  })
-                  .finally(() => setLoadingRecommendations(false))
-              }}
-            >
-              <Sparkles className="h-4 w-4 mr-2" />
-              Actualizar Recomendaciones
-            </Button>
-          </TabsContent>
-
-          <TabsContent value="calendar" className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-foreground">Mi Calendario de Actividades</h2>
-              <Badge variant="secondary" className="bg-green-100 text-green-800">
-                <Calendar className="h-3 w-3 mr-1" />
-                WhatsApp Activo
-              </Badge>
-            </div>
-            {userProfile.email ? (
-              <ActivityCalendar userEmail={userProfile.email} />
-            ) : (
-              <Card className="border-border bg-card">
-                <CardContent className="text-center py-8">
-                  <Calendar className="h-12 w-12 text-mutedForeground mx-auto mb-4 animate-pulse" />
-                  <p className="text-mutedForeground">Cargando calendario...</p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* Achievements */}
-          <TabsContent value="achievements" className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Logros y Reconocimientos</h2>
-
-            <div className="grid gap-4">
-              {achievements.map((achievement, index) => (
-                <Card
-                  key={index}
-                  className={`border-border ${achievement.earned ? "bg-card" : "bg-muted/50"} transition-all`}
-                >
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                          achievement.earned ? "bg-yellow-500" : "bg-muted"
-                        }`}
-                      >
-                        <achievement.icon
-                          className={`h-6 w-6 ${achievement.earned ? "text-white" : "text-mutedForeground"}`}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <CardTitle className={achievement.earned ? "text-foreground" : "text-mutedForeground"}>
-                          {achievement.title}
-                        </CardTitle>
-                        <CardDescription className="text-mutedForeground">{achievement.description}</CardDescription>
-                        {achievement.earned && achievement.date && (
-                          <div className="text-sm text-mutedForeground mt-1">
-                            Obtenido el {new Date(achievement.date).toLocaleDateString("es-ES")}
-                          </div>
-                        )}
-                      </div>
-                      {achievement.earned && (
-                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                          <Trophy className="h-3 w-3 mr-1" />
-                          Obtenido
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Recomendados para Ti
+                </CardTitle>
+                <CardDescription>Basado en tus resultados de tests</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    { title: "Inteligencia Emocional", author: "Daniel Goleman", match: 95 },
+                    { title: "Mindset", author: "Carol Dweck", match: 88 },
+                    { title: "Drive", author: "Daniel Pink", match: 82 },
+                  ].map((book, i) => (
+                    <div key={i} className="p-3 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer transition-colors">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary" className="bg-green-100 text-green-700">
+                          {book.match}% match
                         </Badge>
-                      )}
+                      </div>
+                      <p className="font-medium text-sm">{book.title}</p>
+                      <p className="text-xs text-muted-foreground">{book.author}</p>
                     </div>
-                  </CardHeader>
+                  ))}
+                </div>
+                <Button variant="ghost" className="w-full mt-4" onClick={() => router.push("/recursos")}>
+                  Ver más recomendaciones
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="simulations" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Historial de Simulaciones</h2>
+              <Button onClick={() => router.push("/simulaciones")}>
+                <Gamepad2 className="h-4 w-4 mr-2" />
+                Nueva Simulación
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {simulationHistory.map((sim) => (
+                <Card key={sim.id} className="border-border bg-card">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <Badge variant="outline" className="mb-2">
+                          {sim.type === "entrevista" ? "Entrevista" : "Conversación"}
+                        </Badge>
+                        <h3 className="font-semibold">{sim.scenario}</h3>
+                      </div>
+                      <div className="text-right">
+                        <div className={`text-2xl font-bold ${sim.score >= 70 ? "text-green-600" : "text-amber-600"}`}>
+                          {sim.score}%
+                        </div>
+                        <p className="text-xs text-muted-foreground">{sim.completedAt}</p>
+                      </div>
+                    </div>
+                    <div className="p-2 bg-muted/50 rounded-lg">
+                      <p className="text-sm text-muted-foreground">
+                        <strong>Feedback:</strong> {sim.feedback}
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="sm" className="w-full mt-2">
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Repetir Simulación
+                    </Button>
+                  </CardContent>
                 </Card>
               ))}
             </div>
+
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle>Simulaciones Recomendadas</CardTitle>
+                <CardDescription>Basadas en tus áreas de mejora</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {[
+                    { name: "Entrevista Técnica", difficulty: "Intermedio", relevance: "Alta" },
+                    { name: "Conversación con Jefe", difficulty: "Avanzado", relevance: "Media" },
+                  ].map((sim, i) => (
+                    <div
+                      key={i}
+                      className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      onClick={() => router.push("/simulaciones")}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">{sim.name}</span>
+                        <Badge variant="secondary">{sim.difficulty}</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Relevancia: {sim.relevance}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="evolution" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Evolución de Tests</h2>
+              <Button variant="outline" onClick={() => router.push("/test")}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Re-tomar Test
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {testEvolution.map((test) => {
+                const improvement =
+                  test.attempts.length > 1 ? test.attempts[test.attempts.length - 1].score - test.attempts[0].score : 0
+                return (
+                  <Card key={test.testId} className="border-border bg-card">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base flex items-center justify-between">
+                        {test.testName}
+                        {improvement > 0 && (
+                          <Badge className="bg-green-100 text-green-700">
+                            <TrendingUp className="h-3 w-3 mr-1" />+{improvement}%
+                          </Badge>
+                        )}
+                      </CardTitle>
+                      <CardDescription>{test.attempts.length} intentos</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        {test.attempts.map((attempt, i) => (
+                          <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
+                            <span className="text-sm text-muted-foreground">{attempt.date}</span>
+                            <div className="flex items-center gap-2">
+                              <Progress value={attempt.score} className="w-24 h-2" />
+                              <span className="font-medium text-sm w-12 text-right">{attempt.score}%</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-3 bg-transparent"
+                        onClick={() => router.push(`/test/${test.testId}`)}
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Volver a tomar
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5" />
+                  Recomendación de Re-test
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Se recomienda re-tomar los tests cada 3-6 meses para medir tu evolución y ajustar tu plan de
+                  desarrollo personal.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {Object.entries(TEST_NAMES)
+                    .slice(0, 3)
+                    .map(([id, test]) => (
+                      <div
+                        key={id}
+                        className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                        onClick={() => router.push(`/test/${id}`)}
+                      >
+                        <p className="font-medium text-sm">{test.name}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Último: hace 3 meses</p>
+                      </div>
+                    ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
 
-        {/* Quick Actions */}
-        <Card className="border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-foreground">Acciones Rápidas</CardTitle>
-            <CardDescription className="text-mutedForeground">
-              Continúa tu desarrollo profesional con estas acciones recomendadas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button
-                variant="outline"
-                className="h-auto p-4 border-border bg-transparent"
-                onClick={() => router.push("/ai-coach")}
-              >
-                <div className="text-center">
-                  <MessageSquare className="h-8 w-8 mx-auto mb-2 text-foreground" />
-                  <div className="font-medium text-foreground">Consultar Coach IA</div>
-                  <div className="text-sm text-mutedForeground">Obtén consejos personalizados</div>
-                </div>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto p-4 border-border bg-transparent"
-                onClick={() => router.push("/biblioteca")}
-              >
-                <div className="text-center">
-                  <BookOpen className="h-8 w-8 mx-auto mb-2 text-foreground" />
-                  <div className="font-medium text-foreground">Explorar Biblioteca</div>
-                  <div className="text-sm text-mutedForeground">Recursos de desarrollo</div>
-                </div>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-auto p-4 border-border bg-transparent"
-                onClick={() => handleStartTest("/test/emotional-intelligence")}
-              >
-                <div className="text-center">
-                  <Zap className="h-8 w-8 mx-auto mb-2 text-foreground" />
-                  <div className="font-medium text-foreground">Siguiente Test</div>
-                  <div className="text-sm text-mutedForeground">Inteligencia Emocional</div>
-                </div>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Removed Quick Actions section as it's now integrated into the overview tab */}
       </div>
     </div>
   )

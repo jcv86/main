@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
-import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import {
   Target,
@@ -561,10 +561,10 @@ export default function RIASECResults() {
                   <Calendar className="h-4 w-4" />
                   <span className="hidden sm:inline">Plan 90 Días</span>
                 </TabsTrigger>
-                <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
+                {/* <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
                   <Sparkles className="h-4 w-4" />
                   Coach Dani
-                </TabsTrigger>
+                </TabsTrigger> */}
                 <TabsTrigger value="action" className="flex items-center gap-2 hidden lg:flex">
                   <Target className="h-4 w-4" />
                   Plan
@@ -1164,16 +1164,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <SofiaDaniCoach
-              conversationCategory="orientacion_carrera"
-              userContext={{
-                testType: "Brújula Vocacional Despega",
-                testResults: results,
-                userEmail: isDemoMode ? "demo@example.com" : "user@example.com",
-                completedAt: new Date().toISOString(),
-              }}
-              suggestedAction={`Investiga las carreras sugeridas: ${careerRecommendations.slice(0, 2).join(", ")}`}
-            />
+            <EnhancedCoachFlow testType="RIASEC" testResults={results} />
           </TabsContent>
 
           {/* Career Tab */}

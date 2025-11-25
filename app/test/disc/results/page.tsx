@@ -26,7 +26,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
-import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
+import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 
 interface DISCResult {
   d_score: number
@@ -816,7 +816,7 @@ export default function DISCResultsPage() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <SofiaDaniCoach
+            <EnhancedCoachFlow
               testType="DISC"
               testResults={{
                 primary_type: discResult.primary_type,
