@@ -23,6 +23,9 @@ import {
   Calendar,
   CheckCircle2,
   Lightbulb,
+  Heart,
+  Users,
+  Home,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
@@ -508,6 +511,96 @@ export default function DISCResultsPage() {
                 </CardContent>
               </Card>
             </div>
+
+            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-purple-600" />
+                  Impacto en tu Vida Personal
+                </CardTitle>
+                <CardDescription>
+                  Cómo tu perfil {discResult.primary_type} influye en tus relaciones, bienestar y vida diaria
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Users className="w-5 h-5" />
+                      Relaciones Personales
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {discResult.primary_type === "Dominance"
+                        ? "En tu familia y pareja, tu estilo directo puede ser percibido como autoritario. Practica escucha activa y cede el control en decisiones cotidianas."
+                        : discResult.primary_type === "Influence"
+                          ? "Tu energía social enriquece tus amistades, pero puede agotar a personas más introvertidas. Reserva momentos de calidad sin distracciones."
+                          : discResult.primary_type === "Steadiness"
+                            ? "Tu lealtad es tu mayor fortaleza en relaciones, pero evita sacrificar tus necesidades por complacer. Practica poner límites con amor."
+                            : "Tu tendencia al análisis puede hacer que parezcas distante. Comparte más tus emociones y valora lo emocional tanto como lo lógico."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Home className="w-5 h-5" />
+                      Vida Familiar
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {discResult.primary_type === "Dominance"
+                        ? "Con tu familia, delega responsabilidades y permite que otros lideren. Pregunta '¿Qué opinas?' antes de decidir."
+                        : discResult.primary_type === "Influence"
+                          ? "Tu optimismo levanta el ánimo familiar, pero asegúrate de dar espacio a conversaciones serias y emocionales profundas."
+                          : discResult.primary_type === "Steadiness"
+                            ? "Eres el ancla emocional de tu familia. No olvides pedir apoyo cuando lo necesites - no siempre tienes que ser el fuerte."
+                            : "Tu amor por el orden puede crear tensión en la rutina familiar. Aprende a soltar y disfrutar el caos controlado."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Heart className="w-5 h-5" />
+                      Bienestar Emocional
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {discResult.primary_type === "Dominance"
+                        ? "Tu ritmo acelerado puede llevarte al burnout. Programa momentos de descanso no negociables y practica mindfulness."
+                        : discResult.primary_type === "Influence"
+                          ? "Necesitas interacción social para recargar, pero también requieres soledad. Alterna entre socializar y tiempo a solas."
+                          : discResult.primary_type === "Steadiness"
+                            ? "Tu aversión al conflicto puede acumular resentimiento. Practica expresar molestias pequeñas antes de que se acumulen."
+                            : "Tu mente analítica puede sobre-pensar. Incorpora actividades físicas para salir de tu cabeza y conectar con tu cuerpo."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Sparkles className="w-5 h-5" />
+                      Desarrollo Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {discResult.primary_type === "Dominance"
+                        ? "Enfócate en desarrollar paciencia y empatía. Lee sobre inteligencia emocional y practica ponerte en los zapatos de otros."
+                        : discResult.primary_type === "Influence"
+                          ? "Desarrolla disciplina y seguimiento. Usa herramientas para mantener el enfoque y completa lo que inicias."
+                          : discResult.primary_type === "Steadiness"
+                            ? "Practica la asertividad y el cambio. Sal de tu zona de confort con pequeños experimentos seguros."
+                            : "Desarrolla tu conexión emocional. Practica nombrar tus emociones y compartir cómo te sientes con personas de confianza."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                    💡 Recuerda: Tu trabajo es solo una parte de tu vida
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Este test te ayuda primero a mejorar tus relaciones personales, tu bienestar emocional y tu vida
+                    familiar. Las mejoras en el ámbito laboral son una consecuencia natural de tu crecimiento personal
+                    integral.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="details" className="space-y-6">

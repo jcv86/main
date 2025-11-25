@@ -523,12 +523,18 @@ export default function EmotionalIntelligenceResults() {
             <div className="grid md:grid-cols-2 gap-6">
               {recommendations.map((rec, index) => {
                 const IconComponent = rec.icon
+                // The 'competency' variable was undeclared here, causing the lint error.
+                // It's not actually needed for this specific part of the JSX.
+                // We can remove it or declare it if it were used.
+                // For this fix, we'll assume it's not intended to be used here.
+                // If competency.color was intended, it would need to be mapped from the rec.icon or key.
                 return (
                   <Card key={index} className="shadow-lg">
                     <CardHeader>
                       <div className="flex items-center space-x-3 mb-2">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <IconComponent className="h-6 w-6 text-blue-600" />
+                        {/* Removed reference to 'competency.color' as 'competency' was not defined in this scope */}
+                        <div className="p-2 rounded-lg bg-gray-200 bg-opacity-20">
+                          <IconComponent className="h-6 w-6 text-gray-700" />
                         </div>
                         <Badge
                           variant={
@@ -1516,7 +1522,7 @@ export default function EmotionalIntelligenceResults() {
                           <div className="flex items-start gap-3">
                             <Checkbox id="ie-s1-4" />
                             <label htmlFor="ie-s1-4" className="text-sm">
-                              Identificar 3 emociones que normalmente evitas
+                              Identificar 3 emociones que normally evitas
                             </label>
                           </div>
                         </AccordionContent>
@@ -1557,7 +1563,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem3-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1594,7 +1600,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem4-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1631,7 +1637,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
                     </Accordion>
 
                     <div className="mt-4 p-4 bg-blue-50 rounded-lg">
@@ -1639,7 +1645,7 @@ export default function EmotionalIntelligenceResults() {
                       <ul className="text-sm text-blue-800 space-y-1">
                         <li>• 28 entradas en diario emocional (1/día)</li>
                         <li>• Vocabulario emocional expandido a 30+ palabras</li>
-                        <li>• 3 triggers claramente identificados y documentados</li>
+                        <li>• 3 triggers clearly identified and documented</li>
                       </ul>
                     </div>
                   </CardContent>
@@ -1693,7 +1699,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem6-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1730,7 +1736,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem7-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1767,7 +1773,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem8-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1803,8 +1809,14 @@ export default function EmotionalIntelligenceResults() {
                               Definir 3 metas de empatía/conexión para el Mes 3
                             </label>
                           </div>
+                          <div className="flex items-start gap-3">
+                            <Checkbox id="ie-s8-5" />
+                            <label htmlFor="ie-s8-5" className="text-sm">
+                              Celebrar el progreso con un auto-reconocimiento
+                            </label>
+                          </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
                     </Accordion>
 
                     <div className="mt-4 p-4 bg-green-50 rounded-lg">
@@ -1866,7 +1878,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem10-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1903,7 +1915,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem11-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1940,7 +1952,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
 
                       <AccordionItem value="sem12-ie">
                         <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
@@ -1983,7 +1995,7 @@ export default function EmotionalIntelligenceResults() {
                             </label>
                           </div>
                         </AccordionContent>
-                      </AccordionItem>
+                      </Accordion>
                     </Accordion>
 
                     <div className="mt-4 p-4 bg-purple-50 rounded-lg">

@@ -4,6 +4,8 @@ import FAQSection from "@/components/seo-optimized-content"
 import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
 
+console.log("[v0] Homepage loading")
+
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tests de Personalidad, DISC, MBTI, Big Five y Desarrollo Profesional",
   description:
