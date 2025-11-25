@@ -23,6 +23,7 @@ import {
   PieChart,
   ArrowLeft,
   Sparkles,
+  Calendar,
 } from "lucide-react"
 import {
   BarChart,
@@ -44,6 +45,8 @@ import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -235,7 +238,7 @@ export default function SoftSkillsResults() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 gap-2">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Resumen
@@ -251,6 +254,7 @@ export default function SoftSkillsResults() {
             <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
+            <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
             <TabsTrigger value="coach" className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
               Coach IA
@@ -1226,6 +1230,256 @@ export default function SoftSkillsResults() {
                     Hablar con Coach IA
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="plan-90-dias" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  Plan de Acción 90 Días - Desarrollo de Soft Skills
+                </CardTitle>
+                <CardDescription>
+                  Potencia tus habilidades blandas con práctica deliberada durante los próximos 3 meses
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Progress Overview */}
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Progreso Total del Plan</span>
+                    <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+
+                <Accordion type="single" collapsible className="w-full">
+                  {/* Mes 1: Comunicación y Colaboración */}
+                  <AccordionItem value="mes-1">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          1
+                        </div>
+                        Mes 1: Comunicación y Colaboración
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Mejora tu capacidad de comunicarte efectivamente y trabajar en equipo
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 1-2: Comunicación Efectiva</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s1-1" />
+                                <label htmlFor="ss-m1s1-1">
+                                  Practicar escucha activa: repetir lo escuchado antes de responder
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s1-2" />
+                                <label htmlFor="ss-m1s1-2">
+                                  Dar feedback usando el modelo SBI (Situación-Comportamiento-Impacto)
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s1-3" />
+                                <label htmlFor="ss-m1s1-3">
+                                  Preparar y dar una presentación de 5 minutos sobre un tema profesional
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 3-4: Trabajo en Equipo</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s2-1" />
+                                <label htmlFor="ss-m1s2-1">Liderar una reunión de equipo o proyecto grupal</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s2-2" />
+                                <label htmlFor="ss-m1s2-2">Ofrecer ayuda proactiva a 3 colegas en sus proyectos</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m1s2-3" />
+                                <label htmlFor="ss-m1s2-3">
+                                  Facilitar la resolución de un conflicto o desacuerdo en el equipo
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> 1 presentación completada, 3 feedbacks dados con modelo SBI
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 2: Liderazgo y Adaptabilidad */}
+                  <AccordionItem value="mes-2">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          2
+                        </div>
+                        Mes 2: Liderazgo y Adaptabilidad
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Desarrolla tu capacidad de influir positivamente y adaptarte al cambio
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 5-6: Habilidades de Liderazgo</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s1-1" />
+                                <label htmlFor="ss-m2s1-1">Mentorear o guiar a un colega junior por 2 semanas</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s1-2" />
+                                <label htmlFor="ss-m2s1-2">
+                                  Tomar la iniciativa en un proyecto sin que te lo pidan
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s1-3" />
+                                <label htmlFor="ss-m2s1-3">
+                                  Practicar delegar una tarea importante y dar seguimiento
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 7-8: Adaptabilidad y Resiliencia</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s2-1" />
+                                <label htmlFor="ss-m2s2-1">
+                                  Aprender una nueva herramienta o tecnología en tu campo
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s2-2" />
+                                <label htmlFor="ss-m2s2-2">
+                                  Documentar cómo manejaste un cambio inesperado y qué aprendiste
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m2s2-3" />
+                                <label htmlFor="ss-m2s2-3">
+                                  Pedir feedback sobre tu flexibilidad y áreas de mejora
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> 1 persona mentoreada, 1 nueva herramienta dominada
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 3: Pensamiento Crítico e Integración */}
+                  <AccordionItem value="mes-3">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          3
+                        </div>
+                        Mes 3: Pensamiento Crítico e Integración
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Agudiza tu pensamiento analítico e integra todas tus soft skills
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 9-10: Pensamiento Crítico</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s1-1" />
+                                <label htmlFor="ss-m3s1-1">
+                                  Analizar un problema complejo usando el método de los 5 Porqués
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s1-2" />
+                                <label htmlFor="ss-m3s1-2">
+                                  Proponer una mejora de proceso basada en datos y análisis
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s1-3" />
+                                <label htmlFor="ss-m3s1-3">
+                                  Practicar tomar decisiones documentando pros, contras y criterios
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 11-12: Integración de Soft Skills</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s2-1" />
+                                <label htmlFor="ss-m3s2-1">
+                                  Crear un portafolio de evidencias de tus soft skills desarrolladas
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s2-2" />
+                                <label htmlFor="ss-m3s2-2">Obtener testimonios de 3 colegas sobre tu crecimiento</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ss-m3s2-3" />
+                                <label htmlFor="ss-m3s2-3">
+                                  Diseñar plan de desarrollo continuo para el próximo trimestre
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Portafolio de soft skills + 3 testimonios + plan siguiente
+                          trimestre
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </CardContent>
             </Card>
           </TabsContent>

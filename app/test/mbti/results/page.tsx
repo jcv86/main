@@ -8,11 +8,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, Brain, Download, Share2, TrendingUp, Target, Loader2, Lightbulb, Check } from "lucide-react"
+import {
+  ArrowLeft,
+  Brain,
+  Download,
+  Share2,
+  TrendingUp,
+  Target,
+  Loader2,
+  Lightbulb,
+  Check,
+  Calendar,
+} from "lucide-react"
 import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Progress } from "@/components/ui/progress"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface MBTIResult {
   type: string
@@ -308,12 +320,14 @@ export default function MBTIResultsPage() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 gap-2">
+          {/* Updated grid columns to 8 and added Plan 90 Días tab */}
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2">
             <TabsTrigger value="resumen-ejecutivo">Resumen</TabsTrigger>
             <TabsTrigger value="dimensiones">Dimensiones</TabsTrigger>
             <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
+            <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
             <TabsTrigger value="coach">Coach IA</TabsTrigger>
             <TabsTrigger value="siguientes-pasos">Siguientes Pasos</TabsTrigger>
           </TabsList>
@@ -605,7 +619,7 @@ export default function MBTIResultsPage() {
             </Card>
           </TabsContent>
 
-          {/* Conexión con Otros Módulos */}
+          {/* Conexiones con Otros Módulos */}
           <TabsContent value="conexiones" className="space-y-6">
             <Card className="border-l-4 border-l-indigo-500">
               <CardHeader>
@@ -991,7 +1005,255 @@ export default function MBTIResultsPage() {
             </Card>
           </TabsContent>
 
-          {/* Coach IA */}
+          <TabsContent value="plan-90-dias" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  Plan de Acción 90 Días - Desarrollo de Tipo MBTI
+                </CardTitle>
+                <CardDescription>
+                  Transforma tu autoconocimiento MBTI en acciones concretas durante los próximos 3 meses
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Progress Overview */}
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Progreso Total del Plan</span>
+                    <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+
+                {/* Mes 1: Autoconocimiento Profundo */}
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="mes-1">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          1
+                        </div>
+                        Mes 1: Autoconocimiento Profundo de tu Tipo
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Explora las fortalezas y desafíos únicos de tu tipo {mbtiResult.type || "MBTI"}
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 1-2: Entender tus Preferencias</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s1-1" />
+                                <label htmlFor="m1s1-1">
+                                  Estudiar en profundidad cada una de tus 4 preferencias (E/I, S/N, T/F, J/P)
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s1-2" />
+                                <label htmlFor="m1s1-2">
+                                  Identificar 3 situaciones recientes donde cada preferencia se manifestó
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s1-3" />
+                                <label htmlFor="m1s1-3">
+                                  Escribir un diario de reflexión sobre cómo tu tipo afecta tus decisiones
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 3-4: Fortalezas y Puntos Ciegos</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s2-1" />
+                                <label htmlFor="m1s2-1">Listar tus 5 principales fortalezas según tu tipo MBTI</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s2-2" />
+                                <label htmlFor="m1s2-2">
+                                  Identificar 3 puntos ciegos típicos de tu tipo y cómo te afectan
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m1s2-3" />
+                                <label htmlFor="m1s2-3">
+                                  Pedir feedback a 2 personas cercanas sobre tus comportamientos típicos
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Completar análisis de las 4 preferencias con ejemplos reales
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 2: Desarrollo de Funciones */}
+                  <AccordionItem value="mes-2">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          2
+                        </div>
+                        Mes 2: Desarrollo de Funciones Cognitivas
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Trabaja en desarrollar tu función inferior y equilibrar tu stack cognitivo
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 5-6: Función Dominante y Auxiliar</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s1-1" />
+                                <label htmlFor="m2s1-1">
+                                  Identificar tu función dominante y cómo la usas diariamente
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s1-2" />
+                                <label htmlFor="m2s1-2">
+                                  Practicar conscientemente tu función auxiliar en 3 situaciones
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s1-3" />
+                                <label htmlFor="m2s1-3">Documentar cómo el balance Dom-Aux mejora tus decisiones</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 7-8: Desarrollar la Función Inferior</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s2-1" />
+                                <label htmlFor="m2s2-1">
+                                  Identificar tu función inferior y situaciones donde te falla
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s2-2" />
+                                <label htmlFor="m2s2-2">
+                                  Crear 3 ejercicios específicos para fortalecer tu función inferior
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m2s2-3" />
+                                <label htmlFor="m2s2-3">
+                                  Practicar actividades que requieran tu función inferior (15 min/día)
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Documentar 5 mejoras en el uso de tu función inferior
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 3: Integración y Relaciones */}
+                  <AccordionItem value="mes-3">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          3
+                        </div>
+                        Mes 3: Integración y Mejora de Relaciones
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Aplica tu autoconocimiento para mejorar relaciones y comunicación
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 9-10: Comunicación según Tipos</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s1-1" />
+                                <label htmlFor="m3s1-1">
+                                  Identificar los tipos MBTI de 5 personas importantes en tu vida
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s1-2" />
+                                <label htmlFor="m3s1-2">Adaptar tu comunicación según el tipo de cada persona</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s1-3" />
+                                <label htmlFor="m3s1-3">
+                                  Practicar escucha activa enfocándote en preferencias opuestas
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 11-12: Integración Total</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s2-1" />
+                                <label htmlFor="m3s2-1">Crear un plan de carrera alineado con tu tipo MBTI</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s2-2" />
+                                <label htmlFor="m3s2-2">
+                                  Diseñar tu ambiente ideal de trabajo según tus preferencias
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="m3s2-3" />
+                                <label htmlFor="m3s2-3">
+                                  Escribir tu manifiesto personal integrando todos los aprendizajes
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Completar manifiesto personal y plan de carrera MBTI-aligned
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="coach" className="space-y-6">
             <Card>
               <CardHeader>

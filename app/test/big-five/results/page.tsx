@@ -24,6 +24,7 @@ import {
   Sparkles,
   CheckCircle,
   AlertCircle,
+  Calendar,
 } from "lucide-react"
 import {
   RadarChart,
@@ -49,6 +50,8 @@ import { SofiaDaniCoach } from "@/components/sofia-dani-coach"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface TestResult {
   id: number
@@ -225,7 +228,7 @@ export default function BigFiveResults() {
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-2">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10 gap-2">
             <TabsTrigger value="summary" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Resumen
@@ -253,6 +256,7 @@ export default function BigFiveResults() {
             <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
+            <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
           </TabsList>
 
           <TabsContent value="summary" className="space-y-6">
@@ -1304,6 +1308,248 @@ export default function BigFiveResults() {
                     Hablar con Coach IA
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="plan-90-dias" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  Plan de Acción 90 Días - Desarrollo de Rasgos Big Five
+                </CardTitle>
+                <CardDescription>
+                  Optimiza tus rasgos de personalidad con acciones concretas durante los próximos 3 meses
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Progress Overview */}
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Progreso Total del Plan</span>
+                    <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+
+                <Accordion type="single" collapsible className="w-full">
+                  {/* Mes 1: Apertura y Responsabilidad */}
+                  <AccordionItem value="mes-1">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          1
+                        </div>
+                        Mes 1: Apertura a la Experiencia y Responsabilidad
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Desarrolla tu curiosidad intelectual y tu capacidad de organización
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 1-2: Expandir Apertura</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s1-1" />
+                                <label htmlFor="bf-m1s1-1">
+                                  Leer un libro de un género completamente nuevo para ti
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s1-2" />
+                                <label htmlFor="bf-m1s1-2">Probar una actividad artística o creativa nueva</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s1-3" />
+                                <label htmlFor="bf-m1s1-3">
+                                  Tener una conversación profunda sobre filosofía o ideas abstractas
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 3-4: Fortalecer Responsabilidad</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s2-1" />
+                                <label htmlFor="bf-m1s2-1">
+                                  Implementar un sistema de organización personal (GTD, Bullet Journal, etc.)
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s2-2" />
+                                <label htmlFor="bf-m1s2-2">
+                                  Establecer y cumplir 3 metas pequeñas con fechas límite
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m1s2-3" />
+                                <label htmlFor="bf-m1s2-3">Crear una rutina matutina y mantenerla por 2 semanas</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Completar 3 experiencias nuevas y establecer sistema de
+                          organización
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 2: Extraversión y Amabilidad */}
+                  <AccordionItem value="mes-2">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          2
+                        </div>
+                        Mes 2: Extraversión y Amabilidad
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Mejora tus habilidades sociales y tu capacidad de conexión con otros
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 5-6: Desarrollar Extraversión</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s1-1" />
+                                <label htmlFor="bf-m2s1-1">Iniciar conversación con 2 personas nuevas por semana</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s1-2" />
+                                <label htmlFor="bf-m2s1-2">Asistir a un evento social o networking</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s1-3" />
+                                <label htmlFor="bf-m2s1-3">
+                                  Practicar hablar en público (reunión, presentación informal)
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 7-8: Cultivar Amabilidad</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s2-1" />
+                                <label htmlFor="bf-m2s2-1">Realizar 3 actos de bondad aleatorios por semana</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s2-2" />
+                                <label htmlFor="bf-m2s2-2">
+                                  Practicar dar feedback constructivo a colegas o amigos
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m2s2-3" />
+                                <label htmlFor="bf-m2s2-3">Meditar sobre compasión o practicar gratitud diaria</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Expandir red de contactos en 5 personas, 12 actos de bondad
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 3: Neuroticismo y Estabilidad */}
+                  <AccordionItem value="mes-3">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          3
+                        </div>
+                        Mes 3: Estabilidad Emocional e Integración
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Fortalece tu resiliencia emocional e integra todos los rasgos
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 9-10: Reducir Neuroticismo</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s1-1" />
+                                <label htmlFor="bf-m3s1-1">
+                                  Establecer práctica diaria de mindfulness (10 min/día)
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s1-2" />
+                                <label htmlFor="bf-m3s1-2">
+                                  Identificar y desafiar 5 patrones de pensamiento negativo
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s1-3" />
+                                <label htmlFor="bf-m3s1-3">Crear un plan de manejo del estrés personalizado</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 11-12: Integración de los 5 Rasgos</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s2-1" />
+                                <label htmlFor="bf-m3s2-1">
+                                  Crear perfil integrado de tus 5 rasgos con fortalezas y áreas de mejora
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s2-2" />
+                                <label htmlFor="bf-m3s2-2">
+                                  Diseñar plan de desarrollo continuo basado en tu perfil Big Five
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="bf-m3s2-3" />
+                                <label htmlFor="bf-m3s2-3">Compartir aprendizajes con alguien de confianza</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Plan de manejo del estrés activo + perfil Big Five integrado
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </CardContent>
             </Card>
           </TabsContent>

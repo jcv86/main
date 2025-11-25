@@ -33,6 +33,7 @@ import {
   Lightbulb,
   Rocket,
   Network,
+  Calendar,
 } from "lucide-react"
 import {
   ResponsiveContainer,
@@ -55,6 +56,7 @@ import {
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
+import { Checkbox } from "@/components/ui/checkbox" // Added Checkbox
 
 interface RIASECResults {
   R: number
@@ -526,7 +528,7 @@ export default function RIASECResults() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-2">
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10 gap-2">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <Award className="h-4 w-4" />
                   <span className="hidden sm:inline">Resumen</span>
@@ -554,6 +556,10 @@ export default function RIASECResults() {
                 <TabsTrigger value="reflexion" className="flex items-center gap-2">
                   <Lightbulb className="h-4 w-4" />
                   <span className="hidden sm:inline">Reflexión</span>
+                </TabsTrigger>
+                <TabsTrigger value="plan-90-dias" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">Plan 90 Días</span>
                 </TabsTrigger>
                 <TabsTrigger value="coach" className="flex items-center gap-2 hidden lg:flex">
                   <Sparkles className="h-4 w-4" />
@@ -906,7 +912,257 @@ export default function RIASECResults() {
             </Card>
           </TabsContent>
 
-          {/* Coach Dani Tab */}
+          <TabsContent value="plan-90-dias" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  Plan de Acción 90 Días - Exploración Vocacional RIASEC
+                </CardTitle>
+                <CardDescription>
+                  Explora y valida tu dirección profesional con acciones concretas durante los próximos 3 meses
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Progress Overview */}
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Progreso Total del Plan</span>
+                    <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+
+                <Accordion type="single" collapsible className="w-full">
+                  {/* Mes 1: Exploración de Intereses */}
+                  <AccordionItem value="mes-1">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          1
+                        </div>
+                        Mes 1: Exploración Profunda de tus Intereses
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">Valida y profundiza en tu código RIASEC dominante</p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 1-2: Validación de Intereses</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s1-1" />
+                                <label htmlFor="ri-m1s1-1">
+                                  Investigar 10 carreras relacionadas con tu código RIASEC dominante
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s1-2" />
+                                <label htmlFor="ri-m1s1-2">
+                                  Realizar 2 entrevistas informativas con profesionales de esas carreras
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s1-3" />
+                                <label htmlFor="ri-m1s1-3">
+                                  Documentar qué aspectos de cada carrera te atraen más y por qué
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 3-4: Experiencias Exploratorias</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s2-1" />
+                                <label htmlFor="ri-m1s2-1">
+                                  Hacer job shadowing o visitar un lugar de trabajo de tu interés
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s2-2" />
+                                <label htmlFor="ri-m1s2-2">
+                                  Tomar un curso online introductorio de un área de interés
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m1s2-3" />
+                                <label htmlFor="ri-m1s2-3">
+                                  Participar como voluntario en un proyecto relacionado con tu código
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> 2 entrevistas informativas + 1 experiencia práctica exploratoria
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 2: Desarrollo de Habilidades */}
+                  <AccordionItem value="mes-2">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          2
+                        </div>
+                        Mes 2: Desarrollo de Habilidades Clave
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Construye las competencias necesarias para tu dirección vocacional
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 5-6: Identificación de Gaps</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s1-1" />
+                                <label htmlFor="ri-m2s1-1">
+                                  Listar las habilidades más demandadas en tu área de interés
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s1-2" />
+                                <label htmlFor="ri-m2s1-2">Evaluar tu nivel actual en cada habilidad (1-10)</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s1-3" />
+                                <label htmlFor="ri-m2s1-3">
+                                  Priorizar las 3 habilidades más importantes a desarrollar
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-green-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 7-8: Plan de Desarrollo</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s2-1" />
+                                <label htmlFor="ri-m2s2-1">
+                                  Inscribirse en un curso o certificación de una habilidad clave
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s2-2" />
+                                <label htmlFor="ri-m2s2-2">
+                                  Crear un proyecto personal para practicar las habilidades
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m2s2-3" />
+                                <label htmlFor="ri-m2s2-3">Buscar un mentor en tu área de interés</label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> 1 curso iniciado + proyecto personal en marcha + mentor
+                          identificado
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Mes 3: Plan de Carrera */}
+                  <AccordionItem value="mes-3">
+                    <AccordionTrigger className="text-lg font-semibold">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                          3
+                        </div>
+                        Mes 3: Plan de Carrera Definido
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                      <p className="text-muted-foreground">
+                        Consolida tu dirección profesional con un plan de acción concreto
+                      </p>
+
+                      <div className="grid gap-4">
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 9-10: Definición de Metas</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s1-1" />
+                                <label htmlFor="ri-m3s1-1">
+                                  Definir tu meta profesional a 1, 3 y 5 años usando formato SMART
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s1-2" />
+                                <label htmlFor="ri-m3s1-2">
+                                  Crear roadmap de pasos necesarios para alcanzar cada meta
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s1-3" />
+                                <label htmlFor="ri-m3s1-3">
+                                  Identificar posibles obstáculos y estrategias para superarlos
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="border-l-4 border-l-purple-500">
+                          <CardContent className="p-4">
+                            <h4 className="font-medium mb-2">Semana 11-12: Acción y Networking</h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s2-1" />
+                                <label htmlFor="ri-m3s2-1">
+                                  Actualizar CV y LinkedIn alineados con tu dirección profesional
+                                </label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s2-2" />
+                                <label htmlFor="ri-m3s2-2">Conectar con 10 profesionales de tu área en LinkedIn</label>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Checkbox id="ri-m3s2-3" />
+                                <label htmlFor="ri-m3s2-3">
+                                  Aplicar a 3 oportunidades (trabajo, pasantía, voluntariado) en tu área
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                        <p className="text-sm">
+                          <strong>KPI del Mes:</strong> Plan de carrera documentado + 10 conexiones + 3 aplicaciones
+                          enviadas
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="coach" className="space-y-6">
             <SofiaDaniCoach
               conversationCategory="orientacion_carrera"
@@ -1315,7 +1571,8 @@ export default function RIASECResults() {
                   <h3 className="text-lg font-semibold mb-3">El Ecosistema Completo de Orientación Vocacional</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     RIASEC te muestra QUÉ te interesa, pero necesitas los otros tests para saber CÓMO lo harías, CON
-                    QUIÉN trabajarías mejor, y POR QUÉ te motivaría. Juntos crean un mapa completo de tu carrera ideal.
+                    QUIÉN trabajarías mejor, y POR QUÉ te motivaría. Juntosthey crear un mapa completo de tu carrera
+                    ideal.
                   </p>
                 </div>
 
