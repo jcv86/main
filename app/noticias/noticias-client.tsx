@@ -1,39 +1,26 @@
 "use client"
 
 import type React from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import {
-  Briefcase,
-  Brain,
+  BookOpen,
   Heart,
+  Briefcase,
   Users,
   Target,
   DollarSign,
   Compass,
-  Clock,
-  BookOpen,
-  Star,
-  Bookmark,
-  BookmarkCheck,
-  Share2,
-  ExternalLink,
-  Sparkles,
   TrendingUp,
-  Filter,
-  RefreshCw,
-  CheckCircle2,
-  ArrowRight,
-  MessageSquare,
-  Play,
   ThumbsUp,
-  ThumbsDown,
+  MessageSquare,
+  Rocket,
+  Play,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -64,7 +51,7 @@ type Category = "trabajo" | "psicologia" | "bienestar" | "relaciones" | "habitos
 
 const categories: { id: Category; label: string; icon: React.ReactNode; color: string }[] = [
   { id: "trabajo", label: "Trabajo", icon: <Briefcase className="h-4 w-4" />, color: "bg-blue-500" },
-  { id: "psicologia", label: "Psicología", icon: <Brain className="h-4 w-4" />, color: "bg-purple-500" },
+  { id: "psicologia", label: "Psicología", icon: <Heart className="h-4 w-4" />, color: "bg-purple-500" },
   { id: "bienestar", label: "Bienestar", icon: <Heart className="h-4 w-4" />, color: "bg-green-500" },
   { id: "relaciones", label: "Relaciones", icon: <Users className="h-4 w-4" />, color: "bg-pink-500" },
   { id: "habitos", label: "Hábitos", icon: <Target className="h-4 w-4" />, color: "bg-orange-500" },
@@ -505,18 +492,18 @@ export default function NoticiasClient() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-amber-500" />
+                <Rocket className="h-6 w-6 text-amber-500" />
                 Tu Feed Personalizado
               </h1>
               <p className="text-gray-500 text-sm">Contenido seleccionado según tu perfil y tests completados</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => setShowPreferences(!showPreferences)}>
-                <Filter className="h-4 w-4 mr-1" />
+                <Heart className="h-4 w-4 mr-1" />
                 Preferencias
               </Button>
               <Button variant="outline" size="sm" onClick={() => setArticles(generateArticles())}>
-                <RefreshCw className="h-4 w-4 mr-1" />
+                <TrendingUp className="h-4 w-4 mr-1" />
                 Actualizar
               </Button>
             </div>
@@ -579,7 +566,19 @@ export default function NoticiasClient() {
             <div className="flex flex-wrap gap-4">
               {categories.map((cat) => (
                 <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox checked={preferences.has(cat.id)} onCheckedChange={() => togglePreference(cat.id)} />
+                  <input
+                    type="checkbox"
+                    checked={preferences.has(cat.id)}
+                    onChange={() => togglePreference(cat.id)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-4 h-4 bg-gray-200 rounded peer-checked:bg-blue-500 peer-checked:text-white flex items-center justify-center">
+                    {preferences.has(cat.id) && (
+                      <span className="text-white">
+                        <Heart className="h-3 w-3" />
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm flex items-center gap-1">
                     {cat.icon}
                     {cat.label}
@@ -602,11 +601,11 @@ export default function NoticiasClient() {
                   Para ti ({stats.unread} nuevos)
                 </TabsTrigger>
                 <TabsTrigger value="saved" className="flex items-center gap-1">
-                  <Bookmark className="h-4 w-4" />
+                  <Heart className="h-4 w-4" />
                   Guardados ({stats.saved})
                 </TabsTrigger>
                 <TabsTrigger value="read" className="flex items-center gap-1">
-                  <CheckCircle2 className="h-4 w-4" />
+                  <Briefcase className="h-4 w-4" />
                   Leídos ({stats.read})
                 </TabsTrigger>
               </TabsList>
@@ -673,7 +672,7 @@ export default function NoticiasClient() {
                 {savedArticles.size === 0 && (
                   <Card>
                     <CardContent className="p-12 text-center">
-                      <Bookmark className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                      <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                       <p className="text-gray-500">No has guardado artículos todavía.</p>
                       <p className="text-sm text-gray-400 mt-1">Guarda artículos para leerlos después.</p>
                     </CardContent>
@@ -703,7 +702,7 @@ export default function NoticiasClient() {
                 {readArticles.size === 0 && (
                   <Card>
                     <CardContent className="p-12 text-center">
-                      <BookOpen className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                      <Briefcase className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                       <p className="text-gray-500">No has leído artículos todavía.</p>
                       <p className="text-sm text-gray-400 mt-1">Tu historial de lectura aparecerá aquí.</p>
                     </CardContent>
@@ -739,11 +738,11 @@ export default function NoticiasClient() {
 
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
+                      <Heart className="h-4 w-4" />
                       {selectedArticle.readTime} min
                     </span>
                     <span className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-amber-500" />
+                      <Briefcase className="h-4 w-4 text-amber-500" />
                       {selectedArticle.relevanceScore}% relevante
                     </span>
                   </div>
@@ -764,7 +763,7 @@ export default function NoticiasClient() {
                     <ul className="space-y-1">
                       {selectedArticle.actionItems.map((action, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                          <ArrowRight className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <Briefcase className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                           {action}
                         </li>
                       ))}
@@ -778,13 +777,13 @@ export default function NoticiasClient() {
                     </Button>
                     <Button variant="outline" onClick={() => toggleSave(selectedArticle.id)}>
                       {savedArticles.has(selectedArticle.id) ? (
-                        <BookmarkCheck className="h-4 w-4" />
+                        <Heart className="h-4 w-4" />
                       ) : (
-                        <Bookmark className="h-4 w-4" />
+                        <Briefcase className="h-4 w-4" />
                       )}
                     </Button>
                     <Button variant="outline">
-                      <Share2 className="h-4 w-4" />
+                      <Users className="h-4 w-4" />
                     </Button>
                   </div>
                 </CardContent>
@@ -847,7 +846,7 @@ export default function NoticiasClient() {
                     </Link>
                     <Link href="/dashboard">
                       <Button variant="outline" className="w-full justify-start bg-transparent">
-                        <TrendingUp className="h-4 w-4 mr-2" />
+                        <Briefcase className="h-4 w-4 mr-2" />
                         Mi Dashboard
                       </Button>
                     </Link>
@@ -858,7 +857,7 @@ export default function NoticiasClient() {
                 <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-amber-500" />
+                      <Rocket className="h-5 w-5 text-amber-500" />
                       Recomendación del día
                     </CardTitle>
                   </CardHeader>
@@ -870,7 +869,7 @@ export default function NoticiasClient() {
                     <Link href="/simulaciones">
                       <Button size="sm" className="w-full">
                         Ir a Simulaciones
-                        <ExternalLink className="h-4 w-4 ml-1" />
+                        <Users className="h-4 w-4 ml-1" />
                       </Button>
                     </Link>
                   </CardContent>
@@ -927,13 +926,13 @@ function ArticleCard({
               <Badge className={`${categoryInfo?.color} text-xs`}>{categoryInfo?.label}</Badge>
               {article.relevanceScore >= 90 && (
                 <Badge variant="outline" className="text-xs border-amber-300 text-amber-700">
-                  <Star className="h-3 w-3 mr-1" />
+                  <Briefcase className="h-3 w-3 mr-1" />
                   Alta relevancia
                 </Badge>
               )}
               {read && (
                 <Badge variant="outline" className="text-xs text-green-600 border-green-300">
-                  <CheckCircle2 className="h-3 w-3 mr-1" />
+                  <Heart className="h-3 w-3 mr-1" />
                   Leído
                 </Badge>
               )}
@@ -943,7 +942,7 @@ function ArticleCard({
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
+                  <Heart className="h-3 w-3" />
                   {article.readTime} min
                 </span>
                 <span>{article.source}</span>
@@ -957,7 +956,7 @@ function ArticleCard({
                     onSave()
                   }}
                 >
-                  {saved ? <BookmarkCheck className="h-4 w-4 text-blue-500" /> : <Bookmark className="h-4 w-4" />}
+                  {saved ? <Heart className="h-4 w-4 text-blue-500" /> : <Briefcase className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
@@ -1004,7 +1003,7 @@ function ArticleCard({
               onClick={() => onFeedback(false)}
               className="text-xs"
             >
-              <ThumbsDown className="h-3 w-3 mr-1" />
+              <Briefcase className="h-3 w-3 mr-1" />
               No me sirvió
             </Button>
           </div>
