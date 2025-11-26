@@ -1,5 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { createBrowserClient } from "@supabase/ssr"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -15,12 +18,54 @@ interface TestResult {
   score?: number
 }
 
-interface PerfilIntegralClientProps {
-  testResults: TestResult[]
-  userEmail: string
-}
+export function PerfilIntegralClient() {
+  const router = useRouter()
+  const [testResults, setTestResults] = useState<TestResult[]>([])
+  const [userEmail, setUserEmail] = useState("")
+  const [loading, setLoading] = useState(true)
 
-export function PerfilIntegralClient({ testResults, userEmail }: PerfilIntegralClientProps) {
+  useEffect(() => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
+
+    async function fetchData() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push("/auth")
+        return
+      }
+
+      setUserEmail(user.email || "")
+
+      const { data: results } = await supabase
+        .from("test_results")
+        .select("*")
+        .eq("user_email", user.email)
+        .order("completed_at", { ascending: false })
+
+      setTestResults(results || [])
+      setLoading(false)
+    }
+
+    fetchData()
+  }, [router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Cargando tu perfil integral...</p>
+        </div>
+      </div>
+    )
+  }
+
   const discResult = testResults.find((t) => t.test_type === "disc" || t.test_name?.includes("DISC"))
   const mbtiResult = testResults.find((t) => t.test_type === "mbti" || t.test_name?.includes("MBTI"))
   const bigFiveResult = testResults.find((t) => t.test_type === "big-five" || t.test_name?.includes("Big Five"))
