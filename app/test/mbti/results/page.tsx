@@ -19,6 +19,10 @@ import {
   Lightbulb,
   Check,
   Calendar,
+  Heart,
+  Users,
+  Home,
+  Sparkles,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -276,6 +280,7 @@ export default function MBTIResultsPage() {
   }
 
   const typeInfo = MBTI_DESCRIPTIONS[mbtiResult.type] || MBTI_DESCRIPTIONS["INTJ"]
+  const mbtiType = mbtiResult.type
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -334,6 +339,80 @@ export default function MBTIResultsPage() {
 
           {/* Resumen Ejecutivo */}
           <TabsContent value="resumen-ejecutivo" className="space-y-6">
+            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-purple-600" />
+                  Impacto en tu Vida Personal
+                </CardTitle>
+                <CardDescription>
+                  Cómo tu tipo {mbtiType} influye en tus relaciones, bienestar y vida diaria
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Users className="w-5 h-5" />
+                      Relaciones Personales
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {mbtiType.includes("E")
+                        ? "Tu extraversión te hace sociable y expresivo. Con tu pareja y familia, asegúrate de dar espacio para escuchar y momentos tranquilos de intimidad."
+                        : "Tu introversión te hace reflexivo y profundo. Con tu pareja y familia, comunica tus necesidades de tiempo a solas sin que se sientan rechazados."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Home className="w-5 h-5" />
+                      Vida Familiar
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {mbtiType.includes("J")
+                        ? "Tu preferencia por la estructura ayuda a organizar la vida familiar. Permite también flexibilidad y espontaneidad para momentos de diversión sin plan."
+                        : "Tu espontaneidad trae energía al hogar. Complementa con algo de rutina para dar estabilidad, especialmente si hay niños."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Heart className="w-5 h-5" />
+                      Bienestar Emocional
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {mbtiType.includes("F")
+                        ? "Tu sensibilidad emocional es una fortaleza. Aprende a poner límites para no absorber las emociones de otros y proteger tu energía."
+                        : "Tu enfoque lógico te protege, pero no olvides conectar con tus propias emociones. La vulnerabilidad también es valentía."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Sparkles className="w-5 h-5" />
+                      Desarrollo Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {mbtiType.includes("N")
+                        ? "Tu visión de futuro inspira, pero no descuides el presente. Practica gratitud por lo que ya tienes y disfruta el momento."
+                        : "Tu atención al detalle presente es valiosa. Complementa con visión de futuro para planear la vida que deseas construir."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                    💡 Recuerda: Tu personalidad es para vivir mejor, no solo para trabajar mejor
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Conocer tu tipo MBTI te ayuda a entenderte en tus relaciones personales, a comunicarte mejor con tu
+                    pareja, familia y amigos, y a crear una vida alineada con quien realmente eres. El trabajo es
+                    secundario.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>Tu Perfil de Personalidad</CardTitle>

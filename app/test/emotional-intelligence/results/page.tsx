@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Calendar } from "lucide-react"
 import {
   Brain,
@@ -31,6 +30,7 @@ import {
   Eye,
   Shield,
   Sparkles,
+  Home,
 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
@@ -377,6 +377,80 @@ export default function EmotionalIntelligenceResults() {
 
           {/* Competencies Tab */}
           <TabsContent value="competencies" className="space-y-6">
+            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-purple-600" />
+                  Impacto en tu Vida Personal
+                </CardTitle>
+                <CardDescription>
+                  Cómo tu inteligencia emocional influye en tus relaciones, bienestar y vida diaria
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Users className="w-5 h-5" />
+                      Relaciones Personales
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu nivel de empatía ({results.competency_scores.empathy || 0}%) determina qué tan profundas son
+                      tus conexiones. Una alta IE te permite entender las emociones de tu pareja, familia y amigos,
+                      creando vínculos más auténticos y duraderos.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Home className="w-5 h-5" />
+                      Vida Familiar
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu habilidad para regular emociones ({results.competency_scores.self_regulation || 0}%) impacta
+                      directamente el ambiente familiar. Manejar el estrés sin descargarlo en tu familia crea un hogar
+                      más armonioso y seguro.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Heart className="w-5 h-5" />
+                      Bienestar Emocional
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu autoconciencia emocional ({results.competency_scores.self_awareness || 0}%) es la base de tu
+                      salud mental. Reconocer y nombrar tus emociones te permite procesarlas en lugar de reprimirlas,
+                      reduciendo ansiedad y mejorando tu bienestar general.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Sparkles className="w-5 h-5" />
+                      Desarrollo Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tus habilidades sociales ({results.competency_scores.social_skills || 0}%) te ayudan en el
+                      trabajo, pero más importante aún, enriquecen tu vida personal permitiéndote construir una red de
+                      apoyo sólida y relaciones significativas.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                    💡 Recuerda: Tu inteligencia emocional es para tu vida, no solo para tu trabajo
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    La IE es la base para relaciones sanas con tu pareja, familia y amigos. Una alta IE mejora tu
+                    bienestar mental, reduce conflictos personales y te ayuda a crear una vida más feliz y plena. El
+                    éxito laboral es solo un beneficio secundario.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.entries(results.competency_scores).map(([key, score]) => {
                 const competency = competencyInfo[key as keyof typeof competencyInfo]
@@ -523,16 +597,10 @@ export default function EmotionalIntelligenceResults() {
             <div className="grid md:grid-cols-2 gap-6">
               {recommendations.map((rec, index) => {
                 const IconComponent = rec.icon
-                // The 'competency' variable was undeclared here, causing the lint error.
-                // It's not actually needed for this specific part of the JSX.
-                // We can remove it or declare it if it were used.
-                // For this fix, we'll assume it's not intended to be used here.
-                // If competency.color was intended, it would need to be mapped from the rec.icon or key.
                 return (
                   <Card key={index} className="shadow-lg">
                     <CardHeader>
                       <div className="flex items-center space-x-3 mb-2">
-                        {/* Removed reference to 'competency.color' as 'competency' was not defined in this scope */}
                         <div className="p-2 rounded-lg bg-gray-200 bg-opacity-20">
                           <IconComponent className="h-6 w-6 text-gray-700" />
                         </div>
@@ -725,7 +793,7 @@ export default function EmotionalIntelligenceResults() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center space-x-2">
                       <Eye className="h-5 w-5 text-blue-600" />
-                      <span>1. Autoconciencia Profunda</span>
+                      <span>1. Autoconciencia Emocional Profunda</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -793,7 +861,7 @@ export default function EmotionalIntelligenceResults() {
                         {results.competency_scores.self_regulation >= 80
                           ? "Refinar tu capacidad de regulación para responder (no reaccionar) incluso en situaciones de alta presión."
                           : results.competency_scores.self_regulation >= 60
-                            ? "Fortalecer tu habilidad de pausar antes de responder y elegir conscientemente tus reacciones."
+                            ? "Fortalecer tu habilidad de pausar antes de responder y elegir cómo actuar."
                             : "Construir herramientas básicas para gestionar emociones intensas sin reprimirlas ni explosionar."}
                       </p>
                     </div>
@@ -1460,584 +1528,76 @@ export default function EmotionalIntelligenceResults() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">Cómo usar este plan</h3>
+                  <h3 className="text-lg font-semibold mb-3">Plan de 90 Días Estructurado</h3>
                   <p className="text-sm text-gray-700 mb-4">
-                    Este plan está diseñado específicamente para tu perfil de Inteligencia Emocional. Cada mes tiene un
-                    enfoque diferente: el primero en autoconciencia, el segundo en regulación emocional, y el tercero en
-                    habilidades sociales y empatía.
+                    Este plan está diseñado para tu perfil de Inteligencia Emocional con enfoque en:
                   </p>
-                  <div className="flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <span>Completado</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-                      <span>Pendiente</span>
-                    </div>
-                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>
+                      • <strong>Mes 1 (Semanas 1-4):</strong> Autoconciencia Emocional - Conoce y nombra tus emociones
+                    </li>
+                    <li>
+                      • <strong>Mes 2 (Semanas 5-8):</strong> Regulación Emocional - Aprende a gestionar tus emociones
+                    </li>
+                    <li>
+                      • <strong>Mes 3 (Semanas 9-12):</strong> Empatía y Conexión - Conecta auténticamente con otros
+                    </li>
+                  </ul>
                 </div>
 
-                {/* Mes 1: Autoconciencia */}
-                <Card className="border-2 border-blue-200">
-                  <CardHeader className="bg-blue-50">
-                    <CardTitle className="text-xl flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">Mes 1</span>
-                        <span>Autoconciencia Emocional</span>
-                      </div>
-                    </CardTitle>
-                    <CardDescription>Semanas 1-4: Conoce y nombra tus emociones</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <Accordion type="single" collapsible className="space-y-2">
-                      <AccordionItem value="sem1-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 1
-                            </span>
-                            <span>Diario Emocional</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s1-1" />
-                            <label htmlFor="ie-s1-1" className="text-sm">
-                              Crear un diario emocional (físico o digital)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s1-2" />
-                            <label htmlFor="ie-s1-2" className="text-sm">
-                              Registrar 3 emociones diarias con su contexto
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s1-3" />
-                            <label htmlFor="ie-s1-3" className="text-sm">
-                              Aprender la rueda de emociones de Plutchik
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s1-4" />
-                            <label htmlFor="ie-s1-4" className="text-sm">
-                              Identificar 3 emociones que normally evitas
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-
-                      <AccordionItem value="sem2-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 2
-                            </span>
-                            <span>Señales Corporales</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s2-1" />
-                            <label htmlFor="ie-s2-1" className="text-sm">
-                              Hacer escaneo corporal 2 veces al día (5 minutos)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s2-2" />
-                            <label htmlFor="ie-s2-2" className="text-sm">
-                              Mapear dónde sientes cada emoción en tu cuerpo
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s2-3" />
-                            <label htmlFor="ie-s2-3" className="text-sm">
-                              Identificar señales físicas de estrés antes que se intensifiquen
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s2-4" />
-                            <label htmlFor="ie-s2-4" className="text-sm">
-                              Practicar meditación de atención plena (10 min/día)
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem3-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 3
-                            </span>
-                            <span>Patrones Emocionales</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s3-1" />
-                            <label htmlFor="ie-s3-1" className="text-sm">
-                              Revisar diario e identificar patrones recurrentes
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s3-2" />
-                            <label htmlFor="ie-s3-2" className="text-sm">
-                              Identificar 3 triggers emocionales principales
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s3-3" />
-                            <label htmlFor="ie-s3-3" className="text-sm">
-                              Escribir la historia detrás de cada trigger
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s3-4" />
-                            <label htmlFor="ie-s3-4" className="text-sm">
-                              Pedir feedback a 2 personas cercanas sobre tus patrones
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem4-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 4
-                            </span>
-                            <span>Integración del Mes 1</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s4-1" />
-                            <label htmlFor="ie-s4-1" className="text-sm">
-                              Crear tu "mapa emocional personal" con triggers y patrones
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s4-2" />
-                            <label htmlFor="ie-s4-2" className="text-sm">
-                              Escribir carta a ti mismo sobre lo aprendido
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s4-3" />
-                            <label htmlFor="ie-s4-3" className="text-sm">
-                              Definir 3 metas de regulación para el Mes 2
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s4-4" />
-                            <label htmlFor="ie-s4-4" className="text-sm">
-                              Celebrar el progreso con un auto-reconocimiento
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-                    </Accordion>
-
-                    <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">KPIs del Mes 1</h4>
-                      <ul className="text-sm text-blue-800 space-y-1">
-                        <li>• 28 entradas en diario emocional (1/día)</li>
-                        <li>• Vocabulario emocional expandido a 30+ palabras</li>
-                        <li>• 3 triggers clearly identified and documented</li>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <Card>
+                    <CardHeader className="bg-blue-50">
+                      <CardTitle className="text-lg">Mes 1: Autoconciencia</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <ul className="space-y-2 text-sm">
+                        <li>✓ Diario emocional diario</li>
+                        <li>✓ Escaneo corporal 2x/día</li>
+                        <li>✓ Identificar patrones y triggers</li>
+                        <li>✓ Crear mapa emocional personal</li>
                       </ul>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
 
-                {/* Mes 2: Regulación Emocional */}
-                <Card className="border-2 border-green-200">
-                  <CardHeader className="bg-green-50">
-                    <CardTitle className="text-xl flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm">Mes 2</span>
-                        <span>Regulación Emocional</span>
-                      </div>
-                    </CardTitle>
-                    <CardDescription>Semanas 5-8: Aprende a gestionar tus emociones</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <Accordion type="single" collapsible className="space-y-2">
-                      <AccordionItem value="sem5-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 5
-                            </span>
-                            <span>Técnicas de Calma</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s5-1" />
-                            <label htmlFor="ie-s5-1" className="text-sm">
-                              Dominar respiración 4-7-8 (practicar 3x/día)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s5-2" />
-                            <label htmlFor="ie-s5-2" className="text-sm">
-                              Aprender técnica de grounding 5-4-3-2-1
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s5-3" />
-                            <label htmlFor="ie-s5-3" className="text-sm">
-                              Crear "kit de emergencia emocional" (música, frases, actividades)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s5-4" />
-                            <label htmlFor="ie-s5-4" className="text-sm">
-                              Usar técnicas en al menos 3 situaciones reales
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem6-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 6
-                            </span>
-                            <span>Responder vs Reaccionar</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s6-1" />
-                            <label htmlFor="ie-s6-1" className="text-sm">
-                              Implementar "pausa de 90 segundos" antes de responder
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s6-2" />
-                            <label htmlFor="ie-s6-2" className="text-sm">
-                              Practicar la técnica STOP (Stop, Take breath, Observe, Proceed)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s6-3" />
-                            <label htmlFor="ie-s6-3" className="text-sm">
-                              Documentar 5 situaciones donde respondiste en vez de reaccionar
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s6-4" />
-                            <label htmlFor="ie-s6-4" className="text-sm">
-                              Revisar y aprender de 2 situaciones donde reaccionaste impulsivamente
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem7-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 7
-                            </span>
-                            <span>Reencuadre Cognitivo</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s7-1" />
-                            <label htmlFor="ie-s7-1" className="text-sm">
-                              Aprender técnica ABC (Activating event, Belief, Consequence)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s7-2" />
-                            <label htmlFor="ie-s7-2" className="text-sm">
-                              Identificar 3 creencias limitantes sobre emociones
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s7-3" />
-                            <label htmlFor="ie-s7-3" className="text-sm">
-                              Practicar reencuadre positivo en situaciones cotidianas
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s7-4" />
-                            <label htmlFor="ie-s7-4" className="text-sm">
-                              Escribir 10 afirmaciones de regulación emocional
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem8-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 8
-                            </span>
-                            <span>Integración del Mes 2</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s8-1" />
-                            <label htmlFor="ie-s8-1" className="text-sm">
-                              Crear tu "protocolo personal de regulación"
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s8-2" />
-                            <label htmlFor="ie-s8-2" className="text-sm">
-                              Evaluar mejora en escala 1-10 vs inicio del mes
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s8-3" />
-                            <label htmlFor="ie-s8-3" className="text-sm">
-                              Pedir feedback a 2 personas sobre cambios observados
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s8-4" />
-                            <label htmlFor="ie-s8-4" className="text-sm">
-                              Definir 3 metas de empatía/conexión para el Mes 3
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s8-5" />
-                            <label htmlFor="ie-s8-5" className="text-sm">
-                              Celebrar el progreso con un auto-reconocimiento
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-                    </Accordion>
-
-                    <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">KPIs del Mes 2</h4>
-                      <ul className="text-sm text-green-800 space-y-1">
-                        <li>• 3+ técnicas de regulación dominadas</li>
-                        <li>• Reducción del 50% en reacciones impulsivas</li>
-                        <li>• Protocolo personal de regulación documentado</li>
+                  <Card>
+                    <CardHeader className="bg-green-50">
+                      <CardTitle className="text-lg">Mes 2: Regulación</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <ul className="space-y-2 text-sm">
+                        <li>✓ Técnicas de respiración 4-7-8</li>
+                        <li>✓ Pausa de 90 segundos</li>
+                        <li>✓ Reencuadre cognitivo ABC</li>
+                        <li>✓ Protocolo personal de regulación</li>
                       </ul>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
 
-                {/* Mes 3: Empatía y Habilidades Sociales */}
-                <Card className="border-2 border-purple-200">
-                  <CardHeader className="bg-purple-50">
-                    <CardTitle className="text-xl flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">Mes 3</span>
-                        <span>Empatía y Conexión</span>
-                      </div>
-                    </CardTitle>
-                    <CardDescription>Semanas 9-12: Conecta auténticamente con otros</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <Accordion type="single" collapsible className="space-y-2">
-                      <AccordionItem value="sem9-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 9
-                            </span>
-                            <span>Escucha Activa Profunda</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s9-1" />
-                            <label htmlFor="ie-s9-1" className="text-sm">
-                              Practicar escucha sin interrumpir (3 conversaciones)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s9-2" />
-                            <label htmlFor="ie-s9-2" className="text-sm">
-                              Usar reflejo emocional: "Parece que sientes..."
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s9-3" />
-                            <label htmlFor="ie-s9-3" className="text-sm">
-                              Hacer preguntas de profundización en cada conversación
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s9-4" />
-                            <label htmlFor="ie-s9-4" className="text-sm">
-                              Observar lenguaje no verbal de otros conscientemente
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem10-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 10
-                            </span>
-                            <span>Empatía en Acción</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s10-1" />
-                            <label htmlFor="ie-s10-1" className="text-sm">
-                              Practicar "ponerse en los zapatos del otro" 1x/día
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s10-2" />
-                            <label htmlFor="ie-s10-2" className="text-sm">
-                              Validar emociones de otros sin intentar "arreglar"
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s10-3" />
-                            <label htmlFor="ie-s10-3" className="text-sm">
-                              Realizar 3 actos de compasión activa esta semana
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s10-4" />
-                            <label htmlFor="ie-s10-4" className="text-sm">
-                              Escribir sobre una situación desde la perspectiva de otro
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem11-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 11
-                            </span>
-                            <span>Comunicación Emocional</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s11-1" />
-                            <label htmlFor="ie-s11-1" className="text-sm">
-                              Practicar comunicación "Yo siento... cuando... porque..."
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s11-2" />
-                            <label htmlFor="ie-s11-2" className="text-sm">
-                              Tener una conversación difícil usando técnicas aprendidas
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s11-3" />
-                            <label htmlFor="ie-s11-3" className="text-sm">
-                              Dar feedback constructivo a alguien usando empatía
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s11-4" />
-                            <label htmlFor="ie-s11-4" className="text-sm">
-                              Resolver un conflicto menor usando habilidades de IE
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-
-                      <AccordionItem value="sem12-ie">
-                        <AccordionTrigger className="bg-gray-50 px-4 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-sm font-medium">
-                              Semana 12
-                            </span>
-                            <span>Integración Final y Celebración</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="pt-4 px-4 space-y-3">
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s12-1" />
-                            <label htmlFor="ie-s12-1" className="text-sm">
-                              Crear tu "Manifiesto de IE Personal"
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s12-2" />
-                            <label htmlFor="ie-s12-2" className="text-sm">
-                              Comparar tu estado actual vs día 1 (escala 1-10)
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s12-3" />
-                            <label htmlFor="ie-s12-3" className="text-sm">
-                              Pedir feedback final a 3 personas cercanas
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s12-4" />
-                            <label htmlFor="ie-s12-4" className="text-sm">
-                              Definir plan de mantenimiento para los próximos 6 meses
-                            </label>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <Checkbox id="ie-s12-5" />
-                            <label htmlFor="ie-s12-5" className="text-sm">
-                              Celebrar tus logros de forma significativa
-                            </label>
-                          </div>
-                        </AccordionContent>
-                      </Accordion>
-                    </Accordion>
-
-                    <div className="mt-4 p-4 bg-purple-50 rounded-lg">
-                      <h4 className="font-semibold text-purple-900 mb-2">KPIs del Mes 3</h4>
-                      <ul className="text-sm text-purple-800 space-y-1">
-                        <li>• 10+ conversaciones con escucha activa profunda</li>
-                        <li>• 3+ conflictos resueltos usando habilidades de IE</li>
-                        <li>• Feedback positivo de al menos 2 personas cercanas</li>
+                  <Card>
+                    <CardHeader className="bg-purple-50">
+                      <CardTitle className="text-lg">Mes 3: Empatía</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <ul className="space-y-2 text-sm">
+                        <li>✓ Escucha activa profunda</li>
+                        <li>✓ Ponerse en zapatos del otro</li>
+                        <li>✓ Comunicación "Yo siento..."</li>
+                        <li>✓ Manifiesto personal de IE</li>
                       </ul>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </div>
 
-                {/* Resumen y Recursos */}
                 <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">Recursos Recomendados para Tu Plan</h3>
-                  <div className="grid md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <h4 className="font-semibold mb-2">Libros</h4>
-                      <ul className="space-y-1 opacity-90">
-                        <li>• "Inteligencia Emocional" - Goleman</li>
-                        <li>• "Emotional Agility" - Susan David</li>
-                        <li>• "Permission to Feel" - Marc Brackett</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">Apps</h4>
-                      <ul className="space-y-1 opacity-90">
-                        <li>• Headspace (meditación)</li>
-                        <li>• Daylio (diario emocional)</li>
-                        <li>• Calm (regulación)</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">DTC</h4>
-                      <ul className="space-y-1 opacity-90">
-                        <li>• Coach Sofia/Dani</li>
-                        <li>• Dashboard de progreso</li>
-                        <li>• Comunidad DTC</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-semibold mb-3">Próximos Pasos</h3>
+                  <p className="text-sm opacity-90 mb-4">
+                    Visita tu Dashboard para trackear tu progreso semanal y acceder al plan detallado con checkboxes
+                    interactivos.
+                  </p>
+                  <Button variant="secondary" size="sm" onClick={() => router.push("/dashboard")}>
+                    Ir al Dashboard
+                  </Button>
                 </div>
               </CardContent>
             </Card>

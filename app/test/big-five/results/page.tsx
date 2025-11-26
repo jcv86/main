@@ -25,6 +25,8 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar,
+  Heart,
+  Home,
 } from "lucide-react"
 import {
   RadarChart,
@@ -260,6 +262,76 @@ export default function BigFiveResults() {
           </TabsList>
 
           <TabsContent value="summary" className="space-y-6">
+            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-purple-600" />
+                  Impacto en tu Vida Personal
+                </CardTitle>
+                <CardDescription>
+                  Cómo tu perfil de personalidad influye en tus relaciones, bienestar y vida diaria
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Users className="w-5 h-5" />
+                      Relaciones Personales
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu nivel de Amabilidad ({results.A}%) determina qué tan empático y comprensivo eres con tus seres
+                      queridos. Una alta amabilidad crea relaciones cálidas y de apoyo mutuo.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Home className="w-5 h-5" />
+                      Vida Familiar
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu Responsabilidad ({results.C}%) impacta la organización del hogar. Equilibra estructura con
+                      flexibilidad para que tu familia sienta tanto orden como libertad.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Heart className="w-5 h-5" />
+                      Bienestar Emocional
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu Estabilidad Emocional ({100 - results.N}%) es clave para tu salud mental. Si es baja, prioriza
+                      técnicas de regulación emocional y busca apoyo profesional si lo necesitas.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Sparkles className="w-5 h-5" />
+                      Desarrollo Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu Apertura ({results.O}%) refleja tu curiosidad por aprender y crecer. Una alta apertura te ayuda
+                      a explorar nuevas experiencias que enriquecen tu vida personal.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                    💡 Recuerda: Tu personalidad impacta tu felicidad, no solo tu productividad
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Los Big Five te ayudan a entender cómo te relacionas con otros, cómo manejas tus emociones, y cómo
+                    construyes una vida significativa. El crecimiento personal siempre va primero que el éxito
+                    profesional.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.entries(factorNames).map(([key, name]) => {
                 const score = key === "N" ? 100 - results[key] : results[key]
@@ -473,7 +545,7 @@ export default function BigFiveResults() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {results.development_areas?.map((area: string, index: number) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
-                      <AlertCircle className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                      <AlertCircle className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
                       <span className="text-sm">{area}</span>
                     </div>
                   ))}
@@ -1272,7 +1344,7 @@ export default function BigFiveResults() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-base text-purple-900">
-                        10. Si tuviera que diseñar mi vida IDEAL basándome únicamente en mi perfil Big Five, ¿cómo se
+                        10. ¿Si tuviera que diseñar mi vida IDEAL basándome únicamente en mi perfil Big Five, ¿cómo se
                         vería?
                       </CardTitle>
                     </CardHeader>
