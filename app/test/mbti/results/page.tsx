@@ -23,6 +23,13 @@ import {
   Users,
   Home,
   Sparkles,
+  Zap,
+  Eye,
+  MapPin,
+  Briefcase,
+  Trophy,
+  BookOpen,
+  ArrowRight,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -325,11 +332,11 @@ export default function MBTIResultsPage() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          {/* Updated grid columns to 8 and added Plan 90 Días tab */}
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-2">
             <TabsTrigger value="resumen-ejecutivo">Resumen</TabsTrigger>
             <TabsTrigger value="dimensiones">Dimensiones</TabsTrigger>
             <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
+            <TabsTrigger value="biblioteca">Biblioteca DTC</TabsTrigger>
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
             <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
@@ -339,6 +346,264 @@ export default function MBTIResultsPage() {
 
           {/* Resumen Ejecutivo */}
           <TabsContent value="resumen-ejecutivo" className="space-y-6">
+            <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-3xl font-bold flex items-center gap-3">
+                  <Lightbulb className="w-8 h-8 text-blue-600" />
+                  Resumen Ejecutivo Integral DTC
+                </CardTitle>
+                <CardDescription className="text-lg">
+                  Tu personalidad en una foto: cómo piensas, sientes y te relacionas con el mundo
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                {/* Foto 360° del perfil */}
+                <div className="bg-white rounded-xl p-6 border-2 border-blue-100">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-blue-900">
+                    <Target className="w-6 h-6" />
+                    Foto 360° de tu personalidad {mbtiType}
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Zap className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Energía</h4>
+                          <p className="text-gray-700">
+                            {mbtiType.includes("E")
+                              ? "Te recargas en grupo, hablas para pensar, sociable y expresivo"
+                              : "Te recargas en soledad, piensas antes de hablar, reflexivo y profundo"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                          <Eye className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Percepción</h4>
+                          <p className="text-gray-700">
+                            {mbtiType.includes("S")
+                              ? "Concreto, presente, atención al detalle y experiencia práctica"
+                              : "Abstracto, futuro, big picture y posibilidades creativas"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                          <Brain className="w-4 h-4 text-pink-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Decisiones</h4>
+                          <p className="text-gray-700">
+                            {mbtiType.includes("T")
+                              ? "Lógica, objetividad, análisis crítico y justicia imparcial"
+                              : "Empatía, valores, armonía y consideración de las personas"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                          <Calendar className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Estilo de vida</h4>
+                          <p className="text-gray-700">
+                            {mbtiType.includes("J")
+                              ? "Estructura, planificación, cierre y organización sistemática"
+                              : "Flexibilidad, adaptación, exploración y opciones abiertas"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top 5 ideas sobre tu forma de ser */}
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-purple-900">
+                    <Sparkles className="w-6 h-6" />
+                    Top 5 ideas sobre tu forma de ser
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                      <h4 className="font-semibold text-blue-900 mb-2">1. Cómo piensas y procesas</h4>
+                      <p className="text-gray-700">
+                        {mbtiType.includes("N")
+                          ? 'Ves patrones, conexiones y posibilidades. Tu mente vive en el "qué podría ser". Esto te hace innovador pero a veces desconectado del presente.'
+                          : 'Procesas la realidad tal como es: datos, hechos, experiencia directa. Tu mente vive en el "qué es". Esto te hace práctico pero a veces te cuesta visualizar lo nuevo.'}
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
+                      <h4 className="font-semibold text-purple-900 mb-2">2. Cómo te ves a ti mismo</h4>
+                      <p className="text-gray-700">
+                        {mbtiType.includes("I")
+                          ? "Te sientes más auténtico en la introspección. Valoras tu mundo interno, tus pensamientos y tu autonomía. No eres tímido, simplemente selectivo con tu energía."
+                          : "Te sientes más vivo en la acción y la interacción. Valoras la conexión externa, compartir experiencias y el dinamismo. No eres superficial, simplemente expresivo."}
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-pink-500">
+                      <h4 className="font-semibold text-pink-900 mb-2">3. Cómo te perciben los demás</h4>
+                      <p className="text-gray-700">
+                        {mbtiType.includes("J")
+                          ? "Te ven como organizado, decisivo y confiable. Pueden pensar que eres rígido, pero en realidad buscas claridad y eficiencia para tener más control sobre tu vida."
+                          : "Te ven como flexible, espontáneo y adaptable. Pueden pensar que eres indeciso, pero en realidad mantienes opciones abiertas para responder mejor a lo que surja."}
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                      <h4 className="font-semibold text-green-900 mb-2">4. Tu mayor impacto positivo</h4>
+                      <p className="text-gray-700">
+                        {mbtiType.includes("F")
+                          ? "Creas conexión, armonía y pertenencia. Tu empatía hace que las personas se sientan vistas y valoradas. Aportas humanidad a cualquier situación."
+                          : "Aportas claridad, objetividad y soluciones racionales. Tu lógica ayuda a tomar mejores decisiones sin dejarse llevar por el drama emocional."}
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-orange-500">
+                      <h4 className="font-semibold text-orange-900 mb-2">5. Tu patrón bajo estrés</h4>
+                      <p className="text-gray-700">
+                        {mbtiType.includes("E")
+                          ? "Bajo estrés tiendes a hablar más, buscar validación externa y dispersarte en actividades. Tu crecimiento está en aprender a estar en silencio y mirar hacia dentro."
+                          : "Bajo estrés tiendes a aislarte, rumiar y desconectarte. Tu crecimiento está en aprender a pedir ayuda y compartir lo que sientes con personas de confianza."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mapa de impacto en 3 áreas */}
+                <div className="bg-white rounded-xl p-6 border-2 border-blue-100">
+                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-blue-900">
+                    <MapPin className="w-6 h-6" />
+                    Mapa de impacto: Dónde te juegas la vida
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-5 border border-pink-200">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-pink-900">
+                        <Heart className="w-5 h-5" />
+                        Vida Personal
+                      </h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {mbtiType.includes("F")
+                              ? "Tus emociones guían tus decisiones de vida: con quién estar, qué hacer, qué tolerar"
+                              : "Tu lógica te protege, pero no dejes que te desconecte de lo que realmente sientes"}
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {mbtiType.includes("I")
+                              ? "Necesitas tiempo a solas para recargar. No es egoísta, es supervivencia"
+                              : "Necesitas conexión social para sentirte vivo. No es superficial, es tu naturaleza"}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-5 border border-blue-200">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue-900">
+                        <Users className="w-5 h-5" />
+                        Relaciones
+                      </h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {mbtiType.includes("E")
+                              ? "Tiendes a compartir rápido. Asegúrate de también escuchar profundamente a los demás"
+                              : "Tiendes a guardarte las cosas. Practica compartir más, aunque te cueste"}
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {mbtiType.includes("J")
+                              ? "Tu necesidad de estructura puede frustrar a tipos más espontáneos. Suelta el control a veces"
+                              : "Tu flexibilidad puede frustrar a tipos más estructurados. Comprométete con planes a veces"}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border border-green-200">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green-900">
+                        <Briefcase className="w-5 h-5" />
+                        Trabajo
+                      </h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {mbtiType.includes("N")
+                              ? "Brillas en innovación y visión, pero necesitas a alguien que ejecute los detalles"
+                              : "Brillas en ejecución y operaciones, pero necesitas a alguien que piense el futuro"}
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ArrowRight className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span>El trabajo es solo UN área de tu vida. No sacrifiques relaciones ni salud por él</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3 movimientos clave próximos 90 días */}
+                <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 rounded-xl p-6 border-2 border-amber-200">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-900">
+                    <Trophy className="w-6 h-6" />3 movimientos clave para los próximos 90 días
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="bg-white rounded-lg p-5 border-l-4 border-pink-500">
+                      <h4 className="font-bold mb-2 text-pink-900">Movimiento Personal</h4>
+                      <p className="text-gray-700 text-sm mb-3">
+                        {mbtiType.includes("I")
+                          ? "Acepta una invitación social por semana que normalmente rechazarías. Expande tu zona de confort."
+                          : "Dedica 20 minutos diarios a estar solo en silencio. Fortalece tu mundo interno."}
+                      </p>
+                      <p className="text-xs text-gray-600 italic">
+                        Impacto: Mayor equilibrio emocional y autoconocimiento
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-5 border-l-4 border-blue-500">
+                      <h4 className="font-bold mb-2 text-blue-900">Movimiento Relacional</h4>
+                      <p className="text-gray-700 text-sm mb-3">
+                        {mbtiType.includes("F")
+                          ? 'Practica decir "no" a peticiones que no te corresponden. Tus límites son sagrados.'
+                          : "Comparte algo vulnerable con alguien cercano una vez por semana. La conexión requiere apertura."}
+                      </p>
+                      <p className="text-xs text-gray-600 italic">
+                        Impacto: Relaciones más auténticas y satisfactorias
+                      </p>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-5 border-l-4 border-green-500">
+                      <h4 className="font-bold mb-2 text-green-900">Movimiento Laboral</h4>
+                      <p className="text-gray-700 text-sm mb-3">
+                        {mbtiType.includes("N")
+                          ? "Completa un proyecto concreto del inicio al fin. La ejecución también importa, no solo las ideas."
+                          : "Dedica 1 hora semanal a pensar estrategia y visión. Sal de lo operativo y mira el panorama."}
+                      </p>
+                      <p className="text-xs text-gray-600 italic">Impacto: Mejor equilibrio entre visión y ejecución</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
@@ -1444,6 +1709,220 @@ export default function MBTIResultsPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="biblioteca" className="space-y-6">
+            <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-3">
+                  <BookOpen className="w-7 h-7 text-blue-600" />
+                  Biblioteca DTC Recomendada para {mbtiType}
+                </CardTitle>
+                <CardDescription className="text-base">
+                  Recursos específicos para tu tipo de personalidad con mini-desafíos aplicables
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-blue-100 border-b-2 border-blue-200">
+                        <th className="text-left p-4 font-bold text-blue-900">Área de Desarrollo</th>
+                        <th className="text-left p-4 font-bold text-blue-900">Recurso Recomendado</th>
+                        <th className="text-left p-4 font-bold text-blue-900">Por qué es clave para ti</th>
+                        <th className="text-left p-4 font-bold text-blue-900">Mini-desafío (7 días)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">Autoconocimiento profundo</div>
+                          <div className="text-sm text-gray-600">Entender por qué haces lo que haces</div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">Libro: "Gifts Differing"</div>
+                          <div className="text-sm text-gray-600">Por Isabel Briggs Myers</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Explica a fondo tu tipo {mbtiType}: por qué piensas así, tus puntos ciegos y cómo crecer sin
+                          perder tu esencia
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            Lee el capítulo de tu tipo y anota 3 comportamientos tuyos que ahora entiendes mejor
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">
+                            {mbtiType.includes("I") ? "Comunicación asertiva" : "Escucha profunda"}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {mbtiType.includes("I") ? "Expresar tus ideas con claridad" : "Dar espacio a los demás"}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">
+                            {mbtiType.includes("I")
+                              ? 'Libro: "Quiet" de Susan Cain'
+                              : 'Libro: "El arte de la comunicación consciente"'}
+                          </div>
+                          <div className="text-sm text-gray-600">Comunicación efectiva</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          {mbtiType.includes("I")
+                            ? "Te enseña a valorar tu introversión y comunicarte sin forzarte a ser extrovertido"
+                            : "Te ayuda a frenar, escuchar de verdad y no monopolizar conversaciones"}
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            {mbtiType.includes("I")
+                              ? "En 3 reuniones esta semana, comparte tu opinión aunque no te la pidan"
+                              : "En 3 conversaciones esta semana, haz 3 preguntas antes de dar tu opinión"}
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">Relaciones personales</div>
+                          <div className="text-sm text-gray-600">Entender y conectar con otros tipos</div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">
+                            Curso: "MBTI en relaciones" (Udemy o Coursera)
+                          </div>
+                          <div className="text-sm text-gray-600">Aplicación práctica</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Te explica cómo tu {mbtiType} se relaciona con otros tipos, qué conflictos son típicos y cómo
+                          resolverlos con pareja, familia y amigos
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            Identifica el tipo MBTI de 2 personas cercanas y observa cómo sus diferencias generan
+                            fricción
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">
+                            {mbtiType.includes("N") ? "Ejecución práctica" : "Pensamiento estratégico"}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {mbtiType.includes("N") ? "Bajar ideas a tierra" : "Ver el panorama completo"}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">
+                            {mbtiType.includes("N")
+                              ? 'Libro: "Getting Things Done" de David Allen'
+                              : 'Libro: "Thinking, Fast and Slow" de Daniel Kahneman'}
+                          </div>
+                          <div className="text-sm text-gray-600">Productividad y pensamiento</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          {mbtiType.includes("N")
+                            ? "Como intuitivo, tiendes a tener muchas ideas. Este libro te ayuda a organizarlas y ejecutarlas sin perderte"
+                            : "Como sensorial, tiendes a lo concreto. Este libro te ayuda a pensar en grande y anticipar futuros posibles"}
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            {mbtiType.includes("N")
+                              ? "Elige UNA idea que llevas meses pensando y define los 3 primeros pasos concretos"
+                              : "Dedica 30 min a imaginar cómo podría verse tu vida en 5 años si todo saliera bien"}
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">Gestión emocional</div>
+                          <div className="text-sm text-gray-600">
+                            {mbtiType.includes("F") ? "Poner límites sanos" : "Conectar con emociones"}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">
+                            {mbtiType.includes("F")
+                              ? 'Libro: "Boundaries" de Henry Cloud'
+                              : 'Libro: "Permission to Feel" de Marc Brackett'}
+                          </div>
+                          <div className="text-sm text-gray-600">Inteligencia emocional</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          {mbtiType.includes("F")
+                            ? "Como feeling type, tiendes a absorber emociones ajenas. Aprende a proteger tu energía emocional"
+                            : "Como thinking type, puedes desconectarte de tus emociones. Aprende a reconocerlas y nombrarlas"}
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            {mbtiType.includes("F")
+                              ? 'Di "no" a una petición esta semana sin dar explicaciones excesivas ni sentirte culpable'
+                              : "Al final del día durante 7 días, nombra 3 emociones que sentiste y por qué"}
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr className="hover:bg-blue-50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900">Desarrollo profesional</div>
+                          <div className="text-sm text-gray-600">Aprovechar tus fortalezas en el trabajo</div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-medium text-blue-900">Libro: "Do What You Are" de Paul Tieger</div>
+                          <div className="text-sm text-gray-600">Carrera y MBTI</div>
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Explica qué carreras y roles son naturales para {mbtiType}, cómo aprovechar tus fortalezas y
+                          qué ambientes laborales drenan tu energía
+                        </td>
+                        <td className="p-4 text-sm">
+                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                            Escribe 3 aspectos de tu trabajo actual que drenan tu energía y 3 que te energizan. ¿Hay
+                            patrón?
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
+                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue-900">
+                    <Lightbulb className="w-5 h-5" />
+                    Cómo usar estos recursos
+                  </h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>
+                        <strong>Prioriza por dolor:</strong> Si tienes problemas de comunicación, empieza por ese
+                        recurso. Si te cuesta ejecutar ideas, ve ahí primero.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>
+                        <strong>No acumules:</strong> Mejor leer 1 libro y aplicarlo que comprar 10 y no hacer nada. Los
+                        mini-desafíos son clave.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>
+                        <strong>Comparte lo aprendido:</strong> Explica a alguien cercano un insight de cada recurso.
+                        Enseñar es la mejor forma de aprender.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

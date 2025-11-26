@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useRouter } from "next/router"
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,6 +30,10 @@ import {
   RefreshCw,
   CheckCircle2,
   ArrowRight,
+  MessageSquare,
+  Play,
+  ThumbsUp,
+  ThumbsDown,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -38,6 +43,7 @@ interface Article {
   title: string
   summary: string
   category: Category
+  subtopic?: string
   readTime: number
   source: string
   imageQuery: string
@@ -46,8 +52,12 @@ interface Article {
   tags: string[]
   relatedTests: string[]
   actionItems: string[]
+  suggestedGoals?: string[]
+  relatedResources?: { title: string; type: string }[]
+  simulationPrompts?: string[]
   saved?: boolean
   read?: boolean
+  helpful?: boolean | null // Feedback: true = útil, false = no útil, null = sin responder
 }
 
 type Category = "trabajo" | "psicologia" | "bienestar" | "relaciones" | "habitos" | "dinero" | "proposito"
@@ -79,6 +89,13 @@ const generateArticles = (): Article[] => [
     tags: ["DISC", "entrevistas", "carrera"],
     relatedTests: ["DISC", "Soft Skills"],
     actionItems: ["Practica tu pitch personal", "Identifica 3 logros clave", "Prepara ejemplos STAR"],
+    suggestedGoals: ["Mejorar habilidades de comunicación"],
+    relatedResources: [
+      { title: "Guía de Entrevistas", type: "PDF" },
+      { title: "Ejemplos STAR", type: "Video" },
+    ],
+    simulationPrompts: ["Negociación Salarial"],
+    helpful: null,
   },
   {
     id: "2",
@@ -94,6 +111,13 @@ const generateArticles = (): Article[] => [
     tags: ["tendencias", "habilidades", "empleabilidad"],
     relatedTests: ["Soft Skills", "RIASEC"],
     actionItems: ["Actualiza tu CV", "Identifica brechas de habilidades", "Planifica capacitación"],
+    suggestedGoals: ["Desarrollar soft skills"],
+    relatedResources: [
+      { title: "Top Soft Skills", type: "Infografía" },
+      { title: "Capacitación Online", type: "Plataforma" },
+    ],
+    simulationPrompts: ["Entrevista de Trabajo"],
+    helpful: null,
   },
   // Psicología
   {
@@ -109,6 +133,13 @@ const generateArticles = (): Article[] => [
     tags: ["neurociencia", "personalidad", "autoconocimiento"],
     relatedTests: ["MBTI", "Big Five"],
     actionItems: ["Revisa tus resultados de tests", "Identifica patrones de comportamiento", "Reflexiona sobre sesgos"],
+    suggestedGoals: ["Mejorar autoconocimiento"],
+    relatedResources: [
+      { title: "Autoconocimiento Profundo", type: "Libro" },
+      { title: "Tests Psicológicos", type: "Artículo" },
+    ],
+    simulationPrompts: ["Autoevaluación"],
+    helpful: null,
   },
   {
     id: "4",
@@ -124,6 +155,13 @@ const generateArticles = (): Article[] => [
     tags: ["mindset", "crecimiento", "desarrollo"],
     relatedTests: ["Big Five", "IE"],
     actionItems: ["Identifica creencias limitantes", "Practica el 'todavía no'", "Celebra el proceso"],
+    suggestedGoals: ["Adoptar un mindset de crecimiento"],
+    relatedResources: [
+      { title: "Mindset de Crecimiento", type: "Cursos" },
+      { title: "Carol Dweck", type: "Biografía" },
+    ],
+    simulationPrompts: ["Desarrollo Profesional"],
+    helpful: null,
   },
   // Bienestar
   {
@@ -140,6 +178,13 @@ const generateArticles = (): Article[] => [
     tags: ["balance", "bienestar", "MBTI"],
     relatedTests: ["MBTI", "IE"],
     actionItems: ["Define tus prioridades", "Establece límites claros", "Programa descanso activo"],
+    suggestedGoals: ["Mejorar el balance vida-trabajo"],
+    relatedResources: [
+      { title: "Guía de Autocuidado", type: "PDF" },
+      { title: "Planificador de Descanso", type: "Aplicación" },
+    ],
+    simulationPrompts: ["Autocuidado"],
+    helpful: null,
   },
   {
     id: "6",
@@ -154,6 +199,13 @@ const generateArticles = (): Article[] => [
     tags: ["emociones", "estrés", "rendimiento"],
     relatedTests: ["IE", "Soft Skills"],
     actionItems: ["Practica respiración 4-7-8", "Identifica triggers emocionales", "Crea rutina de descompresión"],
+    suggestedGoals: ["Reducir estrés"],
+    relatedResources: [
+      { title: "Regulación Emocional", type: "Libro" },
+      { title: "IE Explained", type: "Artículo" },
+    ],
+    simulationPrompts: ["Manejo del Estrés"],
+    helpful: null,
   },
   // Relaciones
   {
@@ -169,6 +221,13 @@ const generateArticles = (): Article[] => [
     tags: ["pareja", "comunicación", "IE"],
     relatedTests: ["IE", "DISC"],
     actionItems: ["Practica escucha activa", "Expresa necesidades claramente", "Programa tiempo de calidad"],
+    suggestedGoals: ["Mejorar comunicación en pareja"],
+    relatedResources: [
+      { title: "Comunicación Efectiva", type: "PDF" },
+      { title: "IE en Relaciones", type: "Artículo" },
+    ],
+    simulationPrompts: ["Comunicación"],
+    helpful: null,
   },
   {
     id: "8",
@@ -183,6 +242,13 @@ const generateArticles = (): Article[] => [
     tags: ["networking", "conexiones", "carrera"],
     relatedTests: ["DISC", "Big Five"],
     actionItems: ["Identifica tu estilo de networking", "Prepara tu elevator pitch", "Define metas de conexión"],
+    suggestedGoals: ["Mejorar networking"],
+    relatedResources: [
+      { title: "Networking Efectivo", type: "Libro" },
+      { title: "DISC Explained", type: "Artículo" },
+    ],
+    simulationPrompts: ["Networking"],
+    helpful: null,
   },
   // Hábitos
   {
@@ -198,6 +264,13 @@ const generateArticles = (): Article[] => [
     tags: ["hábitos", "Big Five", "productividad"],
     relatedTests: ["Big Five", "DISC"],
     actionItems: ["Identifica un hábito clave", "Diseña el entorno", "Usa habit stacking"],
+    suggestedGoals: ["Desarrollar buenos hábitos"],
+    relatedResources: [
+      { title: "Atomic Habits", type: "Libro" },
+      { title: "Big Five Traits", type: "Artículo" },
+    ],
+    simulationPrompts: ["Hábitos"],
+    helpful: null,
   },
   {
     id: "10",
@@ -212,6 +285,13 @@ const generateArticles = (): Article[] => [
     tags: ["rutina", "mañana", "productividad"],
     relatedTests: ["Big Five", "MBTI"],
     actionItems: ["Identifica tu cronotipo", "Diseña tu rutina ideal", "Prueba por 7 días"],
+    suggestedGoals: ["Crear rutina matutina"],
+    relatedResources: [
+      { title: "Rutinas Productivas", type: "PDF" },
+      { title: "Cronotipo", type: "Artículo" },
+    ],
+    simulationPrompts: ["Rutinas"],
+    helpful: null,
   },
   // Dinero
   {
@@ -227,6 +307,13 @@ const generateArticles = (): Article[] => [
     tags: ["finanzas", "personalidad", "decisiones"],
     relatedTests: ["Big Five", "DISC"],
     actionItems: ["Revisa tu relación con el dinero", "Identifica patrones de gasto", "Crea presupuesto realista"],
+    suggestedGoals: ["Mejorar gestión financiera"],
+    relatedResources: [
+      { title: "Gestión Financiera", type: "Libro" },
+      { title: "Finanzas Personales", type: "Artículo" },
+    ],
+    simulationPrompts: ["Gestión Financiera"],
+    helpful: null,
   },
   {
     id: "12",
@@ -241,6 +328,13 @@ const generateArticles = (): Article[] => [
     tags: ["salario", "negociación", "carrera"],
     relatedTests: ["DISC", "Soft Skills"],
     actionItems: ["Investiga rangos salariales", "Prepara tu caso", "Practica con simulación"],
+    suggestedGoals: ["Negociación Salarial"],
+    relatedResources: [
+      { title: "Negociación Salarial", type: "PDF" },
+      { title: "Simulaciones de Negociación", type: "Plataforma" },
+    ],
+    simulationPrompts: ["Negociación"],
+    helpful: null,
   },
   // Propósito
   {
@@ -257,6 +351,13 @@ const generateArticles = (): Article[] => [
     tags: ["propósito", "ikigai", "vocación"],
     relatedTests: ["RIASEC", "MBTI"],
     actionItems: ["Completa el ejercicio de ikigai", "Identifica intersecciones", "Define tu declaración de propósito"],
+    suggestedGoals: ["Definir propósito"],
+    relatedResources: [
+      { title: "Ikigai", type: "Libro" },
+      { title: "RIASEC Explained", type: "Artículo" },
+    ],
+    simulationPrompts: ["Ikigai"],
+    helpful: null,
   },
   {
     id: "14",
@@ -271,6 +372,42 @@ const generateArticles = (): Article[] => [
     tags: ["diseño", "carrera", "futuro"],
     relatedTests: ["RIASEC", "Big Five"],
     actionItems: ["Crea 3 prototipos de vida", "Haz una entrevista de odyssey", "Experimenta en pequeño"],
+    suggestedGoals: ["Diseño de Carrera"],
+    relatedResources: [
+      { title: "Design Thinking", type: "PDF" },
+      { title: "Prototipado de Carrera", type: "Artículo" },
+    ],
+    simulationPrompts: ["Design Thinking"],
+    helpful: null,
+  },
+]
+
+type FeedMode = "integral" | "bienestar" | "carrera" | "metas"
+
+const feedModes: { id: FeedMode; label: string; description: string; icon: React.ReactNode }[] = [
+  {
+    id: "integral",
+    label: "Modo Integral",
+    description: "Mezcla balanceada de todas tus áreas",
+    icon: <TrendingUp className="h-4 w-4" />,
+  },
+  {
+    id: "bienestar",
+    label: "Modo Bienestar",
+    description: "Prioriza emociones, estrés, autocuidado",
+    icon: <Heart className="h-4 w-4" />,
+  },
+  {
+    id: "carrera",
+    label: "Modo Carrera",
+    description: "Enfocado en empleabilidad y trabajo",
+    icon: <Briefcase className="h-4 w-4" />,
+  },
+  {
+    id: "metas",
+    label: "Modo Mis Metas",
+    description: "Solo contenido relacionado a tus metas activas",
+    icon: <Target className="h-4 w-4" />,
   },
 ]
 
@@ -283,6 +420,10 @@ export default function NoticiasClient() {
   const [preferences, setPreferences] = useState<Set<Category>>(new Set(categories.map((c) => c.id)))
   const [showPreferences, setShowPreferences] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [feedMode, setFeedMode] = useState<FeedMode>("integral")
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [selectedSubtopics, setSelectedSubtopics] = useState<Set<string>>(new Set())
+  const router = useRouter()
 
   useEffect(() => {
     // Simulate loading articles
@@ -332,6 +473,23 @@ export default function NoticiasClient() {
     return categories.find((c) => c.id === category)
   }
 
+  const handleCreateGoal = (article: Article) => {
+    router.push(`/metas?from=noticia&titulo=${encodeURIComponent(article.title)}`)
+  }
+
+  const handleTalkToCoach = (article: Article) => {
+    // Open coach with article context
+    router.push(`/dashboard?coach=true&context=${encodeURIComponent(article.title)}`)
+  }
+
+  const handleLaunchSimulation = (article: Article) => {
+    router.push(`/simulaciones?topic=${encodeURIComponent(article.category)}`)
+  }
+
+  const handleFeedback = (id: string, helpful: boolean) => {
+    setArticles((prev) => prev.map((a) => (a.id === id ? { ...a, helpful } : a)))
+  }
+
   const stats = {
     total: articles.length,
     saved: savedArticles.size,
@@ -340,7 +498,7 @@ export default function NoticiasClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -383,6 +541,30 @@ export default function NoticiasClient() {
               >
                 {cat.icon}
                 {cat.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Feed mode selector */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">Modo de visualización</h3>
+          <div className="flex flex-wrap gap-2">
+            {feedModes.map((mode) => (
+              <Button
+                key={mode.id}
+                variant={feedMode === mode.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFeedMode(mode.id)}
+                className="flex items-center gap-1.5"
+              >
+                {mode.icon}
+                <div className="text-left">
+                  <div className="font-medium">{mode.label}</div>
+                  <div className="text-xs opacity-70">{mode.description}</div>
+                </div>
               </Button>
             ))}
           </div>
@@ -460,6 +642,10 @@ export default function NoticiasClient() {
                       onRead={() => markAsRead(article.id)}
                       onSelect={() => setSelectedArticle(article)}
                       categoryInfo={getCategoryInfo(article.category)}
+                      onCreateGoal={() => handleCreateGoal(article)}
+                      onTalkToCoach={() => handleTalkToCoach(article)}
+                      onLaunchSimulation={() => handleLaunchSimulation(article)}
+                      onFeedback={(helpful) => handleFeedback(article.id, helpful)}
                     />
                   ))
                 )}
@@ -478,6 +664,10 @@ export default function NoticiasClient() {
                       onRead={() => markAsRead(article.id)}
                       onSelect={() => setSelectedArticle(article)}
                       categoryInfo={getCategoryInfo(article.category)}
+                      onCreateGoal={() => handleCreateGoal(article)}
+                      onTalkToCoach={() => handleTalkToCoach(article)}
+                      onLaunchSimulation={() => handleLaunchSimulation(article)}
+                      onFeedback={(helpful) => handleFeedback(article.id, helpful)}
                     />
                   ))}
                 {savedArticles.size === 0 && (
@@ -504,6 +694,10 @@ export default function NoticiasClient() {
                       onRead={() => markAsRead(article.id)}
                       onSelect={() => setSelectedArticle(article)}
                       categoryInfo={getCategoryInfo(article.category)}
+                      onCreateGoal={() => handleCreateGoal(article)}
+                      onTalkToCoach={() => handleTalkToCoach(article)}
+                      onLaunchSimulation={() => handleLaunchSimulation(article)}
+                      onFeedback={(helpful) => handleFeedback(article.id, helpful)}
                     />
                   ))}
                 {readArticles.size === 0 && (
@@ -699,6 +893,10 @@ function ArticleCard({
   onRead,
   onSelect,
   categoryInfo,
+  onCreateGoal,
+  onTalkToCoach,
+  onLaunchSimulation,
+  onFeedback,
 }: {
   article: Article
   saved: boolean
@@ -706,7 +904,11 @@ function ArticleCard({
   onSave: () => void
   onRead: () => void
   onSelect: () => void
-  categoryInfo?: (typeof categories)[number]
+  categoryInfo: any
+  onCreateGoal: () => void
+  onTalkToCoach: () => void
+  onLaunchSimulation: () => void
+  onFeedback: (helpful: boolean) => void
 }) {
   return (
     <Card
@@ -759,6 +961,52 @@ function ArticleCard({
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Action buttons section */}
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <p className="text-xs text-gray-500 mb-2">Acciones rápidas:</p>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="outline" onClick={onCreateGoal} className="text-xs bg-transparent">
+              <Target className="h-3 w-3 mr-1" />
+              Crear Meta
+            </Button>
+            <Button size="sm" variant="outline" onClick={onTalkToCoach} className="text-xs bg-transparent">
+              <MessageSquare className="h-3 w-3 mr-1" />
+              Hablar con Coach
+            </Button>
+            {article.simulationPrompts && article.simulationPrompts.length > 0 && (
+              <Button size="sm" variant="outline" onClick={onLaunchSimulation} className="text-xs bg-transparent">
+                <Play className="h-3 w-3 mr-1" />
+                Simulación
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Feedback section */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <p className="text-xs text-gray-500 mb-2">¿Te sirvió este contenido?</p>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant={article.helpful === true ? "default" : "outline"}
+              onClick={() => onFeedback(true)}
+              className="text-xs"
+            >
+              <ThumbsUp className="h-3 w-3 mr-1" />
+              Sí, útil
+            </Button>
+            <Button
+              size="sm"
+              variant={article.helpful === false ? "default" : "outline"}
+              onClick={() => onFeedback(false)}
+              className="text-xs"
+            >
+              <ThumbsDown className="h-3 w-3 mr-1" />
+              No me sirvió
+            </Button>
           </div>
         </div>
       </CardContent>

@@ -27,6 +27,9 @@ import {
   Calendar,
   Heart,
   Home,
+  BookOpen,
+  Briefcase,
+  Zap,
 } from "lucide-react"
 import {
   RadarChart,
@@ -259,9 +262,211 @@ export default function BigFiveResults() {
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
             <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
+            <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger> {/* Added Biblioteca Tab Trigger */}
           </TabsList>
 
           <TabsContent value="summary" className="space-y-6">
+            {/* CHANGE: Adding Resumen Ejecutivo Integral DTC at the beginning */}
+            <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Target className="w-6 h-6 text-blue-600" />
+                  Resumen Ejecutivo Integral DTC
+                </CardTitle>
+                <CardDescription>Tu foto 360° y las ideas clave sobre tu personalidad</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Foto 360° */}
+                <div className="bg-white rounded-lg p-6 border-l-4 border-blue-600">
+                  <h3 className="font-semibold text-lg mb-4 text-blue-900">📸 Foto 360° de tu Perfil</h3>
+                  <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="font-semibold text-blue-800">Apertura:</span>
+                      <span className="ml-2 text-gray-700">
+                        {results.O >= 70
+                          ? "Curioso y creativo"
+                          : results.O >= 40
+                            ? "Equilibrado entre tradición e innovación"
+                            : "Práctico y tradicional"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Responsabilidad:</span>
+                      <span className="ml-2 text-gray-700">
+                        {results.C >= 70
+                          ? "Organizado y disciplinado"
+                          : results.C >= 40
+                            ? "Flexible con estructura"
+                            : "Espontáneo y adaptable"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Extraversión:</span>
+                      <span className="ml-2 text-gray-700">
+                        {results.E >= 70
+                          ? "Sociable y energético"
+                          : results.E >= 40
+                            ? "Ambiverte equilibrado"
+                            : "Introspectivo y reflexivo"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Amabilidad:</span>
+                      <span className="ml-2 text-gray-700">
+                        {results.A >= 70
+                          ? "Empático y cooperativo"
+                          : results.A >= 40
+                            ? "Equilibrio entre asertividad y empatía"
+                            : "Directo y competitivo"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Estabilidad Emocional:</span>
+                      <span className="ml-2 text-gray-700">
+                        {100 - results.N >= 70
+                          ? "Calmado y resiliente"
+                          : 100 - results.N >= 40
+                            ? "Sensible pero manejable"
+                            : "Intenso emocionalmente"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top 5 Ideas */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3 text-blue-900">💡 Top 5 Ideas sobre tu Personalidad</h3>
+                  <div className="space-y-3">
+                    <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                      <span className="font-semibold text-blue-900">1. Cómo te ves a ti mismo:</span>
+                      <p className="text-gray-700 mt-1">
+                        {results.O >= 60
+                          ? "Te percibes como alguien curioso y abierto a nuevas experiencias."
+                          : "Valoras la estabilidad y lo familiar sobre lo desconocido."}
+                      </p>
+                    </div>
+                    <div className="bg-indigo-50 rounded-lg p-4 border-l-4 border-indigo-400">
+                      <span className="font-semibold text-indigo-900">2. Cómo te perciben otros:</span>
+                      <p className="text-gray-700 mt-1">
+                        {results.E >= 60
+                          ? "Te ven como alguien sociable y con energía contagiosa."
+                          : "Te ven como alguien reflexivo y tranquilo."}
+                      </p>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-400">
+                      <span className="font-semibold text-purple-900">3. Tu estilo relacional:</span>
+                      <p className="text-gray-700 mt-1">
+                        {results.A >= 60
+                          ? "Priorizas la armonía y la empatía en tus relaciones."
+                          : "Valoras la honestidad directa aunque genere fricción."}
+                      </p>
+                    </div>
+                    <div className="bg-pink-50 rounded-lg p-4 border-l-4 border-pink-400">
+                      <span className="font-semibold text-pink-900">4. Tu enfoque de vida:</span>
+                      <p className="text-gray-700 mt-1">
+                        {results.C >= 60
+                          ? "Estructurado, con planes claros y seguimiento constante."
+                          : "Espontáneo, adaptándote sobre la marcha."}
+                      </p>
+                    </div>
+                    <div className="bg-red-50 rounded-lg p-4 border-l-4 border-red-400">
+                      <span className="font-semibold text-red-900">5. Tu gestión emocional:</span>
+                      <p className="text-gray-700 mt-1">
+                        {100 - results.N >= 60
+                          ? "Mantienes la calma bajo presión."
+                          : "Sientes las emociones intensamente, lo que te conecta profundamente con la vida."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mapa de Impacto */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3 text-blue-900">🗺️ Mapa de Impacto en tu Vida</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                      <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                        <Heart className="w-4 h-4" />
+                        Vida Personal
+                      </h4>
+                      <p className="text-sm text-gray-700">
+                        Tu estabilidad emocional ({100 - results.N}%) y apertura ({results.O}%) determinan tu bienestar
+                        y satisfacción personal.
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+                      <h4 className="font-semibold text-purple-800 mb-2 flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Relaciones
+                      </h4>
+                      <p className="text-sm text-gray-700">
+                        Tu amabilidad ({results.A}%) y extraversión ({results.E}%) impactan la calidad de tus vínculos
+                        con familia, pareja y amigos.
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                      <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                        <Briefcase className="w-4 h-4" />
+                        Trabajo
+                      </h4>
+                      <p className="text-sm text-gray-700">
+                        Tu responsabilidad ({results.C}%) influye en tu productividad, pero recuerda: primero está tu
+                        bienestar.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3 Movimientos Clave */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3 text-blue-900">
+                    🎯 3 Movimientos Clave para los próximos 90 días
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-gray-200">
+                      <div className="bg-green-100 rounded-full p-2">
+                        <Heart className="w-5 h-5 text-green-700" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900">Personal:</h4>
+                        <p className="text-sm text-gray-700 mt-1">
+                          {100 - results.N < 50
+                            ? "Practica técnicas de regulación emocional diarias (respiración, meditación, journaling)."
+                            : "Mantén tu estabilidad emocional explorando nuevos hobbies que te den alegría."}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-gray-200">
+                      <div className="bg-purple-100 rounded-full p-2">
+                        <Users className="w-5 h-5 text-purple-700" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900">Relacional:</h4>
+                        <p className="text-sm text-gray-700 mt-1">
+                          {results.A < 50
+                            ? "Practica escucha activa y empatía en conversaciones con seres queridos."
+                            : "Fortalece tus relaciones existentes con conversaciones profundas semanales."}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-gray-200">
+                      <div className="bg-blue-100 rounded-full p-2">
+                        <Target className="w-5 h-5 text-blue-700" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900">Laboral:</h4>
+                        <p className="text-sm text-gray-700 mt-1">
+                          {results.C < 50
+                            ? "Implementa un sistema simple de organización (to-do list o planner) sin obsesionarte."
+                            : "Aplica tu organización natural a proyectos que te apasionen."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
@@ -1613,6 +1818,166 @@ export default function BigFiveResults() {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* CHANGE: Adding Biblioteca tab */}
+          <TabsContent value="biblioteca" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <BookOpen className="w-6 h-6 text-blue-600" />
+                  Biblioteca DTC Recomendada para tu Perfil
+                </CardTitle>
+                <CardDescription>
+                  Recursos específicos según tus rasgos de personalidad Big Five, con desafíos de 7 días
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-blue-50 border-b-2 border-blue-200">
+                        <th className="text-left p-4 font-semibold text-blue-900">Área de Desarrollo</th>
+                        <th className="text-left p-4 font-semibold text-blue-900">Recurso Recomendado</th>
+                        <th className="text-left p-4 font-semibold text-blue-900">Por qué es relevante</th>
+                        <th className="text-left p-4 font-semibold text-blue-900">Mini Desafío (7 días)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Heart className="w-4 h-4 text-red-500" />
+                            Estabilidad Emocional
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Guía de Mindfulness</span>
+                          <p className="text-sm text-gray-500 mt-1">Práctica de 10 minutos diarios</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {100 - results.N < 50
+                            ? "Tu neuroticismo elevado indica que técnicas de regulación emocional serían muy beneficiosas para ti."
+                            : "Mantén tu estabilidad emocional con prácticas que profundicen tu bienestar."}
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Medita 10 min al despertar durante 7 días seguidos. Anota cómo te sientes antes y después.
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-purple-500" />
+                            Relaciones Interpersonales
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Taller de Empatía Activa</span>
+                          <p className="text-sm text-gray-500 mt-1">Ejercicios de escucha</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {results.A >= 60
+                            ? "Tu alta amabilidad es una fortaleza. Aprende a balancearla con asertividad."
+                            : "Aumentar tu empatía mejorará significativamente tus relaciones personales."}
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Practica escucha sin interrumpir en 3 conversaciones profundas con personas cercanas.
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Lightbulb className="w-4 h-4 text-yellow-500" />
+                            Creatividad Personal
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Programa de Creatividad Diaria</span>
+                          <p className="text-sm text-gray-500 mt-1">30 ideas en 30 días</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {results.O >= 60
+                            ? "Tu alta apertura necesita canales creativos para expresarse plenamente."
+                            : "Desarrollar tu creatividad te abrirá nuevas perspectivas de vida."}
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Escribe 3 ideas nuevas cada mañana durante 7 días. No las juzgues, solo escribe.
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Target className="w-4 h-4 text-blue-500" />
+                            Organización Personal
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Sistema GTD Simplificado</span>
+                          <p className="text-sm text-gray-500 mt-1">Getting Things Done adaptado</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {results.C >= 60
+                            ? "Optimiza tu alta responsabilidad con sistemas que te den más libertad."
+                            : "Un sistema básico de organización reducirá tu estrés significativamente."}
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Usa una lista simple de tareas diarias. Al final del día, revisa qué lograste.
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-orange-500" />
+                            Energía Social
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Guía de Conexión Social</span>
+                          <p className="text-sm text-gray-500 mt-1">Para introvertidos y extrovertidos</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {results.E >= 60
+                            ? "Canaliza tu extraversión en conexiones de calidad, no solo cantidad."
+                            : "Aprende a recargar energía social de forma que respete tu introversión."}
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          {results.E >= 60
+                            ? "Organiza 1 encuentro de calidad con alguien importante para ti."
+                            : "Programa 2 momentos sociales cortos pero significativos esta semana."}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="p-4 font-medium text-gray-900">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-pink-500" />
+                            Desarrollo Integral
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-700">
+                          <span className="font-medium">Plan de Vida Holístico</span>
+                          <p className="text-sm text-gray-500 mt-1">Bienestar 360°</p>
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          Integra todos tus rasgos en un plan coherente que priorice tu felicidad y relaciones.
+                        </td>
+                        <td className="p-4 text-sm text-gray-700">
+                          Dedica 1 hora a escribir tu visión de vida ideal en 3 áreas: personal, relaciones y propósito.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-6 bg-blue-50 rounded-lg p-6 border-l-4 border-blue-600">
+                  <h3 className="font-semibold text-lg mb-2 text-blue-900">💡 Enfoque DTC: Vida Personal Primero</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Estos recursos están diseñados para mejorar tu bienestar, tus relaciones y tu desarrollo personal
+                    antes que tu productividad laboral. El éxito profesional es consecuencia de una vida personal
+                    equilibrada y satisfactoria.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

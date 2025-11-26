@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -24,6 +25,9 @@ import {
   ArrowLeft,
   Sparkles,
   Calendar,
+  BookOpen,
+  MapPin,
+  Briefcase,
 } from "lucide-react"
 import {
   BarChart,
@@ -47,6 +51,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -198,6 +204,13 @@ export default function SoftSkillsResults() {
     return "bg-red-100 text-red-800"
   }
 
+  // Dynamically determine top skills for overview and library sections
+  const sortedSkills = Object.entries(categoryScores)
+    .map(([key, value]) => ({ skill: categoryNames[key as keyof typeof categoryNames] || key, score: value as number }))
+    .sort((a, b) => b.score - a.score)
+
+  const topSkills = sortedSkills
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-8">
       <div className="container mx-auto px-4">
@@ -238,7 +251,7 @@ export default function SoftSkillsResults() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 gap-2">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Resumen
@@ -252,6 +265,10 @@ export default function SoftSkillsResults() {
               Análisis IA
             </TabsTrigger>
             <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
+            <TabsTrigger value="biblioteca" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Biblioteca DTC
+            </TabsTrigger>
             <TabsTrigger value="conexiones">Conexiones</TabsTrigger>
             <TabsTrigger value="reflexion">Reflexión</TabsTrigger>
             <TabsTrigger value="plan-90-dias">Plan 90 Días</TabsTrigger>
@@ -261,7 +278,211 @@ export default function SoftSkillsResults() {
             </TabsTrigger>
           </TabsList>
 
+          {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
+            <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                  Resumen Ejecutivo Integral DTC
+                </CardTitle>
+                <CardDescription>
+                  Tu foto 360° de competencias blandas: cómo te relacionas, lideras y colaboras
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Foto 360° del Perfil */}
+                <div className="bg-muted/50 rounded-lg p-6 space-y-4">
+                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <Target className="h-5 w-5 text-primary" />
+                    Tu Perfil de Competencias
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Fortalezas Dominantes</p>
+                      <p className="text-sm">
+                        {topSkills
+                          .slice(0, 2)
+                          .map((s) => s.skill)
+                          .join(", ")}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Áreas en Desarrollo</p>
+                      <p className="text-sm">
+                        {topSkills
+                          .slice(-2)
+                          .map((s) => s.skill)
+                          .join(", ")}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Enfoque Sugerido</p>
+                      <p className="text-sm">Relaciones interpersonales y comunicación</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top 5 Ideas Clave */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-primary" />5 Ideas Clave sobre tus Competencias
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex gap-3 items-start">
+                      <Badge variant="outline" className="mt-1">
+                        1
+                      </Badge>
+                      <p className="text-sm">
+                        <strong>Cómo te relacionas:</strong>{" "}
+                        {topSkills[0]?.skill === "Comunicación"
+                          ? "Priorizas la claridad y el diálogo abierto"
+                          : "Buscas construir confianza y colaboración genuina"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <Badge variant="outline" className="mt-1">
+                        2
+                      </Badge>
+                      <p className="text-sm">
+                        <strong>Cómo te ves:</strong> Valoras {topSkills[0]?.skill.toLowerCase()} como herramienta para
+                        conectar con otros
+                      </p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <Badge variant="outline" className="mt-1">
+                        3
+                      </Badge>
+                      <p className="text-sm">
+                        <strong>Cómo te ven:</strong> Los demás reconocen tu {topSkills[1]?.skill.toLowerCase()} en
+                        situaciones de grupo
+                      </p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <Badge variant="outline" className="mt-1">
+                        4
+                      </Badge>
+                      <p className="text-sm">
+                        <strong>Tu impacto:</strong> Generas ambientes donde las personas se sienten escuchadas y
+                        valoradas
+                      </p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <Badge variant="outline" className="mt-1">
+                        5
+                      </Badge>
+                      <p className="text-sm">
+                        <strong>Tu zona de fricción:</strong> Situaciones de conflicto o crítica pueden desafiarte a
+                        mantener el balance emocional
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mapa de Impacto */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-primary" />
+                    Mapa de Impacto en tu Vida
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <Card className="bg-gradient-to-br from-blue-50 to-background dark:from-blue-950/20">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Heart className="h-4 w-4 text-blue-600" />
+                          Vida Personal
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm space-y-2">
+                        <p>• Relaciones familiares más armoniosas</p>
+                        <p>• Mayor autoconocimiento emocional</p>
+                        <p>• Límites más claros y sanos</p>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-gradient-to-br from-purple-50 to-background dark:from-purple-950/20">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Users className="h-4 w-4 text-purple-600" />
+                          Relaciones
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm space-y-2">
+                        <p>• Comunicación más auténtica con pareja</p>
+                        <p>• Amistades más profundas</p>
+                        <p>• Capacidad de resolver conflictos</p>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-gradient-to-br from-green-50 to-background dark:from-green-950/20">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Briefcase className="h-4 w-4 text-green-600" />
+                          Trabajo
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm space-y-2">
+                        <p>• Liderazgo más efectivo y empático</p>
+                        <p>• Mejor colaboración en equipo</p>
+                        <p>• Gestión de conflictos laborales</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* 3 Movimientos Clave para 90 días */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-primary" />3 Movimientos Clave para los Próximos 90 Días
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <Card className="border-l-4 border-l-blue-500">
+                      <CardHeader className="pb-3">
+                        <Badge variant="outline" className="w-fit">
+                          Personal
+                        </Badge>
+                        <CardTitle className="text-base mt-2">Práctica de Escucha Activa</CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm text-muted-foreground">
+                        Dedica 15 min diarios a conversaciones profundas con familia, sin distracciones ni juicios
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-purple-500">
+                      <CardHeader className="pb-3">
+                        <Badge variant="outline" className="w-fit">
+                          Relacional
+                        </Badge>
+                        <CardTitle className="text-base mt-2">Expresión Emocional Honesta</CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm text-muted-foreground">
+                        Comparte con tu pareja/amigos cercanos una emoción difícil por semana, practicando
+                        vulnerabilidad
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-green-500">
+                      <CardHeader className="pb-3">
+                        <Badge variant="outline" className="w-fit">
+                          Laboral
+                        </Badge>
+                        <CardTitle className="text-base mt-2">Feedback Constructivo</CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-sm text-muted-foreground">
+                        Solicita feedback 360° a tu equipo sobre tus fortalezas relacionales y áreas de mejora
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                <Alert className="bg-primary/5 border-primary/20">
+                  <Sparkles className="h-4 w-4" />
+                  <AlertTitle>Recuerda el enfoque DTC</AlertTitle>
+                  <AlertDescription>
+                    Las competencias blandas son para vivir mejor, no solo para trabajar mejor. Prioriza el impacto en
+                    tus relaciones personales, bienestar emocional y calidad de vida. El éxito laboral es una
+                    consecuencia natural del desarrollo personal integral.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Bar Chart */}
@@ -1480,6 +1701,230 @@ export default function SoftSkillsResults() {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="biblioteca" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <BookOpen className="h-6 w-6 text-primary" />
+                  Biblioteca DTC Recomendada
+                </CardTitle>
+                <CardDescription>
+                  Recursos seleccionados específicamente para desarrollar tus competencias blandas en la vida real
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-lg border overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[200px]">Área de Desarrollo</TableHead>
+                        <TableHead>Recurso Recomendado</TableHead>
+                        <TableHead>¿Por qué es relevante para ti?</TableHead>
+                        <TableHead className="w-[300px]">Mini-Desafío (7 días)</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Comunicación
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Cómo te relacionas</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">📘 "Comunicación No Violenta" - Marshall Rosenberg</p>
+                            <p className="text-xs text-muted-foreground">Libro + Guía práctica</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Tu perfil muestra fortaleza en {topSkills[0]?.skill}. Este libro te ayudará a profundizar en
+                          comunicación empática, especialmente útil en conversaciones difíciles con familia o pareja.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Aplicación inmediata:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>Identifica 3 necesidades no expresadas en tu relación más importante</li>
+                              <li>Practica escucha sin juzgar durante 1 conversación diaria</li>
+                              <li>Expresa una emoción difícil usando el método CNV</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Inteligencia Emocional
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Autoconocimiento</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">🎧 Podcast "The Happiness Lab" - Dr. Laurie Santos</p>
+                            <p className="text-xs text-muted-foreground">Yale University</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Complementa tu desarrollo en {topSkills[1]?.skill} con ciencia del bienestar aplicada.
+                          Episodios de 30 min sobre emociones, relaciones y propósito personal.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Mini-desafío:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>Escucha 3 episodios sobre manejo emocional</li>
+                              <li>Implementa 1 práctica de gratitud diaria durante 7 días</li>
+                              <li>Comparte 1 insight con alguien cercano</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Liderazgo
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Influencia positiva</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">🎥 Curso "Liderar con Propósito" - Simón Sinek</p>
+                            <p className="text-xs text-muted-foreground">MasterClass</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Tu fortaleza en {topSkills[2]?.skill} te posiciona como líder natural. Este curso te ayudará a
+                          liderar primero en tu familia/comunidad, luego en lo laboral.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Acción concreta:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>Define tu "por qué" personal (más allá del trabajo)</li>
+                              <li>Lidera 1 proyecto familiar o comunitario</li>
+                              <li>Aplica principios de liderazgo empático en 3 conversaciones</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Trabajo en Equipo
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Colaboración efectiva</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">📚 "Los 5 Lenguajes del Amor" - Gary Chapman</p>
+                            <p className="text-xs text-muted-foreground">Aplicable a todas las relaciones</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Aunque el título menciona "amor", este libro es fundamental para entender colaboración en
+                          cualquier relación (pareja, familia, equipo). Alinea con tu perfil relacional.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Experimento:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>Identifica tu lenguaje principal y el de 3 personas cercanas</li>
+                              <li>Practica 1 acción en el lenguaje de cada persona durante 7 días</li>
+                              <li>Observa cambios en calidad de las interacciones</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Resolución de Conflictos
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Conversaciones difíciles</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">🎬 Taller Online "Difficult Conversations" - Harvard</p>
+                            <p className="text-xs text-muted-foreground">2 horas de video + ejercicios</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Basándote en tu área de desarrollo, este taller te dará herramientas prácticas para
+                          conversaciones incómodas en familia, pareja o trabajo sin dañar la relación.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Práctica real:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>Prepara 1 conversación difícil pendiente usando el framework</li>
+                              <li>Practica con un amigo antes de la conversación real</li>
+                              <li>Ten la conversación y reflexiona sobre el proceso</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <Badge variant="outline" className="mb-1">
+                            Desarrollo Integral
+                          </Badge>
+                          <p className="text-xs text-muted-foreground mt-1">Crecimiento holístico</p>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">📱 App "Headspace" - Meditación y Mindfulness</p>
+                            <p className="text-xs text-muted-foreground">+ Módulos de relaciones</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          Las competencias blandas requieren presencia y autoconciencia. Esta app tiene módulos
+                          específicos sobre relaciones, comunicación y manejo emocional aplicados a tu vida diaria.
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          <div className="space-y-2">
+                            <p className="font-medium">Rutina de 7 días:</p>
+                            <ul className="text-xs space-y-1 list-disc list-inside text-muted-foreground">
+                              <li>10 min de meditación matutina antes de revisar el celular</li>
+                              <li>Completa módulo "Relaciones Conscientes"</li>
+                              <li>Practica 1 ejercicio de respiración antes de conversaciones importantes</li>
+                            </ul>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <Alert className="mt-6 bg-primary/5 border-primary/20">
+                  <BookOpen className="h-4 w-4" />
+                  <AlertTitle>Enfoque DTC en Recursos</AlertTitle>
+                  <AlertDescription>
+                    Todos estos recursos están seleccionados con enfoque "vida personal primero". Los mini-desafíos te
+                    invitan a aplicar las competencias en tus relaciones familiares, pareja y bienestar personal antes
+                    que en el contexto laboral. El desarrollo profesional será una consecuencia natural de tu
+                    crecimiento personal.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="mt-6 flex gap-4">
+                  <Button variant="outline" className="flex-1 bg-transparent" asChild>
+                    <Link href="/recursos">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Ver Biblioteca Completa
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="flex-1 bg-transparent" asChild>
+                    <Link href="/metas">
+                      <Target className="h-4 w-4 mr-2" />
+                      Crear Meta de Aprendizaje
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

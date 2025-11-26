@@ -8,29 +8,32 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Calendar } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
+  Activity,
+  Book,
+  BookOpen,
   Brain,
+  Calendar,
+  CheckCircle2,
   Heart,
-  Users,
-  Target,
   Lightbulb,
-  ArrowRight,
+  PieChart,
+  Sparkles,
+  Target,
   TrendingUp,
+  Users,
+  ArrowLeft,
+  ArrowRight,
+  BarChart3,
+  Download,
+  Eye,
+  Home,
+  Share2,
+  Shield,
+  Zap,
   Star,
   Award,
-  BookOpen,
-  Download,
-  Share2,
-  BarChart3,
-  PieChart,
-  Activity,
-  Zap,
-  ArrowLeft,
-  Eye,
-  Shield,
-  Sparkles,
-  Home,
 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
@@ -259,6 +262,16 @@ export default function EmotionalIntelligenceResults() {
   const overallLevel = getScoreLevel(results.overall_score)
   const recommendations = getRecommendations(results.competency_scores)
 
+  // Mock testResults object for the Resumen Ejecutivo tab
+  const testResults = {
+    totalScore: results.overall_score,
+    level: overallLevel.level,
+    competencies: Object.entries(results.competency_scores).map(([key, score]) => ({
+      name: competencyInfo[key as keyof typeof competencyInfo].name,
+      score: score,
+    })),
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -336,7 +349,11 @@ export default function EmotionalIntelligenceResults() {
 
         {/* Detailed Results Tabs */}
         <Tabs defaultValue="competencies" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2 bg-white shadow-lg">
+          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 gap-2 bg-white shadow-lg">
+            <TabsTrigger value="resumen-ejecutivo" className="flex items-center space-x-2">
+              <Sparkles className="h-4 w-4" />
+              <span>Resumen</span>
+            </TabsTrigger>
             <TabsTrigger value="competencies" className="flex items-center space-x-2">
               <PieChart className="h-4 w-4" />
               <span>Competencias</span>
@@ -357,6 +374,10 @@ export default function EmotionalIntelligenceResults() {
               <Target className="h-4 w-4" />
               <span>Oportunidades</span>
             </TabsTrigger>
+            <TabsTrigger value="biblioteca-dtc" className="flex items-center space-x-2">
+              <Book className="h-4 w-4" />
+              <span>Biblioteca DTC</span>
+            </TabsTrigger>
             <TabsTrigger value="conexiones" className="flex items-center space-x-2">
               <Brain className="h-4 w-4" />
               <span>Conexiones</span>
@@ -374,6 +395,245 @@ export default function EmotionalIntelligenceResults() {
               <span>Coach IA</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="resumen-ejecutivo" className="space-y-8">
+            <Card className="border-2 border-purple-200 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
+                <CardTitle className="flex items-center space-x-3 text-2xl">
+                  <Sparkles className="h-7 w-7 text-purple-600" />
+                  <span>Resumen Ejecutivo Integral DTC</span>
+                </CardTitle>
+                <p className="text-gray-600 mt-2">
+                  Tu foto 360° de inteligencia emocional: cómo te relacionas con tus emociones y las de otros
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-8 pt-6">
+                {/* Foto 360° del perfil */}
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-purple-900 flex items-center space-x-2">
+                    <Heart className="h-5 w-5" />
+                    <span>Tu Foto 360° - Inteligencia Emocional</span>
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Card className="bg-gradient-to-br from-purple-50 to-white">
+                      <CardContent className="pt-6">
+                        <p className="text-lg leading-relaxed text-gray-800">
+                          <strong className="text-purple-700">Perfil IE Global:</strong> Con una puntuación de{" "}
+                          {testResults.totalScore}/100, tu inteligencia emocional está en el nivel {testResults.level}.
+                          Esto significa que{" "}
+                          {testResults.totalScore >= 80
+                            ? "tienes una excelente capacidad para reconocer y gestionar emociones"
+                            : testResults.totalScore >= 60
+                              ? "tienes buenas habilidades emocionales que puedes seguir desarrollando"
+                              : testResults.totalScore >= 40
+                                ? "estás en proceso de desarrollar tu conciencia emocional"
+                                : "tienes un gran potencial para crecer en inteligencia emocional"}
+                          .
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-gradient-to-br from-pink-50 to-white">
+                      <CardContent className="pt-6">
+                        <p className="text-lg leading-relaxed text-gray-800">
+                          <strong className="text-pink-700">Competencias Destacadas:</strong> Tus fortalezas están en{" "}
+                          {testResults.competencies
+                            .filter((c) => c.score >= 70)
+                            .map((c) => c.name.toLowerCase())
+                            .slice(0, 2)
+                            .join(" y ")}
+                          , mientras que{" "}
+                          {testResults.competencies
+                            .filter((c) => c.score < 60)
+                            .map((c) => c.name.toLowerCase())
+                            .slice(0, 1)
+                            .join("")}{" "}
+                          es un área con potencial de desarrollo.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* Top 5 ideas sobre tu forma de ser */}
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-purple-900">Top 5 Ideas Sobre Tu Inteligencia Emocional</h3>
+                  <div className="space-y-3">
+                    <Card className="border-l-4 border-l-purple-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-purple-800 mb-2">1. Autoconciencia Emocional</h4>
+                        <p className="text-gray-700">
+                          {testResults.competencies.find((c) => c.name === "Autoconciencia")?.score >= 70
+                            ? "Tienes una excelente capacidad para identificar tus emociones en tiempo real y entender sus causas."
+                            : "Estás desarrollando tu habilidad para reconocer tus emociones. Practicar el registro emocional diario te ayudará."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-pink-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-pink-800 mb-2">2. Regulación Emocional</h4>
+                        <p className="text-gray-700">
+                          {testResults.competencies.find((c) => c.name === "Autorregulación")?.score >= 70
+                            ? "Manejas bien tus emociones intensas y sabes calmarte cuando es necesario."
+                            : "Fortalecer tu capacidad de regulación emocional te ayudará en momentos de estrés. Técnicas de respiración son ideales."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-blue-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-blue-800 mb-2">3. Empatía y Conexión</h4>
+                        <p className="text-gray-700">
+                          {testResults.competencies.find((c) => c.name === "Empatía")?.score >= 70
+                            ? "Tu capacidad empática te permite conectar profundamente con otros y entender sus perspectivas."
+                            : "Desarrollar tu empatía fortalecerá tus relaciones. Practica la escucha activa sin juzgar."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-green-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-green-800 mb-2">4. Habilidades Sociales</h4>
+                        <p className="text-gray-700">
+                          {testResults.competencies.find((c) => c.name === "Habilidades Sociales")?.score >= 70
+                            ? "Te relacionas con facilidad y sabes comunicar tus emociones de forma efectiva."
+                            : "Mejorar tu comunicación emocional fortalecerá tus vínculos. Practica expresar lo que sientes con claridad."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-orange-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-orange-800 mb-2">5. Motivación Interna</h4>
+                        <p className="text-gray-700">
+                          {testResults.competencies.find((c) => c.name === "Motivación")?.score >= 70
+                            ? "Tu motivación interna es sólida y te impulsa a alcanzar tus metas personales."
+                            : "Conectar con tus valores y propósito fortalecerá tu motivación. Reflexiona sobre qué te mueve realmente."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* Mapa de impacto */}
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-purple-900">
+                    Mapa de Impacto: Cómo tu IE influye en tu vida
+                  </h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <Card className="bg-gradient-to-br from-rose-50 to-white">
+                      <CardContent className="pt-6 space-y-3">
+                        <h4 className="font-semibold text-rose-800 flex items-center space-x-2">
+                          <Heart className="h-5 w-5" />
+                          <span>Vida Personal</span>
+                        </h4>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-rose-500 mt-0.5 flex-shrink-0" />
+                            <span>Relaciones familiares más profundas y auténticas</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-rose-500 mt-0.5 flex-shrink-0" />
+                            <span>Mejor gestión del estrés y bienestar emocional</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-rose-500 mt-0.5 flex-shrink-0" />
+                            <span>Mayor autoconocimiento y paz interior</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-gradient-to-br from-purple-50 to-white">
+                      <CardContent className="pt-6 space-y-3">
+                        <h4 className="font-semibold text-purple-800 flex items-center space-x-2">
+                          <Users className="h-5 w-5" />
+                          <span>Relaciones</span>
+                        </h4>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                            <span>Comunicación más clara y empática con tu pareja</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                            <span>Resolución constructiva de conflictos</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                            <span>Amistades más sólidas y significativas</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-gradient-to-br from-blue-50 to-white">
+                      <CardContent className="pt-6 space-y-3">
+                        <h4 className="font-semibold text-blue-800 flex items-center space-x-2">
+                          <Target className="h-5 w-5" />
+                          <span>Trabajo</span>
+                        </h4>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <span>Liderazgo más efectivo y colaborativo</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <span>Mejor manejo de presión y decisiones difíciles</span>
+                          </li>
+                          <li className="flex items-start space-x-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <span>Ambiente laboral más positivo y productivo</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* 3 movimientos clave para 90 días */}
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-purple-900">
+                    3 Movimientos Clave para los Próximos 90 Días
+                  </h3>
+                  <div className="space-y-3">
+                    <Card className="border-l-4 border-l-rose-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-rose-800 mb-2">1. Movimiento Personal</h4>
+                        <p className="text-gray-700 mb-3">
+                          <strong>Registro emocional diario:</strong> Durante 5 minutos cada noche, escribe cómo te
+                          sentiste hoy y por qué. Esto fortalecerá tu autoconciencia emocional.
+                        </p>
+                        <p className="text-sm text-gray-600 italic">
+                          Meta: Identificar patrones emocionales que te ayuden a conocerte mejor
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-purple-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-purple-800 mb-2">2. Movimiento Relacional</h4>
+                        <p className="text-gray-700 mb-3">
+                          <strong>Conversaciones profundas semanales:</strong> Agenda 1 hora semanal con alguien
+                          importante para hablar sin distracciones sobre cómo se sienten ambos. Practica la escucha
+                          activa.
+                        </p>
+                        <p className="text-sm text-gray-600 italic">
+                          Meta: Fortalecer vínculos genuinos y desarrollar empatía
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-blue-500">
+                      <CardContent className="pt-6">
+                        <h4 className="font-semibold text-blue-800 mb-2">3. Movimiento Laboral</h4>
+                        <p className="text-gray-700 mb-3">
+                          <strong>Técnica del semáforo emocional:</strong> Antes de reaccionar en situaciones tensas,
+                          identifica tu emoción (rojo=detente, amarillo=reflexiona, verde=actúa con calma).
+                        </p>
+                        <p className="text-sm text-gray-600 italic">
+                          Meta: Mejorar tu regulación emocional en contextos laborales
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Competencies Tab */}
           <TabsContent value="competencies" className="space-y-6">
@@ -1615,6 +1875,163 @@ export default function EmotionalIntelligenceResults() {
                 total_score: ieResult?.overall_score, // Assuming total_score should map to overall_score
               }}
             />
+          </TabsContent>
+
+          <TabsContent value="biblioteca-dtc" className="space-y-8">
+            <Card className="border-2 border-purple-200 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
+                <CardTitle className="flex items-center space-x-3 text-2xl">
+                  <Book className="h-7 w-7 text-purple-600" />
+                  <span>Biblioteca DTC Recomendada</span>
+                </CardTitle>
+                <p className="text-gray-600 mt-2">
+                  Recursos específicos para fortalecer tu inteligencia emocional en la vida real
+                </p>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-purple-50">
+                        <th className="border border-purple-200 p-3 text-left font-semibold text-purple-900">
+                          Área de Desarrollo
+                        </th>
+                        <th className="border border-purple-200 p-3 text-left font-semibold text-purple-900">
+                          Recurso Recomendado
+                        </th>
+                        <th className="border border-purple-200 p-3 text-left font-semibold text-purple-900">
+                          Por qué es relevante
+                        </th>
+                        <th className="border border-purple-200 p-3 text-left font-semibold text-purple-900">
+                          Mini Desafío
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">
+                          Autoconciencia Emocional
+                        </td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">Inteligencia Emocional - Daniel Goleman</p>
+                            <p className="text-sm text-gray-600">Libro • Psicología</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Te enseña a identificar tus emociones en tiempo real y entender cómo influyen en tus
+                          decisiones y relaciones personales.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          Lleva un "diario emocional" durante 7 días: cada noche escribe 3 emociones que sentiste y qué
+                          las provocó.
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">
+                          Regulación Emocional
+                        </td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">El Poder del Ahora - Eckhart Tolle</p>
+                            <p className="text-sm text-gray-600">Libro • Mindfulness</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Aprenderás a no dejarte arrastrar por emociones intensas, observándolas sin juzgarlas ni
+                          reaccionar impulsivamente.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          Cuando sientas una emoción intensa, haz una pausa de 5 respiraciones profundas antes de
+                          responder.
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">Empatía</td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">Comunicación No Violenta - Marshall Rosenberg</p>
+                            <p className="text-sm text-gray-600">Libro • Comunicación</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Te muestra cómo entender las emociones de otros sin juzgar, creando conexiones más profundas
+                          con familia, pareja y amigos.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          En tu próxima conversación, practica reformular lo que la otra persona dice para confirmar que
+                          entendiste.
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">
+                          Habilidades Sociales
+                        </td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">Conversaciones Cruciales - Kerry Patterson</p>
+                            <p className="text-sm text-gray-600">Libro • Comunicación</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Herramientas prácticas para comunicar tus emociones en situaciones difíciles sin romper la
+                          relación.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          Elige una conversación pendiente y prepárala usando el modelo "Cuando [X], yo sentí [Y],
+                          necesito [Z]".
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">Motivación Interna</td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">Fluir (Flow) - Mihaly Csikszentmihalyi</p>
+                            <p className="text-sm text-gray-600">Libro • Psicología Positiva</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Conecta con actividades que te generan satisfacción genuina, fortaleciendo tu motivación desde
+                          adentro.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          Identifica 3 actividades que te hacen "perder la noción del tiempo" y dedícales al menos 2
+                          horas semanales.
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-purple-50 transition-colors">
+                        <td className="border border-purple-200 p-3 font-medium text-purple-800">
+                          Gestión de Conflictos
+                        </td>
+                        <td className="border border-purple-200 p-3">
+                          <div>
+                            <p className="font-semibold text-gray-800">Conversaciones Difíciles - Douglas Stone</p>
+                            <p className="text-sm text-gray-600">Libro • Relaciones</p>
+                          </div>
+                        </td>
+                        <td className="border border-purple-200 p-3 text-gray-700">
+                          Aprende a manejar conversaciones tensas con pareja, familia o jefe sin escalar el conflicto.
+                        </td>
+                        <td className="border border-purple-200 p-3 text-sm text-gray-700">
+                          Practica el ejercicio de "tercera historia": describe un conflicto sin culpar a nadie, solo
+                          hechos observables.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <Alert className="mt-6 bg-purple-50 border-purple-200">
+                  <BookOpen className="h-5 w-5 text-purple-600" />
+                  <AlertTitle className="text-purple-900">Enfoque Integral: Personal + Trabajo</AlertTitle>
+                  <AlertDescription className="text-purple-800">
+                    Todos estos recursos están pensados para mejorar primero tu bienestar personal, tus relaciones
+                    familiares y tu paz interior. Si además mejoran tu desempeño laboral, es un beneficio adicional,
+                    pero no el objetivo principal. Tu vida personal importa más que tu carrera.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
 

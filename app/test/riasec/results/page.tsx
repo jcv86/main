@@ -34,6 +34,9 @@ import {
   Rocket,
   Network,
   Calendar,
+  Heart,
+  Home,
+  ExternalLink,
 } from "lucide-react"
 import {
   ResponsiveContainer,
@@ -57,6 +60,8 @@ import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from "@/components/ui/checkbox" // Added Checkbox
+import Link from "next/link" // Added Link
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Added Alert
 
 interface RIASECResults {
   R: number
@@ -557,6 +562,10 @@ export default function RIASECResults() {
                   <Lightbulb className="h-4 w-4" />
                   <span className="hidden sm:inline">Reflexión</span>
                 </TabsTrigger>
+                <TabsTrigger value="biblioteca" className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  <span className="hidden sm:inline">Biblioteca</span>
+                </TabsTrigger>
                 <TabsTrigger value="plan-90-dias" className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   <span className="hidden sm:inline">Plan 90 Días</span>
@@ -569,12 +578,303 @@ export default function RIASECResults() {
                   <Target className="h-4 w-4" />
                   Plan
                 </TabsTrigger>
+                {/* <TabsTrigger value="biblioteca" className="flex items-center gap-2 hidden lg:flex">
+                  <BookOpen className="h-4 w-4" />
+                  Biblioteca
+                </TabsTrigger> */}
               </TabsList>
             </CardContent>
           </Card>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
+            <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-blue-600" />
+                  Resumen Ejecutivo Integral DTC
+                </CardTitle>
+                <CardDescription>Tu foto 360° vocacional: lo que descubrimos sobre ti</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Foto 360° del perfil */}
+                <div className="bg-white rounded-lg p-6 border-l-4 border-blue-600">
+                  <h3 className="font-semibold text-lg mb-4 text-blue-900">📸 Tu Foto 360° Vocacional</h3>
+                  <div className="grid md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="font-semibold text-blue-800">Código Holland:</span>
+                      <p className="text-gray-700">
+                        {results.holland_code} -{" "}
+                        {results.holland_code
+                          .split("")
+                          .map((l) => getCategoryName(l))
+                          .join(", ")}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Interés dominante:</span>
+                      <p className="text-gray-700">
+                        {getCategoryName(results.holland_code[0])} (
+                        {results[results.holland_code[0] as keyof typeof results]}/100)
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-blue-800">Perfil:</span>
+                      <p className="text-gray-700">
+                        {results.holland_code.includes("R") && results.holland_code.includes("I")
+                          ? "Pensador práctico"
+                          : results.holland_code.includes("A") && results.holland_code.includes("S")
+                            ? "Creativo empático"
+                            : results.holland_code.includes("E") && results.holland_code.includes("C")
+                              ? "Líder organizado"
+                              : "Perfil único"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top 5 ideas sobre ti */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+                  <h3 className="font-semibold text-lg mb-4 text-blue-900">💡 Top 5 Ideas Sobre Ti</h3>
+                  <div className="space-y-3">
+                    <div className="flex gap-3">
+                      <Badge className="bg-blue-600">1</Badge>
+                      <p className="text-gray-700">
+                        <strong>Qué te energiza:</strong>{" "}
+                        {results.holland_code[0] === "R"
+                          ? "Trabajar con las manos, resolver problemas prácticos, ver resultados tangibles"
+                          : results.holland_code[0] === "I"
+                            ? "Investigar, analizar datos, entender cómo funcionan las cosas"
+                            : results.holland_code[0] === "A"
+                              ? "Crear, expresarte, imaginar nuevas posibilidades"
+                              : results.holland_code[0] === "S"
+                                ? "Ayudar a otros, enseñar, construir relaciones significativas"
+                                : results.holland_code[0] === "E"
+                                  ? "Liderar proyectos, influir en otros, lograr objetivos ambiciosos"
+                                  : "Organizar sistemas, mantener orden, trabajar con precisión"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Badge className="bg-blue-600">2</Badge>
+                      <p className="text-gray-700">
+                        <strong>Cómo te ves:</strong> Como alguien que{" "}
+                        {results.holland_code.includes("A")
+                          ? "ve el mundo diferente y aporta creatividad"
+                          : results.holland_code.includes("S")
+                            ? "hace diferencia en la vida de otros"
+                            : results.holland_code.includes("E")
+                              ? "puede lograr grandes cosas y liderar equipos"
+                              : "contribuye con habilidades únicas y valiosas"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Badge className="bg-blue-600">3</Badge>
+                      <p className="text-gray-700">
+                        <strong>Cómo te ven:</strong>{" "}
+                        {results.holland_code.includes("R")
+                          ? "Práctico, confiable, alguien que resuelve problemas reales"
+                          : results.holland_code.includes("I")
+                            ? "Analítico, curioso, la persona que tiene las respuestas"
+                            : results.holland_code.includes("C")
+                              ? "Organizado, detallista, alguien en quien se puede confiar"
+                              : "Como alguien con talentos distintivos que aporta valor"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Badge className="bg-blue-600">4</Badge>
+                      <p className="text-gray-700">
+                        <strong>Tu impacto natural:</strong>{" "}
+                        {results.holland_code.includes("S")
+                          ? "Mejoras el bienestar y desarrollo de las personas a tu alrededor"
+                          : results.holland_code.includes("E")
+                            ? "Movilizas recursos y personas hacia objetivos importantes"
+                            : results.holland_code.includes("A")
+                              ? "Inspiras creatividad y nuevas formas de ver el mundo"
+                              : "Generas valor a través de tus intereses y habilidades únicas"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Badge className="bg-blue-600">5</Badge>
+                      <p className="text-gray-700">
+                        <strong>Tu zona de fricción:</strong>{" "}
+                        {results.holland_code.includes("A") && !results.holland_code.includes("C")
+                          ? "Estructuras rígidas y rutinas repetitivas te agotan"
+                          : results.holland_code.includes("I") && !results.holland_code.includes("S")
+                            ? "Situaciones con mucha interacción social constante pueden cansarte"
+                            : results.holland_code.includes("E") && !results.holland_code.includes("S")
+                              ? "Tareas que no tienen impacto visible pueden frustrarte"
+                              : "Actividades que van contra tus intereses naturales drenan tu energía"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mapa de impacto */}
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Card className="border-2 border-purple-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Heart className="w-4 h-4 text-purple-600" />
+                        Vida Personal
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-gray-700">
+                      <p>
+                        Dedica tiempo a hobbies y actividades que reflejen tu código Holland. Tu vocación no es solo
+                        trabajo, es tu forma de vivir.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-2 border-blue-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Users className="w-4 h-4 text-blue-600" />
+                        Relaciones
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-gray-700">
+                      <p>
+                        Comparte tus pasiones con otros. Busca personas que compartan tus intereses para conexiones más
+                        profundas.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-2 border-green-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Briefcase className="w-4 h-4 text-green-600" />
+                        Trabajo
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-gray-700">
+                      <p>Busca roles que honren tu código Holland. El trabajo correcto no se siente como trabajo.</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* 3 movimientos clave */}
+                <div className="bg-white rounded-lg p-6 border border-gray-200">
+                  <h3 className="font-semibold text-lg mb-4 text-gray-900">🎯 Tus 3 Movimientos Clave (90 días)</h3>
+                  <div className="space-y-4">
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
+                        1
+                      </div>
+                      <div>
+                        <p className="font-semibold text-purple-900">Personal:</p>
+                        <p className="text-gray-700 text-sm">
+                          Dedica 3 horas semanales a una actividad que refleje tu interés dominante (
+                          {getCategoryName(results.holland_code[0])})
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
+                        2
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-900">Relacional:</p>
+                        <p className="text-gray-700 text-sm">
+                          Conecta con 2-3 personas que compartan tu código Holland para aprender y crecer juntos
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
+                        3
+                      </div>
+                      <div>
+                        <p className="font-semibold text-green-900">Laboral:</p>
+                        <p className="text-gray-700 text-sm">
+                          Evalúa si tu trabajo actual honra tu perfil. Si no, explora opciones más alineadas
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-purple-600" />
+                  Impacto en tu Vida Personal
+                </CardTitle>
+                <CardDescription>
+                  Cómo tus intereses vocacionales influyen en tu vida más allá del trabajo
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Users className="w-5 h-5" />
+                      Propósito y Satisfacción
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {results.holland_code.includes("S")
+                        ? "Tu perfil Social significa que encuentras satisfacción ayudando a otros. Busca formas de servir en tu comunidad, familia y círculo cercano, no solo en el trabajo."
+                        : results.holland_code.includes("A")
+                          ? "Tu perfil Artístico indica que necesitas expresión creativa para sentirte pleno. Dedica tiempo a hobbies creativos que nutran tu alma, no solo proyectos laborales."
+                          : "Tu código Holland revela qué te hace sentir vivo. Asegúrate de que tus actividades diarias (no solo tu trabajo) estén alineadas con estos intereses."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Home className="w-5 h-5" />
+                      Relaciones y Familia
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {results.holland_code.includes("E")
+                        ? "Tu perfil Emprendedor puede llevar a priorizar logros sobre relaciones. Recuerda que el éxito sin conexión humana está vacío."
+                        : results.holland_code.includes("C")
+                          ? "Tu perfil Convencional valora el orden y la estabilidad. En familia, equilibra estructura con espontaneidad para crear recuerdos significativos."
+                          : "Tus intereses vocacionales influyen en cómo te relacionas. Comparte tus pasiones con tus seres queridos para crear vínculos más profundos."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Heart className="w-5 h-5" />
+                      Bienestar Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {results.holland_code.includes("I")
+                        ? "Tu perfil Investigador necesita tiempo de reflexión y aprendizaje constante. Dedica tiempo a la lectura y exploración intelectual para tu salud mental."
+                        : results.holland_code.includes("R")
+                          ? "Tu perfil Realista se beneficia de actividades físicas y trabajo con las manos. El ejercicio y proyectos manuales son esenciales para tu bienestar."
+                          : "Tu bienestar personal depende de alimentar tus intereses genuinos. No pospongas lo que te hace feliz 'para después de trabajar'."}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                      <Sparkles className="w-5 h-5" />
+                      Desarrollo Personal
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Tu código Holland ({results.holland_code}) no solo define tu carrera ideal, sino el tipo de
+                      persona que estás destinado a ser. Desarrolla estas facetas en TODOS los aspectos de tu vida:
+                      voluntariado, hobbies, relaciones, aprendizaje.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                    Tu vocación es más que un trabajo, es tu forma de vivir
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    El test RIASEC no es solo para elegir carrera. Es para entender qué te da energía, qué te hace
+                    sentir vivo, y cómo puedes diseñar una vida completa que honre tus intereses genuinos. Integra tu
+                    código Holland en tus relaciones, tu tiempo libre, y tu crecimiento personal, no solo en tu CV.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid md:grid-cols-2 gap-6">
               {/* Holland Code Breakdown */}
               <Card>
@@ -1626,7 +1926,7 @@ export default function RIASECResults() {
                           <div className="bg-red-50 p-3 rounded text-sm">
                             <strong className="text-red-900">Conexión:</strong>
                             <p className="text-red-800 mt-1">
-                              RIASEC muestra tus intereses, IE muestra si tienes las competencias emocionales para
+                              RIASEC te muestra tus intereses, IE muestra si tienes las competencias emocionales para
                               prosperar en ellos.
                             </p>
                           </div>
@@ -1904,10 +2204,11 @@ export default function RIASECResults() {
                       <Card>
                         <CardContent className="pt-6 space-y-3">
                           <h4 className="font-semibold text-blue-900">
-                            2. Si pudiera rediseñar mi trabajo para que use mi código Holland al 100%, ¿cómo se vería?
+                            2. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
                           <p className="text-sm text-gray-600">
-                            Describe tu día ideal de trabajo. Sé específico: ¿qué haces, con quién, dónde, cómo?
+                            Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
+                            ¿Qué cambios puedes hacer?
                           </p>
                           <textarea
                             placeholder="Escribe tu reflexión aquí..."
@@ -2090,7 +2391,157 @@ export default function RIASECResults() {
             </Card>
           </TabsContent>
 
-          {/* Action Plan Tab (for the hidden lg:flex trigger) */}
+          {/* Biblioteca DTC Tab */}
+          <TabsContent value="biblioteca" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <BookOpen className="w-6 h-6 text-blue-600" />
+                  Biblioteca DTC Recomendada
+                </CardTitle>
+                <CardDescription>Recursos personalizados para tu código Holland {results.holland_code}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border p-3 text-left font-semibold">Área de Desarrollo</th>
+                        <th className="border p-3 text-left font-semibold">Recurso Recomendado</th>
+                        <th className="border p-3 text-left font-semibold">Por qué te sirve</th>
+                        <th className="border p-3 text-left font-semibold">Mini-desafío (7 días)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border p-3 font-medium text-purple-900">Exploración Vocacional</td>
+                        <td className="border p-3">
+                          <Link
+                            href="/biblioteca/que-hago-con-mi-vida"
+                            className="text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            ¿Qué hago con mi vida?
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Te ayuda a conectar tus intereses RIASEC con decisiones vocacionales concretas y superar el
+                          miedo a elegir "mal"
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Escribe 3 escenarios de vida posibles basados en tu código Holland. ¿Cuál te emociona más?
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="border p-3 font-medium text-blue-900">Autoconocimiento Profundo</td>
+                        <td className="border p-3">
+                          <Link
+                            href="/biblioteca/ikigai"
+                            className="text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            Ikigai: Tu razón de ser
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Integra tus intereses RIASEC con tu propósito de vida, no solo con opciones de carrera
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Dibuja tu diagrama Ikigai colocando tu código Holland en el centro. ¿Qué descubres?
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-3 font-medium text-green-900">Diseño de Carrera</td>
+                        <td className="border p-3">
+                          <Link
+                            href="/biblioteca/designing-your-life"
+                            className="text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            Designing Your Life
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Usa design thinking para crear múltiples prototipos de vida alineados con tu perfil vocacional
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Crea 3 "planes de vida" alternativos que honren tu código {results.holland_code}. Prueba uno
+                          por una semana.
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="border p-3 font-medium text-orange-900">Fortalezas Personales</td>
+                        <td className="border p-3">
+                          <Link
+                            href="/biblioteca/gallup-strengthsfinder"
+                            className="text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            StrengthsFinder 2.0
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Complementa tu código Holland con tus 5 fortalezas naturales para un perfil completo
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Identifica cómo tus fortalezas Gallup se conectan con tu interés{" "}
+                          {getCategoryName(results.holland_code[0])}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-3 font-medium text-red-900">Toma de Decisiones</td>
+                        <td className="border p-3">
+                          <Link
+                            href="/biblioteca/the-defining-decade"
+                            className="text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            The Defining Decade
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Te reta a tomar decisiones vocacionales ahora, no "cuando estés listo". Tu perfil RIASEC es tu
+                          brújula.
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Toma UNA decisión pequeña esta semana que te acerque a una carrera alineada con tu código
+                          Holland
+                        </td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="border p-3 font-medium text-indigo-900">Integración Vida-Trabajo</td>
+                        <td className="border p-3">
+                          <Link href="/recursos" className="text-blue-600 hover:underline flex items-center gap-1">
+                            Explora más recursos DTC
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Descubre cómo integrar tus intereses vocacionales en TODA tu vida, no solo en el trabajo
+                        </td>
+                        <td className="border p-3 text-sm">
+                          Encuentra una forma de expresar tu código Holland fuera del trabajo (hobby, voluntariado,
+                          proyecto personal)
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <Alert className="mt-6">
+                  <Lightbulb className="h-4 w-4" />
+                  <AlertTitle>Recuerda</AlertTitle>
+                  <AlertDescription>
+                    La biblioteca DTC no es para "consumir información", sino para APLICAR lo aprendido a tu vida real.
+                    Completa los mini-desafíos y observa cómo tu autoconocimiento se convierte en transformación
+                    tangible.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Action Tab */}
           <TabsContent value="action" className="space-y-6">
             <Card>
               <CardHeader>

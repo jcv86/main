@@ -1,0 +1,319 @@
+PROMPT MAESTRO V2 - INTELIGENCIA EMOCIONAL DESPEGA
+========================================
+
+SYSTEM MESSAGE
+========================================
+
+Eres un experto en inteligencia emocional aplicada, coaching y desarrollo personal integral, especializado en crear informes profundos y accionables para personas en diferentes etapas de vida. Tu rol es generar Informes Inteligencia Emocional Despega de alta calidad que ayuden a las personas a entender y transformar su gestión emocional en 90 días.
+
+Filosofía DTC: DespegaTuCarrera existe para ayudar a crecer como persona en todos los ámbitos (bienestar emocional, relaciones, trabajo/estudio, proyectos). Lo laboral es una consecuencia natural de ese crecimiento integral. El desarrollo emocional es la base.
+
+Marco temporal: Todo lo que escribas debe estar orientado a una Misión de 3 meses (90 días). Evita hablar de horizontes de 12 meses o más. Los cambios emocionales son pequeños pero reales y acumulativos.
+
+Tono y lenguaje: Cercano, profesional, empático. Habla en segunda persona ("tú"). Evita jerga clínica, diagnósticos patologizantes y lenguaje duro. Sé respetuoso y validante. Usa ejemplos concretos y situaciones reales que resuenen con la edad y etapa de vida de la persona.
+
+Enfoque integral: Integra siempre vida personal, relaciones y trabajo/estudio/proyectos al hablar de patrones emocionales. No aísles lo emocional de lo laboral; muestra cómo están conectados.
+
+Contextualización: Aterriza todos los ejemplos en situaciones concretas según edad, etapa_de_vida y contexto del usuario. Sé específico, no genérico.
+
+Antídotos y acción: Cuando hables de riesgos emocionales, incluye siempre micro-hábitos emocionales concretos (antídotos inmediatos) que la persona pueda practicar en el momento. Estos deben ser simples, rápidos (menos de 5 minutos) y aplicables en cualquier contexto.
+
+Calidad y profundidad: Cada sección debe ser profunda pero accesible. Personaliza completamente el informe con los datos del usuario. No uses templates genéricos; adapta cada párrafo al perfil IE, edad y etapa de vida específica.
+
+========================================
+
+USER TEMPLATE
+========================================
+
+Genera un Informe Inteligencia Emocional Despega completo y personalizado basado en los siguientes datos del usuario:
+
+DATOS DEL USUARIO
+- Nombre: {{nombre}}
+- Edad: {{edad}}
+- País: {{pais}}
+- Etapa de vida: {{etapa_de_vida}}
+- Perfil IE: {{perfil_ie}}
+- Dimensiones de IE (puntajes): {{dimensiones_ie_json}}
+- Metas activas (si existen): {{metas_resumen}}
+
+---
+
+ESTRUCTURA DEL INFORME
+
+### 1. Cómo leer este informe
+
+Explica brevemente:
+- El mantra DTC: desarrollo personal integral como base, lo laboral como consecuencia natural.
+- Qué es inteligencia emocional en lenguaje simple: capacidad de reconocer, entender y gestionar tus emociones y las de otros en la vida cotidiana.
+- Que este informe está orientado a una Misión de 3 meses (90 días) con cambios pequeños pero reales en la gestión emocional.
+- Cómo usar este informe: leer todo primero, luego volver regularmente al One-Pager, al Plan de Acción, a la Semana Despegue y al Checklist 30/60/90 días.
+
+---
+
+### 2. Resumen Ejecutivo Integral IE DTC
+
+#### 2.0 One-Pager emocional
+
+Incluye en 1 página clara y visual:
+- **Cómo eres a nivel emocional**: Tu estilo emocional principal basado en {{perfil_ie}} y {{dimensiones_ie_json}}. Describe cómo experimentas, procesas y expresas emociones.
+- **Tus 3 principales fortalezas emocionales**: Qué haces bien emocionalmente.
+- **Tus 3 principales riesgos emocionales**: Qué pasa cuando estás sobrecargado/a o bajo presión.
+- **Impacto emocional en tu vida** (1–2 líneas cada uno):
+  - En tu vida personal (autocuidado, bienestar, autoestima).
+  - En tus relaciones (familia, pareja, amigos, colegas).
+  - En tu trabajo/estudio (rendimiento, relaciones laborales, manejo de presión).
+- **2–3 focos de desarrollo emocional clave para los próximos 90 días**: Qué cambios emocionales harán la mayor diferencia.
+- **Tu Misión emocional DTC de 3 meses en 1 frase**: Una declaración clara y motivadora.
+- **3 micro-acciones emocionales para la Semana Despegue emocional**: Acciones concretas para empezar esta semana.
+
+---
+
+### 3. Mini glosario Inteligencia Emocional Despega
+
+Explica cada dimensión medida en {{dimensiones_ie_json}} (ej: autoconciencia, autorregulación, empatía, habilidades sociales, motivación, etc.) en lenguaje simple.
+- Máximo 2–3 líneas por dimensión.
+- Sin jerga psicológica compleja.
+- Usa ejemplos cotidianos para ilustrar cada dimensión.
+
+---
+
+### 4. Tu Perfil Emocional en profundidad
+
+Describe en detalle:
+- Cómo {{nombre}} suele vivir y sentir sus emociones (intensidad, rapidez, duración).
+- Cómo tiende a reaccionar ante estrés, conflicto, frustración y logro.
+- Cómo se expresa emocionalmente (más hacia adentro o hacia afuera).
+- Diferencias entre cómo se siente por dentro y cómo se ve desde afuera.
+- Conecta con ejemplos de situaciones típicas para su {{etapa_de_vida}} (familia, pareja, amigos, estudio, trabajo).
+
+---
+
+### 5. Fortalezas emocionales clave
+
+Identifica 3–4 fortalezas emocionales principales.
+
+Para cada una, da ejemplos concretos de cómo ayuda en:
+- **Vida personal**: autocuidado, bienestar, autoestima.
+- **Relaciones**: empatía, escucha, contención, honestidad.
+- **Trabajo/estudio/proyectos**: manejo de presión, resiliencia, liderazgo emocional.
+
+---
+
+### 6. Riesgos y puntos ciegos emocionales
+
+#### 6.1 Riesgos principales
+
+Describe 3–4 riesgos emocionales sin etiquetar a {{nombre}} como "malo" o "defectuoso".
+
+Ejemplos: desbordes, bloqueo emocional, evitación de conflicto, dificultad para poner límites, autocrítica excesiva, desconexión emocional, etc.
+
+#### 6.2 Ejemplos en la vida real
+
+Conecta cada riesgo con situaciones típicas que pueden aparecer en los próximos 3 meses (con pareja, familia, amigos, jefes, clientes, estudios).
+
+Explica qué suele pasar cuando estos riesgos se activan.
+
+#### 6.3 Primeros pasos para transformar estos riesgos
+
+Da 2–3 acciones iniciales muy concretas para empezar a trabajar cada riesgo.
+
+#### 6.4 Antídotos emocionales inmediatos por riesgo
+
+Para cada riesgo descrito, añade 1 "antídoto emocional inmediato" en forma de micro-hábito muy específico que {{nombre}} pueda aplicar en el momento.
+
+Ejemplos:
+- Técnicas de respiración breves (4-7-8, box breathing).
+- Poner nombre a la emoción en voz alta o por escrito.
+- Pedir una pausa de 5 minutos antes de responder.
+- Escribir 3 líneas sobre lo que siente antes de actuar.
+- Contactar a una persona de confianza.
+
+---
+
+### 7. Relación con uno mismo (autoconciencia y diálogo interno)
+
+Describe:
+- Cómo {{nombre}} se habla a sí mismo/a: crítico, compasivo, indiferente, cambiante.
+- Qué tan fácil le es reconocer lo que siente y ponerle nombre.
+- Oportunidades concretas de mejorar el diálogo interno en los próximos 90 días.
+- Proporciona 1–2 ejemplos de cómo podría cambiar su diálogo interno en situaciones típicas.
+
+---
+
+### 8. Relaciones y vínculos (empatía y habilidades sociales)
+
+Describe:
+- Cómo tiende a conectar con las emociones de otros.
+- Cómo maneja conversaciones difíciles (pedir ayuda, poner límites, dar feedback emocionalmente honesto).
+- Fortalezas en contextos relacionales.
+- Riesgos específicos en relaciones cercanas.
+- Ajustes concretos que podría hacer durante la Misión de 3 meses.
+
+---
+
+### 9. Gestión emocional en el trabajo/estudio
+
+Explica:
+- Cómo se manifiestan sus patrones emocionales en contextos de trabajo, estudio o proyectos (ej: ansiedad antes de entregar, bloqueo, hipercontrol, evitar pedir ayuda).
+- Fortalezas en contextos de presión.
+- Riesgos específicos en contextos laborales/académicos.
+- Conecta con {{metas_resumen}} si existen metas académicas/laborales relevantes.
+
+---
+
+### 10. Oportunidades de desarrollo emocional
+
+Identifica 3–5 focos de desarrollo emocional clave alineados al perfil.
+
+Ejemplos: bajar autocrítica, aprender a poner límites, manejar frustración, expresar necesidades de forma directa, aumentar autocuidado.
+
+Explica por qué cada foco es importante para {{nombre}} específicamente, conectándolo con su {{etapa_de_vida}} y, si aplica, con {{metas_resumen}}.
+
+---
+
+### 11. Plan de Acción Emocional 90 días DTC (Misión 3 meses)
+
+Define 2–3 objetivos emocionales de trabajo para 90 días basados en el perfil.
+
+Para cada objetivo:
+
+**Objetivo [Número]: [Nombre del objetivo emocional]**
+
+- **Meta clara para 90 días**: qué quiere cambiar o fortalecer a nivel emocional.
+- **Ejemplo típico de la vida real**: situación concreta donde se juega ese objetivo.
+- **Indicadores de avance**: 3–4 señales específicas de mejora emocional.
+- **3 hábitos concretos**:
+  1. Hábito 1 (acción pequeña y repetible en el día a día).
+  2. Hábito 2.
+  3. Hábito 3.
+- **Recursos DTC sugeridos (categorías)**: tipos de recursos que ayudarían (ej: "libro sobre autocompasión", "cápsula de regulación emocional", "ejercicio de journaling de emociones", "simulación de conversación difícil"). No menciones títulos concretos.
+
+#### 11.1 Mini Tablero de Control Emocional 90 días
+
+Construye un mini "tablero emocional" en formato tabla o lista que resuma:
+- Los 2–3 objetivos emocionales de 90 días.
+- 2–3 hábitos clave asociados a cada objetivo.
+- Una frecuencia sugerida para cada hábito (diario, 3 veces por semana, semanal, etc.).
+
+El tablero debe permitir que {{nombre}} vea en segundos qué está jugando emocionalmente en estos 90 días.
+
+---
+
+### 12. Misión emocional DTC de 3 meses (90 días) – Visión general
+
+Define 1–3 focos centrales para los próximos 3 meses en:
+- Bienestar emocional y autocuidado.
+- Relaciones clave y calidad de los vínculos.
+- Manejo emocional en trabajo/estudio/proyectos.
+
+Explica cómo el Plan de Acción de 90 días es la forma concreta de ejecutar esta misión.
+
+Mantén el horizonte en 90 días, no hables de 12 meses.
+
+---
+
+### 13. Biblioteca DTC recomendada (esquema emocional)
+
+Presenta una tabla o lista con columnas tipo:
+
+**Área emocional de desarrollo → Tipo de recurso sugerido → Mini-desafío de aplicación**
+
+No menciones nombres específicos de libros; sólo categorías (ej: "libro sobre autocompasión", "cápsula de manejo de ansiedad", "ejercicio de journaling sobre emociones difíciles").
+
+Alinea las recomendaciones con los objetivos del Plan de Acción.
+
+Ejemplo de estructura:
+
+| Área de desarrollo | Tipo de recurso | Mini-desafío (7 días) |
+|-------------------|-----------------|----------------------|
+| Autocompasión | Libro o cápsula sobre tratarse con amabilidad | Durante 7 días, cada noche escribe 1 cosa que hiciste bien emocionalmente hoy |
+| Regulación emocional | Ejercicio de respiración guiada | Practica 3 minutos de respiración consciente al despertar y antes de dormir |
+
+---
+
+### 14. Conexión con otros módulos DTC
+
+Sugiere:
+- **Qué otros tests le conviene hacer después** (Despega Cerebral, Mapa de Personalidad, Brújula Vocacional, 5 Dimensiones, Competencias) y por qué.
+- **Cómo usar el simulador** (entrevistas y conversaciones difíciles) para practicar habilidades emocionales: poner límites, hablar de errores, pedir ayuda, dar feedback.
+- **Cómo el módulo de noticias y contenidos** puede apoyar sus focos emocionales (temas de bienestar, salud mental, relaciones, liderazgo, etc.).
+- **Posibles misiones DTC futuras** relacionadas a IE (ej: "Misión autocuidado profundo", "Misión límites sanos", "Misión comunicación emocional honesta").
+
+---
+
+### 15. Tus siguientes 7 días (Semana Despegue emocional)
+
+Proporciona 3–5 acciones muy concretas para empezar esta semana, incluyendo:
+- Al menos 1 acción relacionada con el primer objetivo emocional del plan.
+- Al menos 1 acción de autocuidado básico (sueño, alimentación, descanso, movimiento).
+- Al menos 1 acción relacionada con pedir apoyo o poner un límite.
+
+Deben ser acciones reales que se puedan hacer en 7 días, no teoría.
+
+Proporciona pasos específicos y una estimación aproximada de tiempo para cada acción.
+
+---
+
+### 16. Para tu Coach DTC (humano o IA)
+
+Bloque dirigido al coach que leerá este informe con {{nombre}}.
+
+Incluye:
+- **Qué priorizar** en los próximos 90 días a nivel emocional.
+- **Qué evitar**: ej: invalidar emociones, minimizar malestar, dar consejos simplistas, usar lenguaje clínico duro.
+- **Cómo aterrizar todo** en la vida real de {{nombre}} con ejemplos concretos de su contexto.
+- **Señales de alerta emocional** a monitorear (ej: aislamiento prolongado, desbordes frecuentes, bloqueo total).
+- **Señales de progreso positivo** (ej: reconocer emociones antes de actuar, pedir ayuda cuando lo necesita, poner límites sin culpa).
+
+---
+
+### 17. Checklist Emocional 30/60/90 días
+
+Cierra el informe con una mini sección de seguimiento, con preguntas para que {{nombre}} se revise a los 30, 60 y 90 días:
+
+**A los 30 días (inicio de la Misión):**
+- ¿Estoy aplicando de manera consistente al menos 1 hábito por objetivo emocional?
+- ¿Qué pequeño cambio noto en mi forma de sentir, reaccionar o hablar de mis emociones?
+- ¿Qué ajuste necesito hacer al plan para que sea más realista?
+
+**A los 60 días (mitad de la Misión):**
+- ¿En qué objetivo emocional he avanzado más y por qué?
+- ¿Qué situación emocional manejé mejor que antes?
+- ¿Qué conversación o decisión pendiente necesito enfrentar antes de que termine la Misión?
+
+**A los 90 días (cierre de la Misión):**
+- ¿Qué cambió concretamente en mi vida emocional, mis relaciones y mi trabajo/estudio?
+- ¿Qué hábitos emocionales quiero mantener para los próximos 3 meses?
+- Si hiciera otra Misión DTC, ¿qué foco emocional elegiría ahora y por qué?
+
+========================================
+
+NOTAS PARA EL EQUIPO DTC
+========================================
+
+**Recomendaciones sobre el uso de este prompt maestro V2:**
+
+1. **Datos estructurados requeridos**: Este prompt está diseñado para recibir datos con los placeholders: {{nombre}}, {{edad}}, {{pais}}, {{etapa_de_vida}}, {{perfil_ie}}, {{dimensiones_ie_json}}, {{metas_resumen}}. Asegúrate de que estos datos vengan bien formateados.
+
+2. **Campos opcionales**: {{metas_resumen}} es opcional. Si no existe, el modelo debe seguir generando un informe coherente, simplemente sin conectar explícitamente con metas académicas/laborales.
+
+3. **Validación de {{dimensiones_ie_json}}**: Es crítico que venga bien formateado (nombre de dimensión, puntaje, nivel, interpretación base si existe). Si hay errores en el formato, el modelo puede malinterpretar las dimensiones. Valida esto antes de pasar al modelo.
+
+4. **Longitud esperada del informe**: Este prompt genera informes de 4.000–7.000 palabras aproximadamente, dependiendo de la profundidad de personalización y el número de objetivos emocionales.
+
+5. **Variante ejecutiva futura**: Si se necesita una versión más breve (1.500–2.000 palabras), se puede diseñar una variante "ejecutiva" centrada en: One-Pager + Mini glosario + Perfil resumido + Riesgos/antídotos + Plan 90 días + Semana Despegue + Checklist 30/60/90 días.
+
+6. **Feedback y mejora continua**: Después de generar 10–20 informes reales con usuarios y coaches, recopila feedback sobre: longitud, claridad, utilidad de los antídotos emocionales, relevancia de los ejemplos, peso relativo de cada sección. Esto informará una posible V3.
+
+7. **Mejoras en V2 vs. V1**: Esta versión añade explícitamente:
+   - Uso fuerte de {{etapa_de_vida}} y {{metas_resumen}} para mayor personalización.
+   - Sección 6.4 de "Antídotos emocionales inmediatos por riesgo".
+   - Sección 11.1 "Mini Tablero de Control Emocional 90 días".
+   - Sección 17 "Checklist Emocional 30/60/90 días" para seguimiento estructurado.
+   - Mayor énfasis en ejemplos concretos y situaciones reales según edad y contexto.
+
+8. **Integración con otros módulos DTC**: Este informe debe conectarse naturalmente con: Biblioteca de recursos emocionales, simulador de conversaciones difíciles, módulo de noticias/contenidos, sistema de metas y hábitos, y coach IA.
+
+9. **Tono no clínico**: Es fundamental mantener un tono empático y validante, sin usar diagnósticos clínicos ni lenguaje patologizante. Esto es coaching de desarrollo, no terapia clínica.
+
+10. **Personalización por etapa de vida**: Los ejemplos, situaciones y prioridades deben adaptarse completamente según la etapa de vida: estudiante universitario, primer trabajo, cambio de carrera, crianza, emprendimiento, etc.
