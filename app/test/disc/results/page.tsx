@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useSession } from "@/components/session-wrapper" // Corrected import path
+import { useSession } from "@/components/session-provider" // Corrected import path
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   ArrowLeft,
   Brain,
@@ -28,10 +29,14 @@ import {
   Home,
   BookOpen,
   TrendingUp,
+  BarChart3,
+  Rocket,
+  AlertCircle,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { DISCContextForm, type UserContext } from "@/components/disc-context-form"
 
 interface DISCResult {
   d_score: number
@@ -56,6 +61,11 @@ export default function DISCResultsPage() {
   const [activeTab, setActiveTab] = useState("overview")
   const [reflections, setReflections] = useState<Record<string, string>>({})
   const [completedActions, setCompletedActions] = useState<Record<string, boolean>>({})
+
+  const [showContextForm, setShowContextForm] = useState(false)
+  const [userContext, setUserContext] = useState<UserContext | null>(null)
+  const [attemptNumber, setAttemptNumber] = useState(1)
+  const [previousAttempts, setPreviousAttempts] = useState<any[]>([])
 
   useEffect(() => {
     if (!user && !isDemoMode) {
@@ -90,6 +100,16 @@ export default function DISCResultsPage() {
       if (result.success && result.data) {
         const scores = result.data.results
 
+        const attempt = result.data.attempt_number || 1
+        const context = result.data.user_context || null
+
+        setAttemptNumber(attempt)
+        setUserContext(context)
+
+        if (attempt === 1 && !context) {
+          setShowContextForm(true)
+        }
+
         setDiscResult({
           d_score: scores.D || 0,
           i_score: scores.I || 0,
@@ -100,6 +120,8 @@ export default function DISCResultsPage() {
           recommendations: scores.recommendations || "Continúa desarrollando tus fortalezas",
           created_at: result.data.completed_at || new Date().toISOString(),
         })
+
+        await loadPreviousAttempts(user.email!)
       } else {
         toast({
           title: "No hay resultados",
@@ -117,6 +139,46 @@ export default function DISCResultsPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const loadPreviousAttempts = async (email: string) => {
+    try {
+      // This would query all previous DISC attempts for comparison
+      // For now, we'll just set an empty array
+      setPreviousAttempts([])
+    } catch (error) {
+      console.error("Error loading previous attempts:", error)
+    }
+  }
+
+  const handleContextSubmit = async (context: UserContext) => {
+    if (!user) return
+
+    setUserContext(context)
+    setShowContextForm(false)
+
+    // Save context to database
+    try {
+      await UnifiedTestSystem.updateTestContext(user.email!, "DISC Assessment", context)
+      toast({
+        title: "Contexto guardado",
+        description: "Tu informe ahora está personalizado según tu contexto",
+      })
+    } catch (error) {
+      console.error("Error saving context:", error)
+    }
+  }
+
+  if (showContextForm && !loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <DISCContextForm
+          onSubmit={handleContextSubmit}
+          onSkip={() => setShowContextForm(false)}
+          attemptNumber={attemptNumber}
+        />
+      </div>
+    )
   }
 
   if (loading) {
@@ -193,6 +255,20 @@ export default function DISCResultsPage() {
   }
 
   const styleInfo = getStyleDescription(discResult.primary_type)
+
+  const getContentTag = (priority: "now" | "next" | "later") => {
+    const tags = {
+      now: { label: "FOCO ACTUAL", color: "bg-red-100 text-red-800 border-red-300" },
+      next: { label: "PRÓXIMA MISIÓN", color: "bg-amber-100 text-amber-800 border-amber-300" },
+      later: { label: "PARA CUANDO QUIERAS", color: "bg-blue-100 text-blue-800 border-blue-300" },
+    }
+    const tag = tags[priority]
+    return (
+      <Badge variant="outline" className={`${tag.color} border font-semibold`}>
+        {tag.label}
+      </Badge>
+    )
+  }
 
   const developmentOpportunities = [
     {
@@ -379,11 +455,25 @@ export default function DISCResultsPage() {
     const monthActions = Object.keys(completedActions).filter((key) => key.startsWith(monthKey))
     if (monthActions.length === 0) return 0
     const completed = monthActions.filter((key) => completedActions[key]).length
-    return Math.round((completed / 6) * 100) // 6 actions per month approx
+    // Assuming 6 key actions/kpis per month for calculation
+    // Adjust this number based on the actual number of actionable items per month in plan90Days
+    let totalActions = 0
+    if (monthKey === "m1")
+      totalActions =
+        plan90Days.month1.weeks.reduce((sum, week) => sum + week.actions.length, 0) + plan90Days.month1.kpis.length
+    if (monthKey === "m2")
+      totalActions =
+        plan90Days.month2.weeks.reduce((sum, week) => sum + week.actions.length, 0) + plan90Days.month2.kpis.length
+    if (monthKey === "m3")
+      totalActions =
+        plan90Days.month3.weeks.reduce((sum, week) => sum + week.actions.length, 0) + plan90Days.month3.kpis.length
+
+    if (totalActions === 0) return 0
+    return Math.round((completed / totalActions) * 100)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
       <main className="container mx-auto max-w-6xl">
         <div className="flex items-center justify-between mb-6">
           <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")}>
@@ -407,6 +497,14 @@ export default function DISCResultsPage() {
           </div>
         </div>
 
+        {attemptNumber > 1 && (
+          <div className="mb-4 text-center">
+            <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">
+              Intento #{attemptNumber} - Ver Evolución
+            </Badge>
+          </div>
+        )}
+
         <Card className="mb-6">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
@@ -426,6 +524,7 @@ export default function DISCResultsPage() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          {/* TabsList was updated to include new tabs */}
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-1">
             <TabsTrigger value="overview" className="text-xs">
               Resumen
@@ -450,6 +549,37 @@ export default function DISCResultsPage() {
             </TabsTrigger>
             <TabsTrigger value="coach" className="text-xs">
               Coach IA
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Updated TabsList for V2 sections */}
+          <TabsList className="grid w-full grid-cols-9">
+            <TabsTrigger value="overview" className="text-xs">
+              Resumen
+            </TabsTrigger>
+            <TabsTrigger value="details" className="text-xs">
+              Dimensiones
+            </TabsTrigger>
+            <TabsTrigger value="development" className="text-xs">
+              Oportunidades
+            </TabsTrigger>
+            <TabsTrigger value="mini-tablero" className="text-xs">
+              Mini Tablero
+            </TabsTrigger>
+            <TabsTrigger value="mision-3-meses" className="text-xs">
+              Misión 3 Meses
+            </TabsTrigger>
+            <TabsTrigger value="plan90" className="text-xs">
+              Plan 90 Días
+            </TabsTrigger>
+            <TabsTrigger value="semana-despegue" className="text-xs">
+              Semana Despegue
+            </TabsTrigger>
+            <TabsTrigger value="biblioteca" className="text-xs">
+              Biblioteca DTC
+            </TabsTrigger>
+            <TabsTrigger value="checklist" className="text-xs">
+              Checklist 30/60/90
             </TabsTrigger>
           </TabsList>
 
@@ -939,6 +1069,353 @@ export default function DISCResultsPage() {
             </Card>
           </TabsContent>
 
+          {/* New: Mini Tablero de Control section */}
+          <TabsContent value="mini-tablero" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-blue-600" />
+                  Mini Tablero de Control 90 Días
+                </CardTitle>
+                <CardDescription>Tu progreso de un vistazo - Actualizado en tiempo real</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Card className="bg-blue-50">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-medium text-blue-900">Mes 1: Autoconocimiento</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-bold text-blue-700">{calculateMonthProgress("m1")}%</span>
+                          <Badge variant={calculateMonthProgress("m1") >= 75 ? "default" : "secondary"}>
+                            {calculateMonthProgress("m1") >= 75 ? "En curso" : "Pendiente"}
+                          </Badge>
+                        </div>
+                        <Progress value={calculateMonthProgress("m1")} className="h-2 bg-blue-100" />
+                        <p className="text-xs text-blue-700 mt-2">Objetivo: Entender tu perfil DISC</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-green-50">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-medium text-green-900">Mes 2: Experimentación</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-bold text-green-700">{calculateMonthProgress("m2")}%</span>
+                          <Badge variant={calculateMonthProgress("m2") >= 75 ? "default" : "secondary"}>
+                            {calculateMonthProgress("m2") >= 75 ? "En curso" : "Próximo"}
+                          </Badge>
+                        </div>
+                        <Progress value={calculateMonthProgress("m2")} className="h-2 bg-green-100" />
+                        <p className="text-xs text-green-700 mt-2">Objetivo: Practicar nuevos comportamientos</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-purple-50">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-medium text-purple-900">Mes 3: Consolidación</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-bold text-purple-700">{calculateMonthProgress("m3")}%</span>
+                          <Badge variant={calculateMonthProgress("m3") >= 75 ? "default" : "secondary"}>
+                            {calculateMonthProgress("m3") >= 75 ? "En curso" : "Próximo"}
+                          </Badge>
+                        </div>
+                        <Progress value={calculateMonthProgress("m3")} className="h-2 bg-purple-100" />
+                        <p className="text-xs text-purple-700 mt-2">Objetivo: Crear hábitos sostenibles</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Resumen de Progreso Global</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Progreso Total del Plan 90 Días</span>
+                      <span className="text-lg font-bold">
+                        {Math.round(
+                          (calculateMonthProgress("m1") + calculateMonthProgress("m2") + calculateMonthProgress("m3")) /
+                            3,
+                        )}
+                        %
+                      </span>
+                    </div>
+                    <Progress
+                      value={Math.round(
+                        (calculateMonthProgress("m1") + calculateMonthProgress("m2") + calculateMonthProgress("m3")) /
+                          3,
+                      )}
+                      className="h-3"
+                    />
+                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Tests Completados</p>
+                        <p className="text-xl font-semibold">1/6</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Metas Creadas</p>
+                        <p className="text-xl font-semibold">0/3</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* New: Misión 3 Meses section */}
+          <TabsContent value="mision-3-meses" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-purple-600" />
+                  Tu Misión DTC de 3 Meses
+                </CardTitle>
+                <CardDescription>El marco integrador que guiará tu desarrollo personal y profesional</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-2 border-purple-200">
+                  <h3 className="text-xl font-bold text-purple-900 mb-3">
+                    Desarrollar mi versatilidad conductual consciente
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    En los próximos 3 meses, voy a profundizar en mi autoconocimiento DISC para entender cómo mi perfil{" "}
+                    <strong>{discResult.primary_type}</strong> me ayuda y me limita en mi vida personal y profesional.
+                    Voy a experimentar conscientemente con comportamientos fuera de mi zona de confort, especialmente en
+                    situaciones que requieren{" "}
+                    {discResult.primary_type === "D"
+                      ? "más paciencia y escucha"
+                      : discResult.primary_type === "I"
+                        ? "más estructura y seguimiento"
+                        : discResult.primary_type === "S"
+                          ? "más iniciativa y adaptabilidad"
+                          : "más flexibilidad y conexión emocional"}
+                    . Al final, habré creado un sistema personal de desarrollo continuo que me permita elegir
+                    conscientemente cómo quiero comportarme según el contexto.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader>
+                      <CardTitle className="text-sm text-blue-900">Por qué esta misión</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-700">
+                        Porque mi perfil {discResult.primary_type} es una fortaleza en muchas situaciones, pero puede
+                        volverse un patrón automático que me limita. Quiero tener más opciones de respuesta y elegir
+                        conscientemente.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-green-50 border-green-200">
+                    <CardHeader>
+                      <CardTitle className="text-sm text-green-900">Cómo sabré que lo logré</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="text-sm text-gray-700 space-y-1">
+                        <li>✓ Habré completado 3+ tests DTC</li>
+                        <li>✓ Tendré 10+ experimentos documentados</li>
+                        <li>✓ Habré recibido feedback positivo sobre mi versatilidad</li>
+                        <li>✓ Tendré un sistema personal de desarrollo activo</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-purple-50 border-purple-200">
+                    <CardHeader>
+                      <CardTitle className="text-sm text-purple-900">Qué gano con esto</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-700">
+                        Más libertad para ser quien necesito ser en cada momento. Mejores relaciones porque entiendo
+                        mejor a los demás. Más efectividad porque puedo adaptar mi estilo al contexto.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Conexión con tu vida real</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <h4 className="font-medium text-sm mb-1">En tu vida personal:</h4>
+                      <p className="text-sm text-gray-700">
+                        {discResult.primary_type === "D" &&
+                          "Aprenderás a ser más paciente y presente con tu familia y pareja, sin perder tu determinación."}
+                        {discResult.primary_type === "I" &&
+                          "Aprenderás a dar seguimiento a compromisos personales importantes, sin perder tu calidez."}
+                        {discResult.primary_type === "S" &&
+                          "Aprenderás a poner límites y tomar más iniciativas, sin perder tu empatía."}
+                        {discResult.primary_type === "C" &&
+                          "Aprenderás a ser más flexible y espontáneo en tus relaciones, sin perder tu profundidad."}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm mb-1">En tu trabajo/estudio:</h4>
+                      <p className="text-sm text-gray-700">
+                        {discResult.primary_type === "D" &&
+                          "Aprenderás a delegar más y confiar en el proceso, siendo más efectivo como líder."}
+                        {discResult.primary_type === "I" &&
+                          "Aprenderás a estructurar mejor tus proyectos y dar seguimiento, siendo más confiable."}
+                        {discResult.primary_type === "S" &&
+                          "Aprenderás a manejar mejor el cambio y tomar decisiones más rápido cuando es necesario."}
+                        {discResult.primary_type === "C" &&
+                          "Aprenderás a comunicar tus ideas con más calidez y conectar mejor con tu equipo."}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* New: Semana Despegue section */}
+          <TabsContent value="semana-despegue" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Rocket className="h-5 w-5 text-orange-600" />
+                  Semana Despegue: Tus Primeros 7 Días
+                </CardTitle>
+                <CardDescription>
+                  Acciones concretas para empezar HOY (no esperes al lunes, ni al próximo mes)
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Alert className="bg-orange-50 border-orange-200">
+                  <AlertCircle className="h-4 w-4 text-orange-600" />
+                  <AlertTitle className="text-orange-900">Regla de Oro</AlertTitle>
+                  <AlertDescription className="text-orange-800">
+                    Esta semana es de observación sin juicio. No intentes cambiar nada todavía, solo nota y registra.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="space-y-3">
+                  {[
+                    {
+                      day: "Día 1 (HOY)",
+                      title: "Lectura y aceptación",
+                      time: "15 min",
+                      actions: [
+                        "Lee completo tu informe DISC (sí, todo)",
+                        "Marca con ⭐ las 5 frases que más te resonaron",
+                        "Comparte 1 insight con alguien cercano",
+                      ],
+                    },
+                    {
+                      day: "Día 2",
+                      title: "Primera observación",
+                      time: "20 min",
+                      actions: [
+                        "Elige UNA situación típica de tu día (reunión, comida familiar, clase)",
+                        "Observa cómo tu perfil DISC se manifiesta",
+                        "Escribe 3 frases: qué hiciste, cómo te sentiste, qué resultado obtuviste",
+                      ],
+                    },
+                    {
+                      day: "Día 3",
+                      title: "Feedback externo",
+                      time: "30 min",
+                      actions: [
+                        "Pide a 1 persona cercana: '¿Cómo describirías mi forma de comunicarme/trabajar/relacionarme?'",
+                        "NO le digas todavía tus resultados DISC",
+                        "Compara lo que te dice con tu informe",
+                      ],
+                    },
+                    {
+                      day: "Día 4",
+                      title: "Identificar patrón automático",
+                      time: "15 min",
+                      actions: [
+                        "Revisa tu sección 'Riesgos y Sombras' del informe",
+                        "Elige el riesgo que MÁS te resuena",
+                        "Escribe 2 ejemplos recientes donde ese riesgo apareció",
+                      ],
+                    },
+                    {
+                      day: "Día 5",
+                      title: "Mini experimento",
+                      time: "Variable",
+                      actions: [
+                        "Elige UNA acción pequeña de la sección 'Oportunidades de Crecimiento'",
+                        "Pruébala HOY en una situación de bajo riesgo",
+                        "Documenta: qué hiciste diferente, cómo te sentiste, qué pasó",
+                      ],
+                    },
+                    {
+                      day: "Día 6",
+                      title: "Reflexión semanal",
+                      time: "20 min",
+                      actions: [
+                        "Revisa tus notas de los días 1-5",
+                        "¿Qué aprendiste sobre ti que no sabías?",
+                        "¿Qué quieres explorar más en las próximas semanas?",
+                      ],
+                    },
+                    {
+                      day: "Día 7",
+                      title: "Próximos pasos",
+                      time: "25 min",
+                      actions: [
+                        "Completa el test de Inteligencia Emocional (complementa tu DISC)",
+                        "Crea tu primera meta en la plataforma basada en lo que descubriste",
+                        "Agenda 10 min cada semana para seguir observándote",
+                      ],
+                    },
+                  ].map((day, idx) => (
+                    <Card key={idx} className="border-l-4 border-l-orange-400">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="text-sm font-semibold text-orange-900">{day.day}</CardTitle>
+                            <CardDescription className="text-xs">{day.title}</CardDescription>
+                          </div>
+                          <Badge variant="outline" className="text-orange-700 border-orange-300">
+                            {day.time}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-1">
+                          {day.actions.map((action, aIdx) => (
+                            <li key={aIdx} className="text-sm text-gray-700 flex items-start gap-2">
+                              <span className="text-orange-500 font-bold">•</span>
+                              <span>{action}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                <Alert className="bg-green-50 border-green-200">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <AlertTitle className="text-green-900">Al final de esta semana</AlertTitle>
+                  <AlertDescription className="text-green-800">
+                    Tendrás: observaciones concretas de tu comportamiento, feedback externo, un mini experimento
+                    completado, y tu segundo test DTC hecho. Estarás 10x más consciente de tu estilo DISC.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="biblioteca" className="space-y-6">
             <Card>
               <CardHeader>
@@ -958,16 +1435,16 @@ export default function DISCResultsPage() {
                         <th className="text-left p-3 font-semibold">Área de Desarrollo</th>
                         <th className="text-left p-3 font-semibold">Libro/Recurso DTC</th>
                         <th className="text-left p-3 font-semibold">Por qué es clave para ti</th>
-                        <th className="text-left p-3 font-semibold">Mini-Desafío</th>
+                        <th className="text-left p-3 font-semibold">Mini-Desafío (7 días)</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {discResult.d_score > 70 && (
+                      {discResult.d_score >= 50 && (
                         <>
                           <tr className="border-b hover:bg-gray-50">
                             <td className="p-3">
                               <Badge variant="outline" className="bg-red-50">
-                                Intensidad en discusiones
+                                {discResult.d_score > 70 ? "Intensidad en discusiones" : "Asertividad equilibrada"}
                               </Badge>
                             </td>
                             <td className="p-3">
@@ -975,8 +1452,9 @@ export default function DISCResultsPage() {
                               <div className="text-sm text-gray-500">Marshall Rosenberg</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu D alta te hace ir rápido y fuerte; este libro te ayudará a bajar la intensidad sin
-                              perder claridad.
+                              {discResult.d_score > 70
+                                ? "Tu D alta te hace ir rápido y fuerte; este libro te ayudará a bajar la intensidad sin perder claridad."
+                                : "Te ayudará a mantener tu orientación a resultados mientras mejoras tu comunicación empática."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
@@ -995,8 +1473,9 @@ export default function DISCResultsPage() {
                               <div className="text-sm text-gray-500">Erich Fromm</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu urgencia por actuar puede hacer que no escuches completamente. Este libro te enseñará a
-                              frenar.
+                              {discResult.d_score > 70
+                                ? "Tu urgencia por actuar puede hacer que no escuches completamente. Este libro te enseñará a frenar."
+                                : "Fortalecerá tu capacidad de entender profundamente antes de actuar."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
@@ -1007,180 +1486,193 @@ export default function DISCResultsPage() {
                         </>
                       )}
 
-                      {discResult.c_score > 70 && (
-                        <>
-                          <tr className="border-b hover:bg-gray-50">
-                            <td className="p-3">
-                              <Badge variant="outline" className="bg-blue-50">
-                                Perfeccionismo
-                              </Badge>
-                            </td>
-                            <td className="p-3">
-                              <div className="font-medium">El Principio 80/20</div>
-                              <div className="text-sm text-gray-500">Richard Koch</div>
-                            </td>
-                            <td className="p-3 text-sm">
-                              Tu C alta puede llevarte a revisar todo mil veces; necesitas aprender a decidir "hasta
-                              aquí está bien".
-                            </td>
-                            <td className="p-3 text-sm">
-                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Cerrar 1 proyecto en versión 1.0 en una semana
-                              </Button>
-                            </td>
-                          </tr>
-                          <tr className="border-b hover:bg-gray-50">
-                            <td className="p-3">
-                              <Badge variant="outline" className="bg-purple-50">
-                                Vulnerabilidad
-                              </Badge>
-                            </td>
-                            <td className="p-3">
-                              <div className="font-medium">El Poder de la Vulnerabilidad</div>
-                              <div className="text-sm text-gray-500">Brené Brown</div>
-                            </td>
-                            <td className="p-3 text-sm">
-                              Tu énfasis en la lógica puede hacerte ignorar tus emociones. Este libro te ayudará a
-                              conectar con ellas.
-                            </td>
-                            <td className="p-3 text-sm">
-                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Compartir 1 emoción personal diaria esta semana
-                              </Button>
-                            </td>
-                          </tr>
-                        </>
-                      )}
-
-                      {discResult.i_score > 70 && (
+                      {discResult.i_score >= 50 && (
                         <>
                           <tr className="border-b hover:bg-gray-50">
                             <td className="p-3">
                               <Badge variant="outline" className="bg-yellow-50">
-                                Seguimiento y ejecución
+                                {discResult.i_score > 70 ? "Seguimiento y profundidad" : "Conexión significativa"}
                               </Badge>
                             </td>
                             <td className="p-3">
-                              <div className="font-medium">Hábitos Atómicos</div>
-                              <div className="text-sm text-gray-500">James Clear</div>
+                              <div className="font-medium">Esencialismo</div>
+                              <div className="text-sm text-gray-500">Greg McKeown</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu I alta te da muchas ideas pero poca constancia. Este libro te enseñará sistemas para
-                              terminar.
+                              {discResult.i_score > 70
+                                ? "Tu I alta te hace iniciar muchas conversaciones y proyectos; este libro te ayudará a enfocarte en lo que importa."
+                                : "Te ayudará a mantener tu entusiasmo mientras priorizas lo verdaderamente importante."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Implementar 1 micro-hábito durante 21 días
+                                Elegir 3 prioridades y decir no al resto por 1 semana
                               </Button>
                             </td>
                           </tr>
                           <tr className="border-b hover:bg-gray-50">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-green-50">
-                                Profundidad en relaciones
+                              <Badge variant="outline" className="bg-amber-50">
+                                Organización personal
                               </Badge>
                             </td>
                             <td className="p-3">
-                              <div className="font-medium">Relaciones Auténticas</div>
-                              <div className="text-sm text-gray-500">John Gottman</div>
+                              <div className="font-medium">Getting Things Done</div>
+                              <div className="text-sm text-gray-500">David Allen</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu sociabilidad es alta pero superficial. Este libro te ayudará a construir conexiones
-                              profundas.
+                              {discResult.i_score > 70
+                                ? "Tu dispersión natural necesita un sistema simple para capturar y ejecutar tus ideas sin perder tu espontaneidad."
+                                : "Fortalecerá tu capacidad de convertir ideas en resultados concretos."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Programar 1 conversación profunda semanal
+                                Implementar sistema de captura rápida por 7 días
                               </Button>
                             </td>
                           </tr>
                         </>
                       )}
 
-                      {discResult.s_score > 70 && (
+                      {discResult.s_score >= 50 && (
                         <>
                           <tr className="border-b hover:bg-gray-50">
                             <td className="p-3">
                               <Badge variant="outline" className="bg-green-50">
-                                Asertividad
+                                {discResult.s_score > 70 ? "Límites saludables" : "Estabilidad y apoyo"}
                               </Badge>
                             </td>
                             <td className="p-3">
-                              <div className="font-medium">El Arte de Decir No</div>
-                              <div className="text-sm text-gray-500">William Ury</div>
+                              <div className="font-medium">Boundaries (Límites)</div>
+                              <div className="text-sm text-gray-500">Henry Cloud & John Townsend</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu S alta te hace complacer a otros. Este libro te enseñará a poner límites sin culpa.
+                              {discResult.s_score > 70
+                                ? "Tu S alta te hace complacer a otros en exceso; este libro te enseñará a cuidarte sin dejar de ser amable."
+                                : "Te ayudará a mantener tu capacidad de apoyo sin sacrificar tus propias necesidades."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Decir 'no' a 2 solicitudes esta semana
+                                Practicar decir 'no' a 2 pedidos no prioritarios
                               </Button>
                             </td>
                           </tr>
                           <tr className="border-b hover:bg-gray-50">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-blue-50">
-                                Abraza el cambio
+                              <Badge variant="outline" className="bg-teal-50">
+                                Expresión de necesidades
                               </Badge>
                             </td>
                             <td className="p-3">
-                              <div className="font-medium">Mindset</div>
-                              <div className="text-sm text-gray-500">Carol Dweck</div>
+                              <div className="font-medium">Conversaciones Cruciales</div>
+                              <div className="text-sm text-gray-500">Kerry Patterson et al.</div>
                             </td>
                             <td className="p-3 text-sm">
-                              Tu preferencia por la estabilidad puede frenar tu crecimiento. Este libro te ayudará a ver
-                              el cambio como oportunidad.
+                              {discResult.s_score > 70
+                                ? "Tu tendencia a evitar conflictos puede hacer que acumules resentimiento. Aprende a hablar cuando importa."
+                                : "Fortalecerá tu habilidad para mantener conversaciones difíciles sin perder la armonía."}
                             </td>
                             <td className="p-3 text-sm">
                               <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                Probar 1 cosa nueva fuera de tu zona de confort
+                                Tener 1 conversación difícil que has postergado
                               </Button>
                             </td>
                           </tr>
                         </>
                       )}
 
-                      <tr className="border-b hover:bg-gray-50 bg-purple-50">
-                        <td className="p-3">
-                          <Badge variant="outline" className="bg-purple-100">
-                            Inteligencia Emocional
-                          </Badge>
-                        </td>
-                        <td className="p-3">
-                          <div className="font-medium">Inteligencia Emocional</div>
-                          <div className="text-sm text-gray-500">Daniel Goleman</div>
-                        </td>
-                        <td className="p-3 text-sm">
-                          Fundamental para cualquier perfil DISC. Te ayudará a entender cómo tus emociones afectan tus
-                          relaciones.
-                        </td>
-                        <td className="p-3 text-sm">
-                          <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                            Hacer test de IE Despega
-                          </Button>
-                        </td>
-                      </tr>
+                      {discResult.c_score >= 50 && (
+                        <>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="p-3">
+                              <Badge variant="outline" className="bg-blue-50">
+                                {discResult.c_score > 70 ? "Perfeccionismo paralizante" : "Excelencia equilibrada"}
+                              </Badge>
+                            </td>
+                            <td className="p-3">
+                              <div className="font-medium">La Trampa de la Perfección</div>
+                              <div className="text-sm text-gray-500">Brené Brown</div>
+                            </td>
+                            <td className="p-3 text-sm">
+                              {discResult.c_score > 70
+                                ? "Tu C alta puede hacer que nunca te sientas 'suficiente'. Este libro te ayudará a aceptar la imperfección sin bajar estándares."
+                                : "Te ayudará a mantener tu atención al detalle sin caer en la autocrítica excesiva."}
+                            </td>
+                            <td className="p-3 text-sm">
+                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                Entregar 1 proyecto en versión 80% sin seguir puliendo
+                              </Button>
+                            </td>
+                          </tr>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="p-3">
+                              <Badge variant="outline" className="bg-indigo-50">
+                                Conexión emocional
+                              </Badge>
+                            </td>
+                            <td className="p-3">
+                              <div className="font-medium">Inteligencia Emocional 2.0</div>
+                              <div className="text-sm text-gray-500">Travis Bradberry</div>
+                            </td>
+                            <td className="p-3 text-sm">
+                              {discResult.c_score > 70
+                                ? "Tu enfoque lógico puede distanciarte emocionalmente de otros. Aprende a conectar sin perder tu objetividad."
+                                : "Fortalecerá tu capacidad de integrar análisis racional con inteligencia emocional."}
+                            </td>
+                            <td className="p-3 text-sm">
+                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                Compartir 1 emoción personal diaria con alguien cercano
+                              </Button>
+                            </td>
+                          </tr>
+                        </>
+                      )}
 
-                      <tr className="border-b hover:bg-gray-50 bg-orange-50">
-                        <td className="p-3">
-                          <Badge variant="outline" className="bg-orange-100">
-                            Propósito de vida
-                          </Badge>
-                        </td>
-                        <td className="p-3">
-                          <div className="font-medium">El Hombre en Busca de Sentido</div>
-                          <div className="text-sm text-gray-500">Viktor Frankl</div>
-                        </td>
-                        <td className="p-3 text-sm">
-                          Más allá de tu perfil, este libro te ayudará a conectar tu estilo con un propósito más grande.
-                        </td>
-                        <td className="p-3 text-sm">
-                          <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                            Escribir tu declaración de propósito personal
-                          </Button>
-                        </td>
-                      </tr>
+                      {discResult.d_score < 50 &&
+                        discResult.i_score < 50 &&
+                        discResult.s_score < 50 &&
+                        discResult.c_score < 50 && (
+                          <>
+                            <tr className="border-b hover:bg-gray-50">
+                              <td className="p-3">
+                                <Badge variant="outline" className="bg-purple-50">
+                                  Autoconocimiento integral
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <div className="font-medium">Diseña Tu Vida</div>
+                                <div className="text-sm text-gray-500">Bill Burnett & Dave Evans</div>
+                              </td>
+                              <td className="p-3 text-sm">
+                                Tu perfil equilibrado te da flexibilidad. Este libro te ayudará a diseñar una vida que
+                                aproveche esa versatilidad.
+                              </td>
+                              <td className="p-3 text-sm">
+                                <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                  Hacer ejercicio de "Odisea" del cap. 4
+                                </Button>
+                              </td>
+                            </tr>
+                            <tr className="border-b hover:bg-gray-50">
+                              <td className="p-3">
+                                <Badge variant="outline" className="bg-pink-50">
+                                  Desarrollo integral
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <div className="font-medium">Los 7 Hábitos de la Gente Altamente Efectiva</div>
+                                <div className="text-sm text-gray-500">Stephen Covey</div>
+                              </td>
+                              <td className="p-3 text-sm">
+                                Un clásico para construir efectividad personal y profesional desde lo más profundo.
+                              </td>
+                              <td className="p-3 text-sm">
+                                <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                  Implementar Hábito 1 durante 7 días
+                                </Button>
+                              </td>
+                            </tr>
+                          </>
+                        )}
                     </tbody>
                   </table>
                 </div>
@@ -1438,6 +1930,250 @@ export default function DISCResultsPage() {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* New: Checklist 30/60/90 section */}
+          <TabsContent value="checklist" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                  Checklist de Seguimiento 30/60/90 Días
+                </CardTitle>
+                <CardDescription>
+                  Indicadores concretos para saber que vas por buen camino (marca los que completes)
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-6">
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader>
+                      <CardTitle className="text-base text-blue-900">✓ Día 30: Checkpoint "Autoconocimiento"</CardTitle>
+                      <CardDescription className="text-sm text-blue-700">
+                        Ya debes tener claridad sobre tu perfil y haber empezado a observarte
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Tests y Evaluaciones:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-t1" />
+                          <label htmlFor="c30-t1" className="text-sm cursor-pointer">
+                            Completaste el test de Inteligencia Emocional para complementar tu DISC
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-t2" />
+                          <label htmlFor="c30-t2" className="text-sm cursor-pointer">
+                            Leíste completo tu informe DISC al menos 2 veces
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Observación y Registro:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-o1" />
+                          <label htmlFor="c30-o1" className="text-sm cursor-pointer">
+                            Tienes un diario con al menos 15 entradas de situaciones donde tu estilo DISC fue evidente
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-o2" />
+                          <label htmlFor="c30-o2" className="text-sm cursor-pointer">
+                            Identificaste al menos 3 situaciones donde tu estilo te ayudó y 3 donde te limitó
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Feedback Externo:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-f1" />
+                          <label htmlFor="c30-f1" className="text-sm cursor-pointer">
+                            Pediste a 3 personas cercanas que describan tu estilo de comunicación/trabajo
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c30-f2" />
+                          <label htmlFor="c30-f2" className="text-sm cursor-pointer">
+                            Comparaste su percepción con tus resultados y encontraste al menos 2 puntos ciegos
+                          </label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-green-50 border-green-200">
+                    <CardHeader>
+                      <CardTitle className="text-base text-green-900">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
+                      <CardDescription className="text-sm text-green-700">
+                        Ya debes haber salido de tu zona de confort varias veces
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-green-900 mb-2">Experimentos Conductuales:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-e1" />
+                          <label htmlFor="c60-e1" className="text-sm cursor-pointer">
+                            Identificaste tu dimensión DISC más baja y practicaste comportamientos de ese estilo
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-e2" />
+                          <label htmlFor="c60-e2" className="text-sm cursor-pointer">
+                            Tienes documentados al menos 5 experimentos en situaciones de bajo riesgo
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-e3" />
+                          <label htmlFor="c60-e3" className="text-sm cursor-pointer">
+                            Aplicaste lo aprendido en al menos 2 situaciones de mayor importancia
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-green-900 mb-2">Reflexión y Ajustes:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-r1" />
+                          <label htmlFor="c60-r1" className="text-sm cursor-pointer">
+                            Escribiste qué funcionó y qué no en tus experimentos
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-r2" />
+                          <label htmlFor="c60-r2" className="text-sm cursor-pointer">
+                            Ajustaste tu enfoque basado en los resultados obtenidos
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-green-900 mb-2">Profundización:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-p1" />
+                          <label htmlFor="c60-p1" className="text-sm cursor-pointer">
+                            Completaste al menos 1 test adicional (MBTI, Big Five o RIASEC)
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c60-p2" />
+                          <label htmlFor="c60-p2" className="text-sm cursor-pointer">
+                            Leíste al menos 1 libro o recurso de la Biblioteca DTC recomendada
+                          </label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-purple-50 border-purple-200">
+                    <CardHeader>
+                      <CardTitle className="text-base text-purple-900">✓ Día 90: Checkpoint "Consolidación"</CardTitle>
+                      <CardDescription className="text-sm text-purple-700">
+                        Ya debes tener un sistema personal de desarrollo continuo activo
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Sistema y Hábitos:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-s1" />
+                          <label htmlFor="c90-s1" className="text-sm cursor-pointer">
+                            Estableciste una práctica semanal de autoobservación (ej: journaling cada domingo)
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-s2" />
+                          <label htmlFor="c90-s2" className="text-sm cursor-pointer">
+                            Creaste recordatorios/triggers para aplicar tus aprendizajes en situaciones clave
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-s3" />
+                          <label htmlFor="c90-s3" className="text-sm cursor-pointer">
+                            Tienes al menos 3 metas activas en la plataforma relacionadas con tu desarrollo DISC
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Resultados Tangibles:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-r1" />
+                          <label htmlFor="c90-r1" className="text-sm cursor-pointer">
+                            Recibiste feedback positivo sobre cambios en tu comportamiento de al menos 2 personas
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-r2" />
+                          <label htmlFor="c90-r2" className="text-sm cursor-pointer">
+                            Puedes dar 3 ejemplos concretos de situaciones donde elegiste conscientemente adaptar tu
+                            estilo
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-r3" />
+                          <label htmlFor="c90-r3" className="text-sm cursor-pointer">
+                            Tus relaciones personales o profesionales mejoraron tangiblemente (menos conflictos, más
+                            conexión)
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Visión a Futuro:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-v1" />
+                          <label htmlFor="c90-v1" className="text-sm cursor-pointer">
+                            Revisaste tu progreso de los 3 meses y documentaste tus principales aprendizajes
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-v2" />
+                          <label htmlFor="c90-v2" className="text-sm cursor-pointer">
+                            Definiste objetivos claros para los próximos 6 meses de desarrollo personal
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-v3" />
+                          <label htmlFor="c90-v3" className="text-sm cursor-pointer">
+                            Agendaste una sesión con Coach Sofia para revisar tu plan y siguientes pasos
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Ecosistema DTC Completo:</h4>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-d1" />
+                          <label htmlFor="c90-d1" className="text-sm cursor-pointer">
+                            Completaste al menos 3 de los 6 tests DTC (DISC, IE, MBTI, Big Five, RIASEC, Soft Skills)
+                          </label>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Checkbox id="c90-d2" />
+                          <label htmlFor="c90-d2" className="text-sm cursor-pointer">
+                            Exploraste tu Perfil Integral DTC para ver cómo se conectan todos tus resultados
+                          </label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Alert className="bg-yellow-50 border-yellow-200">
+                  <AlertCircle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-900">Importante</AlertTitle>
+                  <AlertDescription className="text-yellow-800">
+                    Estos checkpoints son indicadores, no requisitos rígidos. El desarrollo personal no es lineal. Si
+                    algún checkpoint no lo cumpliste al 100%, está bien - lo importante es que sigas avanzando a tu
+                    ritmo.
+                  </AlertDescription>
+                </Alert>
               </CardContent>
             </Card>
           </TabsContent>

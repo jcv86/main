@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useSession } from "@/components/session-wrapper"
+import { useSession } from "@/components/session-provider" // Corrected import path
 import { createClient } from "@supabase/supabase-js"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -36,6 +36,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { UnifiedTestSystem } from "@/lib/unified-test-system" // Import UnifiedTestSystem
 
 interface MBTIResult {
   type: string
@@ -234,18 +235,27 @@ export default function MBTIResultsPage() {
           created_at: new Date().toISOString(),
         })
       } else {
-        const { data, error } = await supabase
-          .from("test_results")
-          .select("*")
-          .eq("user_id", user?.id)
-          .eq("test_name", "Mapa de Personalidad Despega")
-          .order("created_at", { ascending: false })
-          .limit(1)
-          .single()
+        // Fetch user's email for UnifiedTestSystem
+        if (!user?.email) {
+          console.error("User email not found, cannot fetch test results.")
+          toast({
+            title: "Error de Autenticación",
+            description: "No se pudo recuperar tu información de usuario para cargar los resultados.",
+            variant: "destructive",
+          })
+          setLoading(false)
+          return
+        }
 
-        if (error) throw error
-        if (data) {
+        console.log("[v0] Loading MBTI results from database...")
+        const data = await UnifiedTestSystem.loadTestResult(user.email, "MBTI")
+
+        if (data && data.result) {
           setMbtiResult(data.result as MBTIResult)
+        } else {
+          console.warn("No MBTI results found for the user.")
+          // Optionally set a state to indicate no results found and prompt the user to take the test
+          setMbtiResult(null)
         }
       }
     } catch (error: any) {
@@ -570,7 +580,7 @@ export default function MBTIResultsPage() {
                       <h4 className="font-bold mb-2 text-pink-900">Movimiento Personal</h4>
                       <p className="text-gray-700 text-sm mb-3">
                         {mbtiType.includes("I")
-                          ? "Acepta una invitación social por semana que normalmente rechazarías. Expande tu zona de confort."
+                          ? "Acepta una invitación social por semana que normally rechazarías. Expande tu zona de confort."
                           : "Dedica 20 minutos diarios a estar solo en silencio. Fortalece tu mundo interno."}
                       </p>
                       <p className="text-xs text-gray-600 italic">

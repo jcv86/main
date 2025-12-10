@@ -2445,7 +2445,7 @@ Las personas se convencen más por las razones que ellas mismas descubren que po
 
 **Autoconvencimiento:**
 - Las personas confían más en sus propias conclusiones
-- Hablar ayuda a clarificar pensamientos
+- Hablar ayuda a clarificar thoughts
 - Verbalizar ideas las hace más reales
 - La gente se compromete más con sus propias ideas
 
@@ -3256,17 +3256,12 @@ export default function BookReaderPage() {
 
     utterance.onerror = (event) => {
       console.error("TTS Error:", event.error)
-      setTtsError(`Error: ${event.error || "Desconocido"}`)
-      setIsPlaying(false)
-      isPlayingRef.current = false
 
-      // Intentar siguiente chunk si hay error
-      if (event.error === "interrupted" || event.error === "canceled") {
-        setTimeout(() => {
-          if (isPlayingRef.current) {
-            speakChunk(index + 1)
-          }
-        }, 100)
+      // Don't show error for interrupted/canceled events (these are normal when pausing/stopping)
+      if (event.error !== "interrupted" && event.error !== "canceled") {
+        setTtsError(`Error: ${event.error || "Desconocido"}`)
+        setIsPlaying(false)
+        isPlayingRef.current = false
       }
     }
 
@@ -3294,6 +3289,7 @@ export default function BookReaderPage() {
 
   const pauseTTS = () => {
     if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      setTtsError("")
       window.speechSynthesis.pause()
       isPlayingRef.current = false
       setIsPaused(true)
@@ -3303,6 +3299,7 @@ export default function BookReaderPage() {
 
   const resumeTTS = () => {
     if (window.speechSynthesis.paused) {
+      setTtsError("")
       window.speechSynthesis.resume()
       isPlayingRef.current = true
       setIsPaused(false)
@@ -3311,12 +3308,12 @@ export default function BookReaderPage() {
   }
 
   const stopTTS = () => {
+    setTtsError("")
     window.speechSynthesis.cancel()
     isPlayingRef.current = false
     setIsPlaying(false)
     setIsPaused(false)
     setCurrentChunkIndex(0)
-    setTtsError("")
   }
 
   const toggleTTS = () => {

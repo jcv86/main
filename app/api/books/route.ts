@@ -22,502 +22,241 @@ export async function GET() {
           title: "Organízate con Eficacia",
           author: "David Allen",
           category: "Productividad",
-          content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas en todo el mundo.
+          content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas.
 
 **El Problema Fundamental:**
-Nuestra mente no está diseñada para recordar tareas y compromisos. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante y perdemos claridad mental.
+Nuestra mente no está diseñada para recordar tareas. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante.
 
 **Los Cinco Pasos del Método GTD:**
 
-**1. Capturar**
-- Recopila todo lo que llame tu atención en bandejas de entrada confiables
-- Usa herramientas como libretas, aplicaciones o grabadoras de voz
-- El objetivo es sacar todo de tu mente y ponerlo en un sistema externo
+**1. Capturar** - Recopila todo lo que llame tu atención
+**2. Aclarar** - Procesa cada elemento: ¿Es accionable?
+**3. Organizar** - Coloca elementos en listas apropiadas
+**4. Reflexionar** - Revisa semanalmente todo tu sistema
+**5. Comprometerse** - Usa tu sistema para decidir qué hacer
 
-**2. Aclarar**
-- Procesa cada elemento de tus bandejas de entrada
-- Pregúntate: "¿Es accionable?"
-- Si no es accionable: elimínalo, archívalo o ponlo en "algún día/tal vez"
-- Si es accionable: define la siguiente acción específica
+**Regla de los 2 Minutos:** Si toma menos de 2 minutos, hazlo inmediatamente.
 
-**3. Organizar**
-- Coloca los elementos accionables en las listas apropiadas
-- Usa contextos como @llamadas, @ordenador, @recados
-- Mantén un calendario solo para citas y compromisos con fecha específica
-
-**4. Reflexionar**
-- Revisa semanalmente todo tu sistema
-- Actualiza listas, proyectos y compromisos
-- Mantén tu sistema actualizado y confiable
-
-**5. Comprometerse**
-- Usa tu sistema para tomar decisiones sobre qué hacer
-- Confía en tu sistema para elegir la siguiente acción
-- Actúa con confianza sabiendo que no se te olvida nada
-
-**Conceptos Clave:**
-
-**La Regla de los 2 Minutos:**
-Si una tarea toma menos de 2 minutos, hazla inmediatamente en lugar de organizarla.
-
-**Proyectos vs. Acciones:**
-- Un proyecto es cualquier resultado que requiere más de una acción
-- Cada proyecto debe tener definida su siguiente acción específica
-
-**Contextos:**
-Organiza las acciones por el contexto donde puedes realizarlas (@casa, @oficina, @teléfono).
-
-**Niveles de Perspectiva:**
-- Pista de aterrizaje: Acciones actuales
-- 10,000 pies: Proyectos actuales  
-- 20,000 pies: Áreas de responsabilidad
-- 30,000 pies: Objetivos de 1-2 años
-- 40,000 pies: Visión de 3-5 años
-- 50,000 pies: Propósito y principios de vida
-
-**Beneficios del Sistema:**
-- Mente clara y libre de estrés
-- Mayor productividad y eficiencia
-- Mejor toma de decisiones
-- Sensación de control y confianza
-- Más tiempo para lo que realmente importa
-
-**Implementación Práctica:**
-1. Dedica tiempo inicial para configurar tu sistema
-2. Haz una recopilación completa de todos tus compromisos
-3. Procesa todo hasta llegar a bandeja de entrada cero
-4. Establece el hábito de la revisión semanal
-5. Mantén la disciplina de capturar todo inmediatamente
-
-GTD no es solo un sistema de productividad, es una forma de vida que te permite estar presente y enfocado en lo que realmente importa.`,
-          tags: ["productividad", "organización", "gestión del tiempo", "gtd", "eficiencia"],
+**Beneficios:** Mente clara, mayor productividad, mejor toma de decisiones, más tiempo para lo importante.`,
+          tags: ["productividad", "organización", "gestión del tiempo"],
           slug: "organizate-con-eficacia",
           read_count: 2847,
-          created_at: "2024-01-15T00:00:00Z",
-          updated_at: "2024-01-20T00:00:00Z",
         },
         {
           id: 2,
-          title: "Inteligencia Emocional",
-          author: "Daniel Goleman",
-          category: "Psicología",
-          content: `La Inteligencia Emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de otros.
+          title: "Comunicación Efectiva",
+          author: "Harvard Business Review",
+          category: "Habilidades Blandas",
+          content: `Técnicas para mejorar la comunicación profesional y construir relaciones laborales más sólidas. Cubre comunicación verbal y no verbal, escucha activa, resolución de conflictos y habilidades de presentación.
 
-**Los Cinco Componentes de la Inteligencia Emocional:**
+**Principios de Comunicación Clara:**
+- Sé específico y concreto en tus mensajes
+- Adapta tu comunicación a la audiencia
+- Escucha activamente antes de responder
+- Usa ejemplos y analogías para clarificar ideas
 
-**1. Autoconciencia Emocional**
-- Reconocer y entender tus propias emociones
-- Ser consciente de cómo tus emociones afectan tus pensamientos y comportamiento
-- Conocer tus fortalezas y limitaciones emocionales
-- Tener confianza en ti mismo basada en el autoconocimiento
+**Escucha Activa:**
+- Mantén contacto visual apropiado
+- Parafrasea para confirmar comprensión
+- Haz preguntas abiertas
+- Evita interrumpir
 
-**2. Autorregulación**
-- Manejar efectivamente las emociones disruptivas e impulsos
-- Mantener estándares de honestidad e integridad
-- Asumir responsabilidad por tu desempeño personal
-- Ser flexible en el manejo del cambio
+**Comunicación No Verbal:**
+- El 55% de la comunicación es lenguaje corporal
+- El 38% es tono de voz
+- Solo el 7% son las palabras
 
-**3. Motivación**
-- Estar impulsado a lograr por el simple placer del logro
-- Tener un fuerte impulso para mejorar el desempeño
-- Mostrar compromiso con los objetivos del grupo u organización
-- Estar listo para actuar en oportunidades y ser optimista incluso frente al fracaso
-
-**4. Empatía**
-- Entender las emociones de otros y mostrar interés activo en sus preocupaciones
-- Anticipar, reconocer y satisfacer las necesidades de los clientes
-- Ayudar a desarrollar las habilidades de otros
-- Leer las corrientes políticas y redes sociales de una organización
-
-**5. Habilidades Sociales**
-- Ser efectivo en liderar el cambio
-- Ser persuasivo y usar habilidades de comunicación efectivas
-- Ser experto en construir y liderar equipos
-- Manejar disputas y negociar resoluciones
-
-**El Cerebro Emocional vs. El Cerebro Racional:**
-
-**Sistema Límbico (Cerebro Emocional):**
-- Procesa emociones rápidamente
-- Responde instintivamente
-- Almacena memorias emocionales
-- Puede "secuestrar" la respuesta racional
-
-**Neocórtex (Cerebro Racional):**
-- Procesa información lógicamente
-- Planifica y analiza
-- Controla impulsos
-- Permite el pensamiento abstracto
-
-**Aplicaciones Prácticas:**
-
-**En el Liderazgo:**
-- Los líderes emocionalmente inteligentes crean climas de trabajo positivos
-- Inspiran y motivan a sus equipos
-- Manejan conflictos de manera constructiva
-- Toman mejores decisiones considerando factores emocionales
-
-**En las Relaciones:**
-- Mejora la comunicación y comprensión mutua
-- Reduce conflictos y malentendidos
-- Fortalece vínculos personales y profesionales
-- Facilita la colaboración y trabajo en equipo
-
-**En el Desempeño:**
-- Mejora la capacidad de manejar estrés y presión
-- Aumenta la resiliencia ante adversidades
-- Facilita la adaptación al cambio
-- Mejora la toma de decisiones bajo presión
-
-**Desarrollo de la Inteligencia Emocional:**
-
-**Técnicas de Autoconciencia:**
-- Práctica de mindfulness y meditación
-- Llevar un diario emocional
-- Solicitar feedback de otros
-- Reflexión regular sobre reacciones emocionales
-
-**Estrategias de Autorregulación:**
-- Técnicas de respiración y relajación
-- Pausa antes de reaccionar
-- Reencuadre cognitivo de situaciones
-- Establecimiento de límites personales
-
-**Mejora de Habilidades Sociales:**
-- Práctica de escucha activa
-- Desarrollo de empatía a través de perspectiva
-- Comunicación asertiva y clara
-- Construcción de redes de relaciones
-
-La inteligencia emocional es más predictiva del éxito en la vida que el CI tradicional, y afortunadamente, puede desarrollarse a cualquier edad con práctica y dedicación.`,
-          tags: ["inteligencia emocional", "psicología", "liderazgo", "relaciones", "autoconciencia"],
-          slug: "inteligencia-emocional",
-          read_count: 3156,
-          created_at: "2024-01-10T00:00:00Z",
-          updated_at: "2024-01-18T00:00:00Z",
+**Resolución de Conflictos:**
+- Enfócate en el problema, no en la persona
+- Busca soluciones ganar-ganar
+- Mantén la calma y profesionalismo
+- Practica la empatía`,
+          tags: ["comunicación", "habilidades-blandas", "relaciones"],
+          slug: "comunicacion-efectiva",
+          read_count: 1523,
         },
         {
           id: 3,
-          title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-          author: "Stephen R. Covey",
-          category: "Desarrollo Personal",
-          content: `Los 7 Hábitos de la Gente Altamente Efectiva presenta un enfoque holístico, integrado y centrado en principios para resolver problemas personales y profesionales.
+          title: "Liderazgo con Propósito",
+          author: "Simon Sinek",
+          category: "Liderazgo",
+          content: `Descubre cómo los grandes líderes inspiran acción comenzando con el "por qué". Este libro transforma tu enfoque de liderazgo desde el comando y control hacia la inspiración y el propósito.
 
-**Paradigmas y Principios:**
-Los paradigmas son mapas mentales que determinan cómo vemos el mundo. Los principios son leyes naturales universales que gobiernan la efectividad humana.
+**El Círculo Dorado:**
+- **Por Qué** - Tu propósito, causa o creencia
+- **Cómo** - Tus valores y principios guía
+- **Qué** - Los productos o servicios que ofreces
 
-**Los 7 Hábitos:**
+**La Gente No Compra Lo Que Haces, Compra Por Qué Lo Haces**
+Los líderes inspiradores empiezan con el propósito, no con las características o beneficios.
 
-**VICTORIA PRIVADA (Independencia)**
+**Construir Confianza:**
+- La confianza comienza con autenticidad
+- Sé consistente entre lo que dices y haces
+- Admite errores y vulnerabilidad
+- Cumple siempre tus promesas
 
-**Hábito 1: Ser Proactivo**
-- Toma responsabilidad de tu vida y decisiones
-- Enfócate en tu Círculo de Influencia, no en tu Círculo de Preocupación
-- Usa lenguaje proactivo: "Yo puedo", "Yo elegiré", "Yo prefiero"
-- Responde basándote en valores, no en condiciones o sentimientos
+**Liderar con el Ejemplo:**
+- Tus acciones hablan más que tus palabras
+- Establece estándares altos para ti mismo
+- Muestra el camino, no solo señálalo
+- Celebra los éxitos del equipo
 
-**Hábito 2: Comenzar con el Fin en Mente**
-- Define claramente tu misión y visión personal
-- Crea una declaración de misión personal basada en principios
-- Visualiza tu funeral: ¿qué te gustaría que dijeran de ti?
-- Todos los logros se crean mentalmente antes que físicamente
-
-**Hábito 3: Poner Primero lo Primero**
-- Gestiona tu tiempo basándote en principios, no en prioridades
-- Enfócate en actividades del Cuadrante II (importante pero no urgente)
-- Aprende a decir "no" a lo bueno para decir "sí" a lo mejor
-- Organiza y ejecuta alrededor de prioridades
-
-**VICTORIA PÚBLICA (Interdependencia)**
-
-**Hábito 4: Pensar Ganar-Ganar**
-- Busca beneficio mutuo en todas las interacciones humanas
-- Desarrolla una mentalidad de abundancia, no de escasez
-- Considera las alternativas: Ganar-Ganar o No Hay Trato
-- Construye relaciones basadas en confianza y respeto mutuo
-
-**Hábito 5: Buscar Primero Entender, Luego Ser Entendido**
-- Practica la escucha empática antes de buscar ser escuchado
-- Escucha con la intención de entender, no de responder
-- Reformula lo que la otra persona dice para confirmar comprensión
-- Presenta tus ideas de manera que otros puedan entenderlas
-
-**Hábito 6: Sinergizar**
-- Combina las fortalezas de las personas para lograr objetivos que ninguna podría alcanzar sola
-- Valora las diferencias mentales, emocionales y psicológicas
-- Busca la tercera alternativa que es mejor que cualquier solución individual
-- Crea un ambiente donde es seguro hablar sobre diferencias
-
-**RENOVACIÓN CONTINUA**
-
-**Hábito 7: Afilar la Sierra**
-- Renueva regularmente las cuatro dimensiones de tu naturaleza:
-  - **Física**: ejercicio, nutrición, manejo del estrés
-  - **Espiritual**: clarificación de valores, compromiso, estudio y meditación
-  - **Mental**: lectura, visualización, planificación, escritura
-  - **Social/Emocional**: servicio, empatía, sinergia, seguridad intrínseca
-
-**Conceptos Clave:**
-
-**Cuenta Bancaria Emocional:**
-- Cada interacción hace un depósito o retiro en las relaciones
-- Depósitos: cumplir promesas, pequeñas cortesías, clarificar expectativas
-- Retiros: romper promesas, pequeñas descortesías, traicionar confianzas
-
-**Círculo de Influencia vs. Círculo de Preocupación:**
-- Enfócate en lo que puedes controlar (Círculo de Influencia)
-- No desperdicies energía en lo que no puedes controlar (Círculo de Preocupación)
-
-**Matriz de Gestión del Tiempo:**
-- Cuadrante I: Urgente e Importante (Crisis)
-- Cuadrante II: No Urgente pero Importante (Prevención, planificación)
-- Cuadrante III: Urgente pero No Importante (Interrupciones)
-- Cuadrante IV: No Urgente y No Importante (Pérdidas de tiempo)
-
-**Aplicación Práctica:**
-
-**En el Liderazgo:**
-- Lidera con el ejemplo y principios
-- Desarrolla a otros a través de delegación efectiva
-- Crea visión compartida y compromiso
-
-**En las Relaciones:**
-- Construye confianza a través de la integridad
-- Busca entender antes de ser entendido
-- Encuentra soluciones ganar-ganar
-
-**En el Crecimiento Personal:**
-- Desarrolla proactividad y responsabilidad personal
-- Mantén equilibrio en todas las áreas de la vida
-- Comprométete con el aprendizaje continuo
-
-Los 7 hábitos no son técnicas de personalidad superficiales, sino principios fundamentales de efectividad humana que, cuando se practican consistentemente, se convierten en la base del carácter.`,
-          tags: ["desarrollo personal", "liderazgo", "efectividad", "hábitos", "principios"],
-          slug: "7-habitos-gente-altamente-efectiva",
-          read_count: 4521,
-          created_at: "2024-01-05T00:00:00Z",
-          updated_at: "2024-01-15T00:00:00Z",
+**Desarrollar a Otros:**
+- Delega con confianza
+- Proporciona feedback constructivo
+- Crea oportunidades de crecimiento
+- Reconoce y potencia fortalezas`,
+          tags: ["liderazgo", "propósito", "inspiración", "equipos"],
+          slug: "liderazgo-con-proposito",
+          read_count: 2156,
         },
         {
           id: 4,
-          title: "Cómo Ganar Amigos e Influir sobre las Personas",
-          author: "Dale Carnegie",
-          category: "Comunicación",
-          content: `Este libro clásico enseña técnicas fundamentales para manejar personas, hacer que te aprecien, ganar a la gente a tu manera de pensar y ser un líder.
+          title: "Inteligencia Emocional en el Trabajo",
+          author: "Daniel Goleman",
+          category: "Inteligencia Emocional",
+          content: `La inteligencia emocional es el factor más importante para el éxito profesional. Aprende a reconocer, entender y manejar las emociones propias y ajenas en el contexto laboral.
 
-**PARTE I: TÉCNICAS FUNDAMENTALES PARA TRATAR CON LA GENTE**
+**Los 5 Componentes de la IE:**
 
-**Principio 1: No Critiques, No Condenes, No Te Quejes**
-- La crítica es inútil porque pone a la persona a la defensiva
-- La crítica hiere el orgullo, lastima el sentido de importancia
-- En lugar de criticar, trata de entender por qué hacen lo que hacen
+**1. Autoconciencia:**
+- Reconoce tus emociones en el momento
+- Entiende cómo afectan tu desempeño
+- Conoce tus fortalezas y limitaciones
 
-**Principio 2: Demuestra Aprecio Honesto y Sincero**
-- El deseo más profundo del ser humano es sentirse importante
-- Aprecia genuinamente las buenas cualidades de otros
-- Sé específico en tus elogios y hazlos inmediatamente
+**2. Autorregulación:**
+- Maneja impulsos y emociones disruptivas
+- Mantén la compostura bajo presión
+- Piensa antes de actuar
 
-**Principio 3: Despierta en la Otra Persona un Deseo Vehemente**
-- Habla de lo que la otra persona quiere
-- Muestra cómo pueden obtener lo que desean
-- Conecta tus ideas con sus motivaciones
+**3. Motivación:**
+- Impulsado por logros internos
+- Optimista ante adversidades
+- Comprometido con objetivos
 
-**PARTE II: SEIS MANERAS DE AGRADAR A LA GENTE**
+**4. Empatía:**
+- Entiende perspectivas ajenas
+- Lee señales emocionales no verbales
+- Anticipa necesidades de otros
 
-**Principio 1: Interésate Genuinamente en Otras Personas**
-- Muestra interés real en los demás y sus vidas
-- Haz preguntas sobre sus intereses y experiencias
-- Recuerda detalles importantes sobre las personas
+**5. Habilidades Sociales:**
+- Construye y lidera equipos
+- Maneja conflictos efectivamente
+- Inspira y persuade
 
-**Principio 2: Sonríe**
-- Una sonrisa genuina comunica: "Me alegra verte"
-- Las sonrisas son contagiosas y crean ambiente positivo
-- Sonríe incluso cuando hablas por teléfono
-
-**Principio 3: Recuerda que el Nombre de una Persona es el Sonido más Dulce**
-- Usa el nombre de la persona frecuentemente en la conversación
-- Haz el esfuerzo de aprender y recordar nombres correctamente
-- El nombre es parte de la identidad de la persona
-
-**Principio 4: Sé un Buen Oyente. Anima a Otros a Hablar de Sí Mismos**
-- Escucha más de lo que hablas
-- Haz preguntas que inviten a la persona a compartir
-- Muestra interés genuino en lo que dicen
-
-**Principio 5: Habla en Términos de los Intereses de la Otra Persona**
-- Descubre qué le interesa a la persona
-- Conecta tus conversaciones con sus pasiones
-- Investiga sobre sus hobbies y actividades
-
-**Principio 6: Haz que la Otra Persona se Sienta Importante - y Hazlo Sinceramente**
-- Reconoce los logros y contribuciones de otros
-- Pide su opinión y consejo
-- Trata a todos con respeto y dignidad
-
-**PARTE III: LOGRA QUE LA GENTE PIENSE COMO TÚ**
-
-**Principio 1: La Única Forma de Ganar una Discusión es Evitándola**
-- Las discusiones rara vez cambian opiniones
-- Busca puntos de acuerdo en lugar de diferencias
-- Respeta las opiniones de otros
-
-**Principio 2: Demuestra Respeto por las Opiniones Ajenas. Jamás Digas "Estás Equivocado"**
-- Evita contradecir directamente a las personas
-- Usa frases como "Puede que esté equivocado, pero..."
-- Permite que otros mantengan su dignidad
-
-**Principio 3: Si Estás Equivocado, Admítelo Rápida y Enfáticamente**
-- Admite tus errores antes que otros te los señalen
-- La autocrítica desarma la crítica de otros
-- Muestra humildad y disposición a aprender
-
-**Principio 4: Comienza de Manera Amigable**
-- Inicia conversaciones difíciles con calidez
-- Encuentra terreno común antes de abordar diferencias
-- El tono amigable predispone a la cooperación
-
-**Principio 5: Consigue que la Otra Persona Diga "Sí, Sí" Inmediatamente**
-- Comienza con preguntas que generen acuerdo
-- Construye momentum de acuerdo antes de presentar tu punto
-- Evita que la persona se comprometa con el "no"
-
-**Principio 6: Permite que la Otra Persona Hable Mucho**
-- Deja que otros expresen completamente sus ideas
-- Las personas se convencen más por sus propias palabras
-- Escucha para entender, no para rebatir
-
-**PARTE IV: SÉ UN LÍDER**
-
-**Principio 1: Comienza con Elogio y Aprecio Honesto**
-- Reconoce primero las fortalezas antes de señalar áreas de mejora
-- Crea un ambiente positivo para la retroalimentación
-- Las personas son más receptivas después del reconocimiento
-
-**Principio 2: Llama la Atención sobre los Errores de Otros Indirectamente**
-- Usa "y" en lugar de "pero" después de un elogio
-- Sugiere mejoras sin atacar directamente
-- Permite que las personas mantengan su autoestima
-
-**Principio 3: Habla de tus Propios Errores antes de Criticar los de la Otra Persona**
-- Comparte tus propias experiencias de error y aprendizaje
-- Esto hace que la crítica sea menos amenazante
-- Muestra que todos cometemos errores
-
-**Aplicaciones Modernas:**
-- Networking profesional efectivo
-- Liderazgo de equipos
-- Ventas y negociación
-- Relaciones familiares y de pareja
-- Servicio al cliente
-- Resolución de conflictos
-
-Los principios de Carnegie siguen siendo relevantes porque se basan en necesidades humanas fundamentales que no cambian con el tiempo: el deseo de sentirse importante, comprendido y apreciado.`,
-          tags: ["comunicación", "relaciones interpersonales", "liderazgo", "influencia", "habilidades sociales"],
-          slug: "como-ganar-amigos-influir-personas",
-          read_count: 5234,
-          created_at: "2024-01-12T00:00:00Z",
-          updated_at: "2024-01-22T00:00:00Z",
+**Aplicación Práctica:**
+- En reuniones: lee el ambiente emocional
+- En conflictos: mantén la calma y busca entender
+- En feedback: sé específico y empático
+- En liderazgo: inspira y motiva auténticamente`,
+          tags: ["inteligencia-emocional", "trabajo", "relaciones-laborales"],
+          slug: "inteligencia-emocional-trabajo",
+          read_count: 3421,
         },
         {
           id: 5,
-          title: "Hábitos Atómicos",
-          author: "James Clear",
-          category: "Desarrollo Personal",
-          content: `Los cambios que parecen pequeños e insignificantes al principio se convertirán en resultados extraordinarios si estás dispuesto a mantenerlos durante años. Este es el poder de los hábitos atómicos: pequeños cambios que generan resultados extraordinarios.
+          title: "Mindfulness para Profesionales",
+          author: "Jon Kabat-Zinn",
+          category: "Bienestar",
+          content: `La práctica de mindfulness reduce el estrés, mejora el enfoque y aumenta la efectividad profesional. Aprende técnicas respaldadas por ciencia para integrar la atención plena en tu día a día.
 
-**Las Cuatro Leyes del Cambio de Comportamiento:**
+**¿Qué es Mindfulness?**
+Atención plena al momento presente, sin juicio. Es entrenar tu mente para estar donde estás, completamente presente.
 
-**1ª Ley: Hazlo Obvio**
-- Usa intenciones de implementación: "Haré [COMPORTAMIENTO] a las [TIEMPO] en [LUGAR]"
-- Usa el apilamiento de hábitos: "Después de [HÁBITO ACTUAL], haré [NUEVO HÁBITO]"
-- Diseña tu ambiente para hacer obvios los buenos hábitos
-- Usa señales visuales para activar los comportamientos deseados
+**Beneficios Comprobados:**
+- Reduce estrés y ansiedad en 40%
+- Mejora concentración y memoria
+- Aumenta creatividad y toma de decisiones
+- Mejora relaciones interpersonales
+- Fortalece el sistema inmunológico
 
-**2ª Ley: Hazlo Atractivo**
-- Usa el agrupamiento de tentaciones: combina acciones que quieres hacer con acciones que necesitas hacer
-- Únete a una cultura donde tu comportamiento deseado sea normal
-- Crea un ritual de motivación antes de hábitos difíciles
-- Resalta los beneficios de evitar malos hábitos
+**Prácticas Básicas:**
 
-**3ª Ley: Hazlo Fácil**
-- Reduce la fricción para buenos hábitos y aumenta la fricción para malos hábitos
-- Usa la Regla de los Dos Minutos: escala los hábitos hasta que tomen menos de dos minutos
-- Prepara tu ambiente para hacer más fáciles las acciones futuras
-- Usa la tecnología para automatizar buenos hábitos
+**Meditación de Respiración (5 minutos):**
+1. Siéntate cómodamente
+2. Cierra los ojos
+3. Enfoca atención en la respiración
+4. Cuando la mente divague, regresa suavemente
 
-**4ª Ley: Hazlo Satisfactorio**
-- Usa refuerzo: date recompensas inmediatas por buenos hábitos
-- Haz que "no hacer nada" sea disfrutable para hábitos que quieres evitar
-- Usa un rastreador de hábitos para visualizar tu progreso
-- Nunca falles dos veces: regresa rápidamente después de errores
+**Escaneo Corporal (10 minutos):**
+1. Acuéstate o siéntate cómodamente
+2. Atiende cada parte del cuerpo sistemáticamente
+3. Nota sensaciones sin juzgar
+4. Respira hacia áreas de tensión
 
-**Conceptos Clave:**
+**Mindfulness en Acción:**
+- Come conscientemente una comida al día
+- Camina con atención plena 5 minutos
+- Escucha activamente sin planear respuesta
+- Toma pausas conscientes entre tareas
 
-**Sistemas vs. Objetivos:**
-- Los objetivos son sobre los resultados que quieres lograr
-- Los sistemas son sobre los procesos que llevan a esos resultados
-- Enfócate en sistemas, no en objetivos, para cambios duraderos
+**Integración Laboral:**
+- Comienza reuniones con 1 minuto de silencio
+- Responde emails con atención completa
+- Toma micro-pausas de 30 segundos cada hora
+- Practica la mono-tarea en lugar de multi-tarea`,
+          tags: ["mindfulness", "bienestar", "estrés", "productividad"],
+          slug: "mindfulness-profesionales",
+          read_count: 1876,
+        },
+        {
+          id: 6,
+          title: "Networking Estratégico",
+          author: "Keith Ferrazzi",
+          category: "Desarrollo Profesional",
+          content: `El networking auténtico no es sobre coleccionar contactos, sino sobre cultivar relaciones significativas que generen valor mutuo. Aprende a construir una red profesional poderosa.
 
-**Hábitos Basados en Identidad:**
-- Cada acción es un voto por el tipo de persona que deseas ser
-- Enfócate en quién quieres ser, no en lo que quieres lograr
-- Pregúntate: "¿Qué haría una persona saludable?" o "¿Qué haría una persona organizada?"
+**Principios del Networking Auténtico:**
 
-**La Meseta del Potencial Latente:**
-- Los hábitos a menudo parecen no hacer diferencia hasta que cruzas un umbral crítico
-- Los momentos de avance son a menudo el resultado de muchas acciones previas
-- Sé paciente con el proceso: los resultados se acumularán con el tiempo
+**1. Da Antes de Pedir:**
+- Ofrece ayuda sin esperar nada a cambio
+- Comparte conocimiento y contactos generosamente
+- Conéctate desde el servicio, no desde la necesidad
 
-**Aplicaciones Prácticas:**
+**2. Sé Auténtico:**
+- Muestra tu verdadera personalidad
+- No finjas interés que no sientes
+- Comparte vulnerabilidades apropiadamente
 
-**Para Construir Buenos Hábitos:**
-1. Comienza con hábitos tan pequeños que parezcan triviales
-2. Apila nuevos hábitos sobre rutinas existentes
-3. Diseña tu ambiente para el éxito
-4. Rastrea tu progreso visualmente
-5. Celebra pequeñas victorias inmediatamente
+**3. Haz Seguimiento:**
+- Contacta dentro de las 24 horas después de conocer a alguien
+- Envía artículos o recursos relevantes
+- Recuerda detalles personales
 
-**Para Romper Malos Hábitos:**
-1. Hazlos invisibles (elimina señales)
-2. Hazlos poco atractivos (enfócate en las desventajas)
-3. Hazlos difíciles (aumenta la fricción)
-4. Hazlos insatisfactorios (crea responsabilidad)
+**4. Cultiva Relaciones a Largo Plazo:**
+- No solo contactes cuando necesites algo
+- Celebra los éxitos de tu red
+- Mantén contacto regular
 
-**Tácticas Avanzadas:**
-- Usa el apilamiento de hábitos para construir rutinas
-- Crea intenciones de implementación para escenarios específicos
-- Aplica la Regla de Goldilocks: trabaja en desafíos de dificultad manejable
-- Usa el diseño del ambiente para apoyar comportamientos deseados
+**Estrategias Prácticas:**
 
-**El Proceso de Cuatro Pasos:**
-1. **Señal**: El disparador que inicia el comportamiento
-2. **Anhelo**: La fuerza motivacional detrás de cada hábito
-3. **Respuesta**: El hábito real que realizas
-4. **Recompensa**: El beneficio que obtienes del hábito
+**En Eventos:**
+- Establece objetivo claro antes de ir
+- Prepara tu presentación de 30 segundos
+- Haz preguntas abiertas e interesantes
+- Conecta personas que se beneficiarían de conocerse
 
-**Estrategias de Implementación:**
+**Online (LinkedIn):**
+- Personaliza cada solicitud de conexión
+- Comenta y comparte contenido valioso
+- Participa en grupos de tu industria
+- Escribe artículos compartiendo tu experticia
 
-**Diseño del Ambiente:**
-- Haz obvias las señales para buenos hábitos
-- Reduce la fricción para comportamientos deseados
-- Usa el contexto para tu ventaja
+**Mantenimiento de Red:**
+- Crea sistema para seguimiento regular
+- Usa calendario para recordar contactos
+- Organiza almuerzos o cafés informativos
+- Envía notas de agradecimiento
 
-**Seguimiento del Progreso:**
-- Usa un rastreador de hábitos simple
-- Enfócate en la consistencia, no en la perfección
-- Nunca rompas la cadena dos veces seguidas
-
-**Responsabilidad:**
-- Encuentra un compañero de responsabilidad
-- Haz públicos tus compromisos
-- Crea consecuencias por no cumplir
-
-El secreto para obtener resultados que duren es nunca dejar de hacer mejoras. Es notable lo que puedes construir si simplemente no paras.`,
-          tags: ["hábitos", "cambio de comportamiento", "automejora", "sistemas", "identidad"],
-          slug: "habitos-atomicos",
-          read_count: 6789,
-          created_at: "2024-01-08T00:00:00Z",
-          updated_at: "2024-01-25T00:00:00Z",
+**Networking Estratégico:**
+- Identifica personas clave en tu industria
+- Busca mentores y ofrece ser mentor
+- Construye relaciones con diversos perfiles
+- Participa en asociaciones profesionales`,
+          tags: ["networking", "relaciones-profesionales", "carrera"],
+          slug: "networking-estrategico",
+          read_count: 1234,
         },
       ]
 

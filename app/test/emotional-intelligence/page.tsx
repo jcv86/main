@@ -28,222 +28,222 @@ interface Question {
 const emotionalIntelligenceQuestions: Question[] = [
   {
     id: 1,
-    text: "I can easily recognize when I'm feeling stressed or overwhelmed.",
+    text: "Puedo reconocer fácilmente cuando me siento estresado o abrumado.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 2,
-    text: "I can tell when someone is upset, even if they don't say anything.",
+    text: "Puedo notar cuando alguien está molesto, incluso si no dice nada.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 3,
-    text: "I can manage my emotions effectively during difficult situations.",
+    text: "Puedo manejar mis emociones efectivamente durante situaciones difíciles.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 4,
-    text: "I'm good at motivating myself to achieve my goals.",
+    text: "Soy bueno motivándome a mí mismo para lograr mis metas.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 5,
-    text: "I can help others feel better when they're upset or frustrated.",
+    text: "Puedo ayudar a otros a sentirse mejor cuando están molestos o frustrados.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 6,
-    text: "I understand what triggers my emotional reactions.",
+    text: "Entiendo qué desencadena mis reacciones emocionales.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 7,
-    text: "I can read people's emotions accurately through their body language.",
+    text: "Puedo leer las emociones de las personas con precisión a través de su lenguaje corporal.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 8,
-    text: "I stay calm under pressure and don't let emotions cloud my judgment.",
+    text: "Me mantengo calmado bajo presión y no dejo que las emociones nublen mi juicio.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 9,
-    text: "I can bounce back quickly from setbacks and disappointments.",
+    text: "Puedo recuperarme rápidamente de contratiempos y decepciones.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 10,
-    text: "I'm skilled at building rapport and connecting with others.",
+    text: "Soy hábil para construir rapport y conectar con otros.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 11,
-    text: "I can accurately assess my own strengths and weaknesses.",
+    text: "Puedo evaluar con precisión mis propias fortalezas y debilidades.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 12,
-    text: "I notice when someone's words don't match their emotions.",
+    text: "Noto cuando las palabras de alguien no coinciden con sus emociones.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 13,
-    text: "I can control my impulses and think before acting.",
+    text: "Puedo controlar mis impulsos y pensar antes de actuar.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 14,
-    text: "I maintain optimism even when facing challenges.",
+    text: "Mantengo el optimismo incluso cuando enfrento desafíos.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 15,
-    text: "I can influence others' emotions in a positive way.",
+    text: "Puedo influir en las emociones de otros de manera positiva.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 16,
-    text: "I'm aware of how my emotions affect my behavior and decisions.",
+    text: "Soy consciente de cómo mis emociones afectan mi comportamiento y decisiones.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 17,
-    text: "I can sense the emotional climate of a room when I enter it.",
+    text: "Puedo percibir el clima emocional de una sala cuando entro en ella.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 18,
-    text: "I can adapt my communication style based on others' emotional needs.",
+    text: "Puedo adaptar mi estilo de comunicación según las necesidades emocionales de otros.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 19,
-    text: "I use positive self-talk to manage difficult emotions.",
+    text: "Uso el diálogo interno positivo para manejar emociones difíciles.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
   {
     id: 20,
-    text: "I can resolve conflicts by understanding all parties' emotional perspectives.",
+    text: "Puedo resolver conflictos comprendiendo las perspectivas emocionales de todas las partes.",
     options: [
-      { text: "Never", value: 1, label: "Never" },
-      { text: "Rarely", value: 2, label: "Rarely" },
-      { text: "Sometimes", value: 3, label: "Sometimes" },
-      { text: "Often", value: 4, label: "Often" },
-      { text: "Always", value: 5, label: "Always" },
+      { text: "Nunca", value: 1, label: "Nunca" },
+      { text: "Rara vez", value: 2, label: "Rara vez" },
+      { text: "A veces", value: 3, label: "A veces" },
+      { text: "A menudo", value: 4, label: "A menudo" },
+      { text: "Siempre", value: 5, label: "Siempre" },
     ],
   },
 ]
@@ -300,7 +300,7 @@ export default function EmotionalIntelligenceTest() {
 
   const submitTestWithAnswers = async (finalAnswers: Record<number, number>) => {
     if (Object.keys(finalAnswers).length < emotionalIntelligenceQuestions.length) {
-      alert("Please answer all questions before continuing.")
+      alert("Por favor responde todas las preguntas antes de continuar.")
       return
     }
 
@@ -316,20 +316,22 @@ export default function EmotionalIntelligenceTest() {
       total_score: totalScore,
       max_score: maxScore,
       percentage,
-      level: percentage >= 80 ? "High" : percentage >= 60 ? "Moderate" : percentage >= 40 ? "Developing" : "Low",
+      level: percentage >= 80 ? "Alto" : percentage >= 60 ? "Moderado" : percentage >= 40 ? "En Desarrollo" : "Bajo",
       duration_minutes: duration,
       completion_date: new Date().toISOString(),
       answers: finalAnswers,
       competency_scores: {
-        self_awareness: Math.round(
+        autoconciencia_emocional: Math.round(
           ((finalAnswers[1] + finalAnswers[6] + finalAnswers[11] + finalAnswers[16]) / 20) * 100,
         ),
-        self_regulation: Math.round(
+        autorregulacion_impulsos: Math.round(
           ((finalAnswers[3] + finalAnswers[8] + finalAnswers[13] + finalAnswers[19]) / 20) * 100,
         ),
-        motivation: Math.round(((finalAnswers[4] + finalAnswers[9] + finalAnswers[14]) / 15) * 100),
-        empathy: Math.round(((finalAnswers[2] + finalAnswers[7] + finalAnswers[12] + finalAnswers[17]) / 20) * 100),
-        social_skills: Math.round(
+        motivacion_intrinsic: Math.round(((finalAnswers[4] + finalAnswers[9] + finalAnswers[14]) / 15) * 100),
+        empatia_comprehension_social: Math.round(
+          ((finalAnswers[2] + finalAnswers[7] + finalAnswers[12] + finalAnswers[17]) / 20) * 100,
+        ),
+        habilidades_sociales_relaciones: Math.round(
           ((finalAnswers[5] + finalAnswers[10] + finalAnswers[15] + finalAnswers[20]) / 20) * 100,
         ),
       },
@@ -337,21 +339,16 @@ export default function EmotionalIntelligenceTest() {
     }
 
     try {
-      console.log("[v0] Saving EI test to database...")
+      console.log("[v0] Guardando resultados del EI en la base de datos...")
 
       if (!user?.email) {
-        throw new Error("No user email found")
+        throw new Error("No se encontró el email del usuario")
       }
 
-      const saveResult = await UnifiedTestSystem.saveTestResult(
-        user.email,
-        "Inteligencia Emocional Despega",
-        results,
-        duration,
-      )
+      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Emotional Intelligence", results, duration)
 
       if (!saveResult.success || !saveResult.savedToDatabase) {
-        console.error("[v0] Failed to save to database:", saveResult.error)
+        console.error("[v0] Fallo al guardar en la base de datos:", saveResult.error)
         toast({
           title: "Error Crítico de Guardado",
           description: `No se pudieron guardar tus resultados en la base de datos: ${saveResult.error || "Error desconocido"}. Por favor contacta soporte.`,
@@ -362,13 +359,13 @@ export default function EmotionalIntelligenceTest() {
         return
       }
 
-      console.log("[v0] Results saved successfully to database")
+      console.log("[v0] Resultados guardados exitosamente en la base de datos")
 
       setCompletionResults(results)
       setShowCompletion(true)
       setIsSubmitting(false)
     } catch (error: any) {
-      console.error("[v0] Error submitting test:", error)
+      console.error("[v0] Error al enviar el test:", error)
       toast({
         title: "Error al Guardar Resultados",
         description: `No se pudieron guardar tus resultados: ${error.message}. Por favor contacta soporte.`,
@@ -430,7 +427,7 @@ export default function EmotionalIntelligenceTest() {
           <CardContent className="p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading assessment...</p>
+              <p className="text-gray-600">Cargando evaluación...</p>
             </div>
           </CardContent>
         </Card>
@@ -442,7 +439,7 @@ export default function EmotionalIntelligenceTest() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-gray-600">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -457,7 +454,7 @@ export default function EmotionalIntelligenceTest() {
         <div className="mb-6">
           <Button variant="outline" onClick={() => router.push("/test")} className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Tests
+            Volver a Pruebas
           </Button>
 
           <div className="flex items-center justify-between mb-4">
@@ -469,12 +466,12 @@ export default function EmotionalIntelligenceTest() {
               </div>
             </div>
             <Badge variant="secondary">
-              {currentQuestion + 1} of {emotionalIntelligenceQuestions.length}
+              {currentQuestion + 1} de {emotionalIntelligenceQuestions.length}
             </Badge>
           </div>
 
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Progress</span>
+            <span className="text-sm font-medium">Progreso</span>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Clock className="h-4 w-4" />
               <span>{Math.round((Date.now() - startTime) / 60000)} min</span>
@@ -485,7 +482,7 @@ export default function EmotionalIntelligenceTest() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Question {currentQuestion + 1}</CardTitle>
+            <CardTitle className="text-lg">Pregunta {currentQuestion + 1}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-gray-700 text-lg leading-relaxed">{question.text}</p>
@@ -508,7 +505,7 @@ export default function EmotionalIntelligenceTest() {
             <div className="flex justify-between pt-6">
               <Button variant="outline" onClick={handlePrevious} disabled={currentQuestion === 0}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Previous
+                Anterior
               </Button>
 
               <Button
@@ -519,16 +516,16 @@ export default function EmotionalIntelligenceTest() {
                 {isSubmitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Processing...
+                    Procesando...
                   </>
                 ) : currentQuestion === emotionalIntelligenceQuestions.length - 1 ? (
                   <>
                     <CheckCircle className="w-4 h-4 mr-2" />
-                    Complete
+                    Completar
                   </>
                 ) : (
                   <>
-                    Next
+                    Siguiente
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}
@@ -554,7 +551,7 @@ export default function EmotionalIntelligenceTest() {
             ))}
           </div>
           <p className="text-sm text-gray-600 mt-2">
-            {Object.keys(answers).length} of {emotionalIntelligenceQuestions.length} questions answered
+            {Object.keys(answers).length} de {emotionalIntelligenceQuestions.length} preguntas respondidas
           </p>
         </div>
       </div>

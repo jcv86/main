@@ -183,7 +183,7 @@ export default function EmotionalIntelligenceResults() {
         setIsLoading(true)
         console.log("[v0] Loading EI results...")
 
-        const testResult = await UnifiedTestSystem.loadTestResult(user.email, "Inteligencia Emocional Despega")
+        const testResult = await UnifiedTestSystem.loadTestResult(user.email, "Emotional Intelligence")
 
         if (testResult.success && testResult.data) {
           console.log("[v0] Found results:", testResult.data)
