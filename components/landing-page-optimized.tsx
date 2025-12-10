@@ -50,7 +50,7 @@ export function LandingPageOptimized() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/documents" prefetch={false}>
+            <Link href="/documents" prefetch={true}>
               <Button
                 size="lg"
                 variant="outline"
@@ -60,7 +60,7 @@ export function LandingPageOptimized() {
                 <MessageSquare className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/biblioteca" prefetch={false}>
+            <Link href="/biblioteca" prefetch={true}>
               <Button
                 size="lg"
                 variant="outline"

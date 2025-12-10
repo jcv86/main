@@ -240,171 +240,76 @@ export function DashboardContent() {
 
   useEffect(() => {
     console.log("[v0] DashboardContent mounted")
-    console.log("[v0] sessionUser:", sessionUser)
 
-    if (sessionUser) {
-      console.log("[v0] Loading user from session:", sessionUser)
-      setUserId(sessionUser.id)
-      setUserProfile((prev) => ({
-        ...prev,
-        email: sessionUser.email,
-        name: sessionUser.name || sessionUser.email.split("@")[0],
-      }))
-      console.log("[v0] User profile updated with email:", sessionUser.email)
-    } else {
+    if (!sessionUser) {
       console.log("[v0] No session user found")
-    }
-  }, [sessionUser])
-
-  useEffect(() => {
-    console.log("[v0] Achievements effect triggered, email:", userProfile.email)
-
-    const fetchAchievements = async () => {
-      if (!userProfile.email) {
-        console.log("[v0] Skipping achievements fetch - no email yet")
-        return
-      }
-
-      try {
-        console.log("[v0] Fetching achievements for:", userProfile.email)
-        const response = await fetch(`/api/user-achievements?email=${userProfile.email}`)
-        const data = await response.json()
-        console.log("[v0] Fetched achievements:", data)
-        setUserAchievements(data.achievements || [])
-      } catch (error) {
-        console.error("[v0] Error fetching achievements:", error)
-        setUserAchievements([]) // Set empty array on error
-      } finally {
-        setLoadingAchievements(false)
-        console.log("[v0] Achievements loading complete")
-      }
+      setLoadingRecommendations(false)
+      setLoadingAchievements(false)
+      setCheckingAdmin(false)
+      return
     }
 
-    fetchAchievements()
-  }, [userProfile.email])
+    // Set user data immediately
+    const userEmail = sessionUser.email || ""
+    const userName = sessionUser.user_metadata?.full_name || userEmail.split("@")[0] || "Usuario"
 
-  useEffect(() => {
-    console.log("[v0] Recommendations effect triggered, email:", userProfile.email)
+    setUserId(sessionUser.id || null)
+    setUserProfile({ name: userName, email: userEmail })
 
-    const fetchRecommendations = async () => {
-      if (!userProfile.email) {
-        console.log("[v0] Skipping recommendations - no email yet")
-        setLoadingRecommendations(false)
-        setRecommendations(getFallbackRecommendations())
-        return
-      }
+    // Fetch all data in parallel instead of sequential
+    const fetchAllData = async () => {
+      if (!userEmail) return
 
       try {
-        setLoadingRecommendations(true)
-        console.log("[v0] Fetching recommendations for userEmail:", userProfile.email)
+        const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
+          fetch(`/api/user-achievements?email=${userEmail}`).catch(() => null),
+          fetch(`/api/recommendations?userEmail=${encodeURIComponent(userEmail)}`).catch(() => null),
+          fetch(`/api/admin/check?email=${encodeURIComponent(userEmail)}`).catch(() => null),
+        ])
 
-        const url = `/api/recommendations?userEmail=${encodeURIComponent(userProfile.email)}`
-        console.log("[v0] Recommendations URL:", url)
-
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => {
-          console.log("[v0] Recommendations request timed out")
-          controller.abort()
-        }, 10000)
-
-        const response = await fetch(url, { signal: controller.signal })
-        clearTimeout(timeoutId)
-
-        console.log("[v0] Recommendations response status:", response.status)
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+        // Process achievements
+        if (achievementsRes?.ok) {
+          const data = await achievementsRes.json()
+          setUserAchievements(data.achievements || [])
         }
 
-        const data = await response.json()
-        console.log("[v0] Recommendations response:", data)
-
-        if (data.success && data.recommendations) {
-          const recs = data.recommendations.map((rec: any) => ({
-            title: rec.title,
-            description: rec.description,
-            action: rec.action || "Ver más",
-            icon: getCategoryIcon(rec.category),
-            source: rec.source,
-            confidence: rec.confidence,
-          }))
-          setRecommendations(recs)
-          console.log("[v0] Set", recs.length, "recommendations")
+        // Process recommendations
+        if (recommendationsRes?.ok) {
+          const data = await recommendationsRes.json()
+          if (data.success && data.recommendations) {
+            const recs = data.recommendations.map((rec: any) => ({
+              title: rec.title,
+              description: rec.description,
+              action: rec.action || "Ver más",
+              icon: getCategoryIcon(rec.category),
+              source: rec.source,
+              confidence: rec.confidence,
+            }))
+            setRecommendations(recs)
+          } else {
+            setRecommendations(getFallbackRecommendations())
+          }
         } else {
-          console.log("[v0] No recommendations in response, using fallback")
           setRecommendations(getFallbackRecommendations())
         }
+
+        // Process admin status
+        if (adminRes?.ok) {
+          const data = await adminRes.json()
+          setIsAdmin(data.isAdmin)
+        }
       } catch (error) {
-        console.error("[v0] Error fetching recommendations:", error)
+        console.error("[v0] Error fetching data:", error)
         setRecommendations(getFallbackRecommendations())
       } finally {
+        setLoadingAchievements(false)
         setLoadingRecommendations(false)
-        console.log("[v0] Finished loading recommendations")
-      }
-    }
-
-    fetchRecommendations()
-  }, [userProfile.email])
-
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      if (!userProfile.email) {
-        console.log("[v0] No email yet, skipping admin check")
         setCheckingAdmin(false)
-        return
-      }
-
-      try {
-        console.log("[v0] Checking admin status for:", userProfile.email)
-        const response = await fetch(`/api/admin/check?email=${encodeURIComponent(userProfile.email)}`)
-        const data = await response.json()
-        console.log("[v0] Admin check result:", data)
-        console.log("[v0] Setting isAdmin to:", data.isAdmin)
-        setIsAdmin(data.isAdmin)
-        console.log("[v0] isAdmin state updated")
-      } catch (error) {
-        console.error("[v0] Error checking admin status:", error)
-        setIsAdmin(false)
-      } finally {
-        setCheckingAdmin(false)
-        console.log("[v0] Admin check complete, checkingAdmin set to false")
       }
     }
 
-    checkAdminStatus()
-  }, [userProfile.email])
-
-  // Cleaned up useEffect for sessionUser and Admin check
-  useEffect(() => {
-    if (sessionUser) {
-      setUserId(sessionUser.id || null)
-      setUserProfile((prev) => ({
-        ...prev,
-        name: sessionUser.user_metadata?.full_name || sessionUser.email?.split("@")[0] || "Usuario",
-        email: sessionUser.email || "",
-      }))
-    }
+    fetchAllData()
   }, [sessionUser])
-
-  useEffect(() => {
-    async function checkAdminStatus() {
-      if (!userProfile.email) {
-        setCheckingAdmin(false)
-        return
-      }
-      try {
-        const response = await fetch(`/api/admin/check?email=${encodeURIComponent(userProfile.email)}`)
-        const data = await response.json()
-        setIsAdmin(data.isAdmin)
-      } catch (error) {
-        console.error("Error checking admin status:", error)
-        setIsAdmin(false)
-      } finally {
-        setCheckingAdmin(false)
-      }
-    }
-    checkAdminStatus()
-  }, [userProfile.email])
 
   const achievements = [
     {
