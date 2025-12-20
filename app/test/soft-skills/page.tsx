@@ -381,7 +381,12 @@ export default function SoftSkillsTest() {
 
     try {
       console.log("[v0] Submitting Soft Skills test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Soft Skills", results, duration)
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Competencias Blandas Despega",
+        results,
+        duration,
+      )
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
@@ -428,7 +433,7 @@ export default function SoftSkillsTest() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        testName="Soft Skills"
+        testName="Competencias Blandas Despega"
         description="Evalúa tus habilidades interpersonales y profesionales clave para el éxito en cualquier entorno."
         whatItMeasures={[
           "Comunicación efectiva y escucha activa",
@@ -452,7 +457,7 @@ export default function SoftSkillsTest() {
   if (showCompletion && completionData) {
     return (
       <TestCompletionScreen
-        testName="Soft Skills"
+        testName="Competencias Blandas Despega"
         summary={`Has completado el test evaluando ${completionData.skillCount} competencias clave para tu desarrollo integral.`}
         highlightedInsight={`Tu competencia más desarrollada es ${completionData.topSkill}, con una puntuación de ${completionData.overallScore}%.`}
         onViewFullReport={() => router.push("/test/soft-skills/results")}
@@ -477,7 +482,7 @@ export default function SoftSkillsTest() {
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Star className="h-4 w-4 mr-1" />
-            Soft Skills
+            Competencias Blandas Despega
           </Badge>
         </div>
 
@@ -486,7 +491,7 @@ export default function SoftSkillsTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Soft Skills</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Competencias Blandas Despega</h2>
                 <p className="text-gray-600">
                   Pregunta {currentQuestion + 1} de {softSkillsQuestions.length}
                 </p>

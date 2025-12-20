@@ -198,7 +198,12 @@ export default function RIASECTest() {
 
     try {
       console.log("[v0] Submitting RIASEC test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "RIASEC", results, duration)
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Brújula Vocacional Despega",
+        results,
+        duration,
+      )
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")

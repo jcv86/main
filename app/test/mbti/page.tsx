@@ -386,7 +386,12 @@ export default function MBTITest() {
 
     try {
       console.log("[v0] Submitting MBTI test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "MBTI", results, duration)
+      const saveResult = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Mapa de Personalidad Despega",
+        results,
+        duration,
+      )
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
@@ -442,7 +447,7 @@ export default function MBTITest() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        testName="MBTI"
+        testName="Mapa de Personalidad Despega"
         testDescription="Descubre tu tipo de personalidad MBTI y comprende cómo procesas información, tomas decisiones e interactúas con el mundo"
         whatItMeasures={[
           "Extraversión vs Introversión (E/I) - Tu fuente de energía",
@@ -483,7 +488,7 @@ export default function MBTITest() {
 
     return (
       <TestCompletionScreen
-        testName="MBTI"
+        testName="Mapa de Personalidad Despega"
         completionMessage="Has completado exitosamente tu Mapa de Personalidad Despega"
         quickSummary={`Tu tipo de personalidad es ${type}`}
         keyInsight={typeInsights[type] || "Tu personalidad única es tu mayor fortaleza"}
@@ -515,7 +520,7 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">MBTI</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Mapa de Personalidad Despega</h2>
                 <p className="text-gray-600">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>
