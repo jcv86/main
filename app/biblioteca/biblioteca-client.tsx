@@ -1,20 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Target, User, BookOpen, BookMarked, CheckCircle, Filter, TrendingUp, Search } from 'lucide-react'
+import { Sparkles, Target, User, BookOpen, BookMarked, CheckCircle, Filter, TrendingUp, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Book {
   id: string
@@ -25,6 +19,7 @@ interface Book {
   tags?: string[]
   read_count?: number
   category?: string
+  language?: string
 }
 
 function getContentQualityBadge(book: Book) {
@@ -43,6 +38,7 @@ export default function BibliotecaPage() {
   const [selectedTag, setSelectedTag] = useState<string>("")
   const [sortBy, setSortBy] = useState<string>("popularity")
   const [activeTab, setActiveTab] = useState("all")
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("all")
   const [recommendedBooks, setRecommendedBooks] = useState<Book[]>([])
   const [userProfile, setUserProfile] = useState<any>(null)
   const [loadingProfile, setLoadingProfile] = useState(false)
@@ -90,7 +86,7 @@ export default function BibliotecaPage() {
 
         const resultsArray = Array.isArray(results) ? results : [results]
         const discResult = resultsArray.find((r: any) => r.test_type === "disc")
-        
+
         if (discResult?.results) {
           setUserProfile(discResult.results)
           console.log("[v0] User DISC profile loaded:", discResult.results)
@@ -107,17 +103,17 @@ export default function BibliotecaPage() {
 
     const loadStarterBooks = () => {
       if (books.length === 0) return
-      
+
       console.log("[v0] Loading starter books for users without test results")
-      
+
       const starterTags = ["autoconocimiento", "propósito", "carrera", "habilidades-blandas", "objetivos", "liderazgo"]
       const filtered = books.filter((book) => {
         if (!Array.isArray(book.tags)) return false
         return book.tags.some((tag) => starterTags.includes(tag.toLowerCase()))
       })
-      
+
       const sorted = filtered.sort((a, b) => (b.read_count || 0) - (a.read_count || 0)).slice(0, 6)
-      
+
       console.log("[v0] Loaded", sorted.length, "starter books")
       setRecommendedBooks(sorted)
     }
@@ -172,11 +168,19 @@ export default function BibliotecaPage() {
 
   const filteredBooks = books
     .filter((book) => {
-      const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) || book.author.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSearch =
+        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
       const matchesTag = !selectedTag || (book.tags && book.tags.includes(selectedTag))
-      const matchesTab = activeTab === "all" || (activeTab === "completed" && book.read_count && book.read_count > 0) || (activeTab === "recent" && book.id) || (activeTab === "popular" && (book.read_count || 0) > 10) || (activeTab === "favorites" && false)
-      return matchesSearch && matchesCategory && matchesTag && matchesTab
+      const matchesLanguage = selectedLanguage === "all" || book.language === selectedLanguage
+      const matchesTab =
+        activeTab === "all" ||
+        (activeTab === "completed" && book.read_count && book.read_count > 0) ||
+        (activeTab === "recent" && book.id) ||
+        (activeTab === "popular" && (book.read_count || 0) > 10) ||
+        (activeTab === "favorites" && false)
+      return matchesSearch && matchesCategory && matchesTag && matchesLanguage && matchesTab
     })
     .sort((a, b) => {
       if (sortBy === "popularity") return (b.read_count || 0) - (a.read_count || 0)
@@ -191,7 +195,9 @@ export default function BibliotecaPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Biblioteca de Desarrollo Profesional</h1>
         <p className="text-gray-600">
-          {user ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados` : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
+          {user
+            ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
+            : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
         </p>
       </div>
 
@@ -375,6 +381,17 @@ export default function BibliotecaPage() {
             </div>
           </div>
 
+          <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+            <SelectTrigger className="w-full md:w-[150px]">
+              <SelectValue placeholder="Idioma" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los Idiomas</SelectItem>
+              <SelectItem value="español">Español</SelectItem>
+              <SelectItem value="english">English</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full md:w-[200px]">
               <SelectValue placeholder="Todas las categorías" />
@@ -400,8 +417,14 @@ export default function BibliotecaPage() {
             </SelectContent>
           </Select>
 
-          {selectedTag && (
-            <Button variant="outline" onClick={() => setSelectedTag("")}>
+          {(selectedTag || selectedLanguage !== "all") && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSelectedTag("")
+                setSelectedLanguage("all")
+              }}
+            >
               Limpiar filtros
             </Button>
           )}
