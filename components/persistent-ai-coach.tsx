@@ -641,14 +641,14 @@ export function PersistentAICoach() {
         </TabsList>
 
         <TabsContent value="chat" className="mt-6">
-          <Card className="border-border bg-card flex flex-col h-[calc(100vh-300px)]">
+          <Card className="border-border bg-card flex flex-col max-h-[90vh]">
             <CardHeader>
               <CardTitle className="flex items-center text-foreground">
                 <Bot className="h-5 w-5 mr-2" />
                 Sesión de Coaching de Carrera
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex flex-col overflow-hidden">
+            <CardContent className="flex-1 flex flex-col overflow-hidden px-6">
               <ScrollArea className="flex-1 mb-4 pr-4">
                 <div className="space-y-4">
                   {messages.map((message) => (
@@ -671,7 +671,7 @@ export function PersistentAICoach() {
                 <div ref={messagesEndRef} />
               </ScrollArea>
 
-              <div className="space-y-2 mt-auto">
+              <div className="space-y-4 mt-4 border-t border-border">
                 <div className="flex space-x-2">
                   <Textarea
                     value={inputMessage}
@@ -720,22 +720,26 @@ export function PersistentAICoach() {
                   )}
                 </div>
 
-                {suggestions.length > 0 && (
+                {(suggestions.length > 0 || messages.length <= 1) && (
                   <div className="mt-4 pt-4 border-t border-border">
                     <p className="text-xs text-mutedForeground font-medium mb-3">💡 Preguntas sugeridas:</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {suggestions.slice(0, 4).map((suggestion, index) => (
-                        <button
-                          key={index}
-                          onClick={() => {
-                            setInputMessage(suggestion.text)
-                            setActiveTab("chat")
-                          }}
-                          className="text-left p-3 rounded-lg border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
-                        >
-                          <p className="line-clamp-2 group-hover:text-foreground font-medium">{suggestion.text}</p>
-                        </button>
-                      ))}
+                      {(suggestions.length > 0 ? suggestions.slice(0, 4) : quickStartQuestions).map(
+                        (suggestion, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setInputMessage(suggestion.text || suggestion)
+                              setActiveTab("chat")
+                            }}
+                            className="text-left p-3 rounded-lg border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
+                          >
+                            <p className="line-clamp-2 group-hover:text-foreground font-medium">
+                              {suggestion.text || suggestion}
+                            </p>
+                          </button>
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
