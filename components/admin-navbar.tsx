@@ -2,7 +2,23 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Settings, BarChart3, Home, BookOpen, Brain, MessageSquare, Users, FileText, AlertTriangle, ClipboardList, Trophy, Target, Briefcase, Database, Book, HelpCircle } from 'lucide-react'
+import {
+  Settings,
+  BarChart3,
+  BookOpen,
+  Brain,
+  MessageSquare,
+  Users,
+  FileText,
+  AlertTriangle,
+  ClipboardList,
+  Trophy,
+  Target,
+  Briefcase,
+  Database,
+  Book,
+  HelpCircle,
+} from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +27,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function AdminNavbar() {
   return (
-    <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+    <nav className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -45,6 +62,9 @@ export function AdminNavbar() {
                 <span className="hidden sm:inline">Coach IA</span>
               </Button>
             </Link>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Admin Menu */}
             <DropdownMenu>

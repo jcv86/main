@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from 'next/font/google'
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
@@ -8,6 +8,7 @@ import { AdminNavbar } from "@/components/admin-navbar"
 import { FloatingCoachWidget } from "@/components/floating-coach-widget"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -119,12 +120,14 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className={inter.className}>
-        <SessionWrapper>
-          <AdminNavbar />
-          {children}
-          <Toaster />
-          <FloatingCoachWidget />
-        </SessionWrapper>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
+          <SessionWrapper>
+            <AdminNavbar />
+            {children}
+            <Toaster />
+            <FloatingCoachWidget />
+          </SessionWrapper>
+        </ThemeProvider>
 
         <Analytics />
         <SpeedInsights />

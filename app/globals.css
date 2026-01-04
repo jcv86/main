@@ -68,22 +68,22 @@
   }
 }
 
-/* Custom scrollbar styles */
+/* improved scrollbar styling for both light and dark modes */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: hsl(var(--muted));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: hsl(var(--muted-foreground));
 }
 
 /* Smooth scrolling */
@@ -146,7 +146,7 @@ html {
   left: 50%;
   margin-left: -8px;
   margin-top: -8px;
-  border: 2px solid #ffffff;
+  border: 2px solid hsl(var(--primary));
   border-radius: 50%;
   border-top-color: transparent;
   animation: spin 1s linear infinite;

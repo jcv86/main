@@ -27,12 +27,17 @@ interface FAQSectionProps {
 
 export function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
   return (
-    <section className="py-20 bg-white border-t border-gray-200" itemScope itemType="https://schema.org/FAQPage">
+    <section className="py-20 bg-background border-t border-border" itemScope itemType="https://schema.org/FAQPage">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{title}</h2>
-          <p className="text-lg text-gray-600 mb-6">Respuestas a las preguntas más comunes sobre Despega Tu Carrera</p>
-          <a href="/faq" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">{title}</h2>
+          <p className="text-lg text-foreground opacity-75 mb-6">
+            Respuestas a las preguntas más comunes sobre Despega Tu Carrera
+          </p>
+          <a
+            href="/faq"
+            className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+          >
             Ver todas las preguntas frecuentes
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -43,16 +48,16 @@ export function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionP
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+              className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-border"
               itemScope
               itemProp="mainEntity"
               itemType="https://schema.org/Question"
             >
-              <h3 className="text-xl font-semibold mb-3 text-gray-900" itemProp="name">
+              <h3 className="text-xl font-semibold mb-3 text-foreground" itemProp="name">
                 {faq.question}
               </h3>
               <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                <div itemProp="text" className="text-gray-700 leading-relaxed">
+                <div itemProp="text" className="text-foreground opacity-75 leading-relaxed">
                   {faq.answer}
                 </div>
               </div>
@@ -96,14 +101,14 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <>
       <nav aria-label="Breadcrumb" className="mb-4">
-        <ol className="flex items-center space-x-2 text-sm text-gray-600">
+        <ol className="flex items-center space-x-2 text-sm text-foreground opacity-75">
           {items.map((item, index) => (
             <li key={index} className="flex items-center">
               {index > 0 && <span className="mx-2">/</span>}
               {index === items.length - 1 ? (
-                <span className="font-medium text-gray-900">{item.name}</span>
+                <span className="font-medium text-foreground">{item.name}</span>
               ) : (
-                <a href={item.url} className="hover:text-blue-600">
+                <a href={item.url} className="hover:text-blue-600 dark:hover:text-blue-400">
                   {item.name}
                 </a>
               )}

@@ -327,15 +327,15 @@ export default function MetasSMARTClient() {
   const getColorEstado = (estado: string) => {
     switch (estado) {
       case "activa":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
       case "completada":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
       case "pausada":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
       case "abandonada":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
     }
   }
 
@@ -380,17 +380,19 @@ export default function MetasSMARTClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-                <Target className="h-8 w-8 text-indigo-600" />
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                <Target className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 Sistema de Metas SMART
               </h1>
-              <p className="text-slate-600 mt-2">Metas inteligentes basadas en tus resultados de tests psicométricos</p>
+              <p className="text-slate-600 dark:text-slate-400 mt-2">
+                Metas inteligentes basadas en tus resultados de tests psicométricos
+              </p>
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
@@ -674,50 +676,52 @@ export default function MetasSMARTClient() {
 
           {/* Estadísticas rápidas */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-gradient-to-br from-indigo-50 to-white border-indigo-100">
+            <Card className="bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900 dark:to-slate-800 border-indigo-100 dark:border-indigo-700">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-indigo-600 font-medium">Total Metas</p>
-                    <p className="text-3xl font-bold text-indigo-900">{estadisticas.total}</p>
+                    <p className="text-sm text-indigo-600 dark:text-indigo-300 font-medium">Total Metas</p>
+                    <p className="text-3xl font-bold text-indigo-900 dark:text-indigo-100">{estadisticas.total}</p>
                   </div>
-                  <Target className="h-10 w-10 text-indigo-300" />
+                  <Target className="h-10 w-10 text-indigo-300 dark:text-indigo-500" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-50 to-white border-green-100">
+            <Card className="bg-gradient-to-br from-green-50 to-white dark:from-green-900 dark:to-slate-800 border-green-100 dark:border-green-700">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-green-600 font-medium">Activas</p>
-                    <p className="text-3xl font-bold text-green-900">{estadisticas.activas}</p>
+                    <p className="text-sm text-green-600 dark:text-green-300 font-medium">Activas</p>
+                    <p className="text-3xl font-bold text-green-900 dark:text-green-100">{estadisticas.activas}</p>
                   </div>
-                  <TrendingUp className="h-10 w-10 text-green-300" />
+                  <TrendingUp className="h-10 w-10 text-green-300 dark:text-green-500" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-100">
+            <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-900 dark:to-slate-800 border-blue-100 dark:border-blue-700">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-blue-600 font-medium">Completadas</p>
-                    <p className="text-3xl font-bold text-blue-900">{estadisticas.completadas}</p>
+                    <p className="text-sm text-blue-600 dark:text-blue-300 font-medium">Completadas</p>
+                    <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{estadisticas.completadas}</p>
                   </div>
-                  <CheckCircle2 className="h-10 w-10 text-blue-300" />
+                  <CheckCircle2 className="h-10 w-10 text-blue-300 dark:text-blue-500" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-amber-50 to-white border-amber-100">
+            <Card className="bg-gradient-to-br from-amber-50 to-white dark:from-amber-900 dark:to-slate-800 border-amber-100 dark:border-amber-700">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-amber-600 font-medium">Progreso Promedio</p>
-                    <p className="text-3xl font-bold text-amber-900">{estadisticas.promedioProgreso}%</p>
+                    <p className="text-sm text-amber-600 dark:text-amber-300 font-medium">Progreso Promedio</p>
+                    <p className="text-3xl font-bold text-amber-900 dark:text-amber-100">
+                      {estadisticas.promedioProgreso}%
+                    </p>
                   </div>
-                  <BarChart3 className="h-10 w-10 text-amber-300" />
+                  <BarChart3 className="h-10 w-10 text-amber-300 dark:text-amber-500" />
                 </div>
               </CardContent>
             </Card>
@@ -726,16 +730,25 @@ export default function MetasSMARTClient() {
 
         {/* Tabs principales */}
         <Tabs defaultValue="mis-metas" className="space-y-6">
-          <TabsList className="bg-white border">
-            <TabsTrigger value="mis-metas" className="data-[state=active]:bg-indigo-100">
+          <TabsList className="bg-white dark:bg-slate-800 border dark:border-slate-700">
+            <TabsTrigger
+              value="mis-metas"
+              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
+            >
               <Target className="h-4 w-4 mr-2" />
               Mis Metas
             </TabsTrigger>
-            <TabsTrigger value="plantillas" className="data-[state=active]:bg-indigo-100">
+            <TabsTrigger
+              value="plantillas"
+              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
+            >
               <Lightbulb className="h-4 w-4 mr-2" />
               Plantillas por Test
             </TabsTrigger>
-            <TabsTrigger value="progreso" className="data-[state=active]:bg-indigo-100">
+            <TabsTrigger
+              value="progreso"
+              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
+            >
               <TrendingUp className="h-4 w-4 mr-2" />
               Mi Progreso
             </TabsTrigger>
@@ -773,15 +786,21 @@ export default function MetasSMARTClient() {
             {/* Lista de metas */}
             <div className="grid gap-6">
               {metasFiltradas.map((meta) => (
-                <Card key={meta.id} className="border-l-4 border-l-indigo-500 hover:shadow-lg transition-shadow">
+                <Card
+                  key={meta.id}
+                  className="border-l-4 border-l-indigo-500 hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border-indigo-700"
+                >
                   <CardHeader className="pb-2">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         {getIconoTipo(meta.tipo)}
                         <div>
-                          <CardTitle className="text-lg">{meta.nombre}</CardTitle>
+                          <CardTitle className="text-lg text-slate-900 dark:text-white">{meta.nombre}</CardTitle>
                           <CardDescription className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-xs">
+                            <Badge
+                              variant="outline"
+                              className="text-xs text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-600"
+                            >
                               {meta.origen}
                             </Badge>
                             <Badge className={getColorEstado(meta.estado)}>{meta.estado}</Badge>
@@ -798,52 +817,52 @@ export default function MetasSMARTClient() {
                             setDialogOpen(true)
                           }}
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4 text-slate-600 dark:text-slate-300" />
                         </Button>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-slate-600 mb-4 italic">"{meta.motivoProfundo}"</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 italic">"{meta.motivoProfundo}"</p>
 
                     {/* Barra de progreso */}
                     <div className="mb-4">
                       <div className="flex justify-between text-sm mb-1">
-                        <span>Progreso general</span>
-                        <span className="font-medium">{meta.progreso}%</span>
+                        <span className="text-slate-600 dark:text-slate-300">Progreso general</span>
+                        <span className="font-medium text-indigo-600 dark:text-indigo-400">{meta.progreso}%</span>
                       </div>
                       <Progress value={meta.progreso} className="h-2" />
                     </div>
 
                     {/* Indicadores actuales */}
                     <div className="grid md:grid-cols-3 gap-4 mb-4">
-                      <div className="bg-slate-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2">30 días</h4>
+                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">30 días</h4>
                         <ul className="space-y-1">
                           {meta.indicadores30.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 flex items-start gap-1">
+                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
                               <CheckCircle2 className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
                               {ind}
                             </li>
                           ))}
                         </ul>
                       </div>
-                      <div className="bg-slate-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2">60 días</h4>
+                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">60 días</h4>
                         <ul className="space-y-1">
                           {meta.indicadores60.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 flex items-start gap-1">
+                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
                               <Clock className="h-3 w-3 text-amber-500 mt-0.5 flex-shrink-0" />
                               {ind}
                             </li>
                           ))}
                         </ul>
                       </div>
-                      <div className="bg-slate-50 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2">90 días</h4>
+                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">90 días</h4>
                         <ul className="space-y-1">
                           {meta.indicadores90.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 flex items-start gap-1">
+                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
                               <Star className="h-3 w-3 text-indigo-500 mt-0.5 flex-shrink-0" />
                               {ind}
                             </li>
@@ -855,7 +874,11 @@ export default function MetasSMARTClient() {
                     {/* Hábitos */}
                     <div className="flex flex-wrap gap-2 mb-3">
                       {meta.habitos.map((habito, i) => (
-                        <Badge key={i} variant="outline" className="text-xs bg-green-50 border-green-200">
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          className="text-xs bg-green-50 border-green-200 dark:bg-green-900 dark:border-green-800"
+                        >
                           <Clock className="h-3 w-3 mr-1" />
                           {habito}
                         </Badge>
@@ -865,7 +888,11 @@ export default function MetasSMARTClient() {
                     {/* Recursos */}
                     <div className="flex flex-wrap gap-2">
                       {meta.recursos.map((recurso, i) => (
-                        <Badge key={i} variant="outline" className="text-xs bg-blue-50 border-blue-200">
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          className="text-xs bg-blue-50 border-blue-200 dark:bg-blue-900 dark:border-blue-800"
+                        >
                           <BookOpen className="h-3 w-3 mr-1" />
                           {recurso}
                         </Badge>
@@ -874,8 +901,8 @@ export default function MetasSMARTClient() {
 
                     {/* Notas */}
                     {meta.notas && (
-                      <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-100">
-                        <p className="text-xs text-amber-800">
+                      <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-100 dark:bg-amber-900 dark:border-amber-800">
+                        <p className="text-xs text-amber-800 dark:text-amber-200">
                           <AlertCircle className="h-3 w-3 inline mr-1" />
                           <strong>Última nota:</strong> {meta.notas}
                         </p>
@@ -883,7 +910,7 @@ export default function MetasSMARTClient() {
                     )}
 
                     {/* Fechas */}
-                    <div className="flex justify-between text-xs text-slate-400 mt-4 pt-3 border-t">
+                    <div className="flex justify-between text-xs text-slate-400 mt-4 pt-3 border-t dark:border-slate-700">
                       <span>Creada: {meta.fechaCreacion}</span>
                       <span>Próxima revisión: {meta.fechaRevision}</span>
                     </div>
@@ -897,19 +924,21 @@ export default function MetasSMARTClient() {
           <TabsContent value="plantillas" className="space-y-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.entries(plantillasMetas).map(([test, plantillas]) => (
-                <Card key={test} className="hover:shadow-lg transition-shadow">
+                <Card key={test} className="hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border-slate-700">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Brain className="h-5 w-5 text-indigo-600" />
+                    <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                      <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                       {test}
                     </CardTitle>
-                    <CardDescription>Metas sugeridas basadas en tu perfil</CardDescription>
+                    <CardDescription className="text-slate-600 dark:text-slate-400">
+                      Metas sugeridas basadas en tu perfil
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {plantillas.map((plantilla, i) => (
                       <div
                         key={i}
-                        className="p-3 bg-slate-50 rounded-lg hover:bg-indigo-50 cursor-pointer transition-colors"
+                        className="p-3 bg-slate-50 rounded-lg hover:bg-indigo-50 dark:bg-slate-700 dark:hover:bg-indigo-900 cursor-pointer transition-colors"
                         onClick={() => {
                           setNuevaMeta({
                             ...nuevaMeta,
@@ -923,14 +952,16 @@ export default function MetasSMARTClient() {
                       >
                         <div className="flex items-center gap-2 mb-1">
                           {getIconoTipo(plantilla.tipo)}
-                          <span className="font-medium text-sm">{plantilla.nombre}</span>
+                          <span className="font-medium text-sm text-slate-800 dark:text-slate-200">
+                            {plantilla.nombre}
+                          </span>
                         </div>
-                        <p className="text-xs text-slate-500">{plantilla.motivoProfundo}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{plantilla.motivoProfundo}</p>
                       </div>
                     ))}
                     <Button
                       variant="outline"
-                      className="w-full mt-2 bg-transparent"
+                      className="w-full mt-2 bg-transparent text-indigo-600 dark:text-indigo-400 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                       onClick={() => router.push(`/test/${test.toLowerCase().replace(" ", "-")}`)}
                     >
                       Ver mi perfil {test}
@@ -944,10 +975,10 @@ export default function MetasSMARTClient() {
 
           {/* Tab: Mi Progreso */}
           <TabsContent value="progreso" className="space-y-6">
-            <Card>
+            <Card className="dark:bg-slate-800 dark:border-slate-700">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
+                <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                  <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
                   Resumen de Progreso
                 </CardTitle>
               </CardHeader>
@@ -960,12 +991,14 @@ export default function MetasSMARTClient() {
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
                             {getIconoTipo(meta.tipo)}
-                            <span className="font-medium">{meta.nombre}</span>
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{meta.nombre}</span>
                           </div>
-                          <span className="text-sm font-bold text-indigo-600">{meta.progreso}%</span>
+                          <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                            {meta.progreso}%
+                          </span>
                         </div>
                         <Progress value={meta.progreso} className="h-3" />
-                        <div className="flex justify-between text-xs text-slate-500">
+                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                           <span>Inicio: {meta.fechaCreacion}</span>
                           <span>Meta: {meta.temporal}</span>
                         </div>
@@ -974,8 +1007,8 @@ export default function MetasSMARTClient() {
                 </div>
 
                 {metas.filter((m) => m.estado === "activa").length === 0 && (
-                  <div className="text-center py-8 text-slate-500">
-                    <Target className="h-12 w-12 mx-auto mb-3 text-slate-300" />
+                  <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+                    <Target className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
                     <p>No tienes metas activas. ¡Crea una nueva meta para empezar!</p>
                   </div>
                 )}
@@ -983,10 +1016,10 @@ export default function MetasSMARTClient() {
             </Card>
 
             {/* Conexión con tests */}
-            <Card>
+            <Card className="dark:bg-slate-800 dark:border-slate-700">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-indigo-600" />
+                <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                  <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   Metas por Origen de Test
                 </CardTitle>
               </CardHeader>
@@ -995,10 +1028,10 @@ export default function MetasSMARTClient() {
                   {["DISC", "MBTI", "Big Five", "IE", "RIASEC", "Soft Skills"].map((test) => {
                     const metasDelTest = metas.filter((m) => m.origen.includes(test))
                     return (
-                      <div key={test} className="p-4 bg-slate-50 rounded-lg">
-                        <h4 className="font-medium mb-2">{test}</h4>
-                        <p className="text-2xl font-bold text-indigo-600">{metasDelTest.length}</p>
-                        <p className="text-xs text-slate-500">
+                      <div key={test} className="p-4 bg-slate-50 rounded-lg dark:bg-slate-700">
+                        <h4 className="font-medium mb-2 text-slate-800 dark:text-slate-200">{test}</h4>
+                        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{metasDelTest.length}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
                           {metasDelTest.filter((m) => m.estado === "activa").length} activas
                         </p>
                       </div>

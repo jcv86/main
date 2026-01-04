@@ -22,7 +22,7 @@ import Link from "next/link"
 
 export function LandingPageOptimized() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-28">
         <div className="text-center max-w-5xl mx-auto">
@@ -35,7 +35,7 @@ export function LandingPageOptimized() {
             Transforma Tu Carrera Profesional
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-foreground mb-12 max-w-3xl mx-auto leading-relaxed opacity-80">
             Descubre tu verdadero potencial con tests científicos, accede a 120+ libros de desarrollo y recibe coaching
             personalizado con IA disponible 24/7
           </p>
@@ -54,7 +54,7 @@ export function LandingPageOptimized() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-transparent border-purple-200 hover:bg-purple-50"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
               >
                 Chat con Documentos
                 <MessageSquare className="ml-2 h-5 w-5" />
@@ -64,7 +64,7 @@ export function LandingPageOptimized() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-transparent"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
               >
                 Explorar Biblioteca
                 <BookOpen className="ml-2 h-5 w-5" />
@@ -73,49 +73,49 @@ export function LandingPageOptimized() {
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-foreground mb-12 opacity-75">
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-green-600" />
+              <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
               <span>100% Gratis</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-600" />
+              <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <span>+10,000 Usuarios</span>
             </div>
             <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-purple-600" />
+              <Award className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               <span>Tests Científicos</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-cyan-600" />
+              <Clock className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
               <span>Resultados Inmediatos</span>
             </div>
           </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <Card className="border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-white">
+            <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-purple-600 mb-2">6</p>
-                <p className="text-sm font-medium text-muted-foreground">Tests Psicométricos</p>
+                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">6</p>
+                <p className="text-sm font-medium text-foreground opacity-75">Tests Psicométricos</p>
               </CardContent>
             </Card>
-            <Card className="border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
+            <Card className="border-2 border-blue-200 dark:border-blue-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-blue-600 mb-2">120+</p>
-                <p className="text-sm font-medium text-muted-foreground">Libros Profesionales</p>
+                <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">120+</p>
+                <p className="text-sm font-medium text-foreground opacity-75">Libros Profesionales</p>
               </CardContent>
             </Card>
-            <Card className="border-2 border-cyan-100 bg-gradient-to-br from-cyan-50 to-white">
+            <Card className="border-2 border-cyan-200 dark:border-cyan-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-cyan-600 mb-2">100+</p>
-                <p className="text-sm font-medium text-muted-foreground">Recursos Web</p>
+                <p className="text-4xl font-bold text-cyan-600 dark:text-cyan-400 mb-2">100+</p>
+                <p className="text-sm font-medium text-foreground opacity-75">Recursos Web</p>
               </CardContent>
             </Card>
-            <Card className="border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-white">
+            <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-purple-600 mb-2">24/7</p>
-                <p className="text-sm font-medium text-muted-foreground">Coach con IA</p>
+                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">24/7</p>
+                <p className="text-sm font-medium text-foreground opacity-75">Coach con IA</p>
               </CardContent>
             </Card>
           </div>
@@ -125,7 +125,7 @@ export function LandingPageOptimized() {
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-purple-100 text-purple-700 border-purple-200">
+          <Badge className="mb-4 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
             <Target className="h-3 w-3 mr-1" />
             Plataforma Integral
           </Badge>
@@ -135,137 +135,139 @@ export function LandingPageOptimized() {
               alcanzar tus metas
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-foreground max-w-3xl mx-auto opacity-75">
             Combina ciencia, tecnología y contenido de clase mundial en una sola plataforma diseñada para tu crecimiento
             profesional
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <Card className="bg-white border-2 border-purple-100 hover:border-purple-300 hover:shadow-xl transition-all group">
+          <Card className="bg-card border-2 border-purple-100 dark:border-purple-900/50 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Brain className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">Tests Psicométricos Científicos</CardTitle>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-sm text-foreground opacity-75 mt-2">
                 Evaluaciones validadas científicamente para conocer tu perfil profesional
               </p>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Despega Cerebral & Mapa de Personalidad</p>
-                    <p className="text-sm text-muted-foreground">Comportamiento y personalidad</p>
+                    <p className="text-sm text-foreground opacity-75">Comportamiento y personalidad</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">5 Dimensiones & Brújula Vocacional</p>
-                    <p className="text-sm text-muted-foreground">Rasgos y orientación vocacional</p>
+                    <p className="text-sm text-foreground opacity-75">Rasgos y orientación vocacional</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Inteligencia Emocional Despega</p>
-                    <p className="text-sm text-muted-foreground">Gestión de emociones</p>
+                    <p className="text-sm text-foreground opacity-75">Gestión de emociones</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Competencias Despega</p>
-                    <p className="text-sm text-muted-foreground">Habilidades blandas clave</p>
+                    <p className="text-sm text-foreground opacity-75">Habilidades blandas clave</p>
                   </div>
                 </li>
               </ul>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-blue-100 hover:border-blue-300 hover:shadow-xl transition-all group">
+          <Card className="bg-card border-2 border-blue-100 dark:border-blue-900/50 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">Biblioteca Profesional Completa</CardTitle>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-sm text-foreground opacity-75 mt-2">
                 Acceso ilimitado a los mejores libros de desarrollo profesional
               </p>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">120+ Libros Completos</p>
-                    <p className="text-sm text-muted-foreground">Bestsellers de desarrollo</p>
+                    <p className="text-sm text-foreground opacity-75">Bestsellers de desarrollo</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">100+ Recursos Web</p>
-                    <p className="text-sm text-muted-foreground">Contenido curado del mercado chileno</p>
+                    <p className="text-sm text-foreground opacity-75">Contenido curado del mercado chileno</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Búsqueda Semántica</p>
-                    <p className="text-sm text-muted-foreground">Encuentra respuestas con IA</p>
+                    <p className="text-sm text-foreground opacity-75">Encuentra respuestas con IA</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Actualización Constante</p>
-                    <p className="text-sm text-muted-foreground">Nuevo contenido cada mes</p>
+                    <p className="text-sm text-foreground opacity-75">Nuevo contenido cada mes</p>
                   </div>
                 </li>
               </ul>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-cyan-100 hover:border-cyan-300 hover:shadow-xl transition-all group">
+          <Card className="bg-card border-2 border-cyan-100 dark:border-cyan-900/50 hover:border-cyan-300 dark:hover:border-cyan-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Zap className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">Coach Virtual con IA</CardTitle>
-              <p className="text-sm text-muted-foreground mt-2">Tu mentor personal disponible cuando lo necesites</p>
+              <p className="text-sm text-foreground opacity-75 mt-2">
+                Tu mentor personal disponible cuando lo necesites
+              </p>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-cyan-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Personalizado a Tu Perfil</p>
-                    <p className="text-sm text-muted-foreground">Basado en tus tests</p>
+                    <p className="text-sm text-foreground opacity-75">Basado en tus tests</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-cyan-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Disponible 24/7</p>
-                    <p className="text-sm text-muted-foreground">Respuestas instantáneas</p>
+                    <p className="text-sm text-foreground opacity-75">Respuestas instantáneas</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-cyan-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Conocimiento Experto</p>
-                    <p className="text-sm text-muted-foreground">Entrenado con 120+ libros</p>
+                    <p className="text-sm text-foreground opacity-75">Entrenado con 120+ libros</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-cyan-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Contexto Chileno</p>
-                    <p className="text-sm text-muted-foreground">Adaptado al mercado local</p>
+                    <p className="text-sm text-foreground opacity-75">Adaptado al mercado local</p>
                   </div>
                 </li>
               </ul>
@@ -275,9 +277,9 @@ export function LandingPageOptimized() {
       </section>
 
       {/* How It Works Section */}
-      <section className="container mx-auto px-4 py-20 bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 rounded-3xl my-16">
+      <section className="container mx-auto px-4 py-20 bg-card rounded-3xl my-16 border border-border">
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
+          <Badge className="mb-4 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
             <TrendingUp className="h-3 w-3 mr-1" />
             Proceso Simple
           </Badge>
@@ -287,52 +289,52 @@ export function LandingPageOptimized() {
               3 pasos simples
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-foreground max-w-3xl mx-auto opacity-75">
             Tu camino hacia el desarrollo profesional comienza hoy
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <Card className="bg-white border-2 border-purple-100 relative overflow-hidden">
-            <div className="absolute top-4 right-4 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-purple-600">1</span>
+          <Card className="bg-background border-2 border-purple-100 dark:border-purple-900/50 relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-full flex items-center justify-center">
+              <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">1</span>
             </div>
             <CardContent className="pt-8">
               <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
                 <Brain className="h-7 w-7 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3">Realiza los Tests</h3>
-              <p className="text-muted-foreground">
+              <p className="text-foreground opacity-75">
                 Completa las evaluaciones psicométricas en 15-20 minutos cada una. Descubre tu perfil profesional único.
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-blue-100 relative overflow-hidden">
-            <div className="absolute top-4 right-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-blue-600">2</span>
+          <Card className="bg-background border-2 border-blue-100 dark:border-blue-900/50 relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center">
+              <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">2</span>
             </div>
             <CardContent className="pt-8">
               <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
                 <BookOpen className="h-7 w-7 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3">Explora la Biblioteca</h3>
-              <p className="text-muted-foreground">
+              <p className="text-foreground opacity-75">
                 Accede a 120+ libros profesionales y recursos curados. Aprende de los mejores expertos del mundo.
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-cyan-100 relative overflow-hidden">
-            <div className="absolute top-4 right-4 w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-cyan-600">3</span>
+          <Card className="bg-background border-2 border-cyan-100 dark:border-cyan-900/50 relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-12 h-12 bg-cyan-100 dark:bg-cyan-900/40 rounded-full flex items-center justify-center">
+              <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">3</span>
             </div>
             <CardContent className="pt-8">
               <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-4">
                 <Zap className="h-7 w-7 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3">Recibe Coaching IA</h3>
-              <p className="text-muted-foreground">
+              <p className="text-foreground opacity-75">
                 Obtén recomendaciones personalizadas basadas en tu perfil. Tu coach virtual está disponible 24/7.
               </p>
             </CardContent>

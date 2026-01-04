@@ -203,16 +203,16 @@ export default function BibliotecaPage() {
 
       {/* Personalized Recommendations Section */}
       {user && (
-        <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
+        <Card className="mb-8 border-2 border-blue-200 dark:border-blue-900 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-800">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-blue-600" />
+                <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <div>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="text-xl text-foreground">
                     {userProfile ? "Recomendados para Tu Perfil DISC" : "Comienza Tu Viaje Profesional"}
                   </CardTitle>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     {userProfile
                       ? `Basado en tu perfil ${Object.entries(userProfile.scores || {})
                           .reduce((a: any, b: any) => (a[1] > b[1] ? a : b))[0]
@@ -223,7 +223,10 @@ export default function BibliotecaPage() {
                 </div>
               </div>
               {!userProfile && (
-                <Button onClick={() => router.push("/test/disc")} className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  onClick={() => router.push("/test/disc")}
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                >
                   <Target className="h-4 w-4 mr-2" />
                   Hacer Test DISC
                 </Button>
@@ -234,13 +237,13 @@ export default function BibliotecaPage() {
             {loadingProfile ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[1, 2, 3].map((i) => (
-                  <Card key={i} className="animate-pulse bg-white">
+                  <Card key={i} className="animate-pulse bg-background dark:bg-slate-800">
                     <CardHeader className="pb-3">
-                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/2"></div>
                     </CardHeader>
                     <CardContent>
-                      <div className="h-20 bg-gray-200 rounded"></div>
+                      <div className="h-20 bg-gray-200 dark:bg-slate-700 rounded"></div>
                     </CardContent>
                   </Card>
                 ))}
@@ -250,23 +253,31 @@ export default function BibliotecaPage() {
                 {recommendedBooks.map((book) => {
                   const qualityBadge = getContentQualityBadge(book)
                   return (
-                    <Card key={book.id} className="hover:shadow-lg transition-shadow duration-200 bg-white">
+                    <Card
+                      key={book.id}
+                      className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+                    >
                       <CardHeader className="pb-3">
                         <div className="flex justify-between items-start mb-2">
-                          <Badge variant="default" className={userProfile ? "bg-blue-600" : "bg-purple-600"}>
+                          <Badge
+                            variant="default"
+                            className={
+                              userProfile ? "bg-blue-600 dark:bg-blue-500" : "bg-purple-600 dark:bg-purple-500"
+                            }
+                          >
                             <Target className="h-3 w-3 mr-1" />
                             {userProfile ? "Para ti" : "Recomendado"}
                           </Badge>
                           <Badge className={qualityBadge.color}>{qualityBadge.label}</Badge>
                         </div>
-                        <CardTitle className="text-base leading-tight">{book.title}</CardTitle>
-                        <div className="flex items-center text-sm text-gray-600">
+                        <CardTitle className="text-base leading-tight text-foreground">{book.title}</CardTitle>
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                           <User className="h-4 w-4 mr-1" />
                           {book.author}
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                           {book.content ? book.content.substring(0, 100) + "..." : "Sin descripción disponible"}
                         </p>
 
@@ -295,8 +306,8 @@ export default function BibliotecaPage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">No hay recomendaciones disponibles en este momento</p>
+                <BookOpen className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">No hay recomendaciones disponibles en este momento</p>
               </div>
             )}
           </CardContent>
@@ -481,20 +492,23 @@ export default function BibliotecaPage() {
           {filteredBooks.map((book) => {
             const qualityBadge = getContentQualityBadge(book)
             return (
-              <Card key={book.id} className="hover:shadow-lg transition-shadow duration-200">
+              <Card
+                key={book.id}
+                className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+              >
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
                     {book.category && <Badge variant="outline">{book.category}</Badge>}
                     <Badge className={qualityBadge.color}>{qualityBadge.label}</Badge>
                   </div>
-                  <CardTitle className="text-lg leading-tight">{book.title}</CardTitle>
-                  <div className="flex items-center text-sm text-gray-600">
+                  <CardTitle className="text-lg leading-tight text-foreground">{book.title}</CardTitle>
+                  <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                     <User className="h-4 w-4 mr-1" />
                     {book.author}
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
                     {book.content ? book.content.substring(0, 150) + "..." : "Sin descripción disponible"}
                   </p>
 
