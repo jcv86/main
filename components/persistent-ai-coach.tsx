@@ -11,7 +11,6 @@ import { Progress } from "@/components/ui/progress"
 import {
   Send,
   Bot,
-  User,
   Lightbulb,
   TrendingUp,
   Target,
@@ -109,38 +108,33 @@ export function PersistentAICoach() {
     }
     setMessages([welcomeMessage])
 
-    setSuggestions([
+    const initialSuggestions: Suggestion[] = [
       {
-        id: "1",
-        text: "Considera desarrollar tus habilidades de liderazgo a través de cursos en línea o programas de mentoría",
+        id: "init_1",
+        text: "¿Cómo puedo avanzar en mi rol actual?",
+        category: "career",
+        priority: "high",
+      },
+      {
+        id: "init_2",
+        text: "¿Qué habilidades debería desarrollar a continuación?",
         category: "skills",
         priority: "high",
       },
       {
-        id: "2",
-        text: "Explora oportunidades de networking en tu industria para expandir tus conexiones profesionales",
-        category: "career",
+        id: "init_3",
+        text: "Ayúdame a entender mis resultados de evaluación",
+        category: "development",
         priority: "medium",
       },
       {
-        id: "3",
-        text: "Establece reuniones regulares con tu jefe para discutir tu progreso de carrera",
-        category: "development",
-        priority: "high",
-      },
-      {
-        id: "4",
-        text: "Actualiza tu perfil de LinkedIn para reflejar tus logros recientes y habilidades",
+        id: "init_4",
+        text: "¿Cómo puedo mejorar mis habilidades de liderazgo?",
         category: "career",
         priority: "medium",
       },
-      {
-        id: "5",
-        text: "Considera obtener una certificación profesional en tu campo",
-        category: "development",
-        priority: "low",
-      },
-    ])
+    ]
+    setSuggestions(initialSuggestions)
 
     setInsights([
       {
@@ -309,6 +303,28 @@ export function PersistentAICoach() {
     }
   }, [messages])
 
+  useEffect(() => {
+    if (!userEmail) return
+
+    const loadCoachHistory = async () => {
+      try {
+        const response = await fetch("/api/coach-conversation/load", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userEmail }),
+        })
+        const data = await response.json()
+        if (data.suggestions) {
+          setSuggestions(data.suggestions)
+        }
+      } catch (error) {
+        console.error("[v0] Error loading coach history:", error)
+      }
+    }
+
+    loadCoachHistory()
+  }, [userEmail])
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return
 
@@ -325,6 +341,7 @@ export function PersistentAICoach() {
     setIsLoading(true)
 
     try {
+      console.log("[v0] Sending message:", currentMessage)
       const response = await fetch("/api/brain-query", {
         method: "POST",
         headers: {
@@ -341,28 +358,62 @@ export function PersistentAICoach() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to get AI response")
+        console.log("[v0] API response not OK:", response.status)
+        throw new Error(`Failed to get AI response: ${response.status}`)
       }
 
       const data = await response.json()
+      console.log("[v0] API Response received:", {
+        hasResponse: !!data.response,
+        hasSuggestions: !!data.suggestions,
+        suggestionsCount: data.suggestions?.length || 0,
+        suggestionsContent: data.suggestions,
+      })
 
       const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: data.response,
+        id: Date.now().toString(),
+        content: data.response || "Lo siento, no pude generar una respuesta.",
         sender: "ai",
         timestamp: new Date(),
-        coach: data.coach,
       }
       setMessages((prev) => [...prev, aiResponse])
+
+      // Update suggestions if provided
+      if (data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+        const dynamicSuggestions: Suggestion[] = data.suggestions.map((text: string, index: number) => ({
+          id: `dynamic_${Date.now()}_${index}`,
+          text,
+          category: determineSuggestionCategory(text),
+          priority: determinePriority(text, index),
+        }))
+        setSuggestions(dynamicSuggestions)
+        console.log("[v0] Suggestions updated:", dynamicSuggestions.length)
+
+        await fetch("/api/coach-conversation/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userEmail,
+            sessionId,
+            message: currentMessage,
+            aiResponse: data.response,
+            suggestions: dynamicSuggestions,
+          }),
+        }).catch((err) => console.error("[v0] Error saving conversation:", err))
+      } else {
+        console.log("[v0] No valid suggestions in response")
+      }
     } catch (error) {
-      console.error("[v0] Error getting AI response:", error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: "Lo siento, tuve un problema al procesar tu mensaje. Por favor, intenta de nuevo en un momento.",
+      console.error("[v0] Error sending message:", error)
+      const errorResponse: Message = {
+        id: Date.now().toString(),
+        content:
+          "Disculpa, hubo un error al procesar tu mensaje. Por favor intenta de nuevo. Error: " +
+          (error instanceof Error ? error.message : "Unknown error"),
         sender: "ai",
         timestamp: new Date(),
       }
-      setMessages((prev) => [...prev, errorMessage])
+      setMessages((prev) => [...prev, errorResponse])
     } finally {
       setIsLoading(false)
     }
@@ -398,7 +449,7 @@ export function PersistentAICoach() {
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
-          sender: "ai",
+          sender: "assistant",
           timestamp: new Date(),
           coach: data.coach,
         }
@@ -490,6 +541,19 @@ export function PersistentAICoach() {
     }
   }
 
+  const determineSuggestionCategory = (text: string): "career" | "skills" | "development" => {
+    const lower = text.toLowerCase()
+    if (lower.includes("habilidad") || lower.includes("skill")) return "skills"
+    if (lower.includes("carrera") || lower.includes("profesional")) return "career"
+    return "development"
+  }
+
+  const determinePriority = (text: string, index: number): "high" | "medium" | "low" => {
+    if (index === 0) return "high"
+    if (index === 1) return "medium"
+    return "low"
+  }
+
   return (
     <div className="max-w-6xl mx-auto p-4">
       <div className="mb-6">
@@ -510,6 +574,56 @@ export function PersistentAICoach() {
         </p>
       </div>
 
+      {messages.length <= 1 && (
+        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+          <h2 className="text-xl font-semibold text-foreground mb-2">¿Eres nuevo aquí? Te mostramos cómo funciona</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Tu Coach de Carrera IA está diseñado para apoyarte en tres formas:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Chat Tab Guide */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-3 mb-2">
+                <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <h3 className="font-semibold text-foreground">💬 Chat Personalizado</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Haz preguntas sobre tu carrera, desarrollo de habilidades, próximos pasos o cualquier aspecto
+                profesional que te interese explorar.
+              </p>
+            </div>
+
+            {/* Suggestions Guide */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-green-200 dark:border-green-800">
+              <div className="flex items-start gap-3 mb-2">
+                <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Recomendaciones personalizadas basadas en tus resultados de evaluación, diseñadas para acelerar tu
+                crecimiento profesional.
+              </p>
+            </div>
+
+            {/* Insights Guide */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+              <div className="flex items-start gap-3 mb-2">
+                <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                <h3 className="font-semibold text-foreground">✨ Insights</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Análisis profundos de tu perfil, fortalezas clave y oportunidades de desarrollo identificadas por IA.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground font-medium">
+            👇 Elige una pregunta abajo para comenzar o escribe la tuya propia
+          </p>
+        </div>
+      )}
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 bg-muted">
           <TabsTrigger value="chat" className="data-[state=active]:bg-background">
@@ -527,15 +641,15 @@ export function PersistentAICoach() {
         </TabsList>
 
         <TabsContent value="chat" className="mt-6">
-          <Card className="border-border bg-card">
+          <Card className="border-border bg-card flex flex-col h-[calc(100vh-300px)]">
             <CardHeader>
               <CardTitle className="flex items-center text-foreground">
                 <Bot className="h-5 w-5 mr-2" />
                 Sesión de Coaching de Carrera
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-96 mb-4 pr-4">
+            <CardContent className="flex-1 flex flex-col overflow-hidden">
+              <ScrollArea className="flex-1 mb-4 pr-4">
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
@@ -543,91 +657,21 @@ export function PersistentAICoach() {
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[80%] rounded-lg p-4 ${
+                        className={`max-w-xs px-4 py-2 rounded-lg ${
                           message.sender === "user"
-                            ? "bg-foreground text-background"
-                            : "bg-muted text-foreground border border-border"
+                            ? "bg-foreground text-background rounded-br-none"
+                            : "bg-muted text-foreground rounded-bl-none"
                         }`}
                       >
-                        <div className="flex items-start space-x-3">
-                          {message.sender === "ai" && (
-                            <div className="flex flex-col items-center gap-1">
-                              <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                              {message.coach && (
-                                <Badge
-                                  variant="secondary"
-                                  className={`text-[10px] px-1 py-0 ${
-                                    message.coach === "sofia"
-                                      ? "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300"
-                                      : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                                  }`}
-                                >
-                                  {message.coach === "sofia" ? "Sofía" : "Dani"}
-                                </Badge>
-                              )}
-                            </div>
-                          )}
-                          {message.sender === "user" && <User className="h-4 w-4 mt-0.5 flex-shrink-0" />}
-                          <div className="flex-1">
-                            <p className="text-sm leading-relaxed">{message.content}</p>
-                            <p
-                              className={`text-xs mt-2 ${
-                                message.sender === "user" ? "text-background/70" : "text-mutedForeground"
-                              }`}
-                            >
-                              {message.timestamp.toLocaleTimeString()}
-                            </p>
-                          </div>
-                        </div>
+                        {message.content}
                       </div>
                     </div>
                   ))}
-                  {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="bg-muted border border-border rounded-lg p-4 max-w-[80%]">
-                        <div className="flex items-center space-x-3">
-                          <Bot className="h-4 w-4" />
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"></div>
-                            <div
-                              className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"
-                              style={{ animationDelay: "0.1s" }}
-                            ></div>
-                            <div
-                              className="w-2 h-2 bg-mutedForeground rounded-full animate-bounce"
-                              style={{ animationDelay: "0.2s" }}
-                            ></div>
-                          </div>
-                          <span className="text-sm text-mutedForeground">IA está pensando...</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <div ref={messagesEndRef} />
               </ScrollArea>
 
-              {messages.length <= 1 && (
-                <div className="mb-4">
-                  <p className="text-sm text-mutedForeground mb-3">Preguntas rápidas para comenzar:</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {quickStartQuestions.map((question, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setInputMessage(question)}
-                        className="text-left justify-start h-auto p-3 border-border hover:bg-muted"
-                      >
-                        <MessageSquare className="h-3 w-3 mr-2 flex-shrink-0" />
-                        <span className="text-xs">{question}</span>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-2">
+              <div className="space-y-2 mt-auto">
                 <div className="flex space-x-2">
                   <Textarea
                     value={inputMessage}
@@ -675,6 +719,26 @@ export function PersistentAICoach() {
                     </span>
                   )}
                 </div>
+
+                {suggestions.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-xs text-mutedForeground font-medium mb-3">💡 Preguntas sugeridas:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {suggestions.slice(0, 4).map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setInputMessage(suggestion.text)
+                            setActiveTab("chat")
+                          }}
+                          className="text-left p-3 rounded-lg border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
+                        >
+                          <p className="line-clamp-2 group-hover:text-foreground font-medium">{suggestion.text}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

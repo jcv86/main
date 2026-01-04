@@ -20,7 +20,6 @@ import {
   Calendar,
   Shield,
   Gamepad2,
-  Library,
   RefreshCw,
   ChevronRight,
   Flame,
@@ -431,23 +430,6 @@ export function DashboardContent() {
                 Admin
               </Button>
             )}
-            {/* Added new navigation buttons */}
-            <Button variant="outline" onClick={() => router.push("/metas")}>
-              <Target className="h-4 w-4 mr-2" />
-              Metas
-            </Button>
-            <Button variant="outline" onClick={() => router.push("/recursos")}>
-              <Library className="h-4 w-4 mr-2" />
-              Recursos
-            </Button>
-            <Button variant="outline" onClick={() => router.push("/simulaciones")}>
-              <Gamepad2 className="h-4 w-4 mr-2" />
-              Simulaciones
-            </Button>
-            <Button onClick={() => router.push("/biblioteca")} className="bg-foreground text-background">
-              <BookOpen className="h-4 w-4 mr-2" />
-              Biblioteca
-            </Button>
           </div>
         </div>
 

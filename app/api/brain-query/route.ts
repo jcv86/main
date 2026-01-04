@@ -294,6 +294,10 @@ Usuario: ${message}`
       })
     }
 
+    const suggestedQuestions = generateFollowUpSuggestions(message, text, intentionResult.intention, userContext)
+
+    console.log("[v0] About to return response with suggestions count:", suggestedQuestions.length)
+
     return NextResponse.json({
       response: enhancedResponse,
       coach: personality,
@@ -312,6 +316,7 @@ Usuario: ${message}`
       intention: intentionResult.intention,
       intentionConfidence: intentionResult.confidence,
       sessionId,
+      suggestions: suggestedQuestions && Array.isArray(suggestedQuestions) ? suggestedQuestions : [],
     })
   } catch (error) {
     console.error("[v0] Error in POST /api/brain-query:", error)
@@ -329,6 +334,7 @@ Usuario: ${message}`
       usedFallback: true,
       intention: "general_question",
       intentionConfidence: 0.5,
+      suggestions: [], // Ensure suggestions is always an array
     })
   }
 }
@@ -381,4 +387,84 @@ export async function PATCH(request: NextRequest) {
     console.error("Error in PATCH /api/brain-query:", error)
     return NextResponse.json({ success: false })
   }
+}
+
+function generateFollowUpSuggestions(
+  userMessage: string,
+  aiResponse: string,
+  intention: string,
+  userContext: any,
+): string[] {
+  const suggestions: string[] = []
+  const messageLower = userMessage.toLowerCase()
+  const intentionLower = intention.toLowerCase()
+
+  console.log("[v0] Generating suggestions for intention:", intention)
+
+  // Career development suggestions
+  if (
+    intentionLower.includes("career") ||
+    intentionLower.includes("advancement") ||
+    messageLower.includes("carrera") ||
+    messageLower.includes("avanzar")
+  ) {
+    suggestions.push("¿Cuáles son los próximos pasos para avanzar en mi carrera?")
+    suggestions.push("¿Qué habilidades debo desarrollar para alcanzar mis objetivos?")
+    suggestions.push("¿Cómo puedo identificar oportunidades de crecimiento en mi área?")
+  }
+
+  // Skills development suggestions
+  if (
+    intentionLower.includes("skill") ||
+    intentionLower.includes("habilidad") ||
+    messageLower.includes("habilidad") ||
+    messageLower.includes("competencia")
+  ) {
+    suggestions.push("¿Cuáles son las habilidades más demandadas en el mercado?")
+    suggestions.push("¿Cómo puedo mejorar mis habilidades técnicas?")
+    suggestions.push("¿Qué certificaciones me ayudarían a avanzar?")
+  }
+
+  // Personal development suggestions
+  if (
+    intentionLower.includes("development") ||
+    intentionLower.includes("development") ||
+    messageLower.includes("desarrollo") ||
+    messageLower.includes("crecimiento")
+  ) {
+    suggestions.push("¿Cuál es mi plan de desarrollo personal?")
+    suggestions.push("¿Cómo puedo establecer metas de crecimiento realistas?")
+    suggestions.push("¿Qué recursos recomendas para mi desarrollo?")
+  }
+
+  // Assessment and evaluation suggestions
+  if (
+    intentionLower.includes("assessment") ||
+    intentionLower.includes("evaluación") ||
+    messageLower.includes("evaluación") ||
+    messageLower.includes("test")
+  ) {
+    suggestions.push("¿Cómo interpretar mis resultados de evaluación?")
+    suggestions.push("¿Qué significan mis puntuaciones en cada categoría?")
+    suggestions.push("¿Cómo usar esta información para mejorar?")
+  }
+
+  // General follow-up suggestions
+  if (suggestions.length === 0) {
+    suggestions.push("¿Qué otros aspectos de tu carrera te gustaría explorar?")
+    suggestions.push("¿Cómo te puedo ayudar a alcanzar tus metas profesionales?")
+    suggestions.push("¿Hay desafíos específicos que estés enfrentando?")
+    suggestions.push("¿Cuál es tu mayor fortaleza según los resultados?")
+  }
+
+  if (userContext?.hasCompletedTests || userContext?.testResults?.length > 0) {
+    suggestions.push("Basándome en tus evaluaciones, ¿cuál es tu siguiente paso?")
+  }
+
+  // Return top 3-4 unique suggestions
+  const uniqueSuggestions = Array.from(new Set(suggestions)).slice(0, 4)
+  console.log("[v0] Generated suggestions count:", uniqueSuggestions.length)
+  console.log("[v0] Suggestions:", uniqueSuggestions)
+
+  return uniqueSuggestions
 }
