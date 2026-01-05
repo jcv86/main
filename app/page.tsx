@@ -5,17 +5,11 @@ import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "Despega Tu Carrera - Tests de Personalidad, DISC, MBTI, Big Five y Desarrollo Profesional",
+  title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
   description:
-    "Descubre tu verdadero potencial con tests científicos de personalidad: DISC, MBTI, Big Five, RIASEC e Inteligencia Emocional. Plataforma integral de autoconocimiento y desarrollo profesional con IA personalizada.",
+    "Descubre tu verdadero potencial con tests científicos de personalidad e Inteligencia Emocional. Plataforma integral de autoconocimiento y desarrollo profesional con IA personalizada.",
   keywords: [
     "test de personalidad",
-    "DISC",
-    "MBTI",
-    "Big Five",
-    "test vocacional",
-    "RIASEC",
-    "inteligencia emocional",
     "desarrollo profesional",
     "autoconocimiento",
     "coaching con IA",
@@ -24,6 +18,7 @@ export const metadata: Metadata = {
     "evaluación de competencias",
     "plan de carrera",
     "tests psicométricos",
+    "inteligencia emocional",
   ],
   authors: [{ name: "Despega Tu Carrera" }],
   creator: "Despega Tu Carrera",
@@ -35,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
     description:
-      "Plataforma integral de autoconocimiento: Tests científicos de personalidad (DISC, MBTI, Big Five), orientación vocacional y coaching con IA para tu desarrollo profesional.",
+      "Plataforma integral de autoconocimiento: Tests científicos de personalidad, orientación vocacional y coaching con IA para tu desarrollo profesional.",
     images: [
       {
         url: "/og-image.png",
@@ -49,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
     description:
-      "Tests científicos de personalidad: DISC, MBTI, Big Five, RIASEC. Coaching con IA y desarrollo profesional personalizado.",
+      "Tests científicos de personalidad e Inteligencia Emocional. Coaching con IA y desarrollo profesional personalizado.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -81,12 +76,12 @@ export default function Home() {
     {
       question: "¿Qué es Despega Tu Carrera?",
       answer:
-        "Despega Tu Carrera es una plataforma integral de autoconocimiento y desarrollo profesional que combina tests científicos de personalidad (DISC, MBTI, Big Five, RIASEC, Inteligencia Emocional) con coaching personalizado mediante inteligencia artificial para ayudarte a descubrir tu verdadero potencial y alcanzar tus metas profesionales.",
+        "Despega Tu Carrera es una plataforma integral de autoconocimiento y desarrollo profesional que combina tests científicos de personalidad (Evaluación Conductual, Mapa de Preferencias, Análisis de Dimensiones, Brújula Vocacional e Inteligencia Emocional) con coaching personalizado mediante inteligencia artificial para ayudarte a descubrir tu verdadero potencial y alcanzar tus metas profesionales.",
     },
     {
       question: "¿Son confiables los tests de personalidad?",
       answer:
-        "Sí, todos nuestros tests están basados en metodologías científicamente validadas y ampliamente utilizadas en psicología organizacional y desarrollo profesional. Los tests DISC, MBTI y Big Five cuentan con décadas de investigación respaldándolos y son utilizados por miles de empresas y profesionales en todo el mundo.",
+        "Sí, todos nuestros tests están basados en metodologías científicamente validadas y ampliamente utilizadas en psicología organizacional y desarrollo profesional. Nuestras evaluaciones cuentan con décadas de investigación respaldándolas y son utilizadas por miles de empresas y profesionales en todo el mundo.",
     },
     {
       question: "¿Cuánto tiempo toma completar los tests?",

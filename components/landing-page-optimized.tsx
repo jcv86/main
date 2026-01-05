@@ -16,7 +16,6 @@ import {
   Award,
   Clock,
   Shield,
-  MessageSquare,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -50,7 +49,7 @@ export function LandingPageOptimized() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/documents" prefetch={true}>
+            {/* <Link href="/documents" prefetch={true}>
               <Button
                 size="lg"
                 variant="outline"
@@ -59,7 +58,7 @@ export function LandingPageOptimized() {
                 Chat con Documentos
                 <MessageSquare className="ml-2 h-5 w-5" />
               </Button>
-            </Link>
+            </Link> */}
             <Link href="/biblioteca" prefetch={true}>
               <Button
                 size="lg"
@@ -367,7 +366,7 @@ export function LandingPageOptimized() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Link href="/documents">
+                {/* <Link href="/documents">
                   <Button
                     size="lg"
                     variant="outline"
@@ -376,7 +375,7 @@ export function LandingPageOptimized() {
                     Chat con Documentos
                     <MessageSquare className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
+                </Link> */}
                 <Link href="/biblioteca">
                   <Button
                     size="lg"

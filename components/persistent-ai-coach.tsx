@@ -61,6 +61,13 @@ export function PersistentAICoach() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const [userEmail, setUserEmail] = useState<string>("")
+  const [performanceContext, setPerformanceContext] = useState<{
+    c1_score: number
+    c2_score: number
+    c3_score: number
+    c4_score: number
+    test_results_summary?: any
+  } | null>(null)
 
   const [sessionId, setSessionId] = useState<string>("")
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
@@ -87,6 +94,8 @@ export function PersistentAICoach() {
         if (session?.user?.email) {
           console.log("[v0] User email from session:", session.user.email)
           setUserEmail(session.user.email)
+
+          await loadPerformanceContext(session.user.id)
         } else {
           console.log("[v0] No user session found")
         }
@@ -354,6 +363,7 @@ export function PersistentAICoach() {
             content: m.content,
           })),
           userEmail: userEmail || undefined,
+          performanceContext,
         }),
       })
 
@@ -442,6 +452,7 @@ export function PersistentAICoach() {
           content: m.content,
         })),
         userEmail: userEmail || undefined,
+        performanceContext,
       }),
     })
       .then((res) => res.json())
@@ -554,8 +565,33 @@ export function PersistentAICoach() {
     return "low"
   }
 
+  const loadPerformanceContext = async (userId: string) => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase.from("user_performance_context").select("*").eq("user_id", userId).single()
+
+      if (error && error.code !== "PGRST116") {
+        console.error("[v0] Error loading performance context:", error)
+        return
+      }
+
+      if (data) {
+        console.log("[v0] Performance context loaded:", data)
+        setPerformanceContext({
+          c1_score: data.c1_score || 0,
+          c2_score: data.c2_score || 0,
+          c3_score: data.c3_score || 0,
+          c4_score: data.c4_score || 0,
+          test_results_summary: data.test_results_summary,
+        })
+      }
+    } catch (error) {
+      console.error("[v0] Error in loadPerformanceContext:", error)
+    }
+  }
+
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="flex flex-col h-screen bg-background">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-muted">
@@ -621,6 +657,32 @@ export function PersistentAICoach() {
           <p className="text-xs text-muted-foreground font-medium">
             👇 Elige una pregunta abajo para comenzar o escribe la tuya propia
           </p>
+        </div>
+      )}
+
+      {performanceContext && (
+        <div className="bg-slate-900 border-b border-slate-700 px-4 py-3">
+          <div className="flex items-center gap-4 text-sm">
+            <span className="text-slate-400">Tu Contexto de Performance:</span>
+            <div className="flex gap-3">
+              <div className="flex items-center gap-1">
+                <span className="text-slate-500">C1:</span>
+                <span className="font-semibold text-blue-400">{performanceContext.c1_score.toFixed(1)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-slate-500">C2:</span>
+                <span className="font-semibold text-green-400">{performanceContext.c2_score.toFixed(1)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-slate-500">C3:</span>
+                <span className="font-semibold text-purple-400">{performanceContext.c3_score.toFixed(1)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-slate-500">C4:</span>
+                <span className="font-semibold text-orange-400">{performanceContext.c4_score.toFixed(1)}</span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
