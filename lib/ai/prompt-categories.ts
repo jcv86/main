@@ -24,7 +24,7 @@ export const PROMPT_CATEGORIES = {
     name: "Autoconocimiento y Propósito",
     coach: "sofia",
     description:
-      "Descubre tu perfil con 6 tests psicométricos: DISC, MBTI, Big Five, RIASEC, Soft Skills e Inteligencia Emocional. Sofía analiza tus resultados contigo.",
+      "Descubre tu perfil con 6 evaluaciones psicométricas: Evaluación Conductual, Mapa de Personalidad, Análisis de Dimensiones, Brújula Vocacional, Competencias e Inteligencia Emocional. Sofía analiza tus resultados contigo.",
   },
 
   cv_linkedin_marca: {
