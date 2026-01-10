@@ -537,7 +537,7 @@ export default function BibliotecaPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
-                    {book.content ? book.content.substring(0, 150) + "..." : "Sin descripción disponible"}
+                    {book.content ? book.content.substring(0, 250) + "..." : "Sin descripción disponible"}
                   </p>
 
                   {Array.isArray(book.tags) && book.tags.length > 0 && (
