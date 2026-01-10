@@ -5,24 +5,64 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 export async function GET() {
   try {
-    console.log("Fetching books from database...")
+    console.log("[v0] Fetching books from both knowledge_base and biblioteca...")
 
-    const { data: books, error } = await supabase
+    const { data: originalBooks, error: kbError } = await supabase
       .from("knowledge_base")
       .select("*")
       .order("read_count", { ascending: false })
 
-    if (error) {
-      console.error("Error fetching books from database:", error)
+    const { data: chileanResources, error: bibError } = await supabase
+      .from("biblioteca")
+      .select("*")
+      .order("relevance_score", { ascending: false })
 
-      // Si hay error de base de datos, usar datos de respaldo más completos
-      const fallbackBooks = [
-        {
-          id: 1,
-          title: "Organízate con Eficacia",
-          author: "David Allen",
-          category: "Productividad",
-          content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas.
+    if (kbError && bibError) {
+      console.error("[v0] Error fetching from both tables:", kbError, bibError)
+      return NextResponse.json([], { status: 500 })
+    }
+
+    const booksWithSource = (originalBooks || []).map((book: any) => ({
+      ...book,
+      source_type: "libro_original",
+    }))
+
+    const resourcesWithSource = (chileanResources || []).map((resource: any) => ({
+      ...resource,
+      source_type: "recurso_chileno",
+    }))
+
+    const allItems = [...booksWithSource, ...resourcesWithSource]
+    const deduplicatedItems = Array.from(
+      new Map(
+        allItems.map((item: any) => {
+          const key = item.title.toLowerCase().trim()
+          return [key, item]
+        }),
+      ).values(),
+    )
+
+    const sorted = deduplicatedItems.sort((a: any, b: any) => {
+      const aContentLength = (a.content || "").length + (a.description || "").length
+      const bContentLength = (b.content || "").length + (b.description || "").length
+      return bContentLength - aContentLength
+    })
+
+    console.log(
+      `[v0] Successfully fetched ${booksWithSource.length} original books and ${resourcesWithSource.length} Chilean resources. After deduplication: ${sorted.length}`,
+    )
+    return NextResponse.json(sorted)
+  } catch (error) {
+    console.error("[v0] API Error:", error)
+
+    // Si hay error de base de datos, usar datos de respaldo más completos
+    const fallbackBooks = [
+      {
+        id: 1,
+        title: "Organízate con Eficacia",
+        author: "David Allen",
+        category: "Productividad",
+        content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas.
 
 **El Problema Fundamental:**
 Nuestra mente no está diseñada para recordar tareas. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante.
@@ -38,16 +78,16 @@ Nuestra mente no está diseñada para recordar tareas. Cuando intentamos mantene
 **Regla de los 2 Minutos:** Si toma menos de 2 minutos, hazlo inmediatamente.
 
 **Beneficios:** Mente clara, mayor productividad, mejor toma de decisiones, más tiempo para lo importante.`,
-          tags: ["productividad", "organización", "gestión del tiempo"],
-          slug: "organizate-con-eficacia",
-          read_count: 2847,
-        },
-        {
-          id: 2,
-          title: "Comunicación Efectiva",
-          author: "Harvard Business Review",
-          category: "Habilidades Blandas",
-          content: `Técnicas para mejorar la comunicación profesional y construir relaciones laborales más sólidas. Cubre comunicación verbal y no verbal, escucha activa, resolución de conflictos y habilidades de presentación.
+        tags: ["productividad", "organización", "gestión del tiempo"],
+        slug: "organizate-con-eficacia",
+        read_count: 2847,
+      },
+      {
+        id: 2,
+        title: "Comunicación Efectiva",
+        author: "Harvard Business Review",
+        category: "Habilidades Blandas",
+        content: `Técnicas para mejorar la comunicación profesional y construir relaciones laborales más sólidas. Cubre comunicación verbal y no verbal, escucha activa, resolución de conflictos y habilidades de presentación.
 
 **Principios de Comunicación Clara:**
 - Sé específico y concreto en tus mensajes
@@ -71,16 +111,16 @@ Nuestra mente no está diseñada para recordar tareas. Cuando intentamos mantene
 - Busca soluciones ganar-ganar
 - Mantén la calma y profesionalismo
 - Practica la empatía`,
-          tags: ["comunicación", "habilidades-blandas", "relaciones"],
-          slug: "comunicacion-efectiva",
-          read_count: 1523,
-        },
-        {
-          id: 3,
-          title: "Liderazgo con Propósito",
-          author: "Simon Sinek",
-          category: "Liderazgo",
-          content: `Descubre cómo los grandes líderes inspiran acción comenzando con el "por qué". Este libro transforma tu enfoque de liderazgo desde el comando y control hacia la inspiración y el propósito.
+        tags: ["comunicación", "habilidades-blandas", "relaciones"],
+        slug: "comunicacion-efectiva",
+        read_count: 1523,
+      },
+      {
+        id: 3,
+        title: "Liderazgo con Propósito",
+        author: "Simon Sinek",
+        category: "Liderazgo",
+        content: `Descubre cómo los grandes líderes inspiran acción comenzando con el "por qué". Este libro transforma tu enfoque de liderazgo desde el comando y control hacia la inspiración y el propósito.
 
 **El Círculo Dorado:**
 - **Por Qué** - Tu propósito, causa o creencia
@@ -107,16 +147,16 @@ Los líderes inspiradores empiezan con el propósito, no con las característica
 - Proporciona feedback constructivo
 - Crea oportunidades de crecimiento
 - Reconoce y potencia fortalezas`,
-          tags: ["liderazgo", "propósito", "inspiración", "equipos"],
-          slug: "liderazgo-con-proposito",
-          read_count: 2156,
-        },
-        {
-          id: 4,
-          title: "Inteligencia Emocional en el Trabajo",
-          author: "Daniel Goleman",
-          category: "Inteligencia Emocional",
-          content: `La inteligencia emocional es el factor más importante para el éxito profesional. Aprende a reconocer, entender y manejar las emociones propias y ajenas en el contexto laboral.
+        tags: ["liderazgo", "propósito", "inspiración", "equipos"],
+        slug: "liderazgo-con-proposito",
+        read_count: 2156,
+      },
+      {
+        id: 4,
+        title: "Inteligencia Emocional en el Trabajo",
+        author: "Daniel Goleman",
+        category: "Inteligencia Emocional",
+        content: `La inteligencia emocional es el factor más importante para el éxito profesional. Aprende a reconocer, entender y manejar las emociones propias y ajenas en el contexto laboral.
 
 **Los 5 Componentes de la IE:**
 
@@ -150,16 +190,16 @@ Los líderes inspiradores empiezan con el propósito, no con las característica
 - En conflictos: mantén la calma y busca entender
 - En feedback: sé específico y empático
 - En liderazgo: inspira y motiva auténticamente`,
-          tags: ["inteligencia-emocional", "trabajo", "relaciones-laborales"],
-          slug: "inteligencia-emocional-trabajo",
-          read_count: 3421,
-        },
-        {
-          id: 5,
-          title: "Mindfulness para Profesionales",
-          author: "Jon Kabat-Zinn",
-          category: "Bienestar",
-          content: `La práctica de mindfulness reduce el estrés, mejora el enfoque y aumenta la efectividad profesional. Aprende técnicas respaldadas por ciencia para integrar la atención plena en tu día a día.
+        tags: ["inteligencia-emocional", "trabajo", "relaciones-laborales"],
+        slug: "inteligencia-emocional-trabajo",
+        read_count: 3421,
+      },
+      {
+        id: 5,
+        title: "Mindfulness para Profesionales",
+        author: "Jon Kabat-Zinn",
+        category: "Bienestar",
+        content: `La práctica de mindfulness reduce el estrés, mejora el enfoque y aumenta la efectividad profesional. Aprende técnicas respaldadas por ciencia para integrar la atención plena en tu día a día.
 
 **¿Qué es Mindfulness?**
 Atención plena al momento presente, sin juicio. Es entrenar tu mente para estar donde estás, completamente presente.
@@ -196,16 +236,16 @@ Atención plena al momento presente, sin juicio. Es entrenar tu mente para estar
 - Responde emails con atención completa
 - Toma micro-pausas de 30 segundos cada hora
 - Practica la mono-tarea en lugar de multi-tarea`,
-          tags: ["mindfulness", "bienestar", "estrés", "productividad"],
-          slug: "mindfulness-profesionales",
-          read_count: 1876,
-        },
-        {
-          id: 6,
-          title: "Networking Estratégico",
-          author: "Keith Ferrazzi",
-          category: "Desarrollo Profesional",
-          content: `El networking auténtico no es sobre coleccionar contactos, sino sobre cultivar relaciones significativas que generen valor mutuo. Aprende a construir una red profesional poderosa.
+        tags: ["mindfulness", "bienestar", "estrés", "productividad"],
+        slug: "mindfulness-profesionales",
+        read_count: 1876,
+      },
+      {
+        id: 6,
+        title: "Networking Estratégico",
+        author: "Keith Ferrazzi",
+        category: "Desarrollo Profesional",
+        content: `El networking auténtico no es sobre coleccionar contactos, sino sobre cultivar relaciones significativas que generen valor mutuo. Aprende a construir una red profesional poderosa.
 
 **Principios del Networking Auténtico:**
 
@@ -254,87 +294,14 @@ Atención plena al momento presente, sin juicio. Es entrenar tu mente para estar
 - Busca mentores y ofrece ser mentor
 - Construye relaciones con diversos perfiles
 - Participa en asociaciones profesionales`,
-          tags: ["networking", "relaciones-profesionales", "carrera"],
-          slug: "networking-estrategico",
-          read_count: 1234,
-        },
-      ]
-
-      console.log("Using fallback data with", fallbackBooks.length, "books")
-      return NextResponse.json(fallbackBooks)
-    }
-
-    console.log("Successfully fetched", books?.length || 0, "books from database")
-    return NextResponse.json(books || [])
-  } catch (error) {
-    console.error("API Error:", error)
-
-    // Datos de respaldo más completos en caso de error
-    const comprehensiveFallbackBooks = [
-      {
-        id: 1,
-        title: "Organízate con Eficacia",
-        author: "David Allen",
-        category: "Productividad",
-        content: "Sistema GTD completo para gestión de tareas y productividad personal...",
-        tags: ["productividad", "organización", "gestión del tiempo"],
-        slug: "organizate-con-eficacia",
-        read_count: 2847,
-        created_at: "2024-01-15T00:00:00Z",
-        updated_at: "2024-01-20T00:00:00Z",
-      },
-      {
-        id: 2,
-        title: "Inteligencia Emocional",
-        author: "Daniel Goleman",
-        category: "Psicología",
-        content: "Desarrollo de habilidades emocionales para el éxito personal y profesional...",
-        tags: ["inteligencia emocional", "psicología", "liderazgo"],
-        slug: "inteligencia-emocional",
-        read_count: 3156,
-        created_at: "2024-01-10T00:00:00Z",
-        updated_at: "2024-01-18T00:00:00Z",
-      },
-      {
-        id: 3,
-        title: "Los 7 Hábitos de la Gente Altamente Efectiva",
-        author: "Stephen R. Covey",
-        category: "Desarrollo Personal",
-        content: "Principios fundamentales para la efectividad personal y profesional...",
-        tags: ["desarrollo personal", "liderazgo", "efectividad"],
-        slug: "7-habitos-gente-altamente-efectiva",
-        read_count: 4521,
-        created_at: "2024-01-05T00:00:00Z",
-        updated_at: "2024-01-15T00:00:00Z",
-      },
-      {
-        id: 4,
-        title: "Cómo Ganar Amigos e Influir sobre las Personas",
-        author: "Dale Carnegie",
-        category: "Comunicación",
-        content: "Técnicas fundamentales para mejorar las relaciones interpersonales...",
-        tags: ["comunicación", "relaciones interpersonales", "influencia"],
-        slug: "como-ganar-amigos-influir-personas",
-        read_count: 5234,
-        created_at: "2024-01-12T00:00:00Z",
-        updated_at: "2024-01-22T00:00:00Z",
-      },
-      {
-        id: 5,
-        title: "Hábitos Atómicos",
-        author: "James Clear",
-        category: "Desarrollo Personal",
-        content: "Pequeños cambios que generan resultados extraordinarios...",
-        tags: ["hábitos", "cambio de comportamiento", "automejora"],
-        slug: "habitos-atomicos",
-        read_count: 6789,
-        created_at: "2024-01-08T00:00:00Z",
-        updated_at: "2024-01-25T00:00:00Z",
+        tags: ["networking", "relaciones-profesionales", "carrera"],
+        slug: "networking-estrategico",
+        read_count: 1234,
       },
     ]
 
-    console.log("Using comprehensive fallback data with", comprehensiveFallbackBooks.length, "books")
-    return NextResponse.json(comprehensiveFallbackBooks)
+    console.log("Using fallback data with", fallbackBooks.length, "books")
+    return NextResponse.json(fallbackBooks)
   }
 }
 

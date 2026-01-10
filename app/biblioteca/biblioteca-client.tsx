@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Sparkles, Target, User, BookOpen, BookMarked, CheckCircle, Filter, TrendingUp, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Book {
   id: string
@@ -20,6 +21,7 @@ interface Book {
   read_count?: number
   category?: string
   language?: string
+  source_type?: "libro_original" | "recurso_chileno"
 }
 
 function getContentQualityBadge(book: Book) {
@@ -42,6 +44,7 @@ export default function BibliotecaPage() {
   const [recommendedBooks, setRecommendedBooks] = useState<Book[]>([])
   const [userProfile, setUserProfile] = useState<any>(null)
   const [loadingProfile, setLoadingProfile] = useState(false)
+  const [resourceSection, setResourceSection] = useState<"libros" | "recursos" | "todos">("todos")
   const router = useRouter()
 
   useEffect(() => {
@@ -166,28 +169,33 @@ export default function BibliotecaPage() {
   const allTags = [...new Set(books.flatMap((b) => b.tags || []))].sort()
   const popularTags = allTags.slice(0, 15)
 
-  const filteredBooks = books
-    .filter((book) => {
-      const matchesSearch =
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
-      const matchesTag = !selectedTag || (book.tags && book.tags.includes(selectedTag))
-      const matchesLanguage = selectedLanguage === "all" || book.language === selectedLanguage
-      const matchesTab =
-        activeTab === "all" ||
-        (activeTab === "completed" && book.read_count && book.read_count > 0) ||
-        (activeTab === "recent" && book.id) ||
-        (activeTab === "popular" && (book.read_count || 0) > 10) ||
-        (activeTab === "favorites" && false)
-      return matchesSearch && matchesCategory && matchesTag && matchesLanguage && matchesTab
-    })
-    .sort((a, b) => {
-      if (sortBy === "popularity") return (b.read_count || 0) - (a.read_count || 0)
-      if (sortBy === "title") return a.title.localeCompare(b.title)
-      if (sortBy === "author") return a.author.localeCompare(b.author)
-      return 0
-    })
+  const originalBooks = books.filter((b) => b.source_type === "libro_original")
+  const chileanResources = books.filter((b) => b.source_type === "recurso_chileno")
+
+  const getFilteredBooks = () => {
+    let booksToFilter = books
+    if (resourceSection === "libros") booksToFilter = originalBooks
+    if (resourceSection === "recursos") booksToFilter = chileanResources
+
+    return booksToFilter
+      .filter((book) => {
+        const matchesSearch =
+          book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.author.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesCategory = selectedCategory === "all" || book.category === selectedCategory
+        const matchesTag = !selectedTag || (book.tags && book.tags.includes(selectedTag))
+        const matchesLanguage = selectedLanguage === "all" || book.language === selectedLanguage
+        return matchesSearch && matchesCategory && matchesTag && matchesLanguage
+      })
+      .sort((a, b) => {
+        if (sortBy === "popularity") return (b.read_count || 0) - (a.read_count || 0)
+        if (sortBy === "title") return a.title.localeCompare(b.title)
+        if (sortBy === "author") return a.author.localeCompare(b.author)
+        return 0
+      })
+  }
+
+  const filteredBooks = getFilteredBooks()
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -313,6 +321,26 @@ export default function BibliotecaPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Resource Section Tabs */}
+      <Tabs
+        value={resourceSection}
+        onValueChange={(value) => setResourceSection(value as "libros" | "recursos" | "todos")}
+        className="mb-8"
+      >
+        <TabsList className="grid w-full max-w-md grid-cols-3">
+          <TabsTrigger value="todos" className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4" />
+            Todos ({books.length})
+          </TabsTrigger>
+          <TabsTrigger value="libros" className="flex items-center gap-2">
+            📚 Libros ({originalBooks.length})
+          </TabsTrigger>
+          <TabsTrigger value="recursos" className="flex items-center gap-2">
+            📋 Recursos ({chileanResources.length})
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
