@@ -158,19 +158,22 @@ export default function BibliotecaPage() {
     setRecommendedBooks(sorted)
   }, [userProfile, books])
 
+  // Separate books from Chilean resources FIRST
+  const originalBooks = books.filter((b) => b.source_type === "libro_original")
+  const chileanResources = books.filter((b) => b.source_type === "recurso_chileno")
+
+  // Stats should only count BOOKS, not Chilean resources (which are surveys/databases)
   const stats = {
-    total: books.length,
-    completed: books.filter((b) => b.read_count && b.read_count > 0).length,
-    categories: [...new Set(books.map((b) => b.category).filter(Boolean))].length,
-    authors: [...new Set(books.map((b) => b.author))].length,
-    avgReading: Math.round(books.reduce((sum, b) => sum + (b.read_count || 0), 0) / (books.length || 1)),
+    totalBooks: originalBooks.length,
+    totalResources: chileanResources.length,
+    completed: originalBooks.filter((b) => b.content && b.content.length > 500).length,
+    categories: [...new Set(originalBooks.map((b) => b.category).filter(Boolean))].length,
+    authors: [...new Set(originalBooks.map((b) => b.author))].length,
+    avgReading: Math.round(originalBooks.reduce((sum, b) => sum + (b.read_count || 0), 0) / (originalBooks.length || 1)),
   }
 
   const allTags = [...new Set(books.flatMap((b) => b.tags || []))].sort()
   const popularTags = allTags.slice(0, 15)
-
-  const originalBooks = books.filter((b) => b.source_type === "libro_original")
-  const chileanResources = books.filter((b) => b.source_type === "recurso_chileno")
 
   const getFilteredBooks = () => {
     let booksToFilter = books
@@ -346,12 +349,12 @@ export default function BibliotecaPage() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-600">Total de Libros</CardTitle>
+            <CardTitle className="text-sm text-gray-600">Total Libros</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <BookMarked className="h-5 w-5 text-blue-600" />
-              <span className="text-2xl font-bold">{stats.total}</span>
+              <span className="text-2xl font-bold">{stats.totalBooks}</span>
             </div>
           </CardContent>
         </Card>
@@ -370,11 +373,23 @@ export default function BibliotecaPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-600">Categorías</CardTitle>
+            <CardTitle className="text-sm text-gray-600">Recursos Chilenos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <Filter className="h-5 w-5 text-purple-600" />
+              <span className="text-2xl font-bold">{stats.totalResources}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-600">Categorías</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <User className="h-5 w-5 text-orange-600" />
               <span className="text-2xl font-bold">{stats.categories}</span>
             </div>
           </CardContent>
@@ -386,20 +401,8 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-orange-600" />
-              <span className="text-2xl font-bold">{stats.authors}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-600">Promedio Lecturas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-red-600" />
-              <span className="text-2xl font-bold">{stats.avgReading}</span>
+              <span className="text-2xl font-bold">{stats.authors}</span>
             </div>
           </CardContent>
         </Card>
