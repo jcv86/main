@@ -10,5 +10,4 @@ SELECT
     ELSE 'COMPLETE'
   END as status
 FROM knowledge_base
-WHERE source_type = 'libro_original'
 ORDER BY id;
