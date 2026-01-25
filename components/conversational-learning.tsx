@@ -242,43 +242,6 @@ export function ConversationalLearning() {
     } finally {
       setIsLoading(false)
     }
-
-      // Stream the text
-      const decoder = new TextDecoder()
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = decoder.decode(value)
-        fullContent += chunk
-
-        // Update the message with streaming content
-        setMessages(prev => prev.map(msg =>
-          msg.id === coachMessageId
-            ? { ...msg, content: fullContent }
-            : msg
-        ))
-      }
-
-      // Determine phase based on message count
-      const newMessageCount = messages.filter((m: any) => m.sender === 'user').length + 1
-      let nextPhase: typeof selectedPhase = 'greeting'
-      if (newMessageCount >= 1) nextPhase = 'exploration'
-      if (newMessageCount >= 3) nextPhase = 'recommendations'
-      if (newMessageCount >= 5) nextPhase = 'planning'
-      setSelectedPhase(nextPhase)
-    } catch (error) {
-      console.error('Error sending message:', error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: 'Disculpa, hubo un error. Por favor intenta de nuevo.',
-        sender: 'coach',
-        timestamp: new Date(),
-      }
-      setMessages(prev => [...prev, errorMessage])
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   const phaseBadges = {
