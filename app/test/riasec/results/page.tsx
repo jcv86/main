@@ -62,6 +62,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Checkbox } from "@/components/ui/checkbox" // Added Checkbox
 import Link from "next/link" // Added Link
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Added Alert
+import { TestInsights } from "@/components/test-insights"
 
 interface RIASECResults {
   R: number
@@ -538,6 +539,10 @@ export default function RIASECResults() {
                   <Award className="h-4 w-4" />
                   <span className="hidden sm:inline">Resumen</span>
                 </TabsTrigger>
+                <TabsTrigger value="insights-hibridos" className="flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  <span className="hidden sm:inline">Insights IA</span>
+                </TabsTrigger>
                 <TabsTrigger value="charts" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   <span className="hidden sm:inline">Gráficos</span>
@@ -585,6 +590,15 @@ export default function RIASECResults() {
               </TabsList>
             </CardContent>
           </Card>
+
+          {/* Insights Híbridos Tab */}
+          <TabsContent value="insights-hibridos" className="space-y-6">
+            <TestInsights
+              testType="RIASEC Assessment"
+              testResults={results}
+              userId={user?.id || "demo"}
+            />
+          </TabsContent>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">

@@ -37,6 +37,7 @@ import { useToast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 import { DISCContextForm, type UserContext } from "@/components/disc-context-form"
+import { TestInsights } from "@/components/test-insights"
 
 interface DISCResult {
   d_score: number
@@ -553,9 +554,12 @@ export default function DISCResultsPage() {
           </TabsList>
 
           {/* Updated TabsList for V2 sections */}
-          <TabsList className="grid w-full grid-cols-9">
+          <TabsList className="grid w-full grid-cols-10">
             <TabsTrigger value="overview" className="text-xs">
               Resumen
+            </TabsTrigger>
+            <TabsTrigger value="insights-hibridos" className="text-xs">
+              Insights IA
             </TabsTrigger>
             <TabsTrigger value="details" className="text-xs">
               Dimensiones
@@ -997,6 +1001,26 @@ export default function DISCResultsPage() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="insights-hibridos" className="space-y-6">
+            <TestInsights
+              testType="DISC Assessment"
+              testResults={
+                discResult
+                  ? {
+                      d_score: discResult.d_score,
+                      i_score: discResult.i_score,
+                      s_score: discResult.s_score,
+                      c_score: discResult.c_score,
+                      primary_type: discResult.primary_type,
+                      analysis: discResult.analysis,
+                      recommendations: discResult.recommendations,
+                    }
+                  : {}
+              }
+              userId={user?.id || "demo"}
+            />
           </TabsContent>
 
           <TabsContent value="details" className="space-y-6">

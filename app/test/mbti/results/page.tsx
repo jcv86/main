@@ -36,6 +36,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { TestInsights } from "@/components/test-insights"
 
 interface MBTIResult {
   type: string
@@ -748,6 +749,29 @@ export default function MBTIResultsPage() {
                 </Card>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Insights Híbridos */}
+          <TabsContent value="insights-hibridos" className="space-y-6">
+            <TestInsights
+              testType="MBTI Assessment"
+              testResults={
+                mbtiResult
+                  ? {
+                      type: mbtiResult.type,
+                      e_score: mbtiResult.e_score,
+                      i_score: mbtiResult.i_score,
+                      s_score: mbtiResult.s_score,
+                      n_score: mbtiResult.n_score,
+                      t_score: mbtiResult.t_score,
+                      f_score: mbtiResult.f_score,
+                      j_score: mbtiResult.j_score,
+                      p_score: mbtiResult.p_score,
+                    }
+                  : {}
+              }
+              userId={user?.id || "demo"}
+            />
           </TabsContent>
 
           {/* Dimensiones MBTI */}

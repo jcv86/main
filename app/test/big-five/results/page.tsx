@@ -52,6 +52,7 @@ import {
 import { AiInsightsPanel } from "@/components/ai-insights-panel"
 import { MultiTestInsights } from "@/components/multi-test-insights"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { TestInsights } from "@/components/test-insights"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { useToast } from "@/hooks/use-toast"

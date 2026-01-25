@@ -53,6 +53,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { TestInsights } from "@/components/test-insights"
 
 const categoryIcons = {
   comunicacion: MessageSquare,
@@ -736,7 +737,11 @@ export default function SoftSkillsResults() {
           </TabsContent>
 
           <TabsContent value="insights">
-            <AiInsightsPanel testType="soft-skills" results={results} responses={openResponses} />
+            <TestInsights
+              testType="Soft Skills"
+              testResults={results}
+              userId={user?.id || "demo"}
+            />
           </TabsContent>
 
           <TabsContent value="oportunidades" className="space-y-6">

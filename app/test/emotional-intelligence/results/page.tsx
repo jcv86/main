@@ -39,6 +39,7 @@ import { toast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useSession } from "@/components/session-wrapper"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
+import { TestInsights } from "@/components/test-insights"
 
 interface TestResults {
   overall_score: number
@@ -354,6 +355,10 @@ export default function EmotionalIntelligenceResults() {
               <Sparkles className="h-4 w-4" />
               <span>Resumen</span>
             </TabsTrigger>
+            <TabsTrigger value="insights-hibridos" className="flex items-center space-x-2">
+              <Brain className="h-4 w-4" />
+              <span>Insights IA</span>
+            </TabsTrigger>
             <TabsTrigger value="competencies" className="flex items-center space-x-2">
               <PieChart className="h-4 w-4" />
               <span>Competencias</span>
@@ -395,6 +400,14 @@ export default function EmotionalIntelligenceResults() {
               <span>Coach IA</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="insights-hibridos" className="space-y-6">
+            <TestInsights
+              testType="Emotional Intelligence"
+              testResults={testResults}
+              userId={user?.id || "demo"}
+            />
+          </TabsContent>
 
           <TabsContent value="resumen-ejecutivo" className="space-y-8">
             <Card className="border-2 border-purple-200 shadow-xl">
