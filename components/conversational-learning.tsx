@@ -15,7 +15,13 @@ interface Message {
   content: string
   sender: 'user' | 'coach'
   timestamp: Date
-  type?: 'message' | 'recommendation' | 'insight'
+  type?: 'message' | 'recommendation' | 'insight' | 'options'
+  options?: Array<{
+    id: string
+    label: string
+    description: string
+  }>
+  selectedOptionId?: string
 }
 
 export function ConversationalLearning() {
@@ -43,6 +49,108 @@ export function ConversationalLearning() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  const parseOptionsFromContent = (content: string): { text: string; options: Message['options'] } => {
+    // Check if content contains options pattern (Option A:, Option B:, Option C:)
+    const optionPattern = /\*\s*(?:Opción|Option)\s+([A-Z]):\s*(.+?)(?=\n\*\s*(?:Opción|Option)|$)/gs
+    const matches = [...content.matchAll(optionPattern)]
+    
+    if (matches.length >= 3) {
+      // Extract main text (everything before first option)
+      const firstOptionIndex = content.indexOf('*')
+      const mainText = content.substring(0, firstOptionIndex).trim()
+      
+      // Parse options
+      const options = matches.map((match, idx) => ({
+        id: `option-${String.fromCharCode(65 + idx)}`,
+        label: `Opción ${String.fromCharCode(65 + idx)}`,
+        description: match[2].trim()
+      }))
+      
+      return { text: mainText, options }
+    }
+    
+    return { text: content, options: undefined }
+  }
+
+  const handleOptionSelected = async (optionId: string, messageId: string, description: string) => {
+    // Update message to show selected option
+    setMessages(prev => prev.map(msg =>
+      msg.id === messageId
+        ? { ...msg, selectedOptionId: optionId }
+        : msg
+    ))
+
+    // Send selected option back to coach
+    const selectionMessage = `He elegido: ${description}`
+    
+    const userMessage: Message = {
+      id: (Date.now() + 100).toString(),
+      content: selectionMessage,
+      sender: 'user',
+      timestamp: new Date(),
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/conversational-learning', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userMessage: selectionMessage,
+          conversationHistory: [...messages, userMessage],
+          userId: user?.id || 'demo',
+          email: user?.email,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to fetch response')
+
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No response body')
+
+      const coachMessageId = (Date.now() + 101).toString()
+      let fullContent = ''
+
+      const coachMessage: Message = {
+        id: coachMessageId,
+        content: '',
+        sender: 'coach',
+        timestamp: new Date(),
+        type: 'message',
+      }
+      setMessages(prev => [...prev, coachMessage])
+
+      const decoder = new TextDecoder()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value)
+        fullContent += chunk
+
+        // Parse options if present
+        const { text, options } = parseOptionsFromContent(fullContent)
+
+        setMessages(prev => prev.map(msg =>
+          msg.id === coachMessageId
+            ? {
+                ...msg,
+                content: text,
+                type: options ? 'options' : 'message',
+                options
+              }
+            : msg
+        ))
+      }
+    } catch (error) {
+      console.error('Error processing option:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -90,6 +198,50 @@ export function ConversationalLearning() {
         type: 'message',
       }
       setMessages(prev => [...prev, coachMessage])
+
+      // Stream the text
+      const decoder = new TextDecoder()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value)
+        fullContent += chunk
+
+        // Parse options if present and update message
+        const { text, options } = parseOptionsFromContent(fullContent)
+
+        setMessages(prev => prev.map(msg =>
+          msg.id === coachMessageId
+            ? {
+                ...msg,
+                content: text,
+                type: options ? 'options' : 'message',
+                options
+              }
+            : msg
+        ))
+      }
+
+      // Determine phase based on message count
+      const newMessageCount = messages.filter((m: any) => m.sender === 'user').length + 1
+      let nextPhase: typeof selectedPhase = 'greeting'
+      if (newMessageCount >= 1) nextPhase = 'exploration'
+      if (newMessageCount >= 3) nextPhase = 'recommendations'
+      if (newMessageCount >= 5) nextPhase = 'planning'
+      setSelectedPhase(nextPhase)
+    } catch (error) {
+      console.error('Error sending message:', error)
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'Disculpa, hubo un error. Por favor intenta de nuevo.',
+        sender: 'coach',
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
 
       // Stream the text
       const decoder = new TextDecoder()
@@ -182,6 +334,30 @@ export function ConversationalLearning() {
                       : 'bg-gray-100 text-gray-900 rounded-bl-none'
                   }`}>
                     <p className="text-sm md:text-base leading-relaxed whitespace-pre-line">{message.content}</p>
+                    
+                    {/* Render Options if present */}
+                    {message.type === 'options' && message.options && (
+                      <div className="mt-4 space-y-2">
+                        {message.options.map((option) => (
+                          <button
+                            key={option.id}
+                            onClick={() => handleOptionSelected(option.id, message.id, option.description)}
+                            disabled={isLoading || message.selectedOptionId !== undefined}
+                            className={`w-full text-left p-2 rounded border transition-all ${
+                              message.selectedOptionId === option.id
+                                ? 'bg-green-200 border-green-400 font-semibold'
+                                : message.selectedOptionId
+                                ? 'bg-gray-200 border-gray-300 opacity-50 cursor-not-allowed'
+                                : 'bg-white border-gray-300 hover:bg-blue-50 hover:border-blue-400 cursor-pointer'
+                            }`}
+                          >
+                            <div className="text-xs font-semibold text-gray-700">{option.label}</div>
+                            <div className="text-xs text-gray-600 mt-1">{option.description}</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    
                     <p className={`text-xs mt-2 ${
                       message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
                     }`}>
