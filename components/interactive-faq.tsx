@@ -140,6 +140,7 @@ export function InteractiveFAQ() {
             return (
               <div
                 key={faq.id}
+                id={`faq-${faq.id}`}
                 className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
               >
                 <button
