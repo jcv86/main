@@ -237,20 +237,65 @@ export function TestInsights({ testType, testResults, testResponses, userId, onI
             <CardDescription>Basadas en el Cerebro y tu Biblioteca</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {recommendations.map((rec, idx) => (
-              <div key={idx} className="rounded-lg border border-gray-200 p-3">
-                <p className="font-semibold text-sm">{rec.title}</p>
-                <p className="text-xs text-gray-600">{rec.description}</p>
-                <div className="mt-2 flex gap-2">
-                  <Badge variant="outline" className="text-xs">
-                    {rec.timeframe}
-                  </Badge>
-                  <Badge variant="outline" className="text-xs">
-                    {rec.difficulty}
-                  </Badge>
+            {recommendations.map((rec, idx) => {
+              const isHighlighted = rec.isHighlighted && rec.matchScore >= 70
+              const matchScorePercent = Math.round(rec.matchScore || 0)
+              
+              return (
+                <div 
+                  key={idx} 
+                  className={`rounded-lg border p-3 transition-all ${
+                    isHighlighted
+                      ? 'border-emerald-400 bg-emerald-50 shadow-md ring-2 ring-emerald-200'
+                      : rec.matchScore >= 70
+                      ? 'border-green-200 bg-green-50'
+                      : 'border-gray-200 bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-sm">{rec.title}</p>
+                        {isHighlighted && (
+                          <Badge className="bg-emerald-600 text-white text-xs">
+                            Mejor Coincidencia
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-1">{rec.description}</p>
+                    </div>
+                    {rec.matchScore !== undefined && (
+                      <div className={`flex items-center gap-1 rounded-full px-3 py-1 ${
+                        matchScorePercent >= 70
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        <span className="text-xs font-semibold">{matchScorePercent}%</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Badge variant="outline" className="text-xs">
+                      {rec.timeframe}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {rec.difficulty}
+                    </Badge>
+                    {rec.source && (
+                      <Badge variant="outline" className={`text-xs ${
+                        rec.source === 'cerebro' 
+                          ? 'bg-purple-50 border-purple-200' 
+                          : rec.source === 'hybrid'
+                          ? 'bg-emerald-50 border-emerald-200'
+                          : 'bg-blue-50 border-blue-200'
+                      }`}>
+                        {rec.source === 'cerebro' ? 'Cerebro' : rec.source === 'hybrid' ? 'Híbrida' : 'IA'}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </CardContent>
         </Card>
       )}

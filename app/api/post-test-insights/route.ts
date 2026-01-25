@@ -29,6 +29,8 @@ const InsightSchema = z.object({
       timeframe: z.string(),
       difficulty: z.string(),
       source: z.enum(["openai", "cerebro", "hybrid"]),
+      matchScore: z.number().min(0).max(100).describe("Percentage match to user profile (0-100)"),
+      isHighlighted: z.boolean().optional().describe("True if this recommendation should be highlighted"),
     }),
   ),
   developmentPlan: z.object({
@@ -265,6 +267,9 @@ function mergeAndRankInsights(openaiInsights: any, cerebroInsights: any): any {
     (rec, index, self) => index === self.findIndex((r) => r.title.toLowerCase() === rec.title.toLowerCase()),
   )
 
+  // Calculate match scores and determine highlighting
+  const recommendationsWithScores = calculateRecommendationScores(uniqueRecommendations, cerebroInsights)
+
   // Merge development plans
   const developmentPlan = {
     shortTerm: [
@@ -278,9 +283,60 @@ function mergeAndRankInsights(openaiInsights: any, cerebroInsights: any): any {
 
   return {
     insights: uniqueInsights,
-    recommendations: uniqueRecommendations,
+    recommendations: recommendationsWithScores,
     developmentPlan,
   }
+}
+
+/**
+ * Calculate recommendation match scores and determine which should be highlighted
+ */
+function calculateRecommendationScores(recommendations: any[], cerebroInsights: any): any[] {
+  // Calculate a match score for each recommendation based on source and context
+  const scored = recommendations.map((rec, index) => {
+    let matchScore = 0
+
+    // Cerebro insights get higher base score (more personalized)
+    const isCerebroSource = rec.source === "cerebro"
+    const baseScore = isCerebroSource ? 75 : 60
+
+    // Boost score based on position in cerebro's list (first recommendations are best)
+    const cerebroRecIndex = cerebroInsights.recommendations.findIndex(
+      (r: any) => r.title.toLowerCase() === rec.title.toLowerCase()
+    )
+    if (cerebroRecIndex !== -1) {
+      const proximityBoost = Math.max(0, 15 - cerebroRecIndex * 5)
+      matchScore = baseScore + proximityBoost
+    } else {
+      matchScore = baseScore
+    }
+
+    // Cap at 100
+    matchScore = Math.min(100, matchScore)
+
+    return {
+      ...rec,
+      matchScore,
+      isHighlighted: false, // Will be set below
+    }
+  })
+
+  // Find recommendations that exceed 70% threshold
+  const aboveThreshold = scored.filter((r) => r.matchScore >= 70)
+
+  // If any exceed 70%, highlight the one with highest score
+  if (aboveThreshold.length > 0) {
+    const bestMatch = aboveThreshold.reduce((best, current) => 
+      current.matchScore > best.matchScore ? current : best
+    )
+    
+    return scored.map((rec) => ({
+      ...rec,
+      isHighlighted: rec.matchScore === bestMatch.matchScore,
+    }))
+  }
+
+  return scored
 }
 
 /**
