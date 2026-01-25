@@ -19,6 +19,9 @@ import {
   Database,
   Book,
   HelpCircle,
+  Zap,
+  TrendingUp,
+  Award,
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -59,6 +62,24 @@ export function AdminNavbar() {
               <Button variant="ghost" size="sm">
                 <BookOpen className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Biblioteca</span>
+              </Button>
+            </Link>
+            <Link href="/personalized-learning">
+              <Button variant="ghost" size="sm">
+                <Zap className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Aprender</span>
+              </Button>
+            </Link>
+            <Link href="/leaderboard">
+              <Button variant="ghost" size="sm">
+                <Trophy className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Ranking</span>
+              </Button>
+            </Link>
+            <Link href="/learning-flow-onboarding">
+              <Button variant="ghost" size="sm">
+                <Zap className="h-4 w-4 mr-2 text-amber-500" />
+                <span className="hidden sm:inline">Flujo</span>
               </Button>
             </Link>
             <Link href="/ai-coach">

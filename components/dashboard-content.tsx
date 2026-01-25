@@ -28,6 +28,7 @@ import {
 import { useRouter } from "next/navigation"
 import { DailyCareerTip } from "@/components/daily-career-tip"
 import { useSession } from "@/components/session-wrapper"
+import { BetterMeIntegration } from "@/components/betterme-integration"
 
 interface TestResult {
   id: string
@@ -435,7 +436,16 @@ export function DashboardContent() {
 
         <DailyCareerTip careerStage="intermediate" />
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        {/* BetterMe Integration Section */}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-100">Aprendizaje Inteligente</h2>
+          </div>
+          <BetterMeIntegration />
+        </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 h-auto p-1">
             <TabsTrigger
               value="overview"
@@ -941,8 +951,6 @@ export function DashboardContent() {
             </Card>
           </TabsContent>
         </Tabs>
-
-        {/* Removed Quick Actions section as it's now integrated into the overview tab */}
       </div>
     </div>
   )
