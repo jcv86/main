@@ -8,8 +8,8 @@ export async function GET(request: Request) {
     // Obtener top usuarios por puntos
     const { data: topUsers, error } = await supabase
       .from("user_reading_stats")
-      .select("user_id, total_points, current_streak, total_books_completed")
-      .order("total_points", { ascending: false })
+      .select("user_id, points, reading_streak, books_read")
+      .order("points", { ascending: false })
       .limit(100)
 
     if (error) throw error
@@ -28,9 +28,9 @@ export async function GET(request: Request) {
           user_id: stat.user_id,
           name: userProfile?.full_name || "Usuario",
           avatar: userProfile?.avatar_url,
-          points: stat.total_points,
-          streak: stat.current_streak,
-          booksCompleted: stat.total_books_completed,
+          points: stat.points,
+          streak: stat.reading_streak,
+          booksCompleted: stat.books_read,
         }
       })
     )
@@ -38,8 +38,8 @@ export async function GET(request: Request) {
     // Obtener ranking por streak
     const { data: streakRanking } = await supabase
       .from("user_reading_stats")
-      .select("user_id, current_streak")
-      .order("current_streak", { ascending: false })
+      .select("user_id, reading_streak")
+      .order("reading_streak", { ascending: false })
       .limit(10)
 
     const topStreaks = await Promise.all(
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
         return {
           rank: index + 1,
           name: userProfile?.full_name || "Usuario",
-          streak: stat.current_streak,
+          streak: stat.reading_streak,
         }
       }) || []
     )

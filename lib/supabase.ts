@@ -33,8 +33,12 @@ export function createClient() {
             const response = await fetch(url, options)
             return response
           } catch (error) {
-            console.warn("Supabase fetch failed, using mock client:", error)
-            throw new Error("Network error - using mock client")
+            // Handle AbortError gracefully - just re-throw it without logging
+            if (error instanceof Error && error.name === "AbortError") {
+              throw error
+            }
+            console.warn("Supabase fetch failed:", error)
+            throw error
           }
         },
       },
