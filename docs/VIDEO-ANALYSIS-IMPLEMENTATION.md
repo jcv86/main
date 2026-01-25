@@ -24,7 +24,7 @@
 - **ResultsComparator**: Generar reporte de similitud
 
 ### 2. Flujo de Datos
-```
+\`\`\`
 User uploads video 
   → Extract frames (cada 5-10 segundos)
   → Enviar a GPT-4o con prompt específico
@@ -32,10 +32,10 @@ User uploads video
   → Generar preguntas similares para test
   → Almacenar en Supabase (video_analysis table)
   → Mostrar comparativa con resultados reales
-```
+\`\`\`
 
 ### 3. Database Schema Needed
-```sql
+\`\`\`sql
 CREATE TABLE video_analysis (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES auth.users,
@@ -47,12 +47,12 @@ CREATE TABLE video_analysis (
   comparison_with_test JSONB,
   created_at TIMESTAMP
 );
-```
+\`\`\`
 
 ## Prompts para GPT-4o
 
 ### Prompt 1: Análisis de Test Video
-```
+\`\`\`
 Analyze this test video sequence and extract:
 1. Questions asked (verbatim)
 2. User responses (summary)
@@ -65,10 +65,10 @@ Analyze this test video sequence and extract:
 5. Confidence level (0-100) for profile estimation
 
 Format: JSON with these exact keys: questions, responses, behavioral_indicators, estimated_profile, confidence
-```
+\`\`\`
 
 ### Prompt 2: Question Similarity Matching
-```
+\`\`\`
 Compare these questions from a video test with the standard DISC test questions.
 For each pair, provide:
 1. Similarity score (0-100)
@@ -79,7 +79,7 @@ Video questions: [...]
 Standard test questions: [...]
 
 Format: JSON array with: video_q, standard_q, similarity_score, same_trait, differences
-```
+\`\`\`
 
 ## Implementation Steps
 
@@ -108,7 +108,7 @@ Format: JSON array with: video_q, standard_q, similarity_score, same_trait, diff
 ## Code Examples
 
 ### Extract Frames (Node.js approach)
-```javascript
+\`\`\`javascript
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 
@@ -117,10 +117,10 @@ async function extractFrames(videoPath, frameCount = 20) {
   // Implementation with ffmpeg
   return frames
 }
-```
+\`\`\`
 
 ### Call GPT-4o with Frames
-```javascript
+\`\`\`javascript
 const response = await fetch('https://api.openai.com/v1/chat/completions', {
   method: 'POST',
   headers: {
@@ -142,7 +142,7 @@ const response = await fetch('https://api.openai.com/v1/chat/completions', {
     max_tokens: 2000
   })
 })
-```
+\`\`\`
 
 ## Cost Estimation
 - Video (500MB) → ~5000 frames

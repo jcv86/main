@@ -92,7 +92,7 @@
 
 Cada análisis retorna:
 
-```json
+\`\`\`json
 {
   "success": boolean,
   "analysisType": string,
@@ -106,7 +106,7 @@ Cada análisis retorna:
   "timestamp": ISO8601 string,
   "error": string (si falla)
 }
-```
+\`\`\`
 
 ## Características de la Interfaz
 

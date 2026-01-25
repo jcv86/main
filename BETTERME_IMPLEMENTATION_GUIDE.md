@@ -45,46 +45,46 @@ Hemos implementado los **4 flujos principales de BetterMe** en DTCFinal:
 
 ## 🔌 RUTAS API CREADAS
 
-```
+\`\`\`
 POST   /api/betterme/assessment           - Guardar assessment del usuario
 GET    /api/betterme/assessment           - Obtener perfil de usuario
 GET    /api/betterme/recommendations      - Obtener libros recomendados
 GET    /api/betterme/progress             - Obtener estadísticas de progreso
 POST   /api/betterme/progress             - Actualizar puntos/progreso
 GET    /api/betterme/leaderboard          - Obtener ranking global
-```
+\`\`\`
 
 ---
 
 ## 📊 ESTRUCTURA DE DATOS EN SUPABASE
 
 ### Tabla: `user_learning_profiles`
-```sql
+\`\`\`sql
 - user_id (uuid, PK)
 - current_level (enum: beginner, intermediate, advanced)
 - learning_style (varchar: visual, audio, reading, kinesthetic)
 - learning_goals (array)
 - preferred_categories (array)
 - created_at, updated_at
-```
+\`\`\`
 
 ### Tabla: `user_reading_stats`
-```sql
+\`\`\`sql
 - user_id (uuid, PK)
 - current_streak (integer)
 - total_points (integer)
 - total_books_completed (integer)
 - books_in_progress (array)
 - updated_at
-```
+\`\`\`
 
 ### Tabla: `achievements` (YA EXISTE)
-```sql
+\`\`\`sql
 - user_id (uuid)
 - achievement_type (enum: badge, streak, milestone)
 - earned_at (timestamp)
 - metadata (json)
-```
+\`\`\`
 
 ---
 
@@ -93,19 +93,19 @@ GET    /api/betterme/leaderboard          - Obtener ranking global
 ### Paso 1: Agregar links de navegación
 Agrega estos links en tu navbar o menú principal:
 
-```tsx
+\`\`\`tsx
 <nav>
   <Link href="/personalized-learning">📚 Mi Aprendizaje</Link>
   <Link href="/library-recommendations">⭐ Recomendados</Link>
   <Link href="/my-learning">📊 Mi Progreso</Link>
   <Link href="/leaderboard">🏆 Leaderboard</Link>
 </nav>
-```
+\`\`\`
 
 ### Paso 2: Agregar widget al dashboard
 En tu página principal/dashboard, importa y muestra:
 
-```tsx
+\`\`\`tsx
 import { BetterMeQuickWidget } from '@/components/betterme-quick-widget'
 
 export default function DashboardPage() {
@@ -116,12 +116,12 @@ export default function DashboardPage() {
     </div>
   )
 }
-```
+\`\`\`
 
 ### Paso 3: Integrar con lectura de libros
 Cuando un usuario lee un libro, actualiza puntos:
 
-```tsx
+\`\`\`tsx
 // En el componente de lectura
 async function completeBook(bookId: number) {
   await fetch('/api/betterme/progress', {
@@ -133,13 +133,13 @@ async function completeBook(bookId: number) {
     })
   })
 }
-```
+\`\`\`
 
 ---
 
 ## 📱 FLUJO DE USUARIO COMPLETO
 
-```
+\`\`\`
 1. Usuario nuevo accede a la plataforma
    ↓
 2. Se redirige a `/personalized-learning`
@@ -167,7 +167,7 @@ async function completeBook(bookId: number) {
 11. Puede ver su ranking en `/leaderboard`
    ↓
 12. Compite con otros usuarios
-```
+\`\`\`
 
 ---
 
@@ -189,7 +189,7 @@ Si quieres extender el sistema:
 
 Para probar localmente:
 
-```bash
+\`\`\`bash
 # 1. Asegúrate de que las tablas existan en Supabase:
 #    - user_learning_profiles
 #    - user_reading_stats
@@ -206,7 +206,7 @@ Para probar localmente:
 
 # 4. Verifica datos en Supabase
 #    SELECT * FROM user_learning_profiles
-```
+\`\`\`
 
 ---
 
