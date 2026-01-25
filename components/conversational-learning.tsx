@@ -1,0 +1,278 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Send, BookOpen, Lightbulb, Target, MessageCircle } from 'lucide-react'
+import { useSession } from '@/components/session-wrapper'
+
+interface Message {
+  id: string
+  content: string
+  sender: 'user' | 'coach'
+  timestamp: Date
+  type?: 'message' | 'recommendation' | 'insight'
+}
+
+export function ConversationalLearning() {
+  const { user } = useSession()
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedPhase, setSelectedPhase] = useState<'greeting' | 'exploration' | 'recommendations' | 'planning'>('greeting')
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Initial greeting message
+    if (messages.length === 0) {
+      const greeting: Message = {
+        id: '1',
+        content: 'Hola 👋 Soy tu Coach de Aprendizaje Personalizado. En lugar de hacer preguntas tradicionales, vamos a tener una conversación natural sobre tus intereses, metas y estilo de aprendizaje.\n\n¿Por qué no comenzamos? Cuéntame... ¿hay algún área específica de desarrollo o crecimiento en la que te gustaría enfocarte? Puede ser desde liderazgo, negocios, psicología, innovación o cualquier otra cosa que tengas en mente.',
+        sender: 'coach',
+        timestamp: new Date(),
+        type: 'message'
+      }
+      setMessages([greeting])
+    }
+  }, [])
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!input.trim()) return
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: input,
+      sender: 'user',
+      timestamp: new Date(),
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/conversational-learning', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userMessage: input,
+          conversationHistory: messages,
+          userId: user?.id || 'demo',
+          email: user?.email,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to fetch response')
+
+      // Handle streaming response
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No response body')
+
+      const coachMessageId = (Date.now() + 1).toString()
+      let fullContent = ''
+
+      // Create initial empty message
+      const coachMessage: Message = {
+        id: coachMessageId,
+        content: '',
+        sender: 'coach',
+        timestamp: new Date(),
+        type: 'message',
+      }
+      setMessages(prev => [...prev, coachMessage])
+
+      // Stream the text
+      const decoder = new TextDecoder()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value)
+        fullContent += chunk
+
+        // Update the message with streaming content
+        setMessages(prev => prev.map(msg =>
+          msg.id === coachMessageId
+            ? { ...msg, content: fullContent }
+            : msg
+        ))
+      }
+
+      // Determine phase based on message count
+      const newMessageCount = messages.filter((m: any) => m.sender === 'user').length + 1
+      let nextPhase: typeof selectedPhase = 'greeting'
+      if (newMessageCount >= 1) nextPhase = 'exploration'
+      if (newMessageCount >= 3) nextPhase = 'recommendations'
+      if (newMessageCount >= 5) nextPhase = 'planning'
+      setSelectedPhase(nextPhase)
+    } catch (error) {
+      console.error('Error sending message:', error)
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'Disculpa, hubo un error. Por favor intenta de nuevo.',
+        sender: 'coach',
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const phaseBadges = {
+    greeting: { label: 'Saludo inicial', color: 'bg-blue-100 text-blue-800' },
+    exploration: { label: 'Exploración', color: 'bg-purple-100 text-purple-800' },
+    recommendations: { label: 'Recomendaciones', color: 'bg-green-100 text-green-800' },
+    planning: { label: 'Plan de aprendizaje', color: 'bg-orange-100 text-orange-800' },
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4 md:p-8">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <MessageCircle className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl font-bold">Aprendizaje Conversacional</h1>
+          </div>
+          <p className="text-gray-600 mb-4">Una conversación natural para descubrir tu camino de aprendizaje personalizado</p>
+          <div className="flex gap-2 flex-wrap">
+            {Object.entries(phaseBadges).map(([key, { label, color }]) => (
+              <Badge
+                key={key}
+                className={`${color} ${selectedPhase === key ? 'ring-2 ring-offset-2 ring-current' : 'opacity-60'}`}
+              >
+                {label}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Chat Container */}
+        <Card className="flex flex-col h-[600px] shadow-lg">
+          {/* Messages Area */}
+          <ScrollArea className="flex-1 p-4 md:p-6">
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {message.sender === 'coach' && (
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback className="bg-primary text-white text-xs">Coach</AvatarFallback>
+                    </Avatar>
+                  )}
+
+                  <div className={`max-w-xs md:max-w-md lg:max-w-lg rounded-lg p-3 ${
+                    message.sender === 'user'
+                      ? 'bg-primary text-white rounded-br-none'
+                      : message.type === 'recommendation'
+                      ? 'bg-green-50 text-gray-900 border border-green-200 rounded-bl-none'
+                      : 'bg-gray-100 text-gray-900 rounded-bl-none'
+                  }`}>
+                    <p className="text-sm md:text-base leading-relaxed whitespace-pre-line">{message.content}</p>
+                    <p className={`text-xs mt-2 ${
+                      message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+
+                  {message.sender === 'user' && (
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback className="bg-gray-300 text-white text-xs">You</AvatarFallback>
+                    </Avatar>
+                  )}
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex gap-3">
+                  <Avatar className="w-8 h-8">
+                    <AvatarFallback className="bg-primary text-white text-xs">Coach</AvatarFallback>
+                  </Avatar>
+                  <div className="bg-gray-100 rounded-lg rounded-bl-none p-3">
+                    <div className="flex gap-2">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={scrollRef} />
+            </div>
+          </ScrollArea>
+
+          {/* Input Area */}
+          <div className="border-t p-4 md:p-6 bg-white rounded-b-lg">
+            <form onSubmit={handleSendMessage} className="flex gap-2">
+              <Textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Cuéntame libremente... Ejemplo: 'Trabajo en ventas y quiero mejorar mi liderazgo' o 'Me interesa aprender sobre finanzas personales'"
+                className="min-h-12 resize-none"
+                disabled={isLoading}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSendMessage(e as any)
+                  }
+                }}
+              />
+              <Button
+                type="submit"
+                disabled={!input.trim() || isLoading}
+                size="icon"
+                className="flex-shrink-0 self-end"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </form>
+          </div>
+        </Card>
+
+        {/* Quick Tips */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="border-dashed bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex gap-2 mb-2">
+                <MessageCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <h3 className="font-semibold text-sm">Conversación Natural</h3>
+              </div>
+              <p className="text-xs text-gray-600">Habla como si estuvieras con un amigo. Comparte tus desafíos, metas y sueños profesionales</p>
+            </CardContent>
+          </Card>
+          <Card className="border-dashed bg-green-50">
+            <CardContent className="pt-6">
+              <div className="flex gap-2 mb-2">
+                <BookOpen className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <h3 className="font-semibold text-sm">Recomendaciones Inteligentes</h3>
+              </div>
+              <p className="text-xs text-gray-600">Recibirás libros y recursos de nuestra biblioteca de 145+ títulos, personalizados para ti</p>
+            </CardContent>
+          </Card>
+          <Card className="border-dashed bg-purple-50">
+            <CardContent className="pt-6">
+              <div className="flex gap-2 mb-2">
+                <Target className="w-4 h-4 text-purple-600 flex-shrink-0" />
+                <h3 className="font-semibold text-sm">Plan Personalizado</h3>
+              </div>
+              <p className="text-xs text-gray-600">Crearemos juntos tu hoja de ruta de aprendizaje, adaptada a tu ritmo y disponibilidad</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}

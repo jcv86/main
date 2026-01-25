@@ -282,3 +282,40 @@ export const platformBrain = new EnhancedPlatformBrain()
 export async function queryBrain(query: string, category?: string): Promise<BrainResponse> {
   return platformBrain.generateResponse({ query, category })
 }
+
+// Enhanced platform brain query with formatted results for book recommendations
+export async function enhancedPlatformBrainQuery(query: string, options?: { limit?: number; category?: string }) {
+  try {
+    const response = await platformBrain.generateResponse({
+      query,
+      category: options?.category,
+      limit: options?.limit || 3,
+    })
+
+    // Format results for conversational learning (returns books/resources)
+    return {
+      answer: response.answer,
+      results: response.sources.map((source) => ({
+        id: source.id,
+        title: source.title,
+        author: source.author,
+        category: source.category,
+        content: source.content,
+        tags: source.tags,
+        relevance_score: source.relevance_score || 0.8,
+      })),
+      confidence: response.confidence,
+      suggestions: response.suggestions,
+      search_time_ms: response.search_time_ms,
+    }
+  } catch (error) {
+    console.error('Error in enhanced platform brain query:', error)
+    return {
+      answer: 'No encontré información en este momento.',
+      results: [],
+      confidence: 0,
+      suggestions: [],
+      search_time_ms: 0,
+    }
+  }
+}

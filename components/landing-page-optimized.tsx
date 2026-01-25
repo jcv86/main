@@ -25,11 +25,6 @@ export function LandingPageOptimized() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-28">
         <div className="text-center max-w-5xl mx-auto">
-          <Badge className="mb-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 px-4 py-2 text-sm">
-            <Sparkles className="h-4 w-4 mr-2" />
-            Plataforma N°1 en Chile para Desarrollo Profesional con IA
-          </Badge>
-
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
             Transforma Tu Carrera Profesional
           </h1>
