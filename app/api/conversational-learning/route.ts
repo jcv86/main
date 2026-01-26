@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
 
     // Create streaming response with OpenAI API
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
@@ -239,7 +239,7 @@ async function extractLearningProfile(conversationText: string, userMessage: str
     console.log('[v0] Extracting profile from text:', textToAnalyze.substring(0, 100))
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
