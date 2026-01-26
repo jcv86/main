@@ -159,18 +159,15 @@ async function loadBooks() {
     // Clear existing books (optional)
     // await supabase.from('knowledge_base').delete().neq('id', 0)
 
-    // Insert new books
+    // Insert new books (using only core columns that exist)
     const { data, error } = await supabase
       .from('knowledge_base')
       .insert(
         books.map((book, index) => ({
-          id: index + 1,
           title: book.title,
           author: book.author,
           category: book.category,
-          description: '',
-          cover_url: '',
-          created_at: new Date().toISOString(),
+          content: '',
         }))
       )
       .select()
