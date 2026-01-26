@@ -57,6 +57,8 @@ export async function POST(request: NextRequest) {
   try {
     const { userMessage, conversationHistory, userId, email } = await request.json()
 
+    console.log('[v0] API received:', { userMessage: userMessage?.substring(0, 50), userId })
+
     // Get user's learning profile from conversation
     const conversationText = conversationHistory
       .map((m: any) => `${m.sender === 'user' ? 'User' : 'Coach'}: ${m.content}`)
@@ -70,7 +72,20 @@ export async function POST(request: NextRequest) {
     if (messageCount >= 5) currentPhase = 'planning'
 
     // Build user profile from conversation
-    const profileContext = await extractLearningProfile(conversationText)
+    let profileContext
+    try {
+      profileContext = await extractLearningProfile(conversationText, userMessage)
+      console.log('[v0] Profile extracted:', profileContext)
+    } catch (error) {
+      console.error('[v0] Error extracting profile:', error)
+      profileContext = {
+        interests: ['professional development'],
+        experience_level: 'intermediate',
+        learning_style: 'reading',
+        goals: [],
+        time_availability: 5,
+      }
+    }
 
     // Query our brain system for relevant books
     let bookContext = ''
@@ -84,7 +99,7 @@ export async function POST(request: NextRequest) {
         .map((r: any) => `- ${r.title} by ${r.author} (${r.category})`)
         .join('\n')
     } catch (error) {
-      console.error('Error querying brain:', error)
+      console.error('[v0] Error querying brain:', error)
     }
 
     // Build system prompt
@@ -92,6 +107,8 @@ export async function POST(request: NextRequest) {
       .replace('{phase}', currentPhase)
       .replace('{profile}', JSON.stringify(profileContext))
       .replace('{bookContext}', bookContext)
+
+    console.log('[v0] Creating OpenAI stream...')
 
     // Create streaming response with OpenAI API
     const stream = await openai.chat.completions.create({
@@ -111,10 +128,9 @@ export async function POST(request: NextRequest) {
       max_tokens: 500,
     })
 
-    // Save conversation async (don't wait for it)
-    saveConversation(userMessage, userId, currentPhase, profileContext, stream)
+    console.log('[v0] Stream created, converting to response...')
 
-    // Convert OpenAI stream to SSE format
+    // Convert OpenAI stream to text stream for response
     const encoder = new TextEncoder()
     let fullText = ''
 
@@ -129,7 +145,15 @@ export async function POST(request: NextRequest) {
             }
           }
           controller.close()
+
+          // After stream is done, save conversation in background
+          if (userId && userId !== 'demo') {
+            saveConversationWithText(userMessage, userId, currentPhase, profileContext, fullText).catch(
+              (error) => console.error('[v0] Error saving conversation:', error)
+            )
+          }
         } catch (error) {
+          console.error('[v0] Stream error:', error)
           controller.error(error)
         }
       },
@@ -141,11 +165,34 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Error in conversational learning:', error)
-    return new Response(JSON.stringify({ error: 'Error processing your message' }), {
+    console.error('[v0] Error in conversational learning:', error)
+    return new Response(JSON.stringify({ error: 'Error processing your message', details: String(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     })
+  }
+}
+
+async function saveConversationWithText(
+  userMessage: string,
+  userId: string,
+  phase: string,
+  profile: any,
+  coachResponse: string
+) {
+  if (!userId || userId === 'demo') return
+
+  try {
+    await supabase.from('learning_conversations').insert({
+      user_id: userId,
+      phase: phase,
+      user_message: userMessage,
+      coach_response: coachResponse,
+      learning_profile: profile,
+      created_at: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error('Error saving conversation:', error)
   }
 }
 
@@ -180,30 +227,54 @@ async function saveConversation(
   }
 }
 
-async function extractLearningProfile(conversationText: string) {
+async function extractLearningProfile(conversationText: string, userMessage: string) {
   try {
+    // Use conversation text if available, otherwise use just the user message
+    const textToAnalyze = conversationText.trim() || userMessage
+
+    if (!textToAnalyze) {
+      throw new Error('No text to analyze')
+    }
+
+    console.log('[v0] Extracting profile from text:', textToAnalyze.substring(0, 100))
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
         {
           role: 'system',
-          content: `Extract the user's learning profile from this conversation. 
-          Return JSON with: interests (array), experience_level (beginner/intermediate/advanced), 
-          learning_style (reading/discussion/practice), goals (array), time_availability (hours per week).
-          Be concise and factual.`,
+          content: `Extract the user's learning profile from this text. 
+          Return ONLY valid JSON (no markdown, no code blocks) with: 
+          {"interests": [], "experience_level": "intermediate", "learning_style": "reading", "goals": [], "time_availability": 5}`,
         },
         {
           role: 'user',
-          content: conversationText,
+          content: textToAnalyze,
         },
       ],
       temperature: 0.3,
     })
 
     const content = response.choices[0]?.message?.content || ''
-    return JSON.parse(content)
+    console.log('[v0] Extracted profile response:', content.substring(0, 100))
+
+    // Clean up the response in case it has markdown code blocks
+    let jsonStr = content.trim()
+    if (jsonStr.startsWith('```')) {
+      jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+    }
+
+    const parsed = JSON.parse(jsonStr)
+    return {
+      interests: parsed.interests || ['professional development'],
+      experience_level: parsed.experience_level || 'intermediate',
+      learning_style: parsed.learning_style || 'reading',
+      goals: parsed.goals || [],
+      time_availability: parsed.time_availability || 5,
+    }
   } catch (error) {
-    console.error('Error extracting profile:', error)
+    console.error('[v0] Error in extractLearningProfile:', error)
+    // Return sensible defaults
     return {
       interests: ['professional development'],
       experience_level: 'intermediate',

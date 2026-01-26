@@ -177,6 +177,8 @@ export function ConversationalLearning() {
     setIsLoading(true)
 
     try {
+      console.log('[v0] Sending message to API:', { userMessage: input.substring(0, 50), messagesCount: messages.length })
+
       const response = await fetch('/api/conversational-learning', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -188,7 +190,13 @@ export function ConversationalLearning() {
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to fetch response')
+      console.log('[v0] Response received:', { status: response.status, ok: response.ok })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('[v0] Response error:', errorText)
+        throw new Error(`Failed to fetch response (${response.status}): ${errorText}`)
+      }
       const reader = response.body?.getReader()
       if (!reader) throw new Error('No response body')
 
