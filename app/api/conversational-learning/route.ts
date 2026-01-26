@@ -1,39 +1,29 @@
-import { NextRequest } from 'next/server'
-import OpenAI from 'openai'
-
-// Initialize OpenAI with API key
-const apiKey = process.env.OPENAI_API_KEY
-if (!apiKey) {
-  console.error('[v0] OPENAI_API_KEY not configured')
-}
-
-const openai = new OpenAI({
-  apiKey: apiKey,
-})
-
-
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('[v0] API route called')
+
+    // Check for API key
+    const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      console.error('[v0] OPENAI_API_KEY not set')
+      return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 })
     }
 
-    const { userMessage, conversationHistory } = await request.json()
+    console.log('[v0] API key found, parsing request')
+
+    const body = await request.json()
+    const { userMessage, conversationHistory } = body
 
     if (!userMessage) {
-      return new Response(JSON.stringify({ error: 'No message provided' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      console.warn('[v0] No user message provided')
+      return NextResponse.json({ error: 'No message provided' }, { status: 400 })
     }
 
     console.log('[v0] Received message:', userMessage.substring(0, 50))
 
-    // Build simple conversation
+    // Build messages array
     const messages: any[] = [
       {
         role: 'system',
@@ -42,7 +32,7 @@ export async function POST(request: NextRequest) {
     ]
 
     // Add conversation history
-    if (conversationHistory && Array.isArray(conversationHistory)) {
+    if (Array.isArray(conversationHistory) && conversationHistory.length > 0) {
       for (const msg of conversationHistory) {
         messages.push({
           role: msg.sender === 'user' ? 'user' : 'assistant',
@@ -57,35 +47,50 @@ export async function POST(request: NextRequest) {
       content: userMessage,
     })
 
-    console.log('[v0] Calling OpenAI with', messages.length, 'messages')
+    console.log('[v0] Built messages array, length:', messages.length)
 
-    // Call OpenAI
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: messages,
-      temperature: 0.7,
-      max_tokens: 500,
+    // Use fetch to call OpenAI API directly (more reliable)
+    console.log('[v0] Calling OpenAI API')
+
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 500,
+      }),
     })
 
-    console.log('[v0] OpenAI response received')
+    console.log('[v0] OpenAI response status:', openaiResponse.status)
 
-    const content = response.choices[0]?.message?.content || ''
+    if (!openaiResponse.ok) {
+      const errorData = await openaiResponse.json()
+      console.error('[v0] OpenAI API error:', errorData)
+      return NextResponse.json(
+        { error: `OpenAI API error: ${errorData.error?.message || 'Unknown error'}` },
+        { status: openaiResponse.status }
+      )
+    }
 
-    // Return as text stream so client can read it normally
-    const encoder = new TextEncoder()
-    const data = encoder.encode(content)
+    const data = await openaiResponse.json()
+    const content = data.choices?.[0]?.message?.content || ''
 
-    return new Response(data, {
+    console.log('[v0] Got response from OpenAI, length:', content.length)
+
+    // Return response as plain text
+    return new Response(content, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
       },
     })
   } catch (error) {
-    console.error('[v0] API Error:', error)
+    console.error('[v0] Caught error:', error)
     const errorMsg = error instanceof Error ? error.message : String(error)
-    return new Response(JSON.stringify({ error: errorMsg }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return NextResponse.json({ error: errorMsg }, { status: 500 })
   }
 }
