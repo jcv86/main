@@ -371,17 +371,7 @@ export function ConversationalLearning() {
     </div>
   )
 }
-      setMessages([greeting])
-    }
-  }, [])
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  const parseOptionsFromContent = (content: string): { text: string; options: Message['options'] } => {
-    // Check if content contains options pattern (Option A:, Option B:, Option C:)
-    const optionPattern = /\*\s*(?:Opción|Option)\s+([A-Z]):\s*(.+?)(?=\n\*\s*(?:Opción|Option)|$)/gs
     const matches = [...content.matchAll(optionPattern)]
     
     if (matches.length >= 3) {
