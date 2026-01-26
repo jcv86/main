@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { streamText, convertToModelMessages } from 'ai'
+import { streamText, generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
 import { createClient } from '@supabase/supabase-js'
 import { enhancedPlatformBrainQuery } from '@/lib/enhanced-platform-brain'
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
     // Stream the response for real-time conversation feel
     const result = streamText({
-      model: openai('gpt-4-mini'),
+      model: openai('gpt-4o-mini'),
       system: systemPrompt,
       messages: [
         {
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 async function extractLearningProfile(conversationText: string) {
   try {
     const { text } = await generateText({
-      model: openai('gpt-4-mini'),
+      model: openai('gpt-4o-mini'),
       system: `Extract the user's learning profile from this conversation. 
       Return JSON with: interests (array), experience_level (beginner/intermediate/advanced), 
       learning_style (reading/discussion/practice), goals (array), time_availability (hours per week).
