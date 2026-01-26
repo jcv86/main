@@ -3,9 +3,10 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/app/utils/supabase/server"
 import { ProgressWidget } from "@/components/progress-widget"
 import { RecommendationsWidget } from "@/components/recommendations-widget"
+import { CIPCapacityWidgetWrapper } from "@/components/cip-capacity-widget-wrapper"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { BookOpen, TrendingUp, Users } from "lucide-react"
+import { BookOpen, TrendingUp, Users, Zap } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Mi Aprendizaje",
@@ -17,7 +18,7 @@ export default async function MyLearningPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login")
+    redirect("/auth")
   }
 
   // Verificar si completó assessment
@@ -45,6 +46,20 @@ export default async function MyLearningPage() {
         {/* Progress Stats */}
         <section className="mb-8">
           <ProgressWidget />
+        </section>
+
+        {/* CIP Capacity Widget - Client Component Wrapper */}
+        <section className="mb-8">
+          <div className="border rounded-lg p-6 bg-card">
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="h-5 w-5 text-amber-500" />
+              <h2 className="text-2xl font-bold">Tu Capacidad Efectiva</h2>
+              <Link href="/cip-dashboard" className="ml-auto">
+                <Button variant="outline" size="sm">Ver Panel Completo</Button>
+              </Link>
+            </div>
+            <CIPCapacityWidgetWrapper userId={user.id} />
+          </div>
         </section>
 
         {/* Quick Links */}

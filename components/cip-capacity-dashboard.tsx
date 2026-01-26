@@ -8,12 +8,11 @@ import CIPCapacityIndicator from './cip-capacity-indicator'
 
 interface CapacityData {
   date: string
-  T_capacidad_actual: number
-  P_success: number
-  modo_activo: string
-  fase: string
-  tareas_completadas: number
-  alertas: string[]
+  effective_capacity: number
+  success_probability: number
+  progression_phase: string
+  energy_level: number
+  mood_rating: number
 }
 
 export default function CIPCapacityDashboard() {
@@ -58,7 +57,7 @@ export default function CIPCapacityDashboard() {
     return { level: 'optimal', color: 'text-green-600', bg: 'bg-green-50' }
   }
 
-  const risk = getRiskLevel(capacityData.T_capacidad_actual)
+  const risk = getRiskLevel(capacityData.effective_capacity)
 
   return (
     <div className="space-y-6 p-6">
@@ -70,7 +69,7 @@ export default function CIPCapacityDashboard() {
           </CardHeader>
           <CardContent>
             <div className={`text-3xl font-bold ${risk.color}`}>
-              {capacityData.T_capacidad_actual.toFixed(1)}%
+              {capacityData.effective_capacity.toFixed(1)}%
             </div>
             <p className="text-xs text-gray-500 mt-2">Zona: {risk.level}</p>
           </CardContent>
@@ -83,33 +82,33 @@ export default function CIPCapacityDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-blue-600">
-              {(capacityData.P_success * 100).toFixed(0)}%
+              {capacityData.success_probability.toFixed(0)}%
             </div>
             <p className="text-xs text-gray-500 mt-2">Tareas completables hoy</p>
           </CardContent>
         </Card>
 
-        {/* Modo Activo */}
+        {/* Nivel de Energía */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Modo Activo</CardTitle>
+            <CardTitle className="text-sm font-medium">Energía</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-600">
-              {capacityData.modo_activo}
+              {capacityData.energy_level}/100
             </div>
-            <p className="text-xs text-gray-500 mt-2">Fase: {capacityData.fase}</p>
+            <p className="text-xs text-gray-500 mt-2">Fase: {capacityData.progression_phase}</p>
           </CardContent>
         </Card>
 
-        {/* Tareas Completadas */}
+        {/* Ánimo */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Tareas Completadas</CardTitle>
+            <CardTitle className="text-sm font-medium">Ánimo</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-indigo-600">
-              {capacityData.tareas_completadas}
+              {capacityData.mood_rating}/10
             </div>
             <p className="text-xs text-gray-500 mt-2">Hoy</p>
           </CardContent>
@@ -123,21 +122,24 @@ export default function CIPCapacityDashboard() {
           <CardDescription>Visual de tu zona de trabajo actual</CardDescription>
         </CardHeader>
         <CardContent>
-          <CIPCapacityIndicator capacity={capacityData.T_capacidad_actual} />
+          <CIPCapacityIndicator capacity={capacityData.effective_capacity} />
         </CardContent>
       </Card>
 
-      {/* Alertas */}
-      {capacityData.alertas && capacityData.alertas.length > 0 && (
-        <div className="space-y-2">
-          {capacityData.alertas.map((alerta, idx) => (
-            <Alert key={idx} className={alerta.includes('crítica') ? 'border-red-300 bg-red-50' : 'border-yellow-300 bg-yellow-50'}>
-              <AlertDescription className={alerta.includes('crítica') ? 'text-red-800' : 'text-yellow-800'}>
-                {alerta}
-              </AlertDescription>
-            </Alert>
-          ))}
-        </div>
+      {/* Alertas basadas en capacidad */}
+      {capacityData.effective_capacity <= 15 && (
+        <Alert className="border-red-300 bg-red-50">
+          <AlertDescription className="text-red-800">
+            ⚠️ Capacidad crítica: Tu capacidad efectiva está en zona de frustración. Considera reducir carga y descansar.
+          </AlertDescription>
+        </Alert>
+      )}
+      {capacityData.effective_capacity > 15 && capacityData.effective_capacity <= 68 && (
+        <Alert className="border-yellow-300 bg-yellow-50">
+          <AlertDescription className="text-yellow-800">
+            🎯 En zona de alerta: Tu capacidad está en el rango objetivo de sostenibilidad. Mantén este ritmo.
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Gráfico Histórico */}
@@ -160,7 +162,7 @@ export default function CIPCapacityDashboard() {
                 <XAxis dataKey="date" />
                 <YAxis domain={[0, 100]} />
                 <Tooltip />
-                <Area type="monotone" dataKey="T_capacidad_actual" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorCapacity)" />
+                <Area type="monotone" dataKey="effective_capacity" stroke="#8b5cf6" fillOpacity={1} fill="url(#colorCapacity)" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>

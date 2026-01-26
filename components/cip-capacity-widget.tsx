@@ -4,35 +4,65 @@ import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 
-interface CapacityWidget {
+interface CapacityData {
   effective_capacity: number
   success_probability: number
 }
 
-export default function CIPCapacityWidget() {
-  const [capacity, setCapacity] = useState<CapacityWidget | null>(null)
+interface CIPCapacityWidgetProps {
+  userId: string
+}
+
+export function CIPCapacityWidget({ userId }: CIPCapacityWidgetProps) {
+  const [capacity, setCapacity] = useState<CapacityData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchCapacity()
-  }, [])
+  }, [userId])
 
   const fetchCapacity = async () => {
     try {
-      const response = await fetch('/api/cip/daily')
+      const response = await fetch(`/api/cip/daily?userId=${userId}`)
       if (response.ok) {
-        const data = await response.json()
-        setCapacity(data.today)
+        const result = await response.json()
+        if (result.data) {
+          // Handle nested data structure
+          const capacityData = result.data.today || result.data
+          if (capacityData) {
+            setCapacity({
+              effective_capacity: capacityData.effective_capacity || 0,
+              success_probability: capacityData.success_probability || 0,
+            })
+          }
+        }
+      } else {
+        console.error('[v0] API error:', response.status)
+        // Set default capacity if fetch fails
+        setCapacity({
+          effective_capacity: 50,
+          success_probability: 0.5,
+        })
       }
     } catch (error) {
-      console.error('Error fetching capacity:', error)
+      console.error('[v0] Error fetching capacity:', error)
+      // Set default capacity on error
+      setCapacity({
+        effective_capacity: 50,
+        success_probability: 0.5,
+      })
     } finally {
       setLoading(false)
     }
   }
 
   if (loading || !capacity) {
-    return null
+    return (
+      <div className="p-4 bg-gray-50 rounded-lg animate-pulse">
+        <div className="h-12 bg-gray-200 rounded w-1/3 mb-2"></div>
+        <div className="h-2 bg-gray-200 rounded w-full"></div>
+      </div>
+    )
   }
 
   const getStatusColor = (cap: number) => {
@@ -41,15 +71,25 @@ export default function CIPCapacityWidget() {
     return 'from-green-500 to-green-600'
   }
 
+  const getStatusText = (cap: number) => {
+    if (cap <= 15) return 'Crítica'
+    if (cap <= 68) return 'Alerta'
+    return 'Óptima'
+  }
+
   return (
     <Link href="/cip-dashboard">
-      <Card className="p-4 bg-gradient-to-br hover:shadow-lg transition-shadow cursor-pointer" style={{
-        backgroundImage: `linear-gradient(135deg, var(--tw-gradient-stops))`
-      }}>
-        <div className="space-y-2">
+      <Card className="p-4 bg-gradient-to-br hover:shadow-lg transition-shadow cursor-pointer">
+        <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-700">Tu Capacidad Hoy</span>
-            <span className="text-xs px-2 py-1 bg-white bg-opacity-30 rounded-full text-gray-700">CIP</span>
+            <span className={`text-xs px-2 py-1 rounded-full text-white font-medium ${
+              capacity.effective_capacity <= 15 ? 'bg-red-500' :
+              capacity.effective_capacity <= 68 ? 'bg-yellow-500' :
+              'bg-green-500'
+            }`}>
+              {getStatusText(capacity.effective_capacity)}
+            </span>
           </div>
           
           <div className="text-3xl font-bold text-gray-800">
