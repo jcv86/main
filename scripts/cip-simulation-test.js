@@ -11,51 +11,55 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_
 }
 
 // Simulate capacity calculations with randomness
-async function simulateDay(userId, day, previousCapacity) {
-  // Simulate fatigue/recovery cycle
-  const fatigue = Math.sin((day * Math.PI) / 7) * 20 + Math.random() * 10
-  const T_capacidad_actual = Math.max(10, Math.min(90, previousCapacity + fatigue))
-  
-  // Probability of success based on capacity
-  const P_success = Math.min(1, T_capacidad_actual / 100)
-  
-  // Simulate tasks completed
-  const tareas_completadas = Math.floor(Math.random() * 5 * P_success)
+async function simulateDay(userId, a1Base, dayIndex) {
+  console.log(`\n[CIP] Día ${dayIndex + 1} para usuario ${userId}`)
+
+  // Cálculos CIP
+  const random = Math.random()
+  const T_capacidad_actual = a1Base * (0.8 + random * 0.4) // 80-120% de A1_Base
+  const P_success = Math.min(100, T_capacidad_actual * 0.85) // 85% de la capacidad actual
+
+  console.log(`  T_capacidad_actual: ${T_capacidad_actual.toFixed(2)}%`)
+  console.log(`  P_success: ${P_success.toFixed(2)}%`)
   
   // Check thresholds
-  const alertas = []
-  if (T_capacidad_actual <= 15) {
-    alertas.push('CRÍTICA: Capacidad en zona de frustración alta')
-  }
-  if (T_capacidad_actual >= 68 && T_capacidad_actual <= 72) {
-    alertas.push('ÓPTIMA: En zona de compromiso fuerte')
+  let alertas = []
+  if (P_success <= 15) {
+    console.log(`  ⚠️ ALERTA CRÍTICA: P_success ${P_success.toFixed(2)}% <= 15%`)
+    alertas.push('CRÍTICA')
+  } else if (P_success <= 68) {
+    console.log(`  ⚠️ ALERTA: P_success ${P_success.toFixed(2)}% <= 68%`)
+    alertas.push('ALERTA')
+  } else {
+    console.log(`  ✓ P_success en zona óptima: ${P_success.toFixed(2)}%`)
   }
 
-  // Log to database
-  const { error } = await supabase
+  // Usar fecha de hace N días para simular histórico
+  const dateObj = new Date()
+  dateObj.setDate(dateObj.getDate() - (7 - dayIndex))
+  const date = dateObj.toISOString().split('T')[0]
+  
+  const { data, error } = await supabase
     .from('daily_capacity')
     .insert({
       user_id: userId,
-      fecha: new Date(Date.now() - (7 - day) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      T_capacidad_actual,
-      P_success,
-      tareas_completadas,
-      alertas: alertas.join(';'),
+      date: date,
+      effective_capacity: T_capacidad_actual,
+      success_probability: P_success,
+      energy_level: Math.floor(P_success * 0.7) + 30,
+      mood_rating: Math.floor(P_success * 0.08) + 2,
+      theoretical_capacity: a1Base,
+      capacity_variance: T_capacidad_actual - a1Base,
     })
+    .select()
 
   if (error) {
-    console.error('[CIP] Error inserting daily capacity:', error)
+    console.log(`[CIP] Error inserting daily capacity:`, error)
+    throw error
   }
 
-  return {
-    userId,
-    day,
-    T_capacidad_actual,
-    P_success,
-    tareas_completadas,
-    alertas,
-    estado: T_capacidad_actual <= 15 ? 'crítica' : T_capacidad_atual >= 68 ? 'óptima' : 'normal'
-  }
+  console.log(`[CIP] Día ${dayIndex + 1} registrado exitosamente`)
+  return { T_capacidad_actual, P_success, alertas }
 }
 
 // Main simulation
@@ -63,20 +67,37 @@ async function runSimulation() {
   console.log('[CIP] Starting simulation with 3 users over 7 days...\n')
   
   const usuarios = [
-    { id: 'user-sim-1', nombre: 'Usuario A (Base A1: 50%)', a1_base: 50 },
-    { id: 'user-sim-2', nombre: 'Usuario B (Base A1: 70%)', a1_base: 70 },
-    { id: 'user-sim-3', nombre: 'Usuario C (Base A1: 30%)', a1_base: 30 },
+    { nombre: 'Usuario A (Base A1: 50%)', a1_base: 50 },
+    { nombre: 'Usuario B (Base A1: 70%)', a1_base: 70 },
+    { nombre: 'Usuario C (Base A1: 30%)', a1_base: 30 },
   ]
 
   for (const usuario of usuarios) {
     console.log(`\n========== ${usuario.nombre} ==========`)
-    let capacidadActual = usuario.a1_base
+    
+    // First, create a user profile (mock)
+    // In production, this would be linked to auth.users(id)
+    const mockUserId = `550e8400-e29b-41d4-a716-${Math.random().toString().slice(2, 14).padEnd(12, '0')}`
+    
+    const { data: profileData, error: profileError } = await supabase
+      .from('user_capacity_profile')
+      .insert({
+        user_id: mockUserId,
+        a1_base_capacity: usuario.a1_base,
+        progression_phase: 'A1_Base',
+      })
+      .select()
 
-    for (let day = 1; day <= 7; day++) {
-      const resultado = await simulateDay(usuario.id, day, capacidadActual)
-      capacidadActual = resultado.T_capacidad_actual
-      
-      console.log(`Día ${day}: Capacidad=${resultado.T_capacidad_actual.toFixed(1)}% | P(éxito)=${(resultado.P_success * 100).toFixed(0)}% | Tareas=${resultado.tareas_completadas} | Alertas=${resultado.alertas.length > 0 ? resultado.alertas.join(', ') : 'ninguna'}`)
+    if (profileError) {
+      console.log(`[CIP] Error creating profile:`, profileError)
+      continue
+    }
+
+    const userId = mockUserId
+
+    for (let day = 0; day < 7; day++) {
+      const resultado = await simulateDay(userId, usuario.a1_base, day)
+      console.log(`  Resultado: Capacidad=${resultado.T_capacidad_actual.toFixed(1)}% | P(éxito)=${resultado.P_success.toFixed(0)}%`)
     }
   }
 
