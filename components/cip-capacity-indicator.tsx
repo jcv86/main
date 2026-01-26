@@ -5,66 +5,71 @@ interface CIPCapacityIndicatorProps {
 }
 
 export default function CIPCapacityIndicator({ capacity }: CIPCapacityIndicatorProps) {
-  // Determine zones
   const isOptimal = capacity > 68
   const isWarning = capacity > 15 && capacity <= 68
   const isCritical = capacity <= 15
 
-  // Calculate positions
-  const optimalWidth = Math.max(0, Math.min(100 - 68, capacity - 68)) * (32 / 32)
-  const warningWidth = Math.max(0, Math.min(68 - 15, capacity - 15)) * (53 / 53)
-  const criticalWidth = Math.max(0, Math.min(15, capacity)) * (15 / 15)
-
   return (
-    <div className="space-y-4">
-      {/* Main Indicator Bar */}
+    <div className="space-y-6">
+      {/* Main Progress Bar */}
       <div className="space-y-2">
-        <div className="flex items-end gap-1 h-32 bg-gray-100 p-4 rounded-lg border border-gray-200">
-          {/* Critical Zone */}
-          <div className="flex-1 bg-red-500 rounded-sm opacity-30 hover:opacity-50 transition" style={{ height: `${Math.max(20, isCritical ? 100 : capacity > 0 ? (capacity / 15) * 100 : 0)}%` }}>
-            <div className="text-xs text-red-700 font-bold text-center pt-1">0-15%</div>
-          </div>
-
-          {/* Warning Zone */}
-          <div className="flex-1 bg-yellow-500 rounded-sm opacity-30 hover:opacity-50 transition" style={{ height: `${isWarning || capacity > 15 ? 100 : 0}%` }}>
-            <div className="text-xs text-yellow-700 font-bold text-center pt-1">15-68%</div>
-          </div>
-
-          {/* Optimal Zone */}
-          <div className="flex-1 bg-green-500 rounded-sm opacity-30 hover:opacity-50 transition" style={{ height: `${isOptimal ? 100 : 0}%` }}>
-            <div className="text-xs text-green-700 font-bold text-center pt-1">68-100%</div>
-          </div>
-
-          {/* Current Position Indicator */}
-          <div className="absolute right-8 flex flex-col items-center">
-            <div className="text-2xl font-bold text-gray-800">{capacity.toFixed(1)}%</div>
-            <div className="h-1 w-1 bg-gray-800 rounded-full mt-1"></div>
-          </div>
+        <div className="flex justify-between text-sm font-medium text-gray-700 mb-2">
+          <span>Capacidad Actual</span>
+          <span className="text-lg font-bold">{capacity.toFixed(1)}%</span>
         </div>
+        
+        <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
+          {/* Red Zone (0-15%) */}
+          <div className="absolute left-0 top-0 h-full bg-gradient-to-r from-red-500 to-red-400" style={{ width: '15%' }} />
+          
+          {/* Yellow Zone (15-68%) */}
+          <div className="absolute top-0 h-full bg-gradient-to-r from-yellow-400 to-yellow-300" style={{ left: '15%', width: '53%' }} />
+          
+          {/* Green Zone (68-100%) */}
+          <div className="absolute top-0 h-full bg-gradient-to-r from-green-400 to-green-300" style={{ left: '68%', width: '32%' }} />
+          
+          {/* Current Position Marker */}
+          <div 
+            className="absolute top-1/2 transform -translate-y-1/2 w-1 h-full bg-black opacity-70 transition-all"
+            style={{ left: `${Math.min(capacity, 100)}%` }}
+          />
+        </div>
+      </div>
 
-        {/* Legend */}
-        <div className="grid grid-cols-3 gap-2 text-sm">
-          <div className="p-2 bg-red-50 rounded border border-red-200">
-            <div className="font-semibold text-red-700">Crítica</div>
-            <div className="text-xs text-red-600">0-15%: Frustración alta</div>
-          </div>
-          <div className="p-2 bg-yellow-50 rounded border border-yellow-200">
-            <div className="font-semibold text-yellow-700">Compromiso Fuerte</div>
-            <div className="text-xs text-yellow-600">15-68%: Objetivo</div>
-          </div>
-          <div className="p-2 bg-green-50 rounded border border-green-200">
-            <div className="font-semibold text-green-700">Sostenible</div>
-            <div className="text-xs text-green-600">68-100%: Óptimo</div>
-          </div>
+      {/* Zone Information */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+          <div className="font-semibold text-red-700 text-sm">Crítica</div>
+          <div className="text-xs text-red-600 mt-1">0-15%</div>
+          <div className="text-xs text-red-500 mt-2">⚠️ Frustración</div>
+        </div>
+        
+        <div className="p-3 rounded-lg bg-yellow-50 border border-yellow-200">
+          <div className="font-semibold text-yellow-700 text-sm">Alerta</div>
+          <div className="text-xs text-yellow-600 mt-1">15-68%</div>
+          <div className="text-xs text-yellow-500 mt-2">🎯 Objetivo</div>
+        </div>
+        
+        <div className="p-3 rounded-lg bg-green-50 border border-green-200">
+          <div className="font-semibold text-green-700 text-sm">Óptima</div>
+          <div className="text-xs text-green-600 mt-1">68-100%</div>
+          <div className="text-xs text-green-500 mt-2">✓ Sostenible</div>
         </div>
       </div>
 
       {/* Status Message */}
-      <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
-        <p className="text-sm text-blue-900">
-          {isCritical && 'Tu capacidad está en zona crítica. Considera reducir carga.'}
-          {isWarning && 'Tu capacidad está en zona de compromiso. Mantén este nivel para sostenibilidad.'}
-          {isOptimal && 'Tu capacidad está en zona óptima. Sostenible a largo plazo.'}
+      <div className="p-4 rounded-lg border-l-4" 
+        style={{
+          backgroundColor: isCritical ? '#fee2e2' : isWarning ? '#fef3c7' : '#dcfce7',
+          borderColor: isCritical ? '#dc2626' : isWarning ? '#f59e0b' : '#22c55e'
+        }}>
+        <p className="text-sm font-medium" 
+          style={{
+            color: isCritical ? '#991b1b' : isWarning ? '#92400e' : '#166534'
+          }}>
+          {isCritical && '⚠️ Capacidad crítica: Reduce carga y descansa'}
+          {isWarning && '🎯 En zona de compromiso: Mantén este ritmo'}
+          {isOptimal && '✓ Capacidad sostenible: Ritmo óptimo'}
         </p>
       </div>
     </div>
