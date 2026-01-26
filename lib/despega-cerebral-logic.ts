@@ -145,51 +145,113 @@ const COMPATIBILIDAD_PERFILES: Record<PerfilType, Record<PerfilType, number>> = 
 
 /**
  * Calcula el tipo de perfil basado en respuestas del test
- * @param respuestas Array de respuestas del test
- * @returns PerfilDescubierto con tipo y análisis
+ * Versión simplificada para el test actual
  */
-export async function calcularPerfilDescubierto(
-  respuestas: RespuestaTest[]
-): Promise<PerfilDescubierto> {
-  // Sumar puntuaciones por dimensión
-  const puntuaciones = { A: 0, B: 0, C: 0, D: 0 }
-
-  for (const respuesta of respuestas) {
-    puntuaciones.A += respuesta.answer_score.A || 0
-    puntuaciones.B += respuesta.answer_score.B || 0
-    puntuaciones.C += respuesta.answer_score.C || 0
-    puntuaciones.D += respuesta.answer_score.D || 0
+export function calculateCerebralProfile(responses: Record<string, any>): any {
+  // Mapear respuestas a scores
+  const scores = {
+    analisis: 0,
+    intuicion: 0,
+    impacto: 0,
   }
 
-  // Encontrar tipo dominante
-  const tipo = (
-    Object.entries(puntuaciones).sort((a, b) => b[1] - a[1])[0][0]
-  ) as PerfilType
+  // Análisis simple de respuestas
+  const respuestasArray = Object.entries(responses)
+  const tiposScore = { A: 0, B: 0, C: 0, D: 0 }
 
-  const definicion = PERFILES_DEFINICION[tipo]
+  // Lógica simple para categorizar
+  for (const [key, value] of respuestasArray) {
+    if (typeof value === 'string') {
+      const valorLower = value.toLowerCase()
+      
+      if (valorLower.includes('análisis') || valorLower.includes('data') || valorLower.includes('preciso')) {
+        tiposScore.C += 2
+        scores.analisis += 20
+      } else if (valorLower.includes('rápido') || valorLower.includes('decisión') || valorLower.includes('acción')) {
+        tiposScore.A += 2
+        scores.impacto += 20
+      } else if (valorLower.includes('personas') || valorLower.includes('comunicación') || valorLower.includes('equipo')) {
+        tiposScore.B += 2
+        scores.intuicion += 20
+      } else if (valorLower.includes('estabilidad') || valorLower.includes('seguridad') || valorLower.includes('confianza')) {
+        tiposScore.D += 2
+      }
+    } else if (typeof value === 'number') {
+      // Para escalas
+      if (key === 'pace_preference') {
+        if (value >= 4) tiposScore.A += 2
+        else if (value <= 2) tiposScore.C += 2
+      }
+    }
+  }
+
+  // Determinar tipo dominante
+  const tipoEntrada = Object.entries(tiposScore).sort((a, b) => b[1] - a[1])[0][0]
+  const tiposMap = { A: 'A', B: 'B', C: 'C', D: 'D' }
+  const tipo = tiposMap[tipoEntrada as keyof typeof tiposMap] || 'C'
+
+  // Normalizar scores
+  const totalScore = Object.values(scores).reduce((a, b) => a + b, 0) || 100
+  const normalizedScores = {
+    analisis: Math.min(100, (scores.analisis / totalScore) * 100),
+    intuicion: Math.min(100, (scores.intuicion / totalScore) * 100),
+    impacto: Math.min(100, (scores.impacto / totalScore) * 100),
+  }
 
   return {
     tipo,
-    puntuaciones,
-    descripcion: definicion.descripcion,
-    fortalezas: definicion.fortalezas,
-    areas_mejora: definicion.areas_mejora,
-    empleos_ideales: definicion.empleos_ideales,
-    compatibilidad: COMPATIBILIDAD_PERFILES[tipo],
+    scores: normalizedScores,
+    tiposScore,
   }
 }
 
 /**
- * Genera descripciones personalizadas basadas en puntuaciones
+ * Genera el contenido del informe basado en perfil
  */
-export function generarDescripcionPersonalizada(
-  perfil: PerfilDescubierto
-): string {
-  const total = Object.values(perfil.puntuaciones).reduce((a, b) => a + b, 0)
-  const porcentajeA = Math.round((perfil.puntuaciones.A / total) * 100)
-  const porcentajeB = Math.round((perfil.puntuaciones.B / total) * 100)
-  const porcentajeC = Math.round((perfil.puntuaciones.C / total) * 100)
-  const porcentajeD = Math.round((perfil.puntuaciones.D / total) * 100)
+export function generateInformeContent(profile: any, userProfile: any): any {
+  const tiposDescripcion = {
+    A: { nombre: 'El Visionario', emoji: '⚡' },
+    B: { nombre: 'El Influenciador', emoji: '🌟' },
+    C: { nombre: 'El Analista', emoji: '🎯' },
+    D: { nombre: 'El Estabilizador', emoji: '🛡️' },
+  }
 
-  return `Tu perfil es principalmente ${perfil.tipo} (${porcentajeA}% Dominancia, ${porcentajeB}% Influencia, ${porcentajeC}% Cumplimiento, ${porcentajeD}% Estabilidad). ${perfil.descripcion}`
+  const tiposFortalezas = {
+    A: [
+      'Toma de decisiones rápida y decisiva',
+      'Liderazgo natural y orientado a resultados',
+      'Capacidad de iniciativa y emprendimiento',
+    ],
+    B: [
+      'Comunicación excelente y carismática',
+      'Trabajo efectivo en equipo',
+      'Creatividad e innovación',
+    ],
+    C: [
+      'Análisis profundo y detallado',
+      'Precisión y atención al detalle',
+      'Consistencia y confiabilidad',
+    ],
+    D: [
+      'Lealtad y confiabilidad',
+      'Paciencia y empatía',
+      'Apoyo efectivo a otros',
+    ],
+  }
+
+  const tiposDesarrollo = {
+    A: ['Escucha activa', 'Delegación efectiva', 'Trabajo colaborativo'],
+    B: ['Seguimiento de detalles', 'Análisis profundo', 'Organización'],
+    C: ['Decisión rápida', 'Flexibilidad', 'Iniciativa'],
+    D: ['Adaptabilidad', 'Assertividad', 'Innovación'],
+  }
+
+  const tipo = profile.tipo || 'C'
+  const info = tiposDescripcion[tipo as keyof typeof tiposDescripcion]
+
+  return {
+    resumen: `Eres ${info.nombre}, un profesional con características únicas que te hacen valioso en el mercado laboral.`,
+    fortalezas: tiposFortalezas[tipo as keyof typeof tiposFortalezas] || tiposFortalezas.C,
+    areas_desarrollo: tiposDesarrollo[tipo as keyof typeof tiposDesarrollo] || tiposDesarrollo.C,
+  }
 }

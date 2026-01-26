@@ -150,34 +150,91 @@ export function generarInformePremium(
 }
 
 /**
- * Formatea el informe para PDF
+ * Genera HTML del informe para visualización
  */
-export function formatearInformePDF(informe: InformeGenerico): string {
-  const titulo = informe.tipo_version === 'free' ? 'INFORME PERFIL DESCUBIERTO (FREE)' : 'INFORME PERFIL DESCUBIERTO (PREMIUM)'
-
-  let pdf = `
-═════════════════════════════════════════
-DESPEGA - INFORME PERFIL DESCUBIERTO
-═════════════════════════════════════════
-
-Usuario: ${informe.usuario_nombre}
-Perfil: ${informe.tipo_perfil}
-Generado: ${informe.fecha_generacion.toLocaleDateString('es-ES')}
-Versión: ${informe.tipo_version.toUpperCase()}
-
-═════════════════════════════════════════
-`
-
-  for (const seccion of informe.secciones) {
-    pdf += `\n${seccion.titulo}\n${'─'.repeat(seccion.titulo.length)}\n${seccion.contenido}\n\n`
+export function generateInformeHTML(perfil: any, content: any, isPremium: boolean): string {
+  const tipo = perfil.perfil_tipo || 'C'
+  const tiposEmoji = {
+    A: '⚡',
+    B: '🌟',
+    C: '🎯',
+    D: '🛡️',
   }
 
-  pdf += `
-═════════════════════════════════════════
-Acceso a más funcionalidades en tu dashboard
-${informe.tipo_version === 'free' ? 'Actualiza a PREMIUM para desbloquear análisis completo' : '¡Gracias por tu suscripción premium!'}
-═════════════════════════════════════════
-`
+  const tiposNombre = {
+    A: 'El Visionario (Dominancia)',
+    B: 'El Influenciador (Influencia)',
+    C: 'El Analista (Cumplimiento)',
+    D: 'El Estabilizador (Estabilidad)',
+  }
 
-  return pdf
+  const emoji = tiposEmoji[tipo as keyof typeof tiposEmoji] || '🎯'
+  const nombre = tiposNombre[tipo as keyof typeof tiposNombre] || 'Perfil Descubierto'
+
+  return `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil Descubierto - Despega</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #6b21a8; padding-bottom: 20px; }
+    .emoji { font-size: 60px; margin: 10px 0; }
+    h1 { color: #6b21a8; margin: 10px 0; }
+    h2 { color: #7e22ce; margin-top: 30px; margin-bottom: 15px; border-left: 4px solid #7e22ce; padding-left: 15px; }
+    .section { margin-bottom: 25px; }
+    .fortalezas, .desarrollo { background: #f9fafb; padding: 15px; border-radius: 8px; }
+    .item { margin: 10px 0; padding: 10px; background: white; border-left: 4px solid #10b981; border-radius: 4px; }
+    .premium { background: #dbeafe; padding: 20px; border-radius: 8px; border: 2px solid #3b82f6; margin: 20px 0; }
+    .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="emoji">${emoji}</div>
+      <h1>Tu Perfil Descubierto</h1>
+      <p style="font-size: 24px; color: #7e22ce; margin: 0;">${nombre}</p>
+      <p style="color: #6b7280; margin: 5px 0;">Test Despega Cerebral</p>
+    </div>
+
+    <div class="section">
+      <h2>Resumen</h2>
+      <p>${content.resumen || 'Tu perfil se está generando...'}</p>
+    </div>
+
+    <div class="section fortalezas">
+      <h2>Tus Fortalezas</h2>
+      ${(content.fortalezas || []).map((f: string) => `<div class="item">✓ ${f}</div>`).join('')}
+    </div>
+
+    <div class="section desarrollo">
+      <h2>Áreas de Desarrollo</h2>
+      ${(content.areas_desarrollo || []).map((a: string) => `<div class="item">→ ${a}</div>`).join('')}
+    </div>
+
+    ${!isPremium ? `
+    <div class="premium">
+      <h3 style="margin-top: 0; color: #1e40af;">Desbloquea tu Informe Completo</h3>
+      <p>Acceso a análisis detallado, comparativas con otros usuarios, rutas personalizadas y seguimiento 30-60-90.</p>
+      <a href="/pricing" style="display: inline-block; background: #3b82f6; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">Actualizar a Premium</a>
+    </div>
+    ` : `
+    <div class="premium" style="background: #d1fae5; border-color: #10b981;">
+      <h3 style="margin-top: 0; color: #065f46;">🎉 Premium Desbloqueado</h3>
+      <p>¡Tienes acceso a todas las funcionalidades avanzadas! Explora tu informe completo en el dashboard.</p>
+    </div>
+    `}
+
+    <div class="footer">
+      <p>© Despega - Plataforma de Desarrollo Profesional</p>
+      <p>Informe generado el ${new Date().toLocaleDateString('es-ES')}</p>
+    </div>
+  </div>
+</body>
+</html>
+  `
 }
