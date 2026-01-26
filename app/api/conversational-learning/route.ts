@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server'
-import { streamText, generateText } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import OpenAI from 'openai'
 import { createClient } from '@supabase/supabase-js'
 import { enhancedPlatformBrainQuery } from '@/lib/enhanced-platform-brain'
 
@@ -8,6 +7,10 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+})
 
 const CONVERSATIONAL_SYSTEM_PROMPT = `You are Sofia, a warm and conversational learning coach who understands that everyone learns differently. 
 
@@ -90,41 +93,53 @@ export async function POST(request: NextRequest) {
       .replace('{profile}', JSON.stringify(profileContext))
       .replace('{bookContext}', bookContext)
 
-    // Stream the response for real-time conversation feel
-    const result = streamText({
-      model: openai('gpt-3.5-turbo'),
-      system: systemPrompt,
+    // Create streaming response with OpenAI API
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4',
       messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
         {
           role: 'user',
           content: userMessage,
         },
       ],
-      temperature: 0.7, // Slightly more creative for natural conversation
-      maxTokens: 500,
+      stream: true,
+      temperature: 0.7,
+      max_tokens: 500,
     })
 
     // Save conversation async (don't wait for it)
-    result.done.then(async () => {
-      if (userId && userId !== 'demo') {
+    saveConversation(userMessage, userId, currentPhase, profileContext, stream)
+
+    // Convert OpenAI stream to SSE format
+    const encoder = new TextEncoder()
+    let fullText = ''
+
+    const customStream = new ReadableStream({
+      async start(controller) {
         try {
-          const fullText = await result.text
-          await supabase.from('learning_conversations').insert({
-            user_id: userId,
-            phase: currentPhase,
-            user_message: userMessage,
-            coach_response: fullText,
-            learning_profile: profileContext,
-            created_at: new Date().toISOString(),
-          })
+          for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content || ''
+            if (content) {
+              fullText += content
+              controller.enqueue(encoder.encode(content))
+            }
+          }
+          controller.close()
         } catch (error) {
-          console.error('Error saving conversation:', error)
+          controller.error(error)
         }
-      }
+      },
     })
 
-    // Return streaming response
-    return result.toTextStreamResponse()
+    return new Response(customStream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+    })
   } catch (error) {
     console.error('Error in conversational learning:', error)
     return new Response(JSON.stringify({ error: 'Error processing your message' }), {
@@ -134,23 +149,59 @@ export async function POST(request: NextRequest) {
   }
 }
 
+async function saveConversation(
+  userMessage: string,
+  userId: string,
+  phase: string,
+  profile: any,
+  stream: AsyncIterable<any>
+) {
+  if (!userId || userId === 'demo') return
+
+  try {
+    let fullText = ''
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || ''
+      if (content) {
+        fullText += content
+      }
+    }
+
+    await supabase.from('learning_conversations').insert({
+      user_id: userId,
+      phase: phase,
+      user_message: userMessage,
+      coach_response: fullText,
+      learning_profile: profile,
+      created_at: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error('Error saving conversation:', error)
+  }
+}
+
 async function extractLearningProfile(conversationText: string) {
   try {
-    const { text } = await generateText({
-      model: openai('gpt-3.5-turbo'),
-      system: `Extract the user's learning profile from this conversation. 
-      Return JSON with: interests (array), experience_level (beginner/intermediate/advanced), 
-      learning_style (reading/discussion/practice), goals (array), time_availability (hours per week).
-      Be concise and factual.`,
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
       messages: [
+        {
+          role: 'system',
+          content: `Extract the user's learning profile from this conversation. 
+          Return JSON with: interests (array), experience_level (beginner/intermediate/advanced), 
+          learning_style (reading/discussion/practice), goals (array), time_availability (hours per week).
+          Be concise and factual.`,
+        },
         {
           role: 'user',
           content: conversationText,
         },
       ],
+      temperature: 0.3,
     })
 
-    return JSON.parse(text)
+    const content = response.choices[0]?.message?.content || ''
+    return JSON.parse(content)
   } catch (error) {
     console.error('Error extracting profile:', error)
     return {
