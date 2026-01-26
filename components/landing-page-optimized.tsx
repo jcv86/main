@@ -12,10 +12,6 @@ import {
   Zap,
   Target,
   TrendingUp,
-  Users,
-  Award,
-  Clock,
-  Shield,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -64,26 +60,6 @@ export function LandingPageOptimized() {
                 <BookOpen className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-foreground mb-12 opacity-75">
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
-              <span>100% Gratis</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              <span>+10,000 Usuarios</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              <span>Tests Científicos</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
-              <span>Resultados Inmediatos</span>
-            </div>
           </div>
 
           {/* Quick Stats */}
