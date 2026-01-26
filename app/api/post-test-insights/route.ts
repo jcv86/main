@@ -30,7 +30,8 @@ const InsightSchema = z.object({
       difficulty: z.string(),
       source: z.enum(["openai", "cerebro", "hybrid"]),
       matchScore: z.number().min(0).max(100).describe("Percentage match to user profile (0-100)"),
-      isHighlighted: z.boolean().optional().describe("True if this recommendation should be highlighted"),
+      isHighlighted: z.boolean().optional().describe("True if this recommendation should be highlighted (best in threshold)"),
+      inThresholdZone: z.boolean().optional().describe("True if match score is in 68-72% range"),
     }),
   ),
   developmentPlan: z.object({
@@ -321,22 +322,31 @@ function calculateRecommendationScores(recommendations: any[], cerebroInsights: 
     }
   })
 
-  // Find recommendations that exceed 70% threshold
-  const aboveThreshold = scored.filter((r) => r.matchScore >= 70)
+  // Find recommendations in threshold range (68-72%, ±2% around 70%)
+  const THRESHOLD_CENTER = 70
+  const THRESHOLD_RANGE = 2
+  const THRESHOLD_MIN = THRESHOLD_CENTER - THRESHOLD_RANGE // 68
+  const THRESHOLD_MAX = THRESHOLD_CENTER + THRESHOLD_RANGE // 72
 
-  // If any exceed 70%, highlight the one with highest score
-  if (aboveThreshold.length > 0) {
-    const bestMatch = aboveThreshold.reduce((best, current) => 
+  const inThreshold = scored.filter((r) => r.matchScore >= THRESHOLD_MIN && r.matchScore <= THRESHOLD_MAX)
+
+  // If any are in threshold range, highlight the one with highest score
+  if (inThreshold.length > 0) {
+    const bestMatch = inThreshold.reduce((best, current) => 
       current.matchScore > best.matchScore ? current : best
     )
     
     return scored.map((rec) => ({
       ...rec,
       isHighlighted: rec.matchScore === bestMatch.matchScore,
+      inThresholdZone: rec.matchScore >= THRESHOLD_MIN && rec.matchScore <= THRESHOLD_MAX,
     }))
   }
 
-  return scored
+  return scored.map((rec) => ({
+    ...rec,
+    inThresholdZone: rec.matchScore >= THRESHOLD_MIN && rec.matchScore <= THRESHOLD_MAX,
+  }))
 }
 
 /**

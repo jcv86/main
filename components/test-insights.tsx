@@ -238,16 +238,19 @@ export function TestInsights({ testType, testResults, testResponses, userId, onI
           </CardHeader>
           <CardContent className="space-y-3">
             {recommendations.map((rec, idx) => {
-              const isHighlighted = rec.isHighlighted && rec.matchScore >= 70
               const matchScorePercent = Math.round(rec.matchScore || 0)
+              const inThresholdZone = matchScorePercent >= 68 && matchScorePercent <= 72
+              const isHighlighted = rec.isHighlighted && inThresholdZone
               
               return (
                 <div 
                   key={idx} 
                   className={`rounded-lg border p-3 transition-all ${
                     isHighlighted
-                      ? 'border-emerald-400 bg-emerald-50 shadow-md ring-2 ring-emerald-200'
-                      : rec.matchScore >= 70
+                      ? 'border-emerald-400 bg-emerald-50 shadow-md ring-2 ring-emerald-300'
+                      : inThresholdZone
+                      ? 'border-amber-300 bg-amber-50 shadow-sm ring-1 ring-amber-200'
+                      : rec.matchScore >= 75
                       ? 'border-green-200 bg-green-50'
                       : 'border-gray-200 bg-gray-50'
                   }`}
@@ -261,16 +264,25 @@ export function TestInsights({ testType, testResults, testResponses, userId, onI
                             Mejor Coincidencia
                           </Badge>
                         )}
+                        {inThresholdZone && !isHighlighted && (
+                          <Badge className="bg-amber-500 text-white text-xs">
+                            En Zona Crítica
+                          </Badge>
+                        )}
                       </div>
                       <p className="text-xs text-gray-600 mt-1">{rec.description}</p>
                     </div>
                     {rec.matchScore !== undefined && (
-                      <div className={`flex items-center gap-1 rounded-full px-3 py-1 ${
-                        matchScorePercent >= 70
-                          ? 'bg-emerald-100 text-emerald-700'
+                      <div className={`flex items-center gap-1 rounded-full px-3 py-1 font-semibold text-xs ${
+                        isHighlighted
+                          ? 'bg-emerald-200 text-emerald-800'
+                          : inThresholdZone
+                          ? 'bg-amber-200 text-amber-800'
+                          : matchScorePercent >= 75
+                          ? 'bg-green-100 text-green-700'
                           : 'bg-gray-100 text-gray-600'
                       }`}>
-                        <span className="text-xs font-semibold">{matchScorePercent}%</span>
+                        {matchScorePercent}%
                       </div>
                     )}
                   </div>
