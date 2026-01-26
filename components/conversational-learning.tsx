@@ -120,10 +120,16 @@ export function ConversationalLearning() {
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to fetch response')
-      const reader = response.body?.getReader()
-      if (!reader) throw new Error('No response body')
+      if (!response.ok) {
+        console.error('[v0] Option selection response error:', response.status)
+        throw new Error('Failed to fetch response')
+      }
 
+      if (!response.body) {
+        throw new Error('No response body')
+      }
+
+      const reader = response.body.getReader()
       const coachMessageId = (Date.now() + 101).toString()
       let fullContent = ''
 
@@ -138,24 +144,38 @@ export function ConversationalLearning() {
 
       const decoder = new TextDecoder()
       while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        const chunk = decoder.decode(value)
-        fullContent += chunk
-        const { text, options } = parseOptionsFromContent(fullContent)
-        setMessages(prev => prev.map(msg =>
-          msg.id === coachMessageId
-            ? {
-                ...msg,
-                content: text,
-                type: options ? 'options' : 'message',
-                options
-              }
-            : msg
-        ))
+        try {
+          const { done, value } = await reader.read()
+          if (done) break
+          const chunk = decoder.decode(value)
+          fullContent += chunk
+          const { text, options } = parseOptionsFromContent(fullContent)
+          setMessages(prev => prev.map(msg =>
+            msg.id === coachMessageId
+              ? {
+                  ...msg,
+                  content: text,
+                  type: options ? 'options' : 'message',
+                  options
+                }
+              : msg
+          ))
+        } catch (chunkError) {
+          console.error('[v0] Error reading chunk:', chunkError)
+          break
+        }
       }
     } catch (error) {
-      console.error('Error processing option:', error)
+      console.error('[v0] Error processing option:', error)
+      const errorMsg = error instanceof Error ? error.message : 'Error desconocido'
+      const errorMessage: Message = {
+        id: (Date.now() + 999).toString(),
+        content: `Lo siento, no pude procesar tu selección: ${errorMsg}`,
+        sender: 'coach',
+        timestamp: new Date(),
+        type: 'message',
+      }
+      setMessages(prev => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
     }
@@ -193,13 +213,16 @@ export function ConversationalLearning() {
       console.log('[v0] Response received:', { status: response.status, ok: response.ok })
 
       if (!response.ok) {
-        const errorText = await response.text()
-        console.error('[v0] Response error:', errorText)
-        throw new Error(`Failed to fetch response (${response.status}): ${errorText}`)
+        console.error('[v0] Response not ok:', response.status)
+        throw new Error(`Failed to fetch response (${response.status})`)
       }
-      const reader = response.body?.getReader()
-      if (!reader) throw new Error('No response body')
 
+      if (!response.body) {
+        console.error('[v0] No response body')
+        throw new Error('No response body')
+      }
+
+      const reader = response.body.getReader()
       const coachMessageId = (Date.now() + 1).toString()
       let fullContent = ''
 
@@ -214,9 +237,41 @@ export function ConversationalLearning() {
 
       const decoder = new TextDecoder()
       while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        const chunk = decoder.decode(value)
+        try {
+          const { done, value } = await reader.read()
+          if (done) break
+          const chunk = decoder.decode(value)
+          fullContent += chunk
+          const { text, options } = parseOptionsFromContent(fullContent)
+          setMessages(prev => prev.map(msg =>
+            msg.id === coachMessageId
+              ? {
+                  ...msg,
+                  content: text,
+                  type: options ? 'options' : 'message',
+                  options
+                }
+              : msg
+          ))
+        } catch (chunkError) {
+          console.error('[v0] Error reading chunk:', chunkError)
+          break
+        }
+      }
+    } catch (error) {
+      console.error('[v0] Error sending message:', error)
+      const errorMsg = error instanceof Error ? error.message : 'Error desconocido'
+      const errorMessage: Message = {
+        id: (Date.now() + 999).toString(),
+        content: `Lo siento, ocurrió un error: ${errorMsg}. Intenta de nuevo.`,
+        sender: 'coach',
+        timestamp: new Date(),
+        type: 'message',
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
         fullContent += chunk
         const { text, options } = parseOptionsFromContent(fullContent)
         setMessages(prev => prev.map(msg =>

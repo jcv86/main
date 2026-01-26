@@ -2,7 +2,7 @@
 CREATE TABLE cip_tasks (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  date DATE NOT NULL DEFAULT TODAY(),
+  date DATE NOT NULL DEFAULT CURRENT_DATE,
   
   -- Información de la tarea
   title VARCHAR(255) NOT NULL,
