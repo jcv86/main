@@ -307,3 +307,76 @@ export async function updateUserDay(userId: string, routeId: string, newDay: num
 
   return true
 }
+
+// Obtener recomendaciones de rutas personalizadas (sincronico, para API)
+export function getRouteRecommendations(
+  userProfile: PerfilTipo,
+  capacityLevel: number,
+  routes: any[],
+  userProgress: any[]
+): any[] {
+  if (!routes || routes.length === 0) {
+    return []
+  }
+
+  // Obtener IDs de rutas en progreso o completadas
+  const progressIds = new Set(userProgress?.map(p => p.ruta_id) || [])
+
+  // Calcular score de match para cada ruta
+  const scoredRoutes = routes.map(route => {
+    let score = 0
+
+    // Match por perfil (0-40 puntos)
+    if (route.perfil_ideal === userProfile) {
+      score += 40
+    } else {
+      // Perfiles compatibles
+      const compatibility: Record<string, string[]> = {
+        'A': ['B', 'C'],
+        'B': ['A', 'D'],
+        'C': ['A', 'D'],
+        'D': ['B', 'C']
+      }
+      if (compatibility[userProfile]?.includes(route.perfil_ideal)) {
+        score += 20
+      }
+    }
+
+    // Match por capacidad (0-30 puntos)
+    const routeIntensity = route.nivel === 'principiante' ? 30 : route.nivel === 'intermedio' ? 60 : 90
+    const capacityMatch = 100 - Math.abs(capacityLevel - routeIntensity)
+    score += (capacityMatch / 100) * 30
+
+    // Bonus si no ha empezado (nueva ruta) (0-20 puntos)
+    if (!progressIds.has(route.id)) {
+      score += 20
+    }
+
+    // Bonus por orden (primeras rutas recomendadas)
+    score += (10 - (route.orden || 0)) * 1
+
+    return {
+      ...route,
+      score,
+      reason: getRecommendationReason(route, userProfile, capacityLevel),
+      isNew: !progressIds.has(route.id)
+    }
+  })
+
+  // Ordenar por score descendente
+  return scoredRoutes.sort((a, b) => b.score - a.score)
+}
+
+// Obtener razon de recomendacion
+function getRecommendationReason(route: any, userProfile: PerfilTipo, capacity: number): string {
+  if (route.perfil_ideal === userProfile) {
+    return `Ideal para tu perfil ${PERFIL_CONFIG[userProfile].nombre}`
+  }
+  if (capacity > 70) {
+    return 'Tienes alta capacidad para rutas intensivas'
+  }
+  if (capacity < 40) {
+    return 'Ruta con ritmo adaptado a tu capacidad actual'
+  }
+  return 'Recomendada para expandir tus habilidades'
+}
