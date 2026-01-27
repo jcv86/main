@@ -272,38 +272,6 @@ export function ConversationalLearning() {
     } finally {
       setIsLoading(false)
     }
-        fullContent += chunk
-        const { text, options } = parseOptionsFromContent(fullContent)
-        setMessages(prev => prev.map(msg =>
-          msg.id === coachMessageId
-            ? {
-                ...msg,
-                content: text,
-                type: options ? 'options' : 'message',
-                options
-              }
-            : msg
-        ))
-      }
-
-      const newMessageCount = messages.filter((m: any) => m.sender === 'user').length + 1
-      let nextPhase: typeof selectedPhase = 'greeting'
-      if (newMessageCount >= 1) nextPhase = 'exploration'
-      if (newMessageCount >= 3) nextPhase = 'recommendations'
-      if (newMessageCount >= 5) nextPhase = 'planning'
-      setSelectedPhase(nextPhase)
-    } catch (error) {
-      console.error('Error sending message:', error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: 'Disculpa, hubo un error. Por favor intenta de nuevo.',
-        sender: 'coach',
-        timestamp: new Date(),
-      }
-      setMessages(prev => [...prev, errorMessage])
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   const phaseData = PHASE_INFO[selectedPhase]
