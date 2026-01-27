@@ -19,7 +19,7 @@ CREATE TABLE a3_entrevista_progreso_ciclos (
 
 CREATE TABLE a3_entrevista_feedback_ia (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  entrevista_id UUID REFERENCES a3_entrevistas_guiadas NOT NULL,
+  sesion_id UUID REFERENCES a3_entrevistas_sesiones NOT NULL,
   respuesta_usuario TEXT NOT NULL,
   pregunta TEXT NOT NULL,
   analisis_fortalezas TEXT[],
@@ -92,6 +92,6 @@ CREATE TABLE a3_api_webhooks (
 
 -- Índices para performance
 CREATE INDEX idx_a3_progreso_user ON a3_entrevista_progreso_ciclos(user_id);
-CREATE INDEX idx_a3_feedback_entrevista ON a3_entrevista_feedback_ia(entrevista_id);
+CREATE INDEX idx_a3_feedback_sesion ON a3_entrevista_feedback_ia(sesion_id);
 CREATE INDEX idx_a3_video_user ON a3_video_progreso(user_id);
 CREATE INDEX idx_a3_scoring_user ON a3_scoring_empleadores(user_id);
