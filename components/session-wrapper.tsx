@@ -30,12 +30,20 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   const isUpdatingRef = useRef(false)
 
   useEffect(() => {
+    // Create AbortController to cancel pending operations on unmount
+    const abortController = new AbortController()
+    let isMounted = true
+
     // Check for existing session
     const checkSession = async () => {
       try {
+        if (abortController.signal.aborted) return
+
         const {
           data: { session },
         } = await supabase.auth.getSession()
+
+        if (!isMounted) return
 
         if (session?.user) {
           const userData = {
@@ -67,9 +75,13 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
           }
         }
       } catch (error) {
-        console.error("Session check error:", error)
+        if (!abortController.signal.aborted) {
+          console.error("Session check error:", error)
+        }
       } finally {
-        setIsLoading(false)
+        if (isMounted) {
+          setIsLoading(false)
+        }
       }
     }
 
@@ -78,7 +90,7 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (isUpdatingRef.current) return
+      if (!isMounted || isUpdatingRef.current) return
 
       if (session?.user) {
         const userData = {
@@ -114,6 +126,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     })
 
     return () => {
+      // Cancel pending operations and mark component as unmounted
+      abortController.abort()
+      isMounted = false
       subscription.unsubscribe()
     }
   }, [])
