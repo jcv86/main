@@ -1,4 +1,4 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+mimport { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 export async function createClient() {
   return createSupabaseClient(
