@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+// Despega Tu Carrera - Plataforma de Desarrollo Profesional
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
 import { AdminNavbar } from "@/components/admin-navbar"

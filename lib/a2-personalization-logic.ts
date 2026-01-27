@@ -39,11 +39,14 @@ export interface UserRouteProgress {
   fecha_inicio: string
 }
 
-// Configuración de personalización por perfil
+// Configuración de personalización por perfil Despega Cerebral
+// Colores oficiales basados en el sistema de evaluación
 export const PERFIL_CONFIG = {
   A: {
     nombre: 'Dominante',
-    emoji: '⚡',
+    color: '#DC2626', // Rojo - Dominancia
+    colorBg: '#FEE2E2',
+    colorBorder: '#FECACA',
     formatos_preferidos: ['proyecto', 'ejercicio', 'video'],
     estilo: 'Rápido, orientado a resultados, con decisiones',
     duracion_max_minutos: 45,
@@ -51,7 +54,9 @@ export const PERFIL_CONFIG = {
   },
   B: {
     nombre: 'Influyente',
-    emoji: '🌟',
+    color: '#F59E0B', // Amarillo - Influencia
+    colorBg: '#FEF3C7',
+    colorBorder: '#FDE68A',
     formatos_preferidos: ['video', 'networking', 'reflexion'],
     estilo: 'Social, creativo, con compartición',
     duracion_max_minutos: 60,
@@ -59,7 +64,9 @@ export const PERFIL_CONFIG = {
   },
   C: {
     nombre: 'Cumplidor',
-    emoji: '🎯',
+    color: '#2563EB', // Azul - Cumplimiento
+    colorBg: '#DBEAFE',
+    colorBorder: '#BFDBFE',
     formatos_preferidos: ['lectura', 'ejercicio', 'quiz'],
     estilo: 'Ordenado, validado, paso a paso',
     duracion_max_minutos: 90,
@@ -67,7 +74,9 @@ export const PERFIL_CONFIG = {
   },
   D: {
     nombre: 'Estable',
-    emoji: '🛡️',
+    color: '#16A34A', // Verde - Estabilidad
+    colorBg: '#DCFCE7',
+    colorBorder: '#BBF7D0',
     formatos_preferidos: ['video', 'reflexion', 'lectura'],
     estilo: 'Gradual, con soporte de comunidad',
     duracion_max_minutos: 60,

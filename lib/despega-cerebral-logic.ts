@@ -27,10 +27,19 @@ export interface PerfilDescubierto {
   compatibilidad: Record<PerfilType, number>
 }
 
-// Definiciones de cada perfil
+// Colores oficiales Despega Cerebral (basado en metodologia de perfiles)
+export const PERFIL_COLORES = {
+  A: { primary: '#DC2626', bg: '#FEE2E2', border: '#FECACA' }, // Rojo - Dominancia
+  B: { primary: '#F59E0B', bg: '#FEF3C7', border: '#FDE68A' }, // Amarillo - Influencia
+  C: { primary: '#2563EB', bg: '#DBEAFE', border: '#BFDBFE' }, // Azul - Cumplimiento
+  D: { primary: '#16A34A', bg: '#DCFCE7', border: '#BBF7D0' }, // Verde - Estabilidad
+}
+
+// Definiciones de cada perfil Despega Cerebral
 const PERFILES_DEFINICION: Record<PerfilType, any> = {
   A: {
     nombre: 'El Visionario (Dominancia)',
+    color: PERFIL_COLORES.A,
     descripcion:
       'Líder natural, orientado a resultados, decisivo y competitivo. Impulsa el cambio y busca estar en control.',
     fortalezas: [
