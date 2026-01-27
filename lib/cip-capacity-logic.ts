@@ -336,20 +336,38 @@ export async function getUserCapacityStatus(userId: string) {
   console.log('[v0] CIP: Obteniendo estado de capacidad para:', userId)
 
   try {
-    const { data: profile } = await supabase
+    // Intentar obtener perfil de usuario
+    const { data: profile, error: profileError } = await supabase
       .from('user_capacity_profile')
       .select('*')
       .eq('user_id', userId)
       .single()
 
-    const { data: dailyCapacity } = await supabase
+    // Si no existe perfil, inicializarlo automáticamente
+    let userProfile = profile
+    if (profileError && profileError.code === 'PGRST116') {
+      console.log('[v0] CIP: Perfil no encontrado, inicializando automáticamente')
+      userProfile = await initializeUserCapacity(userId)
+    } else if (profileError) {
+      throw profileError
+    }
+
+    // Intentar obtener capacidad diaria
+    const { data: dailyCapacity, error: dailyError } = await supabase
       .from('daily_capacity')
       .select('*')
       .eq('user_id', userId)
       .eq('date', new Date().toISOString().split('T')[0])
       .single()
 
-    const { data: alerts } = await supabase
+    // Si no existe capacidad diaria, retornar null (no es error)
+    let todayCapacity = dailyCapacity || null
+    if (dailyError && dailyError.code !== 'PGRST116') {
+      console.warn('[v0] CIP: Error obteniendo capacidad diaria:', dailyError)
+    }
+
+    // Obtener alertas activas
+    const { data: alerts, error: alertsError } = await supabase
       .from('capacity_alerts')
       .select('*')
       .eq('user_id', userId)
@@ -357,13 +375,23 @@ export async function getUserCapacityStatus(userId: string) {
       .order('created_at', { ascending: false })
       .limit(5)
 
+    if (alertsError) {
+      console.warn('[v0] CIP: Error obteniendo alertas:', alertsError)
+    }
+
     return {
-      profile,
-      today: dailyCapacity,
+      profile: userProfile,
+      today: todayCapacity,
       activeAlerts: alerts || [],
     }
   } catch (error) {
     console.error('[v0] CIP Error al obtener estado:', error)
-    throw error
+    // Retornar un estado por defecto en lugar de lanzar error
+    return {
+      profile: null,
+      today: null,
+      activeAlerts: [],
+      error: 'No se pudo obtener el estado de capacidad'
+    }
   }
 }

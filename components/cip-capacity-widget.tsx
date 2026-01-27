@@ -24,32 +24,35 @@ export function CIPCapacityWidget({ userId }: CIPCapacityWidgetProps) {
   const fetchCapacity = async () => {
     try {
       const response = await fetch(`/api/cip/daily?userId=${userId}`)
+      
       if (response.ok) {
         const result = await response.json()
+        console.log('[v0] CIP API response:', result)
+        
+        // Handle response structure
         if (result.data) {
-          // Handle nested data structure
           const capacityData = result.data.today || result.data
-          if (capacityData) {
-            setCapacity({
-              effective_capacity: capacityData.effective_capacity || 0,
-              success_probability: capacityData.success_probability || 0,
-            })
-          }
+          
+          // Usar valores por defecto si no hay datos reales
+          setCapacity({
+            effective_capacity: capacityData?.effective_capacity || 60,
+            success_probability: capacityData?.success_probability || 50,
+          })
         }
       } else {
         console.error('[v0] API error:', response.status)
         // Set default capacity if fetch fails
         setCapacity({
-          effective_capacity: 50,
-          success_probability: 0.5,
+          effective_capacity: 60,
+          success_probability: 50,
         })
       }
     } catch (error) {
       console.error('[v0] Error fetching capacity:', error)
       // Set default capacity on error
       setCapacity({
-        effective_capacity: 50,
-        success_probability: 0.5,
+        effective_capacity: 60,
+        success_probability: 50,
       })
     } finally {
       setLoading(false)

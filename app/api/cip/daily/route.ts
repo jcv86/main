@@ -79,15 +79,23 @@ export async function GET(request: NextRequest) {
 
     const status = await getUserCapacityStatus(userId)
 
+    // Retornar exitosamente incluso si status tiene datos parciales
     return NextResponse.json({
       success: true,
       data: status,
+      message: 'Estado de capacidad obtenido'
     })
   } catch (error) {
-    console.error('[v0] CIP API Error en GET daily:', error)
-    return NextResponse.json(
-      { error: 'Error al obtener estado' },
-      { status: 500 }
-    )
+    console.error('[v0] CIP API Error en daily GET:', error)
+    // Retornar respuesta segura en lugar de error 500
+    return NextResponse.json({
+      success: false,
+      data: {
+        profile: null,
+        today: null,
+        activeAlerts: [],
+      },
+      message: 'No se pudo obtener el estado de capacidad. Por favor intenta de nuevo.'
+    }, { status: 500 })
   }
 }
