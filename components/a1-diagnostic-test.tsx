@@ -34,6 +34,13 @@ export default function A1DiagnosticTest({ onComplete }: { onComplete: (data: an
   const curr = QUESTIONS[idx]
   const answered = curr && ans[curr.id] !== undefined
 
+  // Safety check
+  if (!curr) {
+    return <div className="p-8 text-red-600 font-bold">ERROR: Pregunta no cargada. Index: {idx}, Total: {QUESTIONS.length}</div>
+  }
+
+  console.log("[v0] Rendering question:", idx, curr.text)
+
   if (fin) {
     return (
       <div className="p-8 text-center bg-green-50 rounded-lg border-2 border-green-200">
