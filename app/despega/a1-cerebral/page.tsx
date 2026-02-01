@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { TestIntroScreen } from "@/components/test-intro-screen"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -41,14 +42,148 @@ const A1_QUESTIONS = [
 
 export default function A1CerebralPage() {
   const router = useRouter()
+  const supabase = createClient()
   const [stage, setStage] = useState<"intro" | "test" | "results">("intro")
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState<Record<number, any>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [userLevel, setUserLevel] = useState<"principiante" | "intermedio" | "avanzado" | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const question = A1_QUESTIONS[currentIdx]
-  const progress = ((currentIdx + 1) / A1_QUESTIONS.length) * 100
-  const isAnswered = answers[question.id] !== undefined
+  // Load user and their level
+  useEffect(() => {
+    const loadUserLevel = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          setLoading(false)
+          return
+        }
+
+        setUserId(user.id)
+
+        // Try to get user level from previous test results
+        const { data: testResults } = await supabase
+          .from("despega_a1_test_results")
+          .select("nivel_detectado")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single()
+
+        if (testResults?.nivel_detectado) {
+          setUserLevel(testResults.nivel_detectado as any)
+        } else {
+          // Default to principiante if no previous test
+          setUserLevel("principiante")
+        }
+      } catch (error) {
+        console.log("[v0] Could not load user level:", error)
+        setUserLevel("principiante")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadUserLevel()
+  }, [])
+
+  const getRecommendationsByLevel = (area: string, score: number) => {
+    const recommendations = {
+      energia: {
+        principiante: [
+          "Comienza con una rutina básica de sueño: acuéstate y levántate a la misma hora.",
+          "Intenta una actividad física ligera 2-3 veces por semana (caminar, yoga).",
+          "Bebe agua regularmente durante el día - es el paso más simple.",
+          "Evita pantallas 30 minutos antes de dormir.",
+        ],
+        intermedio: [
+          "Optimiza tu sueño: apunta a 7-8 horas consistentes.",
+          "Aumenta el ejercicio a 4-5 veces por semana con intensidad moderada.",
+          "Monitorea tu hidratación - establece recordatorios cada 2 horas.",
+          "Crea una rutina pre-sueño de 45 minutos sin distracciones.",
+        ],
+        avanzado: [
+          "Experimenta con ciclos de sueño (siesta estratégica de 20-30 min).",
+          "Integra entrenamiento de fuerza y cardio balanceados.",
+          "Optimiza nutrición alrededor de tu energía pico.",
+          "Usa tracking de sueño para identificar patrones y mejoras.",
+        ],
+      },
+      enfoque: {
+        principiante: [
+          "Empieza identificando tu 1-2 tareas IMPORTANTES cada día.",
+          "Trabaja 25 minutos sin distracciones (técnica Pomodoro).",
+          "Apaga notificaciones durante bloques de trabajo.",
+          "Anota tu plan cada mañana en un papel o app simple.",
+        ],
+        intermedio: [
+          "Implementa bloques de tiempo de 90 minutos para trabajo profundo.",
+          "Revisa notificaciones solo a horas específicas (9am, 12pm, 3pm).",
+          "Prioriza 3-5 tareas principales cada semana.",
+          "Usa un calendario visual para planificación semanal.",
+        ],
+        avanzado: [
+          "Diseña un sistema personal de priorización (matriz Eisenhower).",
+          "Alcanza 3-4 horas de trabajo profundo sin interrupciones.",
+          "Automatiza notificaciones - solo recibe lo crítico.",
+          "Analiza tu productividad semanal y ajusta el sistema.",
+        ],
+      },
+      relaciones: {
+        principiante: [
+          "Establece 1 llamada mensual con un colega o mentor.",
+          "Practica escucha activa: haz preguntas y espera respuestas.",
+          "Envía 3 mensajes de agradecimiento este mes.",
+          "Únete a 1 evento social o networking mensual.",
+        ],
+        intermedio: [
+          "Mantén contacto semanal con 2-3 colegas clave.",
+          "Practica empatía: entiende el contexto antes de responder.",
+          "Ofrece ayuda específica sin esperar retorno inmediato.",
+          "Participa activamente en 1-2 grupos o comunidades.",
+        ],
+        avanzado: [
+          "Cultiva una red de 10+ relaciones profesionales profundas.",
+          "Mentorea a otros - es la mejor forma de aprender.",
+          "Crea un sistema de seguimiento de relaciones (CRM personal).",
+          "Organiza eventos o encuentros que agreguen valor a otros.",
+        ],
+      },
+      plan_ejecutivo: {
+        principiante: [
+          "Escribe 1 meta clara para los próximos 90 días.",
+          "Planifica tu semana el domingo (30 minutos).",
+          "Haz 1 decisión importante por semana conscientemente.",
+          "Crea un ritual matutino simple de 10 minutos.",
+        ],
+        intermedio: [
+          "Define 3 metas principales con sub-tareas para cada una.",
+          "Planifica diariamente cada mañana (15 minutos).",
+          "Toma decisiones basadas en datos/hechos, no emociones.",
+          "Ritual matutino de 20-30 minutos que te enfoque.",
+        ],
+        avanzado: [
+          "Sistema de OKRs: Objetivos + Key Results trimestrales.",
+          "Revisión diaria de plan + ajustes en tiempo real.",
+          "Decide rápido pero revisa resultados sistemáticamente.",
+          "Ritual matutino personalizado de 45+ minutos.",
+        ],
+      },
+    }
+
+    return recommendations[area as keyof typeof recommendations]?.[userLevel as keyof any] || []
+  }
+
+  const getLevelBadge = () => {
+    const badges = {
+      principiante: { bg: "bg-blue-100", text: "text-blue-900", label: "Principiante" },
+      intermedio: { bg: "bg-amber-100", text: "text-amber-900", label: "Intermedio" },
+      avanzado: { bg: "bg-green-100", text: "text-green-900", label: "Avanzado" },
+    }
+    return badges[userLevel as keyof typeof badges] || badges.principiante
+  }
 
   const handleStartTest = () => {
     setStage("test")
@@ -94,6 +229,21 @@ export default function A1CerebralPage() {
     enfoque: "Enfoque",
     relaciones: "Relaciones",
     plan_ejecutivo: "Plan Ejecutivo",
+  }
+
+  const question = A1_QUESTIONS[currentIdx]
+  const progress = ((currentIdx + 1) / A1_QUESTIONS.length) * 100
+  const isAnswered = question && answers[question.id] !== undefined
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Cargando tu perfil...</p>
+        </div>
+      </div>
+    )
   }
 
   // STAGE 1: INTRO
@@ -329,7 +479,44 @@ export default function A1CerebralPage() {
           </CardContent>
         </Card>
 
-        {/* Insights */}
+        {/* User Level Badge */}
+        <div className="mb-8 text-center">
+          <Badge className={`px-4 py-2 text-base ${getLevelBadge().bg} ${getLevelBadge().text}`}>
+            Tu Nivel: {getLevelBadge().label}
+          </Badge>
+          <p className="text-sm text-gray-600 mt-2">Las recomendaciones están adaptadas a tu nivel</p>
+        </div>
+
+        {/* Personalized Recommendations by Area */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-6">Recomendaciones Personalizadas</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {Object.entries(results).map(([area, score]) => (
+              <Card key={area} className="border-2">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">{areaLabels[area as keyof typeof areaLabels]}</CardTitle>
+                    <Badge className={areaColors[area as keyof typeof areaColors]}>
+                      {Math.round(score)}%
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {getRecommendationsByLevel(area, score).map((rec, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-gray-700">
+                        <span className="font-bold text-blue-600 flex-shrink-0">•</span>
+                        <span>{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Strength & Growth Area */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Strength */}
           <Card className={`border-2 ${areaBgColors[strongest[0] as keyof typeof areaBgColors]}`}>
@@ -338,7 +525,7 @@ export default function A1CerebralPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3 mb-3">
-                <Badge className={areaBadgeColors[strongest[0] as keyof typeof areaBadgeColors]}>
+                <Badge className={areaColors[strongest[0] as keyof typeof areaColors]}>
                   {areaLabels[strongest[0] as keyof typeof areaLabels]}
                 </Badge>
               </div>
@@ -359,7 +546,7 @@ export default function A1CerebralPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3 mb-3">
-                <Badge className={areaBadgeColors[needsWork[0] as keyof typeof areaBadgeColors]}>
+                <Badge className={areaColors[needsWork[0] as keyof typeof areaColors]}>
                   {areaLabels[needsWork[0] as keyof typeof areaLabels]}
                 </Badge>
               </div>
