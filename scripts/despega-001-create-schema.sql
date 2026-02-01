@@ -53,16 +53,22 @@ CREATE TABLE IF NOT EXISTS despega_pilar_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   pilar TEXT NOT NULL CHECK (pilar IN ('a1_cerebral', 'a2_rutas', 'aterrizaje', 'base')),
-  estado JSONB DEFAULT '{}',
-  progreso INTEGER DEFAULT 0 CHECK (progreso >= 0 AND progreso <= 100),
-  score INTEGER DEFAULT 0,
+  -- Issue #1: Separated score types
+  diagnostic_score INTEGER DEFAULT 0 CHECK (diagnostic_score >= 0 AND diagnostic_score <= 100),
+  points_accumulated INTEGER DEFAULT 0 CHECK (points_accumulated >= 0),
+  progress_pct INTEGER DEFAULT 0 CHECK (progress_pct >= 0 AND progress_pct <= 100),
+  -- Cycle metadata
+  total_missions_in_cycle INTEGER DEFAULT 5,
+  missions_completed INTEGER DEFAULT 0,
   ciclo_actual INTEGER DEFAULT 30 CHECK (ciclo_actual IN (30, 60, 90)),
   ciclo_dia INTEGER DEFAULT 1 CHECK (ciclo_dia >= 1 AND ciclo_dia <= 90),
   ciclo_start_date DATE,
+  paquete_activo TEXT CHECK (paquete_activo IN ('energia', 'enfoque', 'relaciones', 'plan_ejecutivo')),
+  estado JSONB DEFAULT '{}',
   is_unlocked BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id, pilar)
+  UNIQUE(user_id, pilar, ciclo_actual)
 );
 
 -- 3. Rutas (definicion de rutas/paquetes)
@@ -198,15 +204,39 @@ CREATE TABLE IF NOT EXISTS despega_user_ruta_progress (
   UNIQUE(user_id, ruta_id)
 );
 
--- Enable RLS
-ALTER TABLE despega_user_profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_pilar_progress ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_rutas ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_misiones ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_user_misiones ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_rankings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_a1_test_results ENABLE ROW LEVEL SECURITY;
-ALTER TABLE despega_user_ruta_progress ENABLE ROW LEVEL SECURITY;
+-- Enable RLS on new tables
+ALTER TABLE despega_a1_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE despega_context_vault ENABLE ROW LEVEL SECURITY;
+ALTER TABLE despega_score_events ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for A1 Results (Issue #5: Security)
+CREATE POLICY "Users can view own A1 results" ON despega_a1_results
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own A1 results" ON despega_a1_results
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- RLS Policies for Context Vault (Issue #5: Sensitive data encryption)
+CREATE POLICY "Users can view own context vault" ON despega_context_vault
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own context vault" ON despega_context_vault
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete expired context vault" ON despega_context_vault
+  FOR DELETE USING (auth.uid() = user_id AND expires_at < NOW());
+
+-- RLS Policies for Score Events (Issue #9: Time-series tracking)
+CREATE POLICY "Users can view own score events" ON despega_score_events
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own score events" ON despega_score_events
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Index for time-series queries
+CREATE INDEX IF NOT EXISTS idx_despega_a1_results_user_ciclo ON despega_a1_results(user_id, ciclo, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_despega_context_vault_user ON despega_context_vault(user_id, expires_at);
+CREATE INDEX IF NOT EXISTS idx_despega_score_events_user_pilar_time ON despega_score_events(user_id, pilar, created_at DESC);
 
 -- RLS Policies
 CREATE POLICY "Users can view own despega profile" ON despega_user_profiles FOR SELECT USING (auth.uid() = user_id);

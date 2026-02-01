@@ -163,38 +163,67 @@ export async function updatePilarProgress(pilar: string, ciclo_actual: number, c
 }
 
 export async function saveA1TestResults(
-  respuestas: any,
-  resultados: any,
-  diagnostico: string
+  camino: "persona" | "profesional",
+  rawAnswers: any,
+  contextData?: any
 ) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) throw new Error("Unauthorized")
 
-  const { data, error } = await supabase
-    .from("despega_a1_test_results")
-    .insert({
-      user_id: user.id,
-      respuestas,
-      resultados,
-      diagnostico,
-      completed_at: new Date().toISOString(),
+  try {
+    // Issue #2: Import and use question mapping to normalize all answers to 1-10
+    const { normalizeAnswersTo110 } = await import("@/lib/a1-question-mapping")
+    const { calculateDimensionScore, calculateOverallScore } = await import("@/lib/a1-scoring-normalization")
+
+    const normalizedAnswers = normalizeAnswersTo110(rawAnswers)
+
+    const scores = {
+      energia: calculateDimensionScore(normalizedAnswers.energia),
+      enfoque: calculateDimensionScore(normalizedAnswers.enfoque),
+      relaciones: calculateDimensionScore(normalizedAnswers.relaciones),
+      plan_ejecutivo: calculateDimensionScore(normalizedAnswers.plan_ejecutivo),
+    }
+
+    const overall = calculateOverallScore(scores)
+
+    // Issue #4: Proper JS date handling (not SQL NOW())
+    const nowISO = new Date().toISOString()
+    const todayDateString = new Date().toISOString().split('T')[0]
+    const expiresAtISO = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
+
+    // Issue #7: Use RPC for transaction atomicity (all-or-nothing)
+    const { data, error } = await supabase.rpc('insert_a1_results_transaction', {
+      p_user_id: user.id,
+      p_score_energia: scores.energia,
+      p_score_enfoque: scores.enfoque,
+      p_score_relaciones: scores.relaciones,
+      p_score_plan_ejecutivo: scores.plan_ejecutivo,
+      p_score_overall: overall,
+      p_context_shift: contextData?.shiftWorker || false,
+      p_context_care: contextData?.caregiving || false,
+      p_context_neuro: contextData?.neurodiversity || false,
+      p_context_text: contextData?.otherContext || null,
+      p_context_consent: contextData?.consentGiven || false,
+      p_now_timestamp: nowISO,
+      p_today_date: todayDateString,
+      p_expires_at: expiresAtISO,
     })
-    .select()
-    .single()
 
-  if (error) throw error
+    if (error) throw error
 
-  // Mark A1 test as completed
-  await supabase
-    .from("despega_user_profiles")
-    .update({
-      a1_test_completed: true,
-      a1_test_completed_at: new Date().toISOString(),
+    console.log("[v0] A1 test results saved successfully", {
+      userId: user.id,
+      scores,
+      overall,
+      timestamp: nowISO,
     })
-    .eq("user_id", user.id)
 
-  revalidatePath("/despega")
-  return data
+    revalidatePath("/despega")
+    return { success: true, data, scores, overall }
+  } catch (error) {
+    console.error("[v0] Error saving A1 test results:", error)
+    throw error
+  }
 }
