@@ -2,11 +2,14 @@
 -- BLOCKER FIX #1: IDEMPOTENT MISSION COMPLETION
 -- ============================================================================
 -- Problem: Double-click on "Complete Mission" duplicates +25 points
--- Solution: Add WHERE completed = FALSE + unique constraint
+-- Solution: Add partial unique index for completed missions
 
+-- First add ciclo_actual column if missing (for tracking cycle-specific missions)
 ALTER TABLE despega_user_misiones
-ADD CONSTRAINT unique_mission_completion 
-UNIQUE(user_id, mision_id, ciclo_actual, completed) 
+ADD COLUMN IF NOT EXISTS ciclo_actual INTEGER DEFAULT 30 CHECK (ciclo_actual IN (30, 60, 90));
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mission_completed 
+ON despega_user_misiones(user_id, mision_id, ciclo_actual) 
 WHERE completed = TRUE;
 
 -- Ensures each user can only complete a mission ONCE per cycle
@@ -34,10 +37,7 @@ ON despega_pilar_progress(user_id, pilar, cycle_id, created_at DESC);
 
 -- Update UNIQUE constraint to include cycle_id
 ALTER TABLE despega_pilar_progress 
-DROP CONSTRAINT IF EXISTS unique_pilar_progress;
-
-ALTER TABLE despega_pilar_progress 
-ADD CONSTRAINT unique_pilar_progress 
+ADD CONSTRAINT unique_pilar_progress_cycle 
 UNIQUE(user_id, pilar, cycle_id);
 
 -- This prevents ciclo 30 UPSERT from overwriting ciclo 31
