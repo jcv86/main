@@ -99,10 +99,10 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="w-5 h-5" />
-            Tu Plan de Acción Personalizado
+            Mapa Inicial de Tus Patrones
           </CardTitle>
           <CardDescription>
-            Basado en tu diagnóstico A1, aquí están tus 4 pilares priorizados
+            Basado en tu check-in A1, aquí está una vista de tus 4 áreas de enfoque
           </CardDescription>
         </CardHeader>
       </Card>
@@ -174,18 +174,18 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex gap-2">
                       <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
                       <div className="text-sm text-orange-700">
-                        Este pilar necesita atención inmediata. Te recomendamos empezar por aquí.
+                        Esta área tiene la mayor fricción. Podrías empezar aquí si quieres explorar.
                       </div>
                     </div>
                   )}
 
                   {/* Recommendations */}
                   <div>
-                    <div className="text-sm font-medium mb-2">Acciones Recomendadas</div>
+                    <div className="text-sm font-medium mb-2">Palancas del Sistema (Explora si te interesa)</div>
                     <ul className="space-y-2">
                       {pilar.recommendations.map((rec, idx) => (
                         <li key={idx} className="text-sm flex gap-2">
-                          <span className="text-primary">•</span>
+                          <span className="text-primary">○</span>
                           <span>{rec}</span>
                         </li>
                       ))}
@@ -199,7 +199,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
                     variant={priority === 1 ? "default" : "outline"}
                   >
                     <Zap className="w-4 h-4 mr-2" />
-                    Empezar Plan {pilar.name}
+                    Explorar {pilar.name}
                   </Button>
                 </CardContent>
               </Card>
@@ -217,10 +217,10 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
-          <p>1. Selecciona el pilar prioritario y accede a las 5 misiones del ciclo 30</p>
-          <p>2. Completa al menos 1 misión diaria durante los próximos 30 días</p>
-          <p>3. Al finalizar, volverás a hacer el diagnóstico para medir progreso</p>
-          <p>4. Recibe coaching personalizado de Sofia/Dani en cada paso</p>
+          <p>1. Selecciona un área y accede a las 5 misiones del ciclo 30 (sin presión de orden)</p>
+          <p>2. Explora, prueba, observa qué se siente diferente</p>
+          <p>3. Al finalizar, vuelves a hacer el check-in para notar cambios</p>
+          <p>4. Sofia/Dani estarán disponibles para explicar patrones en cada paso</p>
         </CardContent>
       </Card>
     </div>
