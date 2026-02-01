@@ -61,15 +61,7 @@ export default function A1DiagnosticTest({ onComplete }: Props) {
   const progress = ((index + 1) / QUESTIONS.length) * 100
   const answered = q && answers[q.id] !== undefined
 
-  // Debug logging
-  console.log("[v0-DEBUG] Component rendered")
-  console.log("[v0-DEBUG] QUESTIONS.length:", QUESTIONS.length)
-  console.log("[v0-DEBUG] Current index:", index)
-  console.log("[v0-DEBUG] Current question:", q)
-  console.log("[v0-DEBUG] Question text:", q?.question)
-
   if (!q || QUESTIONS.length === 0) {
-    console.log("[v0-ERROR] No question loaded")
     return (
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-8 text-center">
         <h2 className="text-2xl font-bold text-red-900 mb-2">Error cargando preguntas</h2>
