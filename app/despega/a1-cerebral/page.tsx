@@ -9,6 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
+import A1DiagnosticTest from "@/components/a1-diagnostic-test"
+import { PersonalizedActionPlan } from "@/components/a1-personalized-action-plan"
+import { saveA1TestResults } from "@/lib/despega/actions"
 
 const PAQUETES_A1 = [
   {
@@ -83,6 +86,8 @@ export default function A1CerebralPage() {
   const [pilarProgress, setPilarProgress] = useState<any>(null)
   const [completedAcciones, setCompletedAcciones] = useState<Set<string>>(new Set())
   const [userId, setUserId] = useState<string | null>(null)
+  const [stage, setStage] = useState<"test" | "results" | "actions">("test") // Track which stage we're in
+  const [testInProgress, setTestInProgress] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -128,6 +133,28 @@ export default function A1CerebralPage() {
     loadData()
   }, [supabase])
 
+  const handleTestComplete = async (testResults: any) => {
+    setTestInProgress(true)
+    try {
+      await saveA1TestResults(
+        testResults.respuestas,
+        testResults.resultados,
+        testResults.diagnostico
+      )
+      setA1Results(testResults.resultados)
+      setStage("results")
+    } catch (error) {
+      console.error("Error saving test results:", error)
+    } finally {
+      setTestInProgress(false)
+    }
+  }
+
+  const handleStartPillar = (pilarId: string) => {
+    setStage("actions")
+    // Could navigate to the specific pillar here
+  }
+
   const handleCompleteAccion = async (paqueteId: string, dia: number, puntos: number) => {
     if (!userId) return
     
@@ -170,6 +197,52 @@ export default function A1CerebralPage() {
       </div>
     )
   }
+
+  // Show diagnostic test if no results yet
+  if (!a1Results && stage === "test") {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Volver al Dashboard
+          </Link>
+
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">
+                🧠
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">A1 Despega Cerebral - Diagnóstico</h1>
+                <p className="text-muted-foreground">Responde 20 preguntas para identificar tus áreas de oportunidad</p>
+              </div>
+            </div>
+          </div>
+
+          <A1DiagnosticTest onComplete={handleTestComplete} />
+        </div>
+      </div>
+    )
+  }
+
+  // Show action plan after test completion
+  if (a1Results && stage === "results") {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Volver al Dashboard
+          </Link>
+
+          <PersonalizedActionPlan results={a1Results} onStartPillar={handleStartPillar} />
+        </div>
+      </div>
+    )
+  }
+
+  // Show action execution view
 
   return (
     <div className="min-h-screen bg-background">
