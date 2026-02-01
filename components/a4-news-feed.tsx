@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -50,6 +50,11 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set())
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -60,7 +65,13 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
 
   const categories = [...new Set(items.map(item => item.categoria))]
 
-  const handleSave = (itemId: string) => {
+  const formatDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString("es-CL")
+    } catch {
+      return "Fecha desconocida"
+    }
+  }
     setSavedItems(prev => {
       const newSet = new Set(prev)
       if (newSet.has(itemId)) {
@@ -163,7 +174,7 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {new Date(item.publicado_en).toLocaleDateString("es-CL")}
+                        {mounted && formatDate(item.publicado_en)}
                       </span>
                       <span>{item.fuente}</span>
                     </div>
@@ -227,7 +238,7 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
                         </Badge>
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {new Date(item.publicado_en).toLocaleDateString("es-CL")}
+                          {mounted && formatDate(item.publicado_en)}
                         </span>
                         <span className="text-xs text-muted-foreground">{item.fuente}</span>
                       </div>

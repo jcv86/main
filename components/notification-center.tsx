@@ -23,9 +23,11 @@ export function NotificationCenter() {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
   const [unreadCount, setUnreadCount] = useState(0)
+  const [mounted, setMounted] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
+    setMounted(true)
     fetchNotifications()
     const interval = setInterval(fetchNotifications, 30000) // Refresh every 30 seconds
     return () => clearInterval(interval)

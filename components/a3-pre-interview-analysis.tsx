@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -20,8 +20,35 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
   const [stage, setStage] = useState<"capture" | "analyzing" | "results">("capture")
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [analysis, setAnalysis] = useState<any>(null)
+  const [mounted, setMounted] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+    // Initialize video stream
+    const initializeVideo = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: "user" } 
+        })
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+        }
+      } catch (error) {
+        console.error("Error accessing camera:", error)
+      }
+    }
+
+    initializeVideo()
+
+    return () => {
+      if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream
+        stream.getTracks().forEach(track => track.stop())
+      }
+    }
+  }, [])
 
   const handleCapturePhoto = async () => {
     if (videoRef.current && canvasRef.current) {
@@ -61,6 +88,8 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
   }
 
   if (stage === "capture") {
+    if (!mounted) return null
+    
     return (
       <Card className="w-full">
         <CardHeader>
