@@ -18,7 +18,37 @@ CREATE TABLE IF NOT EXISTS despega_user_profiles (
   UNIQUE(user_id)
 );
 
--- 2. Pilares Progress (progreso por cada pilar)
+-- 1B. A1 Diagnostic Results (Issue #3: separate table for each check-in)
+CREATE TABLE IF NOT EXISTS despega_a1_results (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  -- Diagnostic scores (0-100, NOT points)
+  diagnostic_score_energia INTEGER NOT NULL CHECK (diagnostic_score_energia >= 0 AND diagnostic_score_energia <= 100),
+  diagnostic_score_enfoque INTEGER NOT NULL CHECK (diagnostic_score_enfoque >= 0 AND diagnostic_score_enfoque <= 100),
+  diagnostic_score_relaciones INTEGER NOT NULL CHECK (diagnostic_score_relaciones >= 0 AND diagnostic_score_relaciones <= 100),
+  diagnostic_score_plan_ejecutivo INTEGER NOT NULL CHECK (diagnostic_score_plan_ejecutivo >= 0 AND diagnostic_score_plan_ejecutivo <= 100),
+  diagnostic_score_overall INTEGER NOT NULL CHECK (diagnostic_score_overall >= 0 AND diagnostic_score_overall <= 100),
+  -- Context captured (Issue #4: separate table for sensitive data)
+  context_shift_worker BOOLEAN DEFAULT false,
+  context_caregiving BOOLEAN DEFAULT false,
+  context_neurodiversity BOOLEAN DEFAULT false,
+  context_other_approved BOOLEAN DEFAULT false,
+  -- ciclo reference
+  ciclo INTEGER DEFAULT 30 CHECK (ciclo IN (30, 60, 90)),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, ciclo, created_at)
+);
+
+-- 1C. Context Data Vault (Issue #4: sensitive data storage with consent)
+CREATE TABLE IF NOT EXISTS despega_context_vault (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  context_other_text TEXT,
+  consent_given BOOLEAN DEFAULT false,
+  retention_days INTEGER DEFAULT 90,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  expires_at TIMESTAMP WITH TIME ZONE
+);
 CREATE TABLE IF NOT EXISTS despega_pilar_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -132,7 +162,24 @@ CREATE TABLE IF NOT EXISTS despega_a1_test_results (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 8. User Ruta Progress (progreso por ruta especifica)
+-- 9B. Score Events (Issue #9: time-series for "Mi Evolución", not rankings)
+CREATE TABLE IF NOT EXISTS despega_score_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  event_type TEXT NOT NULL CHECK (event_type IN ('diagnostic', 'mission_completed', 'milestone')),
+  pilar TEXT CHECK (pilar IN ('a1_cerebral', 'a2_rutas', 'aterrizaje', 'base')),
+  -- Score state at this moment
+  diagnostic_score_at_event INTEGER,
+  points_delta INTEGER,
+  points_total INTEGER,
+  progress_pct_at_event INTEGER,
+  -- Context snapshot
+  context_flags JSONB DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Index for personal evolution queries
+CREATE INDEX IF NOT EXISTS idx_score_events_user_pilar ON despega_score_events(user_id, pilar, created_at DESC);
 CREATE TABLE IF NOT EXISTS despega_user_ruta_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
