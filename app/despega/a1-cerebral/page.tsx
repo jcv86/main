@@ -391,84 +391,200 @@ export default function A1CerebralPage() {
     )
   }
 
-  // STAGE 3: RESULTS - Calculate and display analysis
-  const calculateResults = () => {
-    const areas = { energia: [], enfoque: [], relaciones: [], plan_ejecutivo: [] }
-    
-    // Group answers by area
-    A1_QUESTIONS.forEach(q => {
-      const answer = answers[q.id]
-      if (answer !== undefined) {
-        let score = 0
-        
-        if (q.type === "scale") {
-          // Normalize scale to 0-100
-          score = ((answer - q.min) / (q.max - q.min)) * 100
-        } else {
-          // Multiple choice: use index as score (0-100 based on 5 options)
-          const index = q.options?.indexOf(answer) || 0
-          score = (index / (q.options?.length || 1 - 1)) * 100
-        }
-        
-        areas[q.area as keyof typeof areas].push(score)
-      }
-    })
-    
-    // Calculate averages per area
-    const results = {
-      energia: areas.energia.length > 0 ? areas.energia.reduce((a, b) => a + b) / areas.energia.length : 0,
-      enfoque: areas.enfoque.length > 0 ? areas.enfoque.reduce((a, b) => a + b) / areas.enfoque.length : 0,
-      relaciones: areas.relaciones.length > 0 ? areas.relaciones.reduce((a, b) => a + b) / areas.relaciones.length : 0,
-      plan_ejecutivo: areas.plan_ejecutivo.length > 0 ? areas.plan_ejecutivo.reduce((a, b) => a + b) / areas.plan_ejecutivo.length : 0,
+  // Map questions to DISC-style categories
+  const questionToDISC: Record<number, "energia" | "enfoque" | "relaciones" | "plan_ejecutivo"> = {
+    1: "energia", 2: "energia", 3: "energia", 4: "energia", 5: "energia",
+    6: "enfoque", 7: "enfoque", 8: "enfoque", 9: "enfoque", 10: "enfoque",
+    11: "relaciones", 12: "relaciones", 13: "relaciones", 14: "relaciones", 15: "relaciones",
+    16: "plan_ejecutivo", 17: "plan_ejecutivo", 18: "plan_ejecutivo", 19: "plan_ejecutivo", 20: "plan_ejecutivo",
+  }
+
+  // Calculate DISC-style scores (0-100 per dimension)
+  const calculateDISCScores = () => {
+    const scores = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
     }
-    
-    return results
+    const counts = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
+    }
+
+    A1_QUESTIONS.forEach(question => {
+      const answer = answers[question.id]
+      if (answer === undefined) return
+
+      const dimension = questionToDISC[question.id]
+      let normalizedScore = 0
+
+      if (question.type === "scale") {
+        // Normalize scale answers to 0-100
+        normalizedScore = ((answer - question.min) / (question.max - question.min)) * 100
+      } else if (question.type === "multiple") {
+        // Normalize multiple choice to 0-100 (option index / total options)
+        const optionIndex = question.options?.indexOf(answer) || 0
+        normalizedScore = (optionIndex / (question.options?.length || 1 - 1)) * 100
+      }
+
+      scores[dimension] += normalizedScore
+      counts[dimension]++
+    })
+
+    // Calculate averages and round
+    const finalScores = {
+      energia: counts.energia > 0 ? Math.round(scores.energia / counts.energia) : 0,
+      enfoque: counts.enfoque > 0 ? Math.round(scores.enfoque / counts.enfoque) : 0,
+      relaciones: counts.relaciones > 0 ? Math.round(scores.relaciones / counts.relaciones) : 0,
+      plan_ejecutivo: counts.plan_ejecutivo > 0 ? Math.round(scores.plan_ejecutivo / counts.plan_ejecutivo) : 0,
+    }
+
+    return finalScores
+  }
+
+  const calculateResults = () => {
+    return calculateDISCScores()
   }
 
   const results = calculateResults()
   const sorted = Object.entries(results).sort((a, b) => b[1] - a[1])
-  const strongest = sorted[0]
+  const primaryDimension = sorted[0][0] as string
+  const primaryScore = sorted[0][1]
+  const secondaryDimension = sorted[1][0] as string
   const needsWork = sorted[sorted.length - 1]
 
-  const areaBgColors = {
-    energia: "bg-blue-50 border-blue-200",
-    enfoque: "bg-green-50 border-green-200",
-    relaciones: "bg-orange-50 border-orange-200",
-    plan_ejecutivo: "bg-purple-50 border-purple-200",
+  // Get primary dimension info
+  const getDimensionInfo = (dim: string) => {
+    const info: Record<string, any> = {
+      energia: {
+        label: "Energía",
+        emoji: "⚡",
+        color: "bg-blue-50 border-blue-200",
+        textColor: "text-blue-700",
+        bgColor: "bg-blue-100",
+        description: "Tu capacidad de mantener energía y bienestar sostenido",
+      },
+      enfoque: {
+        label: "Enfoque",
+        emoji: "🎯",
+        color: "bg-green-50 border-green-200",
+        textColor: "text-green-700",
+        bgColor: "bg-green-100",
+        description: "Tu habilidad para concentrarte y ejecutar tareas prioritarias",
+      },
+      relaciones: {
+        label: "Relaciones",
+        emoji: "🤝",
+        color: "bg-orange-50 border-orange-200",
+        textColor: "text-orange-700",
+        bgColor: "bg-orange-100",
+        description: "Tu capacidad de conectar y colaborar con otros",
+      },
+      plan_ejecutivo: {
+        label: "Plan Ejecutivo",
+        emoji: "📊",
+        color: "bg-purple-50 border-purple-200",
+        textColor: "text-purple-700",
+        bgColor: "bg-purple-100",
+        description: "Tu habilidad para planificar y ejecutar estrategias",
+      },
+    }
+    return info[dim] || info.energia
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
-      <div className="container mx-auto px-4 max-w-3xl">
+      <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
           <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold mb-2">¡Test Completado!</h1>
-          <p className="text-lg text-gray-600">Aquí está tu análisis personalizado</p>
+          <p className="text-lg text-gray-600">Aquí está tu Perfil Despega Cerebral</p>
         </div>
 
-        {/* Results Summary */}
-        <Card className="mb-8 shadow-lg border-2">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
-            <CardTitle className="text-2xl">Tu Perfil Cerebral</CardTitle>
+        {/* Primary Profile - DISC Style */}
+        <Card className={`mb-8 shadow-xl border-4 ${getDimensionInfo(primaryDimension).color}`}>
+          <CardHeader className="text-center pb-6">
+            <div className="text-6xl mb-4">{getDimensionInfo(primaryDimension).emoji}</div>
+            <CardTitle className="text-4xl font-bold mb-2">
+              {getDimensionInfo(primaryDimension).label}
+            </CardTitle>
+            <p className="text-lg text-gray-600">Tu dimensión primaria</p>
           </CardHeader>
-          <CardContent className="pt-8">
+          <CardContent className="pb-8">
+            <div className="text-center mb-6">
+              <div className="text-5xl font-bold text-blue-600 mb-2">{primaryScore}%</div>
+              <p className="text-gray-700">
+                {getDimensionInfo(primaryDimension).description}
+              </p>
+            </div>
+
+            {/* Profile Interpretation */}
+            <div className={`p-6 rounded-lg ${getDimensionInfo(primaryDimension).bgColor} ${getDimensionInfo(primaryDimension).textColor} mb-6`}>
+              <p className="font-semibold mb-2">Tu perfil indica que:</p>
+              {primaryDimension === "energia" && (
+                <ul className="space-y-1 text-sm">
+                  <li>• Tienes {primaryScore > 70 ? "excelente" : primaryScore > 50 ? "buena" : "oportunidad de mejorar tu"} gestión de energía personal</li>
+                  <li>• Tu bienestar es {primaryScore > 70 ? "una fortaleza clave" : "un área a desarrollar"}</li>
+                  <li>• Enfócate en {primaryScore > 70 ? "mantener" : "mejorar"} tus hábitos de sueño, ejercicio e hidratación</li>
+                </ul>
+              )}
+              {primaryDimension === "enfoque" && (
+                <ul className="space-y-1 text-sm">
+                  <li>• Tu concentración es {primaryScore > 70 ? "excepcional" : primaryScore > 50 ? "competente" : "un área a mejorar"}</li>
+                  <li>• Sabes {primaryScore > 70 ? "exactamente" : "en parte"} cómo priorizar tareas importantes</li>
+                  <li>• Trabaja en ${primaryScore > 70 ? "mantener" : "desarrollar"} sistemas de gestión de distracciones</li>
+                </ul>
+              )}
+              {primaryDimension === "relaciones" && (
+                <ul className="space-y-1 text-sm">
+                  <li>• Tu comunicación es ${primaryScore > 70 ? "excepcional" : primaryScore > 50 ? "efectiva" : "un área a mejorar"}</li>
+                  <li>• Tus relaciones profesionales son ${primaryScore > 70 ? "un gran activo" : "áreas a fortalecer"}</li>
+                  <li>• Enfócate en ${primaryScore > 70 ? "profundizar" : "construir"} conexiones significativas</li>
+                </ul>
+              )}
+              {primaryDimension === "plan_ejecutivo" && (
+                <ul className="space-y-1 text-sm">
+                  <li>• Tu capacidad de ejecución es ${primaryScore > 70 ? "destacada" : primaryScore > 50 ? "sólida" : "un área a desarrollar"}</li>
+                  <li>• Sabes ${primaryScore > 70 ? "exactamente" : "en parte"} cómo planificar y ejecutar</li>
+                  <li>• Trabaja en ${primaryScore > 70 ? "refinar" : "desarrollar"} tus sistemas de gestión estratégica</li>
+                </ul>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* All Dimensions Comparison */}
+        <Card className="mb-8 shadow-lg border-2">
+          <CardHeader>
+            <CardTitle className="text-2xl">Tu Perfil Completo</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
             <div className="space-y-6">
-              {Object.entries(results).map(([area, score]) => (
-                <div key={area}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className={`font-semibold ${areaColors[area as keyof typeof areaColors]}`}>
-                      {areaLabels[area as keyof typeof areaLabels]}
-                    </span>
-                    <span className="text-2xl font-bold text-blue-600">{Math.round(score)}%</span>
+              {sorted.map(([dim, score]) => (
+                <div key={dim}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{getDimensionInfo(dim).emoji}</span>
+                      <span className="font-semibold text-gray-800">
+                        {getDimensionInfo(dim).label}
+                      </span>
+                    </div>
+                    <span className="text-2xl font-bold text-blue-600">{score}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                     <div
-                      className={`h-3 rounded-full transition-all ${
-                        area === "energia" ? "bg-blue-500" :
-                        area === "enfoque" ? "bg-green-500" :
-                        area === "relaciones" ? "bg-orange-500" :
-                        "bg-purple-500"
+                      className={`h-4 rounded-full transition-all ${
+                        dim === "energia"
+                          ? "bg-blue-500"
+                          : dim === "enfoque"
+                            ? "bg-green-500"
+                            : dim === "relaciones"
+                              ? "bg-orange-500"
+                              : "bg-purple-500"
                       }`}
                       style={{ width: `${score}%` }}
                     />
@@ -491,19 +607,22 @@ export default function A1CerebralPage() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-6">Recomendaciones Personalizadas</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {Object.entries(results).map(([area, score]) => (
-              <Card key={area} className="border-2">
+            {sorted.map(([dim, score]) => (
+              <Card key={dim} className="border-2">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{areaLabels[area as keyof typeof areaLabels]}</CardTitle>
-                    <Badge className={areaColors[area as keyof typeof areaColors]}>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <span className="text-2xl">{getDimensionInfo(dim).emoji}</span>
+                      {getDimensionInfo(dim).label}
+                    </CardTitle>
+                    <Badge className={getDimensionInfo(dim).bgColor}>
                       {Math.round(score)}%
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {getRecommendationsByLevel(area, score).map((rec, i) => (
+                    {getRecommendationsByLevel(dim, score).map((rec, i) => (
                       <li key={i} className="flex gap-2 text-sm text-gray-700">
                         <span className="font-bold text-blue-600 flex-shrink-0">•</span>
                         <span>{rec}</span>
@@ -516,51 +635,6 @@ export default function A1CerebralPage() {
           </div>
         </div>
 
-        {/* Strength & Growth Area */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Strength */}
-          <Card className={`border-2 ${areaBgColors[strongest[0] as keyof typeof areaBgColors]}`}>
-            <CardHeader>
-              <CardTitle className="text-lg">Tu Fortaleza</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-3">
-                <Badge className={areaColors[strongest[0] as keyof typeof areaColors]}>
-                  {areaLabels[strongest[0] as keyof typeof areaLabels]}
-                </Badge>
-              </div>
-              <p className="text-gray-700 font-semibold">{Math.round(strongest[1])}% de desempeño</p>
-              <p className="text-sm text-gray-600 mt-2">
-                {strongest[0] === "energia" && "¡Excelente gestión de tu energía y bienestar! Mantén estas prácticas de sueño, ejercicio e hidratación."}
-                {strongest[0] === "enfoque" && "¡Tu concentración es excepcional! Sabes cómo manejar las distracciones y completar tareas importantes."}
-                {strongest[0] === "relaciones" && "¡Eres un excelente comunicador! Tus relaciones profesionales son un gran activo."}
-                {strongest[0] === "plan_ejecutivo" && "¡Tu capacidad de ejecución es destacada! Sabes planificar y llevar a cabo tus objetivos."}
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Area for Growth */}
-          <Card className={`border-2 ${areaBgColors[needsWork[0] as keyof typeof areaBgColors]}`}>
-            <CardHeader>
-              <CardTitle className="text-lg">Área de Oportunidad</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-3">
-                <Badge className={areaColors[needsWork[0] as keyof typeof areaColors]}>
-                  {areaLabels[needsWork[0] as keyof typeof areaLabels]}
-                </Badge>
-              </div>
-              <p className="text-gray-700 font-semibold">{Math.round(needsWork[1])}% de desempeño</p>
-              <p className="text-sm text-gray-600 mt-2">
-                {needsWork[0] === "energia" && "Enfócate en mejorar tu sueño, actividad física e hidratación para optimizar tu energía."}
-                {needsWork[0] === "enfoque" && "Trabaja en minimizar distracciones y mejorar tu capacidad de concentración profunda."}
-                {needsWork[0] === "relaciones" && "Invierte más tiempo en construir relaciones profesionales significativas."}
-                {needsWork[0] === "plan_ejecutivo" && "Desarrolla un plan claro y un sistema de seguimiento para mejorar tu ejecución."}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Action Button */}
         <div className="text-center">
           <Button
@@ -571,7 +645,7 @@ export default function A1CerebralPage() {
             Volver al Dashboard
           </Button>
           <p className="text-sm text-gray-500 mt-4">
-            Tus respuestas han sido guardadas. Consulta tu perfil completo en el dashboard.
+            Tus resultados han sido guardados en tu perfil.
           </p>
         </div>
       </div>
