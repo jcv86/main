@@ -26,7 +26,7 @@ const QUESTIONS = [
   { id: 'q20', text: '¿Tienes ritual matutino preparatorio?', type: 'choice', options: ['No tengo', 'Irregular', 'Corto (5-10 min)', 'Moderado (10-30 min)', 'Robusto (30+ min)'] },
 ]
 
-export function A1DiagnosticTest({ onComplete }: { onComplete: (data: any) => void }) {
+export default function A1DiagnosticTest({ onComplete }: { onComplete: (data: any) => void }) {
   const [idx, setIdx] = useState(0)
   const [ans, setAns] = useState<Record<string, any>>({})
   const [fin, setFin] = useState(false)
