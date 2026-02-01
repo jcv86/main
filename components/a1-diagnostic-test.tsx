@@ -34,24 +34,15 @@ export default function A1DiagnosticTest({ onComplete }: { onComplete: (data: an
   const curr = QUESTIONS[idx]
   const answered = curr && ans[curr.id] !== undefined
 
-  // Safety check
-  if (!curr) {
-    return <div className="p-8 text-red-600 font-bold">ERROR: Pregunta no cargada. Index: {idx}, Total: {QUESTIONS.length}</div>
-  }
-
-  console.log("[v0] Rendering question:", idx, curr.text)
-
-  if (fin) {
+  // Safety check - if no current question, show error
+  if (!curr || !QUESTIONS.length) {
     return (
-      <div className="p-8 text-center bg-green-50 rounded-lg border-2 border-green-200">
-        <h2 className="text-3xl font-bold mb-4 text-green-900">✓ Diagnóstico Completado</h2>
-        <p className="text-green-700 text-lg">Tus respuestas han sido registradas correctamente.</p>
+      <div className="w-full max-w-2xl mx-auto p-8 bg-red-50 border-2 border-red-300 rounded-lg text-center">
+        <h2 className="text-2xl font-bold text-red-900 mb-2">Error de carga</h2>
+        <p className="text-red-700">No se pudieron cargar las preguntas del diagnóstico.</p>
+        <p className="text-sm text-red-600 mt-2">Índice: {idx}, Total de preguntas: {QUESTIONS.length}</p>
       </div>
     )
-  }
-
-  if (!curr) {
-    return <div className="p-8 text-red-600 text-lg font-bold">Error: No hay preguntas disponibles</div>
   }
 
   const handleAnswer = (value: any) => {
@@ -65,6 +56,16 @@ export default function A1DiagnosticTest({ onComplete }: { onComplete: (data: an
       setFin(true)
       onComplete({ responses: ans })
     }
+  }
+
+  // Completion screen
+  if (fin) {
+    return (
+      <div className="w-full max-w-2xl mx-auto p-8 text-center bg-green-50 rounded-lg border-2 border-green-200">
+        <h2 className="text-3xl font-bold mb-4 text-green-900">✓ Diagnóstico Completado</h2>
+        <p className="text-green-700 text-lg">Tus respuestas han sido registradas correctamente.</p>
+      </div>
+    )
   }
 
   return (
