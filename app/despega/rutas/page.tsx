@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
-import { ArrowLeft, Lock } from "lucide-react"
+import { ArrowLeft, Lock, Zap } from "lucide-react"
+import { A3ScenarioSimulator } from "@/components/a3-scenario-simulator"
 
 const RUTAS = [
   {
@@ -64,7 +66,66 @@ export default function RutasPage() {
   const [loading, setLoading] = useState(true)
   const [rutasProgress, setRutasProgress] = useState<Record<string, number>>({})
   const [userProfile, setUserProfile] = useState<any>(null)
+  const [selectedScenario, setSelectedScenario] = useState<any>(null)
+  const [completedScenarios, setCompletedScenarios] = useState<Set<string>>(new Set())
+  const [activeTab, setActiveTab] = useState("a2")
   const supabase = createClient()
+
+  // Sample A3 scenarios
+  const A3_SCENARIOS = [
+    {
+      id: "escenario_enfoque_1",
+      titulo: "Reunión Excesiva",
+      contexto: "Tu equipo está en 5 reuniones simultáneas y nadie está haciendo trabajo profundo.",
+      tipo: "decision",
+      nivel: "intermedio",
+      puntos: 25,
+      decisiones: [
+        {
+          id: "opt_1",
+          text: "Cancelar todas las reuniones innecesarias",
+          description: "Decisión radical pero efectiva",
+          outcome: "Algunos equipos se sienten frustrados, pero la productividad aumenta 40%",
+          score_impact: 20,
+          reasoning: "Buen instinto, pero falta diplomacia. Mejor comunicar gradualmente."
+        },
+        {
+          id: "opt_2",
+          text: "Crear 'Deep Work Hours' sin reuniones",
+          description: "Establecer bloques protegidos de enfoque",
+          outcome: "Todos adaptan gradualmente. Productividad aumenta 25% sin conflictos.",
+          score_impact: 25,
+          reasoning: "Excelente balance entre efectividad y relaciones. Este es el enfoque recomendado."
+        },
+      ],
+      metricas_exito: [
+        { label: "Productividad", description: "Aumento en trabajo profundo completado", weight: 0.4 },
+        { label: "Moral del equipo", description: "Satisfacción con cambios", weight: 0.3 },
+      ]
+    },
+    {
+      id: "escenario_relaciones_1",
+      titulo: "Conflicto entre Colegas",
+      contexto: "Dos miembros clave del equipo tienen desacuerdo sobre la dirección del proyecto.",
+      tipo: "negociacion",
+      nivel: "intermedio",
+      puntos: 30,
+      decisiones: [
+        {
+          id: "opt_1",
+          text: "Escuchar a ambos por separado",
+          description: "Entendimiento individual antes de negociación",
+          outcome: "Ambos se sienten escuchados. Identificas el verdadero problema subyacente.",
+          score_impact: 25,
+          reasoning: "Excelente comunicación empática. Siempre escucha primero antes de decidir."
+        },
+      ],
+      metricas_exito: [
+        { label: "Resolución", description: "Problema efectivamente resuelto", weight: 0.35 },
+        { label: "Relaciones", description: "Confianza entre las partes", weight: 0.35 },
+      ]
+    },
+  ]
 
   useEffect(() => {
     const loadData = async () => {
@@ -98,12 +159,10 @@ export default function RutasPage() {
     loadData()
   }, [supabase])
 
-  const isRutaAvailable = (rutaCamino: string) => {
-    if (!userProfile) return false
-    if (rutaCamino === "ambos") return true
-    if (rutaCamino === "persona" && userProfile.camino_persona_active) return true
-    if (rutaCamino === "profesional" && userProfile.camino_profesional_active) return true
-    return false
+  const handleScenarioComplete = async (result: any) => {
+    setCompletedScenarios(prev => new Set([...prev, result.scenario_id]))
+    setSelectedScenario(null)
+    // TODO: Save to database
   }
 
   if (loading) {
@@ -134,8 +193,17 @@ export default function RutasPage() {
           </div>
         </div>
 
-        {/* Rutas Grid */}
-        <div className="grid gap-6">
+        {/* Tabs for A2 and A3 */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="a2">A2 Rutas Temáticas</TabsTrigger>
+            <TabsTrigger value="a3" className="flex items-center gap-2">
+              <Zap className="w-4 h-4" />
+              A3 Simulaciones
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="a2" className="space-y-6">
           {RUTAS.map((ruta) => {
             const available = isRutaAvailable(ruta.camino)
             const progress = rutasProgress[ruta.id] || 0
@@ -212,9 +280,78 @@ export default function RutasPage() {
                   )}
                 </CardContent>
               </Card>
-            )
-          })}
-        </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="a3" className="space-y-6">
+          {/* A3 Simulations */}
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Escenarios de Simulación</h2>
+            <div className="text-sm text-muted-foreground mb-4">
+              Aprende enfrentando situaciones realistas. Cada simulación te proporciona feedback personalizado.
+            </div>
+            <div className="grid gap-4">
+              {A3_SCENARIOS.map((scenario) => {
+                const isCompleted = completedScenarios.has(scenario.id)
+                const tipoIcons: Record<string, string> = {
+                  decision: "🤔",
+                  comunicacion: "💬",
+                  negociacion: "🤝",
+                  liderazgo: "👥",
+                  crisis: "🚨",
+                  planificacion: "📋",
+                }
+
+                return (
+                  <Card
+                    key={scenario.id}
+                    className={`cursor-pointer transition-all hover:shadow-md ${
+                      isCompleted ? "opacity-60 bg-muted" : ""
+                    }`}
+                  >
+                    <CardContent className="py-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-2xl">{tipoIcons[scenario.tipo]}</span>
+                            <div>
+                              <div className="font-medium">{scenario.titulo}</div>
+                              <div className="text-sm text-muted-foreground">{scenario.contexto}</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="text-right flex-shrink-0">
+                          <div className="flex gap-2 mb-2">
+                            <Badge variant="outline" className="capitalize">
+                              {scenario.nivel}
+                            </Badge>
+                            <Badge className="bg-primary">
+                              +{scenario.puntos}
+                            </Badge>
+                          </div>
+                          {!isCompleted ? (
+                            <Button
+                              size="sm"
+                              onClick={() => setSelectedScenario(scenario)}
+                            >
+                              Comenzar
+                            </Button>
+                          ) : (
+                            <Badge className="bg-green-100 text-green-800">
+                              Completado
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </div>
+        </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
