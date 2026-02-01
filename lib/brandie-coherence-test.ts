@@ -1,7 +1,8 @@
 // Brandie Sensei Nivel 2 - Cross-Coherence Test Framework
-// Audits Chat Coach responses for DTC system integrity
+// Audits Chat Coach responses for DTC system integrity with Referent Validation
 
 import { z } from "zod"
+import { PILLAR_REFERENTS_MAP, REFERENT_VALIDATION } from "./dtc-referents-framework"
 
 export type CoherenceAxis = "rol" | "limite" | "pilar" | "tono" | "valor"
 export type CoherenceStatus = "cumple" | "parcial" | "no_cumple"
@@ -63,6 +64,7 @@ const PILLAR_RULES: Record<CoherencePillar, {
   mustDo: string[]
   mustAvoid: string[]
   redFlags: string[]
+  referent?: string
 }> = {
   a1: {
     mustDo: [
@@ -70,6 +72,7 @@ const PILLAR_RULES: Record<CoherencePillar, {
       "Contextualización de síntomas",
       "Normalización sin validación errónea",
       "Conexión a A1 diagnosis",
+      "Énfasis en contexto e invisibles",
     ],
     mustAvoid: [
       "Acciones concretas",
@@ -77,6 +80,7 @@ const PILLAR_RULES: Record<CoherencePillar, {
       "Recomendaciones",
       "Referencia a A3 o A4",
     ],
+    referent: "Hidden Brain (Vedantam) - Patrones invisibles del sistema",
     redFlags: [
       "Lo que tienes que hacer es",
       "Te recomiendo que",
@@ -293,4 +297,45 @@ export function detectCriticalFailure(
   }
 
   return { hasCritical: false }
+}
+
+// ============================================
+// REFERENT VALIDATION
+// ============================================
+
+export function validateReferentsAlignment(
+  response: string,
+  pillar: CoherencePillar
+): { aligned: boolean; reason?: string } {
+  const referents = PILLAR_REFERENTS_MAP[pillar]
+  
+  if (!referents) return { aligned: true }
+
+  switch (pillar) {
+    case "a1":
+      // A1 should reflect Hidden Brain principles
+      return {
+        aligned: REFERENT_VALIDATION.checkA1Coherence(response),
+        reason: !REFERENT_VALIDATION.checkA1Coherence(response) 
+          ? "Respuesta no alineada con principios Hidden Brain" 
+          : undefined,
+      }
+    case "a3":
+      // A3 should reflect Adam Grant principles (experimentation focus)
+      return {
+        aligned: REFERENT_VALIDATION.checkA3Coherence(response),
+        reason: !REFERENT_VALIDATION.checkA3Coherence(response)
+          ? "Respuesta no alineada con principios Adam Grant"
+          : undefined,
+      }
+    case "a4":
+      // A4 should reflect Hidden Brain principles (system focus)
+      return {
+        aligned: REFERENT_VALIDATION.checkA4Coherence(response),
+        reason: !REFERENT_VALIDATION.checkA4Coherence(response)
+          ? "Respuesta no alineada con principios Hidden Brain"
+          : undefined,
+      }
+  }
+}
 }
