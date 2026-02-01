@@ -235,6 +235,7 @@ export default function BigFiveTest() {
           <p className="text-gray-600">Loading 5 Dimensiones Despega...</p>
         </div>
       </div>
+      </div>
     )
   }
 
