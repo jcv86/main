@@ -26,20 +26,22 @@ interface RankingEntry {
 }
 
 const RANKING_TABS = [
-  { id: "general", name: "General", scoreKey: "score_general" },
-  { id: "a1", name: "A1 Cerebral", scoreKey: "score_pilar_a1" },
-  { id: "a2", name: "A2 Rutas", scoreKey: "score_pilar_a2" },
-  { id: "aterrizaje", name: "Aterrizaje", scoreKey: "score_aterrizaje" },
-  { id: "base", name: "Base", scoreKey: "score_base" },
-  { id: "persona", name: "C. Persona", scoreKey: "score_camino_persona" },
-  { id: "profesional", name: "C. Profesional", scoreKey: "score_camino_profesional" },
+  { id: "personal", name: "Mi Evolución", scoreKey: "score_general", type: "personal" },
+  { id: "general", name: "Contexto Global (Opt-in)", scoreKey: "score_general", type: "global" },
+  { id: "a1", name: "A1 Cerebral", scoreKey: "score_pilar_a1", type: "global" },
+  { id: "a2", name: "A2 Rutas", scoreKey: "score_pilar_a2", type: "global" },
+  { id: "aterrizaje", name: "Aterrizaje", scoreKey: "score_aterrizaje", type: "global" },
+  { id: "base", name: "Base", scoreKey: "score_base", type: "global" },
+  { id: "persona", name: "C. Persona", scoreKey: "score_camino_persona", type: "global" },
+  { id: "profesional", name: "C. Profesional", scoreKey: "score_camino_profesional", type: "global" },
 ]
 
 export default function RankingsPage() {
   const [loading, setLoading] = useState(true)
   const [rankings, setRankings] = useState<RankingEntry[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState("general")
+  const [activeTab, setActiveTab] = useState("personal")
+  const [userHistory, setUserHistory] = useState<{ date: string; score: number }[]>([])
   const supabase = createClient()
 
   useEffect(() => {
@@ -47,6 +49,19 @@ export default function RankingsPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) setCurrentUserId(user.id)
 
+      // Load personal history (self-comparison default)
+      const { data: historyData } = await supabase
+        .from("despega_user_progress_history")
+        .select("date, score_general")
+        .eq("user_id", user?.id)
+        .order("date", { ascending: true })
+        .limit(30)
+
+      if (historyData) {
+        setUserHistory(historyData.map((h: any) => ({ date: h.date, score: h.score_general })))
+      }
+
+      // Load global rankings
       const { data: rankingsData } = await supabase
         .from("despega_rankings")
         .select(`

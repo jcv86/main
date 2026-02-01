@@ -13,6 +13,53 @@ import A1DiagnosticTest from "@/components/a1-diagnostic-test"
 import { PersonalizedActionPlan } from "@/components/a1-personalized-action-plan"
 import { saveA1TestResults } from "@/lib/despega/actions"
 
+// Phase 4: Context Capture Component (PHASE 4)
+function ContextCaptureScreen({ onContinue }: { onContinue: (context: any) => void }) {
+  const [shiftWorker, setShiftWorker] = useState(false)
+  const [caregiving, setCaregiving] = useState(false)
+  const [neurodiversity, setNeurodiversity] = useState(false)
+
+  const handleContinue = () => {
+    onContinue({ shiftWorker, caregiving, neurodiversity })
+  }
+
+  return (
+    <Card className="border-blue-200 bg-blue-50">
+      <CardHeader>
+        <CardTitle>Contexto Importante</CardTitle>
+        <CardDescription>
+          Esto ayuda a que las misiones sean más relevantes para TI.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <Badge>{shiftWorker ? "✓" : "○"}</Badge>
+            <label className="text-sm font-medium cursor-pointer">
+              Trabajo por turnos o horarios irregulares
+            </label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Badge>{caregiving ? "✓" : "○"}</Badge>
+            <label className="text-sm font-medium cursor-pointer">
+              Tengo responsabilidades de cuidado
+            </label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Badge>{neurodiversity ? "✓" : "○"}</Badge>
+            <label className="text-sm font-medium cursor-pointer">
+              Neurodivergencia (TDAH, autismo, etc.)
+            </label>
+          </div>
+        </div>
+        <Button onClick={handleContinue} className="w-full">
+          Comenzar Diagnóstico
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+
 const PAQUETES_A1 = [
   {
     id: "energia",
@@ -86,8 +133,9 @@ export default function A1CerebralPage() {
   const [pilarProgress, setPilarProgress] = useState<any>(null)
   const [completedAcciones, setCompletedAcciones] = useState<Set<string>>(new Set())
   const [userId, setUserId] = useState<string | null>(null)
-  const [stage, setStage] = useState<"test" | "results" | "actions">("test") // Track which stage we're in
+  const [stage, setStage] = useState<"context" | "test" | "results" | "actions">("context")
   const [testInProgress, setTestInProgress] = useState(false)
+  const [contextData, setContextData] = useState<any>(null)
   const supabase = createClient()
 
   useEffect(() => {
@@ -194,6 +242,30 @@ export default function A1CerebralPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+      </div>
+    )
+  }
+
+  // Show context capture if not captured yet
+  if (!contextData && stage === "context") {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-2xl">
+          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Volver al Dashboard
+          </Link>
+
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold mb-2">Bienvenido a tu Diagnóstico</h1>
+            <p className="text-muted-foreground">Primero, cuéntame un poco más sobre tu contexto</p>
+          </div>
+
+          <ContextCaptureScreen onContinue={(context) => {
+            setContextData(context)
+            setStage("test")
+          }} />
+        </div>
       </div>
     )
   }
