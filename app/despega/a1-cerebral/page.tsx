@@ -6,12 +6,40 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
-import A1DiagnosticTest from "@/components/a1-diagnostic-test"
+import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react"
 import { PersonalizedActionPlan } from "@/components/a1-personalized-action-plan"
 import { saveA1TestResults } from "@/lib/despega/actions"
+
+// All 20 A1 Questions - INLINE
+const A1_QUESTIONS = [
+  { id: 1, area: "energia", type: "scale", text: "¿Cuántas horas duermes por noche?", min: 4, max: 10, minLabel: "4 horas", maxLabel: "10 horas" },
+  { id: 2, area: "energia", type: "multiple", text: "¿Cómo describes tu energía general?", options: ["Muy baja", "Baja", "Normal", "Buena", "Excelente"] },
+  { id: 3, area: "energia", type: "multiple", text: "¿Con qué frecuencia haces ejercicio?", options: ["Nunca", "1-2 veces/semana", "3-4 veces/semana", "5-6 veces/semana", "Diariamente"] },
+  { id: 4, area: "energia", type: "scale", text: "¿Qué tan consistente es tu rutina de sueño?", min: 1, max: 10, minLabel: "Inconsistente", maxLabel: "Muy consistente" },
+  { id: 5, area: "energia", type: "scale", text: "¿Cuánta hidratación diaria tienes?", min: 0, max: 10, minLabel: "Casi nada", maxLabel: "10+ vasos" },
+  
+  { id: 6, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo puedes concentrarte profundamente?", options: ["< 15 min", "15-30 min", "30-60 min", "1-2 horas", "> 2 horas"] },
+  { id: 7, area: "enfoque", type: "multiple", text: "¿Con qué frecuencia revisas notificaciones?", options: ["Constantemente", "Cada 5-10 min", "Cada 15-30 min", "Ocasionalmente", "Casi nunca"] },
+  { id: 8, area: "enfoque", type: "scale", text: "¿Cuántas tareas principales completas diariamente?", min: 1, max: 10, minLabel: "1 tarea", maxLabel: "10+ tareas" },
+  { id: 9, area: "enfoque", type: "scale", text: "¿Qué tan claro tienes tu plan diario?", min: 1, max: 10, minLabel: "Muy confuso", maxLabel: "Muy claro" },
+  { id: 10, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo pierdes en tareas no prioritarias?", options: ["> 50%", "30-50%", "20-30%", "10-20%", "< 10%"] },
+  
+  { id: 11, area: "relaciones", type: "multiple", text: "¿Con qué frecuencia contactas amigos/colegas?", options: ["Casi nunca", "Mensual", "Quincenal", "Semanal", "Varias veces/semana"] },
+  { id: 12, area: "relaciones", type: "scale", text: "¿Cómo describes tu escucha activa?", min: 1, max: 10, minLabel: "Pienso en mi respuesta", maxLabel: "Escucho realmente" },
+  { id: 13, area: "relaciones", type: "multiple", text: "¿Cuántas relaciones profesionales significativas tienes?", options: ["Ninguna", "1-3", "4-8", "9-15", "> 15"] },
+  { id: 14, area: "relaciones", type: "scale", text: "¿Facilidad para expresar gratitud?", min: 1, max: 10, minLabel: "Me cuesta", maxLabel: "Facilidad" },
+  { id: 15, area: "relaciones", type: "scale", text: "¿Comodidad pidiendo ayuda?", min: 1, max: 10, minLabel: "Muy incómodo", maxLabel: "Muy cómodo" },
+  
+  { id: 16, area: "plan_ejecutivo", type: "scale", text: "¿Claridad sobre tus metas principales?", min: 1, max: 10, minLabel: "Confuso", maxLabel: "Cristal claro" },
+  { id: 17, area: "plan_ejecutivo", type: "multiple", text: "¿Con qué frecuencia planificas tu semana?", options: ["Nunca", "Ocasionalmente", "Semanalmente", "2x/semana", "Diariamente"] },
+  { id: 18, area: "plan_ejecutivo", type: "scale", text: "¿Cuántas decisiones importantes tomas/semana?", min: 0, max: 20, minLabel: "Ninguna", maxLabel: "Muchas (20+)" },
+  { id: 19, area: "plan_ejecutivo", type: "multiple", text: "¿Qué tan bien ejecutas lo que planificas?", options: ["Muy mal", "Mal", "Regular", "Bien", "Excelente"] },
+  { id: 20, area: "plan_ejecutivo", type: "multiple", text: "¿Tienes un ritual matutino?", options: ["No", "Irregular", "Sí (5-10 min)", "Sí (10-30 min)", "Sí (30+ min)"] },
+]
 
 // Phase 4: Context Capture Component (PHASE 4)
 function ContextCaptureScreen({ onContinue }: { onContinue: (context: any) => void }) {
@@ -136,6 +164,8 @@ export default function A1CerebralPage() {
   const [stage, setStage] = useState<"context" | "test" | "results" | "actions">("context")
   const [testInProgress, setTestInProgress] = useState(false)
   const [contextData, setContextData] = useState<any>(null)
+  const [currentIdx, setCurrentIdx] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, any>>({})
   const supabase = createClient()
 
   useEffect(() => {
@@ -256,29 +286,118 @@ export default function A1CerebralPage() {
   // Show context capture if not captured yet (SKIP THIS - go straight to test)
   // Removed: if (!contextData && stage === "context") { ... }
 
-  // Show diagnostic test if no results yet
+  // Show diagnostic test if no results yet - INLINE RENDERING
   if (!a1Results && stage === "test") {
+    const curr = A1_QUESTIONS[currentIdx]
+    const answered = answers[curr.id] !== undefined
+    const progress = ((currentIdx + 1) / A1_QUESTIONS.length) * 100
+
+    const handleAnswer = (value: any) => {
+      setAnswers(prev => ({ ...prev, [curr.id]: value }))
+    }
+
+    const handleNext = async () => {
+      if (currentIdx < A1_QUESTIONS.length - 1) {
+        setCurrentIdx(currentIdx + 1)
+      } else {
+        setStage("results")
+        setA1Results(answers)
+        if (userId) await saveA1TestResults(userId, answers, pilarProgress)
+      }
+    }
+
+    const handlePrevious = () => {
+      if (currentIdx > 0) setCurrentIdx(currentIdx - 1)
+    }
+
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+        <div className="container mx-auto px-4 py-8 max-w-2xl">
           <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
             <ArrowLeft className="w-4 h-4 mr-1" />
-            Volver al Dashboard
+            Volver
           </Link>
 
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">
-                🧠
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">A1 Despega Cerebral - Diagnóstico</h1>
-                <p className="text-muted-foreground">Responde 20 preguntas para identificar tus áreas de oportunidad</p>
-              </div>
-            </div>
-          </div>
+          <h1 className="text-3xl font-bold mb-2">Despega Cerebral</h1>
+          <p className="text-muted-foreground mb-8">Pregunta {currentIdx + 1} de {A1_QUESTIONS.length}</p>
 
-          <A1DiagnosticTest onComplete={handleTestComplete} />
+          <Progress value={progress} className="mb-8 h-3" />
+
+          <Card className="mb-8 border-2 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b pb-6">
+              <div className="flex items-center justify-between mb-4">
+                <Badge className={`capitalize font-semibold px-3 py-1 ${
+                  curr.area === "energia" ? "bg-blue-100 text-blue-900" :
+                  curr.area === "enfoque" ? "bg-green-100 text-green-900" :
+                  curr.area === "relaciones" ? "bg-orange-100 text-orange-900" :
+                  "bg-purple-100 text-purple-900"
+                }`}>
+                  {curr.area === "energia" ? "Energía" :
+                   curr.area === "enfoque" ? "Enfoque" :
+                   curr.area === "relaciones" ? "Relaciones" :
+                   "Plan Ejecutivo"}
+                </Badge>
+                <span className="text-sm font-semibold text-gray-600">{currentIdx + 1}/{A1_QUESTIONS.length}</span>
+              </div>
+              <CardTitle className="text-2xl font-bold text-gray-900">{curr.text}</CardTitle>
+            </CardHeader>
+
+            <CardContent className="pt-8 pb-8">
+              {curr.type === "scale" && (
+                <div className="space-y-8">
+                  <Slider
+                    min={curr.min}
+                    max={curr.max}
+                    step={1}
+                    value={[answers[curr.id] || curr.min]}
+                    onValueChange={(v) => handleAnswer(v[0])}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium text-gray-600">{curr.minLabel}</span>
+                    <span className="text-2xl font-bold text-blue-600">{answers[curr.id] || curr.min}</span>
+                    <span className="font-medium text-gray-600">{curr.maxLabel}</span>
+                  </div>
+                </div>
+              )}
+
+              {curr.type === "multiple" && (
+                <RadioGroup value={String(answers[curr.id] || "")} onValueChange={handleAnswer}>
+                  <div className="space-y-3">
+                    {curr.options?.map((opt, i) => (
+                      <div key={i} className="flex items-center space-x-3 p-4 rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all">
+                        <RadioGroupItem value={opt} id={`opt-${i}`} />
+                        <Label htmlFor={`opt-${i}`} className="flex-1 cursor-pointer font-medium text-gray-800">
+                          {opt}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="flex gap-4">
+            <Button onClick={handlePrevious} disabled={currentIdx === 0} variant="outline" className="flex-1">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Anterior
+            </Button>
+
+            <Button onClick={handleNext} disabled={!answered} className="flex-1">
+              {currentIdx === A1_QUESTIONS.length - 1 ? (
+                <>
+                  Completar
+                  <CheckCircle2 className="w-4 h-4 ml-2" />
+                </>
+              ) : (
+                <>
+                  Siguiente
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     )
