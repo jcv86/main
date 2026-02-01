@@ -51,6 +51,10 @@ export default function A1CerebralTestPage() {
 
   const handleAnswer = (value: any) => {
     setAnswers(prev => ({ ...prev, [question.id]: value }))
+    // Auto-advance to next question after answering (optional - remove if not desired)
+    // if (currentIdx < A1_QUESTIONS.length - 1) {
+    //   setTimeout(() => setCurrentIdx(currentIdx + 1), 300)
+    // }
   }
 
   const handleNext = () => {
@@ -162,11 +166,12 @@ export default function A1CerebralTestPage() {
         </Card>
 
         {/* Navigation */}
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between gap-4 mt-8">
           <Button
             variant="outline"
             onClick={handlePrevious}
             disabled={currentIdx === 0}
+            className="flex-1"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Anterior
@@ -175,7 +180,7 @@ export default function A1CerebralTestPage() {
           {currentIdx === A1_QUESTIONS.length - 1 ? (
             <Button
               onClick={handleSubmit}
-              disabled={!canProceed || isSubmitting}
+              disabled={!isAnswered || isSubmitting}
               className="flex-1"
             >
               {isSubmitting ? (
@@ -192,8 +197,11 @@ export default function A1CerebralTestPage() {
             </Button>
           ) : (
             <Button
-              onClick={handleNext}
-              disabled={!canProceed}
+              onClick={() => {
+                console.log("[v0] Next clicked. Current answered:", isAnswered)
+                handleNext()
+              }}
+              disabled={!isAnswered}
               className="flex-1"
             >
               Siguiente
