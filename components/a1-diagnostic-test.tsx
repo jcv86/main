@@ -271,11 +271,11 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
       </div>
 
       {/* Question Card */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2 mb-4">
+      <Card className="border-2">
+        <CardHeader className="space-y-4">
+          <div className="flex items-center justify-between gap-2">
             <Badge 
-              className={`capitalize ${
+              className={`capitalize font-semibold ${
                 currentQuestion.area === "energia" ? "bg-blue-100 text-blue-800" :
                 currentQuestion.area === "enfoque" ? "bg-green-100 text-green-800" :
                 currentQuestion.area === "relaciones" ? "bg-orange-100 text-orange-800" :
@@ -287,17 +287,20 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
                currentQuestion.area === "relaciones" ? "Relaciones" :
                "Plan Ejecutivo"}
             </Badge>
+            <span className="text-sm text-muted-foreground">Pregunta {currentQuestionIndex + 1}/20</span>
           </div>
-          <CardTitle className="text-xl">{currentQuestion.question}</CardTitle>
-          {currentQuestion.subtext && (
-            <CardDescription>{currentQuestion.subtext}</CardDescription>
-          )}
+          <div className="space-y-2">
+            <CardTitle className="text-2xl font-bold leading-tight">{currentQuestion.question}</CardTitle>
+            {currentQuestion.subtext && (
+              <CardDescription className="text-base">{currentQuestion.subtext}</CardDescription>
+            )}
+          </div>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8 pt-8">
           {currentQuestion.type === "scale" && currentQuestion.scale && (
-            <div className="space-y-4">
-              <div className="space-y-3">
+            <div className="space-y-6">
+              <div className="space-y-4">
                 <Slider
                   min={currentQuestion.scale.min}
                   max={currentQuestion.scale.max}
@@ -307,10 +310,10 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
                   className="w-full"
                 />
               </div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>{currentQuestion.scale.minLabel}</span>
-                <span className="font-medium text-foreground">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
-                <span>{currentQuestion.scale.maxLabel}</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground font-medium">{currentQuestion.scale.minLabel}</span>
+                <span className="font-bold text-lg text-primary">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
+                <span className="text-muted-foreground font-medium">{currentQuestion.scale.maxLabel}</span>
               </div>
             </div>
           )}
@@ -319,9 +322,9 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
             <RadioGroup value={String(answers[currentQuestion.id] || "")} onValueChange={handleAnswer}>
               <div className="space-y-3">
                 {currentQuestion.options.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-accent cursor-pointer">
+                  <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-accent cursor-pointer transition-all">
                     <RadioGroupItem value={option} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base">
                       {option}
                     </Label>
                   </div>
