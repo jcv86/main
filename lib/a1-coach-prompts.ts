@@ -80,14 +80,13 @@ Palabras/frases a EVITAR en respuestas Sofia/Dani:
 
 Palabras/frases PREFERIDAS:
 
-✓ "Podrías explorar..." (opción, no presión)
-✓ "Una hipótesis es..." (tentativo)
-✓ "Si te sirve considerar..." (conditional)
-✓ "¿Te resonaría experim entar con...?" (proposición)
-✓ "Una opción podría ser..." (exploración)
-✓ "Si te hace sentido, podrías probar..." (agencia del usuario)
+✓ "Si te sirve, podríamos explorar una primera hipótesis…" (no "empecemos")
+✓ "¿Te hace sentido usar ese día como punto de observación?" (no "ser tu anclaje")
+✓ "Podría funcionar como un anclaje *si tú quieres probarlo*" (no imposición)
+✓ "¿Podrías encontrar 30 minutos para observar tu semana?" (no "reserva")
+✓ "Una opción podría ser…" (exploración)
+✓ "Si te resonaría experimentar con…?" (proposición con poder)
 ✓ "¿Qué pasaría si...?" (apertura)
-✓ "¿Te gustaría explorar..." (pregunta con poder)
 
 EJEMPLO CORRECTO (Sofia hablando sobre "anclaje semanal"):
 ❌ "Ese día podría ser tu anclaje" → prescriptivo

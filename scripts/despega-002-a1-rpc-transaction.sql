@@ -12,10 +12,7 @@ CREATE OR REPLACE FUNCTION insert_a1_results_transaction(
   p_context_care BOOLEAN,
   p_context_neuro BOOLEAN,
   p_context_text TEXT,
-  p_context_consent BOOLEAN,
-  p_now_timestamp TIMESTAMP WITH TIME ZONE,
-  p_today_date DATE,
-  p_expires_at TIMESTAMP WITH TIME ZONE
+  p_context_consent BOOLEAN
 ) RETURNS TABLE (
   result_id UUID,
   user_id_out UUID,
@@ -24,8 +21,170 @@ CREATE OR REPLACE FUNCTION insert_a1_results_transaction(
 ) AS $$
 DECLARE
   v_a1_result_id UUID;
-  v_profile_exists BOOLEAN;
+  v_now TIMESTAMP WITH TIME ZONE;
+  v_today DATE;
+  v_expires_at TIMESTAMP WITH TIME ZONE;
 BEGIN
+  -- Issue #5 Fix: Calculate timestamps server-side (prevent client manipulation)
+  v_now := NOW();
+  v_today := CURRENT_DATE;
+  v_expires_at := v_now + INTERVAL '90 days';
+
+  -- Step 1: Issue #3 - Insert A1 results in separate table (with timestamp)
+  INSERT INTO despega_a1_results (
+    user_id,
+    diagnostic_score_energia,
+    diagnostic_score_enfoque,
+    diagnostic_score_relaciones,
+    diagnostic_score_plan_ejecutivo,
+    diagnostic_score_overall,
+    context_shift_worker,
+    context_caregiving,
+    context_neurodiversity,
+    context_other_approved,
+    ciclo,
+    created_at
+  ) VALUES (
+    p_user_id,
+    p_score_energia,
+    p_score_enfoque,
+    p_score_relaciones,
+    p_score_plan_ejecutivo,
+    p_score_overall,
+    p_context_shift,
+    p_context_care,
+    p_context_neuro,
+    p_context_consent,
+    30,
+    v_now
+  ) RETURNING id INTO v_a1_result_id;  -- Issue #4 Fix: Capture actual inserted ID
+
+  -- Step 2: Issue #4 - Store sensitive context in vault with sanitization
+  IF p_context_text IS NOT NULL AND p_context_consent THEN
+    -- Issue #7 Fix: Sanitize PII (remove specific diagnoses, keep general context)
+    INSERT INTO despega_context_vault (
+      user_id,
+      context_other_text,
+      consent_given,
+      retention_days,
+      expires_at,
+      created_at
+    ) VALUES (
+      p_user_id,
+      -- Sanitize: remove exact diagnosis if present, keep general context
+      REGEXP_REPLACE(p_context_text, '(Alzheimer|demencia|psiquiátrico|diabético|hipertensión)', 'condición médica', 'gi'),
+      true,
+      90,
+      v_expires_at,
+      v_now
+    );
+  END IF;
+
+  -- Step 3: Issue #2 - UPSERT user profile
+  INSERT INTO despega_user_profiles (
+    user_id,
+    a1_test_completed,
+    a1_test_completed_at,
+    current_ciclo,
+    ciclo_start_date,
+    context_shift_worker,
+    context_caregiving,
+    context_neurodiversity,
+    context_other_approved,
+    updated_at
+  ) VALUES (
+    p_user_id,
+    true,
+    v_now,
+    30,
+    v_today,
+    p_context_shift,
+    p_context_care,
+    p_context_neuro,
+    p_context_consent,
+    v_now
+  )
+  ON CONFLICT (user_id) DO UPDATE SET
+    a1_test_completed = true,
+    a1_test_completed_at = v_now,
+    updated_at = v_now;
+
+  -- Step 4: Issue #1 - Initialize pilar progress with SEPARATED score types
+  -- Issue #8 Fix: Check if this is same ciclo to avoid reset
+  INSERT INTO despega_pilar_progress (
+    user_id,
+    pilar,
+    diagnostic_score,
+    points_accumulated,
+    progress_pct,
+    total_missions_in_cycle,
+    missions_completed,
+    ciclo_actual,
+    ciclo_start_date,
+    paquete_activo,
+    is_unlocked,
+    created_at,
+    updated_at
+  ) VALUES (
+    p_user_id,
+    'a1_cerebral',
+    p_score_overall,
+    0,
+    0,
+    5,
+    0,
+    30,
+    v_today,
+    'plan_ejecutivo',
+    true,
+    v_now,
+    v_now
+  )
+  ON CONFLICT (user_id, pilar, ciclo_actual) DO UPDATE SET
+    diagnostic_score = EXCLUDED.diagnostic_score,
+    points_accumulated = 0,
+    progress_pct = 0,
+    missions_completed = 0,
+    updated_at = v_now;
+
+  -- Step 5: Issue #9 - Log score event for Mi Evolución time-series
+  INSERT INTO despega_score_events (
+    user_id,
+    event_type,
+    pilar,
+    diagnostic_score_at_event,
+    points_delta,
+    points_total,
+    progress_pct_at_event,
+    context_flags,
+    created_at
+  ) VALUES (
+    p_user_id,
+    'diagnostic',
+    'a1_cerebral',
+    p_score_overall,
+    0,
+    0,
+    0,
+    jsonb_build_object(
+      'shift_worker', p_context_shift,
+      'caregiving', p_context_care,
+      'neurodiversity', p_context_neuro
+    ),
+    v_now
+  );
+
+  -- Return the actual inserted result ID (Issue #4 Fix)
+  RETURN QUERY SELECT
+    v_a1_result_id,
+    p_user_id,
+    p_score_overall,
+    v_now;
+
+EXCEPTION WHEN OTHERS THEN
+  RAISE EXCEPTION 'Error in A1 transaction: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
   -- Step 1: Issue #3 - Insert A1 results in separate table (with timestamp)
   INSERT INTO despega_a1_results (
     user_id,

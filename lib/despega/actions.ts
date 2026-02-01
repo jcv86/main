@@ -173,10 +173,11 @@ export async function saveA1TestResults(
   if (!user) throw new Error("Unauthorized")
 
   try {
-    // Issue #2: Import and use question mapping to normalize all answers to 1-10
+    // Import normalization functions
     const { normalizeAnswersTo110 } = await import("@/lib/a1-question-mapping")
     const { calculateDimensionScore, calculateOverallScore } = await import("@/lib/a1-scoring-normalization")
 
+    // Normalize all answers to 1-10 scale
     const normalizedAnswers = normalizeAnswersTo110(rawAnswers)
 
     const scores = {
@@ -188,12 +189,8 @@ export async function saveA1TestResults(
 
     const overall = calculateOverallScore(scores)
 
-    // Issue #4: Proper JS date handling (not SQL NOW())
-    const nowISO = new Date().toISOString()
-    const todayDateString = new Date().toISOString().split('T')[0]
-    const expiresAtISO = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
-
-    // Issue #7: Use RPC for transaction atomicity (all-or-nothing)
+    // Issue #5 Fix: DO NOT pass timestamps from client
+    // The RPC function will calculate them server-side to prevent manipulation
     const { data, error } = await supabase.rpc('insert_a1_results_transaction', {
       p_user_id: user.id,
       p_score_energia: scores.energia,
@@ -206,19 +203,11 @@ export async function saveA1TestResults(
       p_context_neuro: contextData?.neurodiversity || false,
       p_context_text: contextData?.otherContext || null,
       p_context_consent: contextData?.consentGiven || false,
-      p_now_timestamp: nowISO,
-      p_today_date: todayDateString,
-      p_expires_at: expiresAtISO,
     })
 
     if (error) throw error
 
-    console.log("[v0] A1 test results saved successfully", {
-      userId: user.id,
-      scores,
-      overall,
-      timestamp: nowISO,
-    })
+    console.log("[v0] A1 test results saved securely (server-calculated timestamps)")
 
     revalidatePath("/despega")
     return { success: true, data, scores, overall }
