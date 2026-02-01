@@ -280,32 +280,11 @@ export default function A1CerebralPage() {
   const strongest = sorted[0]
   const needsWork = sorted[sorted.length - 1]
 
-  const areaLabels = {
-    energia: "Energía",
-    enfoque: "Enfoque",
-    relaciones: "Relaciones",
-    plan_ejecutivo: "Plan Ejecutivo",
-  }
-
   const areaBgColors = {
     energia: "bg-blue-50 border-blue-200",
     enfoque: "bg-green-50 border-green-200",
     relaciones: "bg-orange-50 border-orange-200",
     plan_ejecutivo: "bg-purple-50 border-purple-200",
-  }
-
-  const areaColors = {
-    energia: "text-blue-700",
-    enfoque: "text-green-700",
-    relaciones: "text-orange-700",
-    plan_ejecutivo: "text-purple-700",
-  }
-
-  const areaBadgeColors = {
-    energia: "bg-blue-100 text-blue-900",
-    enfoque: "bg-green-100 text-green-900",
-    relaciones: "bg-orange-100 text-orange-900",
-    plan_ejecutivo: "bg-purple-100 text-purple-900",
   }
 
   return (
