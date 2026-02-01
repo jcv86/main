@@ -46,10 +46,10 @@ const tests: Test[] = [
     description: "Descubre tu estilo de comportamiento y preferencias de comunicación en entornos profesionales.",
     icon: Target,
     duration: "10-15 min",
-    questions: 15,
+    questions: 20,
     difficulty: "Beginner",
     category: "Personality",
-    path: "/test/disc",
+    path: "/despega/a1-cerebral",
     color: "bg-blue-100 text-blue-700 border-blue-200",
   },
   {
