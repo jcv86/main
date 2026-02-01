@@ -183,6 +183,14 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
   const progress = ((currentQuestionIndex + 1) / A1_QUESTIONS.length) * 100
   const answeredCount = Object.keys(answers).length
 
+  // Debug logging
+  console.log("[v0] Questions loaded:", A1_QUESTIONS.length)
+  console.log("[v0] Current index:", currentQuestionIndex)
+  console.log("[v0] Current question exists:", !!currentQuestion)
+  if (currentQuestion) {
+    console.log("[v0] Current question text:", currentQuestion.question)
+  }
+
   const handleAnswer = (value: number | string) => {
     setAnswers(prev => ({
       ...prev,
@@ -271,66 +279,88 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
       </div>
 
       {/* Question Card */}
-      <Card className="border-2">
-        <CardHeader className="space-y-4">
+      <Card className="border-2 min-h-96">
+        <CardHeader className="space-y-4 border-b">
           <div className="flex items-center justify-between gap-2">
-            <Badge 
-              className={`capitalize font-semibold ${
-                currentQuestion.area === "energia" ? "bg-blue-100 text-blue-800" :
-                currentQuestion.area === "enfoque" ? "bg-green-100 text-green-800" :
-                currentQuestion.area === "relaciones" ? "bg-orange-100 text-orange-800" :
-                "bg-purple-100 text-purple-800"
-              }`}
-            >
-              {currentQuestion.area === "energia" ? "Energía" :
-               currentQuestion.area === "enfoque" ? "Enfoque" :
-               currentQuestion.area === "relaciones" ? "Relaciones" :
-               "Plan Ejecutivo"}
-            </Badge>
-            <span className="text-sm text-muted-foreground">Pregunta {currentQuestionIndex + 1}/20</span>
+            {currentQuestion ? (
+              <Badge 
+                className={`capitalize font-semibold px-3 py-1 ${
+                  currentQuestion.area === "energia" ? "bg-blue-100 text-blue-800" :
+                  currentQuestion.area === "enfoque" ? "bg-green-100 text-green-800" :
+                  currentQuestion.area === "relaciones" ? "bg-orange-100 text-orange-800" :
+                  "bg-purple-100 text-purple-800"
+                }`}
+              >
+                {currentQuestion.area === "energia" ? "Energía" :
+                 currentQuestion.area === "enfoque" ? "Enfoque" :
+                 currentQuestion.area === "relaciones" ? "Relaciones" :
+                 "Plan Ejecutivo"}
+              </Badge>
+            ) : (
+              <Badge variant="outline">Cargando...</Badge>
+            )}
+            <span className="text-sm font-semibold text-muted-foreground">Pregunta {currentQuestionIndex + 1}/20</span>
           </div>
-          <div className="space-y-2">
-            <CardTitle className="text-2xl font-bold leading-tight">{currentQuestion.question}</CardTitle>
-            {currentQuestion.subtext && (
-              <CardDescription className="text-base">{currentQuestion.subtext}</CardDescription>
+          <div className="space-y-3">
+            {currentQuestion ? (
+              <>
+                <CardTitle className="text-3xl font-extrabold leading-snug text-foreground">
+                  {currentQuestion.question}
+                </CardTitle>
+                {currentQuestion.subtext && (
+                  <CardDescription className="text-base text-muted-foreground">
+                    {currentQuestion.subtext}
+                  </CardDescription>
+                )}
+              </>
+            ) : (
+              <div className="text-muted-foreground">Cargando pregunta...</div>
             )}
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-8 pt-8">
-          {currentQuestion.type === "scale" && currentQuestion.scale && (
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <Slider
-                  min={currentQuestion.scale.min}
-                  max={currentQuestion.scale.max}
-                  step={1}
-                  value={[typeof answers[currentQuestion.id] === "number" ? answers[currentQuestion.id] : currentQuestion.scale.min]}
-                  onValueChange={(value) => handleAnswer(value[0])}
-                  className="w-full"
-                />
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">{currentQuestion.scale.minLabel}</span>
-                <span className="font-bold text-lg text-primary">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
-                <span className="text-muted-foreground font-medium">{currentQuestion.scale.maxLabel}</span>
-              </div>
-            </div>
-          )}
-
-          {currentQuestion.type === "multiple-choice" && currentQuestion.options && (
-            <RadioGroup value={String(answers[currentQuestion.id] || "")} onValueChange={handleAnswer}>
-              <div className="space-y-3">
-                {currentQuestion.options.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-accent cursor-pointer transition-all">
-                    <RadioGroupItem value={option} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base">
-                      {option}
-                    </Label>
+        <CardContent className="space-y-8 pt-8 pb-8">
+          {currentQuestion ? (
+            <>
+              {currentQuestion.type === "scale" && currentQuestion.scale && (
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <Slider
+                      min={currentQuestion.scale.min}
+                      max={currentQuestion.scale.max}
+                      step={1}
+                      value={[typeof answers[currentQuestion.id] === "number" ? answers[currentQuestion.id] : currentQuestion.scale.min]}
+                      onValueChange={(value) => handleAnswer(value[0])}
+                      className="w-full"
+                    />
                   </div>
-                ))}
-              </div>
-            </RadioGroup>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground font-medium">{currentQuestion.scale.minLabel}</span>
+                    <span className="font-bold text-lg text-primary">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
+                    <span className="text-muted-foreground font-medium">{currentQuestion.scale.maxLabel}</span>
+                  </div>
+                </div>
+              )}
+
+              {currentQuestion.type === "multiple-choice" && currentQuestion.options && (
+                <RadioGroup value={String(answers[currentQuestion.id] || "")} onValueChange={handleAnswer}>
+                  <div className="space-y-3">
+                    {currentQuestion.options.map((option, index) => (
+                      <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-accent cursor-pointer transition-all">
+                        <RadioGroupItem value={option} id={`option-${index}`} />
+                        <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base">
+                          {option}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              )}
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-40 text-muted-foreground">
+              Cargando opciones de respuesta...
+            </div>
           )}
         </CardContent>
       </Card>
