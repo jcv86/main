@@ -183,14 +183,6 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
   const progress = ((currentQuestionIndex + 1) / A1_QUESTIONS.length) * 100
   const answeredCount = Object.keys(answers).length
 
-  // Debug logging
-  console.log("[v0] Questions loaded:", A1_QUESTIONS.length)
-  console.log("[v0] Current index:", currentQuestionIndex)
-  console.log("[v0] Current question exists:", !!currentQuestion)
-  if (currentQuestion) {
-    console.log("[v0] Current question text:", currentQuestion.question)
-  }
-
   const handleAnswer = (value: number | string) => {
     setAnswers(prev => ({
       ...prev,
@@ -268,27 +260,28 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
   const isAnswered = answers[currentQuestion.id] !== undefined
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-sm font-medium">
           <span className="text-muted-foreground">Pregunta {currentQuestionIndex + 1} de {A1_QUESTIONS.length}</span>
           <Badge variant="outline">{answeredCount} respondidas</Badge>
         </div>
-        <Progress value={progress} className="h-2" />
+        <Progress value={progress} className="h-3" />
       </div>
 
-      {/* Question Card */}
-      <Card className="border-2 min-h-96">
-        <CardHeader className="space-y-4 border-b">
-          <div className="flex items-center justify-between gap-2">
-            {currentQuestion ? (
+      {/* Question Card - Simplified */}
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-8 min-h-96 shadow-sm">
+        {/* Header */}
+        <div className="mb-8 pb-6 border-b-2 border-gray-100">
+          <div className="flex items-center gap-3 mb-4">
+            {currentQuestion && (
               <Badge 
-                className={`capitalize font-semibold px-3 py-1 ${
-                  currentQuestion.area === "energia" ? "bg-blue-100 text-blue-800" :
-                  currentQuestion.area === "enfoque" ? "bg-green-100 text-green-800" :
-                  currentQuestion.area === "relaciones" ? "bg-orange-100 text-orange-800" :
-                  "bg-purple-100 text-purple-800"
+                className={`capitalize font-semibold px-4 py-2 text-sm ${
+                  currentQuestion.area === "energia" ? "bg-blue-100 text-blue-900" :
+                  currentQuestion.area === "enfoque" ? "bg-green-100 text-green-900" :
+                  currentQuestion.area === "relaciones" ? "bg-orange-100 text-orange-900" :
+                  "bg-purple-100 text-purple-900"
                 }`}
               >
                 {currentQuestion.area === "energia" ? "Energía" :
@@ -296,48 +289,45 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
                  currentQuestion.area === "relaciones" ? "Relaciones" :
                  "Plan Ejecutivo"}
               </Badge>
-            ) : (
-              <Badge variant="outline">Cargando...</Badge>
             )}
-            <span className="text-sm font-semibold text-muted-foreground">Pregunta {currentQuestionIndex + 1}/20</span>
+            <span className="text-sm font-semibold text-gray-600 ml-auto">Pregunta {currentQuestionIndex + 1}/20</span>
           </div>
-          <div className="space-y-3">
-            {currentQuestion ? (
-              <>
-                <CardTitle className="text-3xl font-extrabold leading-snug text-foreground">
-                  {currentQuestion.question}
-                </CardTitle>
-                {currentQuestion.subtext && (
-                  <CardDescription className="text-base text-muted-foreground">
-                    {currentQuestion.subtext}
-                  </CardDescription>
-                )}
-              </>
-            ) : (
-              <div className="text-muted-foreground">Cargando pregunta...</div>
-            )}
-          </div>
-        </CardHeader>
+          
+          {/* Question Title */}
+          {currentQuestion ? (
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold text-gray-900 leading-tight">
+                {currentQuestion.question}
+              </h2>
+              {currentQuestion.subtext && (
+                <p className="text-lg text-gray-600">
+                  {currentQuestion.subtext}
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="text-gray-500">Cargando pregunta...</p>
+          )}
+        </div>
 
-        <CardContent className="space-y-8 pt-8 pb-8">
+        {/* Answer Options */}
+        <div className="mb-8 min-h-40">
           {currentQuestion ? (
             <>
               {currentQuestion.type === "scale" && currentQuestion.scale && (
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <Slider
-                      min={currentQuestion.scale.min}
-                      max={currentQuestion.scale.max}
-                      step={1}
-                      value={[typeof answers[currentQuestion.id] === "number" ? answers[currentQuestion.id] : currentQuestion.scale.min]}
-                      onValueChange={(value) => handleAnswer(value[0])}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground font-medium">{currentQuestion.scale.minLabel}</span>
-                    <span className="font-bold text-lg text-primary">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
-                    <span className="text-muted-foreground font-medium">{currentQuestion.scale.maxLabel}</span>
+                <div className="space-y-8">
+                  <Slider
+                    min={currentQuestion.scale.min}
+                    max={currentQuestion.scale.max}
+                    step={1}
+                    value={[typeof answers[currentQuestion.id] === "number" ? answers[currentQuestion.id] : currentQuestion.scale.min]}
+                    onValueChange={(value) => handleAnswer(value[0])}
+                    className="w-full cursor-pointer"
+                  />
+                  <div className="flex justify-between px-2">
+                    <span className="text-sm font-medium text-gray-600">{currentQuestion.scale.minLabel}</span>
+                    <span className="text-2xl font-bold text-blue-600">{answers[currentQuestion.id] || currentQuestion.scale.min}</span>
+                    <span className="text-sm font-medium text-gray-600">{currentQuestion.scale.maxLabel}</span>
                   </div>
                 </div>
               )}
@@ -346,9 +336,15 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
                 <RadioGroup value={String(answers[currentQuestion.id] || "")} onValueChange={handleAnswer}>
                   <div className="space-y-3">
                     {currentQuestion.options.map((option, index) => (
-                      <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-accent cursor-pointer transition-all">
+                      <div 
+                        key={index} 
+                        className="flex items-center gap-4 p-4 rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all"
+                      >
                         <RadioGroupItem value={option} id={`option-${index}`} />
-                        <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base">
+                        <Label 
+                          htmlFor={`option-${index}`} 
+                          className="flex-1 cursor-pointer text-base font-medium text-gray-800"
+                        >
                           {option}
                         </Label>
                       </div>
@@ -358,19 +354,20 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
               )}
             </>
           ) : (
-            <div className="flex items-center justify-center h-40 text-muted-foreground">
+            <div className="flex items-center justify-center h-40 text-gray-400">
               Cargando opciones de respuesta...
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Navigation */}
-      <div className="flex gap-3 justify-between">
+      <div className="flex gap-3 justify-between mt-8">
         <Button
           variant="outline"
           onClick={handlePrevious}
           disabled={currentQuestionIndex === 0}
+          size="lg"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Anterior
@@ -379,6 +376,7 @@ export default function A1DiagnosticTest({ onComplete }: A1DiagnosticTestProps) 
         <Button
           onClick={handleNext}
           disabled={!isAnswered}
+          size="lg"
           className="ml-auto"
         >
           {currentQuestionIndex === A1_QUESTIONS.length - 1 ? (
