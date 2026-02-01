@@ -1,200 +1,146 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Slider } from "@/components/ui/slider"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react"
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 
-interface Question {
-  id: string
-  area: "energia" | "enfoque" | "relaciones" | "plan_ejecutivo"
-  question: string
-  type: "scale" | "multiple-choice"
-  options?: string[]
-  scale?: { min: number; max: number; minLabel: string; maxLabel: string }
-}
-
-const QUESTIONS: Question[] = [
-  // ENERGÍA
-  { id: "e1", area: "energia", question: "¿Cuántas horas duermes por noche?", type: "scale", scale: { min: 4, max: 10, minLabel: "4h", maxLabel: "10h" } },
-  { id: "e2", area: "energia", question: "¿Cómo es tu energía general?", type: "multiple-choice", options: ["Muy baja", "Baja", "Normal", "Buena", "Excelente"] },
-  { id: "e3", area: "energia", question: "¿Con qué frecuencia haces ejercicio?", type: "multiple-choice", options: ["Nunca", "1-2x/semana", "3-4x/semana", "5-6x/semana", "Diario"] },
-  { id: "e4", area: "energia", question: "¿Qué tan consistente es tu sueño?", type: "scale", scale: { min: 1, max: 10, minLabel: "Inconsistente", maxLabel: "Consistente" } },
-  { id: "e5", area: "energia", question: "¿Cuánta agua bebes diario?", type: "scale", scale: { min: 0, max: 10, minLabel: "Casi nada", maxLabel: "Mucha" } },
-  
-  // ENFOQUE
-  { id: "f1", area: "enfoque", question: "¿Cuánto tiempo de enfoque profundo tienes?", type: "multiple-choice", options: ["<15 min", "15-30 min", "30-60 min", "1-2 horas", ">2 horas"] },
-  { id: "f2", area: "enfoque", question: "¿Con qué frecuencia revisas notificaciones?", type: "multiple-choice", options: ["Constantemente", "Cada 5-10 min", "Cada 15-30 min", "Ocasionalmente", "Casi nunca"] },
-  { id: "f3", area: "enfoque", question: "¿Cuántas tareas completas al día?", type: "scale", scale: { min: 1, max: 10, minLabel: "1 tarea", maxLabel: "10+ tareas" } },
-  { id: "f4", area: "enfoque", question: "¿Qué tan claro tienes tu plan de hoy?", type: "scale", scale: { min: 1, max: 10, minLabel: "Confuso", maxLabel: "Cristal claro" } },
-  { id: "f5", area: "enfoque", question: "¿Cuánto tiempo pierdes en tareas no prioritarias?", type: "multiple-choice", options: [">50%", "30-50%", "20-30%", "10-20%", "<10%"] },
-  
-  // RELACIONES
-  { id: "r1", area: "relaciones", question: "¿Con qué frecuencia contactas a amigos/colegas?", type: "multiple-choice", options: ["Casi nunca", "Mensual", "Quincenal", "Semanal", "Varias veces/semana"] },
-  { id: "r2", area: "relaciones", question: "¿Cómo es tu escucha activa?", type: "scale", scale: { min: 1, max: 10, minLabel: "Baja", maxLabel: "Alta" } },
-  { id: "r3", area: "relaciones", question: "¿Cuántas relaciones profesionales significativas tienes?", type: "multiple-choice", options: ["Ninguna", "1-3", "4-8", "9-15", ">15"] },
-  { id: "r4", area: "relaciones", question: "¿Expresas gratitud fácilmente?", type: "scale", scale: { min: 1, max: 10, minLabel: "Me cuesta", maxLabel: "Fácil" } },
-  { id: "r5", area: "relaciones", question: "¿Cómo te sientes pidiendo ayuda?", type: "scale", scale: { min: 1, max: 10, minLabel: "Incómodo", maxLabel: "Cómodo" } },
-  
-  // PLAN EJECUTIVO
-  { id: "p1", area: "plan_ejecutivo", question: "¿Claridad en metas (3-6 meses)?", type: "scale", scale: { min: 1, max: 10, minLabel: "Confuso", maxLabel: "Cristal claro" } },
-  { id: "p2", area: "plan_ejecutivo", question: "¿Con qué frecuencia planificas tu semana?", type: "multiple-choice", options: ["Nunca", "Ocasionalmente", "Semanalmente", "2x/semana", "Diario"] },
-  { id: "p3", area: "plan_ejecutivo", question: "¿Cuántas decisiones importantes tomas/semana?", type: "scale", scale: { min: 0, max: 20, minLabel: "Ninguna", maxLabel: "Muchas" } },
-  { id: "p4", area: "plan_ejecutivo", question: "¿Qué tan bien ejecutas lo que planificas?", type: "multiple-choice", options: ["Muy mal", "Mal", "Regular", "Bien", "Excelente"] },
-  { id: "p5", area: "plan_ejecutivo", question: "¿Tienes ritual matutino?", type: "multiple-choice", options: ["No", "Irregular", "5-10 min", "10-30 min", "30+ min"] },
+const QUESTIONS = [
+  { id: 'q1', text: '¿Cuántas horas duermes por noche?', type: 'range', min: 4, max: 10 },
+  { id: 'q2', text: '¿Cómo es tu energía general?', type: 'choice', options: ['Muy baja', 'Baja', 'Normal', 'Buena', 'Excelente'] },
+  { id: 'q3', text: '¿Ejercicio por semana?', type: 'choice', options: ['Nunca', '1-2 veces', '3-4 veces', '5-6 veces', 'Diario'] },
+  { id: 'q4', text: '¿Consistencia del sueño?', type: 'range', min: 1, max: 10 },
+  { id: 'q5', text: '¿Vasos de agua diarios?', type: 'range', min: 0, max: 10 },
+  { id: 'q6', text: '¿Tiempo de concentración sin distracciones?', type: 'choice', options: ['Menos de 15 min', '15-30 min', '30-60 min', '1-2 horas', 'Más de 2 horas'] },
+  { id: 'q7', text: '¿Frecuencia de revisar notificaciones?', type: 'choice', options: ['Constantemente', 'Cada 5-10 min', 'Cada 15-30 min', 'Ocasionalmente', 'Casi nunca'] },
+  { id: 'q8', text: '¿Tareas completadas efectivamente por día?', type: 'range', min: 1, max: 10 },
+  { id: 'q9', text: '¿Claridad de prioridades para hoy?', type: 'range', min: 1, max: 10 },
+  { id: 'q10', text: '¿Tiempo perdido en tareas no prioritarias?', type: 'choice', options: ['Más del 50%', '30-50%', '20-30%', '10-20%', 'Menos del 10%'] },
+  { id: 'q11', text: '¿Frecuencia de contacto con amigos/colegas?', type: 'choice', options: ['Casi nunca', 'Ocasionalmente', 'A veces', 'Regularmente', 'Frecuentemente'] },
+  { id: 'q12', text: '¿Capacidad de escucha activa?', type: 'range', min: 1, max: 10 },
+  { id: 'q13', text: '¿Relaciones profesionales significativas?', type: 'choice', options: ['Ninguna', '1-3', '4-8', '9-15', 'Más de 15'] },
+  { id: 'q14', text: '¿Facilidad para expresar gratitud?', type: 'range', min: 1, max: 10 },
+  { id: 'q15', text: '¿Comodidad pidiendo ayuda?', type: 'range', min: 1, max: 10 },
+  { id: 'q16', text: '¿Claridad sobre tus metas principales?', type: 'range', min: 1, max: 10 },
+  { id: 'q17', text: '¿Frecuencia de planificación semanal?', type: 'choice', options: ['Nunca', 'Ocasionalmente', 'Semanalmente', '2 veces/semana', 'Diariamente'] },
+  { id: 'q18', text: '¿Decisiones importantes por semana?', type: 'range', min: 0, max: 20 },
+  { id: 'q19', text: '¿Ejecución de lo que planificas?', type: 'choice', options: ['Muy mal', 'Mal', 'Regular', 'Bien', 'Excelente'] },
+  { id: 'q20', text: '¿Tienes ritual matutino preparatorio?', type: 'choice', options: ['No tengo', 'Irregular', 'Corto (5-10 min)', 'Moderado (10-30 min)', 'Robusto (30+ min)'] },
 ]
 
-interface Props {
-  onComplete: (results: any) => void
-}
+export function A1DiagnosticTest({ onComplete }: { onComplete: (data: any) => void }) {
+  const [idx, setIdx] = useState(0)
+  const [ans, setAns] = useState<Record<string, any>>({})
+  const [fin, setFin] = useState(false)
 
-export default function A1DiagnosticTest({ onComplete }: Props) {
-  const [index, setIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, any>>({})
-  const [done, setDone] = useState(false)
+  const curr = QUESTIONS[idx]
+  const answered = curr && ans[curr.id] !== undefined
 
-  const q = QUESTIONS[index]
-  const progress = ((index + 1) / QUESTIONS.length) * 100
-  const answered = q && answers[q.id] !== undefined
-
-  if (!q || QUESTIONS.length === 0) {
+  if (fin) {
     return (
-      <div className="bg-red-50 border-2 border-red-200 rounded-lg p-8 text-center">
-        <h2 className="text-2xl font-bold text-red-900 mb-2">Error cargando preguntas</h2>
-        <p className="text-red-700">Las preguntas no se cargaron correctamente. Por favor recarga la página.</p>
+      <div className="p-8 text-center bg-green-50 rounded-lg border-2 border-green-200">
+        <h2 className="text-3xl font-bold mb-4 text-green-900">✓ Diagnóstico Completado</h2>
+        <p className="text-green-700 text-lg">Tus respuestas han sido registradas correctamente.</p>
       </div>
     )
   }
 
-  const handleAnswer = (val: any) => {
-    setAnswers(prev => ({ ...prev, [q.id]: val }))
+  if (!curr) {
+    return <div className="p-8 text-red-600 text-lg font-bold">Error: No hay preguntas disponibles</div>
+  }
+
+  const handleAnswer = (value: any) => {
+    setAns(prev => ({ ...prev, [curr.id]: value }))
   }
 
   const handleNext = () => {
-    if (index < QUESTIONS.length - 1) {
-      setIndex(index + 1)
+    if (idx < QUESTIONS.length - 1) {
+      setIdx(idx + 1)
     } else {
-      setDone(true)
-      onComplete(answers)
+      setFin(true)
+      onComplete({ responses: ans })
     }
   }
 
-  const handlePrev = () => {
-    if (index > 0) setIndex(index - 1)
-  }
-
-  if (done) {
-    return (
-      <div className="bg-blue-50 rounded-lg p-8 text-center">
-        <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-2">¡Diagnóstico Completado!</h2>
-        <p className="text-gray-600">Tus respuestas han sido guardadas</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="w-full max-w-2xl mx-auto">
       {/* Progress */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Pregunta {index + 1} de {QUESTIONS.length}</span>
-          <span>{Object.keys(answers).length} respondidas</span>
+      <div className="mb-8">
+        <div className="flex justify-between text-sm font-semibold mb-3 text-gray-700">
+          <span>Pregunta {idx + 1} de {QUESTIONS.length}</span>
+          <span className="text-blue-600">{Object.keys(ans).length} respondidas</span>
         </div>
-        <Progress value={progress} className="h-2" />
+        <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-blue-500 transition-all duration-300"
+            style={{ width: `${((idx + 1) / QUESTIONS.length) * 100}%` }}
+          />
+        </div>
       </div>
 
-      {/* Question */}
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-8 min-h-96">
-        {/* Badge & Header */}
-        <div className="mb-8 pb-6 border-b-2 border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <Badge className={`px-3 py-1 ${
-              q.area === "energia" ? "bg-blue-100 text-blue-900" :
-              q.area === "enfoque" ? "bg-green-100 text-green-900" :
-              q.area === "relaciones" ? "bg-orange-100 text-orange-900" :
-              "bg-purple-100 text-purple-900"
-            }`}>
-              {q.area === "energia" ? "Energía" : q.area === "enfoque" ? "Enfoque" : q.area === "relaciones" ? "Relaciones" : "Plan Ejecutivo"}
-            </Badge>
-            <span className="text-sm font-semibold text-gray-600">Pregunta {index + 1}/20</span>
-          </div>
-          
-          <h2 className="text-3xl font-bold text-gray-900 leading-tight">
-            {q.question}
+      {/* Question Card */}
+      <div className="bg-white border-2 border-gray-300 rounded-lg p-10 min-h-96 flex flex-col justify-between shadow-md">
+        <div>
+          {/* Question Title */}
+          <h2 className="text-3xl font-bold mb-10 text-gray-900 leading-tight">
+            {curr.text}
           </h2>
-        </div>
 
-        {/* Answers */}
-        <div className="space-y-6">
-          {q.type === "scale" && q.scale && (
-            <div className="space-y-6">
-              <Slider
-                min={q.scale.min}
-                max={q.scale.max}
-                step={1}
-                value={[answers[q.id] || q.scale.min]}
-                onValueChange={(v) => handleAnswer(v[0])}
-                className="w-full"
+          {/* Range Input */}
+          {curr.type === 'range' && (
+            <div className="space-y-8">
+              <input
+                type="range"
+                min={curr.min}
+                max={curr.max}
+                value={ans[curr.id] !== undefined ? ans[curr.id] : curr.min}
+                onChange={(e) => handleAnswer(Number(e.target.value))}
+                className="w-full h-3 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
               />
-              <div className="flex justify-between text-sm font-medium">
-                <span className="text-gray-600">{q.scale.minLabel}</span>
-                <span className="text-2xl font-bold text-blue-600">{answers[q.id] || q.scale.min}</span>
-                <span className="text-gray-600">{q.scale.maxLabel}</span>
+              <div className="text-center pt-4">
+                <span className="text-5xl font-bold text-blue-600">
+                  {ans[curr.id] !== undefined ? ans[curr.id] : curr.min}
+                </span>
               </div>
             </div>
           )}
 
-          {q.type === "multiple-choice" && q.options && (
-            <RadioGroup value={String(answers[q.id] || "")} onValueChange={handleAnswer}>
-              <div className="space-y-3">
-                {q.options.map((opt, i) => (
-                  <div key={i} className="flex items-center p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all">
-                    <RadioGroupItem value={opt} id={`opt-${i}`} />
-                    <Label htmlFor={`opt-${i}`} className="flex-1 cursor-pointer text-base font-medium ml-3 text-gray-800">
-                      {opt}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </RadioGroup>
+          {/* Multiple Choice */}
+          {curr.type === 'choice' && (
+            <div className="space-y-4">
+              {curr.options?.map((opt, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleAnswer(opt)}
+                  className={`w-full p-5 text-left border-2 rounded-lg font-semibold text-lg transition-all ${
+                    ans[curr.id] === opt
+                      ? 'border-blue-500 bg-blue-100 text-blue-900'
+                      : 'border-gray-300 bg-white text-gray-900 hover:border-blue-400 hover:bg-blue-50'
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
           )}
         </div>
-      </div>
 
-      {/* Navigation */}
-      <div className="flex gap-3 justify-between">
-        <Button
-          variant="outline"
-          onClick={handlePrev}
-          disabled={index === 0}
-          size="lg"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Anterior
-        </Button>
-
-        <Button
-          onClick={handleNext}
-          disabled={!answered}
-          size="lg"
-        >
-          {index === QUESTIONS.length - 1 ? (
-            <>
-              Completar
-              <CheckCircle2 className="w-4 h-4 ml-2" />
-            </>
-          ) : (
-            <>
-              Siguiente
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </>
-          )}
-        </Button>
+        {/* Navigation */}
+        <div className="flex gap-4 mt-10 pt-8 border-t-2 border-gray-200">
+          <Button
+            onClick={() => setIdx(Math.max(0, idx - 1))}
+            disabled={idx === 0}
+            variant="outline"
+            className="flex-1 py-6 text-lg"
+          >
+            ← Anterior
+          </Button>
+          <Button
+            onClick={handleNext}
+            disabled={!answered}
+            className="flex-1 py-6 text-lg"
+          >
+            {idx === QUESTIONS.length - 1 ? '✓ Completar' : 'Siguiente →'}
+          </Button>
+        </div>
       </div>
     </div>
   )
