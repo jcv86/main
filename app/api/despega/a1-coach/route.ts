@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { generateObject } from "ai"
 import { openai } from "@ai-sdk/openai"
 import { z } from "zod"
+import { A1_COACH_PROMPT, validateA1Response } from "@/lib/a1-coach-prompts"
+import { detectRedFlags } from "@/lib/brandie-coherence-test"
 
 const A1CoachResponseSchema = z.object({
   response: z.string().describe("The coaching response in Spanish"),
-  type: z.enum(["insight", "suggestion", "question", "support"]).describe("Type of coaching response"),
-  actionItems: z.array(z.string()).optional().describe("Specific action items if applicable"),
+  type: z.enum(["pattern_explanation", "normalization", "contextualization", "question"]).describe("Type of coaching response"),
+  patternIdentified: z.string().optional().describe("The pattern explained"),
 })
 
 export async function POST(request: NextRequest) {
@@ -25,38 +27,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const systemPrompt = `Eres un coach de desarrollo personal especializado en el programa Despega Tu Carrera. 
-Tu nombre es ${Math.random() > 0.5 ? "Sofia" : "Dani"}.
-
-El usuario está trabajando en el pilar: ${context.pilarActive}
-Ha completado ${context.missionsCompleted} de ${context.missionsTotal} misiones.
-
-Su diagnóstico A1 muestra:
-- Energía: ${context.a1Results.score_energia}%
-- Enfoque: ${context.a1Results.score_enfoque}%
-- Relaciones: ${context.a1Results.score_relaciones}%
-- Plan Ejecutivo: ${context.a1Results.score_plan_ejecutivo}%
-
-Tu rol es:
-1. Proporcionar coaching personalizado basado en sus resultados
-2. Motivar y celebrar pequeños logros
-3. Ofrecer estrategias prácticas
-4. Hacer preguntas reflexivas cuando sea apropiado
-5. Adaptar tu tono a su progreso actual
-
-Responde siempre en español, de manera empática y motivadora. Sé breve pero impactante.`
-
     const result = await generateObject({
       model: openai("gpt-4-turbo"),
       schema: A1CoachResponseSchema,
-      system: systemPrompt,
-      prompt: message,
+      system: A1_COACH_PROMPT.systemPrompt,
+      prompt: `Contexto del usuario:
+- Energía: ${context.a1Results?.score_energia || "no disponible"}%
+- Enfoque: ${context.a1Results?.score_enfoque || "no disponible"}%
+- Relaciones: ${context.a1Results?.score_relaciones || "no disponible"}%
+- Plan Ejecutivo: ${context.a1Results?.score_plan_ejecutivo || "no disponible"}%
+
+Mensaje del usuario: ${message}`,
     })
+
+    // Post-generation coherence check
+    const validation = validateA1Response(result.object.response)
+    const redFlags = detectRedFlags(result.object.response, "a1")
+
+    // If red flags detected, log warning but return response
+    if (!validation.valid || redFlags.length > 0) {
+      console.warn("[A1 Coach] Red flags detected:", {
+        validationViolations: validation.violations,
+        coherenceRedFlags: redFlags,
+      })
+    }
 
     return NextResponse.json({
       response: result.object.response,
       type: result.object.type,
-      actionItems: result.object.actionItems,
+      patternIdentified: result.object.patternIdentified,
+      coherenceCheck: {
+        isValid: validation.valid,
+        violations: validation.violations,
+        redFlags: redFlags,
+      },
     })
   } catch (error) {
     console.error("Error in A1 coach endpoint:", error)
