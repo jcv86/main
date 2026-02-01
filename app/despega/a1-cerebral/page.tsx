@@ -153,7 +153,14 @@ export default function A1CerebralPage() {
         .limit(1)
         .single()
 
-      if (a1Data) setA1Results(a1Data)
+      if (a1Data) {
+        setA1Results(a1Data)
+        // If results exist, skip to results screen
+        setStage("results")
+      } else {
+        // No results yet, auto-advance to test (skip context screen)
+        setStage("test")
+      }
 
       const { data: progressData } = await supabase
         .from("despega_pilar_progress")
@@ -246,29 +253,8 @@ export default function A1CerebralPage() {
     )
   }
 
-  // Show context capture if not captured yet
-  if (!contextData && stage === "context") {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8 max-w-2xl">
-          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            Volver al Dashboard
-          </Link>
-
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2">Bienvenido a tu Diagnóstico</h1>
-            <p className="text-muted-foreground">Primero, cuéntame un poco más sobre tu contexto</p>
-          </div>
-
-          <ContextCaptureScreen onContinue={(context) => {
-            setContextData(context)
-            setStage("test")
-          }} />
-        </div>
-      </div>
-    )
-  }
+  // Show context capture if not captured yet (SKIP THIS - go straight to test)
+  // Removed: if (!contextData && stage === "context") { ... }
 
   // Show diagnostic test if no results yet
   if (!a1Results && stage === "test") {
