@@ -410,8 +410,6 @@ export function DashboardContent() {
           </div>
         </div>
 
-        <DailyCareerTip careerStage="intermediate" />
-
         {/* BetterMe Integration Section */}
         <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">
           <div className="flex items-center gap-2 mb-4">
