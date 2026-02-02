@@ -26,10 +26,23 @@ interface SessionWrapperProps {
 export function SessionWrapper({ children }: SessionWrapperProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const supabase = createClient()
+  const [supabase, setSupabase] = useState<any>(null)
   const isUpdatingRef = useRef(false)
 
+  // Initialize supabase client on first render
   useEffect(() => {
+    try {
+      const client = createClient()
+      setSupabase(client)
+    } catch (error) {
+      console.error("[v0] Failed to initialize Supabase:", error)
+      setSupabase(null)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return
+
     // Check for existing session
     const checkSession = async () => {
       try {
@@ -116,7 +129,7 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [supabase])
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
