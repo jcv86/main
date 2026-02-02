@@ -25,10 +25,7 @@ import {
   Flame,
   CircleDot,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { DailyCareerTip } from "@/components/daily-career-tip"
-import { useSession } from "@/components/session-wrapper"
-import { BetterMeIntegration } from "@/components/betterme-integration"
+import { createClient } from "@/lib/supabase/client"
 
 interface TestResult {
   id: string
@@ -261,6 +258,40 @@ export function DashboardContent() {
       if (!userEmail) return
 
       try {
+        const supabase = createClient()
+        
+        // Fetch real test results from Supabase
+        const { data: testResults } = await supabase
+          .from("unified_test_results")
+          .select("*")
+          .eq("user_email", userEmail)
+          .order("created_at", { ascending: false })
+          .limit(10)
+
+        if (testResults && testResults.length > 0) {
+          const mapped = testResults.map((result: any) => {
+            let name = result.test_type
+            let score = 0
+
+            // Extract score from test_results
+            if (result.test_results) {
+              const scores = Object.values(result.test_results as any)
+              if (scores.length > 0) {
+                score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+              }
+            }
+
+            return {
+              id: result.id,
+              name: name,
+              score: score || 0,
+              completedAt: new Date(result.created_at).toLocaleDateString("es-AR"),
+              insights: [],
+            }
+          })
+          setRecentResults(mapped)
+        }
+
         const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
           fetch(`/api/user-achievements?email=${userEmail}`).catch(() => null),
           fetch(`/api/recommendations?userEmail=${encodeURIComponent(userEmail)}`).catch(() => null),
