@@ -223,7 +223,13 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   }
 
   const logout = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      try {
+        await supabase.auth.signOut()
+      } catch (error) {
+        console.error("[v0] Logout error:", error)
+      }
+    }
     setUser(null)
     localStorage.removeItem("dtc_session")
   }
