@@ -12,6 +12,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
+import { UnifiedTestSystem } from "@/lib/unified-test-system"
+import { useToast } from "@/hooks/use-toast"
 
 // ALL 20 QUESTIONS
 const A1_QUESTIONS = [
@@ -325,12 +327,58 @@ export default function A1CerebralPage() {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error("[v0] No user found")
+        setStage("results")
+        return
+      }
+
+      // Calculate scores
+      const scores = calculateDISCScores()
+      const duration = Math.round((Date.now() - (startTimeRef.current || Date.now())) / 60000)
+
+      const testResults = {
+        energia: scores.energia,
+        enfoque: scores.enfoque,
+        relaciones: scores.relaciones,
+        plan_ejecutivo: scores.plan_ejecutivo,
+        answers: answers,
+      }
+
+      console.log("[v0] Saving A1 Cerebral test results...", testResults)
+
+      // Save using UnifiedTestSystem
+      const result = await UnifiedTestSystem.saveTestResult({
+        userEmail: user.email!,
+        testType: "Despega Cerebral",
+        testResults,
+        durationMinutes: duration,
+      })
+
+      if (!result.savedToDatabase) {
+        console.error("[v0] Failed to save test results:", result.error)
+      } else {
+        console.log("[v0] Test results saved successfully")
+      }
+
       setStage("results")
     } finally {
       setIsSubmitting(false)
     }
   }
+
+  // Track test start time
+  const startTimeRef = useEffect(() => {
+    if (stage === "test") {
+      return () => {}
+    }
+    const startTime = Date.now()
+    return () => {
+      startTimeRef.current = startTime
+    }
+  }, [])
 
   const areaColors = {
     energia: "bg-blue-100 text-blue-900",
