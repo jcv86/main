@@ -89,86 +89,201 @@ export default function A1CerebralPage() {
     loadUserLevel()
   }, [])
 
+  const getProfileContent = (dimension: string, score: number) => {
+    // Return content based on Juan Vial structure: natural behavior, connections, what can be uncomfortable, daily thinking, growth opportunities
+    const profileContent: Record<string, Record<string, any>> = {
+      energia: {
+        label: "Estabilidad y Energía",
+        naturalBehavior: score > 70 
+          ? "Actúas con consistencia y equilibrio personal. Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral."
+          : score > 50
+          ? "Buscas mantener un equilibrio en tu energía, aunque a veces fluctúa. Reconoces la importancia del descanso y la actividad física, aunque no siempre logres consistencia."
+          : "Tu energía es variable y requiere atención. A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.",
+        
+        connections: score > 70
+          ? "Te conectas bien con personas que valoran el bienestar, la consistencia y el balance. Te sientes a gusto en entornos donde hay ritmo, orden y cuidado personal."
+          : "Buscas conectar con personas que entienden la importancia de la energía personal, aunque a veces sientas soledad en estos hábitos.",
+        
+        uncomfortable: score < 50
+          ? "Los entornos caóticos o sin estructura pueden agotarte. Te incomoda la presión constante sin pausas. Necesitas espacios para recuperarte."
+          : "Aunque generalmente equilibrado, pueden incomodarte los cambios repentinos o presiones sin descanso.",
+        
+        thinking: score > 70
+          ? "Piensas con serenidad, priorizando tu bienestar. Evalúas decisiones considerando tu energía disponible. Eres consistente incluso en momentos difíciles."
+          : score > 50
+          ? "Piensas en tu bienestar, aunque a veces postergas el autocuidado. Reconoces qué necesitas, pero cuesta ejecutarlo."
+          : "Tu pensamiento está frecuentemente marcado por el cansancio. Necesitas crear sistemas que sostengan tu energía automáticamente.",
+        
+        growth: score > 70
+          ? "Tu oportunidad es compartir con otros cómo mantienes tu energía. Podrías formalizar tus hábitos en rutinas que otros puedan aprender."
+          : "Necesitas crear una estructura clara de sueño, ejercicio e hidratación. Comenzar con UNA sola acción sostenible, no todas a la vez.",
+      },
+      
+      enfoque: {
+        label: "Concentración y Precisión",
+        naturalBehavior: score > 70
+          ? "Actúas con orden y profundidad. Tu concentración es una fortaleza clave. Te apoyas en la claridad antes de actuar, evitando precipitaciones."
+          : score > 50
+          ? "Buscas concentrarte, aunque las distracciones a veces te desvían. Tienes momentos de enfoque profundo, pero no son constantes."
+          : "Tu concentración es un desafío. Las distracciones te capturan fácilmente y te cuesta sostener el enfoque en tareas importantes.",
+        
+        connections: score > 70
+          ? "Te conectas bien con personas que valoran la precisión, el método y el análisis detallado. Prefieres entornos donde la calidad es prioritaria."
+          : "Buscas conectar con personas ordenadas, aunque a veces sientas que el caos te rodea.",
+        
+        uncomfortable: score < 50
+          ? "Los ambientes dispersos o sin dirección clara pueden paralizarte. Te incomoda decidir sin datos. La improvisación te bloquea."
+          : "Aunque generalmente enfocado, puede incomodarte la falta de estructura o criterios claros.",
+        
+        thinking: score > 70
+          ? "Piensas con rigor antes de actuar. Analizas detalles, cuidas cada paso. Prefieres certeza aunque requiera más tiempo."
+          : score > 50
+          ? "Piensas en lo importante, aunque a veces saltas a la acción sin análisis completo."
+          : "Tu pensamiento está disperso entre demasiadas prioridades. Necesitas claridad urgente en qué es realmente importante.",
+        
+        growth: score > 70
+          ? "Tu oportunidad es confiar un poco más en tu criterio sin esperar información perfecta. Compartir tus ideas en proceso, no solo 'listas'."
+          : "Necesitas crear un sistema de prioridades visual. Identifica las 3 cosas MÁS importantes cada día y trabaja solo esas.",
+      },
+      
+      relaciones: {
+        label: "Conexión e Influencia",
+        naturalBehavior: score > 70
+          ? "Actúas con apertura y calidez. Tu capacidad de conectar es natural. Te expresas con empatía, buscando entender antes de ser entendido."
+          : score > 50
+          ? "Buscas conectar con otros, aunque a veces te sientes reservado. Tienes buenas relaciones, pero podrían ser más profundas."
+          : "Tu conexión con otros es limitada. Prefieres la soledad o tienes dificultad expresando calidez. Las relaciones son un desafío.",
+        
+        connections: score > 70
+          ? "Te conectas con personas que valoran la empatía, la escucha y la autenticidad. Te sientes a gusto en equipos cohesionados."
+          : "Buscas personas que entiendan tu ritmo de conexión, aunque a veces sientas que no es suficiente.",
+        
+        uncomfortable: score < 50
+          ? "Los conflictos sin resolver te incomodan. Te afecta la falta de armonía. Los entornos competitivos pueden encerrarte."
+          : "Aunque generalmente conectado, puede incomodarte la falta de autenticidad o superficialidad.",
+        
+        thinking: score > 70
+          ? "Piensas considerando a otros. Tu empatía guía tus decisiones. Buscas soluciones que beneficien a todos."
+          : score > 50
+          ? "Piensas en el impacto en otros, aunque a veces prioriza tus necesidades."
+          : "Tu pensamiento es principalmente individual. Necesitas entrenar la perspectiva de otros.",
+        
+        growth: score > 70
+          ? "Tu oportunidad es establecer límites saludables. No todas las conexiones requieren profundidad. Aprende a decir 'no' desde el amor."
+          : "Necesitas UNA conexión genuina y sostenida. Elige una persona y cultiva esa relación activamente.",
+      },
+      
+      plan_ejecutivo: {
+        label: "Liderazgo y Ejecución",
+        naturalBehavior: score > 70
+          ? "Actúas con lógica orientada a resultados. Tu toma de decisiones es directa y estratégica. Ejecutas lo que planificas de forma confiable."
+          : score > 50
+          ? "Buscas llevar adelante tus planes, aunque a veces necesitas impulso adicional. Tienes intención, pero cuesta la consistencia."
+          : "Tu ejecución es inconsistente. Planificas bien, pero la implementación es un desafío. Necesitas sistemas que te sostengan.",
+        
+        connections: score > 70
+          ? "Te conectas con personas orientadas a resultados que valoran la velocidad y la efectividad. Prefieres equipos que ejecutan."
+          : "Buscas personas que te ayuden a ejecutar, aunque a veces sientas que estás solo en la visión.",
+        
+        uncomfortable: score < 50
+          ? "La indecisión te bloquea. Te incomoda la ambigüedad estratégica. Necesitas claridad en la dirección."
+          : "Aunque generalmente ejecutor, puede incomodarte la falta de progreso o métricas claras.",
+        
+        thinking: score > 70
+          ? "Piensas estratégicamente. Tomas decisiones basadas en impacto. Tu mente está en '¿cómo lograrlo rápido?'"
+          : score > 50
+          ? "Piensas en la ejecución, aunque a veces te pierdes en detalles que no importan."
+          : "Tu pensamiento está fragmentado entre intenciones y realidad. Necesitas estructurar tus metas.",
+        
+        growth: score > 70
+          ? "Tu oportunidad es desarrollar paciencia con los procesos. No todos tienen tu velocidad. Enseña a otros tu método."
+          : "Necesitas un ritual matutino de 10 minutos donde defines LO ÚNICO más importante. Ejecuta solo eso.",
+      },
+    }
+
+    return profileContent[dimension] || null
+  }
+
   const getRecommendationsByLevel = (area: string, score: number) => {
     const recommendations = {
       energia: {
         principiante: [
-          "Comienza con una rutina básica de sueño: acuéstate y levántate a la misma hora.",
-          "Intenta una actividad física ligera 2-3 veces por semana (caminar, yoga).",
-          "Bebe agua regularmente durante el día - es el paso más simple.",
-          "Evita pantallas 30 minutos antes de dormir.",
+          "Establece una hora fija para dormir y despertar (incluso los fines de semana).",
+          "Camina 10 minutos después de cada comida principal.",
+          "Bebe un vaso de agua al despertare y antes de acostarte.",
+          "Apaga pantallas 30 minutos antes de dormir.",
         ],
         intermedio: [
-          "Optimiza tu sueño: apunta a 7-8 horas consistentes.",
-          "Aumenta el ejercicio a 4-5 veces por semana con intensidad moderada.",
-          "Monitorea tu hidratación - establece recordatorios cada 2 horas.",
-          "Crea una rutina pre-sueño de 45 minutos sin distracciones.",
+          "Duerme 7-8 horas consistentes. Rastreatua sueño para identificar patrones.",
+          "Ejercicio 4-5 veces por semana: combina cardio y fuerza.",
+          "Crea un ritual pre-sueño de 45 minutos sin distracciones digitales.",
+          "Revisa tu energía semanalmente: ¿qué hábitos te ayudaron?",
         ],
         avanzado: [
-          "Experimenta con ciclos de sueño (siesta estratégica de 20-30 min).",
-          "Integra entrenamiento de fuerza y cardio balanceados.",
-          "Optimiza nutrición alrededor de tu energía pico.",
-          "Usa tracking de sueño para identificar patrones y mejoras.",
+          "Optimiza ciclos de sueño y experimenta con siesta estratégica (20 min).",
+          "Integra entrenamiento de fuerza + cardio + flexibilidad.",
+          "Diseña tu nutrición alrededor de tu energía pico (mañana vs tarde).",
+          "Sistema de tracking: sueño, ejercicio, hidratación, energía - identifica causas.",
         ],
       },
       enfoque: {
         principiante: [
-          "Empieza identificando tu 1-2 tareas IMPORTANTES cada día.",
-          "Trabaja 25 minutos sin distracciones (técnica Pomodoro).",
-          "Apaga notificaciones durante bloques de trabajo.",
-          "Anota tu plan cada mañana en un papel o app simple.",
+          "Cada mañana: escribe las 2 tareas MÁS importantes (no 10).",
+          "Trabaja en bloques de 25 minutos sin revisar notificaciones.",
+          "Apaga notificaciones de redes sociales durante trabajo.",
+          "Fin de día: marca si completaste tus 2 prioridades.",
         ],
         intermedio: [
-          "Implementa bloques de tiempo de 90 minutos para trabajo profundo.",
-          "Revisa notificaciones solo a horas específicas (9am, 12pm, 3pm).",
-          "Prioriza 3-5 tareas principales cada semana.",
-          "Usa un calendario visual para planificación semanal.",
+          "Bloques de 90 minutos de trabajo profundo (no 25).",
+          "Revisa notificaciones solo 3 veces al día (9am, 12pm, 5pm).",
+          "Planifica tu semana identificando 3-5 tareas que mueven la aguja.",
+          "Crea un sistema visual (tablero Kanban) que ves cada mañana.",
         ],
         avanzado: [
-          "Diseña un sistema personal de priorización (matriz Eisenhower).",
-          "Alcanza 3-4 horas de trabajo profundo sin interrupciones.",
-          "Automatiza notificaciones - solo recibe lo crítico.",
-          "Analiza tu productividad semanal y ajusta el sistema.",
+          "Sistema personal de priorización: matriz de impacto x urgencia.",
+          "Alcanza 3-4 horas diarias de trabajo verdaderamente profundo.",
+          "Automatiza o delega todo lo que no requiere tu expertise.",
+          "Análisis semanal: ¿qué me dispersó? ¿Cómo evitarlo?",
         ],
       },
       relaciones: {
         principiante: [
-          "Establece 1 llamada mensual con un colega o mentor.",
-          "Practica escucha activa: haz preguntas y espera respuestas.",
-          "Envía 3 mensajes de agradecimiento este mes.",
-          "Únete a 1 evento social o networking mensual.",
+          "Esta semana: envía 1 mensaje genuino a alguien sin pedir nada.",
+          "Programa 1 llamada mensual con alguien que importa.",
+          "En conversaciones: haz 1 pregunta más que afirmación.",
+          "Practica escuchar sin pensar tu respuesta.",
         ],
         intermedio: [
-          "Mantén contacto semanal con 2-3 colegas clave.",
-          "Practica empatía: entiende el contexto antes de responder.",
-          "Ofrece ayuda específica sin esperar retorno inmediato.",
-          "Participa activamente en 1-2 grupos o comunidades.",
+          "Mantén contacto semanal con 2-3 personas clave en tu vida.",
+          "Ofrece 1 acción de ayuda específica cada semana (sin esperar retorno).",
+          "Únete a 1 comunidad o grupo donde puedas contribuir.",
+          "Revisa: ¿a quién no he contactado en 3 meses? Alcanzalos.",
         ],
         avanzado: [
-          "Cultiva una red de 10+ relaciones profesionales profundas.",
-          "Mentorea a otros - es la mejor forma de aprender.",
-          "Crea un sistema de seguimiento de relaciones (CRM personal).",
-          "Organiza eventos o encuentros que agreguen valor a otros.",
+          "Cultiva red de 10+ relaciones profesionales verdaderamente profundas.",
+          "Mentorea activamente a 1-2 personas (tu mejor aprendizaje).",
+          "Sistema personal: CRM simple donde registres 'próximas acciones' con cada persona.",
+          "Crea espacios donde otros se conecten (grupos, eventos, cafés).",
         ],
       },
       plan_ejecutivo: {
         principiante: [
-          "Escribe 1 meta clara para los próximos 90 días.",
-          "Planifica tu semana el domingo (30 minutos).",
-          "Haz 1 decisión importante por semana conscientemente.",
-          "Crea un ritual matutino simple de 10 minutos.",
+          "Define 1 meta clara para los próximos 90 días (escrita).",
+          "Cada domingo: planifica tu semana en 15 minutos.",
+          "Ritual matutino: 10 minutos reflexionando sobre lo importante.",
+          "Fin de semana: revisa 1 decisión importante que tomaste.",
         ],
         intermedio: [
-          "Define 3 metas principales con sub-tareas para cada una.",
-          "Planifica diariamente cada mañana (15 minutos).",
+          "3 metas principales para 90 días con sub-tareas claramente identificadas.",
+          "Planifica CADA mañana (15 min): ¿cuál es lo único que importa hoy?",
           "Toma decisiones basadas en datos/hechos, no emociones.",
-          "Ritual matutino de 20-30 minutos que te enfoque.",
+          "Ritual matutino: 20-30 minutos que incluya reflexión + movimiento.",
         ],
         avanzado: [
-          "Sistema de OKRs: Objetivos + Key Results trimestrales.",
-          "Revisión diaria de plan + ajustes en tiempo real.",
-          "Decide rápido pero revisa resultados sistemáticamente.",
-          "Ritual matutino personalizado de 45+ minutos.",
+          "Sistema de OKRs: Objetivos + Key Results trimestral / semanal.",
+          "Revisión diaria: ¿progresé? ¿Qué ajustes necesito?",
+          "Decide rápido en el 80% de información, no esperes 100%.",
+          "Ritual matutino personalizado: 45+ minutos que alimenta tu ejecución.",
         ],
       },
     }
@@ -510,49 +625,53 @@ export default function A1CerebralPage() {
           <CardHeader className="text-center pb-6">
             <div className="text-6xl mb-4">{getDimensionInfo(primaryDimension).emoji}</div>
             <CardTitle className="text-4xl font-bold mb-2">
-              {getDimensionInfo(primaryDimension).label}
+              {getProfileContent(primaryDimension, primaryScore)?.label}
             </CardTitle>
             <p className="text-lg text-gray-600">Tu dimensión primaria</p>
           </CardHeader>
           <CardContent className="pb-8">
             <div className="text-center mb-6">
               <div className="text-5xl font-bold text-blue-600 mb-2">{primaryScore}%</div>
-              <p className="text-gray-700">
-                {getDimensionInfo(primaryDimension).description}
+            </div>
+
+            {/* Natural Behavior */}
+            <div className="mb-6 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+              <h4 className="font-semibold text-blue-900 mb-2">Así es tu forma natural de actuar</h4>
+              <p className="text-gray-700 text-sm">
+                {getProfileContent(primaryDimension, primaryScore)?.naturalBehavior}
               </p>
             </div>
 
-            {/* Profile Interpretation */}
-            <div className={`p-6 rounded-lg ${getDimensionInfo(primaryDimension).bgColor} ${getDimensionInfo(primaryDimension).textColor} mb-6`}>
-              <p className="font-semibold mb-2">Tu perfil indica que:</p>
-              {primaryDimension === "energia" && (
-                <ul className="space-y-1 text-sm">
-                  <li>• Tienes {primaryScore > 70 ? "excelente" : primaryScore > 50 ? "buena" : "oportunidad de mejorar tu"} gestión de energía personal</li>
-                  <li>• Tu bienestar es {primaryScore > 70 ? "una fortaleza clave" : "un área a desarrollar"}</li>
-                  <li>• Enfócate en {primaryScore > 70 ? "mantener" : "mejorar"} tus hábitos de sueño, ejercicio e hidratación</li>
-                </ul>
-              )}
-              {primaryDimension === "enfoque" && (
-                <ul className="space-y-1 text-sm">
-                  <li>• Tu concentración es {primaryScore > 70 ? "excepcional" : primaryScore > 50 ? "competente" : "un área a mejorar"}</li>
-                  <li>• Sabes {primaryScore > 70 ? "exactamente" : "en parte"} cómo priorizar tareas importantes</li>
-                  <li>• Trabaja en ${primaryScore > 70 ? "mantener" : "desarrollar"} sistemas de gestión de distracciones</li>
-                </ul>
-              )}
-              {primaryDimension === "relaciones" && (
-                <ul className="space-y-1 text-sm">
-                  <li>• Tu comunicación es ${primaryScore > 70 ? "excepcional" : primaryScore > 50 ? "efectiva" : "un área a mejorar"}</li>
-                  <li>• Tus relaciones profesionales son ${primaryScore > 70 ? "un gran activo" : "áreas a fortalecer"}</li>
-                  <li>• Enfócate en ${primaryScore > 70 ? "profundizar" : "construir"} conexiones significativas</li>
-                </ul>
-              )}
-              {primaryDimension === "plan_ejecutivo" && (
-                <ul className="space-y-1 text-sm">
-                  <li>• Tu capacidad de ejecución es ${primaryScore > 70 ? "destacada" : primaryScore > 50 ? "sólida" : "un área a desarrollar"}</li>
-                  <li>• Sabes ${primaryScore > 70 ? "exactamente" : "en parte"} cómo planificar y ejecutar</li>
-                  <li>• Trabaja en ${primaryScore > 70 ? "refinar" : "desarrollar"} tus sistemas de gestión estratégica</li>
-                </ul>
-              )}
+            {/* Connections */}
+            <div className="mb-6 p-6 bg-green-50 rounded-lg border-l-4 border-green-500">
+              <h4 className="font-semibold text-green-900 mb-2">Conectas con personas que...</h4>
+              <p className="text-gray-700 text-sm">
+                {getProfileContent(primaryDimension, primaryScore)?.connections}
+              </p>
+            </div>
+
+            {/* What Makes You Uncomfortable */}
+            <div className="mb-6 p-6 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+              <h4 className="font-semibold text-orange-900 mb-2">⚠️ Lo que puede incomodarte en algunos entornos</h4>
+              <p className="text-gray-700 text-sm">
+                {getProfileContent(primaryDimension, primaryScore)?.uncomfortable}
+              </p>
+            </div>
+
+            {/* How You Think */}
+            <div className="mb-6 p-6 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+              <h4 className="font-semibold text-purple-900 mb-2">Así piensas y actúas en tu día a día</h4>
+              <p className="text-gray-700 text-sm">
+                {getProfileContent(primaryDimension, primaryScore)?.thinking}
+              </p>
+            </div>
+
+            {/* Growth Opportunities */}
+            <div className="mb-6 p-6 bg-amber-50 rounded-lg border-l-4 border-amber-500">
+              <h4 className="font-semibold text-amber-900 mb-2">️ Oportunidades para seguir creciendo</h4>
+              <p className="text-gray-700 text-sm">
+                {getProfileContent(primaryDimension, primaryScore)?.growth}
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -605,30 +724,39 @@ export default function A1CerebralPage() {
 
         {/* Personalized Recommendations by Area */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">Recomendaciones Personalizadas</h2>
+          <h2 className="text-2xl font-bold mb-2">Recomendaciones Personalizadas</h2>
+          <p className="text-gray-600 mb-6">Basadas en tu nivel actual ({getLevelBadge().label}) - acciones concretas y adaptadas para ti</p>
           <div className="grid md:grid-cols-2 gap-6">
             {sorted.map(([dim, score]) => (
               <Card key={dim} className="border-2">
                 <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       <span className="text-2xl">{getDimensionInfo(dim).emoji}</span>
-                      {getDimensionInfo(dim).label}
+                      {getProfileContent(dim, score)?.label}
                     </CardTitle>
                     <Badge className={getDimensionInfo(dim).bgColor}>
                       {Math.round(score)}%
                     </Badge>
                   </div>
+                  <p className="text-sm text-gray-600">
+                    {getDimensionInfo(dim).description}
+                  </p>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
-                    {getRecommendationsByLevel(dim, score).map((rec, i) => (
-                      <li key={i} className="flex gap-2 text-sm text-gray-700">
-                        <span className="font-bold text-blue-600 flex-shrink-0">•</span>
-                        <span>{rec}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="font-semibold text-sm text-gray-700 mb-2">Tu próximos pasos ({getLevelBadge().label}):</p>
+                      <ul className="space-y-2">
+                        {getRecommendationsByLevel(dim, score).map((rec, i) => (
+                          <li key={i} className="flex gap-2 text-sm text-gray-700">
+                            <span className="font-bold text-blue-600 flex-shrink-0">•</span>
+                            <span>{rec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             ))}
