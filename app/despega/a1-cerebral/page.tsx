@@ -324,7 +324,59 @@ export default function A1CerebralPage() {
     }
   }
 
-  const handleSubmit = async () => {
+  // Map questions to DISC-style categories
+  const questionToDISC: Record<number, "energia" | "enfoque" | "relaciones" | "plan_ejecutivo"> = {
+    1: "energia", 2: "energia", 3: "energia", 4: "energia", 5: "energia",
+    6: "enfoque", 7: "enfoque", 8: "enfoque", 9: "enfoque", 10: "enfoque",
+    11: "relaciones", 12: "relaciones", 13: "relaciones", 14: "relaciones", 15: "relaciones",
+    16: "plan_ejecutivo", 17: "plan_ejecutivo", 18: "plan_ejecutivo", 19: "plan_ejecutivo", 20: "plan_ejecutivo",
+  }
+
+  // Calculate DISC-style scores (0-100 per dimension)
+  const calculateDISCScores = () => {
+    const scores = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
+    }
+    const counts = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
+    }
+
+    A1_QUESTIONS.forEach(question => {
+      const answer = answers[question.id]
+      if (answer === undefined) return
+
+      const dimension = questionToDISC[question.id]
+      let normalizedScore = 0
+
+      if (question.type === "scale") {
+        // Normalize scale answers to 0-100
+        normalizedScore = ((answer - question.min) / (question.max - question.min)) * 100
+      } else if (question.type === "multiple") {
+        // Normalize multiple choice to 0-100 (option index / total options)
+        const optionIndex = question.options?.indexOf(answer) || 0
+        normalizedScore = (optionIndex / (question.options?.length || 1 - 1)) * 100
+      }
+
+      scores[dimension] += normalizedScore
+      counts[dimension]++
+    })
+
+    // Calculate averages and round
+    const finalScores = {
+      energia: counts.energia > 0 ? Math.round(scores.energia / counts.energia) : 0,
+      enfoque: counts.enfoque > 0 ? Math.round(scores.enfoque / counts.enfoque) : 0,
+      relaciones: counts.relaciones > 0 ? Math.round(scores.relaciones / counts.relaciones) : 0,
+      plan_ejecutivo: counts.plan_ejecutivo > 0 ? Math.round(scores.plan_ejecutivo / counts.plan_ejecutivo) : 0,
+    }
+
+    return finalScores
+  }
     setIsSubmitting(true)
     try {
       // Get current user
@@ -560,52 +612,6 @@ export default function A1CerebralPage() {
     6: "enfoque", 7: "enfoque", 8: "enfoque", 9: "enfoque", 10: "enfoque",
     11: "relaciones", 12: "relaciones", 13: "relaciones", 14: "relaciones", 15: "relaciones",
     16: "plan_ejecutivo", 17: "plan_ejecutivo", 18: "plan_ejecutivo", 19: "plan_ejecutivo", 20: "plan_ejecutivo",
-  }
-
-  // Calculate DISC-style scores (0-100 per dimension)
-  const calculateDISCScores = () => {
-    const scores = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
-    }
-    const counts = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
-    }
-
-    A1_QUESTIONS.forEach(question => {
-      const answer = answers[question.id]
-      if (answer === undefined) return
-
-      const dimension = questionToDISC[question.id]
-      let normalizedScore = 0
-
-      if (question.type === "scale") {
-        // Normalize scale answers to 0-100
-        normalizedScore = ((answer - question.min) / (question.max - question.min)) * 100
-      } else if (question.type === "multiple") {
-        // Normalize multiple choice to 0-100 (option index / total options)
-        const optionIndex = question.options?.indexOf(answer) || 0
-        normalizedScore = (optionIndex / (question.options?.length || 1 - 1)) * 100
-      }
-
-      scores[dimension] += normalizedScore
-      counts[dimension]++
-    })
-
-    // Calculate averages and round
-    const finalScores = {
-      energia: counts.energia > 0 ? Math.round(scores.energia / counts.energia) : 0,
-      enfoque: counts.enfoque > 0 ? Math.round(scores.enfoque / counts.enfoque) : 0,
-      relaciones: counts.relaciones > 0 ? Math.round(scores.relaciones / counts.relaciones) : 0,
-      plan_ejecutivo: counts.plan_ejecutivo > 0 ? Math.round(scores.plan_ejecutivo / counts.plan_ejecutivo) : 0,
-    }
-
-    return finalScores
   }
 
   const calculateResults = () => {
