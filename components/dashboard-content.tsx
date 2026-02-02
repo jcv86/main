@@ -27,7 +27,7 @@ import {
   CircleDot,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-
+import { useSession } from "@/components/session-wrapper"
 interface TestResult {
   id: string
   name: string
