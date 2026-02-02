@@ -163,67 +163,11 @@ export function DashboardContent() {
     },
   ])
 
-  const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([
-    {
-      id: "1",
-      type: "entrevista",
-      scenario: "Entrevista Conductual",
-      score: 78,
-      completedAt: "2025-01-23",
-      feedback: "Buen uso del método STAR",
-    },
-    {
-      id: "2",
-      type: "conversacion",
-      scenario: "Negociación Salarial",
-      score: 65,
-      completedAt: "2025-01-20",
-      feedback: "Mejorar confianza al negociar",
-    },
-  ])
+  const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([])
 
-  const [testEvolution, setTestEvolution] = useState<TestEvolution[]>([
-    {
-      testId: "disc",
-      testName: "Despega Cerebral",
-      attempts: [
-        { date: "2024-10-15", score: 72 },
-        { date: "2025-01-15", score: 85 },
-      ],
-    },
-    {
-      testId: "emotionalIntelligence",
-      testName: "Inteligencia Emocional",
-      attempts: [
-        { date: "2024-11-01", score: 68 },
-        { date: "2025-01-10", score: 79 },
-      ],
-    },
-  ])
+  const [testEvolution, setTestEvolution] = useState<TestEvolution[]>([])
 
-  const [recentResults, setRecentResults] = useState<TestResult[]>([
-    {
-      id: "disc",
-      name: TEST_NAMES.disc.name,
-      score: 85,
-      completedAt: "2024-01-15",
-      insights: ["Alto en Dominancia", "Orientado a resultados"],
-    },
-    {
-      id: "emotionalIntelligence",
-      name: TEST_NAMES.emotionalIntelligence.name,
-      score: 79,
-      completedAt: "2024-01-10",
-      insights: ["Buena autoconciencia", "Mejorar regulación"],
-    },
-    {
-      id: "bigFive",
-      name: TEST_NAMES.bigFive.name,
-      score: 82,
-      completedAt: "2024-01-08",
-      insights: ["Alta apertura", "Responsabilidad moderada"],
-    },
-  ])
+  const [recentResults, setRecentResults] = useState<TestResult[]>([])
 
   const [userAchievements, setUserAchievements] = useState<any[]>([])
   const [loadingAchievements, setLoadingAchievements] = useState(true)
