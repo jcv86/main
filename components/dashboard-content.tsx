@@ -28,6 +28,7 @@ import {
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useSession } from "@/components/session-wrapper"
+import { BetterMeIntegration } from "@/components/betterme-integration"
 interface TestResult {
   id: string
   name: string
