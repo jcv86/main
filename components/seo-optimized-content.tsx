@@ -25,7 +25,7 @@ interface FAQSectionProps {
   title?: string
 }
 
-export function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
+function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
   return (
     <section className="py-20 bg-background border-t border-border" itemScope itemType="https://schema.org/FAQPage">
       <div className="container mx-auto px-4 max-w-7xl">

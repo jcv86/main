@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
-export function LandingPageOptimized() {
+export default function LandingPageOptimized() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -394,5 +394,3 @@ export function LandingPageOptimized() {
     </div>
   )
 }
-
-export default LandingPageOptimized

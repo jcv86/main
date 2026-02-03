@@ -21,7 +21,7 @@ interface Message {
 
 interface SofiaDaniCoachProps {
   userEmail: string
-  testType: "MBTI" | "DISC" | "Big Five" | "RIASEC" | "Soft Skills" | "Emotional Intelligence"
+  testType: "A1" | "A2" | "A3" | "A4" | "A3-Interview" | "A4-Market"
   testResults: any
   conversationCategory: "autoconocimiento" | "desarrollo_habilidades" | "orientacion_carrera"
 }

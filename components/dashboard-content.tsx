@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -25,11 +26,9 @@ import {
   Flame,
   CircleDot,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { DailyCareerTip } from "@/components/daily-career-tip"
+import { createClient } from "@/lib/supabase/client"
 import { useSession } from "@/components/session-wrapper"
 import { BetterMeIntegration } from "@/components/betterme-integration"
-
 interface TestResult {
   id: string
   name: string
@@ -166,67 +165,11 @@ export function DashboardContent() {
     },
   ])
 
-  const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([
-    {
-      id: "1",
-      type: "entrevista",
-      scenario: "Entrevista Conductual",
-      score: 78,
-      completedAt: "2025-01-23",
-      feedback: "Buen uso del método STAR",
-    },
-    {
-      id: "2",
-      type: "conversacion",
-      scenario: "Negociación Salarial",
-      score: 65,
-      completedAt: "2025-01-20",
-      feedback: "Mejorar confianza al negociar",
-    },
-  ])
+  const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([])
 
-  const [testEvolution, setTestEvolution] = useState<TestEvolution[]>([
-    {
-      testId: "disc",
-      testName: "Despega Cerebral",
-      attempts: [
-        { date: "2024-10-15", score: 72 },
-        { date: "2025-01-15", score: 85 },
-      ],
-    },
-    {
-      testId: "emotionalIntelligence",
-      testName: "Inteligencia Emocional",
-      attempts: [
-        { date: "2024-11-01", score: 68 },
-        { date: "2025-01-10", score: 79 },
-      ],
-    },
-  ])
+  const [testEvolution, setTestEvolution] = useState<TestEvolution[]>([])
 
-  const [recentResults, setRecentResults] = useState<TestResult[]>([
-    {
-      id: "disc",
-      name: TEST_NAMES.disc.name,
-      score: 85,
-      completedAt: "2024-01-15",
-      insights: ["Alto en Dominancia", "Orientado a resultados"],
-    },
-    {
-      id: "emotionalIntelligence",
-      name: TEST_NAMES.emotionalIntelligence.name,
-      score: 79,
-      completedAt: "2024-01-10",
-      insights: ["Buena autoconciencia", "Mejorar regulación"],
-    },
-    {
-      id: "bigFive",
-      name: TEST_NAMES.bigFive.name,
-      score: 82,
-      completedAt: "2024-01-08",
-      insights: ["Alta apertura", "Responsabilidad moderada"],
-    },
-  ])
+  const [recentResults, setRecentResults] = useState<TestResult[]>([])
 
   const [userAchievements, setUserAchievements] = useState<any[]>([])
   const [loadingAchievements, setLoadingAchievements] = useState(true)
@@ -261,6 +204,40 @@ export function DashboardContent() {
       if (!userEmail) return
 
       try {
+        const supabase = createClient()
+        
+        // Fetch real test results from Supabase
+        const { data: testResults } = await supabase
+          .from("unified_test_results")
+          .select("*")
+          .eq("user_email", userEmail)
+          .order("created_at", { ascending: false })
+          .limit(10)
+
+        if (testResults && testResults.length > 0) {
+          const mapped = testResults.map((result: any) => {
+            let name = result.test_type
+            let score = 0
+
+            // Extract score from test_results
+            if (result.test_results) {
+              const scores = Object.values(result.test_results as any)
+              if (scores.length > 0) {
+                score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+              }
+            }
+
+            return {
+              id: result.id,
+              name: name,
+              score: score || 0,
+              completedAt: new Date(result.created_at).toLocaleDateString("es-AR"),
+              insights: [],
+            }
+          })
+          setRecentResults(mapped)
+        }
+
         const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
           fetch(`/api/user-achievements?email=${userEmail}`).catch(() => null),
           fetch(`/api/recommendations?userEmail=${encodeURIComponent(userEmail)}`).catch(() => null),
@@ -433,8 +410,6 @@ export function DashboardContent() {
             )}
           </div>
         </div>
-
-        <DailyCareerTip careerStage="intermediate" />
 
         {/* BetterMe Integration Section */}
         <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">

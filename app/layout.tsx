@@ -5,7 +5,6 @@ import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
 import { AdminNavbar } from "@/components/admin-navbar"
-import { FloatingCoachWidget } from "@/components/floating-coach-widget"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -125,7 +124,6 @@ export default function RootLayout({
             <AdminNavbar />
             {children}
             <Toaster />
-            <FloatingCoachWidget />
           </SessionWrapper>
         </ThemeProvider>
 

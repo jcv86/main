@@ -5,7 +5,7 @@ import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, P
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-export function LLMOOptimizedFooter() {
+function LLMOOptimizedFooter() {
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
       <div className="container mx-auto px-4 py-16">

@@ -280,7 +280,8 @@ export default function RutasPage() {
                   )}
                 </CardContent>
               </Card>
-          </div>
+            )
+          })}
         </TabsContent>
 
         <TabsContent value="a3" className="space-y-6">

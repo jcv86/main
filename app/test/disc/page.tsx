@@ -2,24 +2,24 @@ import type { Metadata } from "next"
 import DISCTestClient from "./disc-client"
 
 export const metadata: Metadata = {
-  title: "Despega Cerebral - Evaluación de Estilo de Comportamiento | Despega Tu Carrera",
+  title: "A1 Despega Cerebral - Check-in de Autoconocimiento | Despega Tu Carrera",
   description:
-    "Descubre tu perfil de comportamiento profesional con Despega Cerebral. Conoce tu estilo de trabajo, fortalezas y áreas de desarrollo. Resultados instantáneos basados en el modelo DISC.",
+    "Diagnóstico rápido de tus patrones en Energía, Enfoque, Relaciones y Plan Ejecutivo. Comprende tu sistema, no tu personalidad. Resultados instantáneos en 15 minutos.",
   keywords: [
     "despega cerebral",
-    "test DISC Chile",
-    "evaluación comportamiento",
-    "perfil comportamiento laboral",
-    "test personalidad trabajo",
+    "A1 autoconocimiento",
+    "diagnóstico patrones",
+    "energía enfoque relaciones",
+    "plan ejecutivo",
     "desarrollo profesional",
-    "evaluación estilo trabajo",
     "despega tu carrera",
+    "sistemas comportamiento",
   ],
   openGraph: {
-    title: "Despega Cerebral - Descubre tu Estilo de Comportamiento",
-    description: "Evaluación completa y gratuita de tu perfil de comportamiento profesional en 15 minutos.",
+    title: "A1 Despega Cerebral - Entiende tus Patrones",
+    description: "Diagnóstico gratuito de tus patrones en 4 dimensiones clave para tu carrera.",
     type: "website",
-    url: "https://tucarrera.cl/test/disc",
+    url: "https://tucarrera.cl/test/a1",
   },
 }
 
