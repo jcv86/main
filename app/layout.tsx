@@ -1,7 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import dynamic from "next/dynamic"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
@@ -9,12 +8,6 @@ import { AdminNavbar } from "@/components/admin-navbar"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
-
-// Lazy load FloatingCoachWidget to avoid SSR issues
-const FloatingCoachWidget = dynamic(
-  () => import("@/components/floating-coach-widget").then(mod => ({ default: mod.FloatingCoachWidget })),
-  { ssr: false }
-)
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -131,7 +124,6 @@ export default function RootLayout({
             <AdminNavbar />
             {children}
             <Toaster />
-            <FloatingCoachWidget />
           </SessionWrapper>
         </ThemeProvider>
 
