@@ -72,6 +72,8 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
       return "Fecha desconocida"
     }
   }
+
+  const handleSave = (itemId: string) => {
     setSavedItems(prev => {
       const newSet = new Set(prev)
       if (newSet.has(itemId)) {
