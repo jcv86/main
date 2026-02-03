@@ -394,5 +394,3 @@ export default function LandingPageOptimized() {
     </div>
   )
 }
-
-export default LandingPageOptimized
