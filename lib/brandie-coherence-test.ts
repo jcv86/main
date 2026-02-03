@@ -60,7 +60,7 @@ export function detectMedicalBoundaryViolation(response: string): {
 // AXIS DEFINITIONS
 // ============================================
 
-const COHERENCE_AXES = {
+export const COHERENCE_AXES = {
   rol: {
     name: "Rol",
     description: "¿El coach actúa como traductor de patrones y contexto?",
