@@ -609,13 +609,6 @@ export default function A1CerebralPage() {
   }
 
   // Map questions to DISC-style categories
-  const questionToDISC: Record<number, "energia" | "enfoque" | "relaciones" | "plan_ejecutivo"> = {
-    1: "energia", 2: "energia", 3: "energia", 4: "energia", 5: "energia",
-    6: "enfoque", 7: "enfoque", 8: "enfoque", 9: "enfoque", 10: "enfoque",
-    11: "relaciones", 12: "relaciones", 13: "relaciones", 14: "relaciones", 15: "relaciones",
-    16: "plan_ejecutivo", 17: "plan_ejecutivo", 18: "plan_ejecutivo", 19: "plan_ejecutivo", 20: "plan_ejecutivo",
-  }
-
   const calculateResults = () => {
     return calculateDISCScores()
   }

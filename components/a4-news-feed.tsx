@@ -291,3 +291,5 @@ export function A4NewsFeed({ items, onSave }: A4NewsFeedProps) {
     </div>
   )
 }
+
+export default A4NewsFeed
