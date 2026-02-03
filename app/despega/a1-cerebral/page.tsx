@@ -377,6 +377,8 @@ export default function A1CerebralPage() {
 
     return finalScores
   }
+
+  const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
       // Get current user

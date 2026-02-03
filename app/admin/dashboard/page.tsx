@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Redirect } from '@/components/redirect'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AdminDashboard } from '@/components/admin-dashboard'
 import { AdminUserManagement } from '@/components/admin-user-management'
