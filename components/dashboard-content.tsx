@@ -308,13 +308,22 @@ export function DashboardContent() {
         // Small delay to ensure database write is complete
         await new Promise((resolve) => setTimeout(resolve, 500))
         
-        console.log("[v0] Fetching test results for:", sessionUser.email)
+        console.log("[v0] Fetching test results for user...")
         
-        // RLS disabled - simple query by user_email
+        // Get current user ID from session
+        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        if (authError || !user) {
+          console.log("[v0] No authenticated user found")
+          return
+        }
+
+        console.log("[v0] Querying a1_tests_results for user_id:", user.id)
+        
+        // Query by user_id (not user_email) - this is what the table has
         const { data: testResults, error } = await supabase
           .from("a1_tests_results")
           .select("*")
-          .eq("user_email", sessionUser.email!)
+          .eq("user_id", user.id)
           .order("completed_at", { ascending: false })
           .limit(10)
 
