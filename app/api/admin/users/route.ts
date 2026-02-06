@@ -144,8 +144,55 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id, full_name, bio, phone, location, linkedin_url, github_url, whatsapp_phone } = body
+    const { id, email, action, full_name, bio, phone, location, linkedin_url, github_url, whatsapp_phone } = body
 
+    // Handle reset-onboarding action
+    if (action === "reset-onboarding") {
+      if (!email && !id) {
+        return NextResponse.json({ success: false, error: "Email or user ID is required for reset-onboarding" }, { status: 400 })
+      }
+
+      const adminClient = createAdminClient()
+
+      // Find the user ID if only email is provided
+      let userId = id
+      if (!userId && email) {
+        const { data: existingUser } = await adminClient.from("users").select("id").eq("email", email).maybeSingle()
+        if (!existingUser) {
+          return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
+        }
+        userId = existingUser.id
+      }
+
+      // Reset onboarding in despega_user_profiles
+      const { error: despegatError } = await adminClient
+        .from("despega_user_profiles")
+        .update({
+          onboarding_completed: false,
+          a1_test_completed: false,
+          a1_test_completed_at: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId)
+
+      // Also reset a1_progress
+      const { error: a1Error } = await adminClient
+        .from("a1_progress")
+        .update({
+          tests_completed: 0,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId)
+
+      console.log(`[v0] Onboarding reset for user: ${email || id}`)
+      return NextResponse.json({
+        success: true,
+        message: `Onboarding reset successfully. User ${email || id} can now redo the onboarding flow.`,
+        user_id: userId,
+      })
+    }
+
+    // Standard user profile update
     if (!id) {
       return NextResponse.json({ success: false, error: "User ID is required" }, { status: 400 })
     }
