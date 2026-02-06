@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
+// Cache invalidation: 2026-02-06T15:00:00Z
 export default function LandingPageOptimized() {
   return (
     <div className="min-h-screen bg-background">
