@@ -819,7 +819,7 @@ export default function A1CerebralPage() {
         {/* Action Button */}
         <div className="text-center">
           <Button
-            onClick={() => router.push("/despega")}
+            onClick={() => router.push("/dashboard?refresh=true")}
             size="lg"
             className="px-8"
           >
