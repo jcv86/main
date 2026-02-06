@@ -415,18 +415,18 @@ export default function A1CerebralPage() {
         duration
       )
 
+      console.log("[v0] Test save result:", result)
+
       if (!result.savedToDatabase) {
         console.error("[v0] Failed to save test results:", result.error)
+        setStage("results")
         // Still show results page even if save failed, user can retry
       } else {
-        console.log("[v0] Test results saved successfully, redirecting to dashboard in 3 seconds")
-        // Auto-redirect to dashboard after 3 seconds
-        setTimeout(() => {
-          router.push("/dashboard?refresh=true")
-        }, 3000)
+        console.log("[v0] Test results saved successfully to database. Redirecting immediately...")
+        setStage("results")
+        // Redirect immediately after database confirms save
+        router.push("/dashboard?refresh=true")
       }
-
-      setStage("results")
     } finally {
       setIsSubmitting(false)
     }
@@ -442,6 +442,18 @@ export default function A1CerebralPage() {
       startTimeRef.current = startTime
     }
   }, [])
+
+  // Auto-redirect to dashboard after results are shown
+  useEffect(() => {
+    if (stage === "results" && !isSubmitting) {
+      console.log("[v0] Results displayed, will auto-redirect in 2 seconds")
+      const timer = setTimeout(() => {
+        console.log("[v0] Auto-redirecting to dashboard now")
+        router.push("/dashboard?refresh=true")
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [stage, isSubmitting, router])
 
   const areaColors = {
     energia: "bg-blue-100 text-blue-900",

@@ -277,59 +277,73 @@ export function DashboardContent() {
   // Handle refresh parameter - refetch test results after test completion
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
-    if (searchParams.get("refresh") === "true") {
-      console.log("[v0] Refresh parameter detected, refetching test results...")
-      
-      if (!sessionUser?.email) {
-        console.log("[v0] No session user email, skipping refresh")
-        return
-      }
-
-      const supabase = createClient()
-      const fetchLatestTestResults = async () => {
-        try {
-          const { data: testResults } = await supabase
-            .from("test_results")
-            .select("*")
-            .eq("user_email", sessionUser.email)
-            .order("completed_at", { ascending: false })
-            .limit(10)
-
-          if (testResults && testResults.length > 0) {
-            console.log("[v0] Updated test results after refresh:", testResults.length)
-            const mapped = testResults.map((result: any) => {
-              let name = result.test_type
-              let score = 0
-
-              if (result.results) {
-                const scores = Object.values(result.results as any)
-                if (scores.length > 0) {
-                  score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
-                }
-              }
-
-              return {
-                id: result.id,
-                name: name,
-                score: score || 0,
-                completedAt: new Date(result.completed_at).toLocaleDateString("es-AR"),
-                insights: [],
-              }
-            })
-            setRecentResults(mapped)
-            setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
-          }
-          
-          // Clean up the refresh parameter from URL
-          window.history.replaceState({}, document.title, window.location.pathname)
-        } catch (error) {
-          console.error("[v0] Error refetching test results:", error)
-        }
-      }
-
-      fetchLatestTestResults()
+    const hasRefresh = searchParams.get("refresh") === "true"
+    
+    console.log("[v0] Refresh effect triggered. hasRefresh:", hasRefresh, "sessionUser:", sessionUser?.email)
+    
+    if (!hasRefresh || !sessionUser?.email) {
+      console.log("[v0] Skipping refresh - no refresh param or no session user")
+      return
     }
-  }, [])
+
+    console.log("[v0] Refresh parameter detected, refetching test results for:", sessionUser.email)
+    
+    const supabase = createClient()
+    const fetchLatestTestResults = async () => {
+      try {
+        const { data: testResults, error } = await supabase
+          .from("test_results")
+          .select("*")
+          .eq("user_email", sessionUser.email!)
+          .order("completed_at", { ascending: false })
+          .limit(10)
+
+        if (error) {
+          console.error("[v0] Error fetching test results:", error)
+          return
+        }
+
+        console.log("[v0] Fetched test results count:", testResults?.length || 0)
+        
+        if (testResults && testResults.length > 0) {
+          console.log("[v0] Updated test results after refresh. Count:", testResults.length)
+          const mapped = testResults.map((result: any) => {
+            let name = result.test_type
+            let score = 0
+
+            if (result.results) {
+              const scores = Object.values(result.results as any)
+              if (scores.length > 0) {
+                score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+              }
+            }
+
+            return {
+              id: result.id,
+              name: name,
+              score: score || 0,
+              completedAt: new Date(result.completed_at).toLocaleDateString("es-AR"),
+              insights: [],
+            }
+          })
+          setRecentResults(mapped)
+          setUserProfile((prev) => {
+            console.log("[v0] Updating completedTests from", prev.completedTests, "to", testResults.length)
+            return { ...prev, completedTests: testResults.length }
+          })
+        } else {
+          console.log("[v0] No test results found in database")
+        }
+        
+        // Clean up the refresh parameter from URL
+        window.history.replaceState({}, document.title, window.location.pathname)
+      } catch (error) {
+        console.error("[v0] Error in refresh fetch:", error)
+      }
+    }
+
+    fetchLatestTestResults()
+  }, [sessionUser?.email])
 
   const achievements = [
     {
