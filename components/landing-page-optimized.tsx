@@ -30,9 +30,8 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
-  // COMPLETE REBUILD: Force Next.js to clear all compiled cache - timestamp: 2026-02-06T17:17:45Z
-  const _cacheVersion = "rebuild-now-" + Math.random().toString()
-  const version = "v3"
+  // Force complete rebuild: 2026-02-06T17:20:00Z - rebuild all BookOpen references
+  const _timestamp = Date.now()
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}

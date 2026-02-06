@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { LearningPathCard } from "@/components/learning-path-card"
 import { SkillGapAnalysis } from "@/components/skill-gap-analysis"
-import { Sparkles, Search, TrendingUp, Target, Brain, Filter, Award } from "lucide-react"
+import { Sparkles, Search, TrendingUp, Target, Brain, Filter, Award, BookRead } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
 export default function LearningPathsPage() {
@@ -175,7 +175,7 @@ export default function LearningPathsPage() {
             </Badge>
           </TabsTrigger>
           <TabsTrigger value="my-paths">
-            <BookOpen className="h-4 w-4 mr-2" />
+            <BookRead className="h-4 w-4 mr-2" />
             Mis Rutas
             <Badge variant="secondary" className="ml-2">
               {myPaths.length}
@@ -241,7 +241,7 @@ export default function LearningPathsPage() {
           ) : (
             <Card>
               <CardContent className="py-12 text-center">
-                <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <BookRead className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="text-lg font-semibold mb-2">No has iniciado ninguna ruta</h3>
                 <p className="text-muted-foreground mb-4">
                   Explora nuestras recomendaciones personalizadas para comenzar
