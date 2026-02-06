@@ -6,19 +6,19 @@ import { Suspense } from "react"
 
 // Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {
-  title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
+  title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
   description:
-    "Descubre tu verdadero potencial con tests científicos de personalidad e Inteligencia Emocional. Plataforma integral de autoconocimiento y desarrollo profesional con IA personalizada.",
+    "Descubre tu verdadero potencial a través de una transición consciente de identidad. Tests científicos, exploración de narrativas futuras y coaching IA personalizado para tu transformación profesional.",
   keywords: [
-    "test de personalidad",
-    "desarrollo profesional",
+    "transición de carrera",
+    "transición de identidad",
     "autoconocimiento",
     "coaching con IA",
-    "soft skills",
+    "transformación profesional",
+    "test de personalidad",
     "orientación vocacional",
-    "evaluación de competencias",
-    "plan de carrera",
-    "tests psicométricos",
+    "desarrollo personal",
+    "cambio de carrera",
     "inteligencia emocional",
   ],
   authors: [{ name: "Despega Tu Carrera" }],
@@ -29,23 +29,23 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
-    title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
+    title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
     description:
-      "Plataforma integral de autoconocimiento: Tests científicos de personalidad, orientación vocacional y coaching con IA para tu desarrollo profesional.",
+      "Tu viaje de transformación comienza aquí. Tests científicos, exploración de identidades futuras y coaching IA para tu transición consciente.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Despega Tu Carrera - Plataforma de Tests de Personalidad",
+        alt: "Despega Tu Carrera - Transición De Identidad Profesional",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
+    title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
     description:
-      "Tests científicos de personalidad e Inteligencia Emocional. Coaching con IA y desarrollo profesional personalizado.",
+      "Descubre tu verdadero potencial a través de una transición consciente de identidad. Coaching IA 24/7 y exploración de narrativas futuras.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -77,32 +77,65 @@ export default function Home() {
     {
       question: "¿Qué es Despega Tu Carrera?",
       answer:
-        "Despega Tu Carrera es una plataforma integral de autoconocimiento y desarrollo profesional que combina tests científicos de personalidad (Evaluación Conductual, Mapa de Preferencias, Análisis de Dimensiones, Brújula Vocacional e Inteligencia Emocional) con coaching personalizado mediante inteligencia artificial para ayudarte a descubrir tu verdadero potencial y alcanzar tus metas profesionales.",
+        "Despega Tu Carrera es una plataforma de transición de identidad profesional que te ayuda a descubrir quién eres ahora, explorar quién podrías ser, y construir el puente que te llevará allá. Combinamos tests científicos, exploración de narrativas de transformación y coaching con IA personalizado para acompañarte en tu viaje consciente de cambio profesional.",
     },
     {
-      question: "¿Son confiables los tests de personalidad?",
+      question: "¿Qué significa 'estar en transición'?",
       answer:
-        "Sí, todos nuestros tests están basados en metodologías científicamente validadas y ampliamente utilizadas en psicología organizacional y desarrollo profesional. Nuestras evaluaciones cuentan con décadas de investigación respaldándolas y son utilizadas por miles de empresas y profesionales en todo el mundo.",
+        "Significa estar entre versiones de ti mismo. No es una crisis, es un momento de potencial donde reconoces que quién eras ya no funciona completamente, pero quién serás aún no está definido. DTC te acompaña en esta fase liminal para convertirla en una transformación consciente y diseñada.",
     },
     {
-      question: "¿Cuánto tiempo toma completar los tests?",
+      question: "¿Cómo funciona el 'Ritual de Entrada'?",
       answer:
-        "Cada test toma entre 10-20 minutos en completarse. Recomendamos tomarte el tiempo necesario para responder con honestidad y sin prisas para obtener resultados más precisos. Puedes hacer los tests en diferentes momentos según tu disponibilidad.",
+        "El Ritual de Entrada (Fase A1) son tests científicamente validados que te muestran quién eres realmente hoy: tu personalidad, tus valores, tus emociones, tus competencias. No juzga, simplemente establece tu punto de partida real para que conozcas desde dónde estás transitando.",
     },
     {
-      question: "¿Necesito tener conocimientos previos de psicología?",
+      question: "¿Qué aprenderé en la fase de Exploración?",
       answer:
-        "No, absolutamente no se requieren conocimientos previos. Todos los tests están diseñados para ser intuitivos y fáciles de entender. Los resultados se presentan de manera clara con explicaciones detalladas y ejemplos prácticos para tu vida profesional.",
+        "En la Exploración (A2-A3) tienes acceso a 120+ libros profesionales, 100+ recursos web y búsqueda semántica con IA. Aquí exploras narrativas de transformación, descubres nuevas versiones posibles de ti, y ensayas identidades futuras sin riesgo.",
     },
     {
-      question: "¿Cómo funciona el coaching con IA?",
+      question: "¿Cómo me acompaña el coach IA en mi transición?",
       answer:
-        "Nuestros coaches virtuales Sofia y Dani utilizan inteligencia artificial avanzada para analizar tus resultados y ofrecerte orientación personalizada. Puedes hacerles preguntas sobre tus resultados, pedir consejos para situaciones específicas de tu carrera, y recibir planes de acción adaptados a tu perfil único.",
+        "Sofia y Dani (coaches IA) entienden tu perfil único de transición y te acompañan 24/7. No solo responden preguntas, sino que construyen contigo tu camino personalizado paso a paso: desde reconocer dónde estás, hasta definir acciones concretas para vivir tu nueva identidad profesional.",
     },
     {
-      question: "¿Los resultados son privados y seguros?",
+      question: "¿Es seguro compartir mis datos personales?",
       answer:
-        "Sí, todos tus datos y resultados son completamente privados y seguros. Utilizamos encriptación de última generación y cumplimos con las normativas de protección de datos. Solo tú tienes acceso a tus resultados completos y puedes elegir qué compartir y con quién.",
+        "Sí. Utilizamos encriptación de última generación y cumplimos con normativas internacionales de protección de datos. Tus resultados y el proceso de transición son completamente privados. Solo tú decides qué compartir y con quién.",
+    },
+  ]
+
+  const transitionFaqs = [
+    {
+      question: "¿Por qué este es mi momento para transitar?",
+      answer:
+        "Nunca es el momento 'perfecto'. Pero cuando sientes que quien eres ya no encaja completamente con tu vida, eso es una señal. No significa abandono: significa maduración. DTC te ayuda a honrar ese llamado y convertirlo en acción consciente.",
+    },
+    {
+      question: "¿Qué pasa si no sé exactamente qué quiero cambiar?",
+      answer:
+        "Perfecto. Tu no-saber es tu punto de partida. El Ritual de Entrada y la Exploración no te dirán qué hacer. Te mostrarán quién eres, desde ahí surgen las preguntas correctas, y luego descubres las respuestas. Es un viaje de descubrimiento, no de certeza.",
+    },
+    {
+      question: "¿Cuánto tiempo toma hacer una transición real?",
+      answer:
+        "La transición consciente es un ciclo de 90 días donde estableces fundaciones sólidas. Pero la verdadera transformación de identidad es un proceso de años. DTC te acompaña en los primeros 90 días críticos, y luego te da herramientas para seguir adelante por tu cuenta.",
+    },
+    {
+      question: "¿Qué es exactamente el 'Momento Espejo'?",
+      answer:
+        "Es ese instante donde te ves a ti mismo sin filtros. Donde reconoces tanto tus fortalezas como lo que ya no funciona. El Ritual de Entrada es tu Momento Espejo estructurado. Algunos describen la primera vez que ven sus resultados como 'finalmente alguien me ve tal como soy'.",
+    },
+    {
+      question: "¿Puedo estar en transición y mantener mi trabajo actual?",
+      answer:
+        "Absolutamente. De hecho, la mayoría de transiciones ocurren mientras sigues en tu rol. DTC está diseñado para eso. El Puente de Transición es practicar, experimentar, y gradualmente ir activando tu nueva identidad sin riesgo. Solo cuando estés listo, das el paso visible.",
+    },
+    {
+      question: "¿Qué pasa si mi transición no sale como esperaba?",
+      answer:
+        "Excelente pregunta. Las transiciones no son lineales. A veces descubrimos que el camino que imaginábamos no era el nuestro. DTC te acompaña en esos giros también. El aprendizaje es el verdadero valor, no el destino exacto que imaginaste.",
     },
   ]
 
@@ -112,6 +145,10 @@ export default function Home() {
 
       <Suspense fallback={null}>
         <FAQSection faqs={faqs} />
+      </Suspense>
+
+      <Suspense fallback={null}>
+        <FAQSection faqs={transitionFaqs} title="¿Por Qué Este Es Tu Momento?" />
       </Suspense>
 
       <Suspense fallback={null}>

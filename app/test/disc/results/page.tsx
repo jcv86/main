@@ -523,6 +523,61 @@ export default function DISCResultsPage() {
           </CardContent>
         </Card>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              Tu Puente de Transición
+            </CardTitle>
+            <CardDescription>
+              No es donde estás. Es cómo llegas a donde quieres ir.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Eres Ahora */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu perfil actual</p>
+                <div className="text-2xl font-bold text-blue-600">{styleInfo.title}</div>
+                <p className="text-xs text-muted-foreground mt-2">{styleInfo.description}</p>
+              </div>
+
+              {/* Puedes Ser */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500 flex flex-col justify-between">
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
+                  <p className="text-sm text-muted-foreground mb-3">Nuevas dimensiones tuyas</p>
+                  <div className="text-xs space-y-1 mb-3">
+                    <p>• Versión más equilibrada de ti</p>
+                    <p>• Mayor flexibilidad situacional</p>
+                    <p>• Nuevas competencias</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cómo Llegas */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
+                <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
+                <ul className="text-xs space-y-1">
+                  <li>1. Práctica consciente</li>
+                  <li>2. Retroalimentación constante</li>
+                  <li>3. Coaches IA + Comunidad</li>
+                  <li>4. Celebra avances</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg border border-purple-300">
+              <p className="text-sm text-foreground">
+                <strong>Tu Siguiente Paso:</strong> Usa la exploración de desarrollo abajo para descubrir exactamente qué competencias quieres expandir. Luego, tu coach IA te creará un plan personalizado.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* TabsList was updated to include new tabs */}
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 gap-1">

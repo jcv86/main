@@ -327,6 +327,59 @@ export default function EmotionalIntelligenceResults() {
           </CardContent>
         </Card>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              Tu Puente de Transición Emocional
+            </CardTitle>
+            <CardDescription>
+              No es tu nivel actual. Es cómo desarrollas una inteligencia emocional más integrada.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Eres Ahora */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu IE actual</p>
+                <div className="text-2xl font-bold text-blue-600">{results.overall_score}%</div>
+                <p className="text-xs text-muted-foreground mt-2">{overallLevel.level}</p>
+              </div>
+
+              {/* Puedes Ser */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
+                <p className="text-sm text-muted-foreground mb-3">IE más madura</p>
+                <div className="text-xs space-y-1">
+                  <p>• Mayor autoconocimiento</p>
+                  <p>• Relaciones más auténticas</p>
+                  <p>• Decisiones más equilibradas</p>
+                </div>
+              </div>
+
+              {/* Cómo Llegas */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
+                <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
+                <ul className="text-xs space-y-1">
+                  <li>1. Observa tus patrones</li>
+                  <li>2. Practica regulación</li>
+                  <li>3. Desarrolla empatía</li>
+                  <li>4. Integra sabiduría</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg border border-purple-300">
+              <p className="text-sm text-foreground">
+                <strong>Tu Siguiente Paso:</strong> Identifica tu área de máxima oportunidad en IE. Tu coach IA te diseñará un plan de prácticas para expandir esa competencia gradualmente.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           <Button onClick={handleShare} variant="outline" className="bg-white">

@@ -330,6 +330,59 @@ export default function MBTIResultsPage() {
           </CardHeader>
         </Card>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              Tu Puente de Transición
+            </CardTitle>
+            <CardDescription>
+              No es tu tipo fijo. Es cómo evolucionas en flexibilidad y nuevas competencias.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Eres Ahora */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu tipo actual</p>
+                <div className="text-2xl font-bold text-blue-600">{mbtiResult.type}</div>
+                <p className="text-xs text-muted-foreground mt-2">{typeInfo.title}</p>
+              </div>
+
+              {/* Puedes Ser */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
+                <p className="text-sm text-muted-foreground mb-3">Nuevas facetas tuyas</p>
+                <div className="text-xs space-y-1">
+                  <p>• Mayor flexibilidad contextual</p>
+                  <p>• Nuevas perspectivas</p>
+                  <p>• Versión más integrada</p>
+                </div>
+              </div>
+
+              {/* Cómo Llegas */}
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
+                <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
+                <ul className="text-xs space-y-1">
+                  <li>1. Conoce tus preferencias</li>
+                  <li>2. Practica el lado opuesto</li>
+                  <li>3. Integra perspectivas nuevas</li>
+                  <li>4. Mide tu evolución</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg border border-purple-300">
+              <p className="text-sm text-foreground">
+                <strong>Tu Siguiente Paso:</strong> Identifica qué faceta de ti quieres expandir. Tu coach IA creará un plan para practicar una perspectiva complementaria a tu naturaleza.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 gap-2">
