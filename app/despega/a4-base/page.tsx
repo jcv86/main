@@ -240,13 +240,6 @@ export default function A4Page() {
             </div>
           </CardContent>
         </Card>
-              <div className="text-sm text-blue-800">
-                Mantente actualizado con noticias relevantes a tu carrera, aprende sobre el contexto del mercado chileno, 
-                y desarrolla tu comprensión de tendencias profesionales. Cada módulo completo te proporciona puntos y feedback personalizado.
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )
