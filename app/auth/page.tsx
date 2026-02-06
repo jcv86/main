@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Eye, EyeOff, Loader2, CheckCircle, User, Mail, Lock, UserPlus, LogIn, Play } from "lucide-react"
 
 export default function AuthPage() {
@@ -30,31 +29,11 @@ export default function AuthPage() {
   })
 
   // UI states
-  const [activeTab, setActiveTab] = useState("login")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
-  // Set initial tab based on URL parameter
-  useEffect(() => {
-    const mode = searchParams.get("mode")
-    if (mode === "signup") {
-      setActiveTab("signup")
-    } else if (mode === "demo") {
-      setActiveTab("demo")
-    } else {
-      setActiveTab("login")
-    }
-  }, [searchParams])
-
-  // Demo users for quick access
-  const demoUsers = [
-    { email: "travis@nuanu.com", password: "travis123", name: "Travis Herrera", role: "Senior Developer" },
-    { email: "demo@despegaturcarrera.com", password: "demo123", name: "Ana García", role: "Marketing Analyst" },
-    { email: "test@dtc.com", password: "test123", name: "Carlos Mendoza", role: "Project Coordinator" },
-    { email: "admin@dtc.com", password: "admin123", name: "María López", role: "Platform Administrator" },
-  ]
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -114,27 +93,6 @@ export default function AuthPage() {
       }
     } catch (error) {
       setMessage({ type: "error", text: "Error al crear la cuenta. Intenta de nuevo." })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleDemoLogin = async (demoUser: (typeof demoUsers)[0]) => {
-    setIsLoading(true)
-    setMessage(null)
-
-    try {
-      const success = await login(demoUser.email, demoUser.password)
-      if (success) {
-        setMessage({ type: "success", text: `¡Acceso como ${demoUser.name}!` })
-        setTimeout(() => {
-          router.push("/dashboard")
-        }, 1000)
-      } else {
-        setMessage({ type: "error", text: "Error al acceder con la cuenta demo." })
-      }
-    } catch (error) {
-      setMessage({ type: "error", text: "Error al acceder con la cuenta demo." })
     } finally {
       setIsLoading(false)
     }
