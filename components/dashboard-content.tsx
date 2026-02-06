@@ -115,55 +115,15 @@ export function DashboardContent() {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
     email: "",
-    completedTests: 3,
+    completedTests: 0,
     totalTests: 6,
-    level: "Explorador",
-    points: 1250,
+    level: "Principiante",
+    points: 0,
   })
 
-  const [activeGoals, setActiveGoals] = useState<ActiveGoal[]>([
-    {
-      id: "1",
-      name: "Mejorar comunicación asertiva",
-      type: "laboral",
-      progress: 65,
-      dueDate: "2025-02-15",
-      origin: "DISC",
-    },
-    {
-      id: "2",
-      name: "Desarrollar liderazgo situacional",
-      type: "mixto",
-      progress: 40,
-      dueDate: "2025-03-01",
-      origin: "Big Five",
-    },
-    {
-      id: "3",
-      name: "Equilibrio vida-trabajo",
-      type: "personal",
-      progress: 25,
-      dueDate: "2025-02-28",
-      origin: "IE",
-    },
-  ])
+  const [activeGoals, setActiveGoals] = useState<ActiveGoal[]>([])
 
-  const [booksInProgress, setBooksInProgress] = useState<BookInProgress[]>([
-    {
-      id: "1",
-      title: "Comunicación No Violenta",
-      author: "Marshall Rosenberg",
-      progress: 72,
-      lastRead: "2025-01-24",
-    },
-    {
-      id: "2",
-      title: "Los 7 Hábitos",
-      author: "Stephen Covey",
-      progress: 35,
-      lastRead: "2025-01-22",
-    },
-  ])
+  const [booksInProgress, setBooksInProgress] = useState<BookInProgress[]>([])
 
   const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([])
 
