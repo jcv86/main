@@ -26,6 +26,7 @@ import {
   Users,
   Clock,
   CheckCircle2,
+  Globe,
 } from "lucide-react"
 import Link from "next/link"
 
