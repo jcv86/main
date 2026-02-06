@@ -194,7 +194,9 @@ export function DashboardContent() {
 
     // Set user data immediately
     const userEmail = sessionUser.email || ""
-    const userName = sessionUser.user_metadata?.full_name || userEmail.split("@")[0] || "Usuario"
+    const userName = sessionUser.name || sessionUser.email.split("@")[0] || "Usuario"
+
+    console.log("[v0] Session user:", { id: sessionUser.id, email: userEmail, name: userName })
 
     setUserId(sessionUser.id || null)
     setUserProfile({ name: userName, email: userEmail })
@@ -205,6 +207,18 @@ export function DashboardContent() {
 
       try {
         const supabase = createClient()
+        
+        // Fetch user data from users table to get the correct name
+        const { data: userData } = await supabase
+          .from("users")
+          .select("id, email, name")
+          .eq("email", userEmail)
+          .single()
+
+        if (userData && userData.name) {
+          console.log("[v0] Fetched user name from database:", userData.name)
+          setUserProfile((prev) => ({ ...prev, name: userData.name }))
+        }
         
         // Fetch real test results from Supabase
         const { data: testResults } = await supabase
