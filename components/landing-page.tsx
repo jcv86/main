@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ChevronRight, Target, Award, BookOpen, Brain, TrendingUp } from "lucide-react"
+import { ChevronRight, Target, Award, BookRead, Brain, TrendingUp } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
@@ -93,7 +93,7 @@ export default function LandingPage() {
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <BookOpen className="h-8 w-8 text-green-600" />
+                  <BookRead className="h-8 w-8 text-green-600" />
                 </div>
                 <CardTitle className="text-2xl">Biblioteca Digital</CardTitle>
               </CardHeader>

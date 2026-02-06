@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { LearningPathCard } from "@/components/learning-path-card"
 import { SkillGapAnalysis } from "@/components/skill-gap-analysis"
-import { Sparkles, Search, TrendingUp, Target, BookOpen, Filter, Award } from "lucide-react"
+import { Sparkles, Search, TrendingUp, Target, Brain, Filter, Award } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
 export default function LearningPathsPage() {
@@ -80,7 +80,7 @@ export default function LearningPathsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
-            <BookOpen className="h-8 w-8 text-white" />
+            <Brain className="h-8 w-8 text-white" />
           </div>
           <div>
             <h1 className="text-4xl font-bold">Rutas de Aprendizaje</h1>
