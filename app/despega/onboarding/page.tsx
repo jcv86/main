@@ -516,72 +516,148 @@ export default function DespegaOnboarding() {
               </div>
             </div>
 
-            {/* INSIGHTS SECTION */}
+            {/* INSIGHTS SECTION - Rich DISC-adapted insights */}
             <div className="space-y-4 p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg">
               <h3 className="text-xl font-bold">Tus Insights Personalizados</h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Energía Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-blue-500" />
-                    <span className="font-semibold">Energía ({(results.energia * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Energía ({results.energia}%)</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {results.energia <= 2 ? "Tu energía es baja. Considera implementar pausas regulares y actividades que te recarguen. Enfócate en pequeños logros para mantener la motivación." :
-                     results.energia <= 3 ? "Tienes energía moderada. Identifica qué actividades te energizan y potencíalas. Equilibra trabajo intenso con descanso significativo." :
-                     "Tienes excelente energía. Aprovecha este nivel para liderar proyectos o mentorar a otros. Mantén este ritmo sin agotarte."}
-                  </p>
+                  {results.energia > 70 ? (
+                    <>
+                      <p className="text-sm font-medium">Actúas con consistencia y equilibrio personal</p>
+                      <p className="text-sm text-muted-foreground">Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu oportunidad:</strong> Comparte con otros cómo mantienes tu energía. Podrías formalizar tus hábitos en rutinas que otros puedan aprender.</p>
+                    </>
+                  ) : results.energia > 50 ? (
+                    <>
+                      <p className="text-sm font-medium">Buscas mantener un equilibrio en tu energía</p>
+                      <p className="text-sm text-muted-foreground">Aunque a veces fluctúa, reconoces la importancia del descanso y la actividad física. No siempre logres consistencia, pero estás en el camino.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Próximo paso:</strong> Identifica UNA sola acción sostenible (sueño, ejercicio o hidratación) y perfecciónala primero.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium">Tu energía es variable y requiere atención</p>
+                      <p className="text-sm text-muted-foreground">A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción urgente:</strong> Crea un sistema que sostenga tu energía automáticamente. Comienza mañana con 7 horas de sueño.</p>
+                    </>
+                  )}
                 </div>
 
                 {/* Enfoque Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-green-500" />
-                    <span className="font-semibold">Enfoque ({(results.enfoque * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Concentración & Precisión ({results.enfoque}%)</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {results.enfoque <= 2 ? "Tu enfoque es disperso. Practica la técnica Pomodoro o bloques de tiempo dedicados. Reduce las distracciones y establece metas clatas por sesión." :
-                     results.enfoque <= 3 ? "Tienes buen enfoque pero variable. Experimenta con distintos espacios y momentos del día para potenciar tu concentración." :
-                     "Tu enfoque es excepcional. Eres capaz de penetración profunda en problemas complejos. Utiliza esto para tareas estratégicas."}
-                  </p>
+                  {results.enfoque > 70 ? (
+                    <>
+                      <p className="text-sm font-medium">Actúas con orden y profundidad</p>
+                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te apoyas en la claridad antes de actuar, evitando precipitaciones.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu oportunidad:</strong> Confía un poco más en tu criterio sin esperar información perfecta. Comparte tus ideas en proceso, no solo 'listas' finales.</p>
+                    </>
+                  ) : results.enfoque > 50 ? (
+                    <>
+                      <p className="text-sm font-medium">Buscas concentrarte aunque las distracciones te desvían</p>
+                      <p className="text-sm text-muted-foreground">Tienes momentos de enfoque profundo, pero no son constantes. Necesitas crear mejores condiciones para la concentración.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica recomendada:</strong> Crea un sistema de prioridades visual. Identifica las 3 cosas MÁS importantes cada día y trabaja solo esas.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium">Tu concentración es un desafío actual</p>
+                      <p className="text-sm text-muted-foreground">Las distracciones te capturan fácilmente y te cuesta sostener el enfoque en tareas importantes.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza ahora:</strong> Apaga notificaciones por 90 minutos. Usa Pomodoro (25 min enfoque, 5 min descanso). Repite 4 veces.</p>
+                    </>
+                  )}
                 </div>
 
                 {/* Relaciones Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-orange-500">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-orange-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-orange-500" />
-                    <span className="font-semibold">Relaciones ({(results.relaciones * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Conexión e Influencia ({results.relaciones}%)</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {results.relaciones <= 2 ? "Prefieres el trabajo independiente. Desarrolla habilidades colaborativas gradualmente. Busca espacios seguros para practicar trabajo en equipo." :
-                     results.relaciones <= 3 ? "Tienes buenas habilidades sociales. Participa en espacios de colaboración pero mantén límites saludables." :
-                     "Eres un conectador natural. Tu capacidad para construir relaciones es un activo. Considera roles que requieran liderazgo de personas."}
-                  </p>
+                  {results.relaciones > 70 ? (
+                    <>
+                      <p className="text-sm font-medium">Actúas con apertura y calidez natural</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad de conectar es natural. Te expresas con empatía, buscando entender antes de ser entendido.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu oportunidad:</strong> Establece límites saludables. No todas las conexiones requieren profundidad. Aprende a decir 'no' desde el amor.</p>
+                    </>
+                  ) : results.relaciones > 50 ? (
+                    <>
+                      <p className="text-sm font-medium">Buscas conectar con otros pero a veces te sientes reservado</p>
+                      <p className="text-sm text-muted-foreground">Tienes buenas relaciones, pero podrían ser más profundas. Tomas tus tiempos para abrirte.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Siguiente paso:</strong> Cultiva UNA conexión genuina. Elige una persona y reúnete con ella regularmente.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium">Tu conexión con otros es limitada</p>
+                      <p className="text-sm text-muted-foreground">Prefieres la soledad o tienes dificultad expresando calidez. Las relaciones son un desafío actual.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo importante:</strong> Practica escucha activa. Esta semana, haz preguntas genuinas a 3 personas y solo escucha.</p>
+                    </>
+                  )}
                 </div>
 
                 {/* Plan Ejecutivo Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-purple-500" />
-                    <span className="font-semibold">Plan Ejecutivo ({(results.plan_ejecutivo * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Liderazgo y Ejecución ({results.plan_ejecutivo}%)</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {results.plan_ejecutivo <= 2 ? "Vives en el presente. Desarrolla la capacidad de planificación a largo plazo. Comienza con metas a 3 meses y progresa." :
-                     results.plan_ejecutivo <= 3 ? "Planificas bien pero podrías ser más estratégico. Visualiza tus objetivos a 1-3 años y trabaja hacia atrás." :
-                     "Tienes visión ejecutiva fuerte. Eres capaz de traducir sueños en planes accionables. Lidera iniciativas estratégicas."}
-                  </p>
+                  {results.plan_ejecutivo > 70 ? (
+                    <>
+                      <p className="text-sm font-medium">Actúas con lógica orientada a resultados</p>
+                      <p className="text-sm text-muted-foreground">Tu toma de decisiones es directa y estratégica. Ejecutas lo que planificas de forma confiable.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Próximo nivel:</strong> Lidera iniciativas estratégicas. Tu visión ejecutiva fuerte es valiosa para equipos.</p>
+                    </>
+                  ) : results.plan_ejecutivo > 50 ? (
+                    <>
+                      <p className="text-sm font-medium">Buscas llevar adelante tus planes</p>
+                      <p className="text-sm text-muted-foreground">Aunque a veces necesitas impulso adicional. Tienes intención, pero cuesta la consistencia.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza tus objetivos a 1-3 años y trabaja hacia atrás. Divide en metas trimestrales.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium">Tu ejecución es inconsistente</p>
+                      <p className="text-sm text-muted-foreground">Planificas bien, pero la implementación es un desafío. Necesitas sistemas que te sostengan.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea UN ritual matutino de 10 min. Revisa tus 3 prioridades. Repítelo mañana.</p>
+                    </>
+                  )}
                 </div>
               </div>
 
-              {/* Overall Recommendation */}
-              <div className="p-4 bg-blue-100 dark:bg-blue-900 rounded-lg mt-4">
-                <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Tu Recomendación Personalizada:</p>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  {results.nivel === "Iniciante" ? "Comienza construyendo una base sólida. Enfócate en desarrollar una dimensión a la vez. Tu jornada de transformación acaba de comenzar." :
-                   results.nivel === "Intermedio" ? "Tienes un buen balance de capacidades. Identifica tu dimensión más débil y desarrollala. También potencia tus fortalezas." :
-                   results.nivel === "Avanzado" ? "Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades y en ayudar a otros en su jornada." :
-                   "Felicitaciones, has alcanzado un nivel de maestría. Transforma tu experiencia en mentoría y liderazgo transformacional."}
+              {/* Overall Recommendation from knowledge base */}
+              <div className="p-4 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-lg mt-4">
+                <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">📚 Tu Ruta de Desarrollo Personalizada:</p>
+                <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                  Basado en tu perfil y en los insights de 120+ libros de desarrollo profesional en nuestra biblioteca:
                 </p>
+                <div className="space-y-2 text-sm">
+                  {results.nivel === "Principiante" ? (
+                    <>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Los 7 Hábitos de la Gente Altamente Efectiva" - Construye una base sólida desarrollando una dimensión a la vez.</p>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Plan de 30 días:</strong> Semana 1: Enfócate en dormir bien. Semana 2: Agrega 20 min de ejercicio. Semana 3: Una conexión genuina. Semana 4: Consolida todo.</p>
+                    </>
+                  ) : results.nivel === "Intermedio" ? (
+                    <>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Deep Work" de Cal Newport - Tienes buen balance. Ahora potencia tu fortaleza más débil y amplifica tus fortalezas.</p>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu enfoque:</strong> Identifica la dimensión con menor puntuación y dedica este mes a desarrollarla específicamente.</p>
+                    </>
+                  ) : results.nivel === "Avanzado" ? (
+                    <>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "El Monje que vendió su Ferrari" - Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades.</p>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu rol:</strong> Ayuda a otros en su jornada. Considera mentoría o liderazgo transformacional.</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "The Mastery Manual" - Has alcanzado maestría. Transforma tu experiencia en impacto duradero.</p>
+                      <p className="text-blue-800 dark:text-blue-200"><strong>Próximo paso:</strong> Documenta tu metodología. Lidera con ejemplo. Eres un modelo para otros.</p>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
