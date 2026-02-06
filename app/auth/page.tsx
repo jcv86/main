@@ -29,11 +29,23 @@ export default function AuthPage() {
   })
 
   // UI states
-  const [isLoginMode, setIsLoginMode] = useState(true)
+  const [activeTab, setActiveTab] = useState("login")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+
+  // Set initial tab based on URL parameter
+  useEffect(() => {
+    const mode = searchParams.get("mode")
+    if (mode === "signup") {
+      setActiveTab("signup")
+    } else if (mode === "demo") {
+      setActiveTab("demo")
+    } else {
+      setActiveTab("login")
+    }
+  }, [searchParams])
 
   // Demo users for quick access
   const demoUsers = [
@@ -146,28 +158,168 @@ export default function AuthPage() {
           <p className="text-gray-600">Plataforma de Desarrollo Profesional</p>
         </div>
 
-        <div className="mb-6 flex justify-center gap-2">
-          <Button
-            variant={isLoginMode ? "default" : "outline"}
-            onClick={() => setIsLoginMode(true)}
-            size="lg"
-            className="px-8"
-          >
-            <LogIn className="mr-2 h-4 w-4" />
-            Iniciar Sesión
-          </Button>
-          <Button
-            variant={!isLoginMode ? "default" : "outline"}
-            onClick={() => setIsLoginMode(false)}
-            size="lg"
-            className="px-8"
-          >
-            <UserPlus className="mr-2 h-4 w-4" />
-            Registrarse
-          </Button>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="signup" className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4" />
+              Crear Cuenta
+            </TabsTrigger>
+            <TabsTrigger value="login" className="flex items-center gap-2">
+              <LogIn className="h-4 w-4" />
+              Iniciar Sesión
+            </TabsTrigger>
+            <TabsTrigger value="demo" className="flex items-center gap-2">
+              <Play className="h-4 w-4" />
+              Demo
+            </TabsTrigger>
+          </TabsList>
 
-        {isLoginMode ? (
+          {/* Signup Tab */}
+          <TabsContent value="signup">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserPlus className="h-5 w-5 text-blue-600" />
+                  Crear Nueva Cuenta
+                </CardTitle>
+                <CardDescription>Únete a nuestra plataforma y comienza tu desarrollo profesional</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Nombre Completo
+                    </Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      placeholder="Tu nombre completo"
+                      value={signupForm.name}
+                      onChange={(e) => setSignupForm({ ...signupForm, name: e.target.value })}
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email" className="flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      Correo Electrónico
+                    </Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={signupForm.email}
+                      onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password" className="flex items-center gap-2">
+                      <Lock className="h-4 w-4" />
+                      Contraseña
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="signup-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Mínimo 6 caracteres"
+                        value={signupForm.password}
+                        onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
+                        required
+                        disabled={isLoading}
+                        minLength={6}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={isLoading}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-confirm-password" className="flex items-center gap-2">
+                      <Lock className="h-4 w-4" />
+                      Confirmar Contraseña
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="signup-confirm-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Repite tu contraseña"
+                        value={signupForm.confirmPassword}
+                        onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
+                        required
+                        disabled={isLoading}
+                        minLength={6}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        disabled={isLoading}
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creando cuenta...
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Crear Cuenta
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                  <h4 className="font-semibold text-blue-900 mb-2">¿Qué obtienes con tu cuenta?</h4>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>• Tests de personalidad y habilidades</li>
+                    <li>• Dashboard personalizado</li>
+                    <li>• Análisis con IA</li>
+                    <li>• Coach virtual 24/7</li>
+                    <li>• Seguimiento de progreso</li>
+                  </ul>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-600">
+                    ¿Ya tienes cuenta?{" "}
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("login")}
+                      className="text-blue-600 hover:underline font-medium"
+                    >
+                      Iniciar Sesión
+                    </button>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Login Tab */}
+          <TabsContent value="login">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -237,22 +389,15 @@ export default function AuthPage() {
                   </Button>
                 </form>
 
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 mb-2">¿Qué es DTC?</h4>
-                  <p className="text-sm text-blue-800">
-                    Tu plataforma de desarrollo profesional con tests de personalidad, análisis con IA, y coach virtual 24/7.
-                  </p>
-                </div>
-
                 <div className="mt-4 text-center">
                   <p className="text-sm text-gray-600">
                     ¿No tienes cuenta?{" "}
                     <button
                       type="button"
-                      onClick={() => setIsLoginMode(false)}
+                      onClick={() => setActiveTab("signup")}
                       className="text-blue-600 hover:underline font-medium"
                     >
-                      Regístrate aquí
+                      Crear Cuenta
                     </button>
                   </p>
                 </div>
@@ -260,149 +405,55 @@ export default function AuthPage() {
             </Card>
           </TabsContent>
 
-        ) : (
-          // Signup Mode
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <UserPlus className="h-5 w-5 text-blue-600" />
-                Crear Nueva Cuenta
-              </CardTitle>
-              <CardDescription>Únete a nuestra plataforma y comienza tu desarrollo profesional</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    Nombre Completo
-                  </Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="Tu nombre completo"
-                    value={signupForm.name}
-                    onChange={(e) => setSignupForm({ ...signupForm, name: e.target.value })}
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Correo Electrónico
-                  </Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={signupForm.email}
-                    onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="flex items-center gap-2">
-                    <Lock className="h-4 w-4" />
-                    Contraseña
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="signup-password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Mínimo 6 caracteres"
-                      value={signupForm.password}
-                      onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                      required
-                      disabled={isLoading}
-                      minLength={6}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLoading}
+          {/* Demo Tab */}
+          <TabsContent value="demo">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Play className="h-5 w-5 text-green-600" />
+                  Acceso Demo
+                </CardTitle>
+                <CardDescription>Prueba la plataforma con cuentas de demostración</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {demoUsers.map((user, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{user.name}</div>
+                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <Badge variant="secondary" className="text-xs mt-1">
+                          {user.role}
+                        </Badge>
+                      </div>
+                      <Button onClick={() => handleDemoLogin(user)} disabled={isLoading} size="sm" variant="outline">
+                        {isLoading ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <>
+                            <Play className="mr-1 h-3 w-3" />
+                            Acceder
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-confirm-password" className="flex items-center gap-2">
-                    <Lock className="h-4 w-4" />
-                    Confirmar Contraseña
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="signup-confirm-password"
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Repite tu contraseña"
-                      value={signupForm.confirmPassword}
-                      onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
-                      required
-                      disabled={isLoading}
-                      minLength={6}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      disabled={isLoading}
-                    >
-                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
+                <div className="mt-6 p-4 bg-green-50 rounded-lg">
+                  <h4 className="font-semibold text-green-900 mb-2">Cuentas Demo</h4>
+                  <p className="text-sm text-green-800">
+                    Estas cuentas tienen datos precargados para que puedas explorar todas las funcionalidades de la
+                    plataforma sin necesidad de completar tests.
+                  </p>
                 </div>
-
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creando cuenta...
-                    </>
-                  ) : (
-                    <>
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      Crear Cuenta
-                    </>
-                  )}
-                </Button>
-              </form>
-
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">¿Qué obtienes con tu cuenta?</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• Tests de personalidad y habilidades</li>
-                  <li>• Dashboard personalizado</li>
-                  <li>• Análisis con IA</li>
-                  <li>• Coach virtual 24/7</li>
-                  <li>• Seguimiento de progreso</li>
-                </ul>
-              </div>
-
-              <div className="mt-4 text-center">
-                <p className="text-sm text-gray-600">
-                  ¿Ya tienes cuenta?{" "}
-                  <button
-                    type="button"
-                    onClick={() => setIsLoginMode(true)}
-                    className="text-blue-600 hover:underline font-medium"
-                  >
-                    Inicia Sesión
-                  </button>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Message Display */}
         {message && (
