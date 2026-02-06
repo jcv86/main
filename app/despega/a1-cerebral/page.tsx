@@ -417,8 +417,13 @@ export default function A1CerebralPage() {
 
       if (!result.savedToDatabase) {
         console.error("[v0] Failed to save test results:", result.error)
+        // Still show results page even if save failed, user can retry
       } else {
-        console.log("[v0] Test results saved successfully")
+        console.log("[v0] Test results saved successfully, redirecting to dashboard in 3 seconds")
+        // Auto-redirect to dashboard after 3 seconds
+        setTimeout(() => {
+          router.push("/dashboard?refresh=true")
+        }, 3000)
       }
 
       setStage("results")
