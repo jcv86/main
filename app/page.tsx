@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import LandingPageOptimized from "@/components/landing-page-optimized"
+import LandingPageOptimized from "@/components/landing-page-v2"
 import FAQSection from "@/components/seo-optimized-content"
 import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
 
-// Force cache invalidation: 2026-02-06 16:10:00Z - Remove BookOpen reference from landing page
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
   description:

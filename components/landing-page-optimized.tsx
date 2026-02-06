@@ -19,6 +19,10 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
+  // Hard rebuild trigger - timestamp: 2026-02-06T16:12:00Z
+  if (typeof window === "undefined") {
+    console.log("[v0] LandingPageOptimized rendering on server")
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
