@@ -221,11 +221,11 @@ export default function LandingPageOptimized() {
           <Card className="bg-card border-2 border-cyan-100 dark:border-cyan-900/50 hover:border-cyan-300 dark:hover:border-cyan-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Trophy className="h-8 w-8 text-white" />
+                <Globe className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">A4: La Realidad - Dónde Vive</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
-                Coaching personalizado para vivir tu nueva identidad
+                Noticias del mercado, coaching IA y plan de acción para vivir tu nueva identidad
               </p>
             </CardHeader>
             <CardContent>
@@ -233,29 +233,29 @@ export default function LandingPageOptimized() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Coach IA Personalizado</p>
-                    <p className="text-sm text-foreground opacity-75">Sofia & Dani para ti</p>
+                    <p className="font-medium">Noticias del Mercado</p>
+                    <p className="text-sm text-foreground opacity-75">Contexto y oportunidades en tiempo real</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Disponible 24/7</p>
-                    <p className="text-sm text-foreground opacity-75">Acompañamiento constante</p>
+                    <p className="font-medium">Coach IA Personalizado</p>
+                    <p className="text-sm text-foreground opacity-75">Sofia & Dani acompañan tu transición 24/7</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Plan de Acción - 90 Días</p>
+                    <p className="text-sm text-foreground opacity-75">Asentamiento, exploración e integración estructurados</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Contexto Chileno</p>
-                    <p className="text-sm text-foreground opacity-75">Mercado y oportunidades</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Plan de Acción</p>
-                    <p className="text-sm text-foreground opacity-75">Pasos prácticos para hoy</p>
+                    <p className="text-sm text-foreground opacity-75">Adaptado al mercado y oportunidades locales</p>
                   </div>
                 </li>
               </ul>
