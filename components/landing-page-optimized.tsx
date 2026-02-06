@@ -248,8 +248,8 @@ export default function LandingPageOptimized() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Plan de Acción - 90 Días</p>
-                    <p className="text-sm text-foreground opacity-75">Asentamiento, exploración e integración estructurados</p>
+                    <p className="font-medium">Plan de Acción - 30, 60 o 90 Días</p>
+                    <p className="text-sm text-foreground opacity-75">Elige tu ritmo: intenso, balanceado o completo</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
