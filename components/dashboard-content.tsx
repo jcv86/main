@@ -197,43 +197,56 @@ export function DashboardContent() {
           setUserProfile((prev) => ({ ...prev, name: userData.name }))
         }
         
-        // Fetch real test results from Supabase - using correct table name
-        const { data: testResults } = await supabase
-          .from("test_results")
-          .select("*")
-          .eq("user_email", userEmail)
-          .order("completed_at", { ascending: false })
-          .limit(10)
+        // Fetch real test results from Supabase - using CORRECT table name a1_tests_results
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser()
+        
+        if (authUser?.id) {
+          console.log("[v0] Fetching tests from a1_tests_results for user_id:", authUser.id)
+          const { data: testResults } = await supabase
+            .from("a1_tests_results")
+            .select("*")
+            .eq("user_id", authUser.id)
+            .order("completed_at", { ascending: false })
+            .limit(10)
 
-        if (testResults && testResults.length > 0) {
-          const mapped = testResults.map((result: any) => {
-            let name = result.test_type
-            let score = 0
+          if (testResults && testResults.length > 0) {
+            console.log("[v0] Found", testResults.length, 'tests in a1_tests_results')
+            const mapped = testResults.map((result: any) => {
+              let name = result.test_type || result.test_name
+              let score = result.score || 0
 
-            // Extract score from test_results
-            if (result.test_results) {
-              const scores = Object.values(result.test_results as any)
-              if (scores.length > 0) {
-                score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+              // Extract score from responses if not directly available
+              if (!score && result.responses) {
+                const responses = result.responses
+                if (typeof responses === "object") {
+                  const scores = Object.values(responses as any).filter(v => typeof v === "number")
+                  if (scores.length > 0) {
+                    score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+                  }
+                }
               }
-            }
 
-            return {
-              id: result.id,
-              name: name,
-              score: score || 0,
-              completedAt: new Date(result.created_at).toLocaleDateString("es-AR"),
-              insights: [],
-            }
-          })
-          setRecentResults(mapped)
-          // UPDATE completedTests count from database
-          setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
-          console.log("[v0] Updated completedTests count:", testResults.length)
+              return {
+                id: result.id,
+                name: name,
+                score: score || 0,
+                completedAt: new Date(result.completed_at).toLocaleDateString("es-AR"),
+                insights: [],
+              }
+            })
+
+            setRecentResults(mapped)
+            console.log("[v0] Updating completedTests to", testResults.length)
+            setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
+          } else {
+            console.log("[v0] No tests found in a1_tests_results")
+            setRecentResults([])
+          }
         } else {
-          console.log("[v0] No test results found for user")
+          console.log("[v0] No authenticated user for test fetch")
+          setRecentResults([])
         }
-
+        
         // Mark initial data loading complete AFTER checking database
         setIsLoadingInitialData(false)
 
