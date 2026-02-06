@@ -210,8 +210,6 @@ export function DashboardContent() {
             }
           })
           setRecentResults(mapped)
-          // UPDATE: Set the completed tests count
-          setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
         }
 
         const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
@@ -387,69 +385,7 @@ export function DashboardContent() {
           </div>
         </div>
 
-        {/* TEST GATE: Show blocker if no tests completed */}
-        {userProfile.completedTests === 0 && (
-          <Card className="border-2 border-blue-500 bg-blue-50 dark:bg-blue-950">
-            <CardHeader>
-              <CardTitle className="text-2xl text-blue-900 dark:text-blue-100 flex items-center gap-2">
-                <Gamepad2 className="h-6 w-6" />
-                ¡Comienza tu Viaje Profesional!
-              </CardTitle>
-              <CardDescription className="text-base text-blue-800 dark:text-blue-200">
-                Completa tu primer test psicométrico para desbloquear tu dashboard personalizado, biblioteca de desarrollo y recomendaciones con IA.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-foreground">Descubre tu Perfil Profesional</p>
-                    <p className="text-sm text-muted-foreground">Realiza tests psicométricos validados internacionalmente</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-foreground">Análisis Personalizado con IA</p>
-                    <p className="text-sm text-muted-foreground">Recibe insights y recomendaciones basadas en tus resultados</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-foreground">Coach Virtual 24/7</p>
-                    <p className="text-sm text-muted-foreground">Accede a tu coach IA para acompañarte en tu desarrollo</p>
-                  </div>
-                </div>
-              </div>
-              <Button 
-                onClick={() => router.push("/tests")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-semibold"
-              >
-                <Sparkles className="h-5 w-5 mr-2" />
-                Realizar Mi Primer Test
-              </Button>
-              <p className="text-xs text-center text-muted-foreground">
-                Toma unos 15-20 minutos • Resultados inmediatos • Sin compromiso
-              </p>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Hide dashboard content until tests are completed */}
-        {userProfile.completedTests === 0 ? (
-          <div className="opacity-50 pointer-events-none">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-muted-foreground">Contenido Bloqueado</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Completa tu primer test para acceder a todas las funcionalidades del dashboard</p>
-              </CardContent>
-            </Card>
-          </div>
-        ) : (
+        {/* BetterMe Integration Section */}
         <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -964,7 +900,6 @@ export function DashboardContent() {
             </Card>
           </TabsContent>
         </Tabs>
-        )}
       </div>
     </div>
   )

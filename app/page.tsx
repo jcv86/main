@@ -4,7 +4,6 @@ import FAQSection from "@/components/seo-optimized-content"
 import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
 
-// Cache invalidation: 2026-02-06T16:45:00Z - Fixed BookOpen undefined error
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
   description:
