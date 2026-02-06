@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import LandingPageOptimized from "@/components/landing-page-v2"
+import LandingPageOptimized from "@/components/landing-page-optimized"
 import FAQSection from "@/components/seo-optimized-content"
 import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"

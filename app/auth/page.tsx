@@ -29,19 +29,10 @@ export default function AuthPage() {
   })
 
   // UI states
-  const [isSignupMode, setIsSignupMode] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
-
-  // Check for signup mode in URL
-  useEffect(() => {
-    const mode = searchParams.get("signup")
-    if (mode === "true") {
-      setIsSignupMode(true)
-    }
-  }, [searchParams])
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -131,147 +122,18 @@ export default function AuthPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              {isSignupMode ? (
-                <>
-                  <UserPlus className="h-5 w-5 text-blue-600" />
-                  Crear Cuenta
-                </>
-              ) : (
-                <>
-                  <LogIn className="h-5 w-5 text-blue-600" />
-                  Iniciar Sesión
-                </>
-              )}
+              <LogIn className="h-5 w-5 text-blue-600" />
+              Iniciar Sesión
             </CardTitle>
-            <CardDescription>
-              {isSignupMode
-                ? "Únete a Despega y comienza tu desarrollo profesional"
-                : "Accede a tu cuenta para continuar tu desarrollo profesional"}
-            </CardDescription>
+            <CardDescription>Accede a tu cuenta para continuar tu desarrollo profesional</CardDescription>
           </CardHeader>
           <CardContent>
-            {isSignupMode ? (
-              // SIGNUP FORM
-              <form onSubmit={handleSignup} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name" className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      Nombre Completo
-                    </Label>
-                    <Input
-                      id="signup-name"
-                      type="text"
-                      placeholder="Tu nombre completo"
-                      value={signupForm.name}
-                      onChange={(e) => setSignupForm({ ...signupForm, name: e.target.value })}
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="flex items-center gap-2">
+                    <Label htmlFor="login-email" className="flex items-center gap-2">
                       <Mail className="h-4 w-4" />
                       Correo Electrónico
                     </Label>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      value={signupForm.email}
-                      onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password" className="flex items-center gap-2">
-                      <Lock className="h-4 w-4" />
-                      Contraseña
-                    </Label>
-                    <div className="relative">
-                      <Input
-                        id="signup-password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Mínimo 6 caracteres"
-                        value={signupForm.password}
-                        onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                        required
-                        disabled={isLoading}
-                        minLength={6}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                        disabled={isLoading}
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-confirm-password" className="flex items-center gap-2">
-                      <Lock className="h-4 w-4" />
-                      Confirmar Contraseña
-                    </Label>
-                    <div className="relative">
-                      <Input
-                        id="signup-confirm-password"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Repite tu contraseña"
-                        value={signupForm.confirmPassword}
-                        onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
-                        required
-                        disabled={isLoading}
-                        minLength={6}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        disabled={isLoading}
-                      >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creando cuenta...
-                      </>
-                    ) : (
-                      <>
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Crear Cuenta
-                      </>
-                    )}
-                  </Button>
-                </form>
-
-                <div className="mt-4 text-center">
-                  <p className="text-sm text-gray-600">
-                    ¿Ya tienes cuenta?{" "}
-                    <button
-                      type="button"
-                      onClick={() => setIsSignupMode(false)}
-                      className="text-blue-600 hover:underline font-medium"
-                    >
-                      Inicia Sesión
-                    </button>
-                  </p>
-                </div>
-            ) : (
-              // LOGIN FORM
                     <Input
                       id="login-email"
                       type="email"
@@ -329,13 +191,11 @@ export default function AuthPage() {
                 <div className="mt-4 text-center">
                   <p className="text-sm text-gray-600">
                     ¿No tienes cuenta?{" "}
-                    <button
-                      type="button"
-                      onClick={() => setIsSignupMode(true)}
-                      className="text-blue-600 hover:underline font-medium"
-                    >
-                      Regístrate aquí
-                    </button>
+                    <Link href="/auth?signup=true">
+                      <button type="button" className="text-blue-600 hover:underline font-medium">
+                        Regístrate aquí
+                      </button>
+                    </Link>
                   </p>
                 </div>
 
@@ -345,7 +205,6 @@ export default function AuthPage() {
                     Tu plataforma de desarrollo profesional con tests de personalidad, análisis con IA, y coach virtual 24/7.
                   </p>
                 </div>
-            )}
               </CardContent>
             </Card>
       </div>
