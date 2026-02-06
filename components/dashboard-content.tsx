@@ -308,30 +308,22 @@ export function DashboardContent() {
         // Small delay to ensure database write is complete
         await new Promise((resolve) => setTimeout(resolve, 500))
         
-        // Get current user from Supabase auth to properly bypass RLS
-        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        console.log("[v0] Fetching test results for:", sessionUser.email)
         
-        if (authError || !user) {
-          console.error("[v0] Auth error or no user:", authError)
-          return
-        }
-
-        console.log("[v0] Fetching test results for user ID:", user.id)
-        
-        // Query using user_id which is what the RLS policy checks
+        // RLS disabled - simple query by user_email
         const { data: testResults, error } = await supabase
           .from("a1_tests_results")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_email", sessionUser.email!)
           .order("completed_at", { ascending: false })
           .limit(10)
 
         if (error) {
-          console.error("[v0] Error fetching test results from a1_tests_results:", error)
+          console.error("[v0] Error fetching test results:", error)
           return
         }
 
-        console.log("[v0] Fetched test results from a1_tests_results count:", testResults?.length || 0)
+        console.log("[v0] Fetched test results count:", testResults?.length || 0)
         
         if (testResults && testResults.length > 0) {
           console.log("[v0] Updated test results after refresh. Count:", testResults.length)
