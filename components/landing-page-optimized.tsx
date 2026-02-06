@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   Brain,
-  BookOpen,
   Sparkles,
   ArrowRight,
   CheckCircle2,
@@ -45,28 +44,8 @@ export default function LandingPageOptimized() {
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
               >
-                Inicia Sesión
+                Inicia Sesión o Regístrate
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            {/* <Link href="/documents" prefetch={true}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
-              >
-                Chat con Documentos
-                <MessageSquare className="ml-2 h-5 w-5" />
-              </Button>
-            </Link> */}
-            <Link href="/biblioteca" prefetch={true}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
-              >
-                Explorar Biblioteca
-                <BookOpen className="ml-2 h-5 w-5" />
               </Button>
             </Link>
           </div>
