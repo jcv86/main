@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString(),
       },
       {
-        onConflict: "id",
+        onConflict: "email", // Use email as the unique key, not id
       },
     )
 
