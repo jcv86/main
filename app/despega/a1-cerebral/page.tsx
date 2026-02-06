@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { TestIntroScreen } from "@/components/test-intro-screen"
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
+import { ArrowLeft, ArrowRight, CheckCircle, Check } from "lucide-react"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
 
@@ -47,8 +47,10 @@ export default function A1CerebralPage() {
   const supabase = createClient()
   const [stage, setStage] = useState<"intro" | "test" | "results">("intro")
   const [currentIdx, setCurrentIdx] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, any>>({})
+  const [answers, setAnswers] = useState<Record<number, number>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [userLevel, setUserLevel] = useState<"principiante" | "intermedio" | "avanzado" | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -433,27 +435,61 @@ export default function A1CerebralPage() {
   }
 
   // Track test start time
-  const startTimeRef = useEffect(() => {
-    if (stage === "test") {
-      return () => {}
-    }
-    const startTime = Date.now()
-    return () => {
-      startTimeRef.current = startTime
-    }
-  }, [])
+  const startTimeRef = useRef<number | null>(null)
 
-  // Auto-redirect to dashboard after results are shown
-  useEffect(() => {
-    if (stage === "results" && !isSubmitting) {
-      console.log("[v0] Results displayed, will auto-redirect in 2 seconds")
-      const timer = setTimeout(() => {
-        console.log("[v0] Auto-redirecting to dashboard now")
-        router.push("/dashboard?refresh=true")
-      }, 2000)
-      return () => clearTimeout(timer)
+  // Handle dashboard navigation - verify save before redirecting
+  const handleGoToDashboard = async () => {
+    console.log("[v0] Dashboard button clicked, verifying save status...")
+    
+    setSaveStatus("saving")
+    setSaveError(null)
+
+    try {
+      if (!user?.email) {
+        throw new Error("Usuario no identificado")
+      }
+
+      // Calculate scores
+      const scores = calculateScores()
+      
+      const testResults = {
+        energia: scores.energia,
+        enfoque: scores.enfoque,
+        relaciones: scores.relaciones,
+        plan_ejecutivo: scores.plan_ejecutivo,
+        answers: answers,
+      }
+
+      console.log("[v0] Re-saving test results on dashboard navigation...", testResults)
+
+      // Save with explicit confirmation
+      const result = await UnifiedTestSystem.saveTestResult(
+        user.email,
+        "Despega Cerebral" as any,
+        testResults,
+        duration
+      )
+
+      if (!result.savedToDatabase) {
+        throw new Error(result.error || "No se pudo guardar los resultados")
+      }
+
+      console.log("[v0] Test save confirmed, redirecting to dashboard now...")
+      setSaveStatus("saved")
+
+      // Wait a moment to show success state
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      // Redirect only after confirmed save
+      router.push("/dashboard?refresh=true")
+    } catch (error) {
+      console.error("[v0] Error saving before redirect:", error)
+      setSaveStatus("error")
+      setSaveError(
+        error instanceof Error ? error.message : "Error al guardar resultados. Intenta de nuevo."
+      )
     }
-  }, [stage, isSubmitting, router])
+  }
 
   const areaColors = {
     energia: "bg-blue-100 text-blue-900",
@@ -834,16 +870,40 @@ export default function A1CerebralPage() {
         </div>
 
         {/* Action Button */}
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <Button
-            onClick={() => router.push("/dashboard?refresh=true")}
+            onClick={handleGoToDashboard}
+            disabled={saveStatus === "saving" || saveStatus === "saved"}
             size="lg"
-            className="px-8"
+            className="px-8 w-full md:w-auto"
           >
-            Volver al Dashboard
+            {saveStatus === "saving" && (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                Guardando Resultados...
+              </>
+            )}
+            {saveStatus === "saved" && (
+              <>
+                <Check className="h-4 w-4 mr-2" />
+                Guardado - Redirigiendo...
+              </>
+            )}
+            {saveStatus === "error" && "Reintentar"}
+            {saveStatus === "idle" && "Ir a mi Dashboard Despega"}
           </Button>
-          <p className="text-sm text-gray-500 mt-4">
-            Tus resultados han sido guardados en tu perfil.
+          
+          {saveStatus === "error" && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-sm text-red-800">{saveError}</p>
+              <p className="text-xs text-red-600 mt-2">Haz clic en el botón para reintentar guardar.</p>
+            </div>
+          )}
+          
+          <p className="text-sm text-gray-600">
+            {saveStatus === "idle" && "Tus resultados serán guardados cuando hagas clic."}
+            {saveStatus === "saved" && "Tus resultados fueron guardados exitosamente."}
+            {saveStatus !== "idle" && saveStatus !== "saved" && "Por favor, no cierres esta página..."}
           </p>
         </div>
       </div>
