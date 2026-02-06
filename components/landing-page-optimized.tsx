@@ -30,7 +30,8 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
-  // Force complete recompile - timestamp: 2026-02-06T17:00:00Z
+  // FORCE REBUILD: Structural change to clear stale build cache - 2026-02-06T17:16:00Z
+  const version = "v2" // This forces recompilation
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}

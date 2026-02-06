@@ -71,6 +71,57 @@ export async function POST(request: NextRequest) {
     })
 
     if (authError) {
+      // If user already exists in auth, we can still update their database profile
+      if (authError.message?.includes("duplicate") || authError.message?.includes("already")) {
+        console.log(`[v0] User ${email} already exists in auth. Checking database...`)
+        
+        // Get the existing auth user ID
+        const { data: { users: authUsers }, error: listError } = await adminClient.auth.admin.listUsers()
+        const existingAuthUser = authUsers?.find((u) => u.email === email)
+        
+        if (existingAuthUser) {
+          console.log(`[v0] Found existing user in auth with ID: ${existingAuthUser.id}`)
+          
+          // Try to update their password if provided
+          if (password) {
+            await adminClient.auth.admin.updateUserById(existingAuthUser.id, { password })
+              .then(() => console.log(`[v0] Password updated for ${email}`))
+              .catch((err) => console.log(`[v0] Could not update password: ${err.message}`))
+          }
+          
+          // Update database profile
+          const { data: updatedUser, error: updateError } = await adminClient
+            .from("users")
+            .upsert({
+              id: existingAuthUser.id,
+              email,
+              full_name: full_name || null,
+              bio: bio || null,
+              phone: phone || null,
+              location: location || null,
+              linkedin_url: linkedin_url || null,
+              github_url: github_url || null,
+              whatsapp_phone: whatsapp_phone || null,
+              updated_at: new Date().toISOString(),
+            }, {
+              onConflict: "id",
+            })
+            .select()
+            .single()
+
+          if (updateError) {
+            console.error("[v0] Error upserting user profile:", updateError)
+            return NextResponse.json({ success: false, error: `Failed to update profile: ${updateError.message}` }, { status: 500 })
+          }
+
+          return NextResponse.json({
+            success: true,
+            user: updatedUser,
+            message: `User ${email} already existed. Profile updated and password reset.`,
+          })
+        }
+      }
+      
       console.error("[Admin Users API] Error creating auth user:", authError)
       return NextResponse.json({ success: false, error: `Auth error: ${authError.message}` }, { status: 500 })
     }
