@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   Brain,
-  BookOpen,
   Sparkles,
   ArrowRight,
   CheckCircle2,
@@ -16,6 +15,7 @@ import {
   Award,
   Clock,
   Shield,
+  BookOpen,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -45,28 +45,8 @@ export default function LandingPageOptimized() {
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
               >
-                Comenzar Demo Gratuito
+                Inicia Sesión o Regístrate
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            {/* <Link href="/documents" prefetch={true}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
-              >
-                Chat con Documentos
-                <MessageSquare className="ml-2 h-5 w-5" />
-              </Button>
-            </Link> */}
-            <Link href="/biblioteca" prefetch={true}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 bg-background hover:bg-card"
-              >
-                Explorar Biblioteca
-                <BookOpen className="ml-2 h-5 w-5" />
               </Button>
             </Link>
           </div>
@@ -315,11 +295,11 @@ export default function LandingPageOptimized() {
             </div>
             <CardContent className="pt-8">
               <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
-                <BookOpen className="h-7 w-7 text-white" />
+                <Target className="h-7 w-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Explora la Biblioteca</h3>
+              <h3 className="text-xl font-bold mb-3">Recibe Análisis Personal</h3>
               <p className="text-foreground opacity-75">
-                Accede a 120+ libros profesionales y recursos curados. Aprende de los mejores expertos del mundo.
+                Obtén un reporte detallado con tus fortalezas, áreas de desarrollo y una ruta personalizada hacia tus metas.
               </p>
             </CardContent>
           </Card>
@@ -362,28 +342,8 @@ export default function LandingPageOptimized() {
                     size="lg"
                     className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-6 w-full sm:w-auto shadow-xl"
                   >
-                    Comenzar Ahora Gratis
+                    Inicia Sesión o Regístrate
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                {/* <Link href="/documents">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto"
-                  >
-                    Chat con Documentos
-                    <MessageSquare className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link> */}
-                <Link href="/biblioteca">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto"
-                  >
-                    Ver Biblioteca
-                    <BookOpen className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
               </div>
