@@ -22,6 +22,9 @@ import {
   CircleDot,
   Zap,
   ArrowRight,
+  Users,
+  Clock,
+  CheckCircle2,
 } from "lucide-react"
 import Link from "next/link"
 
