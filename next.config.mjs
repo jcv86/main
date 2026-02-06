@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-// Force clean rebuild - cache invalidation timestamp: 2026-02-03T15:58:00Z
+// Force clean rebuild - cache invalidation timestamp: 2026-02-06T16:00:00Z
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,

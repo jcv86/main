@@ -21,6 +21,7 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
+  console.log("[v0] Landing page rendered with BookOpen imported correctly")
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
