@@ -308,11 +308,21 @@ export function DashboardContent() {
         // Small delay to ensure database write is complete
         await new Promise((resolve) => setTimeout(resolve, 500))
         
-        // FIXED: Use correct table name a1_tests_results not test_results
+        // Get current user from Supabase auth to properly bypass RLS
+        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        
+        if (authError || !user) {
+          console.error("[v0] Auth error or no user:", authError)
+          return
+        }
+
+        console.log("[v0] Fetching test results for user ID:", user.id)
+        
+        // Query using user_id which is what the RLS policy checks
         const { data: testResults, error } = await supabase
           .from("a1_tests_results")
           .select("*")
-          .eq("user_email", sessionUser.email!)
+          .eq("user_id", user.id)
           .order("completed_at", { ascending: false })
           .limit(10)
 
