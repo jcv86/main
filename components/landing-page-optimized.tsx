@@ -15,6 +15,7 @@ import {
   Award,
   Clock,
   Shield,
+  BookOpen,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -158,6 +159,94 @@ export default function LandingPageOptimized() {
                   <div>
                     <p className="font-medium">Competencias Despega</p>
                     <p className="text-sm text-foreground opacity-75">Habilidades blandas clave</p>
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card border-2 border-blue-100 dark:border-blue-900/50 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all group">
+            <CardHeader className="pb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <BookOpen className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl">Biblioteca Profesional Completa</CardTitle>
+              <p className="text-sm text-foreground opacity-75 mt-2">
+                Acceso ilimitado a los mejores libros de desarrollo profesional
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">120+ Libros Completos</p>
+                    <p className="text-sm text-foreground opacity-75">Bestsellers de desarrollo</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">100+ Recursos Web</p>
+                    <p className="text-sm text-foreground opacity-75">Contenido curado del mercado chileno</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Búsqueda Semántica</p>
+                    <p className="text-sm text-foreground opacity-75">Encuentra respuestas con IA</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Actualización Constante</p>
+                    <p className="text-sm text-foreground opacity-75">Nuevo contenido cada mes</p>
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card border-2 border-cyan-100 dark:border-cyan-900/50 hover:border-cyan-300 dark:hover:border-cyan-700 hover:shadow-xl transition-all group">
+            <CardHeader className="pb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Zap className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl">Coach Virtual con IA</CardTitle>
+              <p className="text-sm text-foreground opacity-75 mt-2">
+                Tu mentor personal disponible cuando lo necesites
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Personalizado a Tu Perfil</p>
+                    <p className="text-sm text-foreground opacity-75">Basado en tus tests</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Disponible 24/7</p>
+                    <p className="text-sm text-foreground opacity-75">Respuestas instantáneas</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Conocimiento Experto</p>
+                    <p className="text-sm text-foreground opacity-75">Entrenado con 120+ libros</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Contexto Chileno</p>
+                    <p className="text-sm text-foreground opacity-75">Adaptado al mercado local</p>
                   </div>
                 </li>
               </ul>
