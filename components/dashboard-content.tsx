@@ -143,6 +143,19 @@ export function DashboardContent() {
   
   // Add loading state for initial data fetch
   const [isLoadingInitialData, setIsLoadingInitialData] = useState(true)
+  const [shouldRefresh, setShouldRefresh] = useState(false)
+
+  // Detect refresh parameter on client-side only
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search)
+      const hasRefresh = searchParams.get("refresh") === "true"
+      if (hasRefresh) {
+        console.log("[v0] Refresh parameter detected in URL")
+        setShouldRefresh(true)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     console.log("[v0] DashboardContent mounted")
@@ -347,7 +360,7 @@ export function DashboardContent() {
     }
 
     fetchLatestTestResults()
-  }, [sessionUser?.email, window.location.search])
+  }, [sessionUser?.email, shouldRefresh])
 
   const achievements = [
     {
