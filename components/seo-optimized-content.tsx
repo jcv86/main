@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 interface SEOContentProps {
   children: React.ReactNode
@@ -44,25 +45,19 @@ function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
             </svg>
           </a>
         </div>
-        <div className="max-w-4xl mx-auto space-y-6">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-border"
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
-            >
-              <h3 className="text-xl font-semibold mb-3 text-foreground" itemProp="name">
-                {faq.question}
-              </h3>
-              <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                <div itemProp="text" className="text-foreground opacity-75 leading-relaxed">
-                  {faq.answer}
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="max-w-4xl mx-auto">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
+                <AccordionTrigger className="hover:text-foreground text-lg font-semibold py-4 px-0 text-left" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                  <span itemProp="name">{faq.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-base text-foreground opacity-75 leading-relaxed pb-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                  <div itemProp="text">{faq.answer}</div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
 
