@@ -30,8 +30,9 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
-  // FORCE REBUILD: Structural change to clear stale build cache - 2026-02-06T17:16:00Z
-  const version = "v2" // This forces recompilation
+  // COMPLETE REBUILD: Force Next.js to clear all compiled cache - timestamp: 2026-02-06T17:17:45Z
+  const _cacheVersion = "rebuild-now-" + Math.random().toString()
+  const version = "v3"
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
