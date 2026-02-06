@@ -6,20 +6,20 @@ import { Suspense } from "react"
 
 // Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {
-  title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
+  title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
   description:
-    "Descubre tu verdadero potencial a través de una transición consciente de identidad. Tests científicos, exploración de narrativas futuras y coaching IA personalizado para tu transformación profesional.",
+    "Tu siguiente versión te está esperando. Descubre quién eres ahora, explora quién podrías ser, y construye el puente que te llevará allá con tests científicos, coaching IA y exploración de narrativas de transformación.",
   keywords: [
-    "transición de carrera",
     "transición de identidad",
+    "transformación profesional",
     "autoconocimiento",
     "coaching con IA",
-    "transformación profesional",
+    "transición de carrera",
     "test de personalidad",
     "orientación vocacional",
     "desarrollo personal",
     "cambio de carrera",
-    "inteligencia emocional",
+    "siguiente versión",
   ],
   authors: [{ name: "Despega Tu Carrera" }],
   creator: "Despega Tu Carrera",
@@ -29,23 +29,23 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
-    title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
+    title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
     description:
-      "Tu viaje de transformación comienza aquí. Tests científicos, exploración de identidades futuras y coaching IA para tu transición consciente.",
+      "Tu siguiente versión te está esperando. Descubre quién eres, explora quién podrías ser, y construye tu puente de transformación con tests científicos y coaching IA.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Despega Tu Carrera - Transición De Identidad Profesional",
+        alt: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Despega Tu Carrera - Tu Transición De Identidad Profesional",
+    title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
     description:
-      "Descubre tu verdadero potencial a través de una transición consciente de identidad. Coaching IA 24/7 y exploración de narrativas futuras.",
+      "Tu siguiente versión te está esperando. Descubre quién eres ahora, explora nuevas identidades, y construye tu puente con coaching IA 24/7.",
     images: ["/og-image.png"],
   },
   robots: {
