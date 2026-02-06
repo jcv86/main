@@ -30,6 +30,7 @@ import {
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
+  // Force complete recompile - timestamp: 2026-02-06T17:00:00Z
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}

@@ -516,6 +516,75 @@ export default function DespegaOnboarding() {
               </div>
             </div>
 
+            {/* INSIGHTS SECTION */}
+            <div className="space-y-4 p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg">
+              <h3 className="text-xl font-bold">Tus Insights Personalizados</h3>
+              <div className="space-y-3">
+                {/* Energía Insight */}
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    <span className="font-semibold">Energía ({(results.energia * 20).toFixed(0)}%)</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {results.energia <= 2 ? "Tu energía es baja. Considera implementar pausas regulares y actividades que te recarguen. Enfócate en pequeños logros para mantener la motivación." :
+                     results.energia <= 3 ? "Tienes energía moderada. Identifica qué actividades te energizan y potencíalas. Equilibra trabajo intenso con descanso significativo." :
+                     "Tienes excelente energía. Aprovecha este nivel para liderar proyectos o mentorar a otros. Mantén este ritmo sin agotarte."}
+                  </p>
+                </div>
+
+                {/* Enfoque Insight */}
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <span className="font-semibold">Enfoque ({(results.enfoque * 20).toFixed(0)}%)</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {results.enfoque <= 2 ? "Tu enfoque es disperso. Practica la técnica Pomodoro o bloques de tiempo dedicados. Reduce las distracciones y establece metas clatas por sesión." :
+                     results.enfoque <= 3 ? "Tienes buen enfoque pero variable. Experimenta con distintos espacios y momentos del día para potenciar tu concentración." :
+                     "Tu enfoque es excepcional. Eres capaz de penetración profunda en problemas complejos. Utiliza esto para tareas estratégicas."}
+                  </p>
+                </div>
+
+                {/* Relaciones Insight */}
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-orange-500">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-orange-500" />
+                    <span className="font-semibold">Relaciones ({(results.relaciones * 20).toFixed(0)}%)</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {results.relaciones <= 2 ? "Prefieres el trabajo independiente. Desarrolla habilidades colaborativas gradualmente. Busca espacios seguros para practicar trabajo en equipo." :
+                     results.relaciones <= 3 ? "Tienes buenas habilidades sociales. Participa en espacios de colaboración pero mantén límites saludables." :
+                     "Eres un conectador natural. Tu capacidad para construir relaciones es un activo. Considera roles que requieran liderazgo de personas."}
+                  </p>
+                </div>
+
+                {/* Plan Ejecutivo Insight */}
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-purple-500" />
+                    <span className="font-semibold">Plan Ejecutivo ({(results.plan_ejecutivo * 20).toFixed(0)}%)</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {results.plan_ejecutivo <= 2 ? "Vives en el presente. Desarrolla la capacidad de planificación a largo plazo. Comienza con metas a 3 meses y progresa." :
+                     results.plan_ejecutivo <= 3 ? "Planificas bien pero podrías ser más estratégico. Visualiza tus objetivos a 1-3 años y trabaja hacia atrás." :
+                     "Tienes visión ejecutiva fuerte. Eres capaz de traducir sueños en planes accionables. Lidera iniciativas estratégicas."}
+                  </p>
+                </div>
+              </div>
+
+              {/* Overall Recommendation */}
+              <div className="p-4 bg-blue-100 dark:bg-blue-900 rounded-lg mt-4">
+                <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Tu Recomendación Personalizada:</p>
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  {results.nivel === "Iniciante" ? "Comienza construyendo una base sólida. Enfócate en desarrollar una dimensión a la vez. Tu jornada de transformación acaba de comenzar." :
+                   results.nivel === "Intermedio" ? "Tienes un buen balance de capacidades. Identifica tu dimensión más débil y desarrollala. También potencia tus fortalezas." :
+                   results.nivel === "Avanzado" ? "Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades y en ayudar a otros en su jornada." :
+                   "Felicitaciones, has alcanzado un nivel de maestría. Transforma tu experiencia en mentoría y liderazgo transformacional."}
+                </p>
+              </div>
+            </div>
+
             <div className="p-4 bg-muted rounded-lg">
               <h3 className="font-semibold mb-2">Tus Caminos Activos:</h3>
               <div className="flex gap-2">
