@@ -154,8 +154,10 @@ export default function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">DTC Final</h1>
-          <p className="text-gray-600">Plataforma de Desarrollo Profesional</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
+            Despega
+          </h1>
+          <p className="text-gray-600">Inicia Sesión o Regístrate</p>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
