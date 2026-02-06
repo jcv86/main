@@ -198,28 +198,89 @@ export default function A4Page() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <span className="text-xl">📋</span>
-                  Tu Plan de Acción - 90 Días de Transición
+                  Tu Plan de Acción - Elige Tu Ritmo
                 </CardTitle>
                 <CardDescription>
-                  Pasos concretos para vivir tu nueva identidad en el mundo real. Basado en quién eres (A1), lo que exploraste (A2-A3), y donde quieres estar.
+                  Pasos concretos para vivir tu nueva identidad. Elige 30, 60 o 90 días según tu disponibilidad y ritmo de transición.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <div className="p-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20">
-                    <h4 className="font-semibold mb-2">Semana 1-2: Asentamiento</h4>
-                    <p className="text-sm text-muted-foreground">Consolidar tu nuevo entendimiento. Comunicar cambios clave a personas importantes.</p>
-                  </div>
-                  <div className="p-4 border-l-4 border-purple-500 bg-purple-50 dark:bg-purple-900/20">
-                    <h4 className="font-semibold mb-2">Semana 3-6: Exploración Activa</h4>
-                    <p className="text-sm text-muted-foreground">Buscar oportunidades. Conectar con personas. Practicar tu nueva identidad en contextos reales.</p>
-                  </div>
-                  <div className="p-4 border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20">
-                    <h4 className="font-semibold mb-2">Semana 7-12: Integración</h4>
-                    <p className="text-sm text-muted-foreground">Tomar decisiones. Hacer cambios concretos. Vivir tu nueva identidad a diario.</p>
-                  </div>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {/* Plan 30 días */}
+                  <Card className="border-2 border-orange-200 bg-orange-50 dark:bg-orange-900/20">
+                    <CardHeader>
+                      <CardTitle className="text-lg">30 Días - Intenso</CardTitle>
+                      <CardDescription>Transformación acelerada</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 1: Asentamiento</div>
+                        <p className="text-muted-foreground">Diagnóstico y comunicación de cambios</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 2-3: Exploración Activa</div>
+                        <p className="text-muted-foreground">Oportunidades y práctica intensiva</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 4: Decisión</div>
+                        <p className="text-muted-foreground">Primer cambio concreto implementado</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Plan 60 días */}
+                  <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
+                    <CardHeader>
+                      <CardTitle className="text-lg">60 Días - Balanceado</CardTitle>
+                      <CardDescription>Transición sostenible</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 1-2: Asentamiento</div>
+                        <p className="text-muted-foreground">Consolidar nuevo entendimiento</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 3-7: Exploración Activa</div>
+                        <p className="text-muted-foreground">Búsqueda profunda y networking</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 8-9: Integración</div>
+                        <p className="text-muted-foreground">Implementar cambios principales</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Plan 90 días */}
+                  <Card className="border-2 border-green-200 bg-green-50 dark:bg-green-900/20 ring-2 ring-green-300 dark:ring-green-700">
+                    <CardHeader>
+                      <CardTitle className="text-lg">90 Días - Completo</CardTitle>
+                      <CardDescription>Transformación profunda (Recomendado)</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 1-2: Asentamiento</div>
+                        <p className="text-muted-foreground">Consolidar tu nuevo entendimiento</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 3-6: Exploración Activa</div>
+                        <p className="text-muted-foreground">Buscar oportunidades, conectar, practicar</p>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 7-12: Integración</div>
+                        <p className="text-muted-foreground">Decisiones finales y vivir tu nueva identidad</p>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-                <Button className="w-full" variant="default">Descargar Mi Plan Personalizado</Button>
+
+                <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
+                  <CardContent className="pt-6">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      <strong>¿Cuál elegir?</strong> Si es tu primera transición importante, recomendamos 90 días. Si ya tienes experiencia, 30-60 días puede ser suficiente. Tu coach IA te puede ayudar a elegir según tu contexto.
+                    </p>
+                    <Button className="w-full">Crear Mi Plan Personalizado</Button>
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
           </TabsContent>
