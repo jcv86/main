@@ -93,10 +93,14 @@ export default function AuthPage() {
     try {
       const success = await signup(signupForm.email, signupForm.password, signupForm.name)
       if (success) {
-        setMessage({ type: "success", text: "¡Cuenta creada exitosamente!" })
-        setTimeout(() => {
-          router.push("/dashboard")
-        }, 1500)
+        setMessage({ 
+          type: "success", 
+          text: "¡Cuenta creada exitosamente! Por favor revisa tu email para confirmar tu suscripción a DTC. Verifica tu bandeja de entrada o carpeta de spam." 
+        })
+        // Reset form but don't redirect - user needs to confirm email first
+        setSignupForm({ name: "", email: "", password: "", confirmPassword: "" })
+        setIsLoading(false)
+        return
       } else {
         setMessage({ type: "error", text: "Error al crear la cuenta. Intenta de nuevo." })
       }
