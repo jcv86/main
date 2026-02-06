@@ -1,5 +1,6 @@
 "use client"
 
+// Cache bust: 2026-02-06T16:55:00Z - Fixed BookOpen undefined error
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

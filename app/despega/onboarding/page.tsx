@@ -533,7 +533,7 @@ export default function DespegaOnboarding() {
             </div>
 
             <Button 
-              onClick={() => router.push("/despega")} 
+              onClick={() => router.push("/dashboard")} 
               className="w-full" 
               size="lg"
               disabled={loading}
