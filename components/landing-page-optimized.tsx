@@ -45,7 +45,7 @@ export default function LandingPageOptimized() {
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
               >
-                Comenzar Demo Gratuito
+                Inicia Sesión
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
