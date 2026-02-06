@@ -4,6 +4,7 @@ import FAQSection from "@/components/seo-optimized-content"
 import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
 
+// Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tests de Personalidad y Desarrollo Profesional",
   description:

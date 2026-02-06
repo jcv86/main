@@ -140,6 +140,9 @@ export function DashboardContent() {
 
   const [isAdmin, setIsAdmin] = useState(false)
   const [checkingAdmin, setCheckingAdmin] = useState(true)
+  
+  // Add loading state for initial data fetch
+  const [isLoadingInitialData, setIsLoadingInitialData] = useState(true)
 
   useEffect(() => {
     console.log("[v0] DashboardContent mounted")
@@ -217,6 +220,9 @@ export function DashboardContent() {
         } else {
           console.log("[v0] No test results found for user")
         }
+
+        // Mark initial data loading complete AFTER checking database
+        setIsLoadingInitialData(false)
 
         const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
           fetch(`/api/user-achievements?email=${userEmail}`).catch(() => null),
@@ -391,8 +397,8 @@ export function DashboardContent() {
           </div>
         </div>
 
-        {/* TEST GATE: Show blocker if no tests completed */}
-        {userProfile.completedTests === 0 && (
+        {/* TEST GATE: Show blocker if no tests completed (only after data loads) */}
+        {!isLoadingInitialData && userProfile.completedTests === 0 && (
           <Card className="border-2 border-blue-500 bg-blue-50 dark:bg-blue-950">
             <CardHeader>
               <CardTitle className="text-2xl text-blue-900 dark:text-blue-100 flex items-center gap-2">
@@ -441,7 +447,7 @@ export function DashboardContent() {
           </Card>
         )}
 
-        {userProfile.completedTests === 0 ? (
+        {!isLoadingInitialData && userProfile.completedTests === 0 ? (
           <div className="opacity-50 pointer-events-none">
             <Card>
               <CardHeader>
