@@ -82,14 +82,17 @@ export default function A4Page() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
               🌍
             </div>
             <div>
-              <h1 className="text-2xl font-bold">A4 Base - Contexto Profesional</h1>
-              <p className="text-muted-foreground">Noticias, tendencias y módulos de aprendizaje sobre el mercado profesional</p>
+              <h1 className="text-3xl font-bold">La Realidad - Dónde Vive Tu Identidad</h1>
+              <p className="text-muted-foreground">A4: El mercado, las oportunidades, tu contexto profesional + coaching personalizado</p>
             </div>
           </div>
+          <Badge className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300">
+            Fase A4: Tu identidad en el mundo real
+          </Badge>
         </div>
 
         {/* Quick Stats */}
@@ -125,7 +128,7 @@ export default function A4Page() {
 
         {/* Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="noticias">
               <Newspaper className="w-4 h-4 mr-2" />
               Noticias
@@ -134,9 +137,13 @@ export default function A4Page() {
               <BookOpen className="w-4 h-4 mr-2" />
               Módulos
             </TabsTrigger>
-            <TabsTrigger value="recursos">
-              <Bookmark className="w-4 h-4 mr-2" />
-              Recursos
+            <TabsTrigger value="coaching">
+              <span className="mr-2">🎯</span>
+              Coaching
+            </TabsTrigger>
+            <TabsTrigger value="plan">
+              <span className="mr-2">📋</span>
+              Tu Plan
             </TabsTrigger>
           </TabsList>
 
@@ -148,32 +155,91 @@ export default function A4Page() {
             <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
           </TabsContent>
 
-          <TabsContent value="recursos" className="space-y-6">
+          <TabsContent value="coaching" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bookmark className="w-5 h-5" />
-                  Biblioteca de Recursos
+                  <span className="text-xl">🎯</span>
+                  Tu Coach IA - Guía de Transición
                 </CardTitle>
                 <CardDescription>
-                  Colección curada de libros, artículos, herramientas y más
+                  Sofia & Dani acompañan tu transformación. Pregunta sobre cualquier aspecto de tu nueva identidad en el contexto real.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  Los recursos se cargarán aquí. Sistema en desarrollo.
+              <CardContent className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Sofia</CardTitle>
+                      <CardDescription>Coach de Transición Personal</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm mb-4">Especializada en guiar tu transformación de identidad con empatía y profundidad emocional.</p>
+                      <Button variant="outline" className="w-full">Hablar con Sofia</Button>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Dani</CardTitle>
+                      <CardDescription>Coach de Transición Profesional</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm mb-4">Experto en navegar el mercado y transformar tu identidad profesional en oportunidades reales.</p>
+                      <Button variant="outline" className="w-full">Hablar con Dani</Button>
+                    </CardContent>
+                  </Card>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="plan" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-xl">📋</span>
+                  Tu Plan de Acción - 90 Días de Transición
+                </CardTitle>
+                <CardDescription>
+                  Pasos concretos para vivir tu nueva identidad en el mundo real. Basado en quién eres (A1), lo que exploraste (A2-A3), y donde quieres estar.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="p-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20">
+                    <h4 className="font-semibold mb-2">Semana 1-2: Asentamiento</h4>
+                    <p className="text-sm text-muted-foreground">Consolidar tu nuevo entendimiento. Comunicar cambios clave a personas importantes.</p>
+                  </div>
+                  <div className="p-4 border-l-4 border-purple-500 bg-purple-50 dark:bg-purple-900/20">
+                    <h4 className="font-semibold mb-2">Semana 3-6: Exploración Activa</h4>
+                    <p className="text-sm text-muted-foreground">Buscar oportunidades. Conectar con personas. Practicar tu nueva identidad en contextos reales.</p>
+                  </div>
+                  <div className="p-4 border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20">
+                    <h4 className="font-semibold mb-2">Semana 7-12: Integración</h4>
+                    <p className="text-sm text-muted-foreground">Tomar decisiones. Hacer cambios concretos. Vivir tu nueva identidad a diario.</p>
+                  </div>
+                </div>
+                <Button className="w-full" variant="default">Descargar Mi Plan Personalizado</Button>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-blue-50 border-blue-200">
+        <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-blue-600">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-cyan-600 text-lg">💡</div>
             <div>
-              <div className="font-medium text-blue-900 mb-1">Cómo usar A4 Base</div>
+              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - La Realidad: Tu Identidad en Acción</div>
+              <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">
+                <li>✓ <strong>Noticias:</strong> Entiende el contexto del mercado donde vivirá tu nueva identidad</li>
+                <li>✓ <strong>Coaching:</strong> Sofia y Dani te guían en decisiones reales y transiciones concretas</li>
+                <li>✓ <strong>Tu Plan:</strong> 90 días estructurados para que tu transformación sea real, no teórica</li>
+                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu nueva identidad profesional</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
               <div className="text-sm text-blue-800">
                 Mantente actualizado con noticias relevantes a tu carrera, aprende sobre el contexto del mercado chileno, 
                 y desarrolla tu comprensión de tendencias profesionales. Cada módulo completo te proporciona puntos y feedback personalizado.
