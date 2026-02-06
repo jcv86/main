@@ -171,22 +171,6 @@ export default function AuthPage() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-name" className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      Nombre Completo
-                    </Label>
-                    <Input
-                      id="login-name"
-                      type="text"
-                      placeholder="Tu nombre completo"
-                      value={signupForm.name}
-                      onChange={(e) => setSignupForm({ ...signupForm, name: e.target.value })}
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
                     <Label htmlFor="login-email" className="flex items-center gap-2">
                       <Mail className="h-4 w-4" />
                       Correo Electrónico
@@ -244,6 +228,17 @@ export default function AuthPage() {
                     )}
                   </Button>
                 </form>
+
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-600">
+                    ¿No tienes cuenta?{" "}
+                    <Link href="/auth?signup=true">
+                      <button type="button" className="text-blue-600 hover:underline font-medium">
+                        Regístrate aquí
+                      </button>
+                    </Link>
+                  </p>
+                </div>
 
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                   <h4 className="font-semibold text-blue-900 mb-2">¿Qué es Despega?</h4>
