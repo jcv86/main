@@ -308,30 +308,35 @@ export function DashboardContent() {
         // Small delay to ensure database write is complete
         await new Promise((resolve) => setTimeout(resolve, 500))
         
+        // FIXED: Use correct table name a1_tests_results not test_results
         const { data: testResults, error } = await supabase
-          .from("test_results")
+          .from("a1_tests_results")
           .select("*")
           .eq("user_email", sessionUser.email!)
           .order("completed_at", { ascending: false })
           .limit(10)
 
         if (error) {
-          console.error("[v0] Error fetching test results:", error)
+          console.error("[v0] Error fetching test results from a1_tests_results:", error)
           return
         }
 
-        console.log("[v0] Fetched test results count:", testResults?.length || 0)
+        console.log("[v0] Fetched test results from a1_tests_results count:", testResults?.length || 0)
         
         if (testResults && testResults.length > 0) {
           console.log("[v0] Updated test results after refresh. Count:", testResults.length)
           const mapped = testResults.map((result: any) => {
-            let name = result.test_type
-            let score = 0
+            let name = result.test_type || result.test_name
+            let score = result.score || 0
 
-            if (result.results) {
-              const scores = Object.values(result.results as any)
-              if (scores.length > 0) {
-                score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+            // Handle different score formats
+            if (!score && result.responses) {
+              const responses = result.responses
+              if (typeof responses === "object") {
+                const scores = Object.values(responses as any).filter(v => typeof v === "number")
+                if (scores.length > 0) {
+                  score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+                }
               }
             }
 

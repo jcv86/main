@@ -52,25 +52,26 @@ export async function saveTestResult(
 
   // Save to database - THIS IS REQUIRED
   try {
+    // IMPORTANT: Use correct table name a1_tests_results not test_results
+    console.log("[v0] Attempting to save to a1_tests_results table...")
+    
     const { data, error } = await supabase
-      .from("test_results")
-      .upsert(
-        {
-          user_email: userEmail,
-          test_type: testType,
-          results,
-          completed_at: testResult.completed_at,
-          duration_minutes: durationMinutes,
-        },
-        {
-          onConflict: "user_email,test_type",
-        },
-      )
+      .from("a1_tests_results")
+      .insert({
+        user_id: (await supabase.auth.getUser()).data.user?.id,
+        user_email: userEmail,
+        test_type: testType,
+        test_name: testType,
+        responses: results.answers || results,
+        score: results.score || 0,
+        completed_at: testResult.completed_at,
+        created_at: testResult.completed_at,
+      })
       .select()
       .single()
 
     if (error) {
-      console.error(`[v0] Database error saving ${testType}:`, error)
+      console.error(`[v0] Database error saving ${testType} to a1_tests_results:`, error)
       return {
         success: false,
         error: `Error al guardar en base de datos: ${error.message}. Contacta a soporte.`,
@@ -78,10 +79,10 @@ export async function saveTestResult(
       }
     }
 
-    console.log(`[v0] Successfully saved ${testType} to database`)
+    console.log(`[v0] Successfully saved ${testType} to a1_tests_results table:`, data)
 
-    // Update completed tests list
-    await updateCompletedTestsList(testType, userEmail)
+    // Update progress table
+    await updateTestProgress(userEmail, testType)
 
     return { success: true, savedToDatabase: true, data }
   } catch (e: any) {
@@ -103,10 +104,10 @@ export async function loadTestResult(
 
   const supabase = getSupabaseClient()
 
-  // Try database first
+  // Try database first - use correct table name
   try {
     const { data, error } = await supabase
-      .from("test_results")
+      .from("a1_tests_results")
       .select("*")
       .eq("user_email", userEmail)
       .eq("test_type", testType)
@@ -115,13 +116,13 @@ export async function loadTestResult(
       .single()
 
     if (!error && data) {
-      console.log(`[v0] Loaded ${testType} from database`)
+      console.log(`[v0] Loaded ${testType} from a1_tests_results table`, data)
       return {
         success: true,
         data: {
           test_type: testType,
           user_email: data.user_email,
-          results: data.results,
+          results: data.responses || data.results,
           completed_at: data.completed_at,
           duration_minutes: data.duration_minutes,
           user_context: data.user_context,
@@ -131,7 +132,7 @@ export async function loadTestResult(
 
     console.log(`[v0] No ${testType} results in database, checking localStorage`)
   } catch (e: any) {
-    console.warn(`[v0] Error loading from database:`, e)
+    console.warn(`[v0] Error loading from a1_tests_results:`, e)
   }
 
   // Fallback to localStorage
@@ -157,38 +158,42 @@ function loadFromLocalStorage(testType: TestType): TestResult | null {
   return null
 }
 
-// Helper: Update completed tests list
-async function updateCompletedTestsList(testType: TestType, userEmail: string) {
+// Helper: Update test progress after successful save
+async function updateTestProgress(userEmail: string, testType: TestType) {
   const supabase = getSupabaseClient()
 
   try {
-    // Get current completed tests
-    const { data: existing } = await supabase
-      .from("user_profiles")
-      .select("completed_tests")
-      .eq("email", userEmail)
-      .single()
+    const user = await supabase.auth.getUser()
+    if (!user.data.user?.id) {
+      console.warn("[v0] No authenticated user for progress update")
+      return
+    }
 
-    const completedTests = existing?.completed_tests || []
+    // Update a1_progress table to mark test as completed
+    const progressUpdates: any = {}
+    const normalizedType = testType.toLowerCase().replace(/\s+/g, "_")
+    progressUpdates[`${normalizedType}_completed`] = true
 
-    if (!completedTests.includes(testType)) {
-      completedTests.push(testType)
-
-      await supabase.from("user_profiles").upsert(
+    const { error } = await supabase
+      .from("a1_progress")
+      .upsert(
         {
-          email: userEmail,
-          completed_tests: completedTests,
-          updated_at: new Date().toISOString(),
+          user_id: user.data.user.id,
+          ...progressUpdates,
+          last_updated: new Date().toISOString(),
         },
         {
-          onConflict: "email",
-        },
+          onConflict: "user_id",
+        }
       )
 
-      console.log(`[v0] Updated completed tests list for ${userEmail}`)
+    if (error) {
+      console.warn("[v0] Failed to update progress:", error)
+    } else {
+      console.log(`[v0] Updated a1_progress for ${testType}`)
     }
   } catch (e) {
-    console.warn("[v0] Failed to update completed tests list:", e)
+    console.warn("[v0] Exception updating progress:", e)
   }
 }
 
@@ -197,9 +202,16 @@ export async function getCompletedTests(userEmail: string): Promise<TestType[]> 
   const supabase = getSupabaseClient()
 
   try {
-    const { data } = await supabase.from("test_results").select("test_type").eq("user_email", userEmail)
+    // Query the correct table
+    const { data } = await supabase
+      .from("a1_tests_results")
+      .select("test_type")
+      .eq("user_email", userEmail)
 
-    return data?.map((d) => d.test_type) || []
+    const completed = data?.map((d) => d.test_type) || []
+    console.log(`[v0] Completed tests for ${userEmail}:`, completed)
+    
+    return completed
   } catch (e) {
     console.warn("[v0] Failed to load completed tests:", e)
     return []
