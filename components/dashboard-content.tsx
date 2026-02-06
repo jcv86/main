@@ -276,10 +276,11 @@ export function DashboardContent() {
 
   // Handle refresh parameter - refetch test results after test completion
   useEffect(() => {
+    // Check for refresh parameter in URL
     const searchParams = new URLSearchParams(window.location.search)
     const hasRefresh = searchParams.get("refresh") === "true"
     
-    console.log("[v0] Refresh effect triggered. hasRefresh:", hasRefresh, "sessionUser:", sessionUser?.email)
+    console.log("[v0] Refresh effect triggered. hasRefresh:", hasRefresh, "sessionUser:", sessionUser?.email, "location:", window.location.href)
     
     if (!hasRefresh || !sessionUser?.email) {
       console.log("[v0] Skipping refresh - no refresh param or no session user")
@@ -291,6 +292,9 @@ export function DashboardContent() {
     const supabase = createClient()
     const fetchLatestTestResults = async () => {
       try {
+        // Small delay to ensure database write is complete
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        
         const { data: testResults, error } = await supabase
           .from("test_results")
           .select("*")
@@ -343,7 +347,7 @@ export function DashboardContent() {
     }
 
     fetchLatestTestResults()
-  }, [sessionUser?.email])
+  }, [sessionUser?.email, window.location.search])
 
   const achievements = [
     {
