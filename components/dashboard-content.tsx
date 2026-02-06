@@ -115,55 +115,15 @@ export function DashboardContent() {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
     email: "",
-    completedTests: 3,
+    completedTests: 0,
     totalTests: 6,
-    level: "Explorador",
-    points: 1250,
+    level: "Principiante",
+    points: 0,
   })
 
-  const [activeGoals, setActiveGoals] = useState<ActiveGoal[]>([
-    {
-      id: "1",
-      name: "Mejorar comunicación asertiva",
-      type: "laboral",
-      progress: 65,
-      dueDate: "2025-02-15",
-      origin: "DISC",
-    },
-    {
-      id: "2",
-      name: "Desarrollar liderazgo situacional",
-      type: "mixto",
-      progress: 40,
-      dueDate: "2025-03-01",
-      origin: "Big Five",
-    },
-    {
-      id: "3",
-      name: "Equilibrio vida-trabajo",
-      type: "personal",
-      progress: 25,
-      dueDate: "2025-02-28",
-      origin: "IE",
-    },
-  ])
+  const [activeGoals, setActiveGoals] = useState<ActiveGoal[]>([])
 
-  const [booksInProgress, setBooksInProgress] = useState<BookInProgress[]>([
-    {
-      id: "1",
-      title: "Comunicación No Violenta",
-      author: "Marshall Rosenberg",
-      progress: 72,
-      lastRead: "2025-01-24",
-    },
-    {
-      id: "2",
-      title: "Los 7 Hábitos",
-      author: "Stephen Covey",
-      progress: 35,
-      lastRead: "2025-01-22",
-    },
-  ])
+  const [booksInProgress, setBooksInProgress] = useState<BookInProgress[]>([])
 
   const [simulationHistory, setSimulationHistory] = useState<SimulationHistory[]>([])
 
@@ -180,6 +140,9 @@ export function DashboardContent() {
 
   const [isAdmin, setIsAdmin] = useState(false)
   const [checkingAdmin, setCheckingAdmin] = useState(true)
+  
+  // Add loading state for initial data fetch
+  const [isLoadingInitialData, setIsLoadingInitialData] = useState(true)
 
   useEffect(() => {
     console.log("[v0] DashboardContent mounted")
@@ -194,10 +157,13 @@ export function DashboardContent() {
 
     // Set user data immediately
     const userEmail = sessionUser.email || ""
-    const userName = sessionUser.user_metadata?.full_name || userEmail.split("@")[0] || "Usuario"
+    const userName = sessionUser.name || sessionUser.email.split("@")[0] || "Usuario"
+
+    console.log("[v0] Session user:", { id: sessionUser.id, email: userEmail, name: userName })
 
     setUserId(sessionUser.id || null)
-    setUserProfile({ name: userName, email: userEmail })
+    // Reset completedTests to 0 initially, will update from database
+    setUserProfile({ name: userName, email: userEmail, completedTests: 0, totalTests: 6, level: "Principiante", points: 0 })
 
     // Fetch all data in parallel instead of sequential
     const fetchAllData = async () => {
@@ -205,6 +171,18 @@ export function DashboardContent() {
 
       try {
         const supabase = createClient()
+        
+        // Fetch user data from users table to get the correct name
+        const { data: userData } = await supabase
+          .from("users")
+          .select("id, email, name")
+          .eq("email", userEmail)
+          .single()
+
+        if (userData && userData.name) {
+          console.log("[v0] Fetched user name from database:", userData.name)
+          setUserProfile((prev) => ({ ...prev, name: userData.name }))
+        }
         
         // Fetch real test results from Supabase
         const { data: testResults } = await supabase
@@ -236,7 +214,15 @@ export function DashboardContent() {
             }
           })
           setRecentResults(mapped)
+          // UPDATE completedTests count from database
+          setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
+          console.log("[v0] Updated completedTests count:", testResults.length)
+        } else {
+          console.log("[v0] No test results found for user")
         }
+
+        // Mark initial data loading complete AFTER checking database
+        setIsLoadingInitialData(false)
 
         const [achievementsRes, recommendationsRes, adminRes] = await Promise.all([
           fetch(`/api/user-achievements?email=${userEmail}`).catch(() => null),
@@ -411,6 +397,69 @@ export function DashboardContent() {
           </div>
         </div>
 
+        {/* TEST GATE: Show blocker if no tests completed (only after data loads) */}
+        {!isLoadingInitialData && userProfile.completedTests === 0 && (
+          <Card className="border-2 border-blue-500 bg-blue-50 dark:bg-blue-950">
+            <CardHeader>
+              <CardTitle className="text-2xl text-blue-900 dark:text-blue-100 flex items-center gap-2">
+                <Gamepad2 className="h-6 w-6" />
+                ¡Comienza tu Viaje Profesional!
+              </CardTitle>
+              <CardDescription className="text-base text-blue-800 dark:text-blue-200">
+                Completa tu primer test psicométrico para desbloquear tu dashboard personalizado, biblioteca de desarrollo y recomendaciones con IA.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">Descubre tu Perfil Profesional</p>
+                    <p className="text-sm text-muted-foreground">Realiza tests psicométricos validados internacionalmente</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">Análisis Personalizado con IA</p>
+                    <p className="text-sm text-muted-foreground">Recibe insights y recomendaciones basadas en tus resultados</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CircleDot className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">Coach Virtual 24/7</p>
+                    <p className="text-sm text-muted-foreground">Accede a tu coach IA para acompañarte en tu desarrollo</p>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                onClick={() => router.push("/despega/a1-cerebral")}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-semibold"
+              >
+                <Sparkles className="h-5 w-5 mr-2" />
+                Realizar Mi Primer Test
+              </Button>
+              <p className="text-xs text-center text-muted-foreground">
+                Toma unos 15-20 minutos • Resultados inmediatos • Sin compromiso
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {!isLoadingInitialData && userProfile.completedTests === 0 ? (
+          <div className="opacity-50 pointer-events-none">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-muted-foreground">Contenido Bloqueado</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Completa tu primer test para acceder a todas las funcionalidades del dashboard</p>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <>
         {/* BetterMe Integration Section */}
         <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">
           <div className="flex items-center gap-2 mb-4">
@@ -926,6 +975,8 @@ export function DashboardContent() {
             </Card>
           </TabsContent>
         </Tabs>
+        </>
+        )}
       </div>
     </div>
   )

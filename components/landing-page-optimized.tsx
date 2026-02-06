@@ -1,25 +1,36 @@
 "use client"
 
+// Cache bust: 2026-02-06T16:55:00Z - Fixed BookOpen undefined error
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   Brain,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Zap,
   Target,
-  TrendingUp,
-  Users,
   Award,
-  Clock,
+  BarChart3,
+  MessageSquare,
+  Trophy,
+  Lightbulb,
+  Sparkles,
+  TrendingUp,
+  Calendar,
   Shield,
-  BookOpen,
+  Gamepad2,
+  RefreshCw,
+  ChevronRight,
+  Flame,
+  CircleDot,
+  Zap,
+  ArrowRight,
+  Users,
+  Clock,
+  CheckCircle2,
 } from "lucide-react"
 import Link from "next/link"
 
 export default function LandingPageOptimized() {
+  // Force complete recompile - timestamp: 2026-02-06T17:00:00Z
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -168,7 +179,7 @@ export default function LandingPageOptimized() {
           <Card className="bg-card border-2 border-blue-100 dark:border-blue-900/50 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-8 w-8 text-white" />
+                <Zap className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">Biblioteca Profesional Completa</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
