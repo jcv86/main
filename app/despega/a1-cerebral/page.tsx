@@ -407,13 +407,13 @@ export default function A1CerebralPage() {
 
       console.log("[v0] Saving A1 Cerebral test results...", testResults)
 
-      // Save using UnifiedTestSystem
-      const result = await UnifiedTestSystem.saveTestResult({
-        userEmail: user.email!,
-        testType: "Despega Cerebral",
+      // Save using UnifiedTestSystem with correct parameter order
+      const result = await UnifiedTestSystem.saveTestResult(
+        user.email!,
+        "Despega Cerebral" as any,
         testResults,
-        durationMinutes: duration,
-      })
+        duration
+      )
 
       if (!result.savedToDatabase) {
         console.error("[v0] Failed to save test results:", result.error)
