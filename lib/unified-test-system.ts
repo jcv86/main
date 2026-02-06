@@ -6,7 +6,7 @@ export function getSupabaseClient() {
 }
 
 // Test types supported
-export type TestType = "DISC Assessment" | "MBTI" | "Big Five" | "RIASEC" | "Soft Skills" | "Emotional Intelligence"
+export type TestType = "DISC Assessment" | "MBTI" | "Big Five" | "RIASEC" | "Soft Skills" | "Emotional Intelligence" | "Despega Cerebral"
 
 // Unified result structure
 export interface TestResult {

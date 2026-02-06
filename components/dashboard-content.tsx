@@ -184,12 +184,12 @@ export function DashboardContent() {
           setUserProfile((prev) => ({ ...prev, name: userData.name }))
         }
         
-        // Fetch real test results from Supabase
+        // Fetch real test results from Supabase - using correct table name
         const { data: testResults } = await supabase
-          .from("unified_test_results")
+          .from("test_results")
           .select("*")
           .eq("user_email", userEmail)
-          .order("created_at", { ascending: false })
+          .order("completed_at", { ascending: false })
           .limit(10)
 
         if (testResults && testResults.length > 0) {
@@ -273,6 +273,63 @@ export function DashboardContent() {
 
     fetchAllData()
   }, [sessionUser])
+
+  // Handle refresh parameter - refetch test results after test completion
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.get("refresh") === "true") {
+      console.log("[v0] Refresh parameter detected, refetching test results...")
+      
+      if (!sessionUser?.email) {
+        console.log("[v0] No session user email, skipping refresh")
+        return
+      }
+
+      const supabase = createClient()
+      const fetchLatestTestResults = async () => {
+        try {
+          const { data: testResults } = await supabase
+            .from("test_results")
+            .select("*")
+            .eq("user_email", sessionUser.email)
+            .order("completed_at", { ascending: false })
+            .limit(10)
+
+          if (testResults && testResults.length > 0) {
+            console.log("[v0] Updated test results after refresh:", testResults.length)
+            const mapped = testResults.map((result: any) => {
+              let name = result.test_type
+              let score = 0
+
+              if (result.results) {
+                const scores = Object.values(result.results as any)
+                if (scores.length > 0) {
+                  score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+                }
+              }
+
+              return {
+                id: result.id,
+                name: name,
+                score: score || 0,
+                completedAt: new Date(result.completed_at).toLocaleDateString("es-AR"),
+                insights: [],
+              }
+            })
+            setRecentResults(mapped)
+            setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
+          }
+          
+          // Clean up the refresh parameter from URL
+          window.history.replaceState({}, document.title, window.location.pathname)
+        } catch (error) {
+          console.error("[v0] Error refetching test results:", error)
+        }
+      }
+
+      fetchLatestTestResults()
+    }
+  }, [])
 
   const achievements = [
     {
