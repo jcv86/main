@@ -9,9 +9,608 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
+import { ArrowDown, ArrowRight, CheckCircle2, Zap, Target, Users, Lightbulb } from "lucide-react"
 
 // Test A1 Base - Despega Cerebral (obligatorio)
 const TEST_A1_QUESTIONS = [
+  {
+    id: 1,
+    category: "energia",
+    question: "¿Cómo describes tu nivel de energía durante el día?",
+    options: [
+      { value: 1, label: "Muy bajo - Me siento agotado constantemente" },
+      { value: 2, label: "Bajo - Tengo poca energía para actividades" },
+      { value: 3, label: "Medio - Energía variable según el día" },
+      { value: 4, label: "Alto - Generalmente me siento con buena energía" },
+      { value: 5, label: "Muy alto - Tengo energía abundante todo el día" },
+    ],
+  },
+  {
+    id: 2,
+    category: "enfoque",
+    question: "¿Qué tan fácil te resulta concentrarte en una tarea?",
+    options: [
+      { value: 1, label: "Muy difícil - Me distraigo constantemente" },
+      { value: 2, label: "Difícil - Necesito mucho esfuerzo para concentrarme" },
+      { value: 3, label: "Regular - A veces logro concentrarme" },
+      { value: 4, label: "Fácil - Puedo concentrarme con relativa facilidad" },
+      { value: 5, label: "Muy fácil - Entro en estado de flujo con frecuencia" },
+    ],
+  },
+  {
+    id: 3,
+    category: "relaciones",
+    question: "¿Cómo evalúas tus habilidades de comunicación?",
+    options: [
+      { value: 1, label: "Muy débiles - Me cuesta expresarme" },
+      { value: 2, label: "Débiles - Tengo dificultades frecuentes" },
+      { value: 3, label: "Regulares - Me comunico de forma básica" },
+      { value: 4, label: "Buenas - Me expreso con claridad" },
+      { value: 5, label: "Excelentes - Comunico ideas complejas fácilmente" },
+    ],
+  },
+  {
+    id: 4,
+    category: "plan_ejecutivo",
+    question: "¿Qué tan efectivo eres ejecutando tus planes?",
+    options: [
+      { value: 1, label: "Nada efectivo - Raramente completo lo que planeo" },
+      { value: 2, label: "Poco efectivo - Completo menos del 30%" },
+      { value: 3, label: "Moderado - Completo alrededor del 50%" },
+      { value: 4, label: "Efectivo - Completo más del 70%" },
+      { value: 5, label: "Muy efectivo - Completo casi todo lo que planeo" },
+    ],
+  },
+  {
+    id: 5,
+    category: "energia",
+    question: "¿Cómo es tu calidad de sueño?",
+    options: [
+      { value: 1, label: "Muy mala - Duermo menos de 5 horas o mal" },
+      { value: 2, label: "Mala - Sueño irregular o poco reparador" },
+      { value: 3, label: "Regular - A veces duermo bien" },
+      { value: 4, label: "Buena - Generalmente duermo bien" },
+      { value: 5, label: "Excelente - Sueño reparador y consistente" },
+    ],
+  },
+  {
+    id: 6,
+    category: "enfoque",
+    question: "¿Cómo manejas las distracciones digitales?",
+    options: [
+      { value: 1, label: "Muy mal - Estoy pegado al celular todo el día" },
+      { value: 2, label: "Mal - Me distraigo frecuentemente" },
+      { value: 3, label: "Regular - A veces logro desconectarme" },
+      { value: 4, label: "Bien - Controlo mi uso de tecnología" },
+      { value: 5, label: "Muy bien - Uso intencional y controlado" },
+    ],
+  },
+  {
+    id: 7,
+    category: "relaciones",
+    question: "¿Cómo describes tu red de contactos profesionales?",
+    options: [
+      { value: 1, label: "Inexistente - No tengo red profesional" },
+      { value: 2, label: "Muy pequeña - Menos de 10 contactos activos" },
+      { value: 3, label: "Pequeña - Entre 10-30 contactos" },
+      { value: 4, label: "Media - Entre 30-100 contactos" },
+      { value: 5, label: "Grande - Más de 100 contactos activos" },
+    ],
+  },
+  {
+    id: 8,
+    category: "plan_ejecutivo",
+    question: "¿Cómo priorizas tus tareas diarias?",
+    options: [
+      { value: 1, label: "No priorizo - Hago lo que aparece" },
+      { value: 2, label: "Raramente - Solo en emergencias" },
+      { value: 3, label: "A veces - Cuando tengo tiempo" },
+      { value: 4, label: "Frecuentemente - Tengo un sistema básico" },
+      { value: 5, label: "Siempre - Tengo un sistema robusto de priorización" },
+    ],
+  },
+]
+
+type Step = "intro" | "camino" | "test" | "results"
+
+export default function DespegaOnboarding() {
+  const [step, setStep] = useState<Step>("intro")
+  const [caminoPersona, setCaminoPersona] = useState(false)
+  const [caminoProfesional, setCaminoProfesional] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [responses, setResponses] = useState<Record<number, number>>({})
+  const [results, setResults] = useState<{
+    energia: number
+    enfoque: number
+    relaciones: number
+    plan_ejecutivo: number
+    total: number
+    nivel: string
+  } | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
+  const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) setUserId(user.id)
+    }
+    getUser()
+  }, [supabase])
+
+  const question = TEST_A1_QUESTIONS[currentQuestion]
+  const progress = ((currentQuestion + 1) / TEST_A1_QUESTIONS.length) * 100
+
+  const handleSelect = (value: number) => {
+    setResponses({ ...responses, [question.id]: value })
+  }
+
+  const handleNext = () => {
+    if (currentQuestion < TEST_A1_QUESTIONS.length - 1) {
+      setCurrentQuestion(currentQuestion + 1)
+    } else {
+      calculateResults()
+    }
+  }
+
+  const calculateResults = async () => {
+    setLoading(true)
+    
+    const scores = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
+    }
+    
+    const counts = {
+      energia: 0,
+      enfoque: 0,
+      relaciones: 0,
+      plan_ejecutivo: 0,
+    }
+
+    TEST_A1_QUESTIONS.forEach((q) => {
+      const response = responses[q.id]
+      if (response) {
+        scores[q.category as keyof typeof scores] += response
+        counts[q.category as keyof typeof counts]++
+      }
+    })
+
+    // Calculate averages (scale 1-5)
+    const avgScores = {
+      energia: counts.energia > 0 ? scores.energia / counts.energia : 0,
+      enfoque: counts.enfoque > 0 ? scores.enfoque / counts.enfoque : 0,
+      relaciones: counts.relaciones > 0 ? scores.relaciones / counts.relaciones : 0,
+      plan_ejecutivo: counts.plan_ejecutivo > 0 ? scores.plan_ejecutivo / counts.plan_ejecutivo : 0,
+    }
+
+    const total = (avgScores.energia + avgScores.enfoque + avgScores.relaciones + avgScores.plan_ejecutivo) / 4
+    
+    let nivel = "principiante"
+    if (total >= 4) nivel = "avanzado"
+    else if (total >= 3) nivel = "intermedio"
+
+    const finalResults = { ...avgScores, total, nivel }
+    setResults(finalResults)
+
+    // Save to database
+    if (userId) {
+      try {
+        // Create user profile
+        await supabase.from("despega_user_profiles").upsert({
+          user_id: userId,
+          camino_persona_active: caminoPersona,
+          camino_profesional_active: caminoProfesional,
+          camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
+          onboarding_completed: true,
+          a1_test_completed: true,
+        })
+
+        // Save test results
+        await supabase.from("despega_a1_test_results").insert({
+          user_id: userId,
+          score_energia: Math.round(avgScores.energia * 20),
+          score_enfoque: Math.round(avgScores.enfoque * 20),
+          score_relaciones: Math.round(avgScores.relaciones * 20),
+          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          nivel_detectado: nivel,
+          respuestas_raw: responses,
+        })
+
+        // Initialize pilar progress
+        const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
+        for (const pilar of pilares) {
+          await supabase.from("despega_pilar_progress").upsert({
+            user_id: userId,
+            pilar,
+            estado: { diagnostico_completado: pilar === "a1_cerebral" },
+            progreso: pilar === "a1_cerebral" ? 10 : 0,
+            score: 0,
+            ciclo_actual: "30",
+            ciclo_dia: 1,
+          })
+        }
+
+        // Initialize rankings
+        await supabase.from("despega_rankings").upsert({
+          user_id: userId,
+          score_pilar_a1: 10,
+          score_pilar_a2: 0,
+          score_aterrizaje: 0,
+          score_base: 0,
+          score_camino_persona: caminoPersona ? 5 : 0,
+          score_camino_profesional: caminoProfesional ? 5 : 0,
+          score_general: 10,
+        })
+      } catch (error) {
+        console.error("Error saving onboarding data:", error)
+      }
+    }
+
+    setLoading(false)
+    setStep("results")
+  }
+
+  // STEP 1: Intro con flujo visual
+  if (step === "intro") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-slate-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <h1 className="text-5xl font-bold text-slate-900">Bienvenido a Despega</h1>
+            <p className="text-xl text-slate-600">Tu plataforma de desarrollo integral</p>
+          </div>
+
+          {/* Visual Flow */}
+          <div className="space-y-6">
+            {/* Step 1 */}
+            <Card className="border-2 border-blue-200 bg-blue-50">
+              <CardContent className="pt-6 flex items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg">1</div>
+                <div>
+                  <h3 className="font-semibold text-lg">Elige tu Camino</h3>
+                  <p className="text-sm text-slate-600">Persona, Profesional o Ambos</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Arrow Down */}
+            <div className="flex justify-center">
+              <div className="animate-bounce">
+                <ArrowDown className="w-6 h-6 text-blue-500" />
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <Card className="border-2 border-purple-200 bg-purple-50">
+              <CardContent className="pt-6 flex items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg">2</div>
+                <div>
+                  <h3 className="font-semibold text-lg">Completa el Diagnóstico</h3>
+                  <p className="text-sm text-slate-600">8 preguntas sobre ti (5 min)</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Arrow Down */}
+            <div className="flex justify-center">
+              <div className="animate-bounce">
+                <ArrowDown className="w-6 h-6 text-purple-500" />
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <Card className="border-2 border-green-200 bg-green-50">
+              <CardContent className="pt-6 flex items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-lg">3</div>
+                <div>
+                  <h3 className="font-semibold text-lg">Ve tus Resultados</h3>
+                  <p className="text-sm text-slate-600">Tu perfil personalizado</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Arrow Down */}
+            <div className="flex justify-center">
+              <div className="animate-bounce">
+                <ArrowDown className="w-6 h-6 text-green-500" />
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <Card className="border-2 border-orange-200 bg-orange-50">
+              <CardContent className="pt-6 flex items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold text-lg">4</div>
+                <div>
+                  <h3 className="font-semibold text-lg">Comienza tu Viaje</h3>
+                  <p className="text-sm text-slate-600">Acceso a los 4 Pilares de Despega</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Info Cards */}
+          <div className="grid grid-cols-2 gap-4 mt-8">
+            <div className="p-4 bg-white rounded-lg border border-slate-200 text-center">
+              <div className="text-3xl font-bold text-blue-600">4</div>
+              <div className="text-sm text-slate-600 mt-1">Pilares</div>
+            </div>
+            <div className="p-4 bg-white rounded-lg border border-slate-200 text-center">
+              <div className="text-3xl font-bold text-purple-600">90</div>
+              <div className="text-sm text-slate-600 mt-1">Días</div>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <Button 
+            onClick={() => setStep("camino")} 
+            size="lg"
+            className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg font-semibold rounded-xl shadow-lg"
+          >
+            Comenzar
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  // STEP 2: Selector de Camino
+  if (step === "camino") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold text-slate-900">Elige tu Camino</h2>
+            <p className="text-slate-600">Puedes elegir uno o ambos. Esto personaliza tu experiencia.</p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Camino Persona */}
+            <div 
+              className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
+                caminoPersona 
+                  ? "border-blue-500 bg-blue-50 shadow-lg" 
+                  : "border-slate-200 bg-white hover:border-blue-300"
+              }`}
+              onClick={() => setCaminoPersona(!caminoPersona)}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center ${
+                  caminoPersona ? "bg-blue-500 border-blue-500" : "border-slate-300"
+                }`}>
+                  {caminoPersona && <CheckCircle2 className="w-4 h-4 text-white" />}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg text-slate-900">🧠 Camino Persona</h3>
+                  <p className="text-sm text-slate-600 mt-2 mb-3">
+                    Desarrollo personal: energía, hábitos, bienestar, relaciones y autoconocimiento
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Energía</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Relaciones</span>
+                    <span className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full">Bienestar</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Arrow */}
+            <div className="flex justify-center">
+              <p className="text-slate-500 font-medium">O</p>
+            </div>
+
+            {/* Camino Profesional */}
+            <div 
+              className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
+                caminoProfesional 
+                  ? "border-orange-500 bg-orange-50 shadow-lg" 
+                  : "border-slate-200 bg-white hover:border-orange-300"
+              }`}
+              onClick={() => setCaminoProfesional(!caminoProfesional)}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center ${
+                  caminoProfesional ? "bg-orange-500 border-orange-500" : "border-slate-300"
+                }`}>
+                  {caminoProfesional && <CheckCircle2 className="w-4 h-4 text-white" />}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg text-slate-900">🚀 Camino Profesional</h3>
+                  <p className="text-sm text-slate-600 mt-2 mb-3">
+                    Desarrollo de carrera: enfoque, productividad, networking y habilidades laborales
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full">Enfoque</span>
+                    <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full">Plan Ejecutivo</span>
+                    <span className="text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">Carrera</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-3 pt-4">
+            <Button 
+              variant="outline"
+              onClick={() => setStep("intro")}
+              className="flex-1"
+            >
+              Atrás
+            </Button>
+            <Button 
+              onClick={() => setStep("test")} 
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              disabled={!caminoPersona && !caminoProfesional}
+            >
+              Siguiente
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // STEP 3: Test (same as before but with better styling)
+  if (step === "test") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <div className="space-y-4">
+              <div>
+                <CardTitle>Diagnóstico Despega Cerebral</CardTitle>
+                <CardDescription>
+                  Entendamos tu punto de partida para personalizar tu ruta
+                </CardDescription>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm font-medium">
+                  <span>Pregunta {currentQuestion + 1} de {TEST_A1_QUESTIONS.length}</span>
+                  <span className="text-blue-600">{Math.round(progress)}%</span>
+                </div>
+                <Progress value={progress} className="h-2" />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                  question.category === "energia" ? "bg-blue-100 text-blue-700" :
+                  question.category === "enfoque" ? "bg-green-100 text-green-700" :
+                  question.category === "relaciones" ? "bg-orange-100 text-orange-700" :
+                  "bg-purple-100 text-purple-700"
+                }`}>
+                  {question.category.charAt(0).toUpperCase() + question.category.slice(1).replace("_", " ")}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold mb-6 text-slate-900">{question.question}</h3>
+              <RadioGroup 
+                value={responses[question.id]?.toString() || ""} 
+                onValueChange={(v) => handleSelect(parseInt(v))}
+              >
+                <div className="space-y-3">
+                  {question.options.map((option) => (
+                    <div 
+                      key={option.value} 
+                      className={`flex items-start space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        responses[question.id] === option.value 
+                          ? "border-blue-500 bg-blue-50" 
+                          : "border-slate-200 hover:border-blue-300 bg-white"
+                      }`}
+                      onClick={() => handleSelect(option.value)}
+                    >
+                      <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} className="mt-1" />
+                      <Label htmlFor={`option-${option.value}`} className="cursor-pointer flex-1 text-sm">
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </RadioGroup>
+            </div>
+            <div className="flex gap-3 pt-4">
+              {currentQuestion > 0 && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCurrentQuestion(currentQuestion - 1)}
+                  className="flex-1"
+                >
+                  Anterior
+                </Button>
+              )}
+              <Button 
+                onClick={handleNext}
+                disabled={!responses[question.id]}
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+              >
+                {currentQuestion === TEST_A1_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // STEP 4: Results
+  if (step === "results" && results) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl">Tu Diagnóstico Inicial</CardTitle>
+            <CardDescription className="text-base mt-2">
+              ¡Bienvenido! Aquí está tu perfil de desarrollo
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+              <p className="text-sm font-medium text-slate-600">Tu Nivel</p>
+              <p className="text-4xl font-bold capitalize text-blue-700 mt-2">{results.nivel}</p>
+              <p className="text-lg text-slate-600 mt-1">{(results.total * 20).toFixed(0)}% de potencial actual</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-5 h-5 text-blue-600" />
+                  <span className="font-semibold text-slate-900">Energía</span>
+                </div>
+                <div className="text-3xl font-bold text-blue-600">{(results.energia * 20).toFixed(0)}%</div>
+                <Progress value={results.energia * 20} className="mt-2" />
+              </div>
+              <div className="p-4 rounded-lg bg-green-50 border border-green-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="w-5 h-5 text-green-600" />
+                  <span className="font-semibold text-slate-900">Enfoque</span>
+                </div>
+                <div className="text-3xl font-bold text-green-600">{(results.enfoque * 20).toFixed(0)}%</div>
+                <Progress value={results.enfoque * 20} className="mt-2" />
+              </div>
+              <div className="p-4 rounded-lg bg-orange-50 border border-orange-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-5 h-5 text-orange-600" />
+                  <span className="font-semibold text-slate-900">Relaciones</span>
+                </div>
+                <div className="text-3xl font-bold text-orange-600">{(results.relaciones * 20).toFixed(0)}%</div>
+                <Progress value={results.relaciones * 20} className="mt-2" />
+              </div>
+              <div className="p-4 rounded-lg bg-purple-50 border border-purple-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <Lightbulb className="w-5 h-5 text-purple-600" />
+                  <span className="font-semibold text-slate-900">Plan Ejecutivo</span>
+                </div>
+                <div className="text-3xl font-bold text-purple-600">{(results.plan_ejecutivo * 20).toFixed(0)}%</div>
+                <Progress value={results.plan_ejecutivo * 20} className="mt-2" />
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => router.push("/despega")}
+              size="lg"
+              className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg font-semibold rounded-xl"
+              disabled={loading}
+            >
+              Ir a mi Dashboard
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+}
+
   {
     id: 1,
     category: "energia",
