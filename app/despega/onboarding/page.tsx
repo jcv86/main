@@ -538,39 +538,307 @@ export default function DespegaOnboarding() {
           </Card>
         )}
 
-        {/* RESULTS STEP */}
+        {/* RESULTS STEP - Professional Report */}
         {step === "results" && results && (
-          <div className="space-y-6">
-            {/* Loading AI Insights */}
+          <div className="space-y-6 max-w-4xl mx-auto">
+            {/* PORTADA */}
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+              <CardContent className="pt-12 pb-12 text-center">
+                <div className="space-y-4">
+                  <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-100">INFORME DESPEGA CEREBRAL</h1>
+                  <p className="text-lg text-blue-700 dark:text-blue-200">Perfil de Comportamiento DISC</p>
+                  <div className="pt-4 border-t-2 border-blue-300 dark:border-blue-700 mt-6">
+                    <p className="text-sm text-blue-600 dark:text-blue-400">Usuario: <span className="font-semibold">{session?.user?.email || "Usuario"}</span></p>
+                    <p className="text-sm text-blue-600 dark:text-blue-400">Fecha: <span className="font-semibold">{new Date().toLocaleDateString("es-ES")}</span></p>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">Score General: <span className="text-2xl font-bold text-blue-700">{Math.round(results.total)}%</span></p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* TABLA DE PUNTUACIONES */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle>Tus Puntuaciones DISC</CardTitle>
+                <CardDescription>Análisis de los cuatro estilos de comportamiento</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* D - Dominance */}
+                <div className="p-4 rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-950">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h4 className="font-bold text-orange-900 dark:text-orange-100">D - Dominio</h4>
+                      <p className="text-xs text-orange-700 dark:text-orange-300">Orientación a resultados y decisión</p>
+                    </div>
+                    <span className="text-2xl font-bold text-orange-600">{Math.round(results.D)}%</span>
+                  </div>
+                  <Progress value={results.D} className="h-2" />
+                </div>
+
+                {/* I - Influence */}
+                <div className="p-4 rounded-lg border border-purple-200 bg-purple-50 dark:bg-purple-950">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h4 className="font-bold text-purple-900 dark:text-purple-100">I - Influencia</h4>
+                      <p className="text-xs text-purple-700 dark:text-purple-300">Motivación y conexión con personas</p>
+                    </div>
+                    <span className="text-2xl font-bold text-purple-600">{Math.round(results.I)}%</span>
+                  </div>
+                  <Progress value={results.I} className="h-2" />
+                </div>
+
+                {/* S - Steadiness */}
+                <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h4 className="font-bold text-blue-900 dark:text-blue-100">S - Estabilidad</h4>
+                      <p className="text-xs text-blue-700 dark:text-blue-300">Serenidad y apoyo consistente</p>
+                    </div>
+                    <span className="text-2xl font-bold text-blue-600">{Math.round(results.S)}%</span>
+                  </div>
+                  <Progress value={results.S} className="h-2" />
+                </div>
+
+                {/* C - Conscientiousness */}
+                <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-950">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h4 className="font-bold text-green-900 dark:text-green-100">C - Consciencia</h4>
+                      <p className="text-xs text-green-700 dark:text-green-300">Rigor, precisión y cumplimiento</p>
+                    </div>
+                    <span className="text-2xl font-bold text-green-600">{Math.round(results.C)}%</span>
+                  </div>
+                  <Progress value={results.C} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* ASÍ ES TU FORMA NATURAL DE ACTUAR */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-2xl">Así es tu forma natural de actuar</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200">
+                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Tu estilo predominante:</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      {results.D > results.I && results.D > results.S && results.D > results.C
+                        ? "Actúas con decisión y enfoque en resultados. Vas directo al objetivo, prefieres la velocidad y la eficiencia. Eres directo en la comunicación y buscas soluciones rápidas."
+                        : results.I > results.D && results.I > results.S && results.I > results.C
+                        ? "Actúas motivando y conectando con otros. Eres natural persuadiendo y generando entusiasmo. Tu carisma es tu fortaleza en cualquier equipo."
+                        : results.S > results.D && results.S > results.I && results.S > results.C
+                        ? "Actúas buscando estabilidad y apoyo continuo. Eres confiable, consistente y apoyas a otros sin necesidad de reconocimiento. Tu fortaleza es la constancia."
+                        : "Actúas con análisis y precisión. Prefieres verificar antes de actuar, buscas exactitud en cada detalle. Tu rigor es tu gran contribución."}
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200">
+                    <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">⚠️ Lo que puede incomodarte:</p>
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                      {results.D > results.I && results.D > results.S && results.D > results.C
+                        ? "Ambigüedad, procesos lentos, falta de claridad en objetivos. Te incomoda perder tiempo en detalles innecesarios."
+                        : results.I > results.D && results.I > results.S && results.I > results.C
+                        ? "Trabajo rutinario, entornos sin interacción social, crítica directa. Te desmotiva la soledad o la falta de reconocimiento."
+                        : results.S > results.D && results.S > results.I && results.S > results.C
+                        ? "Cambios abruptos, presión excesiva, ambientes caóticos. Te incomoda la incertidumbre y la falta de estructura."
+                        : "Improvisación, errores, falta de exactitud. Te incomoda trabajar sin datos o con información incompleta."}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* TUS FORTALEZAS */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-2xl">Tus fortalezas visibles y cómo conectas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-lg">Lo que sabes hacer bien</h4>
+                    <ul className="space-y-2">
+                      <li className="flex gap-3">
+                        <span className="text-blue-600 text-lg">✓</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Tomar decisiones rápidas bajo presión"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Motivar y inspirar a equipos hacia objetivos comunes"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Mantener consistencia y ser un apoyo confiable"
+                            : "Garantizar calidad y exactitud en cada tarea"}
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-600 text-lg">✓</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Alcanzar objetivos y lograr resultados medibles"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Construir redes y crear conexiones significativas"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Generar confianza y seguridad en el equipo"
+                            : "Detectar errores antes de que escalen problemas"}
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-600 text-lg">✓</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Liderar con confianza y autoría"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Comunicar de forma clara y persuasiva"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Apoyar a otros sin buscar reconocimiento"
+                            : "Trabajar con precisión y estándares altos"}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-lg">Así colaboras con otros</h4>
+                    <ul className="space-y-2">
+                      <li className="flex gap-3">
+                        <span className="text-purple-600 text-lg">→</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Prefieres roles claros y autonomía"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Te conectas bien con equipos colaborativos"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Eres el pilar de estabilidad del equipo"
+                            : "Colaboras mejor en roles técnicos especializados"}
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-purple-600 text-lg">→</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Te comunicas de forma directa y eficiente"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Creas un ambiente positivo y motivador"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Eres predecible y generas confianza"
+                            : "Trabajas con precisión y documentación clara"}
+                        </span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-purple-600 text-lg">→</span>
+                        <span className="text-sm">
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Respetas la competencia y los resultados"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Inspiras y elevas el ánimo del grupo"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Escuchas y entiendes las necesidades de otros"
+                            : "Proporcionas análisis y perspectiva crítica"}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* OPORTUNIDADES DE CRECIMIENTO */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-2xl">Oportunidades de crecimiento</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200">
+                    <h4 className="font-bold text-orange-900 dark:text-orange-100 mb-3">Para desarrollarte:</h4>
+                    <ul className="space-y-2">
+                      <li className="text-sm text-orange-800 dark:text-orange-200 flex gap-2">
+                        <span>📌</span>
+                        <span>
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Practica escuchar activamente antes de decidir"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Desarrolla disciplina en seguimiento de detalles"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Aprende a tomar riesgos calculados"
+                            : "Mejora tu comunicación más allá de lo formal"}
+                        </span>
+                      </li>
+                      <li className="text-sm text-orange-800 dark:text-orange-200 flex gap-2">
+                        <span>📌</span>
+                        <span>
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Cultiva empatía y considere perspectivas ajenas"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Fortalece tu capacidad analítica"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Desarrolla mayor assertividad"
+                            : "Practica la delegación y confianza en otros"}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200">
+                    <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-3">Dónde puedes brillar:</h4>
+                    <ul className="space-y-2">
+                      <li className="text-sm text-blue-800 dark:text-blue-200 flex gap-2">
+                        <span>⭐</span>
+                        <span>
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Roles de liderazgo y toma de decisiones estratégica"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Roles de comunicación, ventas y relaciones públicas"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Roles de soporte, coordinación y mentoring"
+                            : "Roles técnicos, análisis y aseguramiento de calidad"}
+                        </span>
+                      </li>
+                      <li className="text-sm text-blue-800 dark:text-blue-200 flex gap-2">
+                        <span>⭐</span>
+                        <span>
+                          {results.D > results.I && results.D > results.S && results.D > results.C
+                            ? "Ambientes competitivos con objetivos claros"
+                            : results.I > results.D && results.I > results.S && results.I > results.C
+                            ? "Equipos colaborativos con interacción constante"
+                            : results.S > results.D && results.S > results.I && results.S > results.C
+                            ? "Entornos estables con procesos definidos"
+                            : "Proyectos que requieran precisión y control de calidad"}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* LOADING INSIGHTS */}
             {loadingInsights && (
               <Card className="border-0 shadow-lg bg-blue-50 dark:bg-blue-950">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
+                <CardContent className="pt-6 pb-6">
+                  <div className="flex items-center gap-3 justify-center">
                     <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">Generando análisis profundo de tu perfil con IA...</p>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">Generando recomendaciones personalizadas...</p>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Display Insights if available */}
+            {/* AI INSIGHTS */}
             {insights && (
               <>
-                {/* AI-Generated Insights Section */}
                 {insights.insights && insights.insights.length > 0 && (
                   <Card className="border-0 shadow-lg">
                     <CardHeader>
-                      <CardTitle className="text-xl">Análisis Profundo de tu Perfil</CardTitle>
-                      <CardDescription>Insights generados con IA basado en tus respuestas</CardDescription>
+                      <CardTitle>Análisis Profundo Personalizado</CardTitle>
+                      <CardDescription>Insights específicos basados en tu perfil</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {insights.insights.slice(0, 5).map((insight: any, idx: number) => (
                         <div key={idx} className="p-4 border rounded-lg bg-gradient-to-r from-transparent to-blue-50 dark:to-blue-950">
                           <div className="flex justify-between items-start gap-3 mb-2">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-sm">{insight.title}</h4>
-                              <p className="text-xs text-muted-foreground mt-0.5">{insight.category}</p>
-                            </div>
+                            <h4 className="font-semibold text-sm">{insight.title}</h4>
                             <span className={`text-xs font-bold px-2 py-1 rounded ${
                               insight.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300' :
                               insight.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300' :
@@ -580,96 +848,23 @@ export default function DespegaOnboarding() {
                             </span>
                           </div>
                           <p className="text-sm text-foreground">{insight.description}</p>
-                          {insight.actionableSteps && insight.actionableSteps.length > 0 && (
-                            <div className="mt-3 pt-3 border-t">
-                              <p className="text-xs font-semibold text-muted-foreground mb-2">Pasos accionables:</p>
-                              <ul className="space-y-1">
-                                {insight.actionableSteps.slice(0, 3).map((step: string, sidx: number) => (
-                                  <li key={sidx} className="text-xs text-foreground flex gap-2">
-                                    <span className="text-blue-600">•</span>
-                                    <span>{step}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
                         </div>
                       ))}
                     </CardContent>
                   </Card>
                 )}
 
-                {/* Development Plan */}
-                {insights.developmentPlan && (
-                  <Card className="border-0 shadow-lg">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Tu Plan de Desarrollo Personalizado</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {insights.developmentPlan.shortTerm && insights.developmentPlan.shortTerm.length > 0 && (
-                        <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200 dark:border-orange-900">
-                          <h4 className="font-semibold text-sm text-orange-900 dark:text-orange-100 mb-2">Corto Plazo (1-3 meses)</h4>
-                          <ul className="space-y-1">
-                            {insights.developmentPlan.shortTerm.slice(0, 3).map((item: string, idx: number) => (
-                              <li key={idx} className="text-sm text-orange-800 dark:text-orange-200 flex gap-2">
-                                <span>→</span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {insights.developmentPlan.mediumTerm && insights.developmentPlan.mediumTerm.length > 0 && (
-                        <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
-                          <h4 className="font-semibold text-sm text-blue-900 dark:text-blue-100 mb-2">Mediano Plazo (3-6 meses)</h4>
-                          <ul className="space-y-1">
-                            {insights.developmentPlan.mediumTerm.slice(0, 3).map((item: string, idx: number) => (
-                              <li key={idx} className="text-sm text-blue-800 dark:text-blue-200 flex gap-2">
-                                <span>→</span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {insights.developmentPlan.longTerm && insights.developmentPlan.longTerm.length > 0 && (
-                        <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-900">
-                          <h4 className="font-semibold text-sm text-purple-900 dark:text-purple-100 mb-2">Largo Plazo (6-12 meses)</h4>
-                          <ul className="space-y-1">
-                            {insights.developmentPlan.longTerm.slice(0, 3).map((item: string, idx: number) => (
-                              <li key={idx} className="text-sm text-purple-800 dark:text-purple-200 flex gap-2">
-                                <span>→</span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Recommendations */}
                 {insights.recommendations && insights.recommendations.length > 0 && (
                   <Card className="border-0 shadow-lg">
                     <CardHeader>
-                      <CardTitle className="text-lg">Recomendaciones de Recursos</CardTitle>
-                      <CardDescription>Seleccionadas de nuestra biblioteca de 120+ libros y recursos</CardDescription>
+                      <CardTitle>Recursos Recomendados</CardTitle>
+                      <CardDescription>De nuestra biblioteca especializada</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {insights.recommendations.slice(0, 4).map((rec: any, idx: number) => (
-                        <div key={idx} className="p-3 border rounded-lg hover:bg-muted/50 transition">
-                          <div className="flex justify-between items-start gap-2 mb-1">
-                            <h4 className="font-semibold text-sm">{rec.title}</h4>
-                            <span className="text-xs bg-muted px-2 py-1 rounded">{rec.timeframe}</span>
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-2">{rec.description}</p>
-                          <div className="flex gap-2 text-xs">
-                            <span className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">
-                              {rec.difficulty}
-                            </span>
-                            <span className="text-muted-foreground">De: {rec.source === 'cerebro' ? 'Cerebro' : 'Biblioteca'}</span>
-                          </div>
+                        <div key={idx} className="p-3 border rounded-lg">
+                          <h4 className="font-semibold text-sm">{rec.title}</h4>
+                          <p className="text-sm text-muted-foreground">{rec.description}</p>
                         </div>
                       ))}
                     </CardContent>
@@ -677,21 +872,22 @@ export default function DespegaOnboarding() {
                 )}
               </>
             )}
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-2xl text-center">Tu Perfil DISC Despega Cerebral</CardTitle>
-                <CardDescription className="text-center">
-                  Score General: <span className="text-2xl font-bold text-blue-600">{Math.round(results.total)}%</span>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* D - Dominance */}
-                <div className="p-4 rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-950 dark:border-orange-900">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-orange-900 dark:text-orange-100">D - Dominio (Plan Ejecutivo)</h4>
-                    <span className="text-sm font-bold text-orange-600 dark:text-orange-400">{Math.round(results.D)}%</span>
-                  </div>
-                  <Progress value={results.D} className="h-2" />
+
+            {/* CTA BUTTON */}
+            <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-600 to-blue-700">
+              <CardContent className="pt-8 pb-8 text-center">
+                <h3 className="text-xl font-bold text-white mb-3">Tu análisis está listo</h3>
+                <p className="text-blue-100 mb-6">Accede a tu dashboard para explorar tu perfil completo y comenzar tu viaje de desarrollo</p>
+                <Button 
+                  onClick={() => router.push("/dashboard")}
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-6 text-base"
+                >
+                  Ir a Mi Dashboard
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
                   <p className="text-sm text-orange-800 dark:text-orange-200 mt-2">
                     {results.D > 75 ? "Decisivo y orientado a resultados" : results.D > 50 ? "Moderadamente decidido" : "Necesitas mayor decisión"}
                   </p>
