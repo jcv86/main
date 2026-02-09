@@ -434,11 +434,11 @@ export function DashboardContent() {
                 </div>
               </div>
               <Button 
-                onClick={() => router.push("/despega/a1-cerebral")}
+                onClick={() => router.push("/despega/a1-cerebral/results")}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-semibold"
               >
                 <Sparkles className="h-5 w-5 mr-2" />
-                Realizar Mi Primer Test
+                Ver Mis Resultados del Test
               </Button>
               <p className="text-xs text-center text-muted-foreground">
                 Toma unos 15-20 minutos • Resultados inmediatos • Sin compromiso

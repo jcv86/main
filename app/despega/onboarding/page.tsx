@@ -218,7 +218,7 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results
+        // Save test results to both tables for compatibility
         await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
           score_energia: Math.round(avgScores.energia * 20),
@@ -228,6 +228,22 @@ export default function DespegaOnboarding() {
           nivel_detectado: nivel,
           respuestas_raw: responses,
         })
+
+        // Also save to unified_test_results so dashboard recognizes it
+        const userEmail = (await supabase.auth.getUser()).data.user?.email
+        if (userEmail) {
+          await supabase.from("unified_test_results").insert({
+            user_email: userEmail,
+            test_type: "disc",
+            test_results: {
+              energia: Math.round(avgScores.energia * 20),
+              enfoque: Math.round(avgScores.enfoque * 20),
+              relaciones: Math.round(avgScores.relaciones * 20),
+              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+            },
+            created_at: new Date().toISOString(),
+          })
+        }
 
         // Initialize pilar progress
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
