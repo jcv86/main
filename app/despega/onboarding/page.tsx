@@ -10,104 +10,35 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Base - Despega Cerebral (obligatorio)
+// Test A1 Base - Despega Cerebral DISC (obligatorio) - 20 DISC questions only
 const TEST_A1_QUESTIONS = [
-  {
-    id: 1,
-    category: "energia",
-    question: "¿Cómo describes tu nivel de energía durante el día?",
-    options: [
-      { value: 1, label: "Muy bajo - Me siento agotado constantemente" },
-      { value: 2, label: "Bajo - Tengo poca energía para actividades" },
-      { value: 3, label: "Medio - Energía variable según el día" },
-      { value: 4, label: "Alto - Generalmente me siento con buena energía" },
-      { value: 5, label: "Muy alto - Tengo energía abundante todo el día" },
-    ],
-  },
-  {
-    id: 2,
-    category: "enfoque",
-    question: "¿Qué tan fácil te resulta concentrarte en una tarea?",
-    options: [
-      { value: 1, label: "Muy difícil - Me distraigo constantemente" },
-      { value: 2, label: "Difícil - Necesito mucho esfuerzo para concentrarme" },
-      { value: 3, label: "Regular - A veces logro concentrarme" },
-      { value: 4, label: "Fácil - Puedo concentrarme con relativa facilidad" },
-      { value: 5, label: "Muy fácil - Entro en estado de flujo con frecuencia" },
-    ],
-  },
-  {
-    id: 3,
-    category: "relaciones",
-    question: "¿Cómo evalúas tus habilidades de comunicación?",
-    options: [
-      { value: 1, label: "Muy débiles - Me cuesta expresarme" },
-      { value: 2, label: "Débiles - Tengo dificultades frecuentes" },
-      { value: 3, label: "Regulares - Me comunico de forma básica" },
-      { value: 4, label: "Buenas - Me expreso con claridad" },
-      { value: 5, label: "Excelentes - Comunico ideas complejas fácilmente" },
-    ],
-  },
-  {
-    id: 4,
-    category: "plan_ejecutivo",
-    question: "¿Qué tan efectivo eres ejecutando tus planes?",
-    options: [
-      { value: 1, label: "Nada efectivo - Raramente completo lo que planeo" },
-      { value: 2, label: "Poco efectivo - Completo menos del 30%" },
-      { value: 3, label: "Moderado - Completo alrededor del 50%" },
-      { value: 4, label: "Efectivo - Completo más del 70%" },
-      { value: 5, label: "Muy efectivo - Completo casi todo lo que planeo" },
-    ],
-  },
-  {
-    id: 5,
-    category: "energia",
-    question: "¿Cómo es tu calidad de sueño?",
-    options: [
-      { value: 1, label: "Muy mala - Duermo menos de 5 horas o mal" },
-      { value: 2, label: "Mala - Sueño irregular o poco reparador" },
-      { value: 3, label: "Regular - A veces duermo bien" },
-      { value: 4, label: "Buena - Generalmente duermo bien" },
-      { value: 5, label: "Excelente - Sueño reparador y consistente" },
-    ],
-  },
-  {
-    id: 6,
-    category: "enfoque",
-    question: "¿Cómo manejas las distracciones digitales?",
-    options: [
-      { value: 1, label: "Muy mal - Estoy pegado al celular todo el día" },
-      { value: 2, label: "Mal - Me distraigo frecuentemente" },
-      { value: 3, label: "Regular - A veces logro desconectarme" },
-      { value: 4, label: "Bien - Controlo mi uso de tecnología" },
-      { value: 5, label: "Muy bien - Uso intencional y controlado" },
-    ],
-  },
-  {
-    id: 7,
-    category: "relaciones",
-    question: "¿Cómo describes tu red de contactos profesionales?",
-    options: [
-      { value: 1, label: "Inexistente - No tengo red profesional" },
-      { value: 2, label: "Muy pequeña - Menos de 10 contactos activos" },
-      { value: 3, label: "Pequeña - Entre 10-30 contactos" },
-      { value: 4, label: "Media - Entre 30-100 contactos" },
-      { value: 5, label: "Grande - Más de 100 contactos activos" },
-    ],
-  },
-  {
-    id: 8,
-    category: "plan_ejecutivo",
-    question: "¿Cómo priorizas tus tareas diarias?",
-    options: [
-      { value: 1, label: "No priorizo - Hago lo que aparece" },
-      { value: 2, label: "Raramente - Solo en emergencias" },
-      { value: 3, label: "A veces - Cuando tengo tiempo" },
-      { value: 4, label: "Frecuentemente - Tengo un sistema básico" },
-      { value: 5, label: "Siempre - Tengo un sistema robusto de priorización" },
-    ],
-  },
+  // DOMINANCIA - Questions 1-5
+  { id: 1, category: "dominancia", question: "Prefiero tomar decisiones rápidas y directas sin hesitación", options: [{ value: 1, label: "Analizo primero" }, { value: 2, label: "" }, { value: 3, label: "Normal" }, { value: 4, label: "" }, { value: 5, label: "Decido rápido" }] },
+  { id: 2, category: "dominancia", question: "¿Cómo respondes ante desafíos o competencia?", options: [{ value: 1, label: "Evito conflictos" }, { value: 2, label: "Prefiero cooperar" }, { value: 3, label: "Compito moderadamente" }, { value: 4, label: "Busco ganar" }, { value: 5, label: "Debo ganar a toda costa" }] },
+  { id: 3, category: "dominancia", question: "¿Cuánto necesitas tener control sobre las situaciones?", options: [{ value: 1, label: "Poco control" }, { value: 2, label: "" }, { value: 3, label: "Equilibrado" }, { value: 4, label: "" }, { value: 5, label: "Control total" }] },
+  { id: 4, category: "dominancia", question: "¿Cuál es tu estilo de comunicación?", options: [{ value: 1, label: "Muy diplomático" }, { value: 2, label: "Considerado" }, { value: 3, label: "Directo" }, { value: 4, label: "Muy directo" }, { value: 5, label: "Brutal honestidad" }] },
+  { id: 5, category: "dominancia", question: "¿Te gusta tomar riesgos calculados para lograr objetivos?", options: [{ value: 1, label: "Prefiero seguridad" }, { value: 2, label: "" }, { value: 3, label: "Riesgos moderados" }, { value: 4, label: "" }, { value: 5, label: "Busco riesgos" }] },
+  
+  // INFLUENCIA - Questions 6-10
+  { id: 6, category: "influencia", question: "¿Con qué frecuencia socializas o conectas con gente nueva?", options: [{ value: 1, label: "Casi nunca" }, { value: 2, label: "Raramente" }, { value: 3, label: "Ocasionalmente" }, { value: 4, label: "Frecuentemente" }, { value: 5, label: "Constantemente" }] },
+  { id: 7, category: "influencia", question: "¿Cuán fácil te resulta persuadir o convencer a otros?", options: [{ value: 1, label: "Muy difícil" }, { value: 2, label: "Difícil" }, { value: 3, label: "Moderado" }, { value: 4, label: "Fácil" }, { value: 5, label: "Muy fácil" }] },
+  { id: 8, category: "influencia", question: "¿Cómo describes tu entusiasmo y optimismo?", options: [{ value: 1, label: "Reservado" }, { value: 2, label: "Moderado" }, { value: 3, label: "Normal" }, { value: 4, label: "Entusiasta" }, { value: 5, label: "Extremadamente entusiasta" }] },
+  { id: 9, category: "influencia", question: "¿Disfrutas ser el centro de atención?", options: [{ value: 1, label: "Prefiero pasar desapercibido" }, { value: 2, label: "" }, { value: 3, label: "Indiferente" }, { value: 4, label: "" }, { value: 5, label: "Amo la atención" }] },
+  { id: 10, category: "influencia", question: "¿Cómo te adaptas a nuevas personas o entornos?", options: [{ value: 1, label: "Lentamente con dificultad" }, { value: 2, label: "Lentamente" }, { value: 3, label: "Moderadamente" }, { value: 4, label: "Rápidamente" }, { value: 5, label: "Instantáneamente" }] },
+  
+  // ESTABILIDAD - Questions 11-15
+  { id: 11, category: "estabilidad", question: "¿Cómo prefieres tu entorno de trabajo?", options: [{ value: 1, label: "Muy dinámico" }, { value: 2, label: "Dinámico" }, { value: 3, label: "Equilibrado" }, { value: 4, label: "Estable" }, { value: 5, label: "Muy predecible" }] },
+  { id: 12, category: "estabilidad", question: "¿Eres paciente y tolerante con los errores de otros?", options: [{ value: 1, label: "Poco paciente" }, { value: 2, label: "" }, { value: 3, label: "Moderadamente" }, { value: 4, label: "" }, { value: 5, label: "Muy paciente" }] },
+  { id: 13, category: "estabilidad", question: "¿Cuál es tu nivel de lealtad hacia personas o equipos?", options: [{ value: 1, label: "Cambio fácilmente" }, { value: 2, label: "Moderadamente leal" }, { value: 3, label: "Leal" }, { value: 4, label: "Muy leal" }, { value: 5, label: "Extremadamente leal" }] },
+  { id: 14, category: "estabilidad", question: "¿Prefieres tareas de largo plazo versus cambio constante?", options: [{ value: 1, label: "Cambio constante" }, { value: 2, label: "" }, { value: 3, label: "Equilibrio" }, { value: 4, label: "" }, { value: 5, label: "Largo plazo" }] },
+  { id: 15, category: "estabilidad", question: "¿Cómo reaccionas ante cambios no esperados?", options: [{ value: 1, label: "Entro en pánico" }, { value: 2, label: "Me perturba" }, { value: 3, label: "Me adapto" }, { value: 4, label: "Casi no me afecta" }, { value: 5, label: "Lo veo como oportunidad" }] },
+  
+  // CONSCIENCIA - Questions 16-20
+  { id: 16, category: "consciencia", question: "¿Cuán importante es el análisis detallado antes de decidir?", options: [{ value: 1, label: "Decido por intuición" }, { value: 2, label: "" }, { value: 3, label: "Moderado" }, { value: 4, label: "" }, { value: 5, label: "Necesito datos" }] },
+  { id: 17, category: "consciencia", question: "¿Cuál es tu relación con los procedimientos y reglas?", options: [{ value: 1, label: "Las ignoro" }, { value: 2, label: "Las sigo si me conviene" }, { value: 3, label: "Generalmente las sigo" }, { value: 4, label: "Las sigo siempre" }, { value: 5, label: "Necesito más reglas" }] },
+  { id: 18, category: "consciencia", question: "¿Qué tan importante es la perfección y calidad en tu trabajo?", options: [{ value: 1, label: "Aproximado está bien" }, { value: 2, label: "" }, { value: 3, label: "Moderado" }, { value: 4, label: "" }, { value: 5, label: "Debe ser perfecto" }] },
+  { id: 19, category: "consciencia", question: "¿Cómo manejas los errores o inconsistencias?", options: [{ value: 1, label: "Los ignoro" }, { value: 2, label: "Los tolero" }, { value: 3, label: "Los noto" }, { value: 4, label: "Los corijo siempre" }, { value: 5, label: "Me obsesiono" }] },
+  { id: 20, category: "consciencia", question: "¿Necesitas evidencia antes de aceptar información nueva?", options: [{ value: 1, label: "Confío en palabras" }, { value: 2, label: "" }, { value: 3, label: "Depende" }, { value: 4, label: "" }, { value: 5, label: "Necesito evidencia" }] },
 ]
 
 type Step = "intro" | "camino" | "test" | "results"
@@ -119,10 +50,10 @@ export default function DespegaOnboarding() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<number, number>>({})
   const [results, setResults] = useState<{
-    energia: number
-    enfoque: number
-    relaciones: number
-    plan_ejecutivo: number
+    dominancia: number
+    influencia: number
+    estabilidad: number
+    consciencia: number
     total: number
     nivel: string
   } | null>(null)
@@ -158,17 +89,17 @@ export default function DespegaOnboarding() {
     setLoading(true)
     
     const scores = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
+      dominancia: 0,
+      influencia: 0,
+      estabilidad: 0,
+      consciencia: 0,
     }
     
     const counts = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
+      dominancia: 0,
+      influencia: 0,
+      estabilidad: 0,
+      consciencia: 0,
     }
 
     TEST_A1_QUESTIONS.forEach((q) => {
@@ -181,13 +112,13 @@ export default function DespegaOnboarding() {
 
     // Calculate averages (scale 1-5)
     const avgScores = {
-      energia: counts.energia > 0 ? scores.energia / counts.energia : 0,
-      enfoque: counts.enfoque > 0 ? scores.enfoque / counts.enfoque : 0,
-      relaciones: counts.relaciones > 0 ? scores.relaciones / counts.relaciones : 0,
-      plan_ejecutivo: counts.plan_ejecutivo > 0 ? scores.plan_ejecutivo / counts.plan_ejecutivo : 0,
+      dominancia: counts.dominancia > 0 ? scores.dominancia / counts.dominancia : 0,
+      influencia: counts.influencia > 0 ? scores.influencia / counts.influencia : 0,
+      estabilidad: counts.estabilidad > 0 ? scores.estabilidad / counts.estabilidad : 0,
+      consciencia: counts.consciencia > 0 ? scores.consciencia / counts.consciencia : 0,
     }
 
-    const total = (avgScores.energia + avgScores.enfoque + avgScores.relaciones + avgScores.plan_ejecutivo) / 4
+    const total = (avgScores.dominancia + avgScores.influencia + avgScores.estabilidad + avgScores.consciencia) / 4
     
     let nivel = "principiante"
     if (total >= 4) nivel = "avanzado"
@@ -209,13 +140,13 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results
+        // Save test results with DISC dimensions
         await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
-          score_energia: Math.round(avgScores.energia * 20),
-          score_enfoque: Math.round(avgScores.enfoque * 20),
-          score_relaciones: Math.round(avgScores.relaciones * 20),
-          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          score_dominancia: Math.round(avgScores.dominancia * 20),
+          score_influencia: Math.round(avgScores.influencia * 20),
+          score_estabilidad: Math.round(avgScores.estabilidad * 20),
+          score_consciencia: Math.round(avgScores.consciencia * 20),
           nivel_detectado: nivel,
           respuestas_raw: responses,
         })
