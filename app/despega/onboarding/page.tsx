@@ -218,36 +218,42 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results to both tables for compatibility
-        await supabase.from("despega_a1_test_results").insert({
+        // Save test results with CORRECT schema
+        const scoreTotalPercentage = Math.round(total * 20)
+        const resultados = {
+          energia: Math.round(avgScores.energia * 20),
+          enfoque: Math.round(avgScores.enfoque * 20),
+          relaciones: Math.round(avgScores.relaciones * 20),
+          plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+        }
+
+        const { error: a1Error } = await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
-          score_energia: Math.round(avgScores.energia * 20),
-          score_enfoque: Math.round(avgScores.enfoque * 20),
-          score_relaciones: Math.round(avgScores.relaciones * 20),
-          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-          nivel_detectado: nivel,
-          respuestas_raw: responses,
-        }).then(res => {
-          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
-          else console.log("[v0] Saved to despega_a1_test_results")
+          score_total: scoreTotalPercentage,
+          resultados: resultados,
+          respuestas: responses,
+          diagnostico: nivel,
+          completed_at: new Date().toISOString(),
         })
+        
+        if (a1Error) {
+          console.error("[v0] Error saving to despega_a1_test_results:", a1Error.message)
+        } else {
+          console.log("[v0] Successfully saved to despega_a1_test_results")
+        }
 
         // Also save to unified_test_results so dashboard recognizes it
-        const userEmail = (await supabase.auth.getUser()).data.user?.email
+        const { data: { user } } = await supabase.auth.getUser()
+        const userEmail = user?.email
+        
         if (userEmail) {
-          const { error } = await supabase.from("unified_test_results").insert({
+          const { error: unifiedError } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
             test_type: "disc",
-            test_results: {
-              energia: Math.round(avgScores.energia * 20),
-              enfoque: Math.round(avgScores.enfoque * 20),
-              relaciones: Math.round(avgScores.relaciones * 20),
-              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-            },
-            created_at: new Date().toISOString(),
+            test_results: resultados,
           })
-          if (error) {
-            console.error("[v0] Error saving to unified_test_results:", error)
+          if (unifiedError) {
+            console.error("[v0] Error saving to unified_test_results:", unifiedError.message)
           } else {
             console.log("[v0] Successfully saved to unified_test_results")
           }
@@ -262,7 +268,7 @@ export default function DespegaOnboarding() {
             estado: { diagnostico_completado: pilar === "a1_cerebral" },
             progreso: pilar === "a1_cerebral" ? 10 : 0,
             score: 0,
-            ciclo_actual: "30",
+            ciclo_actual: 30,
             ciclo_dia: 1,
           })
         }
@@ -270,16 +276,16 @@ export default function DespegaOnboarding() {
         // Initialize rankings
         await supabase.from("despega_rankings").upsert({
           user_id: userId,
-          score_pilar_a1: 10,
-          score_pilar_a2: 0,
+          score_a1_cerebral: scoreTotalPercentage,
+          score_a2_rutas: 0,
           score_aterrizaje: 0,
           score_base: 0,
           score_camino_persona: caminoPersona ? 5 : 0,
           score_camino_profesional: caminoProfesional ? 5 : 0,
-          score_general: 10,
+          score_general: scoreTotalPercentage,
         })
       } catch (error) {
-        console.error("Error saving onboarding data:", error)
+        console.error("[v0] Error saving onboarding data:", error)
       }
     }
 
