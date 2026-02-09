@@ -4,118 +4,110 @@ import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Base - Despega Cerebral Modelo de Evaluación Integral
-// Dimensiones: Energía (Estabilidad), Enfoque (Precisión), Relaciones (Influencia), Plan Ejecutivo (Dominio)
+// Test A1 Cerebral - Formato Paired Comparison (2 opciones)
+// Basado en modelo DISC: Energía (S), Enfoque (C), Relaciones (I), Plan Ejecutivo (D)
+// Cada pregunta presenta 2 opciones, el usuario elige cuál es más como él
 const TEST_A1_QUESTIONS = [
-  // Estabilidad Emocional → ENERGÍA
   {
     id: 1,
-    category: "energia",
-    question: "Ante situaciones inesperadas, ¿cómo reaccionas típicamente?",
-    options: [
-      { value: 1, label: "Me estreso rápidamente y me toma tiempo recuperarme" },
-      { value: 2, label: "Me afecta, pero intento mantener la calma" },
-      { value: 3, label: "Busco equilibrio entre adaptación y consistencia" },
-      { value: 4, label: "Me adapto con relativa calma y serenidad" },
-      { value: 5, label: "Mantengo serenidad y veo lo positivo en el cambio" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Mantengo la calma bajo presión y busco estabilidad",
+      category: "energia",
+    },
+    optionB: {
+      text: "Soy decidido y voy directo hacia mis objetivos",
+      category: "plan_ejecutivo",
+    },
   },
-  // Precisión y Concentración → ENFOQUE
   {
     id: 2,
-    category: "enfoque",
-    question: "Cuando trabajas en algo importante, ¿cuál es tu enfoque?",
-    options: [
-      { value: 1, label: "Salto entre tareas sin completarlas" },
-      { value: 2, label: "Me cuesta mantener el enfoque prolongado" },
-      { value: 3, label: "Puedo concentrarme, pero me distraigo ocasionalmente" },
-      { value: 4, label: "Mantengo enfoque y atención al detalle" },
-      { value: 5, label: "Profundizo al máximo nivel, verificando cada detalle" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Analizo cada detalle y busco precisión en mi trabajo",
+      category: "enfoque",
+    },
+    optionB: {
+      text: "Conecto fácilmente con otros y construyo relaciones",
+      category: "relaciones",
+    },
   },
-  // Influencia y Conexión → RELACIONES
   {
     id: 3,
-    category: "relaciones",
-    question: "En grupos o reuniones, ¿cuál es tu rol natural?",
-    options: [
-      { value: 1, label: "Me cuesta participar o hablar" },
-      { value: 2, label: "Participo poco, observo más" },
-      { value: 3, label: "Participo de manera equilibrada" },
-      { value: 4, label: "Contribuyo activamente a la conversación" },
-      { value: 5, label: "Conecto personas e inspiro participación" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Prefiero trabajar de forma consistente y confiable",
+      category: "energia",
+    },
+    optionB: {
+      text: "Prefiero innovar y asumir nuevos desafíos",
+      category: "plan_ejecutivo",
+    },
   },
-  // Dominio y Ejecución → PLAN EJECUTIVO
   {
     id: 4,
-    category: "plan_ejecutivo",
-    question: "Cuando estableces un objetivo, ¿qué tan directo es tu camino?",
-    options: [
-      { value: 1, label: "No tengo metas claras ni ejecuto bien" },
-      { value: 2, label: "Tengo metas pero me cuesta ejecutarlas" },
-      { value: 3, label: "Balanceo metas con flexibilidad en el proceso" },
-      { value: 4, label: "Ejecuto con determinación hacia mis objetivos" },
-      { value: 5, label: "Avanzo rápido hacia resultados con enfoque implacable" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Busco perfección y reviso cada detalle meticulosamente",
+      category: "enfoque",
+    },
+    optionB: {
+      text: "Inspiro a otros y disfruto influenciar en equipo",
+      category: "relaciones",
+    },
   },
-  // DISC-S (Steadiness) → ENERGÍA (relaciones interpersonales)
   {
     id: 5,
-    category: "energia",
-    question: "¿Cómo prefieres trabajar con otros?",
-    options: [
-      { value: 1, label: "Prefiero evitar el trabajo en equipo" },
-      { value: 2, label: "Trabajo en equipo pero necesito autonomía" },
-      { value: 3, label: "Me adapto bien a distintos estilos de equipo" },
-      { value: 4, label: "Disfruto la colaboración y la armonía grupal" },
-      { value: 5, label: "Busco crear ambiente de confianza y apoyo mutuo" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Soy amigable y creo un ambiente armonioso",
+      category: "energia",
+    },
+    optionB: {
+      text: "Soy competitivo y orientado a resultados",
+      category: "plan_ejecutivo",
+    },
   },
-  // DISC-C (Conscientiousness) → ENFOQUE (calidad y precisión)
   {
     id: 6,
-    category: "enfoque",
-    question: "¿Qué importancia tiene la calidad en tu trabajo?",
-    options: [
-      { value: 1, label: "Me importa terminar rápido más que la calidad" },
-      { value: 2, label: "Busco equilibrio entre velocidad y calidad" },
-      { value: 3, label: "Calidad es importante, pero no siempre es perfecta" },
-      { value: 4, label: "Busco alta calidad en todo lo que hago" },
-      { value: 5, label: "La excelencia es no negociable, reviso todo meticulosamente" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Me cuesta cambiar mis procesos una vez establecidos",
+      category: "enfoque",
+    },
+    optionB: {
+      text: "Soy carismático y motivador con los demás",
+      category: "relaciones",
+    },
   },
-  // DISC-I (Influence) → RELACIONES (networking, influencia)
   {
     id: 7,
-    category: "relaciones",
-    question: "¿Cómo es tu capacidad de influencia sobre otros?",
-    options: [
-      { value: 1, label: "Me cuesta influir o persuadir a otros" },
-      { value: 2, label: "Puedo influir en ciertos contextos" },
-      { value: 3, label: "Tengo capacidad moderada para influir" },
-      { value: 4, label: "Puedo persuadir e influir de manera clara" },
-      { value: 5, label: "Inspiro y motivo a otros con facilidad natural" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Adapto mis comportamientos según el contexto",
+      category: "energia",
+    },
+    optionB: {
+      text: "Tomo decisiones rápidas sin necesidad de consenso",
+      category: "plan_ejecutivo",
+    },
   },
-  // DISC-D (Dominance) → PLAN EJECUTIVO (liderazgo, decisiones)
   {
     id: 8,
-    category: "plan_ejecutivo",
-    question: "Ante decisiones difíciles o conflictos, ¿cómo actúas?",
-    options: [
-      { value: 1, label: "Evito decidir o los delego siempre" },
-      { value: 2, label: "Me cuesta tomar decisiones difíciles" },
-      { value: 3, label: "Decido con análisis de consecuencias" },
-      { value: 4, label: "Decido firmemente cuando es necesario" },
-      { value: 5, label: "Tomo decisiones rápidas y resolutivas, sin titubear" },
-    ],
+    question: "¿Cuál es más como tú?",
+    optionA: {
+      text: "Cumplo mis compromisos con disciplina exacta",
+      category: "enfoque",
+    },
+    optionB: {
+      text: "Tengo una red amplia y mantengo muchas amistades",
+      category: "relaciones",
+    },
   },
 ]
 
@@ -126,7 +118,7 @@ export default function DespegaOnboarding() {
   const [caminoPersona, setCaminoPersona] = useState(false)
   const [caminoProfesional, setCaminoProfesional] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, number>>({})
+  const [responses, setResponses] = useState<Record<number, string>>({})
   const [results, setResults] = useState<{
     energia: number
     enfoque: number
@@ -150,16 +142,25 @@ export default function DespegaOnboarding() {
 
   const question = TEST_A1_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / TEST_A1_QUESTIONS.length) * 100
+  const isAnswered = responses[question.id] !== undefined
 
-  const handleSelect = (value: number) => {
-    setResponses({ ...responses, [question.id]: value })
+  const handleSelect = (option: "A" | "B") => {
+    setResponses({ ...responses, [question.id]: option })
   }
 
   const handleNext = () => {
+    if (!isAnswered) return
+    
     if (currentQuestion < TEST_A1_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
       calculateResults()
+    }
+  }
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1)
     }
   }
 
@@ -180,30 +181,41 @@ export default function DespegaOnboarding() {
       plan_ejecutivo: 0,
     }
 
+    // Contar respuestas por categoría
     TEST_A1_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
       if (response) {
-        scores[q.category as keyof typeof scores] += response
-        counts[q.category as keyof typeof counts]++
+        const selectedOption = response === "A" ? q.optionA : q.optionB
+        const category = selectedOption.category as keyof typeof scores
+        scores[category]++
+        counts[category]++
       }
     })
 
-    // Calculate averages (scale 1-5)
+    // Calcular porcentajes (0-100)
     const avgScores = {
-      energia: counts.energia > 0 ? scores.energia / counts.energia : 0,
-      enfoque: counts.enfoque > 0 ? scores.enfoque / counts.enfoque : 0,
-      relaciones: counts.relaciones > 0 ? scores.relaciones / counts.relaciones : 0,
-      plan_ejecutivo: counts.plan_ejecutivo > 0 ? scores.plan_ejecutivo / counts.plan_ejecutivo : 0,
+      energia: counts.energia > 0 ? (scores.energia / counts.energia) * 100 : 0,
+      enfoque: counts.enfoque > 0 ? (scores.enfoque / counts.enfoque) * 100 : 0,
+      relaciones: counts.relaciones > 0 ? (scores.relaciones / counts.relaciones) * 100 : 0,
+      plan_ejecutivo: counts.plan_ejecutivo > 0 ? (scores.plan_ejecutivo / counts.plan_ejecutivo) * 100 : 0,
     }
 
     const total = (avgScores.energia + avgScores.enfoque + avgScores.relaciones + avgScores.plan_ejecutivo) / 4
     
-    let nivel = "principiante"
-    if (total >= 4) nivel = "avanzado"
-    else if (total >= 3) nivel = "intermedio"
+    // Determinar nivel
+    let nivel = "Equilibrado"
+    if (total > 75) nivel = "Alto"
+    else if (total > 50) nivel = "Moderado"
+    else nivel = "Por Desarrollar"
 
-    const finalResults = { ...avgScores, total, nivel }
-    setResults(finalResults)
+    setResults({
+      energia: avgScores.energia,
+      enfoque: avgScores.enfoque,
+      relaciones: avgScores.relaciones,
+      plan_ejecutivo: avgScores.plan_ejecutivo,
+      total,
+      nivel,
+    })
 
     // Save to database
     if (userId) {
@@ -230,12 +242,12 @@ export default function DespegaOnboarding() {
         }
 
         // Save test results with CORRECT schema
-        const scoreTotalPercentage = Math.round(total * 20)
+        const scoreTotalPercentage = Math.round(total)
         const resultados = {
-          energia: Math.round(avgScores.energia * 20),
-          enfoque: Math.round(avgScores.enfoque * 20),
-          relaciones: Math.round(avgScores.relaciones * 20),
-          plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          energia: Math.round(avgScores.energia),
+          enfoque: Math.round(avgScores.enfoque),
+          relaciones: Math.round(avgScores.relaciones),
+          plan_ejecutivo: Math.round(avgScores.plan_ejecutivo),
         }
 
         const { error: a1Error } = await supabase.from("despega_a1_test_results").insert({
@@ -323,449 +335,253 @@ export default function DespegaOnboarding() {
     }
   }
 
-  // STEP 1: Intro - "El Ritual de Entrada"
-  if (step === "intro") {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Bienvenido a Tu Ritual de Entrada</CardTitle>
-            <CardDescription className="text-lg mt-2">
-              El primer paso de tu transición consciente de identidad. Aquí descubrimos quién eres ahora, para construir quién quieres ser.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div className="p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-primary">4</div>
-                <div className="text-sm text-muted-foreground">Fases de Transición</div>
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-primary">90</div>
-                <div className="text-sm text-muted-foreground">Días de Acompañamiento</div>
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              <h3 className="font-semibold">Tu Viaje de 4 Fases:</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500" />
-                  <span><strong>A1 El Ritual</strong> - Descubre quién eres ahora (punto de partida)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500" />
-                  <span><strong>A2 Exploración</strong> - Explora narrativas de identidades futuras</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span><strong>A3 Ensayo</strong> - Practica tu identidad futura en escenarios reales</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-purple-500" />
-                  <span><strong>A4 Realidad</strong> - Vive tu nueva identidad en el mercado</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-              <p className="text-sm text-foreground">
-                <strong>El Espejo:</strong> Este test es tu espejo. No juzga. Solo muestra quién eres hoy, para que desde ahí construyamos juntos tu puente hacia tu siguiente versión.
-              </p>
-            </div>
-
-            <Button onClick={() => setStep("camino")} className="w-full" size="lg">
-              Comenzar Mi Transición
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  // STEP 2: Selector de Camino - Con contexto de transición
-  if (step === "camino") {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle>Tu Transición Comienza Aquí</CardTitle>
-            <CardDescription>
-              Elige los aspectos de tu vida en los que necesitas transitar. Puedes trabajar uno o ambos simultáneamente.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div 
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  caminoPersona ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-                }`}
-                onClick={() => setCaminoPersona(!caminoPersona)}
-              >
-                <div className="flex items-start gap-3">
-                  <Checkbox checked={caminoPersona} />
-                  <div>
-                    <h3 className="font-semibold text-lg">Transición Personal</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Tu versión más auténtica: energía, hábitos, relaciones significativas, bienestar y autoconocimiento profundo.
-                    </p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Quién Eres</span>
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Cómo Te Sientes</span>
-                      <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Relaciones</span>
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="max-w-2xl mx-auto p-4 py-12">
+        {/* INTRO STEP */}
+        {step === "intro" && (
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-3xl text-center">Despega Cerebral</CardTitle>
+              <CardDescription className="text-center text-base mt-2">
+                Descubre tu perfil profesional en 2 minutos
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Este test evalúa 4 dimensiones clave de tu comportamiento profesional:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex gap-3">
+                    <span className="text-blue-600 font-bold">•</span>
+                    <div>
+                      <p className="font-semibold">Energía (Estabilidad)</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para mantener la calma y consistencia</p>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div 
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  caminoProfesional ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-                }`}
-                onClick={() => setCaminoProfesional(!caminoProfesional)}
-              >
-                <div className="flex items-start gap-3">
-                  <Checkbox checked={caminoProfesional} />
-                  <div>
-                    <h3 className="font-semibold text-lg">Transición Profesional</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Tu rol en el mundo: enfoque, productividad, networking, estrategia de carrera y dominio de tu expertise.
-                    </p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Tu Rol</span>
-                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Tu Estrategia</span>
-                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Tu Carrera</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-green-600 font-bold">•</span>
+                    <div>
+                      <p className="font-semibold">Enfoque (Precisión)</p>
+                      <p className="text-sm text-muted-foreground">Tu atención al detalle y rigor analítico</p>
                     </div>
-                  </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-purple-600 font-bold">•</span>
+                    <div>
+                      <p className="font-semibold">Relaciones (Influencia)</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para conectar e influir en otros</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-orange-600 font-bold">•</span>
+                    <div>
+                      <p className="font-semibold">Plan Ejecutivo (Dominio)</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para decidir y ejecutar</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-3 pt-4 border-t">
+                <p className="font-semibold">¿En cuál camino estás?</p>
+                <div className="flex gap-3">
+                  <Checkbox
+                    id="camino-persona"
+                    checked={caminoPersona}
+                    onCheckedChange={(checked) => setCaminoPersona(checked as boolean)}
+                  />
+                  <Label htmlFor="camino-persona" className="flex-1 cursor-pointer">
+                    <span className="font-medium">Crecimiento Personal</span>
+                    <p className="text-sm text-muted-foreground font-normal">Desarrollo de tu ser</p>
+                  </Label>
+                </div>
+                <div className="flex gap-3">
+                  <Checkbox
+                    id="camino-profesional"
+                    checked={caminoProfesional}
+                    onCheckedChange={(checked) => setCaminoProfesional(checked as boolean)}
+                  />
+                  <Label htmlFor="camino-profesional" className="flex-1 cursor-pointer">
+                    <span className="font-medium">Desarrollo Profesional</span>
+                    <p className="text-sm text-muted-foreground font-normal">Avance en tu carrera</p>
+                  </Label>
                 </div>
               </div>
-            </div>
 
-            <Button 
-              onClick={() => setStep("test")} 
-              className="w-full" 
-              size="lg"
-              disabled={!caminoPersona && !caminoProfesional}
-            >
-              Continuar al Espejo
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+              <Button
+                onClick={() => setStep("test")}
+                className="w-full h-12 text-base font-semibold"
+                disabled={!caminoPersona && !caminoProfesional}
+              >
+                Comenzar Test
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
-  // STEP 3: Test A1 Base - "El Espejo"
-  if (step === "test") {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <div className="space-y-4">
-              <div>
-                <CardTitle>El Espejo - Tu Diagnóstico Inicial</CardTitle>
-                <CardDescription>
-                  Miramos profundo. No para juzgar, sino para ver desde dónde realmente estás transitando.
-                </CardDescription>
-              </div>
+        {/* TEST STEP */}
+        {step === "test" && (
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
               <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Pregunta {currentQuestion + 1} de {TEST_A1_QUESTIONS.length}</span>
-                  <span>{Math.round(progress)}%</span>
-                </div>
-                <Progress value={progress} />
+                <Progress value={progress} className="h-2" />
+                <p className="text-sm text-muted-foreground">
+                  Pregunta {currentQuestion + 1} de {TEST_A1_QUESTIONS.length}
+                </p>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`text-xs px-2 py-1 rounded ${
-                  question.category === "energia" ? "bg-blue-100 text-blue-800" :
-                  question.category === "enfoque" ? "bg-green-100 text-green-800" :
-                  question.category === "relaciones" ? "bg-orange-100 text-orange-800" :
-                  "bg-purple-100 text-purple-800"
-                }`}>
-                  {question.category.charAt(0).toUpperCase() + question.category.slice(1).replace("_", " ")}
-                </span>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-6">{question.question}</h3>
+                
+                {/* Option A */}
+                <button
+                  onClick={() => handleSelect("A")}
+                  className={`w-full p-4 mb-3 rounded-lg border-2 transition-all text-left ${
+                    responses[question.id] === "A"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+                      : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
+                  }`}
+                >
+                  <p className="font-medium">{question.optionA.text}</p>
+                </button>
+
+                {/* Option B */}
+                <button
+                  onClick={() => handleSelect("B")}
+                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                    responses[question.id] === "B"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+                      : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
+                  }`}
+                >
+                  <p className="font-medium">{question.optionB.text}</p>
+                </button>
               </div>
-              <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
-              <RadioGroup 
-                value={responses[question.id]?.toString() || ""} 
-                onValueChange={(v) => handleSelect(parseInt(v))}
-              >
-                <div className="space-y-3">
-                  {question.options.map((option) => (
-                    <div 
-                      key={option.value} 
-                      className={`flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${
-                        responses[question.id] === option.value 
-                          ? "border-primary bg-primary/5" 
-                          : "border-border hover:border-primary/50"
-                      }`}
-                      onClick={() => handleSelect(option.value)}
-                    >
-                      <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                      <Label htmlFor={`option-${option.value}`} className="cursor-pointer flex-1">
-                        {option.label}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </RadioGroup>
-            </div>
-            <div className="flex gap-3">
-              {currentQuestion > 0 && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => setCurrentQuestion(currentQuestion - 1)}
+
+              {/* Navigation Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={currentQuestion === 0}
                   className="flex-1"
                 >
                   Anterior
                 </Button>
-              )}
-              <Button 
-                onClick={handleNext}
-                disabled={!responses[question.id]}
-                className="flex-1"
-              >
-                {currentQuestion === TEST_A1_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+                <Button
+                  onClick={handleNext}
+                  disabled={!isAnswered || loading}
+                  className="flex-1"
+                >
+                  {currentQuestion === TEST_A1_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-  // STEP 4: Results - "Tu Punto de Partida Revelado"
-  if (step === "results" && results) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Tu Punto de Partida Revelado</CardTitle>
-            <CardDescription>
-              El espejo ha mostrado quién eres hoy. Ahora construimos tu puente hacia quién quieres ser.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="text-center p-4 bg-primary/10 rounded-lg border-l-4 border-primary">
-              <p className="text-sm text-muted-foreground">Tu Estado Actual</p>
-              <p className="text-3xl font-bold capitalize mt-1">{results.nivel}</p>
-              <p className="text-lg text-muted-foreground">Potencial disponible: {(results.total * 20).toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground mt-2">Este es tu punto de partida para la transición</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
-                  <span className="font-medium">Energía</span>
-                </div>
-                <div className="text-2xl font-bold">{(results.energia * 20).toFixed(0)}%</div>
-                <Progress value={results.energia * 20} className="mt-2" />
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="font-medium">Enfoque</span>
-                </div>
-                <div className="text-2xl font-bold">{(results.enfoque * 20).toFixed(0)}%</div>
-                <Progress value={results.enfoque * 20} className="mt-2" />
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-orange-500" />
-                  <span className="font-medium">Relaciones</span>
-                </div>
-                <div className="text-2xl font-bold">{(results.relaciones * 20).toFixed(0)}%</div>
-                <Progress value={results.relaciones * 20} className="mt-2" />
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-purple-500" />
-                  <span className="font-medium">Plan Ejecutivo</span>
-                </div>
-                <div className="text-2xl font-bold">{(results.plan_ejecutivo * 20).toFixed(0)}%</div>
-                <Progress value={results.plan_ejecutivo * 20} className="mt-2" />
-              </div>
-            </div>
-
-            {/* INSIGHTS SECTION - Rich DISC-adapted insights */}
-            <div className="space-y-4 p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg">
-              <h3 className="text-xl font-bold">Tus Insights Personalizados</h3>
-              <div className="space-y-4">
-                {/* Energía Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500 space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500" />
-                    <span className="font-semibold text-lg">Energía ({(results.energia * 20).toFixed(0)}%)</span>
+        {/* RESULTS STEP */}
+        {step === "results" && results && (
+          <div className="space-y-6">
+            {/* Main Results Card */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-2xl text-center">Tu Perfil Despega Cerebral</CardTitle>
+                <CardDescription className="text-center">
+                  Score General: <span className="text-2xl font-bold text-blue-600">{Math.round(results.total)}%</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Dimension Cards */}
+                <div className="grid gap-4">
+                  {/* Energía */}
+                  <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-blue-900 dark:text-blue-100">Energía (Estabilidad)</h4>
+                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{Math.round(results.energia)}%</span>
+                    </div>
+                    <Progress value={results.energia} className="h-2" />
+                    <p className="text-sm text-blue-800 dark:text-blue-200 mt-2">
+                      {results.energia > 75 ? "Emocionalmente resiliente" : results.energia > 50 ? "Buscas equilibrio" : "Necesitas mayor estabilidad"}
+                    </p>
                   </div>
-                  {results.energia > 3.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Emocionalmente Resiliente</p>
-                      <p className="text-sm text-muted-foreground">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Lidera procesos complejos donde la estabilidad es vital.</p>
-                    </>
-                  ) : results.energia > 2.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Buscas Equilibrio</p>
-                      <p className="text-sm text-muted-foreground">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad. Esto te dará el ancla que necesitas.</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Necesitas Mayor Equilibrio</p>
-                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Recuperar estabilidad es prioritario para tu desempeño.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte. Esto restaurará tu base.</p>
-                    </>
-                  )}
-                </div>
 
-                {/* Enfoque Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500 space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                    <span className="font-semibold text-lg">Concentración & Precisión ({(results.enfoque * 20).toFixed(0)}%)</span>
+                  {/* Enfoque */}
+                  <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-900">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-green-900 dark:text-green-100">Enfoque (Precisión)</h4>
+                      <span className="text-sm font-bold text-green-600 dark:text-green-400">{Math.round(results.enfoque)}%</span>
+                    </div>
+                    <Progress value={results.enfoque} className="h-2" />
+                    <p className="text-sm text-green-800 dark:text-green-200 mt-2">
+                      {results.enfoque > 75 ? "Analítico y riguroso" : results.enfoque > 50 ? "Buscas mayor precisión" : "Necesitas desarrollar rigor"}
+                    </p>
                   </div>
-                  {results.enfoque > 3.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Analítico y Riguroso</p>
-                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te obsesiona la calidad, los detalles y la precisión. Evitas errores con rigor analítico.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos.</p>
-                    </>
-                  ) : results.enfoque > 2.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Buscas Mayor Enfoque</p>
-                      <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces abandones por rapidez.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros. Revisa solo UNA vez al final. Confía en tu proceso.</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Necesitas Desarrollar Disciplina</p>
-                      <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas sistemas que impongan estructura.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones. Dedica 90 min puros a una sola tarea.</p>
-                    </>
-                  )}
-                </div>
 
-                {/* Relaciones Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-orange-500 space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-3 h-3 rounded-full bg-orange-500" />
-                    <span className="font-semibold text-lg">Conexión e Influencia ({(results.relaciones * 20).toFixed(0)}%)</span>
+                  {/* Relaciones */}
+                  <div className="p-4 rounded-lg border border-purple-200 bg-purple-50 dark:bg-purple-950 dark:border-purple-900">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-purple-900 dark:text-purple-100">Relaciones (Influencia)</h4>
+                      <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{Math.round(results.relaciones)}%</span>
+                    </div>
+                    <Progress value={results.relaciones} className="h-2" />
+                    <p className="text-sm text-purple-800 dark:text-purple-200 mt-2">
+                      {results.relaciones > 75 ? "Inspirador y conectado" : results.relaciones > 50 ? "Buscas conectar más" : "Necesitas desarrollar conexión"}
+                    </p>
                   </div>
-                  {results.relaciones > 3.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Inspirador y Conectado</p>
-                      <p className="text-sm text-muted-foreground">Tu carisma y conectividad son tus superpoderes. Inspiras a otros, construyes redes, creas comunidades. Las personas te siguen naturalmente.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres el catalizador del equipo. Tu energía hace que otros rindan más. Lidera cambios culturales y construcción de equipos.</p>
-                    </>
-                  ) : results.relaciones > 2.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Buscas Conectar</p>
-                      <p className="text-sm text-muted-foreground">Tienes capacidad para conectar, pero no siempre la desplegas plenamente. Buscas pertenecer y contribuir sin perder autenticidad.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estrategia:</strong> Invierte en 3 relaciones profundas este mes. Aprende a preguntar. La vulnerabilidad build conexiones reales.</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Necesitas Desarrollar Conexión</p>
-                      <p className="text-sm text-muted-foreground">Te cuesta conectar con otros. Prefieres la soledad. Esto limita tu impacto y oportunidades de crecimiento.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Primer paso:</strong> Busca UNA persona para mentor/mentorado. Una taza de café. Practica escuchar más que hablar.</p>
-                    </>
-                  )}
-                </div>
 
-                {/* Plan Ejecutivo Insight */}
-                <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500 space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-3 h-3 rounded-full bg-purple-500" />
-                    <span className="font-semibold text-lg">Liderazgo y Ejecución ({(results.plan_ejecutivo * 20).toFixed(0)}%)</span>
+                  {/* Plan Ejecutivo */}
+                  <div className="p-4 rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-950 dark:border-orange-900">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-orange-900 dark:text-orange-100">Plan Ejecutivo (Dominio)</h4>
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">{Math.round(results.plan_ejecutivo)}%</span>
+                    </div>
+                    <Progress value={results.plan_ejecutivo} className="h-2" />
+                    <p className="text-sm text-orange-800 dark:text-orange-200 mt-2">
+                      {results.plan_ejecutivo > 75 ? "Líder decisivo" : results.plan_ejecutivo > 50 ? "Buscas mayor ejecución" : "Necesitas desarrollar liderazgo"}
+                    </p>
                   </div>
-                  {results.plan_ejecutivo > 3.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Líder Decisivo</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad para tomar decisiones rápidas y ejecutar es excepcional. Te atreves a liderar incluso con información incompleta. Eres motor de cambio.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Tú HACES que las cosas pasen. En crisis, todos te miran. Lidera iniciativas complejas que requieren coraje.</p>
-                    </>
-                  ) : results.plan_ejecutivo > 2.5 ? (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Buscas Mayor Ejecución</p>
-                      <p className="text-sm text-muted-foreground">Tienes potencial para liderar, pero dudas entre actuar y reflexionar. A veces paralizas por perfeccionismo. Necesitas confiar más en tus instintos.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Técnica del 70%:</strong> Si estás 70% seguro, ACTÚA. El aprendizaje viene del hacer, no del analizar infinito.</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Necesitas Desarrollar Liderazgo</p>
-                      <p className="text-sm text-muted-foreground">Te cuesta tomar decisiones. Delegas decisiones importantes. Necesitas fortaleza para guiar desde la incertidumbre.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Hoy mismo:</strong> Toma UNA decisión pequeña SIN consultarla. Prueba. Aprende. Repite. El liderazgo es un músculo.</p>
-                    </>
-                  )}
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              {/* Overall Recommendation from knowledge base */}
-              <div className="p-4 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-lg mt-4">
-                <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">📚 Tu Ruta de Desarrollo Personalizada:</p>
-                <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                  Basado en tu perfil y en los insights de 120+ libros de desarrollo profesional en nuestra biblioteca:
-                </p>
-                <div className="space-y-2 text-sm">
-                  {results.nivel === "principiante" ? (
-                    <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Los 7 Hábitos de la Gente Altamente Efectiva" - Construye una base sólida desarrollando una dimensión a la vez.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Plan de 30 días:</strong> Semana 1: Enfócate en dormir bien. Semana 2: Agrega 20 min de ejercicio. Semana 3: Una conexión genuina. Semana 4: Consolida todo.</p>
-                    </>
-                  ) : results.nivel === "intermedio" ? (
-                    <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Deep Work" de Cal Newport - Tienes buen balance. Ahora potencia tu fortaleza más débil y amplifica tus fortalezas.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu enfoque:</strong> Identifica la dimensión con menor puntuación y dedica este mes a desarrollarla específicamente.</p>
-                    </>
-                  ) : results.nivel === "avanzado" ? (
-                    <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "El Monje que vendió su Ferrari" - Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu rol:</strong> Ayuda a otros en su jornada. Considera mentoría o liderazgo transformacional.</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "The Mastery Manual" - Has alcanzado maestría. Transforma tu experiencia en impacto duradero.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Próximo paso:</strong> Documenta tu metodología. Lidera con ejemplo. Eres un modelo para otros.</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-muted rounded-lg">
-              <h3 className="font-semibold mb-2">Tus Caminos Activos:</h3>
-              <div className="flex gap-2">
-                {caminoPersona && (
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                    Camino Persona
-                  </span>
+            {/* Insights Card */}
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle>Tu Insight Personalizado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {results.energia > 3.5 ? (
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
+                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Emocionalmente Resiliente</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
+                  </div>
+                ) : results.energia > 2.5 ? (
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
+                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Buscas Equilibrio</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
+                  </div>
+                ) : (
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
+                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Necesitas Mayor Equilibrio</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">Experimentas fluctuaciones emocionales frecuentes. Recuperar estabilidad es prioritario para tu desempeño.</p>
+                  </div>
                 )}
-                {caminoProfesional && (
-                  <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
-                    Camino Profesional
-                  </span>
-                )}
-              </div>
-            </div>
 
-            <Button 
-                onClick={() => router.push("/dashboard?refetch=true")}
-              className="w-full" 
-              size="lg"
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Ir a mi Dashboard Despega"}
-            </Button>
-          </CardContent>
-        </Card>
+                <Button 
+                  onClick={() => router.push("/dashboard")}
+                  className="w-full h-12 text-base font-semibold mt-6"
+                >
+                  Ir a mi Dashboard
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
-    )
-  }
-
-  return null
+    </div>
+  )
 }
