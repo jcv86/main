@@ -888,60 +888,6 @@ export default function DespegaOnboarding() {
             </Card>
           </div>
         )}
-                  <p className="text-sm text-orange-800 dark:text-orange-200 mt-2">
-                    {results.D > 75 ? "Decisivo y orientado a resultados" : results.D > 50 ? "Moderadamente decidido" : "Necesitas mayor decisión"}
-                  </p>
-                </div>
-
-                {/* I - Influence */}
-                <div className="p-4 rounded-lg border border-purple-200 bg-purple-50 dark:bg-purple-950 dark:border-purple-900">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-purple-900 dark:text-purple-100">I - Influencia (Relaciones)</h4>
-                    <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{Math.round(results.I)}%</span>
-                  </div>
-                  <Progress value={results.I} className="h-2" />
-                  <p className="text-sm text-purple-800 dark:text-purple-200 mt-2">
-                    {results.I > 75 ? "Carismático e inspirador" : results.I > 50 ? "Buscas conectar" : "Necesitas desarrollar influencia"}
-                  </p>
-                </div>
-
-                {/* S - Steadiness */}
-                <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-blue-900 dark:text-blue-100">S - Steadiness (Energía)</h4>
-                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{Math.round(results.S)}%</span>
-                  </div>
-                  <Progress value={results.S} className="h-2" />
-                  <p className="text-sm text-blue-800 dark:text-blue-200 mt-2">
-                    {results.S > 75 ? "Calmado y consistente" : results.S > 50 ? "Buscas equilibrio" : "Necesitas mayor estabilidad"}
-                  </p>
-                </div>
-
-                {/* C - Conscientiousness */}
-                <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-900">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-green-900 dark:text-green-100">C - Conscientiousness (Enfoque)</h4>
-                    <span className="text-sm font-bold text-green-600 dark:text-green-400">{Math.round(results.C)}%</span>
-                  </div>
-                  <Progress value={results.C} className="h-2" />
-                  <p className="text-sm text-green-800 dark:text-green-200 mt-2">
-                    {results.C > 75 ? "Analítico y riguroso" : results.C > 50 ? "Buscas precisión" : "Necesitas desarrollar rigor"}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Action Button */}
-            <div className="text-center">
-              <Button
-                onClick={() => router.push("/dashboard")}
-                className="h-12 text-base font-semibold px-8"
-              >
-                Ir a Mi Dashboard
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
