@@ -249,12 +249,20 @@ export default function OnboardingPage() {
 
       // Save to database
       if (userId && userEmail) {
-        await supabase.from("unified_test_results").insert({
+        console.log("[v0] Saving test results to database:", { userId, userEmail, normalizedResults })
+        const { error } = await supabase.from("unified_test_results").insert({
           user_email: userEmail,
           user_id: userId,
           test_type: "despega_cerebral",
           test_results: normalizedResults,
         })
+        if (error) {
+          console.error("[v0] Error saving to database:", error)
+        } else {
+          console.log("[v0] Successfully saved to database")
+        }
+      } else {
+        console.log("[v0] Missing userId or userEmail, cannot save to database")
       }
 
       setStep("results")

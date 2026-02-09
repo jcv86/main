@@ -25,7 +25,6 @@ interface UserProgress {
 }
 
 export function DashboardContent() {
-  const { session } = useSession()
   const supabase = createClient()
   
   const [loading, setLoading] = useState(true)
@@ -33,25 +32,36 @@ export function DashboardContent() {
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
   const [bibliotecaBooks, setBibliotecaBooks] = useState<any[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!session?.user?.email || !session?.user?.id) {
-      setLoading(false)
-      return
-    }
-
     const loadDashboardData = async () => {
       try {
         setLoading(true)
 
+        // Get authenticated user
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (!user?.email || !user?.id) {
+          console.log("[v0] No user found")
+          setLoading(false)
+          return
+        }
+
+        setUserEmail(user.email)
+
+        console.log("[v0] Loading dashboard for user:", user.email)
+
         // Fetch Despega Cerebral results
-        const { data: cerebralData } = await supabase
+        const { data: cerebralData, error: cerebralError } = await supabase
           .from("unified_test_results")
           .select("test_results")
-          .eq("user_email", session.user.email)
+          .eq("user_email", user.email)
           .eq("test_type", "despega_cerebral")
           .order("created_at", { ascending: false })
           .limit(1)
+
+        console.log("[v0] Cerebral data:", cerebralData, cerebralError)
 
         if (cerebralData && cerebralData.length > 0) {
           setCerebralScore(cerebralData[0].test_results)
@@ -61,7 +71,7 @@ export function DashboardContent() {
         const { data: profileData } = await supabase
           .from("despega_user_profiles")
           .select("*")
-          .eq("user_id", session.user.id)
+          .eq("user_id", user.id)
           .single()
 
         if (profileData) {
@@ -94,7 +104,7 @@ export function DashboardContent() {
     }
 
     loadDashboardData()
-  }, [session?.user?.email, session?.user?.id, supabase])
+  }, [supabase])
 
   if (loading) {
     return (
@@ -114,7 +124,7 @@ export function DashboardContent() {
       <div>
         <h1 className="text-3xl font-bold">Tu Dashboard Despega</h1>
         <p className="text-muted-foreground mt-1">
-          {session?.user?.email}
+          {userEmail || "Cargando..."}
         </p>
       </div>
 
