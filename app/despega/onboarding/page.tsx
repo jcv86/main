@@ -754,12 +754,12 @@ export default function DespegaOnboarding() {
             </div>
 
             <Button 
-                onClick={() => router.push("/dashboard?refetch=true")}
+                onClick={() => router.push("/despega/onboarding/book-recommendations")}
               className="w-full" 
               size="lg"
               disabled={loading}
             >
-              {loading ? "Guardando..." : "Ir a mi Dashboard Despega"}
+              {loading ? "Guardando..." : "Ver Libros Recomendados"}
             </Button>
           </CardContent>
         </Card>
