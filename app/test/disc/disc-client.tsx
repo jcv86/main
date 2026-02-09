@@ -88,41 +88,45 @@ export default function DISCTestClient() {
     }
   }
 
-  const calculateDISCScores = () => {
-    const scores = { D: 0, I: 0, S: 0, C: 0 }
+  const calculateDesperaScores = () => {
+    // Calcular puntuaciones para las 4 dimensiones de Despega Cerebral
+    const scores = { 
+      energia: 0, 
+      enfoque: 0, 
+      relaciones: 0, 
+      plan_ejecutivo: 0 
+    }
+    const counts = { 
+      energia: 0, 
+      enfoque: 0, 
+      relaciones: 0, 
+      plan_ejecutivo: 0 
+    }
 
+    // Basarse en el mapeo de 'area' en las preguntas, no en 'type'
     discQuestions.forEach((question) => {
       const answer = answers[question.id]
       if (answer) {
-        if (question.type === "multiple_choice" && question.options) {
-          const answerIndex = question.options.indexOf(answer)
-          if (answerIndex === 0) scores.D += 3
-          else if (answerIndex === 1) scores.I += 3
-          else if (answerIndex === 2) scores.S += 3
-          else if (answerIndex === 3) scores.C += 3
-        } else if (question.type === "open_ended" || question.type === "scenario") {
-          scores[question.category] += 2
+        // Usar la escala de 1-5 de las respuestas
+        const answerValue = parseInt(answer) || 3 // Default a neutral (3) si no es un número
+        const normalizedScore = (answerValue - 1) / 4 // Normalizar a 0-1 scale
+        
+        if (question.area) {
+          scores[question.area as keyof typeof scores] += normalizedScore
+          counts[question.area as keyof typeof counts] += 1
         }
       }
     })
 
-    const total = scores.D + scores.I + scores.S + scores.C
-    if (total > 0) {
-      scores.D = Math.round((scores.D / total) * 100)
-      scores.I = Math.round((scores.I / total) * 100)
-      scores.S = Math.round((scores.S / total) * 100)
-      scores.C = Math.round((scores.C / total) * 100)
+    // Calcular promedios y convertir a percentiles (0-100)
+    const results = {
+      energia: counts.energia > 0 ? Math.round((scores.energia / counts.energia) * 100) : 0,
+      enfoque: counts.enfoque > 0 ? Math.round((scores.enfoque / counts.enfoque) * 100) : 0,
+      relaciones: counts.relaciones > 0 ? Math.round((scores.relaciones / counts.relaciones) * 100) : 0,
+      plan_ejecutivo: counts.plan_ejecutivo > 0 ? Math.round((scores.plan_ejecutivo / counts.plan_ejecutivo) * 100) : 0,
     }
 
-    return scores
-  }
-
-  const getPrimaryStyle = (scores: { D: number; I: number; S: number; C: number }) => {
-    const maxScore = Math.max(scores.D, scores.I, scores.S, scores.C)
-    if (scores.D === maxScore) return "Dominance"
-    if (scores.I === maxScore) return "Influence"
-    if (scores.S === maxScore) return "Steadiness"
-    return "Compliance"
+    return results
   }
 
   const submitTest = async () => {
@@ -137,16 +141,14 @@ export default function DISCTestClient() {
 
     setIsSubmitting(true)
     try {
-      const scores = calculateDISCScores()
-      const primaryStyle = getPrimaryStyle(scores)
+      const scores = calculateDesperaScores()
       const duration = Math.round((Date.now() - startTime) / 60000)
 
       const testResults = {
-        D: scores.D,
-        I: scores.I,
-        S: scores.S,
-        C: scores.C,
-        primary_style: primaryStyle,
+        energia: scores.energia,
+        enfoque: scores.enfoque,
+        relaciones: scores.relaciones,
+        plan_ejecutivo: scores.plan_ejecutivo,
         answers: answers,
         gesture_interactions: gestureLog.length,
         touch_enabled: touchSupport,
@@ -176,12 +178,10 @@ export default function DISCTestClient() {
         description: "Tus resultados han sido guardados exitosamente",
       })
 
-      setCompletionData({
-        primaryStyle,
-        scores,
-        duration,
-      })
-      setShowCompletion(true)
+      // Redirigir a la nueva página de resultados Despega
+      setTimeout(() => {
+        router.push("/test/disc/results-despega")
+      }, 1500)
     } catch (error) {
       console.error("[v0] Error submitting test:", error)
       toast({
@@ -198,12 +198,12 @@ export default function DISCTestClient() {
     return (
       <TestIntroScreen
         testName="Despega Cerebral"
-        testDescription="Tu Perfil de Comportamiento Profesional"
+        testDescription="Check-in de Autoconocimiento Profesional"
         whatItMeasures={[
-          "Tu estilo de comportamiento natural en el trabajo",
-          "Preferencias de comunicación y toma de decisiones",
-          "4 dimensiones clave: Dominancia, Influencia, Estabilidad y Cumplimiento",
-          "Fortalezas naturales y áreas de desarrollo",
+          "Tu gestión de ENERGÍA vital y sostenibilidad",
+          "Tu capacidad de ENFOQUE y ejecución de objetivos",
+          "Calidad de tus RELACIONES e inversión relacional",
+          "Claridad de PLAN EJECUTIVO y visión a largo plazo",
         ]}
         whyRelevant="Entender tu estilo DISC te ayuda a comunicarte mejor, elegir roles que se alineen con tus fortalezas naturales y desarrollar competencias complementarias."
         estimatedTime={15}
