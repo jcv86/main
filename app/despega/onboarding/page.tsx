@@ -208,83 +208,119 @@ export default function DespegaOnboarding() {
     // Save to database
     if (userId) {
       try {
-        // Create user profile
-        await supabase.from("despega_user_profiles").upsert({
-          user_id: userId,
-          camino_persona_active: caminoPersona,
-          camino_profesional_active: caminoProfesional,
-          camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
-          onboarding_completed: true,
-          a1_test_completed: true,
-        })
+        // Get user email once at the beginning
+        const { data: { user: authUser } } = await supabase.auth.getUser()
+        const userEmail = authUser?.email
 
-        // Save test results to both tables for compatibility
-        await supabase.from("despega_a1_test_results").insert({
+        // Create user profile with proper onConflict
+        const { error: profileError } = await supabase.from("despega_user_profiles").upsert(
+          {
+            user_id: userId,
+            camino_persona_active: caminoPersona,
+            camino_profesional_active: caminoProfesional,
+            camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
+            onboarding_completed: true,
+            a1_test_completed: true,
+          },
+          { onConflict: "user_id" }
+        )
+        
+        if (profileError) {
+          console.error("[v0] Error saving user profile:", profileError.message)
+        }
+
+        // Save test results with CORRECT schema
+        const scoreTotalPercentage = Math.round(total * 20)
+        const resultados = {
+          energia: Math.round(avgScores.energia * 20),
+          enfoque: Math.round(avgScores.enfoque * 20),
+          relaciones: Math.round(avgScores.relaciones * 20),
+          plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+        }
+
+        const { error: a1Error } = await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
-          score_energia: Math.round(avgScores.energia * 20),
-          score_enfoque: Math.round(avgScores.enfoque * 20),
-          score_relaciones: Math.round(avgScores.relaciones * 20),
-          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-          nivel_detectado: nivel,
-          respuestas_raw: responses,
-        }).then(res => {
-          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
-          else console.log("[v0] Saved to despega_a1_test_results")
+          score_total: scoreTotalPercentage,
+          resultados: resultados,
+          respuestas: responses,
+          diagnostico: nivel,
+          completed_at: new Date().toISOString(),
         })
+        
+        if (a1Error) {
+          console.error("[v0] Error saving to despega_a1_test_results:", a1Error.message)
+        } else {
+          console.log("[v0] Successfully saved to despega_a1_test_results")
+        }
 
         // Also save to unified_test_results so dashboard recognizes it
-        const userEmail = (await supabase.auth.getUser()).data.user?.email
         if (userEmail) {
-          const { error } = await supabase.from("unified_test_results").insert({
+          const { error: unifiedError } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
             test_type: "disc",
-            test_results: {
-              energia: Math.round(avgScores.energia * 20),
-              enfoque: Math.round(avgScores.enfoque * 20),
-              relaciones: Math.round(avgScores.relaciones * 20),
-              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-            },
-            created_at: new Date().toISOString(),
+            test_results: resultados,
           })
-          if (error) {
-            console.error("[v0] Error saving to unified_test_results:", error)
+          if (unifiedError) {
+            console.error("[v0] Error saving to unified_test_results:", unifiedError.message)
           } else {
             console.log("[v0] Successfully saved to unified_test_results")
           }
         }
 
-        // Initialize pilar progress
+        // Initialize pilar progress with proper onConflict
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
         for (const pilar of pilares) {
-          await supabase.from("despega_pilar_progress").upsert({
-            user_id: userId,
-            pilar,
-            estado: { diagnostico_completado: pilar === "a1_cerebral" },
-            progreso: pilar === "a1_cerebral" ? 10 : 0,
-            score: 0,
-            ciclo_actual: "30",
-            ciclo_dia: 1,
-          })
+          const { error: pilarError } = await supabase.from("despega_pilar_progress").upsert(
+            {
+              user_id: userId,
+              pilar,
+              estado: { diagnostico_completado: pilar === "a1_cerebral" },
+              progreso: pilar === "a1_cerebral" ? 10 : 0,
+              score: 0,
+              ciclo_actual: 30,
+              ciclo_dia: 1,
+            },
+            { onConflict: "user_id,pilar" }
+          )
+          
+          if (pilarError) {
+            console.error(`[v0] Error saving pilar ${pilar}:`, pilarError.message)
+          }
         }
 
-        // Initialize rankings
-        await supabase.from("despega_rankings").upsert({
-          user_id: userId,
-          score_pilar_a1: 10,
-          score_pilar_a2: 0,
-          score_aterrizaje: 0,
-          score_base: 0,
-          score_camino_persona: caminoPersona ? 5 : 0,
-          score_camino_profesional: caminoProfesional ? 5 : 0,
-          score_general: 10,
-        })
+        // Initialize rankings with proper onConflict
+        const { error: rankingError } = await supabase.from("despega_rankings").upsert(
+          {
+            user_id: userId,
+            score_a1_cerebral: scoreTotalPercentage,
+            score_a2_rutas: 0,
+            score_aterrizaje: 0,
+            score_base: 0,
+            score_camino_persona: caminoPersona ? 5 : 0,
+            score_camino_profesional: caminoProfesional ? 5 : 0,
+            score_general: scoreTotalPercentage,
+          },
+          { onConflict: "user_id" }
+        )
+        
+        if (rankingError) {
+          console.error("[v0] Error saving to despega_rankings:", rankingError.message)
+        } else {
+          console.log("[v0] Successfully saved to despega_rankings")
+        }
       } catch (error) {
-        console.error("Error saving onboarding data:", error)
+        console.error("[v0] Error saving onboarding data:", error)
+        // Don't throw - continue to show results even if saving fails
+      } finally {
+        setLoading(false)
+        setStep("results")
       }
+    } else {
+      // No userId but still allow to see results
+      console.warn("[v0] No userId available, skipping database save")
+      setLoading(false)
+      setStep("results")
     }
-
-    setLoading(false)
-    setStep("results")
   }
 
   // STEP 1: Intro - "El Ritual de Entrada"

@@ -521,20 +521,7 @@ export function DashboardContent() {
           </Card>
         )}
 
-        {!isLoadingInitialData && userProfile.completedTests === 0 ? (
-          <div className="opacity-50 pointer-events-none">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-muted-foreground">Contenido Bloqueado</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Completa tu primer test para acceder a todas las funcionalidades del dashboard</p>
-              </CardContent>
-            </Card>
-          </div>
-        ) : (
-          <>
-        {/* BetterMe Integration Section */}
+        {/* Main Dashboard Content - Always Visible */}
         <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 p-6">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -1049,9 +1036,7 @@ export function DashboardContent() {
             </Card>
           </TabsContent>
         </Tabs>
-        </>
-        )}
-      </div>
+        </div>
     </div>
   )
 }
