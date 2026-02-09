@@ -212,15 +212,18 @@ export default function DespegaOnboarding() {
         const { data: { user: authUser } } = await supabase.auth.getUser()
         const userEmail = authUser?.email
 
-        // Create user profile
-        const { error: profileError } = await supabase.from("despega_user_profiles").upsert({
-          user_id: userId,
-          camino_persona_active: caminoPersona,
-          camino_profesional_active: caminoProfesional,
-          camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
-          onboarding_completed: true,
-          a1_test_completed: true,
-        })
+        // Create user profile with proper onConflict
+        const { error: profileError } = await supabase.from("despega_user_profiles").upsert(
+          {
+            user_id: userId,
+            camino_persona_active: caminoPersona,
+            camino_profesional_active: caminoProfesional,
+            camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
+            onboarding_completed: true,
+            a1_test_completed: true,
+          },
+          { onConflict: "user_id" }
+        )
         
         if (profileError) {
           console.error("[v0] Error saving user profile:", profileError.message)
@@ -264,35 +267,41 @@ export default function DespegaOnboarding() {
           }
         }
 
-        // Initialize pilar progress
+        // Initialize pilar progress with proper onConflict
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
         for (const pilar of pilares) {
-          const { error: pilarError } = await supabase.from("despega_pilar_progress").upsert({
-            user_id: userId,
-            pilar,
-            estado: { diagnostico_completado: pilar === "a1_cerebral" },
-            progreso: pilar === "a1_cerebral" ? 10 : 0,
-            score: 0,
-            ciclo_actual: 30,
-            ciclo_dia: 1,
-          })
+          const { error: pilarError } = await supabase.from("despega_pilar_progress").upsert(
+            {
+              user_id: userId,
+              pilar,
+              estado: { diagnostico_completado: pilar === "a1_cerebral" },
+              progreso: pilar === "a1_cerebral" ? 10 : 0,
+              score: 0,
+              ciclo_actual: 30,
+              ciclo_dia: 1,
+            },
+            { onConflict: "user_id,pilar" }
+          )
           
           if (pilarError) {
             console.error(`[v0] Error saving pilar ${pilar}:`, pilarError.message)
           }
         }
 
-        // Initialize rankings with error handling
-        const { error: rankingError } = await supabase.from("despega_rankings").upsert({
-          user_id: userId,
-          score_a1_cerebral: scoreTotalPercentage,
-          score_a2_rutas: 0,
-          score_aterrizaje: 0,
-          score_base: 0,
-          score_camino_persona: caminoPersona ? 5 : 0,
-          score_camino_profesional: caminoProfesional ? 5 : 0,
-          score_general: scoreTotalPercentage,
-        })
+        // Initialize rankings with proper onConflict
+        const { error: rankingError } = await supabase.from("despega_rankings").upsert(
+          {
+            user_id: userId,
+            score_a1_cerebral: scoreTotalPercentage,
+            score_a2_rutas: 0,
+            score_aterrizaje: 0,
+            score_base: 0,
+            score_camino_persona: caminoPersona ? 5 : 0,
+            score_camino_profesional: caminoProfesional ? 5 : 0,
+            score_general: scoreTotalPercentage,
+          },
+          { onConflict: "user_id" }
+        )
         
         if (rankingError) {
           console.error("[v0] Error saving to despega_rankings:", rankingError.message)
