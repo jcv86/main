@@ -37,6 +37,7 @@ import { useToast } from "@/hooks/use-toast"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 import { DISCContextForm, type UserContext } from "@/components/disc-context-form"
+import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 
 interface DISCResult {
   d_score: number
@@ -650,6 +651,37 @@ export default function DISCResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6 pt-6">
+                {/* Radar Chart Visualization */}
+                <CompetencyRadarChart
+                  data={[
+                    {
+                      name: "Dominancia",
+                      value: discResult.d_score,
+                      fullMark: 100,
+                    },
+                    {
+                      name: "Influencia",
+                      value: discResult.i_score,
+                      fullMark: 100,
+                    },
+                    {
+                      name: "Estabilidad",
+                      value: discResult.s_score,
+                      fullMark: 100,
+                    },
+                    {
+                      name: "Cumplimiento",
+                      value: discResult.c_score,
+                      fullMark: 100,
+                    },
+                  ]}
+                  title="Tu Perfil DISC Completo"
+                  description="Visualización de tus 4 dimensiones de personalidad"
+                  strokeColor="#3b82f6"
+                  fillColor="#3b82f6"
+                  height={400}
+                />
+
                 {/* Foto rápida del perfil */}
                 <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-lg">
                   <h3 className="text-xl font-bold text-blue-900 mb-2">Tu perfil: {discResult.primary_type}</h3>
