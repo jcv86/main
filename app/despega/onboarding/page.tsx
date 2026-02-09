@@ -604,21 +604,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.energia > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Estable y Consistente</p>
-                      <p className="text-sm text-muted-foreground">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Aprovecha esto para mediar conflictos y liderar con serenidad.</p>
+                      <p className="text-sm font-medium">Sereno y Equilibrado</p>
+                      <p className="text-sm text-muted-foreground">Tu estabilidad emocional es una fortaleza. Mantienes la calma bajo presión, recuperas equilibrio rápidamente y transmites confianza.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu serenidad inspira confianza. Lidera en crisis y situaciones de alta presión.</p>
                     </>
                   ) : results.energia > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Buscas Equilibrio</p>
-                      <p className="text-sm text-muted-foreground">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad (respiración, meditación o caminar). Esto te dará el ancla que necesitas.</p>
+                      <p className="text-sm font-medium">Buscas Mayor Estabilidad</p>
+                      <p className="text-sm text-muted-foreground">Te afectan las situaciones inesperadas, pero recuperas el equilibrio. Buscas consistencia pero a veces pierdes el ritmo.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Herramienta:</strong> Crea rutinas que te anclen (meditación, ejercicio, lectura). Una hora de "tu tiempo" diario sin interrupciones.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Inestabilidad Emocional</p>
-                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Te cuesta mantener la consistencia bajo presión. Recuperar estabilidad es prioritario.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte (ejercicio, meditación). Esto restaurará tu base.</p>
+                      <p className="text-sm font-medium">Necesitas Desarrollar Estabilidad</p>
+                      <p className="text-sm text-muted-foreground">Te estresa fácilmente y recuperarte toma tiempo. Necesitas desarrollar resiliencia emocional y técnicas de manejo del estrés.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Comienza hoy:</strong> Práctica 5 min de respiración profunda cada mañana. Practica meditación. Esto restaura tu base.</p>
                     </>
                   )}
                 </div>
@@ -631,19 +631,19 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.enfoque > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Meticuloso y Preciso</p>
+                      <p className="text-sm font-medium">Meticuloso y Preciso</p>
                       <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te obsesiona la calidad, los detalles y la precisión. Evitas errores con rigor analítico.</p>
                       <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos donde la precisión es vital.</p>
                     </>
                   ) : results.enfoque > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Buscas Precisión</p>
+                      <p className="text-sm font-medium">Buscas Precisión</p>
                       <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces la abandones por rapidez.</p>
                       <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros para cada tarea. Revisa solo UNA vez al final. Confía en tu proceso, no en perfeccionismo infinito.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Necesitas Desarrollar Rigor</p>
+                      <p className="text-sm font-medium">Necesitas Desarrollar Rigor</p>
                       <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas crear sistemas que impongan estructura.</p>
                       <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones digitales. Dedica 90 min puros a una sola tarea hoy.</p>
                     </>
@@ -658,19 +658,19 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.relaciones > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Inspirador y Conectado</p>
+                      <p className="text-sm font-medium">Inspirador y Conectado</p>
                       <p className="text-sm text-muted-foreground">Tu capacidad de conexión es natural. Inspiras a otros, influyes sin imponer, y generas entusiasmo genuino a tu alrededor.</p>
                       <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador social. Tu carisma abre puertas. Lidera movimientos, comunidades y transformaciones basadas en personas.</p>
                     </>
                   ) : results.relaciones > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Buscas Conectar</p>
+                      <p className="text-sm font-medium">Buscas Conectar</p>
                       <p className="text-sm text-muted-foreground">Tienes buena presencia social, pero a veces te reservas. Puedes influir, pero necesitas más confianza en tu impacto.</p>
                       <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo:</strong> Practica compartir tus opiniones con más libertad. Una conexión genuina cada semana. Celebra pequeños momentos de influencia.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Necesitas Desarrollar Influencia</p>
+                      <p className="text-sm font-medium">Necesitas Desarrollar Influencia</p>
                       <p className="text-sm text-muted-foreground">Te cuesta conectar o influir. Prefieres trabajar en solitario. Desarrollar carisma y presencia social es un area importante.</p>
                       <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Comienza:</strong> Practica escucha activa sin juzgar. Haz preguntas genuinas. Conecta con UNA persona profundamente esta semana.</p>
                     </>
@@ -685,19 +685,19 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.plan_ejecutivo > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Líder Decisivo</p>
+                      <p className="text-sm font-medium">Líder Decisivo</p>
                       <p className="text-sm text-muted-foreground">Tu impulso por resultados es natural. Decides rápido, ejecutas con determinación y logras objetivos bajo presión.</p>
                       <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador de acción. Tu visión se convierte en realidad. Lidera transformaciones estratégicas y grandes proyectos.</p>
                     </>
                   ) : results.plan_ejecutivo > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Buscas Mayor Ejecución</p>
+                      <p className="text-sm font-medium">Buscas Mayor Ejecución</p>
                       <p className="text-sm text-muted-foreground">Tienes intención de lograr resultados, pero a veces necesitas impulso. Planificas bien pero la ejecución falta consistencia.</p>
                       <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza objetivos a 3 años. Divide en metas trimestrales. Revisa progreso cada lunes. Esto crea accountability.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Necesitas Desarrollar Liderazgo</p>
+                      <p className="text-sm font-medium">Necesitas Desarrollar Liderazgo</p>
                       <p className="text-sm text-muted-foreground">La ejecución es un desafío. Luchas con la toma de decisiones o la consistencia. Necesitas crear sistemas de apoyo.</p>
                       <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea ritual matutino: 10 min, revisa 3 prioridades, ejecuta solo esas. Mañana comienza.</p>
                     </>
@@ -709,28 +709,52 @@ export default function DespegaOnboarding() {
               <div className="p-4 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-lg mt-4">
                 <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">📚 Tu Ruta de Desarrollo Personalizada:</p>
                 <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                  Basado en tu perfil y en los insights de 120+ libros de desarrollo profesional en nuestra biblioteca:
+                  Basado en los insights de 120+ libros de desarrollo profesional seleccionamos estos 2 libros para ti:
                 </p>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-3 text-sm">
                   {results.nivel === "principiante" ? (
                     <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Los 7 Hábitos de la Gente Altamente Efectiva" - Construye una base sólida desarrollando una dimensión a la vez.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Plan de 30 días:</strong> Semana 1: Enfócate en dormir bien. Semana 2: Agrega 20 min de ejercicio. Semana 3: Una conexión genuina. Semana 4: Consolida todo.</p>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 1:</strong> "Los 7 Hábitos de la Gente Altamente Efectiva"</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Construye una base sólida desarrollando una dimensión a la vez.</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 2:</strong> "Atomic Habits" - James Clear</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Transforma tu vida con pequeños cambios consistentes cada día.</p>
+                      </div>
                     </>
                   ) : results.nivel === "intermedio" ? (
                     <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Deep Work" de Cal Newport - Tienes buen balance. Ahora potencia tu fortaleza más débil y amplifica tus fortalezas.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu enfoque:</strong> Identifica la dimensión con menor puntuación y dedica este mes a desarrollarla específicamente.</p>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 1:</strong> "Deep Work" - Cal Newport</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Potencia tu enfoque y crea trabajo de impacto genuino.</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 2:</strong> "Mindset" - Carol Dweck</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Desarrolla tu mentalidad de crecimiento y acelera tu evolución.</p>
+                      </div>
                     </>
                   ) : results.nivel === "avanzado" ? (
                     <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "El Monje que vendió su Ferrari" - Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Tu rol:</strong> Ayuda a otros en su jornada. Considera mentoría o liderazgo transformacional.</p>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 1:</strong> "El Monje que vendió su Ferrari"</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Integra sabiduría con liderazgo transformacional.</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 2:</strong> "Start with Why" - Simon Sinek</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Inspira a otros desde tu propósito y crea impacto duradero.</p>
+                      </div>
                     </>
                   ) : (
                     <>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "The Mastery Manual" - Has alcanzado maestría. Transforma tu experiencia en impacto duradero.</p>
-                      <p className="text-blue-800 dark:text-blue-200"><strong>Próximo paso:</strong> Documenta tu metodología. Lidera con ejemplo. Eres un modelo para otros.</p>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 1:</strong> "The Mastery Manual"</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Transforma tu expertise en impacto y legado.</p>
+                      </div>
+                      <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                        <p className="text-blue-800 dark:text-blue-200"><strong>Libro 2:</strong> "Stolen Focus" - Johann Hari</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">Comprende los desafíos modernos y domina tu concentración.</p>
+                      </div>
                     </>
                   )}
                 </div>
@@ -754,12 +778,12 @@ export default function DespegaOnboarding() {
             </div>
 
             <Button 
-                onClick={() => router.push("/despega/onboarding/book-recommendations")}
+                onClick={() => router.push("/dashboard?refetch=true")}
               className="w-full" 
               size="lg"
               disabled={loading}
             >
-              {loading ? "Guardando..." : "Ver Libros Recomendados"}
+              {loading ? "Guardando..." : "Ir a mi Dashboard"}
             </Button>
           </CardContent>
         </Card>
