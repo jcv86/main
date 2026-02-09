@@ -27,10 +27,18 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [supabase, setSupabase] = useState<any>(null)
+  const [isMounted, setIsMounted] = useState(false)
   const isUpdatingRef = useRef(false)
+
+  // Set mounted flag to ensure client-side only operations
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Initialize supabase client on first render
   useEffect(() => {
+    if (!isMounted) return
+    
     try {
       const client = createClient()
       setSupabase(client)
@@ -38,10 +46,10 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
       console.error("[v0] Failed to initialize Supabase:", error)
       setSupabase(null)
     }
-  }, [])
+  }, [isMounted])
 
   useEffect(() => {
-    if (!supabase) return
+    if (!supabase || !isMounted) return
 
     // Check for existing session
     const checkSession = async () => {
@@ -58,25 +66,29 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
           }
           setUser(userData)
 
-          // Also save to localStorage for compatibility
-          localStorage.setItem(
-            "dtc_session",
-            JSON.stringify({
-              authenticated: true,
-              user: userData,
-              timestamp: Date.now(),
-            }),
-          )
+          // Also save to localStorage for compatibility (client-side only)
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              "dtc_session",
+              JSON.stringify({
+                authenticated: true,
+                user: userData,
+                timestamp: Date.now(),
+              }),
+            )
+          }
           setIsLoading(false)
           return
         }
 
-        // Fallback: Check local storage
-        const localSession = localStorage.getItem("dtc_session")
-        if (localSession) {
-          const sessionData = JSON.parse(localSession)
-          if (sessionData.authenticated && sessionData.user) {
-            setUser(sessionData.user)
+        // Fallback: Check local storage (client-side only)
+        if (typeof window !== "undefined") {
+          const localSession = localStorage.getItem("dtc_session")
+          if (localSession) {
+            const sessionData = JSON.parse(localSession)
+            if (sessionData.authenticated && sessionData.user) {
+              setUser(sessionData.user)
+            }
           }
         }
       } catch (error) {
@@ -106,14 +118,16 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
           }
 
           isUpdatingRef.current = true
-          localStorage.setItem(
-            "dtc_session",
-            JSON.stringify({
-              authenticated: true,
-              user: userData,
-              timestamp: Date.now(),
-            }),
-          )
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              "dtc_session",
+              JSON.stringify({
+                authenticated: true,
+                user: userData,
+                timestamp: Date.now(),
+              }),
+            )
+          }
           setTimeout(() => {
             isUpdatingRef.current = false
           }, 100)
@@ -122,7 +136,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
         })
       } else {
         setUser(null)
-        localStorage.removeItem("dtc_session")
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("dtc_session")
+        }
       }
     })
 
@@ -156,14 +172,16 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
       }
 
       setUser(userData)
-      localStorage.setItem(
-        "dtc_session",
-        JSON.stringify({
-          authenticated: true,
-          user: userData,
-          timestamp: Date.now(),
-        }),
-      )
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          "dtc_session",
+          JSON.stringify({
+            authenticated: true,
+            user: userData,
+            timestamp: Date.now(),
+          }),
+        )
+      }
 
       return true
     } catch (error) {
@@ -204,14 +222,16 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
       }
 
       setUser(userData)
-      localStorage.setItem(
-        "dtc_session",
-        JSON.stringify({
-          authenticated: true,
-          user: userData,
-          timestamp: Date.now(),
-        }),
-      )
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          "dtc_session",
+          JSON.stringify({
+            authenticated: true,
+            user: userData,
+            timestamp: Date.now(),
+          }),
+        )
+      }
 
       return true
     } catch (error) {
@@ -231,8 +251,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
       }
     }
     setUser(null)
-    localStorage.removeItem("dtc_session")
-  }
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("dtc_session")
+    }
 
   return (
     <SessionContext.Provider value={{ user, isLoading, login, signup, logout }}>{children}</SessionContext.Provider>
