@@ -17,36 +17,36 @@ import { ArrowLeft, ArrowRight, CheckCircle, Check } from "lucide-react"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
 
-// DISC-Based Questions (20 questions) - Complete replacement of old energy/focus/relations questions
-// Maps to: Dominance (D), Influence (I), Steadiness (S), Conscientiousness (C)
+// DISC-Based Questions (20 questions) - Complete replacement with new nomenclature
+// Maps to: Acción (Action), Inspiración (Inspiration), Apoyo (Support), Excelencia (Excellence)
 const A1_QUESTIONS_DISC_2024 = [
-  // DOMINANCE - Results-oriented, Competitive, Direct
-  { id: 1, area: "dominancia", type: "scale", text: "Prefiero tomar decisiones rápidas y directas sin hesitación", min: 1, max: 10, minLabel: "Analizo primero", maxLabel: "Decido rápido" },
-  { id: 2, area: "dominancia", type: "multiple", text: "¿Cómo respondes ante desafíos o competencia?", options: ["Evito conflictos", "Prefiero cooperar", "Compito moderadamente", "Busco ganar", "Debo ganar a toda costa"], weights: [0.1, 0.25, 0.5, 0.8, 1.0] },
-  { id: 3, area: "dominancia", type: "scale", text: "¿Cuánto necesitas tener control sobre las situaciones?", min: 1, max: 10, minLabel: "Poco control", maxLabel: "Control total" },
-  { id: 4, area: "dominancia", type: "multiple", text: "¿Cuál es tu estilo de comunicación?", options: ["Muy diplomático", "Considerado", "Directo", "Muy directo", "Brutal honestidad"], weights: [0.1, 0.3, 0.6, 0.85, 1.0] },
-  { id: 5, area: "dominancia", type: "scale", text: "¿Te gusta tomar riesgos calculados para lograr objetivos?", min: 1, max: 10, minLabel: "Prefiero seguridad", maxLabel: "Busco riesgos" },
+  // ACCIÓN - Results-oriented, Competitive, Direct
+  { id: 1, area: "accion", type: "scale", text: "Prefiero tomar decisiones rápidas y directas sin hesitación", min: 1, max: 10, minLabel: "Analizo primero", maxLabel: "Decido rápido" },
+  { id: 2, area: "accion", type: "multiple", text: "¿Cómo respondes ante desafíos o competencia?", options: ["Evito conflictos", "Prefiero cooperar", "Compito moderadamente", "Busco ganar", "Debo ganar a toda costa"], weights: [0.1, 0.25, 0.5, 0.8, 1.0] },
+  { id: 3, area: "accion", type: "scale", text: "¿Cuánto necesitas tener control sobre las situaciones?", min: 1, max: 10, minLabel: "Poco control", maxLabel: "Control total" },
+  { id: 4, area: "accion", type: "multiple", text: "¿Cuál es tu estilo de comunicación?", options: ["Muy diplomático", "Considerado", "Directo", "Muy directo", "Brutal honestidad"], weights: [0.1, 0.3, 0.6, 0.85, 1.0] },
+  { id: 5, area: "accion", type: "scale", text: "¿Te gusta tomar riesgos calculados para lograr objetivos?", min: 1, max: 10, minLabel: "Prefiero seguridad", maxLabel: "Busco riesgos" },
   
-  // INFLUENCE - Persuasive, Enthusiastic, Social
-  { id: 6, area: "influencia", type: "multiple", text: "¿Con qué frecuencia socializas o conectas con gente nueva?", options: ["Casi nunca", "Raramente", "Ocasionalmente", "Frecuentemente", "Constantemente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
-  { id: 7, area: "influencia", type: "scale", text: "¿Cuán fácil te resulta persuadir o convencer a otros?", min: 1, max: 10, minLabel: "Muy difícil", maxLabel: "Muy fácil" },
-  { id: 8, area: "influencia", type: "multiple", text: "¿Cómo describes tu entusiasmo y optimismo?", options: ["Reservado", "Moderado", "Normal", "Entusiasta", "Extremadamente entusiasta"], weights: [0.15, 0.35, 0.55, 0.8, 0.95] },
-  { id: 9, area: "influencia", type: "scale", text: "¿Disfrutas ser el centro de atención?", min: 1, max: 10, minLabel: "Prefiero pasar desapercibido", maxLabel: "Amo la atención" },
-  { id: 10, area: "influencia", type: "multiple", text: "¿Cómo te adaptas a nuevas personas o entornos?", options: ["Lentamente con dificultad", "Lentamente", "Moderadamente", "Rápidamente", "Instantáneamente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
+  // INSPIRACIÓN - Persuasive, Enthusiastic, Social
+  { id: 6, area: "inspiracion", type: "multiple", text: "¿Con qué frecuencia socializas o conectas con gente nueva?", options: ["Casi nunca", "Raramente", "Ocasionalmente", "Frecuentemente", "Constantemente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
+  { id: 7, area: "inspiracion", type: "scale", text: "¿Cuán fácil te resulta persuadir o convencer a otros?", min: 1, max: 10, minLabel: "Muy difícil", maxLabel: "Muy fácil" },
+  { id: 8, area: "inspiracion", type: "multiple", text: "¿Cómo describes tu entusiasmo y optimismo?", options: ["Reservado", "Moderado", "Normal", "Entusiasta", "Extremadamente entusiasta"], weights: [0.15, 0.35, 0.55, 0.8, 0.95] },
+  { id: 9, area: "inspiracion", type: "scale", text: "¿Disfrutas ser el centro de atención?", min: 1, max: 10, minLabel: "Prefiero pasar desapercibido", maxLabel: "Amo la atención" },
+  { id: 10, area: "inspiracion", type: "multiple", text: "¿Cómo te adaptas a nuevas personas o entornos?", options: ["Lentamente con dificultad", "Lentamente", "Moderadamente", "Rápidamente", "Instantáneamente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
   
-  // STEADINESS - Loyal, Patient, Stable
-  { id: 11, area: "estabilidad", type: "multiple", text: "¿Cómo prefieres tu entorno de trabajo?", options: ["Muy dinámico y caótico", "Dinámico", "Equilibrado", "Estable", "Muy predecible"], weights: [1.0, 0.7, 0.55, 0.8, 0.95] },
-  { id: 12, area: "estabilidad", type: "scale", text: "¿Eres paciente y tolerante con los errores de otros?", min: 1, max: 10, minLabel: "Poco paciente", maxLabel: "Muy paciente" },
-  { id: 13, area: "estabilidad", type: "multiple", text: "¿Cuál es tu nivel de lealtad hacia personas o equipos?", options: ["Cambio fácilmente", "Moderadamente leal", "Leal", "Muy leal", "Extremadamente leal"], weights: [0.1, 0.35, 0.6, 0.85, 1.0] },
-  { id: 14, area: "estabilidad", type: "scale", text: "¿Prefieres tareas o proyectos de largo plazo versus cambio constante?", min: 1, max: 10, minLabel: "Cambio constante", maxLabel: "Largo plazo" },
-  { id: 15, area: "estabilidad", type: "multiple", text: "¿Cómo reaccionas ante cambios no esperados?", options: ["Entro en pánico", "Me perturba", "Me adapto", "Casi no me afecta", "Lo veo como oportunidad"], weights: [0.05, 0.25, 0.55, 0.75, 0.95] },
+  // APOYO - Loyal, Patient, Stable
+  { id: 11, area: "apoyo", type: "multiple", text: "¿Cómo prefieres tu entorno de trabajo?", options: ["Muy dinámico y caótico", "Dinámico", "Equilibrado", "Estable", "Muy predecible"], weights: [1.0, 0.7, 0.55, 0.8, 0.95] },
+  { id: 12, area: "apoyo", type: "scale", text: "¿Eres paciente y tolerante con los errores de otros?", min: 1, max: 10, minLabel: "Poco paciente", maxLabel: "Muy paciente" },
+  { id: 13, area: "apoyo", type: "multiple", text: "¿Cuál es tu nivel de lealtad hacia personas o equipos?", options: ["Cambio fácilmente", "Moderadamente leal", "Leal", "Muy leal", "Extremadamente leal"], weights: [0.1, 0.35, 0.6, 0.85, 1.0] },
+  { id: 14, area: "apoyo", type: "scale", text: "¿Prefieres tareas o proyectos de largo plazo versus cambio constante?", min: 1, max: 10, minLabel: "Cambio constante", maxLabel: "Largo plazo" },
+  { id: 15, area: "apoyo", type: "multiple", text: "¿Cómo reaccionas ante cambios no esperados?", options: ["Entro en pánico", "Me perturba", "Me adapto", "Casi no me afecta", "Lo veo como oportunidad"], weights: [0.05, 0.25, 0.55, 0.75, 0.95] },
   
-  // CONSCIENTIOUSNESS - Analytical, Organized, Quality-focused
-  { id: 16, area: "consciencia", type: "scale", text: "¿Cuán importante es el análisis detallado antes de decidir?", min: 1, max: 10, minLabel: "Decido por intuición", maxLabel: "Necesito datos" },
-  { id: 17, area: "consciencia", type: "multiple", text: "¿Cuál es tu relación con los procedimientos y reglas?", options: ["Las ignoro", "Las sigo cuando me conviene", "Generalmente las sigo", "Las sigo siempre", "Necesito más reglas"], weights: [1.0, 0.7, 0.55, 0.85, 0.95] },
-  { id: 18, area: "consciencia", type: "scale", text: "¿Qué tan importante es la perfección y calidad en tu trabajo?", min: 1, max: 10, minLabel: "Está bien lo aproximado", maxLabel: "Debe ser perfecto" },
-  { id: 19, area: "consciencia", type: "multiple", text: "¿Cómo manejas los errores o inconsistencias?", options: ["Los ignoro", "Los tolero", "Los noto", "Los corijo siempre", "Me obsesiono"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
-  { id: 20, area: "consciencia", type: "scale", text: "¿Necesitas evidencia o pruebas antes de aceptar información nueva?", min: 1, max: 10, minLabel: "Confío en palabras", maxLabel: "Necesito evidencia" },
+  // EXCELENCIA - Analytical, Organized, Quality-focused
+  { id: 16, area: "excelencia", type: "scale", text: "¿Cuán importante es el análisis detallado antes de decidir?", min: 1, max: 10, minLabel: "Decido por intuición", maxLabel: "Necesito datos" },
+  { id: 17, area: "excelencia", type: "multiple", text: "¿Cuál es tu relación con los procedimientos y reglas?", options: ["Las ignoro", "Las sigo cuando me conviene", "Generalmente las sigo", "Las sigo siempre", "Necesito más reglas"], weights: [1.0, 0.7, 0.55, 0.85, 0.95] },
+  { id: 18, area: "excelencia", type: "scale", text: "¿Qué tan importante es la perfección y calidad en tu trabajo?", min: 1, max: 10, minLabel: "Está bien lo aproximado", maxLabel: "Debe ser perfecto" },
+  { id: 19, area: "excelencia", type: "multiple", text: "¿Cómo manejas los errores o inconsistencias?", options: ["Los ignoro", "Los tolero", "Los noto", "Los corijo siempre", "Me obsesiono"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
+  { id: 20, area: "excelencia", type: "scale", text: "¿Necesitas evidencia o pruebas antes de aceptar información nueva?", min: 1, max: 10, minLabel: "Confío en palabras", maxLabel: "Necesito evidencia" },
 ]
 
 // Use the new DISC questions - THIS IS THE ACTIVE QUESTIONS ARRAY
@@ -107,10 +107,10 @@ export default function A1CerebralPage() {
   }, [])
 
   const getProfileContent = (dimension: string, score: number) => {
-    // DISC Profile content based on Juan Vial framework
+    // Profile content based on new nomenclature: Acción, Inspiración, Apoyo, Excelencia
     const profileContent: Record<string, Record<string, any>> = {
-      dominancia: {
-        label: "Dominancia - Orientación a Resultados",
+      accion: {
+        label: "Acción - Orientación a Resultados",
         naturalBehavior: score > 70
           ? "Actúas con decisión y dirección clara. Orientado a resultados, buscas siempre lograr objetivos. Tu comunicación es directa y sin rodeos, priorizando la eficiencia."
           : score > 50
@@ -136,8 +136,8 @@ export default function A1CerebralPage() {
           : "Necesitas practicar tomar decisiones con información del 70% en lugar del 100%. La velocidad estratégica vence a la perfección.",
       },
       
-      influencia: {
-        label: "Influencia - Persuasión y Motivación",
+      inspiracion: {
+        label: "Inspiración - Persuasión y Motivación",
         naturalBehavior: score > 70
           ? "Actúas con entusiasmo y calidez natural. Inspiras a otros mediante tu optimismo y capacidad de conectar. Te expresas con pasión, contagiando motivación."
           : score > 50
@@ -153,27 +153,27 @@ export default function A1CerebralPage() {
           : "Aunque generalmente extrovertido, puede incomodarte no ser escuchado o falta de respuesta a tus ideas.",
         
         thinking: score > 70
-          ? "Piensas imaginando posibilidades y oportunidades. Tu mente busca conexiones creativas entre personas y ideas. Ves potencial en todo."
+          ? "Piensas imaginando posibilidades y oportunidades. Tu mente busca conexiones creativas entre personas e ideas. Ves potencial en todo."
           : score > 50
           ? "Piensas en formas de conectar, aunque a veces te pierdes en detalles de implementación."
           : "Tu pensamiento es más literal. Necesitas entrenar ver oportunidades en lugar de limitaciones.",
         
         growth: score > 70
           ? "Tu oportunidad es desarrollar seguimiento en la ejecución. La inspiración sin resultados es solo aire. Aprende a cerrar ciclos."
-          : "Necesitas UNA alianza auténtica donde puedas ser completamente tú. De esa plataforma, expande tu influencia naturalmente.",
+          : "Necesitas UNA alianza auténtica donde puedas ser completamente tú. De esa plataforma, expande tu capacidad de inspirar.",
       },
       
-      estabilidad: {
-        label: "Estabilidad - Lealtad y Apoyo",
+      apoyo: {
+        label: "Apoyo - Lealtad y Confiabilidad",
         naturalBehavior: score > 70
           ? "Actúas con calma y consistencia. Eres la roca donde otros confían. Tu lealtad es inquebrantable y tu paciencia es legendaria en tu círculo."
           : score > 50
-          ? "Buscas aportar estabilidad, aunque a veces necesitas movimiento o cambio. Eres confiable, pero ocasionalmente deseas aventura."
+          ? "Buscas aportar apoyo, aunque a veces necesitas movimiento o cambio. Eres confiable, pero ocasionalmente deseas aventura."
           : "Tu acercamiento es más dinámico. Prefieres variedad sobre predictibilidad. La rutina no es tu motivación.",
         
         connections: score > 70
           ? "Te conectas profundamente con personas que valoran la lealtad, la confianza y el apoyo genuino. Prefieres pocas relaciones hondas que muchas superficiales."
-          : "Buscas personas stables y confiables, aunque a veces el mundo te parece demasiado volátil.",
+          : "Buscas personas confiables y estables, aunque a veces el mundo te parece demasiado volátil.",
         
         uncomfortable: score < 50
           ? "Los cambios constantes o la falta de estructura te perturban. Te incomoda la traición o la inconsistencia ajena. Necesitas predecibilidad."
@@ -190,8 +190,8 @@ export default function A1CerebralPage() {
           : "Necesitas buscar cambio positivo en UNA área importante. No resistir el cambio, sino conducirlo.",
       },
       
-      consciencia: {
-        label: "Consciencia - Precisión y Calidad",
+      excelencia: {
+        label: "Excelencia - Precisión y Calidad",
         naturalBehavior: score > 70
           ? "Actúas con lógica y precisión. Tu análisis es profundo, valorando los datos antes de suposiciones. Te expresas con cautela y claridad, buscando siempre lo correcto."
           : score > 50
@@ -203,7 +203,7 @@ export default function A1CerebralPage() {
           : "Buscas personas confiables y coherentes, aunque a veces sientas que el mundo es demasiado impreciso.",
         
         uncomfortable: score < 50
-          ? "Los entornos improvisados o desordenados te bloquean. Te incomoda decidir sin datos o percibes ambigüedad. Necesitas estructura y profesionalismo."
+          ? "Los entornos improvisados o desordenados te bloquean. Te incomoda decidir sin datos o percibir ambigüedad. Necesitas estructura y profesionalismo."
           : "Aunque generalmente meticuloso, puede incomodarte exceso de perfeccionismo.",
         
         thinking: score > 70
@@ -222,9 +222,9 @@ export default function A1CerebralPage() {
   }
 
   const getRecommendationsByLevel = (dimension: string, score: number) => {
-    // ONLY DISC recommendations - no old areas
+    // Recommendations based on new nomenclature
     const recommendations = {
-      dominancia: {
+      accion: {
         principiante: [
           "Practica escuchar perspectivas diferentes antes de decidir.",
           "Define objetivos claros pero permite ajustes en el camino.",
@@ -240,13 +240,71 @@ export default function A1CerebralPage() {
         avanzado: [
           "Lidera movimientos que impacten más allá de tu control directo.",
           "Mentorea a otros en velocidad estratégica sin sacrificar empatía.",
-          "Crea culturas donde el 'ganar' significa que todos crecen.",
+          "Crea culturas donde ganar significa que todos crecen.",
           "Influencia política: construye alianzas que multiplican tu impacto.",
         ],
       },
-      influencia: {
+      inspiracion: {
         principiante: [
           "Esta semana: cuenta una historia personal auténtica en 1 conversación.",
+          "Busca UNA persona que necesite motivación y ofrécele escucha activa.",
+          "Propón UNA idea creativa en tu equipo, aunque sea pequeña.",
+          "Presta atención: ¿cuáles emociones mueven a otros?",
+        ],
+        intermedio: [
+          "Crea sistemas que sostengan tu motivación - no deje que dependa solo de emociones.",
+          "Mentorea otros en cómo inspirar sin perder foco en ejecución.",
+          "Comunica tu visión clara: ¿qué futuro ves?",
+          "Multiplica tu influencia - valida que tu mensaje llegó completamente.",
+        ],
+        avanzado: [
+          "Lidera movimientos culturales que inspiren transformación.",
+          "Mentorea otros en cómo inspirar multiplica tu influencia.",
+          "Construye comunidades que crecen bajo tu visión compartida.",
+          "Impacto multiplicador: tu inspiración genera otros inspiradores.",
+        ],
+      },
+      apoyo: {
+        principiante: [
+          "Esta semana: pregunta a alguien qué necesita de ti.",
+          "Mantén UNA relación importante con consistencia absoluta.",
+          "Ofrece apoyo sin esperar reconocimiento - observa tu reacción.",
+          "Define qué estabilidad significa para ti en 1 frase.",
+        ],
+        intermedio: [
+          "Lidera pequeños cambios - prueba que puedes adaptarte.",
+          "Comunica tu necesidad de estabilidad al equipo claramente.",
+          "Mentorea a otros en paciencia y apoyo sostenido.",
+          "Busca cambio positivo en UNA área importante.",
+        ],
+        avanzado: [
+          "Lidera transiciones siendo el punto de apoyo para otros.",
+          "Construye sistemas donde tu confiabilidad multiplica el crecimiento.",
+          "Crea culturas donde apoyo y crecimiento coexisten.",
+          "Tu apoyo como fortaleza: enseña otros a cultivarla.",
+        ],
+      },
+      excelencia: {
+        principiante: [
+          "Esta semana: documenta UNA decisión importante con razonamiento claro.",
+          "Comparte tus estándares con otros - no es perfeccionismo, es excelencia.",
+          "Busca el 70% de información - la perfección no siempre es la meta.",
+          "Pregunta: ¿cuándo fue la última vez que actué sin análisis?",
+        ],
+        intermedio: [
+          "Crea UN sistema donde documentes decisiones importantes.",
+          "Mentorea a otros en cómo buscar excelencia sin parálisis.",
+          "Comparte tus ideas en proceso, no solo cuando sean perfectas.",
+          "Revisa: ¿dónde el perfectionism-mo me detiene?",
+        ],
+        avanzado: [
+          "Lidera transformación a través de rigor metodológico.",
+          "Construye sistemas donde la excelencia es sostenible.",
+          "Mentorea a otros en cómo alcanzar excelencia sin burnout.",
+          "Tu excelencia como fortaleza: enseña otros a exigirse.",
+        ],
+      },
+    }
           "Practica escuchar más que hablar (al menos 60-40).",
           "Nota 3 cosas buenas en otros y comparte feedback positivo.",
           "Conecta personas que deberían conocerse - sé catalizador.",
@@ -343,20 +401,27 @@ export default function A1CerebralPage() {
   }
 
   // Map questions to DISC dimensions
-  const questionToDISC: Record<number, "dominancia" | "influencia" | "estabilidad" | "consciencia"> = {
-    1: "dominancia", 2: "dominancia", 3: "dominancia", 4: "dominancia", 5: "dominancia",
-    6: "influencia", 7: "influencia", 8: "influencia", 9: "influencia", 10: "influencia",
-    11: "estabilidad", 12: "estabilidad", 13: "estabilidad", 14: "estabilidad", 15: "estabilidad",
-    16: "consciencia", 17: "consciencia", 18: "consciencia", 19: "consciencia", 20: "consciencia",
-  }
+    const questionToArea: Record<number, "accion" | "inspiracion" | "apoyo" | "excelencia"> = {
+      1: "accion", 2: "accion", 3: "accion", 4: "accion", 5: "accion",
+      6: "inspiracion", 7: "inspiracion", 8: "inspiracion", 9: "inspiracion", 10: "inspiracion",
+      11: "apoyo", 12: "apoyo", 13: "apoyo", 14: "apoyo", 15: "apoyo",
+      16: "excelencia", 17: "excelencia", 18: "excelencia", 19: "excelencia", 20: "excelencia",
+    }
 
   // Calculate DISC scores (0-100 per dimension)
   const calculateDISCScores = () => {
     const scores = {
-      dominancia: 0,
-      influencia: 0,
-      estabilidad: 0,
-      consciencia: 0,
+      accion: 0,
+      inspiracion: 0,
+      apoyo: 0,
+      excelencia: 0,
+    }
+    
+    const counts = {
+      accion: 0,
+      inspiracion: 0,
+      apoyo: 0,
+      excelencia: 0,
     }
     const counts = {
       dominancia: 0,
@@ -391,10 +456,10 @@ export default function A1CerebralPage() {
 
     // Calculate averages and round
     const finalScores = {
-      dominancia: counts.dominancia > 0 ? Math.round(scores.dominancia / counts.dominancia) : 0,
-      influencia: counts.influencia > 0 ? Math.round(scores.influencia / counts.influencia) : 0,
-      estabilidad: counts.estabilidad > 0 ? Math.round(scores.estabilidad / counts.estabilidad) : 0,
-      consciencia: counts.consciencia > 0 ? Math.round(scores.consciencia / counts.consciencia) : 0,
+      accion: counts.accion > 0 ? Math.round(scores.accion / counts.accion) : 0,
+      inspiracion: counts.inspiracion > 0 ? Math.round(scores.inspiracion / counts.inspiracion) : 0,
+      apoyo: counts.apoyo > 0 ? Math.round(scores.apoyo / counts.apoyo) : 0,
+      excelencia: counts.excelencia > 0 ? Math.round(scores.excelencia / counts.excelencia) : 0,
     }
 
     return finalScores
@@ -416,10 +481,10 @@ export default function A1CerebralPage() {
       const duration = Math.round((Date.now() - (startTimeRef.current || Date.now())) / 60000)
 
       const testResults = {
-        dominancia: scores.dominancia,
-        influencia: scores.influencia,
-        estabilidad: scores.estabilidad,
-        consciencia: scores.consciencia,
+      accion: scores.accion,
+      inspiracion: scores.inspiracion,
+      apoyo: scores.apoyo,
+      excelencia: scores.excelencia,
         answers: answers,
       }
 
@@ -508,17 +573,17 @@ export default function A1CerebralPage() {
   }
 
   const areaColors = {
-    dominancia: "bg-red-100 text-red-900",
-    influencia: "bg-yellow-100 text-yellow-900",
-    estabilidad: "bg-blue-100 text-blue-900",
-    consciencia: "bg-green-100 text-green-900",
+      accion: "bg-red-100 text-red-900",
+      inspiracion: "bg-yellow-100 text-yellow-900",
+      apoyo: "bg-blue-100 text-blue-900",
+      excelencia: "bg-green-100 text-green-900",
   }
 
   const areaLabels = {
-    dominancia: "Dominancia",
-    influencia: "Influencia",
-    estabilidad: "Estabilidad",
-    consciencia: "Consciencia",
+      accion: "Acción",
+      inspiracion: "Inspiración",
+      apoyo: "Apoyo",
+      excelencia: "Excelencia",
   }
 
   const question = A1_QUESTIONS[currentIdx]
@@ -693,35 +758,35 @@ export default function A1CerebralPage() {
   const secondaryDimension = sorted[1][0] as string
   const needsWork = sorted[sorted.length - 1]
 
-  // Get dimension info for DISC display
+  // Get dimension info for display
   const getDimensionInfo = (dim: string) => {
     const info: Record<string, any> = {
-      dominancia: {
-        label: "Dominancia",
+      accion: {
+        label: "Acción",
         emoji: "🎯",
         color: "bg-red-50 border-red-200",
         textColor: "text-red-700",
         bgColor: "bg-red-100",
         description: "Tu orientación a resultados, decisión y liderazgo directo",
       },
-      influencia: {
-        label: "Influencia",
+      inspiracion: {
+        label: "Inspiración",
         emoji: "💫",
         color: "bg-yellow-50 border-yellow-200",
         textColor: "text-yellow-700",
         bgColor: "bg-yellow-100",
         description: "Tu capacidad de persuadir, motivar e inspirar a otros",
       },
-      estabilidad: {
-        label: "Estabilidad",
+      apoyo: {
+        label: "Apoyo",
         emoji: "🛡️",
         color: "bg-blue-50 border-blue-200",
         textColor: "text-blue-700",
         bgColor: "bg-blue-100",
         description: "Tu lealtad, paciencia y apoyo al equipo",
       },
-      consciencia: {
-        label: "Consciencia",
+      excelencia: {
+        label: "Excelencia",
         emoji: "🔍",
         color: "bg-green-50 border-green-200",
         textColor: "text-green-700",
@@ -729,7 +794,7 @@ export default function A1CerebralPage() {
         description: "Tu precisión, análisis detallado y búsqueda de calidad",
       },
     }
-    return info[dim] || info.dominancia
+    return info[dim] || info.accion
   }
 
   return (
