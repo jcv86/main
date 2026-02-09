@@ -10,102 +10,111 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Base - Despega Cerebral (obligatorio)
+// Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
+// DISC mapping: D→plan_ejecutivo, I→relaciones, S→energia, C→enfoque
 const TEST_A1_QUESTIONS = [
+  // DISC-S (Steadiness) → ENERGÍA
   {
     id: 1,
     category: "energia",
-    question: "¿Cómo describes tu nivel de energía durante el día?",
+    question: "Ante situaciones inesperadas, ¿cómo reaccionas típicamente?",
     options: [
-      { value: 1, label: "Muy bajo - Me siento agotado constantemente" },
-      { value: 2, label: "Bajo - Tengo poca energía para actividades" },
-      { value: 3, label: "Medio - Energía variable según el día" },
-      { value: 4, label: "Alto - Generalmente me siento con buena energía" },
-      { value: 5, label: "Muy alto - Tengo energía abundante todo el día" },
+      { value: 1, label: "Me estreso rápidamente y me toma tiempo recuperarme" },
+      { value: 2, label: "Me afecta, pero intento mantener la calma" },
+      { value: 3, label: "Busco equilibrio entre adaptación y consistencia" },
+      { value: 4, label: "Me adapto con relativa calma y serenidad" },
+      { value: 5, label: "Mantengo serenidad y veo lo positivo en el cambio" },
     ],
   },
+  // DISC-C (Conscientiousness) → ENFOQUE
   {
     id: 2,
     category: "enfoque",
-    question: "¿Qué tan fácil te resulta concentrarte en una tarea?",
+    question: "Cuando trabajas en algo importante, ¿cuál es tu enfoque?",
     options: [
-      { value: 1, label: "Muy difícil - Me distraigo constantemente" },
-      { value: 2, label: "Difícil - Necesito mucho esfuerzo para concentrarme" },
-      { value: 3, label: "Regular - A veces logro concentrarme" },
-      { value: 4, label: "Fácil - Puedo concentrarme con relativa facilidad" },
-      { value: 5, label: "Muy fácil - Entro en estado de flujo con frecuencia" },
+      { value: 1, label: "Salto entre tareas sin completarlas" },
+      { value: 2, label: "Me cuesta mantener el enfoque prolongado" },
+      { value: 3, label: "Puedo concentrarme, pero me distraigo ocasionalmente" },
+      { value: 4, label: "Mantengo enfoque y atención al detalle" },
+      { value: 5, label: "Profundizo al máximo nivel, verificando cada detalle" },
     ],
   },
+  // DISC-I (Influence) → RELACIONES
   {
     id: 3,
     category: "relaciones",
-    question: "¿Cómo evalúas tus habilidades de comunicación?",
+    question: "En grupos o reuniones, ¿cuál es tu rol natural?",
     options: [
-      { value: 1, label: "Muy débiles - Me cuesta expresarme" },
-      { value: 2, label: "Débiles - Tengo dificultades frecuentes" },
-      { value: 3, label: "Regulares - Me comunico de forma básica" },
-      { value: 4, label: "Buenas - Me expreso con claridad" },
-      { value: 5, label: "Excelentes - Comunico ideas complejas fácilmente" },
+      { value: 1, label: "Me cuesta participar o hablar" },
+      { value: 2, label: "Participo poco, observo más" },
+      { value: 3, label: "Participo de manera equilibrada" },
+      { value: 4, label: "Contribuyo activamente a la conversación" },
+      { value: 5, label: "Conecto personas e inspiro participación" },
     ],
   },
+  // DISC-D (Dominance) → PLAN EJECUTIVO
   {
     id: 4,
     category: "plan_ejecutivo",
-    question: "¿Qué tan efectivo eres ejecutando tus planes?",
+    question: "Cuando estableces un objetivo, ¿qué tan directo es tu camino?",
     options: [
-      { value: 1, label: "Nada efectivo - Raramente completo lo que planeo" },
-      { value: 2, label: "Poco efectivo - Completo menos del 30%" },
-      { value: 3, label: "Moderado - Completo alrededor del 50%" },
-      { value: 4, label: "Efectivo - Completo más del 70%" },
-      { value: 5, label: "Muy efectivo - Completo casi todo lo que planeo" },
+      { value: 1, label: "No tengo metas claras ni ejecuto bien" },
+      { value: 2, label: "Tengo metas pero me cuesta ejecutarlas" },
+      { value: 3, label: "Balanceo metas con flexibilidad en el proceso" },
+      { value: 4, label: "Ejecuto con determinación hacia mis objetivos" },
+      { value: 5, label: "Avanzo rápido hacia resultados con enfoque implacable" },
     ],
   },
+  // DISC-S (Steadiness) → ENERGÍA (relaciones interpersonales)
   {
     id: 5,
     category: "energia",
-    question: "¿Cómo es tu calidad de sueño?",
+    question: "¿Cómo prefieres trabajar con otros?",
     options: [
-      { value: 1, label: "Muy mala - Duermo menos de 5 horas o mal" },
-      { value: 2, label: "Mala - Sueño irregular o poco reparador" },
-      { value: 3, label: "Regular - A veces duermo bien" },
-      { value: 4, label: "Buena - Generalmente duermo bien" },
-      { value: 5, label: "Excelente - Sueño reparador y consistente" },
+      { value: 1, label: "Prefiero evitar el trabajo en equipo" },
+      { value: 2, label: "Trabajo en equipo pero necesito autonomía" },
+      { value: 3, label: "Me adapto bien a distintos estilos de equipo" },
+      { value: 4, label: "Disfruto la colaboración y la armonía grupal" },
+      { value: 5, label: "Busco crear ambiente de confianza y apoyo mutuo" },
     ],
   },
+  // DISC-C (Conscientiousness) → ENFOQUE (calidad y precisión)
   {
     id: 6,
     category: "enfoque",
-    question: "¿Cómo manejas las distracciones digitales?",
+    question: "¿Qué importancia tiene la calidad en tu trabajo?",
     options: [
-      { value: 1, label: "Muy mal - Estoy pegado al celular todo el día" },
-      { value: 2, label: "Mal - Me distraigo frecuentemente" },
-      { value: 3, label: "Regular - A veces logro desconectarme" },
-      { value: 4, label: "Bien - Controlo mi uso de tecnología" },
-      { value: 5, label: "Muy bien - Uso intencional y controlado" },
+      { value: 1, label: "Me importa terminar rápido más que la calidad" },
+      { value: 2, label: "Busco equilibrio entre velocidad y calidad" },
+      { value: 3, label: "Calidad es importante, pero no siempre es perfecta" },
+      { value: 4, label: "Busco alta calidad en todo lo que hago" },
+      { value: 5, label: "La excelencia es no negociable, reviso todo meticulosamente" },
     ],
   },
+  // DISC-I (Influence) → RELACIONES (networking, influencia)
   {
     id: 7,
     category: "relaciones",
-    question: "¿Cómo describes tu red de contactos profesionales?",
+    question: "¿Cómo es tu capacidad de influencia sobre otros?",
     options: [
-      { value: 1, label: "Inexistente - No tengo red profesional" },
-      { value: 2, label: "Muy pequeña - Menos de 10 contactos activos" },
-      { value: 3, label: "Pequeña - Entre 10-30 contactos" },
-      { value: 4, label: "Media - Entre 30-100 contactos" },
-      { value: 5, label: "Grande - Más de 100 contactos activos" },
+      { value: 1, label: "Me cuesta influir o persuadir a otros" },
+      { value: 2, label: "Puedo influir en ciertos contextos" },
+      { value: 3, label: "Tengo capacidad moderada para influir" },
+      { value: 4, label: "Puedo persuadir e influir de manera clara" },
+      { value: 5, label: "Inspiro y motivo a otros con facilidad natural" },
     ],
   },
+  // DISC-D (Dominance) → PLAN EJECUTIVO (liderazgo, decisiones)
   {
     id: 8,
     category: "plan_ejecutivo",
-    question: "¿Cómo priorizas tus tareas diarias?",
+    question: "Ante decisiones difíciles o conflictos, ¿cómo actúas?",
     options: [
-      { value: 1, label: "No priorizo - Hago lo que aparece" },
-      { value: 2, label: "Raramente - Solo en emergencias" },
-      { value: 3, label: "A veces - Cuando tengo tiempo" },
-      { value: 4, label: "Frecuentemente - Tengo un sistema básico" },
-      { value: 5, label: "Siempre - Tengo un sistema robusto de priorización" },
+      { value: 1, label: "Evito decidir o los delego siempre" },
+      { value: 2, label: "Me cuesta tomar decisiones difíciles" },
+      { value: 3, label: "Decido con análisis de consecuencias" },
+      { value: 4, label: "Decido firmemente cuando es necesario" },
+      { value: 5, label: "Tomo decisiones rápidas y resolutivas, sin titubear" },
     ],
   },
 ]
@@ -209,7 +218,7 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results
+        // Save test results to both tables for compatibility
         await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
           score_energia: Math.round(avgScores.energia * 20),
@@ -218,7 +227,31 @@ export default function DespegaOnboarding() {
           score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
           nivel_detectado: nivel,
           respuestas_raw: responses,
+        }).then(res => {
+          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
+          else console.log("[v0] Saved to despega_a1_test_results")
         })
+
+        // Also save to unified_test_results so dashboard recognizes it
+        const userEmail = (await supabase.auth.getUser()).data.user?.email
+        if (userEmail) {
+          const { error } = await supabase.from("unified_test_results").insert({
+            user_email: userEmail,
+            test_type: "disc",
+            test_results: {
+              energia: Math.round(avgScores.energia * 20),
+              enfoque: Math.round(avgScores.enfoque * 20),
+              relaciones: Math.round(avgScores.relaciones * 20),
+              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+            },
+            created_at: new Date().toISOString(),
+          })
+          if (error) {
+            console.error("[v0] Error saving to unified_test_results:", error)
+          } else {
+            console.log("[v0] Successfully saved to unified_test_results")
+          }
+        }
 
         // Initialize pilar progress
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
@@ -531,25 +564,25 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-blue-500" />
-                    <span className="font-semibold text-lg">Energía ({results.energia}%)</span>
+                    <span className="font-semibold text-lg">Energía ({(results.energia * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.energia > 70 ? (
+                  {results.energia > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con consistencia y equilibrio personal</p>
-                      <p className="text-sm text-muted-foreground">Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu oportunidad:</strong> Comparte con otros cómo mantienes tu energía. Podrías formalizar tus hábitos en rutinas que otros puedan aprender.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Estable y Consistente</p>
+                      <p className="text-sm text-muted-foreground">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Aprovecha esto para mediar conflictos y liderar con serenidad.</p>
                     </>
-                  ) : results.energia > 50 ? (
+                  ) : results.energia > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas mantener un equilibrio en tu energía</p>
-                      <p className="text-sm text-muted-foreground">Aunque a veces fluctúa, reconoces la importancia del descanso y la actividad física. No siempre logres consistencia, pero estás en el camino.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Próximo paso:</strong> Identifica UNA sola acción sostenible (sueño, ejercicio o hidratación) y perfecciónala primero.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Buscas Equilibrio</p>
+                      <p className="text-sm text-muted-foreground">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad (respiración, meditación o caminar). Esto te dará el ancla que necesitas.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu energía es variable y requiere atención</p>
-                      <p className="text-sm text-muted-foreground">A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción urgente:</strong> Crea un sistema que sostenga tu energía automáticamente. Comienza mañana con 7 horas de sueño.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Inestabilidad Emocional</p>
+                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Te cuesta mantener la consistencia bajo presión. Recuperar estabilidad es prioritario.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte (ejercicio, meditación). Esto restaurará tu base.</p>
                     </>
                   )}
                 </div>
@@ -558,25 +591,25 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-green-500" />
-                    <span className="font-semibold text-lg">Concentración & Precisión ({results.enfoque}%)</span>
+                    <span className="font-semibold text-lg">Concentración & Precisión ({(results.enfoque * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.enfoque > 70 ? (
+                  {results.enfoque > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con orden y profundidad</p>
-                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te apoyas en la claridad antes de actuar, evitando precipitaciones.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu oportunidad:</strong> Confía un poco más en tu criterio sin esperar información perfecta. Comparte tus ideas en proceso, no solo 'listas' finales.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Meticuloso y Preciso</p>
+                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te obsesiona la calidad, los detalles y la precisión. Evitas errores con rigor analítico.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos donde la precisión es vital.</p>
                     </>
-                  ) : results.enfoque > 50 ? (
+                  ) : results.enfoque > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas concentrarte aunque las distracciones te desvían</p>
-                      <p className="text-sm text-muted-foreground">Tienes momentos de enfoque profundo, pero no son constantes. Necesitas crear mejores condiciones para la concentración.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica recomendada:</strong> Crea un sistema de prioridades visual. Identifica las 3 cosas MÁS importantes cada día y trabaja solo esas.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Buscas Precisión</p>
+                      <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces la abandones por rapidez.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros para cada tarea. Revisa solo UNA vez al final. Confía en tu proceso, no en perfeccionismo infinito.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu concentración es un desafío actual</p>
-                      <p className="text-sm text-muted-foreground">Las distracciones te capturan fácilmente y te cuesta sostener el enfoque en tareas importantes.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza ahora:</strong> Apaga notificaciones por 90 minutos. Usa Pomodoro (25 min enfoque, 5 min descanso). Repite 4 veces.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Necesitas Desarrollar Rigor</p>
+                      <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas crear sistemas que impongan estructura.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones digitales. Dedica 90 min puros a una sola tarea hoy.</p>
                     </>
                   )}
                 </div>
@@ -585,25 +618,25 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-orange-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-orange-500" />
-                    <span className="font-semibold text-lg">Conexión e Influencia ({results.relaciones}%)</span>
+                    <span className="font-semibold text-lg">Conexión e Influencia ({(results.relaciones * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.relaciones > 70 ? (
+                  {results.relaciones > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con apertura y calidez natural</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad de conectar es natural. Te expresas con empatía, buscando entender antes de ser entendido.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu oportunidad:</strong> Establece límites saludables. No todas las conexiones requieren profundidad. Aprende a decir 'no' desde el amor.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Inspirador y Conectado</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad de conexión es natural. Inspiras a otros, influyes sin imponer, y generas entusiasmo genuino a tu alrededor.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador social. Tu carisma abre puertas. Lidera movimientos, comunidades y transformaciones basadas en personas.</p>
                     </>
-                  ) : results.relaciones > 50 ? (
+                  ) : results.relaciones > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas conectar con otros pero a veces te sientes reservado</p>
-                      <p className="text-sm text-muted-foreground">Tienes buenas relaciones, pero podrían ser más profundas. Tomas tus tiempos para abrirte.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Siguiente paso:</strong> Cultiva UNA conexión genuina. Elige una persona y reúnete con ella regularmente.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Buscas Conectar</p>
+                      <p className="text-sm text-muted-foreground">Tienes buena presencia social, pero a veces te reservas. Puedes influir, pero necesitas más confianza en tu impacto.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo:</strong> Practica compartir tus opiniones con más libertad. Una conexión genuina cada semana. Celebra pequeños momentos de influencia.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu conexión con otros es limitada</p>
-                      <p className="text-sm text-muted-foreground">Prefieres la soledad o tienes dificultad expresando calidez. Las relaciones son un desafío actual.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo importante:</strong> Practica escucha activa. Esta semana, haz preguntas genuinas a 3 personas y solo escucha.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Necesitas Desarrollar Influencia</p>
+                      <p className="text-sm text-muted-foreground">Te cuesta conectar o influir. Prefieres trabajar en solitario. Desarrollar carisma y presencia social es un area importante.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Comienza:</strong> Practica escucha activa sin juzgar. Haz preguntas genuinas. Conecta con UNA persona profundamente esta semana.</p>
                     </>
                   )}
                 </div>
@@ -612,25 +645,25 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-purple-500" />
-                    <span className="font-semibold text-lg">Liderazgo y Ejecución ({results.plan_ejecutivo}%)</span>
+                    <span className="font-semibold text-lg">Liderazgo y Ejecución ({(results.plan_ejecutivo * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.plan_ejecutivo > 70 ? (
+                  {results.plan_ejecutivo > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con lógica orientada a resultados</p>
-                      <p className="text-sm text-muted-foreground">Tu toma de decisiones es directa y estratégica. Ejecutas lo que planificas de forma confiable.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Próximo nivel:</strong> Lidera iniciativas estratégicas. Tu visión ejecutiva fuerte es valiosa para equipos.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Líder Decisivo</p>
+                      <p className="text-sm text-muted-foreground">Tu impulso por resultados es natural. Decides rápido, ejecutas con determinación y logras objetivos bajo presión.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador de acción. Tu visión se convierte en realidad. Lidera transformaciones estratégicas y grandes proyectos.</p>
                     </>
-                  ) : results.plan_ejecutivo > 50 ? (
+                  ) : results.plan_ejecutivo > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas llevar adelante tus planes</p>
-                      <p className="text-sm text-muted-foreground">Aunque a veces necesitas impulso adicional. Tienes intención, pero cuesta la consistencia.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza tus objetivos a 1-3 años y trabaja hacia atrás. Divide en metas trimestrales.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Buscas Mayor Ejecución</p>
+                      <p className="text-sm text-muted-foreground">Tienes intención de lograr resultados, pero a veces necesitas impulso. Planificas bien pero la ejecución falta consistencia.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza objetivos a 3 años. Divide en metas trimestrales. Revisa progreso cada lunes. Esto crea accountability.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu ejecución es inconsistente</p>
-                      <p className="text-sm text-muted-foreground">Planificas bien, pero la implementación es un desafío. Necesitas sistemas que te sostengan.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea UN ritual matutino de 10 min. Revisa tus 3 prioridades. Repítelo mañana.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Necesitas Desarrollar Liderazgo</p>
+                      <p className="text-sm text-muted-foreground">La ejecución es un desafío. Luchas con la toma de decisiones o la consistencia. Necesitas crear sistemas de apoyo.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea ritual matutino: 10 min, revisa 3 prioridades, ejecuta solo esas. Mañana comienza.</p>
                     </>
                   )}
                 </div>
@@ -643,17 +676,17 @@ export default function DespegaOnboarding() {
                   Basado en tu perfil y en los insights de 120+ libros de desarrollo profesional en nuestra biblioteca:
                 </p>
                 <div className="space-y-2 text-sm">
-                  {results.nivel === "Principiante" ? (
+                  {results.nivel === "principiante" ? (
                     <>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Los 7 Hábitos de la Gente Altamente Efectiva" - Construye una base sólida desarrollando una dimensión a la vez.</p>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Plan de 30 días:</strong> Semana 1: Enfócate en dormir bien. Semana 2: Agrega 20 min de ejercicio. Semana 3: Una conexión genuina. Semana 4: Consolida todo.</p>
                     </>
-                  ) : results.nivel === "Intermedio" ? (
+                  ) : results.nivel === "intermedio" ? (
                     <>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "Deep Work" de Cal Newport - Tienes buen balance. Ahora potencia tu fortaleza más débil y amplifica tus fortalezas.</p>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Tu enfoque:</strong> Identifica la dimensión con menor puntuación y dedica este mes a desarrollarla específicamente.</p>
                     </>
-                  ) : results.nivel === "Avanzado" ? (
+                  ) : results.nivel === "avanzado" ? (
                     <>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Libro recomendado:</strong> "El Monje que vendió su Ferrari" - Eres un profesional en desarrollo continuo. Ahora enfócate en complementariedades.</p>
                       <p className="text-blue-800 dark:text-blue-200"><strong>Tu rol:</strong> Ayuda a otros en su jornada. Considera mentoría o liderazgo transformacional.</p>
@@ -685,7 +718,7 @@ export default function DespegaOnboarding() {
             </div>
 
             <Button 
-              onClick={() => router.push("/dashboard?refresh=true")} 
+                onClick={() => router.push("/dashboard?refetch=true")}
               className="w-full" 
               size="lg"
               disabled={loading}

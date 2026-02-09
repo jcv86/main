@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, useRef } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -108,9 +108,12 @@ const TEST_NAMES = {
 
 export function DashboardContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user: sessionUser } = useSession()
   const [userId, setUserId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("overview")
+  const shouldRefetch = searchParams?.get("refetch") === "true"
+  const refetchAttempted = useRef(false)
 
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "Usuario",
@@ -274,6 +277,77 @@ export function DashboardContent() {
     fetchAllData()
   }, [sessionUser])
 
+  // Refetch when coming back from test completion
+  useEffect(() => {
+    if (shouldRefetch && !refetchAttempted.current && sessionUser) {
+      refetchAttempted.current = true
+      console.log("[v0] Detected refetch signal, waiting for data to sync...")
+      
+      // Wait a moment for data to sync to database, then refetch
+      setTimeout(() => {
+        setIsLoadingInitialData(true)
+        
+        const userEmail = sessionUser.email || ""
+        if (!userEmail) return
+
+        const supabase = createClient()
+        
+        // Refetch test results
+        supabase
+          .from("unified_test_results")
+          .select("*")
+          .eq("user_email", userEmail)
+          .order("created_at", { ascending: false })
+          .limit(10)
+          .then(({ data: testResults, error }) => {
+            if (error) {
+              console.error("[v0] Error fetching test results:", error)
+              setIsLoadingInitialData(false)
+              return
+            }
+            
+            console.log("[v0] Test results from database:", testResults)
+            
+            if (testResults && testResults.length > 0) {
+              const mapped = testResults.map((result: any) => {
+                let name = result.test_type
+                let score = 0
+
+                if (result.test_results) {
+                  const scores = Object.values(result.test_results as any)
+                  if (scores.length > 0) {
+                    score = Math.round(scores.reduce((a: any, b: any) => a + b, 0) / scores.length)
+                  }
+                }
+
+                return {
+                  id: result.id,
+                  name: name,
+                  score: score || 0,
+                  completedAt: new Date(result.created_at).toLocaleDateString("es-AR"),
+                  insights: [],
+                }
+              })
+              setRecentResults(mapped)
+              setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
+              console.log("[v0] Refetch complete, updated completedTests:", testResults.length)
+            } else {
+              console.log("[v0] No test results found in refetch")
+            }
+            
+            setIsLoadingInitialData(false)
+            // Clear the URL parameter
+            window.history.replaceState({}, document.title, '/dashboard')
+          })
+          .catch((err) => {
+            console.error("[v0] Catch error fetching test results:", err)
+            setIsLoadingInitialData(false)
+          })
+      }, 1500)
+    }
+  }, [shouldRefetch, sessionUser])
+
+
   const achievements = [
     {
       title: "Primer Test Completado",
@@ -434,7 +508,7 @@ export function DashboardContent() {
                 </div>
               </div>
               <Button 
-                onClick={() => router.push("/despega/a1-cerebral")}
+                onClick={() => router.push("/despega/onboarding")}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-semibold"
               >
                 <Sparkles className="h-5 w-5 mr-2" />
