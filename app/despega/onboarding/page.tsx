@@ -9,121 +9,106 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Cerebral - Formato Paired Comparison (2 opciones)
-// Basado en modelo DISC: Energía (S), Enfoque (C), Relaciones (I), Plan Ejecutivo (D)
-// Cada pregunta presenta 2 opciones, el usuario elige cuál es más como él
+// Test Despega Cerebral - Formato DISC Estándar
+// 4 opciones por pregunta: elegir MÁS parecida y MENOS parecida
+// Basado en: D=Dominio, I=Influencia, S=Estabilidad, C=Cumplimiento(Enfoque)
 const TEST_A1_QUESTIONS = [
   {
     id: 1,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Mantengo la calma bajo presión y busco estabilidad",
-      category: "energia",
-    },
-    optionB: {
-      text: "Soy decidido y voy directo hacia mis objetivos",
-      category: "plan_ejecutivo",
-    },
+    question: "¿Cuál te describe mejor?",
+    options: [
+      { text: "Soy decisivo y voy directo a los resultados", type: "D" }, // Plan Ejecutivo
+      { text: "Soy entusiasta e inspiro a otros", type: "I" }, // Relaciones
+      { text: "Soy calmado y consistente", type: "S" }, // Energía
+      { text: "Soy preciso y meticuloso", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 2,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Analizo cada detalle y busco precisión en mi trabajo",
-      category: "enfoque",
-    },
-    optionB: {
-      text: "Conecto fácilmente con otros y construyo relaciones",
-      category: "relaciones",
-    },
+    question: "En el trabajo, tiendo a ser...",
+    options: [
+      { text: "Competitivo y orientado al logro", type: "D" }, // Plan Ejecutivo
+      { text: "Carismático y motivador", type: "I" }, // Relaciones
+      { text: "Armonioso y colaborativo", type: "S" }, // Energía
+      { text: "Analítico y enfocado en la calidad", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 3,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Prefiero trabajar de forma consistente y confiable",
-      category: "energia",
-    },
-    optionB: {
-      text: "Prefiero innovar y asumir nuevos desafíos",
-      category: "plan_ejecutivo",
-    },
+    question: "Cuando enfrento presión, yo...",
+    options: [
+      { text: "Actúo rápido y tomo decisiones", type: "D" }, // Plan Ejecutivo
+      { text: "Mantengo la energía y motivo al equipo", type: "I" }, // Relaciones
+      { text: "Permanezco tranquilo y enfocado", type: "S" }, // Energía
+      { text: "Profundizo en los detalles para asegurar calidad", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 4,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Busco perfección y reviso cada detalle meticulosamente",
-      category: "enfoque",
-    },
-    optionB: {
-      text: "Inspiro a otros y disfruto influenciar en equipo",
-      category: "relaciones",
-    },
+    question: "Mi mayor fortaleza es...",
+    options: [
+      { text: "Mi capacidad para ejecutar y lograr objetivos", type: "D" }, // Plan Ejecutivo
+      { text: "Mi capacidad para conectar y influir en otros", type: "I" }, // Relaciones
+      { text: "Mi consistencia y confiabilidad", type: "S" }, // Energía
+      { text: "Mi atención al detalle y precisión", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 5,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Soy amigable y creo un ambiente armonioso",
-      category: "energia",
-    },
-    optionB: {
-      text: "Soy competitivo y orientado a resultados",
-      category: "plan_ejecutivo",
-    },
+    question: "Prefiero trabajar con personas que sean...",
+    options: [
+      { text: "Directas y enfocadas en resultados", type: "D" }, // Plan Ejecutivo
+      { text: "Optimistas y conectadas socialmente", type: "I" }, // Relaciones
+      { text: "Cooperativas y estables", type: "S" }, // Energía
+      { text: "Rigurosas y basadas en hechos", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 6,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Me cuesta cambiar mis procesos una vez establecidos",
-      category: "enfoque",
-    },
-    optionB: {
-      text: "Soy carismático y motivador con los demás",
-      category: "relaciones",
-    },
+    question: "En mi equipo, soy conocido por ser...",
+    options: [
+      { text: "El que impulsa la acción y cierra deals", type: "D" }, // Plan Ejecutivo
+      { text: "El que levanta energía y crea ambiente", type: "I" }, // Relaciones
+      { text: "El que mantiene la estabilidad del grupo", type: "S" }, // Energía
+      { text: "El que garantiza los estándares de calidad", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 7,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Adapto mis comportamientos según el contexto",
-      category: "energia",
-    },
-    optionB: {
-      text: "Tomo decisiones rápidas sin necesidad de consenso",
-      category: "plan_ejecutivo",
-    },
+    question: "Lo que más me motiva es...",
+    options: [
+      { text: "Ganar y lograr objetivos ambiciosos", type: "D" }, // Plan Ejecutivo
+      { text: "Impactar positivamente en otros", type: "I" }, // Relaciones
+      { text: "Contribuir de forma consistente", type: "S" }, // Energía
+      { text: "Hacer las cosas bien y correctamente", type: "C" }, // Enfoque
+    ],
   },
   {
     id: 8,
-    question: "¿Cuál es más como tú?",
-    optionA: {
-      text: "Cumplo mis compromisos con disciplina exacta",
-      category: "enfoque",
-    },
-    optionB: {
-      text: "Tengo una red amplia y mantengo muchas amistades",
-      category: "relaciones",
-    },
+    question: "Mi desafío principal es...",
+    options: [
+      { text: "A veces puedo ser muy impulsivo", type: "D" }, // Plan Ejecutivo
+      { text: "A veces me disperso en demasiadas cosas", type: "I" }, // Relaciones
+      { text: "A veces me cuesta adaptarme al cambio", type: "S" }, // Energía
+      { text: "A veces soy muy exigente con los detalles", type: "C" }, // Enfoque
+    ],
   },
 ]
 
 type Step = "intro" | "camino" | "test" | "results"
+type SelectionType = "most" | "least"
 
 export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
   const [caminoPersona, setCaminoPersona] = useState(false)
   const [caminoProfesional, setCaminoProfesional] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, string>>({})
+  const [responses, setResponses] = useState<Record<number, { most: number; least: number }>>({})
   const [results, setResults] = useState<{
-    energia: number
-    enfoque: number
-    relaciones: number
-    plan_ejecutivo: number
+    D: number
+    I: number
+    S: number
+    C: number
     total: number
     nivel: string
   } | null>(null)
@@ -142,10 +127,20 @@ export default function DespegaOnboarding() {
 
   const question = TEST_A1_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / TEST_A1_QUESTIONS.length) * 100
-  const isAnswered = responses[question.id] !== undefined
+  const currentResponse = responses[question.id]
+  const isAnswered = currentResponse && currentResponse.most !== undefined && currentResponse.least !== undefined
+  const canSelectLeast = currentResponse?.most !== undefined && currentResponse.most !== currentResponse.least
 
-  const handleSelect = (option: "A" | "B") => {
-    setResponses({ ...responses, [question.id]: option })
+  const handleSelect = (optionIndex: number, type: SelectionType) => {
+    const existing = responses[question.id] || { most: undefined, least: undefined }
+    const updated = { ...existing, [type]: optionIndex }
+    
+    // Evitar seleccionar la misma opción para both
+    if (updated.most === updated.least && updated.least !== undefined) {
+      return
+    }
+    
+    setResponses({ ...responses, [question.id]: updated })
   }
 
   const handleNext = () => {
@@ -168,39 +163,41 @@ export default function DespegaOnboarding() {
     setLoading(true)
     
     const scores = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
-    }
-    
-    const counts = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
+      D: 0, // Plan Ejecutivo
+      I: 0, // Relaciones
+      S: 0, // Energía
+      C: 0, // Enfoque
     }
 
-    // Contar respuestas por categoría
+    // Contar respuestas: +1 por "most", -1 por "least"
     TEST_A1_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
       if (response) {
-        const selectedOption = response === "A" ? q.optionA : q.optionB
-        const category = selectedOption.category as keyof typeof scores
-        scores[category]++
-        counts[category]++
+        const mostOption = q.options[response.most]
+        const leastOption = q.options[response.least]
+        
+        if (mostOption) {
+          scores[mostOption.type as keyof typeof scores]++
+        }
+        if (leastOption) {
+          scores[leastOption.type as keyof typeof scores]--
+        }
       }
     })
 
-    // Calcular porcentajes (0-100)
-    const avgScores = {
-      energia: counts.energia > 0 ? (scores.energia / counts.energia) * 100 : 0,
-      enfoque: counts.enfoque > 0 ? (scores.enfoque / counts.enfoque) * 100 : 0,
-      relaciones: counts.relaciones > 0 ? (scores.relaciones / counts.relaciones) * 100 : 0,
-      plan_ejecutivo: counts.plan_ejecutivo > 0 ? (scores.plan_ejecutivo / counts.plan_ejecutivo) * 100 : 0,
+    // Normalizar a 0-100 (rango esperado: -16 a +16)
+    const normalize = (score: number) => {
+      return Math.max(0, Math.min(100, ((score + 16) / 32) * 100))
     }
 
-    const total = (avgScores.energia + avgScores.enfoque + avgScores.relaciones + avgScores.plan_ejecutivo) / 4
+    const normalizedScores = {
+      D: normalize(scores.D),
+      I: normalize(scores.I),
+      S: normalize(scores.S),
+      C: normalize(scores.C),
+    }
+
+    const total = (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4
     
     // Determinar nivel
     let nivel = "Equilibrado"
@@ -209,10 +206,10 @@ export default function DespegaOnboarding() {
     else nivel = "Por Desarrollar"
 
     setResults({
-      energia: avgScores.energia,
-      enfoque: avgScores.enfoque,
-      relaciones: avgScores.relaciones,
-      plan_ejecutivo: avgScores.plan_ejecutivo,
+      D: normalizedScores.D,
+      I: normalizedScores.I,
+      S: normalizedScores.S,
+      C: normalizedScores.C,
       total,
       nivel,
     })
@@ -220,11 +217,10 @@ export default function DespegaOnboarding() {
     // Save to database
     if (userId) {
       try {
-        // Get user email once at the beginning
         const { data: { user: authUser } } = await supabase.auth.getUser()
         const userEmail = authUser?.email
 
-        // Create user profile with proper onConflict
+        // Create user profile
         const { error: profileError } = await supabase.from("despega_user_profiles").upsert(
           {
             user_id: userId,
@@ -241,13 +237,17 @@ export default function DespegaOnboarding() {
           console.error("[v0] Error saving user profile:", profileError.message)
         }
 
-        // Save test results with CORRECT schema
+        // Save test results
         const scoreTotalPercentage = Math.round(total)
         const resultados = {
-          energia: Math.round(avgScores.energia),
-          enfoque: Math.round(avgScores.enfoque),
-          relaciones: Math.round(avgScores.relaciones),
-          plan_ejecutivo: Math.round(avgScores.plan_ejecutivo),
+          D: Math.round(normalizedScores.D),
+          I: Math.round(normalizedScores.I),
+          S: Math.round(normalizedScores.S),
+          C: Math.round(normalizedScores.C),
+          energia: Math.round(normalizedScores.S), // S = Energía
+          enfoque: Math.round(normalizedScores.C), // C = Enfoque
+          relaciones: Math.round(normalizedScores.I), // I = Relaciones
+          plan_ejecutivo: Math.round(normalizedScores.D), // D = Plan Ejecutivo
         }
 
         const { error: a1Error } = await supabase.from("despega_a1_test_results").insert({
@@ -261,11 +261,9 @@ export default function DespegaOnboarding() {
         
         if (a1Error) {
           console.error("[v0] Error saving to despega_a1_test_results:", a1Error.message)
-        } else {
-          console.log("[v0] Successfully saved to despega_a1_test_results")
         }
 
-        // Also save to unified_test_results so dashboard recognizes it
+        // Save to unified_test_results
         if (userEmail) {
           const { error: unifiedError } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
@@ -274,12 +272,10 @@ export default function DespegaOnboarding() {
           })
           if (unifiedError) {
             console.error("[v0] Error saving to unified_test_results:", unifiedError.message)
-          } else {
-            console.log("[v0] Successfully saved to unified_test_results")
           }
         }
 
-        // Initialize pilar progress with proper onConflict
+        // Initialize pilar progress
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
         for (const pilar of pilares) {
           const { error: pilarError } = await supabase.from("despega_pilar_progress").upsert(
@@ -300,7 +296,7 @@ export default function DespegaOnboarding() {
           }
         }
 
-        // Initialize rankings with proper onConflict
+        // Initialize rankings
         const { error: rankingError } = await supabase.from("despega_rankings").upsert(
           {
             user_id: userId,
@@ -317,19 +313,14 @@ export default function DespegaOnboarding() {
         
         if (rankingError) {
           console.error("[v0] Error saving to despega_rankings:", rankingError.message)
-        } else {
-          console.log("[v0] Successfully saved to despega_rankings")
         }
       } catch (error) {
         console.error("[v0] Error saving onboarding data:", error)
-        // Don't throw - continue to show results even if saving fails
       } finally {
         setLoading(false)
         setStep("results")
       }
     } else {
-      // No userId but still allow to see results
-      console.warn("[v0] No userId available, skipping database save")
       setLoading(false)
       setStep("results")
     }
@@ -344,7 +335,7 @@ export default function DespegaOnboarding() {
             <CardHeader>
               <CardTitle className="text-3xl text-center">Despega Cerebral</CardTitle>
               <CardDescription className="text-center text-base mt-2">
-                Descubre tu perfil profesional en 2 minutos
+                Descubre tu perfil DISC en 2 minutos
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -354,31 +345,31 @@ export default function DespegaOnboarding() {
                 </p>
                 <ul className="space-y-3">
                   <li className="flex gap-3">
-                    <span className="text-blue-600 font-bold">•</span>
+                    <span className="text-orange-600 font-bold">D</span>
                     <div>
-                      <p className="font-semibold">Energía (Estabilidad)</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad para mantener la calma y consistencia</p>
-                    </div>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-green-600 font-bold">•</span>
-                    <div>
-                      <p className="font-semibold">Enfoque (Precisión)</p>
-                      <p className="text-sm text-muted-foreground">Tu atención al detalle y rigor analítico</p>
-                    </div>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-purple-600 font-bold">•</span>
-                    <div>
-                      <p className="font-semibold">Relaciones (Influencia)</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad para conectar e influir en otros</p>
-                    </div>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-orange-600 font-bold">•</span>
-                    <div>
-                      <p className="font-semibold">Plan Ejecutivo (Dominio)</p>
+                      <p className="font-semibold">Dominio (Plan Ejecutivo)</p>
                       <p className="text-sm text-muted-foreground">Tu capacidad para decidir y ejecutar</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-purple-600 font-bold">I</span>
+                    <div>
+                      <p className="font-semibold">Influencia (Relaciones)</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para conectar e influir</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-blue-600 font-bold">S</span>
+                    <div>
+                      <p className="font-semibold">Steadiness (Energía)</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para mantener calma</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-green-600 font-bold">C</span>
+                    <div>
+                      <p className="font-semibold">Conscientiousness (Enfoque)</p>
+                      <p className="text-sm text-muted-foreground">Tu atención al detalle y calidad</p>
                     </div>
                   </li>
                 </ul>
@@ -436,29 +427,44 @@ export default function DespegaOnboarding() {
               <div>
                 <h3 className="text-lg font-semibold mb-6">{question.question}</h3>
                 
-                {/* Option A */}
-                <button
-                  onClick={() => handleSelect("A")}
-                  className={`w-full p-4 mb-3 rounded-lg border-2 transition-all text-left ${
-                    responses[question.id] === "A"
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
-                      : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
-                  }`}
-                >
-                  <p className="font-medium">{question.optionA.text}</p>
-                </button>
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-muted-foreground">Selecciona cuál TE DESCRIBE MÁS:</p>
+                  <div className="space-y-2 mb-6">
+                    {question.options.map((option, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSelect(idx, "most")}
+                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                          currentResponse?.most === idx
+                            ? "border-blue-500 bg-blue-50 dark:bg-blue-950 ring-2 ring-blue-300"
+                            : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
+                        }`}
+                      >
+                        <p className="font-medium text-sm">{option.text}</p>
+                      </button>
+                    ))}
+                  </div>
 
-                {/* Option B */}
-                <button
-                  onClick={() => handleSelect("B")}
-                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                    responses[question.id] === "B"
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
-                      : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
-                  }`}
-                >
-                  <p className="font-medium">{question.optionB.text}</p>
-                </button>
+                  <p className="text-xs font-semibold text-muted-foreground">Selecciona cuál TE DESCRIBE MENOS:</p>
+                  <div className="space-y-2">
+                    {question.options.map((option, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSelect(idx, "least")}
+                        disabled={!canSelectLeast || currentResponse?.most === idx}
+                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                          currentResponse?.least === idx
+                            ? "border-red-500 bg-red-50 dark:bg-red-950 ring-2 ring-red-300"
+                            : currentResponse?.most === idx || !canSelectLeast
+                            ? "border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 opacity-50 cursor-not-allowed"
+                            : "border-slate-200 dark:border-slate-700 hover:border-slate-300"
+                        }`}
+                      >
+                        <p className="font-medium text-sm">{option.text}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Navigation Buttons */}
@@ -486,99 +492,73 @@ export default function DespegaOnboarding() {
         {/* RESULTS STEP */}
         {step === "results" && results && (
           <div className="space-y-6">
-            {/* Main Results Card */}
             <Card className="border-0 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-2xl text-center">Tu Perfil Despega Cerebral</CardTitle>
+                <CardTitle className="text-2xl text-center">Tu Perfil DISC Despega Cerebral</CardTitle>
                 <CardDescription className="text-center">
                   Score General: <span className="text-2xl font-bold text-blue-600">{Math.round(results.total)}%</span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Dimension Cards */}
-                <div className="grid gap-4">
-                  {/* Energía */}
-                  <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-blue-900 dark:text-blue-100">Energía (Estabilidad)</h4>
-                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{Math.round(results.energia)}%</span>
-                    </div>
-                    <Progress value={results.energia} className="h-2" />
-                    <p className="text-sm text-blue-800 dark:text-blue-200 mt-2">
-                      {results.energia > 75 ? "Emocionalmente resiliente" : results.energia > 50 ? "Buscas equilibrio" : "Necesitas mayor estabilidad"}
-                    </p>
+                {/* D - Dominance */}
+                <div className="p-4 rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-950 dark:border-orange-900">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-semibold text-orange-900 dark:text-orange-100">D - Dominio (Plan Ejecutivo)</h4>
+                    <span className="text-sm font-bold text-orange-600 dark:text-orange-400">{Math.round(results.D)}%</span>
                   </div>
+                  <Progress value={results.D} className="h-2" />
+                  <p className="text-sm text-orange-800 dark:text-orange-200 mt-2">
+                    {results.D > 75 ? "Decisivo y orientado a resultados" : results.D > 50 ? "Moderadamente decidido" : "Necesitas mayor decisión"}
+                  </p>
+                </div>
 
-                  {/* Enfoque */}
-                  <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-900">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-green-900 dark:text-green-100">Enfoque (Precisión)</h4>
-                      <span className="text-sm font-bold text-green-600 dark:text-green-400">{Math.round(results.enfoque)}%</span>
-                    </div>
-                    <Progress value={results.enfoque} className="h-2" />
-                    <p className="text-sm text-green-800 dark:text-green-200 mt-2">
-                      {results.enfoque > 75 ? "Analítico y riguroso" : results.enfoque > 50 ? "Buscas mayor precisión" : "Necesitas desarrollar rigor"}
-                    </p>
+                {/* I - Influence */}
+                <div className="p-4 rounded-lg border border-purple-200 bg-purple-50 dark:bg-purple-950 dark:border-purple-900">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-semibold text-purple-900 dark:text-purple-100">I - Influencia (Relaciones)</h4>
+                    <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{Math.round(results.I)}%</span>
                   </div>
+                  <Progress value={results.I} className="h-2" />
+                  <p className="text-sm text-purple-800 dark:text-purple-200 mt-2">
+                    {results.I > 75 ? "Carismático e inspirador" : results.I > 50 ? "Buscas conectar" : "Necesitas desarrollar influencia"}
+                  </p>
+                </div>
 
-                  {/* Relaciones */}
-                  <div className="p-4 rounded-lg border border-purple-200 bg-purple-50 dark:bg-purple-950 dark:border-purple-900">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-purple-900 dark:text-purple-100">Relaciones (Influencia)</h4>
-                      <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{Math.round(results.relaciones)}%</span>
-                    </div>
-                    <Progress value={results.relaciones} className="h-2" />
-                    <p className="text-sm text-purple-800 dark:text-purple-200 mt-2">
-                      {results.relaciones > 75 ? "Inspirador y conectado" : results.relaciones > 50 ? "Buscas conectar más" : "Necesitas desarrollar conexión"}
-                    </p>
+                {/* S - Steadiness */}
+                <div className="p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-semibold text-blue-900 dark:text-blue-100">S - Steadiness (Energía)</h4>
+                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{Math.round(results.S)}%</span>
                   </div>
+                  <Progress value={results.S} className="h-2" />
+                  <p className="text-sm text-blue-800 dark:text-blue-200 mt-2">
+                    {results.S > 75 ? "Calmado y consistente" : results.S > 50 ? "Buscas equilibrio" : "Necesitas mayor estabilidad"}
+                  </p>
+                </div>
 
-                  {/* Plan Ejecutivo */}
-                  <div className="p-4 rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-950 dark:border-orange-900">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-orange-900 dark:text-orange-100">Plan Ejecutivo (Dominio)</h4>
-                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">{Math.round(results.plan_ejecutivo)}%</span>
-                    </div>
-                    <Progress value={results.plan_ejecutivo} className="h-2" />
-                    <p className="text-sm text-orange-800 dark:text-orange-200 mt-2">
-                      {results.plan_ejecutivo > 75 ? "Líder decisivo" : results.plan_ejecutivo > 50 ? "Buscas mayor ejecución" : "Necesitas desarrollar liderazgo"}
-                    </p>
+                {/* C - Conscientiousness */}
+                <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-900">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-semibold text-green-900 dark:text-green-100">C - Conscientiousness (Enfoque)</h4>
+                    <span className="text-sm font-bold text-green-600 dark:text-green-400">{Math.round(results.C)}%</span>
                   </div>
+                  <Progress value={results.C} className="h-2" />
+                  <p className="text-sm text-green-800 dark:text-green-200 mt-2">
+                    {results.C > 75 ? "Analítico y riguroso" : results.C > 50 ? "Buscas precisión" : "Necesitas desarrollar rigor"}
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Insights Card */}
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle>Tu Insight Personalizado</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {results.energia > 3.5 ? (
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
-                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Emocionalmente Resiliente</p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
-                  </div>
-                ) : results.energia > 2.5 ? (
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
-                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Buscas Equilibrio</p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
-                  </div>
-                ) : (
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
-                    <p className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Despega Cerebral - Estabilidad: Necesitas Mayor Equilibrio</p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">Experimentas fluctuaciones emocionales frecuentes. Recuperar estabilidad es prioritario para tu desempeño.</p>
-                  </div>
-                )}
-
-                <Button 
-                  onClick={() => router.push("/dashboard")}
-                  className="w-full h-12 text-base font-semibold mt-6"
-                >
-                  Ir a mi Dashboard
-                </Button>
-              </CardContent>
-            </Card>
+            {/* Action Button */}
+            <div className="text-center">
+              <Button
+                onClick={() => router.push("/dashboard")}
+                className="h-12 text-base font-semibold px-8"
+              >
+                Ir a Mi Dashboard
+              </Button>
+            </div>
           </div>
         )}
       </div>
