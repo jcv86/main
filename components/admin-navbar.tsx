@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import {
   Settings,
@@ -37,17 +36,13 @@ export function AdminNavbar() {
   return (
     <nav className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-32">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <Image
-              src="/despega-logo.png"
-              alt="DESPEGA Tu Carrera"
-              width={240}
-              height={80}
-              className="h-20 w-auto"
-              priority
-            />
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">D</span>
+            </div>
+            <span className="font-bold text-lg hidden sm:inline text-slate-900">Despega</span>
           </Link>
 
           {/* Navigation Links */}
