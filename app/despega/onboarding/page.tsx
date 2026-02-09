@@ -544,21 +544,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.energia > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con consistencia y equilibrio personal</p>
-                      <p className="text-sm text-muted-foreground">Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu oportunidad:</strong> Comparte con otros cómo mantienes tu energía. Podrías formalizar tus hábitos en rutinas que otros puedan aprender.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Estable y Consistente</p>
+                      <p className="text-sm text-muted-foreground">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Aprovecha esto para mediar conflictos y liderar con serenidad.</p>
                     </>
                   ) : results.energia > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas mantener un equilibrio en tu energía</p>
-                      <p className="text-sm text-muted-foreground">Aunque a veces fluctúa, reconoces la importancia del descanso y la actividad física. No siempre logres consistencia, pero estás en el camino.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Próximo paso:</strong> Identifica UNA sola acción sostenible (sueño, ejercicio o hidratación) y perfecciónala primero.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Buscas Equilibrio</p>
+                      <p className="text-sm text-muted-foreground">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad (respiración, meditación o caminar). Esto te dará el ancla que necesitas.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu energía es variable y requiere atención</p>
-                      <p className="text-sm text-muted-foreground">A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción urgente:</strong> Crea un sistema que sostenga tu energía automáticamente. Comienza mañana con 7 horas de sueño.</p>
+                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Inestabilidad Emocional</p>
+                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Te cuesta mantener la consistencia bajo presión. Recuperar estabilidad es prioritario.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte (ejercicio, meditación). Esto restaurará tu base.</p>
                     </>
                   )}
                 </div>
@@ -571,21 +571,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.enfoque > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con orden y profundidad</p>
-                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te apoyas en la claridad antes de actuar, evitando precipitaciones.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu oportunidad:</strong> Confía un poco más en tu criterio sin esperar información perfecta. Comparte tus ideas en proceso, no solo 'listas' finales.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Meticuloso y Preciso</p>
+                      <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te obsesiona la calidad, los detalles y la precisión. Evitas errores con rigor analítico.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos donde la precisión es vital.</p>
                     </>
                   ) : results.enfoque > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas concentrarte aunque las distracciones te desvían</p>
-                      <p className="text-sm text-muted-foreground">Tienes momentos de enfoque profundo, pero no son constantes. Necesitas crear mejores condiciones para la concentración.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica recomendada:</strong> Crea un sistema de prioridades visual. Identifica las 3 cosas MÁS importantes cada día y trabaja solo esas.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Buscas Precisión</p>
+                      <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces la abandones por rapidez.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros para cada tarea. Revisa solo UNA vez al final. Confía en tu proceso, no en perfeccionismo infinito.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu concentración es un desafío actual</p>
-                      <p className="text-sm text-muted-foreground">Las distracciones te capturan fácilmente y te cuesta sostener el enfoque en tareas importantes.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza ahora:</strong> Apaga notificaciones por 90 minutos. Usa Pomodoro (25 min enfoque, 5 min descanso). Repite 4 veces.</p>
+                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Necesitas Desarrollar Rigor</p>
+                      <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas crear sistemas que impongan estructura.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones digitales. Dedica 90 min puros a una sola tarea hoy.</p>
                     </>
                   )}
                 </div>
@@ -598,21 +598,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.relaciones > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con apertura y calidez natural</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad de conectar es natural. Te expresas con empatía, buscando entender antes de ser entendido.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu oportunidad:</strong> Establece límites saludables. No todas las conexiones requieren profundidad. Aprende a decir 'no' desde el amor.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Inspirador y Conectado</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad de conexión es natural. Inspiras a otros, influyes sin imponer, y generas entusiasmo genuino a tu alrededor.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador social. Tu carisma abre puertas. Lidera movimientos, comunidades y transformaciones basadas en personas.</p>
                     </>
                   ) : results.relaciones > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas conectar con otros pero a veces te sientes reservado</p>
-                      <p className="text-sm text-muted-foreground">Tienes buenas relaciones, pero podrían ser más profundas. Tomas tus tiempos para abrirte.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Siguiente paso:</strong> Cultiva UNA conexión genuina. Elige una persona y reúnete con ella regularmente.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Buscas Conectar</p>
+                      <p className="text-sm text-muted-foreground">Tienes buena presencia social, pero a veces te reservas. Puedes influir, pero necesitas más confianza en tu impacto.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo:</strong> Practica compartir tus opiniones con más libertad. Una conexión genuina cada semana. Celebra pequeños momentos de influencia.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu conexión con otros es limitada</p>
-                      <p className="text-sm text-muted-foreground">Prefieres la soledad o tienes dificultad expresando calidez. Las relaciones son un desafío actual.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo importante:</strong> Practica escucha activa. Esta semana, haz preguntas genuinas a 3 personas y solo escucha.</p>
+                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Necesitas Desarrollar Influencia</p>
+                      <p className="text-sm text-muted-foreground">Te cuesta conectar o influir. Prefieres trabajar en solitario. Desarrollar carisma y presencia social es un area importante.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Comienza:</strong> Practica escucha activa sin juzgar. Haz preguntas genuinas. Conecta con UNA persona profundamente esta semana.</p>
                     </>
                   )}
                 </div>
@@ -625,21 +625,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.plan_ejecutivo > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Actúas con lógica orientada a resultados</p>
-                      <p className="text-sm text-muted-foreground">Tu toma de decisiones es directa y estratégica. Ejecutas lo que planificas de forma confiable.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Próximo nivel:</strong> Lidera iniciativas estratégicas. Tu visión ejecutiva fuerte es valiosa para equipos.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Líder Decisivo</p>
+                      <p className="text-sm text-muted-foreground">Tu impulso por resultados es natural. Decides rápido, ejecutas con determinación y logras objetivos bajo presión.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador de acción. Tu visión se convierte en realidad. Lidera transformaciones estratégicas y grandes proyectos.</p>
                     </>
                   ) : results.plan_ejecutivo > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas llevar adelante tus planes</p>
-                      <p className="text-sm text-muted-foreground">Aunque a veces necesitas impulso adicional. Tienes intención, pero cuesta la consistencia.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza tus objetivos a 1-3 años y trabaja hacia atrás. Divide en metas trimestrales.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Buscas Mayor Ejecución</p>
+                      <p className="text-sm text-muted-foreground">Tienes intención de lograr resultados, pero a veces necesitas impulso. Planificas bien pero la ejecución falta consistencia.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza objetivos a 3 años. Divide en metas trimestrales. Revisa progreso cada lunes. Esto crea accountability.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Tu ejecución es inconsistente</p>
-                      <p className="text-sm text-muted-foreground">Planificas bien, pero la implementación es un desafío. Necesitas sistemas que te sostengan.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea UN ritual matutino de 10 min. Revisa tus 3 prioridades. Repítelo mañana.</p>
+                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Necesitas Desarrollar Liderazgo</p>
+                      <p className="text-sm text-muted-foreground">La ejecución es un desafío. Luchas con la toma de decisiones o la consistencia. Necesitas crear sistemas de apoyo.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea ritual matutino: 10 min, revisa 3 prioridades, ejecuta solo esas. Mañana comienza.</p>
                     </>
                   )}
                 </div>
