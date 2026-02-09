@@ -710,7 +710,7 @@ export default function DespegaOnboarding() {
             </div>
 
             <Button 
-              onClick={() => router.push("/dashboard?refresh=true")} 
+                onClick={() => router.push("/dashboard?refetch=true")}
               className="w-full" 
               size="lg"
               disabled={loading}
