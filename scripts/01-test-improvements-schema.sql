@@ -27,9 +27,7 @@ CREATE TABLE IF NOT EXISTS test_completion_metrics (
   completion_percentage INT DEFAULT 100,
   started_at TIMESTAMP WITH TIME ZONE NOT NULL,
   completed_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  INDEX_completion_metrics_test_type (test_type),
-  INDEX_completion_metrics_created_at (created_at)
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 3. Test Progress Snapshots Table (for interrupted tests)
@@ -44,9 +42,7 @@ CREATE TABLE IF NOT EXISTS test_progress_snapshots (
   duration_so_far_minutes NUMERIC NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  expires_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() + INTERVAL '7 days',
-  INDEX_progress_snapshots_user (user_email),
-  INDEX_progress_snapshots_session (session_id)
+  expires_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() + INTERVAL '7 days'
 );
 
 -- 4. A/B Test Variants Table (already exists as ab_test_variants, but we'll ensure proper structure)
@@ -72,11 +68,9 @@ CREATE TABLE IF NOT EXISTS ab_test_results_tracking (
   question_id INT NOT NULL,
   variant_name VARCHAR(100) NOT NULL,
   response_time_ms INT,
-  response_quality INT, -- 1-5 scale
+  response_quality INT,
   answer_provided JSONB,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  INDEX_ab_results_test_type (test_type),
-  INDEX_ab_results_variant (variant_name)
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 6. Test Analytics Summary Table
@@ -101,15 +95,13 @@ CREATE TABLE IF NOT EXISTS test_export_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_email VARCHAR(255) NOT NULL,
   test_type VARCHAR(100),
-  export_format VARCHAR(20) NOT NULL, -- pdf, csv, json
+  export_format VARCHAR(20) NOT NULL,
   export_url TEXT,
   file_size_bytes INT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   exported_at TIMESTAMP WITH TIME ZONE,
   expires_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() + INTERVAL '7 days',
-  download_count INT DEFAULT 0,
-  INDEX_export_logs_user (user_email),
-  INDEX_export_logs_format (export_format)
+  download_count INT DEFAULT 0
 );
 
 -- Create indexes for better query performance
