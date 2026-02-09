@@ -262,7 +262,7 @@ export default function DespegaOnboarding() {
         // Initialize pilar progress
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
         for (const pilar of pilares) {
-          await supabase.from("despega_pilar_progress").upsert({
+          const { error: pilarError } = await supabase.from("despega_pilar_progress").upsert({
             user_id: userId,
             pilar,
             estado: { diagnostico_completado: pilar === "a1_cerebral" },
@@ -271,10 +271,14 @@ export default function DespegaOnboarding() {
             ciclo_actual: 30,
             ciclo_dia: 1,
           })
+          
+          if (pilarError) {
+            console.error(`[v0] Error saving pilar ${pilar}:`, pilarError.message)
+          }
         }
 
-        // Initialize rankings
-        await supabase.from("despega_rankings").upsert({
+        // Initialize rankings with error handling
+        const { error: rankingError } = await supabase.from("despega_rankings").upsert({
           user_id: userId,
           score_a1_cerebral: scoreTotalPercentage,
           score_a2_rutas: 0,
@@ -284,6 +288,12 @@ export default function DespegaOnboarding() {
           score_camino_profesional: caminoProfesional ? 5 : 0,
           score_general: scoreTotalPercentage,
         })
+        
+        if (rankingError) {
+          console.error("[v0] Error saving to despega_rankings:", rankingError.message)
+        } else {
+          console.log("[v0] Successfully saved to despega_rankings")
+        }
       } catch (error) {
         console.error("[v0] Error saving onboarding data:", error)
       }
