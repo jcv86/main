@@ -372,6 +372,28 @@ export default function DespegaOnboarding() {
       const data = await response.json()
       console.log("[v0] AI Insights received:", data)
       setInsights(data)
+
+      // También obtener recomendaciones de libros basadas en perfil DISC
+      console.log("[v0] Fetching book recommendations based on DISC profile")
+      const booksResponse = await fetch("/api/despega-book-recommendations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          results: testResults,
+          userId: userId || "anonymous",
+        }),
+      })
+
+      if (booksResponse.ok) {
+        const booksData = await booksResponse.json()
+        console.log("[v0] Book recommendations received:", booksData)
+        // Combinar insights con recomendaciones de libros
+        setInsights((prev: any) => ({
+          ...prev,
+          bookRecommendations: booksData.recommendations,
+          dominantProfile: booksData.dominantProfile,
+        }))
+      }
     } catch (error) {
       console.error("[v0] Error generating AI insights:", error)
     } finally {
@@ -858,17 +880,72 @@ export default function DespegaOnboarding() {
                   </Card>
                 )}
 
-                {insights.recommendations && insights.recommendations.length > 0 && (
+                {/* LIBRO RECOMMENDATIONS FROM BIBLIOTECA */}
+                {insights.bookRecommendations && insights.bookRecommendations.length > 0 && (
                   <Card className="border-0 shadow-lg">
                     <CardHeader>
-                      <CardTitle>Recursos Recomendados</CardTitle>
-                      <CardDescription>De nuestra biblioteca especializada</CardDescription>
+                      <CardTitle className="text-2xl">Libros Recomendados para Tu Perfil</CardTitle>
+                      <CardDescription>
+                        Seleccionados de nuestra biblioteca basados en tu perfil DISC: <span className="font-bold">{insights.dominantProfile}</span>
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-3">
-                      {insights.recommendations.slice(0, 4).map((rec: any, idx: number) => (
-                        <div key={idx} className="p-3 border rounded-lg">
-                          <h4 className="font-semibold text-sm">{rec.title}</h4>
-                          <p className="text-sm text-muted-foreground">{rec.description}</p>
+                    <CardContent className="space-y-4">
+                      {insights.bookRecommendations.map((book: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-gradient-to-r from-blue-50 to-transparent dark:from-blue-950 dark:to-transparent hover:shadow-md transition"
+                        >
+                          <div className="flex gap-4">
+                            {book.cover_url && (
+                              <img
+                                src={book.cover_url}
+                                alt={book.title}
+                                className="w-24 h-32 object-cover rounded-lg"
+                              />
+                            )}
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <h4 className="font-bold text-base text-foreground">{book.title}</h4>
+                                  <p className="text-sm text-muted-foreground">{book.author}</p>
+                                </div>
+                                {book.rating && (
+                                  <span className="text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300 px-2 py-1 rounded">
+                                    ⭐ {book.rating.toFixed(1)}
+                                  </span>
+                                )}
+                              </div>
+
+                              <p className="text-sm text-foreground mb-3 line-clamp-2">
+                                {book.description}
+                              </p>
+
+                              <div className="flex flex-wrap gap-2 items-center">
+                                <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                                  book.difficulty === 'beginner' ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300' :
+                                  book.difficulty === 'intermediate' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300' :
+                                  'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'
+                                }`}>
+                                  {book.difficulty === 'beginner' ? 'Principiante' : 
+                                   book.difficulty === 'intermediate' ? 'Intermedio' : 'Avanzado'}
+                                </span>
+
+                                {book.estimated_read_time && (
+                                  <span className="text-xs text-muted-foreground">
+                                    📖 {book.estimated_read_time} horas
+                                  </span>
+                                )}
+
+                                <span className="text-xs text-muted-foreground">
+                                  Perfil: <span className="font-semibold">{book.matchProfile}</span>
+                                </span>
+
+                                <span className="text-xs text-blue-600 dark:text-blue-400">
+                                  {book.matchReason}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </CardContent>
