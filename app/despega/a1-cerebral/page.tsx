@@ -1,5 +1,7 @@
 "use client"
 
+// Version: DISC-2024-v2 - Force cache invalidation
+// Last update: Updated all 20 DISC-based questions with proper scoring
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
@@ -15,9 +17,9 @@ import { ArrowLeft, ArrowRight, CheckCircle, Check } from "lucide-react"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
 
-// DISC-Based Questions (20 questions) - Replaces generic energy/focus/relations questions
+// DISC-Based Questions (20 questions) - Complete replacement of old energy/focus/relations questions
 // Maps to: Dominance (D), Influence (I), Steadiness (S), Conscientiousness (C)
-const A1_QUESTIONS = [
+const A1_QUESTIONS_DISC_2024 = [
   // DOMINANCE - Results-oriented, Competitive, Direct
   { id: 1, area: "dominancia", type: "scale", text: "Prefiero tomar decisiones rápidas y directas sin hesitación", min: 1, max: 10, minLabel: "Analizo primero", maxLabel: "Decido rápido" },
   { id: 2, area: "dominancia", type: "multiple", text: "¿Cómo respondes ante desafíos o competencia?", options: ["Evito conflictos", "Prefiero cooperar", "Compito moderadamente", "Busco ganar", "Debo ganar a toda costa"], weights: [0.1, 0.25, 0.5, 0.8, 1.0] },
@@ -47,6 +49,9 @@ const A1_QUESTIONS = [
   { id: 20, area: "consciencia", type: "scale", text: "¿Necesitas evidencia o pruebas antes de aceptar información nueva?", min: 1, max: 10, minLabel: "Confío en palabras", maxLabel: "Necesito evidencia" },
 ]
 
+// Use the new DISC questions - THIS IS THE ACTIVE QUESTIONS ARRAY
+const A1_QUESTIONS = A1_QUESTIONS_DISC_2024
+
 export default function A1CerebralPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -64,6 +69,9 @@ export default function A1CerebralPage() {
   useEffect(() => {
     const loadUserLevel = async () => {
       try {
+        console.log("[v0] A1 Cerebral Page - Total questions loaded:", A1_QUESTIONS.length)
+        console.log("[v0] A1_QUESTIONS array:", A1_QUESTIONS.map(q => ({ id: q.id, area: q.area, text: q.text.substring(0, 50) })))
+        
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
           setLoading(false)
@@ -310,6 +318,8 @@ export default function A1CerebralPage() {
   }
 
   const handleStartTest = () => {
+    console.log("[v0] Starting test - A1_QUESTIONS length:", A1_QUESTIONS.length)
+    console.log("[v0] First question:", A1_QUESTIONS[0])
     setStage("test")
     setCurrentIdx(0)
     setAnswers({})
