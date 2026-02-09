@@ -35,14 +35,17 @@ export function DashboardContent() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!session?.user?.email) return
+    if (!session?.user?.email || !session?.user?.id) {
+      setLoading(false)
+      return
+    }
 
     const loadDashboardData = async () => {
       try {
         setLoading(true)
 
         // Fetch Despega Cerebral results
-        const { data: cerebralData, error: cerebralError } = await supabase
+        const { data: cerebralData } = await supabase
           .from("unified_test_results")
           .select("test_results")
           .eq("user_email", session.user.email)
@@ -80,6 +83,8 @@ export function DashboardContent() {
         if (books) {
           setBibliotecaBooks(books)
         }
+
+        setError(null)
       } catch (err) {
         console.error("[v0] Error loading dashboard data:", err)
         setError("Error cargando datos del dashboard")
@@ -89,7 +94,7 @@ export function DashboardContent() {
     }
 
     loadDashboardData()
-  }, [session?.user?.email, session?.user?.id])
+  }, [session?.user?.email, session?.user?.id, supabase])
 
   if (loading) {
     return (

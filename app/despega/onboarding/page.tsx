@@ -339,21 +339,29 @@ export default function DespegaOnboarding() {
   }
 
   const generateAIInsights = async (userId: string | null, testResults: any) => {
+    console.log("[v0] Starting AI insights generation with:", { userId, testResults })
     setLoadingInsights(true)
     try {
-      const response = await fetch("/api/post-test-insights", {
+      const payload = {
+        testType: "despega_cerebral",
+        results: testResults,
+        userId: userId || "anonymous",
+        testResponses: responses,
+      }
+      console.log("[v0] Sending payload to /api/post-test-insights-simple:", payload)
+
+      // Try simple endpoint first
+      const response = await fetch("/api/post-test-insights-simple", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          testType: "despega_cerebral",
-          results: testResults,
-          userId: userId || "anonymous",
-          testResponses: responses,
-        }),
+        body: JSON.stringify(payload),
       })
 
+      console.log("[v0] API response status:", response.status)
+
       if (!response.ok) {
-        console.error("[v0] API error:", response.statusText)
+        const errorText = await response.text()
+        console.error("[v0] API error response:", errorText)
         return
       }
 
