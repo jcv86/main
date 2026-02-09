@@ -10,102 +10,111 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Base - Despega Cerebral (obligatorio)
+// Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
+// DISC mapping: D→plan_ejecutivo, I→relaciones, S→energia, C→enfoque
 const TEST_A1_QUESTIONS = [
+  // DISC-S (Steadiness) → ENERGÍA
   {
     id: 1,
     category: "energia",
-    question: "¿Cómo describes tu nivel de energía durante el día?",
+    question: "Ante situaciones inesperadas, ¿cómo reaccionas típicamente?",
     options: [
-      { value: 1, label: "Muy bajo - Me siento agotado constantemente" },
-      { value: 2, label: "Bajo - Tengo poca energía para actividades" },
-      { value: 3, label: "Medio - Energía variable según el día" },
-      { value: 4, label: "Alto - Generalmente me siento con buena energía" },
-      { value: 5, label: "Muy alto - Tengo energía abundante todo el día" },
+      { value: 1, label: "Me estreso rápidamente y me toma tiempo recuperarme" },
+      { value: 2, label: "Me afecta, pero intento mantener la calma" },
+      { value: 3, label: "Busco equilibrio entre adaptación y consistencia" },
+      { value: 4, label: "Me adapto con relativa calma y serenidad" },
+      { value: 5, label: "Mantengo serenidad y veo lo positivo en el cambio" },
     ],
   },
+  // DISC-C (Conscientiousness) → ENFOQUE
   {
     id: 2,
     category: "enfoque",
-    question: "¿Qué tan fácil te resulta concentrarte en una tarea?",
+    question: "Cuando trabajas en algo importante, ¿cuál es tu enfoque?",
     options: [
-      { value: 1, label: "Muy difícil - Me distraigo constantemente" },
-      { value: 2, label: "Difícil - Necesito mucho esfuerzo para concentrarme" },
-      { value: 3, label: "Regular - A veces logro concentrarme" },
-      { value: 4, label: "Fácil - Puedo concentrarme con relativa facilidad" },
-      { value: 5, label: "Muy fácil - Entro en estado de flujo con frecuencia" },
+      { value: 1, label: "Salto entre tareas sin completarlas" },
+      { value: 2, label: "Me cuesta mantener el enfoque prolongado" },
+      { value: 3, label: "Puedo concentrarme, pero me distraigo ocasionalmente" },
+      { value: 4, label: "Mantengo enfoque y atención al detalle" },
+      { value: 5, label: "Profundizo al máximo nivel, verificando cada detalle" },
     ],
   },
+  // DISC-I (Influence) → RELACIONES
   {
     id: 3,
     category: "relaciones",
-    question: "¿Cómo evalúas tus habilidades de comunicación?",
+    question: "En grupos o reuniones, ¿cuál es tu rol natural?",
     options: [
-      { value: 1, label: "Muy débiles - Me cuesta expresarme" },
-      { value: 2, label: "Débiles - Tengo dificultades frecuentes" },
-      { value: 3, label: "Regulares - Me comunico de forma básica" },
-      { value: 4, label: "Buenas - Me expreso con claridad" },
-      { value: 5, label: "Excelentes - Comunico ideas complejas fácilmente" },
+      { value: 1, label: "Me cuesta participar o hablar" },
+      { value: 2, label: "Participo poco, observo más" },
+      { value: 3, label: "Participo de manera equilibrada" },
+      { value: 4, label: "Contribuyo activamente a la conversación" },
+      { value: 5, label: "Conecto personas e inspiro participación" },
     ],
   },
+  // DISC-D (Dominance) → PLAN EJECUTIVO
   {
     id: 4,
     category: "plan_ejecutivo",
-    question: "¿Qué tan efectivo eres ejecutando tus planes?",
+    question: "Cuando estableces un objetivo, ¿qué tan directo es tu camino?",
     options: [
-      { value: 1, label: "Nada efectivo - Raramente completo lo que planeo" },
-      { value: 2, label: "Poco efectivo - Completo menos del 30%" },
-      { value: 3, label: "Moderado - Completo alrededor del 50%" },
-      { value: 4, label: "Efectivo - Completo más del 70%" },
-      { value: 5, label: "Muy efectivo - Completo casi todo lo que planeo" },
+      { value: 1, label: "No tengo metas claras ni ejecuto bien" },
+      { value: 2, label: "Tengo metas pero me cuesta ejecutarlas" },
+      { value: 3, label: "Balanceo metas con flexibilidad en el proceso" },
+      { value: 4, label: "Ejecuto con determinación hacia mis objetivos" },
+      { value: 5, label: "Avanzo rápido hacia resultados con enfoque implacable" },
     ],
   },
+  // DISC-S (Steadiness) → ENERGÍA (relaciones interpersonales)
   {
     id: 5,
     category: "energia",
-    question: "¿Cómo es tu calidad de sueño?",
+    question: "¿Cómo prefieres trabajar con otros?",
     options: [
-      { value: 1, label: "Muy mala - Duermo menos de 5 horas o mal" },
-      { value: 2, label: "Mala - Sueño irregular o poco reparador" },
-      { value: 3, label: "Regular - A veces duermo bien" },
-      { value: 4, label: "Buena - Generalmente duermo bien" },
-      { value: 5, label: "Excelente - Sueño reparador y consistente" },
+      { value: 1, label: "Prefiero evitar el trabajo en equipo" },
+      { value: 2, label: "Trabajo en equipo pero necesito autonomía" },
+      { value: 3, label: "Me adapto bien a distintos estilos de equipo" },
+      { value: 4, label: "Disfruto la colaboración y la armonía grupal" },
+      { value: 5, label: "Busco crear ambiente de confianza y apoyo mutuo" },
     ],
   },
+  // DISC-C (Conscientiousness) → ENFOQUE (calidad y precisión)
   {
     id: 6,
     category: "enfoque",
-    question: "¿Cómo manejas las distracciones digitales?",
+    question: "¿Qué importancia tiene la calidad en tu trabajo?",
     options: [
-      { value: 1, label: "Muy mal - Estoy pegado al celular todo el día" },
-      { value: 2, label: "Mal - Me distraigo frecuentemente" },
-      { value: 3, label: "Regular - A veces logro desconectarme" },
-      { value: 4, label: "Bien - Controlo mi uso de tecnología" },
-      { value: 5, label: "Muy bien - Uso intencional y controlado" },
+      { value: 1, label: "Me importa terminar rápido más que la calidad" },
+      { value: 2, label: "Busco equilibrio entre velocidad y calidad" },
+      { value: 3, label: "Calidad es importante, pero no siempre es perfecta" },
+      { value: 4, label: "Busco alta calidad en todo lo que hago" },
+      { value: 5, label: "La excelencia es no negociable, reviso todo meticulosamente" },
     ],
   },
+  // DISC-I (Influence) → RELACIONES (networking, influencia)
   {
     id: 7,
     category: "relaciones",
-    question: "¿Cómo describes tu red de contactos profesionales?",
+    question: "¿Cómo es tu capacidad de influencia sobre otros?",
     options: [
-      { value: 1, label: "Inexistente - No tengo red profesional" },
-      { value: 2, label: "Muy pequeña - Menos de 10 contactos activos" },
-      { value: 3, label: "Pequeña - Entre 10-30 contactos" },
-      { value: 4, label: "Media - Entre 30-100 contactos" },
-      { value: 5, label: "Grande - Más de 100 contactos activos" },
+      { value: 1, label: "Me cuesta influir o persuadir a otros" },
+      { value: 2, label: "Puedo influir en ciertos contextos" },
+      { value: 3, label: "Tengo capacidad moderada para influir" },
+      { value: 4, label: "Puedo persuadir e influir de manera clara" },
+      { value: 5, label: "Inspiro y motivo a otros con facilidad natural" },
     ],
   },
+  // DISC-D (Dominance) → PLAN EJECUTIVO (liderazgo, decisiones)
   {
     id: 8,
     category: "plan_ejecutivo",
-    question: "¿Cómo priorizas tus tareas diarias?",
+    question: "Ante decisiones difíciles o conflictos, ¿cómo actúas?",
     options: [
-      { value: 1, label: "No priorizo - Hago lo que aparece" },
-      { value: 2, label: "Raramente - Solo en emergencias" },
-      { value: 3, label: "A veces - Cuando tengo tiempo" },
-      { value: 4, label: "Frecuentemente - Tengo un sistema básico" },
-      { value: 5, label: "Siempre - Tengo un sistema robusto de priorización" },
+      { value: 1, label: "Evito decidir o los delego siempre" },
+      { value: 2, label: "Me cuesta tomar decisiones difíciles" },
+      { value: 3, label: "Decido con análisis de consecuencias" },
+      { value: 4, label: "Decido firmemente cuando es necesario" },
+      { value: 5, label: "Tomo decisiones rápidas y resolutivas, sin titubear" },
     ],
   },
 ]
