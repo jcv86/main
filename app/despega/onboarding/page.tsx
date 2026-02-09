@@ -582,7 +582,7 @@ export default function DespegaOnboarding() {
                       <p className="text-sm text-muted-foreground">Buscas resultados rápidamente, compites por el éxito y prefieres tener control sobre las situaciones. Tu comunicación es directa y sin rodeos.</p>
                       <p className="text-xs text-red-600 dark:text-red-400 mt-2"><strong>Oportunidad de crecimiento:</strong> Desarrolla empatía en la ejecución. No todos disfrutan el ritmo de competencia. Escucha los tiempos ajenos.</p>
                     </>
-                  ) : results.dominancia > 50 ? (
+                  ) : results.accion > 50 ? (
                     <>
                       <p className="text-sm font-medium">Buscas lograr resultados con balance moderado</p>
                       <p className="text-sm text-muted-foreground">Tienes iniciativa y tomas decisiones, aunque a veces balanceas entre dirección y consideración por otros. Tienes capacidad de liderazgo natural.</p>
@@ -598,17 +598,17 @@ export default function DespegaOnboarding() {
                 </div>
 
                 {/* Inspiración Insight - Already updated above */}
-                  {results.influencia > 70 ? (
+                  {results.inspiracion > 70 ? (
                     <>
                       <p className="text-sm font-medium">Eres naturalmente carismático y motivador</p>
                       <p className="text-sm text-muted-foreground">Conectas fácilmente con otros, inspiras mediante tu optimismo y energía. Te expresas con pasión y contagias motivación a tu alrededor.</p>
                       <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2"><strong>Oportunidad:</strong> Desarrolla seguimiento en la ejecución. La inspiración sin resultados es solo aire. Aprende a cerrar ciclos.</p>
                     </>
-                  ) : results.influencia > 50 ? (
+                  ) : results.inspiracion > 50 ? (
                     <>
-                      <p className="text-sm font-medium">Tienes capacidad de conexión e influencia moderada</p>
+                      <p className="text-sm font-medium">Tienes capacidad de conexión e inspiración moderada</p>
                       <p className="text-sm text-muted-foreground">Buscas inspirar a otros, aunque a veces tu mensaje se diluye. Tienes buena capacidad de conexión pero necesitas estructura para amplificarla.</p>
-                      <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2"><strong>Siguiente paso:</strong> Encuentra UNA alianza auténtica donde puedas ser completamente tú. De esa plataforma, expande tu influencia naturalmente.</p>
+                      <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2"><strong>Siguiente paso:</strong> Encuentra UNA alianza auténtica donde puedas ser completamente tú. De esa plataforma, expande tu inspiración naturalmente.</p>
                     </>
                   ) : (
                     <>
@@ -623,17 +623,17 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-lg">🛡️</span>
-                    <span className="font-semibold text-lg">Estabilidad - Tu Lealtad y Apoyo ({(results.estabilidad * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Apoyo - Tu Lealtad y Confiabilidad ({(results.apoyo * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.estabilidad > 70 ? (
+                  {results.apoyo > 70 ? (
                     <>
                       <p className="text-sm font-medium">Eres la roca donde otros pueden confiar</p>
                       <p className="text-sm text-muted-foreground">Tu lealtad es inquebrantable, tu paciencia es legendaria. Actúas con calma y consistencia, proporcionando estabilidad a tu entorno.</p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Oportunidad:</strong> Tu reto es iniciarte en cambios controlados. El mundo evolucionará con o sin ti. Aprende a liderar en transiciones.</p>
                     </>
-                  ) : results.estabilidad > 50 ? (
+                  ) : results.apoyo > 50 ? (
                     <>
-                      <p className="text-sm font-medium">Buscas equilibrio entre estabilidad y cambio</p>
+                      <p className="text-sm font-medium">Buscas equilibrio entre apoyo y cambio</p>
                       <p className="text-sm text-muted-foreground">Eres confiable, aunque ocasionalmente deseas movimiento o aventura. Tu fortaleza es tu consistencia, pero necesitas variedad.</p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Siguiente paso:</strong> Busca cambio positivo en UNA área importante. No resistas el cambio, sino condúcelo estratégicamente.</p>
                     </>
@@ -650,15 +650,15 @@ export default function DespegaOnboarding() {
                 <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500 space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-lg">🔍</span>
-                    <span className="font-semibold text-lg">Consciencia - Tu Precisión y Análisis ({(results.consciencia * 20).toFixed(0)}%)</span>
+                    <span className="font-semibold text-lg">Excelencia - Tu Precisión y Análisis ({(results.excelencia * 20).toFixed(0)}%)</span>
                   </div>
-                  {results.consciencia > 70 ? (
+                  {results.excelencia > 70 ? (
                     <>
                       <p className="text-sm font-medium">Eres lógico, preciso y orientado a la calidad</p>
                       <p className="text-sm text-muted-foreground">Tu análisis es profundo, valoras los datos antes de suposiciones. Te expresas con cautela y claridad, buscando siempre lo correcto.</p>
                       <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Oportunidad:</strong> Comparte tus ideas en proceso, no solo cuando son perfectas. Confía en tu criterio incluso sin toda la información.</p>
                     </>
-                  ) : results.consciencia > 50 ? (
+                  ) : results.excelencia > 50 ? (
                     <>
                       <p className="text-sm font-medium">Buscas precisión con pragmatismo moderado</p>
                       <p className="text-sm text-muted-foreground">Tienes estándares altos, aunque balanceas entre perfección y lo "suficientemente bueno". Tu análisis es cuidadoso pero flexible.</p>

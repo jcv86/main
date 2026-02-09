@@ -214,7 +214,7 @@ export default function A1CerebralPage() {
         
         growth: score > 70
           ? "Tu oportunidad es compartir tus ideas en proceso, no solo cuando son perfectas. Confía en tu criterio, incluso sin toda la información."
-          : "Necesitas crear UN sistema donde documentes decisiones importantes. El método te liberará de la ansiedad.",
+          : "Necesitas crear UN sistema donde documentes decisiones importantes. El método te liberar�� de la ansiedad.",
       },
     }
 
@@ -424,17 +424,17 @@ export default function A1CerebralPage() {
       excelencia: 0,
     }
     const counts = {
-      dominancia: 0,
-      influencia: 0,
-      estabilidad: 0,
-      consciencia: 0,
+      accion: 0,
+      inspiracion: 0,
+      apoyo: 0,
+      excelencia: 0,
     }
 
     A1_QUESTIONS.forEach(question => {
       const answer = answers[question.id]
       if (answer === undefined) return
 
-      const dimension = questionToDISC[question.id]
+      const dimension = questionToArea[question.id]
       let normalizedScore = 0
 
       if (question.type === "scale") {
