@@ -14,6 +14,7 @@ import { Slider } from "@/components/ui/slider"
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
+import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 
 // ALL 20 QUESTIONS - Varied scoring weights to prevent 100% on perfect answers
 const A1_QUESTIONS = [
@@ -735,7 +736,20 @@ export default function A1CerebralPage() {
             <CardTitle className="text-2xl">Tu Perfil Completo</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            <div className="space-y-6">
+            <CompetencyRadarChart
+              data={sorted.map(([dim, score]) => ({
+                name: getDimensionInfo(dim).label,
+                value: score,
+                fullMark: 100,
+              }))}
+              title="Análisis Integral Despega Cerebral"
+              description="Visualización de tus 4 dimensiones clave"
+              strokeColor="#3b82f6"
+              fillColor="#3b82f6"
+              height={400}
+            />
+
+            <div className="space-y-6 mt-8">
               {sorted.map(([dim, score]) => (
                 <div key={dim}>
                   <div className="flex items-center justify-between mb-2">
