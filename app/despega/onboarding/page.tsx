@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
+import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 
 // Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
 // DISC mapping: D→plan_ejecutivo, I→relaciones, S→energia, C→enfoque
@@ -555,6 +556,39 @@ export default function DespegaOnboarding() {
               <p className="text-3xl font-bold capitalize mt-1">{results.nivel}</p>
               <p className="text-lg text-muted-foreground">Potencial disponible: {(results.total * 20).toFixed(0)}%</p>
               <p className="text-xs text-muted-foreground mt-2">Este es tu punto de partida para la transición</p>
+            </div>
+
+            {/* Radar Chart */}
+            <div className="bg-white p-4 rounded-lg border">
+              <CompetencyRadarChart
+                data={[
+                  {
+                    name: "Energía",
+                    value: results.energia * 20,
+                    fullMark: 100,
+                  },
+                  {
+                    name: "Enfoque",
+                    value: results.enfoque * 20,
+                    fullMark: 100,
+                  },
+                  {
+                    name: "Relaciones",
+                    value: results.relaciones * 20,
+                    fullMark: 100,
+                  },
+                  {
+                    name: "Plan Ejecutivo",
+                    value: results.plan_ejecutivo * 20,
+                    fullMark: 100,
+                  },
+                ]}
+                title=""
+                description=""
+                strokeColor="#3b82f6"
+                fillColor="#3b82f7"
+                height={350}
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
