@@ -497,17 +497,17 @@ export default function A1CerebralPage() {
   }
 
   const areaColors = {
-    energia: "bg-blue-100 text-blue-900",
-    enfoque: "bg-green-100 text-green-900",
-    relaciones: "bg-orange-100 text-orange-900",
-    plan_ejecutivo: "bg-purple-100 text-purple-900",
+    dominancia: "bg-red-100 text-red-900",
+    influencia: "bg-yellow-100 text-yellow-900",
+    estabilidad: "bg-blue-100 text-blue-900",
+    consciencia: "bg-green-100 text-green-900",
   }
 
   const areaLabels = {
-    energia: "Energía",
-    enfoque: "Enfoque",
-    relaciones: "Relaciones",
-    plan_ejecutivo: "Plan Ejecutivo",
+    dominancia: "Dominancia",
+    influencia: "Influencia",
+    estabilidad: "Estabilidad",
+    consciencia: "Consciencia",
   }
 
   const question = A1_QUESTIONS[currentIdx]
