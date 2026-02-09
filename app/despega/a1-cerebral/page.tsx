@@ -902,8 +902,9 @@ export default function A1CerebralPage() {
           
           <p className="text-sm text-gray-600">
             {saveStatus === "idle" && "Tus resultados serán guardados cuando hagas clic."}
-            {saveStatus === "saved" && "Tus resultados fueron guardados exitosamente."}
-            {saveStatus !== "idle" && saveStatus !== "saved" && "Por favor, no cierres esta página..."}
+            {saveStatus === "saving" && "Sincronizando tus resultados con el servidor..."}
+            {saveStatus === "saved" && "✓ Tus resultados fueron guardados exitosamente en tu perfil."}
+            {saveStatus === "error" && "Ocurrió un error al guardar. Por favor intenta de nuevo."}
           </p>
         </div>
       </div>
