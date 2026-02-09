@@ -159,10 +159,10 @@ export default function DespegaOnboarding() {
           diagnostico: nivel,
           score_total: total,
           recomendaciones: {
-            accion: results.accion > 70 ? "Alto potencial en toma de decisiones" : "Desarrolla tu capacidad de acción",
-            inspiracion: results.inspiracion > 70 ? "Natural inspirador de otros" : "Cultiva tu capacidad de inspirar",
-            apoyo: results.apoyo > 70 ? "Fuerte lealtad y apoyo" : "Desarrolla tu consistencia",
-            excelencia: results.excelencia > 70 ? "Alto estándar de calidad" : "Mejora tu enfoque en precisión",
+            accion: finalResults.accion > 70 ? "Alto potencial en toma de decisiones" : "Desarrolla tu capacidad de acción",
+            inspiracion: finalResults.inspiracion > 70 ? "Natural inspirador de otros" : "Cultiva tu capacidad de inspirar",
+            apoyo: finalResults.apoyo > 70 ? "Fuerte lealtad y apoyo" : "Desarrolla tu consistencia",
+            excelencia: finalResults.excelencia > 70 ? "Alto estándar de calidad" : "Mejora tu enfoque en precisión",
           },
         })
 
