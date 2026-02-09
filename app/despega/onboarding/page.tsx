@@ -218,41 +218,69 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results to both tables for compatibility
-        await supabase.from("despega_a1_test_results").insert({
+        // Save test results to database
+    if (!userId) {
+      console.warn("[v0] No userId available, skipping despega_a1_test_results save")
+    } else {
+      try {
+        // Save to despega_a1_test_results with correct schema
+        const { error: a1Error } = await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
-          score_energia: Math.round(avgScores.energia * 20),
-          score_enfoque: Math.round(avgScores.enfoque * 20),
-          score_relaciones: Math.round(avgScores.relaciones * 20),
-          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-          nivel_detectado: nivel,
-          respuestas_raw: responses,
-        }).then(res => {
-          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
-          else console.log("[v0] Saved to despega_a1_test_results")
+          score_total: Math.round(total * 20),
+          resultados: {
+            energia: Math.round(avgScores.energia * 20),
+            enfoque: Math.round(avgScores.enfoque * 20),
+            relaciones: Math.round(avgScores.relaciones * 20),
+            plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          },
+          respuestas: responses,
+          diagnostico: nivel,
         })
-
-        // Also save to unified_test_results so dashboard recognizes it
-        const userEmail = (await supabase.auth.getUser()).data.user?.email
-        if (userEmail) {
-          const { error } = await supabase.from("unified_test_results").insert({
-            user_email: userEmail,
-            test_type: "disc",
-            test_results: {
-              energia: Math.round(avgScores.energia * 20),
-              enfoque: Math.round(avgScores.enfoque * 20),
-              relaciones: Math.round(avgScores.relaciones * 20),
-              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-            },
-            created_at: new Date().toISOString(),
-          })
-          if (error) {
-            console.error("[v0] Error saving to unified_test_results:", error)
-          } else {
-            console.log("[v0] Successfully saved to unified_test_results")
-          }
+        
+        if (a1Error) {
+          console.error("[v0] Error saving to despega_a1_test_results:", a1Error.message)
+        } else {
+          console.log("[v0] Successfully saved to despega_a1_test_results")
         }
+      } catch (err) {
+        console.error("[v0] Exception saving to despega_a1_test_results:", err)
+      }
+    }
 
+    // Always save to unified_test_results for dashboard
+    try {
+      const userEmail = (await supabase.auth.getUser()).data.user?.email
+      if (userEmail) {
+        const { error: unifiedError } = await supabase.from("unified_test_results").insert({
+          user_email: userEmail,
+          test_type: "disc",
+          test_results: {
+            energia: Math.round(avgScores.energia * 20),
+            enfoque: Math.round(avgScores.enfoque * 20),
+            relaciones: Math.round(avgScores.relaciones * 20),
+            plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          },
+          created_at: new Date().toISOString(),
+        })
+        
+        if (unifiedError) {
+          console.error("[v0] Error saving to unified_test_results:", unifiedError.message)
+          console.error("[v0] Error saving to unified_test_results:", unifiedError.message)
+        } else {
+          console.log("[v0] Successfully saved to unified_test_results")
+        }
+      } else {
+        console.warn("[v0] User email not found for unified_test_results save")
+      }
+    } catch (err) {
+      console.error("[v0] Exception saving to unified_test_results:", err)
+    }
+
+    // TODO: Initialize pilar progress and rankings when userId is available
+    // These can be set up in a separate user initialization process
+    /*
+    if (userId) {
+      try {
         // Initialize pilar progress
         const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
         for (const pilar of pilares) {
@@ -279,9 +307,10 @@ export default function DespegaOnboarding() {
           score_general: 10,
         })
       } catch (error) {
-        console.error("Error saving onboarding data:", error)
+        console.error("Error initializing pilar data:", error)
       }
     }
+    */
 
     setLoading(false)
     setStep("results")
