@@ -113,6 +113,8 @@ export default function DespegaOnboarding() {
     nivel: string
   } | null>(null)
   const [loading, setLoading] = useState(false)
+  const [loadingInsights, setLoadingInsights] = useState(false)
+  const [insights, setInsights] = useState<any>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
@@ -319,10 +321,49 @@ export default function DespegaOnboarding() {
       } finally {
         setLoading(false)
         setStep("results")
+        
+        // Generar insights con IA en background después de mostrar resultados
+        if (userId && results) {
+          generateAIInsights(userId, results)
+        }
       }
     } else {
       setLoading(false)
       setStep("results")
+      
+      // Generar insights sin userId si no hay autenticación
+      if (results) {
+        generateAIInsights(null, results)
+      }
+    }
+  }
+
+  const generateAIInsights = async (userId: string | null, testResults: any) => {
+    setLoadingInsights(true)
+    try {
+      const response = await fetch("/api/post-test-insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testType: "despega_cerebral",
+          results: testResults,
+          userId: userId || "anonymous",
+          testResponses: responses,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error("[v0] API error:", response.statusText)
+        return
+      }
+
+      const data = await response.json()
+      console.log("[v0] AI Insights received:", data)
+      setInsights(data)
+    } catch (error) {
+      console.error("[v0] Error generating AI insights:", error)
+    } finally {
+      setLoadingInsights(false)
     }
   }
 
@@ -492,6 +533,142 @@ export default function DespegaOnboarding() {
         {/* RESULTS STEP */}
         {step === "results" && results && (
           <div className="space-y-6">
+            {/* Loading AI Insights */}
+            {loadingInsights && (
+              <Card className="border-0 shadow-lg bg-blue-50 dark:bg-blue-950">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-3">
+                    <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">Generando análisis profundo de tu perfil con IA...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Display Insights if available */}
+            {insights && (
+              <>
+                {/* AI-Generated Insights Section */}
+                {insights.insights && insights.insights.length > 0 && (
+                  <Card className="border-0 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-xl">Análisis Profundo de tu Perfil</CardTitle>
+                      <CardDescription>Insights generados con IA basado en tus respuestas</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {insights.insights.slice(0, 5).map((insight: any, idx: number) => (
+                        <div key={idx} className="p-4 border rounded-lg bg-gradient-to-r from-transparent to-blue-50 dark:to-blue-950">
+                          <div className="flex justify-between items-start gap-3 mb-2">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-sm">{insight.title}</h4>
+                              <p className="text-xs text-muted-foreground mt-0.5">{insight.category}</p>
+                            </div>
+                            <span className={`text-xs font-bold px-2 py-1 rounded ${
+                              insight.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300' :
+                              insight.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300' :
+                              'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300'
+                            }`}>
+                              {insight.priority.toUpperCase()}
+                            </span>
+                          </div>
+                          <p className="text-sm text-foreground">{insight.description}</p>
+                          {insight.actionableSteps && insight.actionableSteps.length > 0 && (
+                            <div className="mt-3 pt-3 border-t">
+                              <p className="text-xs font-semibold text-muted-foreground mb-2">Pasos accionables:</p>
+                              <ul className="space-y-1">
+                                {insight.actionableSteps.slice(0, 3).map((step: string, sidx: number) => (
+                                  <li key={sidx} className="text-xs text-foreground flex gap-2">
+                                    <span className="text-blue-600">•</span>
+                                    <span>{step}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Development Plan */}
+                {insights.developmentPlan && (
+                  <Card className="border-0 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Tu Plan de Desarrollo Personalizado</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {insights.developmentPlan.shortTerm && insights.developmentPlan.shortTerm.length > 0 && (
+                        <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200 dark:border-orange-900">
+                          <h4 className="font-semibold text-sm text-orange-900 dark:text-orange-100 mb-2">Corto Plazo (1-3 meses)</h4>
+                          <ul className="space-y-1">
+                            {insights.developmentPlan.shortTerm.slice(0, 3).map((item: string, idx: number) => (
+                              <li key={idx} className="text-sm text-orange-800 dark:text-orange-200 flex gap-2">
+                                <span>→</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {insights.developmentPlan.mediumTerm && insights.developmentPlan.mediumTerm.length > 0 && (
+                        <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-900">
+                          <h4 className="font-semibold text-sm text-blue-900 dark:text-blue-100 mb-2">Mediano Plazo (3-6 meses)</h4>
+                          <ul className="space-y-1">
+                            {insights.developmentPlan.mediumTerm.slice(0, 3).map((item: string, idx: number) => (
+                              <li key={idx} className="text-sm text-blue-800 dark:text-blue-200 flex gap-2">
+                                <span>→</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {insights.developmentPlan.longTerm && insights.developmentPlan.longTerm.length > 0 && (
+                        <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-900">
+                          <h4 className="font-semibold text-sm text-purple-900 dark:text-purple-100 mb-2">Largo Plazo (6-12 meses)</h4>
+                          <ul className="space-y-1">
+                            {insights.developmentPlan.longTerm.slice(0, 3).map((item: string, idx: number) => (
+                              <li key={idx} className="text-sm text-purple-800 dark:text-purple-200 flex gap-2">
+                                <span>→</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Recommendations */}
+                {insights.recommendations && insights.recommendations.length > 0 && (
+                  <Card className="border-0 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Recomendaciones de Recursos</CardTitle>
+                      <CardDescription>Seleccionadas de nuestra biblioteca de 120+ libros y recursos</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {insights.recommendations.slice(0, 4).map((rec: any, idx: number) => (
+                        <div key={idx} className="p-3 border rounded-lg hover:bg-muted/50 transition">
+                          <div className="flex justify-between items-start gap-2 mb-1">
+                            <h4 className="font-semibold text-sm">{rec.title}</h4>
+                            <span className="text-xs bg-muted px-2 py-1 rounded">{rec.timeframe}</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{rec.description}</p>
+                          <div className="flex gap-2 text-xs">
+                            <span className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">
+                              {rec.difficulty}
+                            </span>
+                            <span className="text-muted-foreground">De: {rec.source === 'cerebro' ? 'Cerebro' : 'Biblioteca'}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+              </>
+            )}
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-2xl text-center">Tu Perfil DISC Despega Cerebral</CardTitle>
