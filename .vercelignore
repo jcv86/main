@@ -1,5 +1,0 @@
-# Vercel cache invalidation - force clean build 2026-02-03
-*.log
-.next/cache
-.turbo
-node_modules/.cache
