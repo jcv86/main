@@ -1,10 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { useSession } from "@/components/session-wrapper"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Brain, Zap, Users, Target, BookOpen, TrendingUp } from "lucide-react"
@@ -254,10 +256,13 @@ export function DashboardContent() {
             </div>
           ) : (
             <Card>
-              <CardContent className="pt-6 text-center">
+              <CardContent className="pt-6 text-center space-y-4">
                 <p className="text-muted-foreground">
-                  No hay resultados de Despega Cerebral aún. Completa el test en onboarding.
+                  No hay resultados de Despega Cerebral aún. Completa el test para descubrir tu perfil DISC personalizado.
                 </p>
+                <Link href="/despega/onboarding">
+                  <Button>Comenzar Test Despega Cerebral</Button>
+                </Link>
               </CardContent>
             </Card>
           )}

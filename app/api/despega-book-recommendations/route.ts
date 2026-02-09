@@ -1,10 +1,12 @@
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
     const { results, userId } = await request.json()
     const supabase = createClient()
+
+    console.log("[v0] Book recommendations endpoint - results:", results, "userId:", userId)
 
     if (!results || !results.D || results.I === undefined || results.S === undefined || results.C === undefined) {
       return NextResponse.json(

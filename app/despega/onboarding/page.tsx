@@ -158,6 +158,7 @@ export default function OnboardingPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<number, { most: number; least: number }>>({})
   const [results, setResults] = useState<{ D: number; I: number; S: number; C: number } | null>(null)
+  const [insights, setInsights] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [userEmail, setUserEmail] = useState<string | null>(null)
@@ -166,10 +167,14 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const getUser = async () => {
+      console.log("[v0] Fetching authenticated user...")
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
+        console.log("[v0] User found:", user.email, user.id)
         setUserId(user.id)
         setUserEmail(user.email || null)
+      } else {
+        console.log("[v0] No user found")
       }
     }
     getUser()
@@ -265,11 +270,76 @@ export default function OnboardingPage() {
         console.log("[v0] Missing userId or userEmail, cannot save to database")
       }
 
+      // Generate AI insights
+      console.log("[v0] Triggering AI insights generation...")
+      await generateAIInsights(userId, normalizedResults)
+
       setStep("results")
     } catch (error) {
       console.error("[v0] Error calculating results:", error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const generateAIInsights = async (userId: string | null, testResults: any) => {
+    console.log("[v0] Starting AI insights generation with:", { userId, testResults })
+    try {
+      const payload = {
+        testType: "despega_cerebral",
+        results: testResults,
+        userId: userId || "anonymous",
+        testResponses: responses,
+      }
+      console.log("[v0] Sending payload to /api/post-test-insights-simple:", JSON.stringify(payload).substring(0, 200))
+
+      const response = await fetch("/api/post-test-insights-simple", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      console.log("[v0] API response status:", response.status)
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error("[v0] API error response status:", response.status, "text:", errorText.substring(0, 200))
+        return
+      }
+
+      const data = await response.json()
+      console.log("[v0] AI Insights received successfully:", JSON.stringify(data).substring(0, 300))
+      setInsights(data)
+
+      // También obtener recomendaciones de libros basadas en perfil DISC
+      console.log("[v0] Fetching book recommendations based on DISC profile")
+      try {
+        const booksResponse = await fetch("/api/despega-book-recommendations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            results: testResults,
+            userId: userId || "anonymous",
+          }),
+        })
+
+        if (booksResponse.ok) {
+          const booksData = await booksResponse.json()
+          console.log("[v0] Book recommendations received:", JSON.stringify(booksData).substring(0, 300))
+          // Combinar insights con recomendaciones de libros
+          setInsights((prev: any) => ({
+            ...prev,
+            bookRecommendations: booksData.recommendations,
+            dominantProfile: booksData.dominantProfile,
+          }))
+        } else {
+          console.error("[v0] Book recommendations failed:", booksResponse.statusText)
+        }
+      } catch (bookError) {
+        console.error("[v0] Error fetching book recommendations:", bookError)
+      }
+    } catch (error) {
+      console.error("[v0] Error generating AI insights:", error)
     }
   }
 
