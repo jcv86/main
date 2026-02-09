@@ -10,10 +10,10 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 
-// Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
-// DISC mapping: D→plan_ejecutivo, I→relaciones, S→energia, C→enfoque
+// Test A1 Base - Despega Cerebral Modelo de Evaluación Integral
+// Dimensiones: Energía (Estabilidad), Enfoque (Precisión), Relaciones (Influencia), Plan Ejecutivo (Dominio)
 const TEST_A1_QUESTIONS = [
-  // DISC-S (Steadiness) → ENERGÍA
+  // Estabilidad Emocional → ENERGÍA
   {
     id: 1,
     category: "energia",
@@ -26,7 +26,7 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Mantengo serenidad y veo lo positivo en el cambio" },
     ],
   },
-  // DISC-C (Conscientiousness) → ENFOQUE
+  // Precisión y Concentración → ENFOQUE
   {
     id: 2,
     category: "enfoque",
@@ -39,7 +39,7 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Profundizo al máximo nivel, verificando cada detalle" },
     ],
   },
-  // DISC-I (Influence) → RELACIONES
+  // Influencia y Conexión → RELACIONES
   {
     id: 3,
     category: "relaciones",
@@ -52,7 +52,7 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Conecto personas e inspiro participación" },
     ],
   },
-  // DISC-D (Dominance) → PLAN EJECUTIVO
+  // Dominio y Ejecución → PLAN EJECUTIVO
   {
     id: 4,
     category: "plan_ejecutivo",
@@ -257,7 +257,7 @@ export default function DespegaOnboarding() {
         if (userEmail) {
           const { error: unifiedError } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
-            test_type: "disc",
+            test_type: "despega_cerebral",
             test_results: resultados,
           })
           if (unifiedError) {
@@ -604,21 +604,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.energia > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Estable y Consistente</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Emocionalmente Resiliente</p>
                       <p className="text-sm text-muted-foreground">Tu fortaleza está en la estabilidad emocional. Mantienes la calma bajo presión y generas confianza en tu entorno. Eres confiable y predecible.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Aprovecha esto para mediar conflictos y liderar con serenidad.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Tu poder:</strong> Eres el ancla del equipo. Tu calma inspira tranquilidad. Lidera procesos complejos donde la estabilidad es vital.</p>
                     </>
                   ) : results.energia > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Buscas Equilibrio</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Buscas Equilibrio</p>
                       <p className="text-sm text-muted-foreground">Oscila entre momentos de calma y períodos de inquietud. Reconoces la importancia de la consistencia, pero aún buscas tu ritmo natural.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad (respiración, meditación o caminar). Esto te dará el ancla que necesitas.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Desarrollo:</strong> Practica UNA sola rutina de estabilidad. Esto te dará el ancla que necesitas.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-S (Steadiness): Inestabilidad Emocional</p>
-                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Te cuesta mantener la consistencia bajo presión. Recuperar estabilidad es prioritario.</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte (ejercicio, meditación). Esto restaurará tu base.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Estabilidad: Necesitas Mayor Equilibrio</p>
+                      <p className="text-sm text-muted-foreground">Experimentas fluctuaciones emocionales frecuentes. Recuperar estabilidad es prioritario para tu desempeño.</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-2"><strong>Acción inmediata:</strong> Establece una práctica diaria de 10 min para estabilizarte. Esto restaurará tu base.</p>
                     </>
                   )}
                 </div>
@@ -631,21 +631,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.enfoque > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Meticuloso y Preciso</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Analítico y Riguroso</p>
                       <p className="text-sm text-muted-foreground">Tu concentración es una fortaleza clave. Te obsesiona la calidad, los detalles y la precisión. Evitas errores con rigor analítico.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos donde la precisión es vital.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Tu poder:</strong> Eres el guardián de la calidad. Tus análisis profundos previenen errores costosos. Lidera procesos críticos.</p>
                     </>
                   ) : results.enfoque > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Buscas Precisión</p>
-                      <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces la abandones por rapidez.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros para cada tarea. Revisa solo UNA vez al final. Confía en tu proceso, no en perfeccionismo infinito.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Buscas Mayor Enfoque</p>
+                      <p className="text-sm text-muted-foreground">Tienes capacidad para el enfoque profundo, pero no siempre la mantienes. Buscas calidad pero a veces abandones por rapidez.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Técnica:</strong> Define estándares claros. Revisa solo UNA vez al final. Confía en tu proceso.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-C (Conscientiousness): Necesitas Desarrollar Rigor</p>
-                      <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas crear sistemas que impongan estructura.</p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones digitales. Dedica 90 min puros a una sola tarea hoy.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Precisión: Necesitas Desarrollar Disciplina</p>
+                      <p className="text-sm text-muted-foreground">Las distracciones te dominan. Te cuesta profundizar en detalles. Necesitas sistemas que impongan estructura.</p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-2"><strong>Comienza:</strong> Usa checklists para cada tarea. Apaga distracciones. Dedica 90 min puros a una sola tarea.</p>
                     </>
                   )}
                 </div>
@@ -658,21 +658,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.relaciones > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Inspirador y Conectado</p>
-                      <p className="text-sm text-muted-foreground">Tu capacidad de conexión es natural. Inspiras a otros, influyes sin imponer, y generas entusiasmo genuino a tu alrededor.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador social. Tu carisma abre puertas. Lidera movimientos, comunidades y transformaciones basadas en personas.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Inspirador y Conectado</p>
+                      <p className="text-sm text-muted-foreground">Tu carisma y conectividad son tus superpoderes. Inspiras a otros, construyes redes, creas comunidades. Las personas te siguen naturalmente.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres el catalizador del equipo. Tu energía hace que otros rindan más. Lidera cambios culturales y construcción de equipos.</p>
                     </>
                   ) : results.relaciones > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Buscas Conectar</p>
-                      <p className="text-sm text-muted-foreground">Tienes buena presencia social, pero a veces te reservas. Puedes influir, pero necesitas más confianza en tu impacto.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Desarrollo:</strong> Practica compartir tus opiniones con más libertad. Una conexión genuina cada semana. Celebra pequeños momentos de influencia.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Buscas Conectar</p>
+                      <p className="text-sm text-muted-foreground">Tienes capacidad para conectar, pero no siempre la desplegas plenamente. Buscas pertenecer y contribuir sin perder autenticidad.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estrategia:</strong> Invierte en 3 relaciones profundas este mes. Aprende a preguntar. La vulnerabilidad build conexiones reales.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-I (Influence): Necesitas Desarrollar Influencia</p>
-                      <p className="text-sm text-muted-foreground">Te cuesta conectar o influir. Prefieres trabajar en solitario. Desarrollar carisma y presencia social es un area importante.</p>
-                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Comienza:</strong> Practica escucha activa sin juzgar. Haz preguntas genuinas. Conecta con UNA persona profundamente esta semana.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Influencia: Necesitas Desarrollar Conexión</p>
+                      <p className="text-sm text-muted-foreground">Te cuesta conectar con otros. Prefieres la soledad. Esto limita tu impacto y oportunidades de crecimiento.</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Primer paso:</strong> Busca UNA persona para mentor/mentorado. Una taza de café. Practica escuchar más que hablar.</p>
                     </>
                   )}
                 </div>
@@ -685,21 +685,21 @@ export default function DespegaOnboarding() {
                   </div>
                   {results.plan_ejecutivo > 3.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Líder Decisivo</p>
-                      <p className="text-sm text-muted-foreground">Tu impulso por resultados es natural. Decides rápido, ejecutas con determinación y logras objetivos bajo presión.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Tu poder:</strong> Eres un catalizador de acción. Tu visión se convierte en realidad. Lidera transformaciones estratégicas y grandes proyectos.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Líder Decisivo</p>
+                      <p className="text-sm text-muted-foreground">Tu capacidad para tomar decisiones rápidas y ejecutar es excepcional. Te atreves a liderar incluso con información incompleta. Eres motor de cambio.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Tu poder:</strong> Tú HACES que las cosas pasen. En crisis, todos te miran. Lidera iniciativas complejas que requieren coraje.</p>
                     </>
                   ) : results.plan_ejecutivo > 2.5 ? (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Buscas Mayor Ejecución</p>
-                      <p className="text-sm text-muted-foreground">Tienes intención de lograr resultados, pero a veces necesitas impulso. Planificas bien pero la ejecución falta consistencia.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Técnica:</strong> Visualiza objetivos a 3 años. Divide en metas trimestrales. Revisa progreso cada lunes. Esto crea accountability.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Buscas Mayor Ejecución</p>
+                      <p className="text-sm text-muted-foreground">Tienes potencial para liderar, pero dudas entre actuar y reflexionar. A veces paralizas por perfeccionismo. Necesitas confiar más en tus instintos.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Técnica del 70%:</strong> Si estás 70% seguro, ACTÚA. El aprendizaje viene del hacer, no del analizar infinito.</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-sm font-medium">Perfil DISC-D (Dominance): Necesitas Desarrollar Liderazgo</p>
-                      <p className="text-sm text-muted-foreground">La ejecución es un desafío. Luchas con la toma de decisiones o la consistencia. Necesitas crear sistemas de apoyo.</p>
-                      <p className="text-xs text-purple-600 dark:text-purple-400 mt-2"><strong>Estructura urgente:</strong> Crea ritual matutino: 10 min, revisa 3 prioridades, ejecuta solo esas. Mañana comienza.</p>
+                      <p className="text-sm font-medium">Despega Cerebral - Dominio: Necesitas Desarrollar Liderazgo</p>
+                      <p className="text-sm text-muted-foreground">Te cuesta tomar decisiones. Delegas decisiones importantes. Necesitas fortaleza para guiar desde la incertidumbre.</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400 mt-2"><strong>Hoy mismo:</strong> Toma UNA decisión pequeña SIN consultarla. Prueba. Aprende. Repite. El liderazgo es un músculo.</p>
                     </>
                   )}
                 </div>

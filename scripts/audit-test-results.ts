@@ -12,7 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 async function auditTestResults() {
   console.log("\n" + "=".repeat(70))
-  console.log("🔍 AUDITORÍA: Guardado de Resultados DISC en Base de Datos")
+  console.log("🔍 AUDITORÍA: Guardado de Resultados Despega Cerebral en Base de Datos")
   console.log("=".repeat(70))
 
   try {
@@ -44,19 +44,19 @@ async function auditTestResults() {
     console.log("\n2️⃣  TABLA: unified_test_results")
     console.log("-".repeat(60))
 
-    const { data: unifiedResults, error: unifiedError, count: unifiedCount } = await supabase
+    const { data: despegaTests, error: despegaError, count: despegaCount } = await supabase
       .from("unified_test_results")
       .select("*", { count: "exact" })
-      .eq("test_type", "disc")
+      .eq("test_type", "despega_cerebral")
       .order("created_at", { ascending: false })
       .limit(5)
 
-    if (unifiedError) {
-      console.error("❌ Error accediendo unified_test_results:", unifiedError.message)
+    if (despegaError) {
+      console.error("❌ Error accediendo unified_test_results:", despegaError.message)
     } else {
-      console.log(`✅ Total registros DISC: ${unifiedCount}`)
+      console.log(`✅ Total registros Despega Cerebral: ${despegaCount}`)
       console.log(`📈 Últimos 5 registros:`)
-      unifiedResults?.forEach((result, idx) => {
+      despegaTests?.forEach((result, idx) => {
         console.log(`\n  ${idx + 1}. User Email: ${result.user_email}`)
         console.log(`     Test Type: ${result.test_type}`)
         console.log(`     Results: ${JSON.stringify(result.test_results)}`)
@@ -116,19 +116,19 @@ async function auditTestResults() {
     console.log("\n5️⃣  RESUMEN DE INTEGRIDAD")
     console.log("-".repeat(60))
 
-    const allTablesOk = !a1Error && !unifiedError && !profileError && !rankingError
+    const allTablesOk = !a1Error && !despegaError && !profileError && !rankingError
 
     if (allTablesOk) {
       console.log("✅ Todas las tablas accesibles")
       console.log(`   • A1 Test Results: ${a1Count} registros`)
-      console.log(`   • Unified Results: ${unifiedCount} registros`)
+      console.log(`   • Unified Results: ${despegaCount} registros`)
       console.log(`   • User Profiles: ${profileCount} registros`)
       console.log(`   • Rankings: ${rankingCount} registros`)
 
       if (a1Count === 0) {
         console.warn("\n⚠️  ADVERTENCIA: No hay registros en despega_a1_test_results")
       }
-      if (unifiedCount === 0) {
+      if (despegaCount === 0) {
         console.warn("⚠️  ADVERTENCIA: No hay registros en unified_test_results")
       }
     } else {
