@@ -116,13 +116,17 @@ export default function DespegaOnboarding() {
   const [loadingInsights, setLoadingInsights] = useState(false)
   const [insights, setInsights] = useState<any>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) setUserId(user.id)
+      if (user) {
+        setUserId(user.id)
+        setUserEmail(user.email || null)
+      }
     }
     getUser()
   }, [supabase])
@@ -548,7 +552,7 @@ export default function DespegaOnboarding() {
                   <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-100">INFORME DESPEGA CEREBRAL</h1>
                   <p className="text-lg text-blue-700 dark:text-blue-200">Perfil de Comportamiento DISC</p>
                   <div className="pt-4 border-t-2 border-blue-300 dark:border-blue-700 mt-6">
-                    <p className="text-sm text-blue-600 dark:text-blue-400">Usuario: <span className="font-semibold">{session?.user?.email || "Usuario"}</span></p>
+                    <p className="text-sm text-blue-600 dark:text-blue-400">Usuario: <span className="font-semibold">{userEmail || "Usuario"}</span></p>
                     <p className="text-sm text-blue-600 dark:text-blue-400">Fecha: <span className="font-semibold">{new Date().toLocaleDateString("es-ES")}</span></p>
                     <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">Score General: <span className="text-2xl font-bold text-blue-700">{Math.round(results.total)}%</span></p>
                   </div>
