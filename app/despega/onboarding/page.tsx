@@ -227,12 +227,15 @@ export default function DespegaOnboarding() {
           score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
           nivel_detectado: nivel,
           respuestas_raw: responses,
+        }).then(res => {
+          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
+          else console.log("[v0] Saved to despega_a1_test_results")
         })
 
         // Also save to unified_test_results so dashboard recognizes it
         const userEmail = (await supabase.auth.getUser()).data.user?.email
         if (userEmail) {
-          await supabase.from("unified_test_results").insert({
+          const { error } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
             test_type: "disc",
             test_results: {
@@ -243,6 +246,11 @@ export default function DespegaOnboarding() {
             },
             created_at: new Date().toISOString(),
           })
+          if (error) {
+            console.error("[v0] Error saving to unified_test_results:", error)
+          } else {
+            console.log("[v0] Successfully saved to unified_test_results")
+          }
         }
 
         // Initialize pilar progress

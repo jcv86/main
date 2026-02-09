@@ -299,7 +299,15 @@ export function DashboardContent() {
           .eq("user_email", userEmail)
           .order("created_at", { ascending: false })
           .limit(10)
-          .then(({ data: testResults }) => {
+          .then(({ data: testResults, error }) => {
+            if (error) {
+              console.error("[v0] Error fetching test results:", error)
+              setIsLoadingInitialData(false)
+              return
+            }
+            
+            console.log("[v0] Test results from database:", testResults)
+            
             if (testResults && testResults.length > 0) {
               const mapped = testResults.map((result: any) => {
                 let name = result.test_type
@@ -323,11 +331,17 @@ export function DashboardContent() {
               setRecentResults(mapped)
               setUserProfile((prev) => ({ ...prev, completedTests: testResults.length }))
               console.log("[v0] Refetch complete, updated completedTests:", testResults.length)
+            } else {
+              console.log("[v0] No test results found in refetch")
             }
             
             setIsLoadingInitialData(false)
             // Clear the URL parameter
             window.history.replaceState({}, document.title, '/dashboard')
+          })
+          .catch((err) => {
+            console.error("[v0] Catch error fetching test results:", err)
+            setIsLoadingInitialData(false)
           })
       }, 1500)
     }
