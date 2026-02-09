@@ -15,31 +15,36 @@ import { ArrowLeft, ArrowRight, CheckCircle, Check } from "lucide-react"
 import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
 
-// ALL 20 QUESTIONS - Varied scoring weights to prevent 100% on perfect answers
+// DISC-Based Questions (20 questions) - Replaces generic energy/focus/relations questions
+// Maps to: Dominance (D), Influence (I), Steadiness (S), Conscientiousness (C)
 const A1_QUESTIONS = [
-  { id: 1, area: "energia", type: "scale", text: "¿Cuántas horas duermes por noche?", min: 4, max: 10, minLabel: "4 horas", maxLabel: "10 horas" },
-  { id: 2, area: "energia", type: "multiple", text: "¿Cómo describes tu energía general durante el día?", options: ["Muy baja", "Baja", "Normal", "Buena", "Excelente"], weights: [0.1, 0.3, 0.5, 0.8, 1.0] },
-  { id: 3, area: "energia", type: "multiple", text: "¿Con qué frecuencia haces ejercicio?", options: ["Nunca", "1-2 veces/semana", "3-4 veces/semana", "5-6 veces/semana", "Diariamente"], weights: [0.0, 0.4, 0.7, 0.85, 0.95] },
-  { id: 4, area: "energia", type: "scale", text: "¿Qué tan consistente es tu rutina de sueño?", min: 1, max: 10, minLabel: "Inconsistente", maxLabel: "Consistente" },
-  { id: 5, area: "energia", type: "scale", text: "¿Cuánta hidratación diaria tienes?", min: 0, max: 10, minLabel: "Casi nada", maxLabel: "10+ vasos" },
+  // DOMINANCE - Results-oriented, Competitive, Direct
+  { id: 1, area: "dominancia", type: "scale", text: "Prefiero tomar decisiones rápidas y directas sin hesitación", min: 1, max: 10, minLabel: "Analizo primero", maxLabel: "Decido rápido" },
+  { id: 2, area: "dominancia", type: "multiple", text: "¿Cómo respondes ante desafíos o competencia?", options: ["Evito conflictos", "Prefiero cooperar", "Compito moderadamente", "Busco ganar", "Debo ganar a toda costa"], weights: [0.1, 0.25, 0.5, 0.8, 1.0] },
+  { id: 3, area: "dominancia", type: "scale", text: "¿Cuánto necesitas tener control sobre las situaciones?", min: 1, max: 10, minLabel: "Poco control", maxLabel: "Control total" },
+  { id: 4, area: "dominancia", type: "multiple", text: "¿Cuál es tu estilo de comunicación?", options: ["Muy diplomático", "Considerado", "Directo", "Muy directo", "Brutal honestidad"], weights: [0.1, 0.3, 0.6, 0.85, 1.0] },
+  { id: 5, area: "dominancia", type: "scale", text: "¿Te gusta tomar riesgos calculados para lograr objetivos?", min: 1, max: 10, minLabel: "Prefiero seguridad", maxLabel: "Busco riesgos" },
   
-  { id: 6, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo puedes concentrarte profundamente?", options: ["< 15 min", "15-30 min", "30-60 min", "1-2 horas", "> 2 horas"], weights: [0.2, 0.4, 0.65, 0.85, 0.98] },
-  { id: 7, area: "enfoque", type: "multiple", text: "¿Con qué frecuencia revisas notificaciones?", options: ["Constantemente", "Cada 5-10 min", "Cada 15-30 min", "Ocasionalmente", "Casi nunca"], weights: [1.0, 0.8, 0.6, 0.3, 0.1] },
-  { id: 8, area: "enfoque", type: "scale", text: "¿Cuántas tareas principales completas al día?", min: 1, max: 10, minLabel: "1 tarea", maxLabel: "10+ tareas" },
-  { id: 9, area: "enfoque", type: "scale", text: "¿Qué tan claro tienes tu plan diario?", min: 1, max: 10, minLabel: "Confuso", maxLabel: "Muy claro" },
-  { id: 10, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo pierdes en tareas no prioritarias?", options: ["> 50%", "30-50%", "20-30%", "10-20%", "< 10%"], weights: [1.0, 0.75, 0.5, 0.25, 0.05] },
+  // INFLUENCE - Persuasive, Enthusiastic, Social
+  { id: 6, area: "influencia", type: "multiple", text: "¿Con qué frecuencia socializas o conectas con gente nueva?", options: ["Casi nunca", "Raramente", "Ocasionalmente", "Frecuentemente", "Constantemente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
+  { id: 7, area: "influencia", type: "scale", text: "¿Cuán fácil te resulta persuadir o convencer a otros?", min: 1, max: 10, minLabel: "Muy difícil", maxLabel: "Muy fácil" },
+  { id: 8, area: "influencia", type: "multiple", text: "¿Cómo describes tu entusiasmo y optimismo?", options: ["Reservado", "Moderado", "Normal", "Entusiasta", "Extremadamente entusiasta"], weights: [0.15, 0.35, 0.55, 0.8, 0.95] },
+  { id: 9, area: "influencia", type: "scale", text: "¿Disfrutas ser el centro de atención?", min: 1, max: 10, minLabel: "Prefiero pasar desapercibido", maxLabel: "Amo la atención" },
+  { id: 10, area: "influencia", type: "multiple", text: "¿Cómo te adaptas a nuevas personas o entornos?", options: ["Lentamente con dificultad", "Lentamente", "Moderadamente", "Rápidamente", "Instantáneamente"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
   
-  { id: 11, area: "relaciones", type: "multiple", text: "¿Con qué frecuencia contactas amigos/colegas?", options: ["Casi nunca", "Mensual", "Quincenal", "Semanal", "Varias veces/semana"], weights: [0.15, 0.35, 0.55, 0.8, 0.95] },
-  { id: 12, area: "relaciones", type: "scale", text: "¿Cómo describes tu escucha activa?", min: 1, max: 10, minLabel: "Pienso en mi respuesta", maxLabel: "Escucho realmente" },
-  { id: 13, area: "relaciones", type: "multiple", text: "¿Cuántas relaciones profesionales significativas?", options: ["Ninguna", "1-3", "4-8", "9-15", "> 15"], weights: [0.1, 0.35, 0.6, 0.8, 0.9] },
-  { id: 14, area: "relaciones", type: "scale", text: "¿Facilidad para expresar gratitud?", min: 1, max: 10, minLabel: "Me cuesta", maxLabel: "Facilidad" },
-  { id: 15, area: "relaciones", type: "scale", text: "¿Comodidad pidiendo ayuda?", min: 1, max: 10, minLabel: "Incómodo", maxLabel: "Cómodo" },
+  // STEADINESS - Loyal, Patient, Stable
+  { id: 11, area: "estabilidad", type: "multiple", text: "¿Cómo prefieres tu entorno de trabajo?", options: ["Muy dinámico y caótico", "Dinámico", "Equilibrado", "Estable", "Muy predecible"], weights: [1.0, 0.7, 0.55, 0.8, 0.95] },
+  { id: 12, area: "estabilidad", type: "scale", text: "¿Eres paciente y tolerante con los errores de otros?", min: 1, max: 10, minLabel: "Poco paciente", maxLabel: "Muy paciente" },
+  { id: 13, area: "estabilidad", type: "multiple", text: "¿Cuál es tu nivel de lealtad hacia personas o equipos?", options: ["Cambio fácilmente", "Moderadamente leal", "Leal", "Muy leal", "Extremadamente leal"], weights: [0.1, 0.35, 0.6, 0.85, 1.0] },
+  { id: 14, area: "estabilidad", type: "scale", text: "¿Prefieres tareas o proyectos de largo plazo versus cambio constante?", min: 1, max: 10, minLabel: "Cambio constante", maxLabel: "Largo plazo" },
+  { id: 15, area: "estabilidad", type: "multiple", text: "¿Cómo reaccionas ante cambios no esperados?", options: ["Entro en pánico", "Me perturba", "Me adapto", "Casi no me afecta", "Lo veo como oportunidad"], weights: [0.05, 0.25, 0.55, 0.75, 0.95] },
   
-  { id: 16, area: "plan_ejecutivo", type: "scale", text: "¿Claridad sobre tus metas principales?", min: 1, max: 10, minLabel: "Confuso", maxLabel: "Cristal claro" },
-  { id: 17, area: "plan_ejecutivo", type: "multiple", text: "¿Con qué frecuencia planificas tu semana?", options: ["Nunca", "Ocasionalmente", "Semanalmente", "2x/semana", "Diariamente"], weights: [0.05, 0.25, 0.6, 0.8, 0.95] },
-  { id: 18, area: "plan_ejecutivo", type: "scale", text: "¿Decisiones importantes por semana?", min: 0, max: 20, minLabel: "Ninguna", maxLabel: "Muchas" },
-  { id: 19, area: "plan_ejecutivo", type: "multiple", text: "¿Qué tan bien ejecutas lo que planificas?", options: ["Muy mal", "Mal", "Regular", "Bien", "Excelente"], weights: [0.05, 0.25, 0.5, 0.75, 0.92] },
-  { id: 20, area: "plan_ejecutivo", type: "multiple", text: "¿Tienes un ritual matutino?", options: ["No", "Irregular", "Sí (5-10 min)", "Sí (10-30 min)", "Sí (30+ min)"], weights: [0.1, 0.3, 0.55, 0.8, 0.98] },
+  // CONSCIENTIOUSNESS - Analytical, Organized, Quality-focused
+  { id: 16, area: "consciencia", type: "scale", text: "¿Cuán importante es el análisis detallado antes de decidir?", min: 1, max: 10, minLabel: "Decido por intuición", maxLabel: "Necesito datos" },
+  { id: 17, area: "consciencia", type: "multiple", text: "¿Cuál es tu relación con los procedimientos y reglas?", options: ["Las ignoro", "Las sigo cuando me conviene", "Generalmente las sigo", "Las sigo siempre", "Necesito más reglas"], weights: [1.0, 0.7, 0.55, 0.85, 0.95] },
+  { id: 18, area: "consciencia", type: "scale", text: "¿Qué tan importante es la perfección y calidad en tu trabajo?", min: 1, max: 10, minLabel: "Está bien lo aproximado", maxLabel: "Debe ser perfecto" },
+  { id: 19, area: "consciencia", type: "multiple", text: "¿Cómo manejas los errores o inconsistencias?", options: ["Los ignoro", "Los tolero", "Los noto", "Los corijo siempre", "Me obsesiono"], weights: [0.1, 0.3, 0.55, 0.8, 1.0] },
+  { id: 20, area: "consciencia", type: "scale", text: "¿Necesitas evidencia o pruebas antes de aceptar información nueva?", min: 1, max: 10, minLabel: "Confío en palabras", maxLabel: "Necesito evidencia" },
 ]
 
 export default function A1CerebralPage() {
@@ -94,114 +99,114 @@ export default function A1CerebralPage() {
   }, [])
 
   const getProfileContent = (dimension: string, score: number) => {
-    // Return content based on Juan Vial structure: natural behavior, connections, what can be uncomfortable, daily thinking, growth opportunities
+    // DISC Profile content based on Juan Vial framework
     const profileContent: Record<string, Record<string, any>> = {
-      energia: {
-        label: "Estabilidad y Energía",
-        naturalBehavior: score > 70 
-          ? "Actúas con consistencia y equilibrio personal. Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral."
+      dominancia: {
+        label: "Dominancia - Orientación a Resultados",
+        naturalBehavior: score > 70
+          ? "Actúas con decisión y dirección clara. Orientado a resultados, buscas siempre lograr objetivos. Tu comunicación es directa y sin rodeos, priorizando la eficiencia."
           : score > 50
-          ? "Buscas mantener un equilibrio en tu energía, aunque a veces fluctúa. Reconoces la importancia del descanso y la actividad física, aunque no siempre logres consistencia."
-          : "Tu energía es variable y requiere atención. A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.",
+          ? "Buscas lograr resultados, aunque a veces balanceas entre dirección y consideración. Tienes iniciativa, pero no siempre asumes el control total."
+          : "Tu orientación es más reflexiva que decisoria. Prefieres consultar antes de actuar, evitando la confrontación.",
         
         connections: score > 70
-          ? "Te conectas bien con personas que valoran el bienestar, la consistencia y el balance. Te sientes a gusto en entornos donde hay ritmo, orden y cuidado personal."
-          : "Buscas conectar con personas que entienden la importancia de la energía personal, aunque a veces sientas soledad en estos hábitos.",
+          ? "Te conectas con personas orientadas a logros que valoran la velocidad y la efectividad. Prefieres equipos que ejecutan sin dilación."
+          : "Buscas personas que compartan tus objetivos, aunque a veces sientas que los demás van más lento.",
         
         uncomfortable: score < 50
-          ? "Los entornos caóticos o sin estructura pueden agotarte. Te incomoda la presión constante sin pausas. Necesitas espacios para recuperarte."
-          : "Aunque generalmente equilibrado, pueden incomodarte los cambios repentinos o presiones sin descanso.",
+          ? "Los procesos lentos o indecisiones te frustran. Te incomoda no tener control sobre el progreso. La falta de claridad te paraliza."
+          : "Aunque generalmente decididor, puede incomodarte cuando otros no comparten tu velocidad.",
         
         thinking: score > 70
-          ? "Piensas con serenidad, priorizando tu bienestar. Evalúas decisiones considerando tu energía disponible. Eres consistente incluso en momentos difíciles."
+          ? "Piensas estratégicamente en resultados. Tomas decisiones rápidas con datos disponibles. Tu mente está en '¿cómo ganamos?'"
           : score > 50
-          ? "Piensas en tu bienestar, aunque a veces postergas el autocuidado. Reconoces qué necesitas, pero cuesta ejecutarlo."
-          : "Tu pensamiento está frecuentemente marcado por el cansancio. Necesitas crear sistemas que sostengan tu energía automáticamente.",
+          ? "Piensas en objetivos, aunque a veces te detienes para reflexionar sobre alternativas."
+          : "Tu pensamiento busca consenso. Necesitas validación antes de decidir direcciones importantes.",
         
         growth: score > 70
-          ? "Tu oportunidad es compartir con otros cómo mantienes tu energía. Podrías formalizar tus hábitos en rutinas que otros puedan aprender."
-          : "Necesitas crear una estructura clara de sueño, ejercicio e hidratación. Comenzar con UNA sola acción sostenible, no todas a la vez.",
+          ? "Tu oportunidad es desarrollar empatía en la ejecución. No todos disfrutan el ritmo de competencia. Escucha los tiempos ajenos."
+          : "Necesitas practicar tomar decisiones con información del 70% en lugar del 100%. La velocidad estratégica vence a la perfección.",
       },
       
-      enfoque: {
-        label: "Concentración y Precisión",
+      influencia: {
+        label: "Influencia - Persuasión y Motivación",
         naturalBehavior: score > 70
-          ? "Actúas con orden y profundidad. Tu concentración es una fortaleza clave. Te apoyas en la claridad antes de actuar, evitando precipitaciones."
+          ? "Actúas con entusiasmo y calidez natural. Inspiras a otros mediante tu optimismo y capacidad de conectar. Te expresas con pasión, contagiando motivación."
           : score > 50
-          ? "Buscas concentrarte, aunque las distracciones a veces te desvían. Tienes momentos de enfoque profundo, pero no son constantes."
-          : "Tu concentración es un desafío. Las distracciones te capturan fácilmente y te cuesta sostener el enfoque en tareas importantes.",
+          ? "Buscas inspirar a otros, aunque a veces tu mensaje se diluye. Tienes capacidad de conexión, pero necesitas estructura para amplificarla."
+          : "Tu acercamiento es más reservado. Prefieres observar que ser el centro. La persuasión no es tu fortaleza natural.",
         
         connections: score > 70
-          ? "Te conectas bien con personas que valoran la precisión, el método y el análisis detallado. Prefieres entornos donde la calidad es prioritaria."
-          : "Buscas conectar con personas ordenadas, aunque a veces sientas que el caos te rodea.",
+          ? "Te conectas con personas que valoran la energía positiva, la creatividad y la autenticidad. Te sientes vivo en equipos dinámicos y colaborativos."
+          : "Buscas ambientes sociales, aunque a veces sientas que tu mensaje no llega completamente.",
         
         uncomfortable: score < 50
-          ? "Los ambientes dispersos o sin dirección clara pueden paralizarte. Te incomoda decidir sin datos. La improvisación te bloquea."
-          : "Aunque generalmente enfocado, puede incomodarte la falta de estructura o criterios claros.",
+          ? "Los entornos sombríos o altamente estructurados te agobian. Te incomoda no poder expresarte o conectar genuinamente. El aislamiento te consume."
+          : "Aunque generalmente extrovertido, puede incomodarte no ser escuchado o falta de respuesta a tus ideas.",
         
         thinking: score > 70
-          ? "Piensas con rigor antes de actuar. Analizas detalles, cuidas cada paso. Prefieres certeza aunque requiera más tiempo."
+          ? "Piensas imaginando posibilidades y oportunidades. Tu mente busca conexiones creativas entre personas y ideas. Ves potencial en todo."
           : score > 50
-          ? "Piensas en lo importante, aunque a veces saltas a la acción sin análisis completo."
-          : "Tu pensamiento está disperso entre demasiadas prioridades. Necesitas claridad urgente en qué es realmente importante.",
+          ? "Piensas en formas de conectar, aunque a veces te pierdes en detalles de implementación."
+          : "Tu pensamiento es más literal. Necesitas entrenar ver oportunidades en lugar de limitaciones.",
         
         growth: score > 70
-          ? "Tu oportunidad es confiar un poco más en tu criterio sin esperar información perfecta. Compartir tus ideas en proceso, no solo 'listas'."
-          : "Necesitas crear un sistema de prioridades visual. Identifica las 3 cosas MÁS importantes cada día y trabaja solo esas.",
+          ? "Tu oportunidad es desarrollar seguimiento en la ejecución. La inspiración sin resultados es solo aire. Aprende a cerrar ciclos."
+          : "Necesitas UNA alianza auténtica donde puedas ser completamente tú. De esa plataforma, expande tu influencia naturalmente.",
       },
       
-      relaciones: {
-        label: "Conexión e Influencia",
+      estabilidad: {
+        label: "Estabilidad - Lealtad y Apoyo",
         naturalBehavior: score > 70
-          ? "Actúas con apertura y calidez. Tu capacidad de conectar es natural. Te expresas con empatía, buscando entender antes de ser entendido."
+          ? "Actúas con calma y consistencia. Eres la roca donde otros confían. Tu lealtad es inquebrantable y tu paciencia es legendaria en tu círculo."
           : score > 50
-          ? "Buscas conectar con otros, aunque a veces te sientes reservado. Tienes buenas relaciones, pero podrían ser más profundas."
-          : "Tu conexión con otros es limitada. Prefieres la soledad o tienes dificultad expresando calidez. Las relaciones son un desafío.",
+          ? "Buscas aportar estabilidad, aunque a veces necesitas movimiento o cambio. Eres confiable, pero ocasionalmente deseas aventura."
+          : "Tu acercamiento es más dinámico. Prefieres variedad sobre predictibilidad. La rutina no es tu motivación.",
         
         connections: score > 70
-          ? "Te conectas con personas que valoran la empatía, la escucha y la autenticidad. Te sientes a gusto en equipos cohesionados."
-          : "Buscas personas que entiendan tu ritmo de conexión, aunque a veces sientas que no es suficiente.",
+          ? "Te conectas profundamente con personas que valoran la lealtad, la confianza y el apoyo genuino. Prefieres pocas relaciones hondas que muchas superficiales."
+          : "Buscas personas stables y confiables, aunque a veces el mundo te parece demasiado volátil.",
         
         uncomfortable: score < 50
-          ? "Los conflictos sin resolver te incomodan. Te afecta la falta de armonía. Los entornos competitivos pueden encerrarte."
-          : "Aunque generalmente conectado, puede incomodarte la falta de autenticidad o superficialidad.",
+          ? "Los cambios constantes o la falta de estructura te perturban. Te incomoda la traición o la inconsistencia ajena. Necesitas predecibilidad."
+          : "Aunque generalmente estable, puede incomodarte presión para cambiar rápidamente.",
         
         thinking: score > 70
-          ? "Piensas considerando a otros. Tu empatía guía tus decisiones. Buscas soluciones que beneficien a todos."
+          ? "Piensas considerando el impacto en otros. Tu decisión busca minimizar disrupción. Eres reflexivo y empático."
           : score > 50
-          ? "Piensas en el impacto en otros, aunque a veces prioriza tus necesidades."
-          : "Tu pensamiento es principalmente individual. Necesitas entrenar la perspectiva de otros.",
+          ? "Piensas en lo que es mejor para el grupo, aunque a veces necesitas pensar en ti."
+          : "Tu pensamiento es más individual. Necesitas entrenar la perspectiva colectiva.",
         
         growth: score > 70
-          ? "Tu oportunidad es establecer límites saludables. No todas las conexiones requieren profundidad. Aprende a decir 'no' desde el amor."
-          : "Necesitas UNA conexión genuina y sostenida. Elige una persona y cultiva esa relación activamente.",
+          ? "Tu oportunidad es iniciarse en cambios controlados. El mundo evolucionará con o sin ti. Aprende a liderar en transiciones."
+          : "Necesitas buscar cambio positivo en UNA área importante. No resistir el cambio, sino conducirlo.",
       },
       
-      plan_ejecutivo: {
-        label: "Liderazgo y Ejecución",
+      consciencia: {
+        label: "Consciencia - Precisión y Calidad",
         naturalBehavior: score > 70
-          ? "Actúas con lógica orientada a resultados. Tu toma de decisiones es directa y estratégica. Ejecutas lo que planificas de forma confiable."
+          ? "Actúas con lógica y precisión. Tu análisis es profundo, valorando los datos antes de suposiciones. Te expresas con cautela y claridad, buscando siempre lo correcto."
           : score > 50
-          ? "Buscas llevar adelante tus planes, aunque a veces necesitas impulso adicional. Tienes intención, pero cuesta la consistencia."
-          : "Tu ejecución es inconsistente. Planificas bien, pero la implementación es un desafío. Necesitas sistemas que te sostengan.",
+          ? "Buscas precisión, aunque a veces equilibras entre perfección y pragmatismo. Tienes estándares altos, pero permites lo 'suficientemente bueno'."
+          : "Tu acercamiento es más flexible. Prefieres velocidad sobre perfección. Los detalles no siempre te cautivan.",
         
         connections: score > 70
-          ? "Te conectas con personas orientadas a resultados que valoran la velocidad y la efectividad. Prefieres equipos que ejecutan."
-          : "Buscas personas que te ayuden a ejecutar, aunque a veces sientas que estás solo en la visión.",
+          ? "Te conectas con personas que trabajan con criterio, cuidado y atención al detalle. Te sientes a gusto cuando hay reglas claras y argumentos sólidos."
+          : "Buscas personas confiables y coherentes, aunque a veces sientas que el mundo es demasiado impreciso.",
         
         uncomfortable: score < 50
-          ? "La indecisión te bloquea. Te incomoda la ambigüedad estratégica. Necesitas claridad en la dirección."
-          : "Aunque generalmente ejecutor, puede incomodarte la falta de progreso o métricas claras.",
+          ? "Los entornos improvisados o desordenados te bloquean. Te incomoda decidir sin datos o percibes ambigüedad. Necesitas estructura y profesionalismo."
+          : "Aunque generalmente meticuloso, puede incomodarte exceso de perfeccionismo.",
         
         thinking: score > 70
-          ? "Piensas estratégicamente. Tomas decisiones basadas en impacto. Tu mente está en '¿cómo lograrlo rápido?'"
+          ? "Piensas con orden y profundidad, analizando antes de actuar. Te apoyas en hechos, evitando suposiciones. Evalúas cada paso."
           : score > 50
-          ? "Piensas en la ejecución, aunque a veces te pierdes en detalles que no importan."
-          : "Tu pensamiento está fragmentado entre intenciones y realidad. Necesitas estructurar tus metas.",
+          ? "Piensas en lo importante, aunque a veces actúas sin análisis completo."
+          : "Tu pensamiento es más directo. Necesitas entrenar el análisis antes de la acción.",
         
         growth: score > 70
-          ? "Tu oportunidad es desarrollar paciencia con los procesos. No todos tienen tu velocidad. Enseña a otros tu método."
-          : "Necesitas un ritual matutino de 10 minutos donde defines LO ÚNICO más importante. Ejecuta solo eso.",
+          ? "Tu oportunidad es compartir tus ideas en proceso, no solo cuando son perfectas. Confía en tu criterio, incluso sin toda la información."
+          : "Necesitas crear UN sistema donde documentes decisiones importantes. El método te liberará de la ansiedad.",
       },
     }
 
@@ -326,27 +331,27 @@ export default function A1CerebralPage() {
     }
   }
 
-  // Map questions to DISC-style categories
-  const questionToDISC: Record<number, "energia" | "enfoque" | "relaciones" | "plan_ejecutivo"> = {
-    1: "energia", 2: "energia", 3: "energia", 4: "energia", 5: "energia",
-    6: "enfoque", 7: "enfoque", 8: "enfoque", 9: "enfoque", 10: "enfoque",
-    11: "relaciones", 12: "relaciones", 13: "relaciones", 14: "relaciones", 15: "relaciones",
-    16: "plan_ejecutivo", 17: "plan_ejecutivo", 18: "plan_ejecutivo", 19: "plan_ejecutivo", 20: "plan_ejecutivo",
+  // Map questions to DISC dimensions
+  const questionToDISC: Record<number, "dominancia" | "influencia" | "estabilidad" | "consciencia"> = {
+    1: "dominancia", 2: "dominancia", 3: "dominancia", 4: "dominancia", 5: "dominancia",
+    6: "influencia", 7: "influencia", 8: "influencia", 9: "influencia", 10: "influencia",
+    11: "estabilidad", 12: "estabilidad", 13: "estabilidad", 14: "estabilidad", 15: "estabilidad",
+    16: "consciencia", 17: "consciencia", 18: "consciencia", 19: "consciencia", 20: "consciencia",
   }
 
-  // Calculate DISC-style scores (0-100 per dimension)
+  // Calculate DISC scores (0-100 per dimension)
   const calculateDISCScores = () => {
     const scores = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
+      dominancia: 0,
+      influencia: 0,
+      estabilidad: 0,
+      consciencia: 0,
     }
     const counts = {
-      energia: 0,
-      enfoque: 0,
-      relaciones: 0,
-      plan_ejecutivo: 0,
+      dominancia: 0,
+      influencia: 0,
+      estabilidad: 0,
+      consciencia: 0,
     }
 
     A1_QUESTIONS.forEach(question => {
@@ -375,10 +380,10 @@ export default function A1CerebralPage() {
 
     // Calculate averages and round
     const finalScores = {
-      energia: counts.energia > 0 ? Math.round(scores.energia / counts.energia) : 0,
-      enfoque: counts.enfoque > 0 ? Math.round(scores.enfoque / counts.enfoque) : 0,
-      relaciones: counts.relaciones > 0 ? Math.round(scores.relaciones / counts.relaciones) : 0,
-      plan_ejecutivo: counts.plan_ejecutivo > 0 ? Math.round(scores.plan_ejecutivo / counts.plan_ejecutivo) : 0,
+      dominancia: counts.dominancia > 0 ? Math.round(scores.dominancia / counts.dominancia) : 0,
+      influencia: counts.influencia > 0 ? Math.round(scores.influencia / counts.influencia) : 0,
+      estabilidad: counts.estabilidad > 0 ? Math.round(scores.estabilidad / counts.estabilidad) : 0,
+      consciencia: counts.consciencia > 0 ? Math.round(scores.consciencia / counts.consciencia) : 0,
     }
 
     return finalScores
@@ -400,10 +405,10 @@ export default function A1CerebralPage() {
       const duration = Math.round((Date.now() - (startTimeRef.current || Date.now())) / 60000)
 
       const testResults = {
-        energia: scores.energia,
-        enfoque: scores.enfoque,
-        relaciones: scores.relaciones,
-        plan_ejecutivo: scores.plan_ejecutivo,
+        dominancia: scores.dominancia,
+        influencia: scores.influencia,
+        estabilidad: scores.estabilidad,
+        consciencia: scores.consciencia,
         answers: answers,
       }
 
@@ -677,43 +682,43 @@ export default function A1CerebralPage() {
   const secondaryDimension = sorted[1][0] as string
   const needsWork = sorted[sorted.length - 1]
 
-  // Get primary dimension info
+  // Get dimension info for DISC display
   const getDimensionInfo = (dim: string) => {
     const info: Record<string, any> = {
-      energia: {
-        label: "Energía",
-        emoji: "⚡",
+      dominancia: {
+        label: "Dominancia",
+        emoji: "🎯",
+        color: "bg-red-50 border-red-200",
+        textColor: "text-red-700",
+        bgColor: "bg-red-100",
+        description: "Tu orientación a resultados, decisión y liderazgo directo",
+      },
+      influencia: {
+        label: "Influencia",
+        emoji: "💫",
+        color: "bg-yellow-50 border-yellow-200",
+        textColor: "text-yellow-700",
+        bgColor: "bg-yellow-100",
+        description: "Tu capacidad de persuadir, motivar e inspirar a otros",
+      },
+      estabilidad: {
+        label: "Estabilidad",
+        emoji: "🛡️",
         color: "bg-blue-50 border-blue-200",
         textColor: "text-blue-700",
         bgColor: "bg-blue-100",
-        description: "Tu capacidad de mantener energía y bienestar sostenido",
+        description: "Tu lealtad, paciencia y apoyo al equipo",
       },
-      enfoque: {
-        label: "Enfoque",
-        emoji: "🎯",
+      consciencia: {
+        label: "Consciencia",
+        emoji: "🔍",
         color: "bg-green-50 border-green-200",
         textColor: "text-green-700",
         bgColor: "bg-green-100",
-        description: "Tu habilidad para concentrarte y ejecutar tareas prioritarias",
-      },
-      relaciones: {
-        label: "Relaciones",
-        emoji: "🤝",
-        color: "bg-orange-50 border-orange-200",
-        textColor: "text-orange-700",
-        bgColor: "bg-orange-100",
-        description: "Tu capacidad de conectar y colaborar con otros",
-      },
-      plan_ejecutivo: {
-        label: "Plan Ejecutivo",
-        emoji: "📊",
-        color: "bg-purple-50 border-purple-200",
-        textColor: "text-purple-700",
-        bgColor: "bg-purple-100",
-        description: "Tu habilidad para planificar y ejecutar estrategias",
+        description: "Tu precisión, análisis detallado y búsqueda de calidad",
       },
     }
-    return info[dim] || info.energia
+    return info[dim] || info.dominancia
   }
 
   return (
