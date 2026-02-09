@@ -221,91 +221,92 @@ export default function A1CerebralPage() {
     return profileContent[dimension] || null
   }
 
-  const getRecommendationsByLevel = (area: string, score: number) => {
+  const getRecommendationsByLevel = (dimension: string, score: number) => {
+    // ONLY DISC recommendations - no old areas
     const recommendations = {
-      energia: {
+      dominancia: {
         principiante: [
-          "Establece una hora fija para dormir y despertar (incluso los fines de semana).",
-          "Camina 10 minutos después de cada comida principal.",
-          "Bebe un vaso de agua al despertare y antes de acostarte.",
-          "Apaga pantallas 30 minutos antes de dormir.",
+          "Practica escuchar perspectivas diferentes antes de decidir.",
+          "Define objetivos claros pero permite ajustes en el camino.",
+          "Celebra pequeñas victorias del equipo, no solo grandes triunfos.",
+          "Pregunta '¿y tú qué piensas?' antes de imponer tu visión.",
         ],
         intermedio: [
-          "Duerme 7-8 horas consistentes. Rastreatua sueño para identificar patrones.",
-          "Ejercicio 4-5 veces por semana: combina cardio y fuerza.",
-          "Crea un ritual pre-sueño de 45 minutos sin distracciones digitales.",
-          "Revisa tu energía semanalmente: ¿qué hábitos te ayudaron?",
+          "Delega controlando menos - tu equipo crecerá más.",
+          "Negocia ganador-ganador, no solo ganar a toda costa.",
+          "Toma decisiones rápidas pero comunica el 'por qué' con claridad.",
+          "Revisa: ¿cuándo fue la última vez que cambié de opinión?",
         ],
         avanzado: [
-          "Optimiza ciclos de sueño y experimenta con siesta estratégica (20 min).",
-          "Integra entrenamiento de fuerza + cardio + flexibilidad.",
-          "Diseña tu nutrición alrededor de tu energía pico (mañana vs tarde).",
-          "Sistema de tracking: sueño, ejercicio, hidratación, energía - identifica causas.",
+          "Lidera movimientos que impacten más allá de tu control directo.",
+          "Mentorea a otros en velocidad estratégica sin sacrificar empatía.",
+          "Crea culturas donde el 'ganar' significa que todos crecen.",
+          "Influencia política: construye alianzas que multiplican tu impacto.",
         ],
       },
-      enfoque: {
+      influencia: {
         principiante: [
-          "Cada mañana: escribe las 2 tareas MÁS importantes (no 10).",
-          "Trabaja en bloques de 25 minutos sin revisar notificaciones.",
-          "Apaga notificaciones de redes sociales durante trabajo.",
-          "Fin de día: marca si completaste tus 2 prioridades.",
+          "Esta semana: cuenta una historia personal auténtica en 1 conversación.",
+          "Practica escuchar más que hablar (al menos 60-40).",
+          "Nota 3 cosas buenas en otros y comparte feedback positivo.",
+          "Conecta personas que deberían conocerse - sé catalizador.",
         ],
         intermedio: [
-          "Bloques de 90 minutos de trabajo profundo (no 25).",
-          "Revisa notificaciones solo 3 veces al día (9am, 12pm, 5pm).",
-          "Planifica tu semana identificando 3-5 tareas que mueven la aguja.",
-          "Crea un sistema visual (tablero Kanban) que ves cada mañana.",
+          "Desarrolla 3-5 historias que demuestren tu punto, no datos solos.",
+          "Influencia genuina: ayuda primero, pide después.",
+          "Crea un grupo o comunidad donde otros se conecten.",
+          "Estudia a 1 líder inspirador - ¿cómo genera energía?",
         ],
         avanzado: [
-          "Sistema personal de priorización: matriz de impacto x urgencia.",
-          "Alcanza 3-4 horas diarias de trabajo verdaderamente profundo.",
-          "Automatiza o delega todo lo que no requiere tu expertise.",
-          "Análisis semanal: ¿qué me dispersó? ¿Cómo evitarlo?",
+          "Construye movimientos que duran más que tu presencia.",
+          "Mentorea otros en cómo inspirar - multiplica tu influencia.",
+          "Crea contenido/espacios que inspiran a miles.",
+          "Tu legado: ¿qué creó que seguirá sin ti?",
         ],
       },
-      relaciones: {
+      estabilidad: {
         principiante: [
-          "Esta semana: envía 1 mensaje genuino a alguien sin pedir nada.",
-          "Programa 1 llamada mensual con alguien que importa.",
-          "En conversaciones: haz 1 pregunta más que afirmación.",
-          "Practica escuchar sin pensar tu respuesta.",
+          "Acepta 1 cambio pequeño cada semana - práctica segura.",
+          "Comunica tu necesidad de estabilidad al equipo claramente.",
+          "Documenta procesos para sentirte más seguro.",
+          "Encuentra 1 persona estable con quien compartir preocupaciones.",
         ],
         intermedio: [
-          "Mantén contacto semanal con 2-3 personas clave en tu vida.",
-          "Ofrece 1 acción de ayuda específica cada semana (sin esperar retorno).",
-          "Únete a 1 comunidad o grupo donde puedas contribuir.",
-          "Revisa: ¿a quién no he contactado en 3 meses? Alcanzalos.",
+          "Lidera transiciones siendo el punto de estabilidad para otros.",
+          "Adapta tu ritmo sin perder tus valores fundamentales.",
+          "Construye resiliencia: ¿qué cambios ya navegaste bien?",
+          "Mentorea a otros en cómo mantener calma en la tormenta.",
         ],
         avanzado: [
-          "Cultiva red de 10+ relaciones profesionales verdaderamente profundas.",
-          "Mentorea activamente a 1-2 personas (tu mejor aprendizaje).",
-          "Sistema personal: CRM simple donde registres 'próximas acciones' con cada persona.",
-          "Crea espacios donde otros se conecten (grupos, eventos, cafés).",
+          "Sed la roca donde otros confían durante transformaciones.",
+          "Anticipa cambios - sé proactivo, no solo reactivo.",
+          "Crea cultura donde estabilidad y crecimiento coexisten.",
+          "Tu estabilidad como fortaleza: enseña otros a tenerla.",
         ],
       },
-      plan_ejecutivo: {
+      consciencia: {
         principiante: [
-          "Define 1 meta clara para los próximos 90 días (escrita).",
-          "Cada domingo: planifica tu semana en 15 minutos.",
-          "Ritual matutino: 10 minutos reflexionando sobre lo importante.",
-          "Fin de semana: revisa 1 decisión importante que tomaste.",
+          "Elige 1 cosa importante y hazla bien, no todo mediocre.",
+          "Documenta decisiones: ¿por qué elegiste A sobre B?",
+          "Busca feedback específico, no elogios generales.",
+          "Aprende 1 metodología o framework que mejore tu precisión.",
         ],
         intermedio: [
-          "3 metas principales para 90 días con sub-tareas claramente identificadas.",
-          "Planifica CADA mañana (15 min): ¿cuál es lo único que importa hoy?",
-          "Toma decisiones basadas en datos/hechos, no emociones.",
-          "Ritual matutino: 20-30 minutos que incluya reflexión + movimiento.",
+          "Crea sistemas donde la calidad sea automática (checklists, pruebas).",
+          "Comparte tu rigor sin paralizar a otros con perfeccionismo.",
+          "Análisis profundo + decisión rápida: encontra tu punto de balance.",
+          "Mentorea a otros en análisis - enseña a pensar, no qué pensar.",
         ],
         avanzado: [
-          "Sistema de OKRs: Objetivos + Key Results trimestral / semanal.",
-          "Revisión diaria: ¿progresé? ¿Qué ajustes necesito?",
-          "Decide rápido en el 80% de información, no esperes 100%.",
-          "Ritual matutino personalizado: 45+ minutos que alimenta tu ejecución.",
+          "Desarrolla expertise verdadera que otros buscan y respetan.",
+          "Crea estándares de calidad que elevan a todo el equipo.",
+          "Comunica complejidad en forma simple y comprensible.",
+          "Tu precisión como ventaja: enseña la disciplina que la requiere.",
         ],
       },
     }
 
-    return recommendations[area as keyof typeof recommendations]?.[userLevel as keyof any] || []
+    return recommendations[dimension as keyof typeof recommendations]?.[userLevel as keyof any] || []
   }
 
   const getLevelBadge = () => {
