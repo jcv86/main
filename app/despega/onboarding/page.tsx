@@ -122,7 +122,7 @@ export default function DespegaOnboarding() {
       excelencia: counts.excelencia > 0 ? scores.excelencia / counts.excelencia : 0,
     }
 
-    const total = (avgScores.dominancia + avgScores.influencia + avgScores.estabilidad + avgScores.consciencia) / 4
+    const total = (avgScores.accion + avgScores.inspiracion + avgScores.apoyo + avgScores.excelencia) / 4
     
     let nivel = "principiante"
     if (total >= 4) nivel = "avanzado"
