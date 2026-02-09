@@ -144,15 +144,26 @@ export default function DespegaOnboarding() {
           a1_test_completed: true,
         })
 
-        // Save test results with new dimension names
+        // Save test results with new dimension names to resultados jsonb
         await supabase.from("despega_a1_test_results").insert({
           user_id: userId,
-          score_accion: Math.round(avgScores.accion * 20),
-          score_inspiracion: Math.round(avgScores.inspiracion * 20),
-          score_apoyo: Math.round(avgScores.apoyo * 20),
-          score_excelencia: Math.round(avgScores.excelencia * 20),
-          nivel_detectado: nivel,
-          respuestas_raw: responses,
+          resultados: {
+            accion: Math.round(avgScores.accion * 20),
+            inspiracion: Math.round(avgScores.inspiracion * 20),
+            apoyo: Math.round(avgScores.apoyo * 20),
+            excelencia: Math.round(avgScores.excelencia * 20),
+            nivel: nivel,
+            total: total,
+          },
+          respuestas: responses,
+          diagnostico: nivel,
+          score_total: total,
+          recomendaciones: {
+            accion: results.accion > 70 ? "Alto potencial en toma de decisiones" : "Desarrolla tu capacidad de acción",
+            inspiracion: results.inspiracion > 70 ? "Natural inspirador de otros" : "Cultiva tu capacidad de inspirar",
+            apoyo: results.apoyo > 70 ? "Fuerte lealtad y apoyo" : "Desarrolla tu consistencia",
+            excelencia: results.excelencia > 70 ? "Alto estándar de calidad" : "Mejora tu enfoque en precisión",
+          },
         })
 
         // Initialize pilar progress
