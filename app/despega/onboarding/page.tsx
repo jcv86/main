@@ -1,5 +1,9 @@
 "use client"
 
+// Version: DISC-2024-v4 - COMPLETE DISC TEST ONLY
+// All 20 questions are DISC-based (Dominancia, Influencia, Estabilidad, Consciencia)
+// No legacy energy/focus/relations questions
+
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -336,13 +340,16 @@ export default function DespegaOnboarding() {
           <CardContent className="space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className={`text-xs px-2 py-1 rounded ${
-                  question.category === "energia" ? "bg-blue-100 text-blue-800" :
-                  question.category === "enfoque" ? "bg-green-100 text-green-800" :
-                  question.category === "relaciones" ? "bg-orange-100 text-orange-800" :
-                  "bg-purple-100 text-purple-800"
+                <span className={`text-xs px-2 py-1 rounded font-semibold ${
+                  question.category === "dominancia" ? "bg-red-100 text-red-800" :
+                  question.category === "influencia" ? "bg-yellow-100 text-yellow-800" :
+                  question.category === "estabilidad" ? "bg-blue-100 text-blue-800" :
+                  "bg-green-100 text-green-800"
                 }`}>
-                  {question.category.charAt(0).toUpperCase() + question.category.slice(1).replace("_", " ")}
+                  {question.category === "dominancia" ? "🎯 Dominancia" :
+                   question.category === "influencia" ? "💫 Influencia" :
+                   question.category === "estabilidad" ? "🛡️ Estabilidad" :
+                   "🔍 Consciencia"}
                 </span>
               </div>
               <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
