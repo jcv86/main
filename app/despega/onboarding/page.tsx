@@ -208,8 +208,12 @@ export default function DespegaOnboarding() {
     // Save to database
     if (userId) {
       try {
+        // Get user email once at the beginning
+        const { data: { user: authUser } } = await supabase.auth.getUser()
+        const userEmail = authUser?.email
+
         // Create user profile
-        await supabase.from("despega_user_profiles").upsert({
+        const { error: profileError } = await supabase.from("despega_user_profiles").upsert({
           user_id: userId,
           camino_persona_active: caminoPersona,
           camino_profesional_active: caminoProfesional,
@@ -217,6 +221,10 @@ export default function DespegaOnboarding() {
           onboarding_completed: true,
           a1_test_completed: true,
         })
+        
+        if (profileError) {
+          console.error("[v0] Error saving user profile:", profileError.message)
+        }
 
         // Save test results with CORRECT schema
         const scoreTotalPercentage = Math.round(total * 20)
@@ -243,9 +251,6 @@ export default function DespegaOnboarding() {
         }
 
         // Also save to unified_test_results so dashboard recognizes it
-        const { data: { user } } = await supabase.auth.getUser()
-        const userEmail = user?.email
-        
         if (userEmail) {
           const { error: unifiedError } = await supabase.from("unified_test_results").insert({
             user_email: userEmail,
@@ -296,11 +301,17 @@ export default function DespegaOnboarding() {
         }
       } catch (error) {
         console.error("[v0] Error saving onboarding data:", error)
+        // Don't throw - continue to show results even if saving fails
+      } finally {
+        setLoading(false)
+        setStep("results")
       }
+    } else {
+      // No userId but still allow to see results
+      console.warn("[v0] No userId available, skipping database save")
+      setLoading(false)
+      setStep("results")
     }
-
-    setLoading(false)
-    setStep("results")
   }
 
   // STEP 1: Intro - "El Ritual de Entrada"
