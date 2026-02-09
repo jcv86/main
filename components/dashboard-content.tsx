@@ -158,7 +158,7 @@ export function DashboardContent() {
   }, [])
 
   useEffect(() => {
-    console.log("[v0] DashboardContent mounted")
+    console.log("[v0] DashboardContent mounted with sessionUser:", sessionUser?.email)
 
     if (!sessionUser) {
       console.log("[v0] No session user found")
