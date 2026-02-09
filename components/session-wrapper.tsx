@@ -26,32 +26,29 @@ interface SessionWrapperProps {
 export function SessionWrapper({ children }: SessionWrapperProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [isMounted, setIsMounted] = useState(false)
+  const [supabase, setSupabase] = useState<any>(null)
   const isUpdatingRef = useRef(false)
-  const supabaseRef = useRef<any>(null)
 
-  // Only initialize on client side
+  // Initialize supabase client on first render
   useEffect(() => {
-    setIsMounted(true)
-    
-    if (!supabaseRef.current) {
-      try {
-        supabaseRef.current = createClient()
-      } catch (error) {
-        console.error("[v0] Failed to initialize Supabase:", error)
-      }
+    try {
+      const client = createClient()
+      setSupabase(client)
+    } catch (error) {
+      console.error("[v0] Failed to initialize Supabase:", error)
+      setSupabase(null)
     }
   }, [])
 
   useEffect(() => {
-    if (!isMounted || !supabaseRef.current) return
+    if (!supabase) return
 
-    const supabase = supabaseRef.current
-    
     // Check for existing session
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
 
         if (session?.user) {
           const userData = {
@@ -60,12 +57,30 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
             name: session.user.user_metadata?.full_name || session.user.email,
           }
           setUser(userData)
-        } else {
-          setUser(null)
+
+          // Also save to localStorage for compatibility
+          localStorage.setItem(
+            "dtc_session",
+            JSON.stringify({
+              authenticated: true,
+              user: userData,
+              timestamp: Date.now(),
+            }),
+          )
+          setIsLoading(false)
+          return
+        }
+
+        // Fallback: Check local storage
+        const localSession = localStorage.getItem("dtc_session")
+        if (localSession) {
+          const sessionData = JSON.parse(localSession)
+          if (sessionData.authenticated && sessionData.user) {
+            setUser(sessionData.user)
+          }
         }
       } catch (error) {
-        console.error("[v0] Session check error:", error)
-        setUser(null)
+        console.error("Session check error:", error)
       } finally {
         setIsLoading(false)
       }
@@ -73,7 +88,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
 
     checkSession()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (isUpdatingRef.current) return
 
       if (session?.user) {
@@ -82,23 +99,43 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
           email: session.user.email || "",
           name: session.user.user_metadata?.full_name || session.user.email,
         }
-        setUser(userData)
+
+        setUser((currentUser) => {
+          if (currentUser?.id === userData.id) {
+            return currentUser // No change, return same reference
+          }
+
+          isUpdatingRef.current = true
+          localStorage.setItem(
+            "dtc_session",
+            JSON.stringify({
+              authenticated: true,
+              user: userData,
+              timestamp: Date.now(),
+            }),
+          )
+          setTimeout(() => {
+            isUpdatingRef.current = false
+          }, 100)
+
+          return userData
+        })
       } else {
         setUser(null)
+        localStorage.removeItem("dtc_session")
       }
     })
 
     return () => {
-      subscription?.unsubscribe()
+      subscription.unsubscribe()
     }
-  }, [isMounted])
+  }, [supabase])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    if (!supabaseRef.current) return false
-    
     try {
       setIsLoading(true)
-      const { data, error } = await supabaseRef.current.auth.signInWithPassword({
+
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -108,17 +145,29 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
         return false
       }
 
-      if (data.user) {
-        setUser({
-          id: data.user.id,
-          email: data.user.email || "",
-          name: data.user.user_metadata?.full_name || data.user.email,
-        })
-        return true
+      if (!data.user) {
+        return false
       }
-      return false
+
+      const userData = {
+        id: data.user.id,
+        email: data.user.email || "",
+        name: data.user.user_metadata?.full_name || data.user.email,
+      }
+
+      setUser(userData)
+      localStorage.setItem(
+        "dtc_session",
+        JSON.stringify({
+          authenticated: true,
+          user: userData,
+          timestamp: Date.now(),
+        }),
+      )
+
+      return true
     } catch (error) {
-      console.error("[v0] Login error:", error)
+      console.error("Login error:", error)
       return false
     } finally {
       setIsLoading(false)
@@ -126,15 +175,16 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   }
 
   const signup = async (email: string, password: string, name: string): Promise<boolean> => {
-    if (!supabaseRef.current) return false
-    
     try {
       setIsLoading(true)
-      const { data, error } = await supabaseRef.current.auth.signUp({
+
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { full_name: name },
+          data: {
+            full_name: name,
+          },
         },
       })
 
@@ -143,46 +193,56 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
         return false
       }
 
-      if (data.user) {
-        setUser({
-          id: data.user.id,
-          email: data.user.email || "",
-          name: name,
-        })
-        return true
+      if (!data.user) {
+        return false
       }
-      return false
+
+      const userData = {
+        id: data.user.id,
+        email: data.user.email || "",
+        name: name,
+      }
+
+      setUser(userData)
+      localStorage.setItem(
+        "dtc_session",
+        JSON.stringify({
+          authenticated: true,
+          user: userData,
+          timestamp: Date.now(),
+        }),
+      )
+
+      return true
     } catch (error) {
-      console.error("[v0] Signup error:", error)
+      console.error("Signup error:", error)
       return false
     } finally {
       setIsLoading(false)
     }
   }
 
-  const logout = () => {
-    if (supabaseRef.current) {
-      supabaseRef.current.auth.signOut().catch((error: any) => {
+  const logout = async () => {
+    if (supabase) {
+      try {
+        await supabase.auth.signOut()
+      } catch (error) {
         console.error("[v0] Logout error:", error)
-      })
+      }
     }
     setUser(null)
-  }
-
-  if (!isMounted) {
-    return <>{children}</>
+    localStorage.removeItem("dtc_session")
   }
 
   return (
-    <SessionContext.Provider value={{ user, isLoading, login, signup, logout }}>
-      {children}
-    </SessionContext.Provider>
+    <SessionContext.Provider value={{ user, isLoading, login, signup, logout }}>{children}</SessionContext.Provider>
   )
 }
 
 export function useSession() {
   const context = useContext(SessionContext)
 
+  // Provide safe fallbacks during SSR
   if (typeof window === "undefined") {
     return {
       user: null,

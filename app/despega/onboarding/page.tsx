@@ -201,44 +201,85 @@ export default function DespegaOnboarding() {
     let nivel = "principiante"
     if (total >= 4) nivel = "avanzado"
     else if (total >= 3) nivel = "intermedio"
-    else if (total >= 2) nivel = "intermedio"
 
-    // Get user email from Supabase auth
-    const { data: { user } } = await supabase.auth.getUser()
-    const userEmail = user?.email
+    const finalResults = { ...avgScores, total, nivel }
+    setResults(finalResults)
 
-    if (!userEmail) {
-      console.error("[v0] User email not found")
-      setLoading(false)
-      return
-    }
+    // Save to database
+    if (userId) {
+      try {
+        // Create user profile
+        await supabase.from("despega_user_profiles").upsert({
+          user_id: userId,
+          camino_persona_active: caminoPersona,
+          camino_profesional_active: caminoProfesional,
+          camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
+          onboarding_completed: true,
+          a1_test_completed: true,
+        })
 
-    console.log("[v0] Saving test for user:", userEmail)
+        // Save test results to both tables for compatibility
+        await supabase.from("despega_a1_test_results").insert({
+          user_id: userId,
+          score_energia: Math.round(avgScores.energia * 20),
+          score_enfoque: Math.round(avgScores.enfoque * 20),
+          score_relaciones: Math.round(avgScores.relaciones * 20),
+          score_plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+          nivel_detectado: nivel,
+          respuestas_raw: responses,
+        }).then(res => {
+          if (res.error) console.error("[v0] Error saving to despega_a1_test_results:", res.error)
+          else console.log("[v0] Saved to despega_a1_test_results")
+        })
 
-    // Save to unified_test_results table (simplified, no despega_a1_test_results)
-    const { error } = await supabase.from("unified_test_results").insert({
-      user_email: userEmail,
-      test_type: "disc",
-      test_results: {
-        energia: Math.round(avgScores.energia * 20),
-        enfoque: Math.round(avgScores.enfoque * 20),
-        relaciones: Math.round(avgScores.relaciones * 20),
-        plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
-      },
-      created_at: new Date().toISOString(),
-    })
-
-    if (error) {
-      console.error("[v0] Error saving test results:", error.message, error.code)
-    } else {
-      console.log("[v0] Successfully saved DISC test results")
+        // Also save to unified_test_results so dashboard recognizes it
+        const userEmail = (await supabase.auth.getUser()).data.user?.email
+        if (userEmail) {
+          const { error } = await supabase.from("unified_test_results").insert({
+            user_email: userEmail,
+            test_type: "disc",
+            test_results: {
+              energia: Math.round(avgScores.energia * 20),
+              enfoque: Math.round(avgScores.enfoque * 20),
+              relaciones: Math.round(avgScores.relaciones * 20),
+              plan_ejecutivo: Math.round(avgScores.plan_ejecutivo * 20),
+            },
+            created_at: new Date().toISOString(),
+          })
+          if (error) {
+            console.error("[v0] Error saving to unified_test_results:", error)
+          } else {
+            console.log("[v0] Successfully saved to unified_test_results")
+          }
         }
 
-        // TODO: Initialize pilar progress and rankings if needed
-        // These can be handled by separate user setup process
-        // For now, we only track the DISC test result
+        // Initialize pilar progress
+        const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
+        for (const pilar of pilares) {
+          await supabase.from("despega_pilar_progress").upsert({
+            user_id: userId,
+            pilar,
+            estado: { diagnostico_completado: pilar === "a1_cerebral" },
+            progreso: pilar === "a1_cerebral" ? 10 : 0,
+            score: 0,
+            ciclo_actual: "30",
+            ciclo_dia: 1,
+          })
+        }
+
+        // Initialize rankings
+        await supabase.from("despega_rankings").upsert({
+          user_id: userId,
+          score_pilar_a1: 10,
+          score_pilar_a2: 0,
+          score_aterrizaje: 0,
+          score_base: 0,
+          score_camino_persona: caminoPersona ? 5 : 0,
+          score_camino_profesional: caminoProfesional ? 5 : 0,
+          score_general: 10,
+        })
       } catch (error) {
-        console.error("[v0] Error in calculateResults:", error)
+        console.error("Error saving onboarding data:", error)
       }
     }
 
