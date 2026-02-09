@@ -252,22 +252,31 @@ export default function OnboardingPage() {
       setResults(normalizedResults)
       console.log("[v0] Calculated DISC results:", normalizedResults)
 
-      // Save to database
+      // Save to database via API
       if (userId && userEmail) {
-        console.log("[v0] Saving test results to database:", { userId, userEmail, normalizedResults })
-        const { error } = await supabase.from("unified_test_results").insert({
-          user_email: userEmail,
-          user_id: userId,
-          test_type: "despega_cerebral",
-          test_results: normalizedResults,
-        })
-        if (error) {
-          console.error("[v0] Error saving to database:", error)
-        } else {
-          console.log("[v0] Successfully saved to database")
+        console.log("[v0] Saving test results via API:", { userId, userEmail })
+        try {
+          const saveResponse = await fetch("/api/save-test-results", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              userEmail,
+              testType: "despega_cerebral",
+              testResults: normalizedResults,
+            }),
+          })
+          if (!saveResponse.ok) {
+            const errorData = await saveResponse.json()
+            console.error("[v0] Error saving to database:", errorData.error)
+          } else {
+            console.log("[v0] Successfully saved to database")
+          }
+        } catch (error) {
+          console.error("[v0] Error calling save-test-results API:", error)
         }
       } else {
-        console.log("[v0] Missing userId or userEmail, cannot save to database")
+        console.log("[v0] Missing userId or userEmail - userId:", userId, "userEmail:", userEmail)
       }
 
       // Generate AI insights

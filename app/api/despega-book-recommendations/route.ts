@@ -162,10 +162,12 @@ export async function POST(request: NextRequest) {
       .sort((a, b) => b.priority - a.priority)
       .slice(0, 6)
 
+    console.log("[v0] Found", sortedRecommendations.length, "recommendations for profile:", dominantProfile)
+
     // Guardar recomendaciones al usuario si existe userId
     if (userId && userId !== "anonymous") {
       try {
-        await supabase.from("user_book_recommendations").insert(
+        const { error: saveError } = await supabase.from("user_book_recommendations").insert(
           sortedRecommendations.map((book) => ({
             user_id: userId,
             book_id: book.id,
@@ -174,6 +176,11 @@ export async function POST(request: NextRequest) {
             priority: book.priority,
           }))
         )
+        if (saveError) {
+          console.error("[v0] Error saving recommendations to user:", saveError)
+        } else {
+          console.log("[v0] Saved recommendations for user:", userId)
+        }
       } catch (error) {
         console.error("[v0] Error saving recommendations:", error)
       }
@@ -198,8 +205,12 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("[v0] Error in despega-book-recommendations:", error)
     return NextResponse.json(
-      { error: "Error generating recommendations" },
-      { status: 500 }
-    )
+      { 
+        error: "Error generating recommendations",
+        recommendations: [],
+        dominantProfile: "unknown"
+      },
+      { status: 200 }
+      )
   }
 }
