@@ -249,6 +249,48 @@ export default function SoftSkillsResults() {
           </CardContent>
         </Card>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              Tu Puente de Desarrollo de Competencias
+            </CardTitle>
+            <CardDescription>
+              Tus competencias ahora. Cómo evolucionan hacia el siguiente nivel.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu nivel de competencias actual</p>
+                <div className="text-2xl font-bold text-blue-600">{results.overall_score}%</div>
+                <p className="text-xs text-muted-foreground mt-2">{getScoreLabel(results.overall_score)}</p>
+              </div>
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
+                <p className="text-sm text-muted-foreground mb-3">Competencias más avanzadas</p>
+                <div className="text-xs space-y-1">
+                  <p>• Mayor profundidad en cada área</p>
+                  <p>• Versatilidad interpersonal</p>
+                  <p>• Liderazgo más auténtico</p>
+                </div>
+              </div>
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu plan de desarrollo</p>
+                <ul className="text-xs space-y-1">
+                  <li>1. Identifica brecha principal</li>
+                  <li>2. Practica deliberadamente</li>
+                  <li>3. Busca feedback real</li>
+                  <li>4. Integra nuevas formas</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 gap-2">

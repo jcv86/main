@@ -529,6 +529,47 @@ export default function RIASECResults() {
           </CardHeader>
         </Card>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              Tu Puente de Transición Vocacional
+            </CardTitle>
+            <CardDescription>
+              Tu código Holland es tu brújula hoy. Pero puedes expandir hacia nuevas orientaciones profesionales.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+                <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu orientación vocacional actual</p>
+                <div className="text-2xl font-bold text-blue-600">{results.holland_code}</div>
+              </div>
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+                <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
+                <p className="text-sm text-muted-foreground mb-3">Nuevas opciones profesionales</p>
+                <div className="text-xs space-y-1">
+                  <p>• Orientaciones complementarias</p>
+                  <p>• Carreras multidimensionales</p>
+                  <p>• Roles más integrados</p>
+                </div>
+              </div>
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
+                <p className="text-sm text-muted-foreground mb-3">Tu puente de carrera</p>
+                <ul className="text-xs space-y-1">
+                  <li>1. Explora roles nuevos</li>
+                  <li>2. Desarrolla habilidades</li>
+                  <li>3. Construye portfolio</li>
+                  <li>4. Transiciona estratégicamente</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <Card>
@@ -1642,7 +1683,7 @@ export default function RIASECResults() {
                           : results.holland_code[0] === "I"
                             ? "Aplica tu capacidad analítica a contextos más prácticos o emprendedores. Busca oportunidades donde la investigación se convierta en acción."
                             : results.holland_code[0] === "A"
-                              ? "Desarrolla estructura y método en tu creatividad. Aprende gestión de proyectos creativos o emprendimiento artístico."
+                              ? "Desarrolla estructura y método en tu creatividad. Aprende gesti��n de proyectos creativos o emprendimiento artístico."
                               : results.holland_code[0] === "S"
                                 ? "Integra competencias de liderazgo o emprendimiento en tu vocación de servicio. Considera roles donde puedas iniciar programas sociales."
                                 : results.holland_code[0] === "E"

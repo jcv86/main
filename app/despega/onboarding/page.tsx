@@ -254,53 +254,59 @@ export default function DespegaOnboarding() {
     setStep("results")
   }
 
-  // STEP 1: Intro
+  // STEP 1: Intro - "El Ritual de Entrada"
   if (step === "intro") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Bienvenido a Despega</CardTitle>
+            <CardTitle className="text-3xl font-bold">Bienvenido a Tu Ritual de Entrada</CardTitle>
             <CardDescription className="text-lg mt-2">
-              Tu sistema de desarrollo integral para alcanzar tu máximo potencial personal y profesional
+              El primer paso de tu transición consciente de identidad. Aquí descubrimos quién eres ahora, para construir quién quieres ser.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4 text-center">
               <div className="p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-primary">4</div>
-                <div className="text-sm text-muted-foreground">Pilares de Desarrollo</div>
+                <div className="text-sm text-muted-foreground">Fases de Transición</div>
               </div>
               <div className="p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-primary">90</div>
-                <div className="text-sm text-muted-foreground">Días de Transformación</div>
+                <div className="text-sm text-muted-foreground">Días de Acompañamiento</div>
               </div>
             </div>
             
             <div className="space-y-3">
-              <h3 className="font-semibold">Los 4 Pilares:</h3>
+              <h3 className="font-semibold">Tu Viaje de 4 Fases:</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-blue-500" />
-                  <span><strong>A1 Despega Cerebral</strong> - Diagnóstico y acciones base</span>
+                  <span><strong>A1 El Ritual</strong> - Descubre quién eres ahora (punto de partida)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500" />
-                  <span><strong>A2 Rutas</strong> - Energía, Enfoque, Relaciones, Plan Ejecutivo</span>
+                  <span><strong>A2 Exploración</strong> - Explora narrativas de identidades futuras</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span><strong>Aterrizaje</strong> - CV, LinkedIn, Entrevistas, Negociación</span>
+                  <span><strong>A3 Ensayo</strong> - Practica tu identidad futura en escenarios reales</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-purple-500" />
-                  <span><strong>Base</strong> - Noticias y Cultura General</span>
+                  <span><strong>A4 Realidad</strong> - Vive tu nueva identidad en el mercado</span>
                 </div>
               </div>
             </div>
 
+            <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-sm text-foreground">
+                <strong>El Espejo:</strong> Este test es tu espejo. No juzga. Solo muestra quién eres hoy, para que desde ahí construyamos juntos tu puente hacia tu siguiente versión.
+              </p>
+            </div>
+
             <Button onClick={() => setStep("camino")} className="w-full" size="lg">
-              Comenzar mi Viaje
+              Comenzar Mi Transición
             </Button>
           </CardContent>
         </Card>
@@ -308,15 +314,15 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 2: Selector de Camino
+  // STEP 2: Selector de Camino - Con contexto de transición
   if (step === "camino") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader>
-            <CardTitle>Elige tu Camino</CardTitle>
+            <CardTitle>Tu Transición Comienza Aquí</CardTitle>
             <CardDescription>
-              Puedes elegir uno o ambos caminos. Esto personaliza tu experiencia de desarrollo.
+              Elige los aspectos de tu vida en los que necesitas transitar. Puedes trabajar uno o ambos simultáneamente.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -330,14 +336,14 @@ export default function DespegaOnboarding() {
                 <div className="flex items-start gap-3">
                   <Checkbox checked={caminoPersona} />
                   <div>
-                    <h3 className="font-semibold text-lg">Camino Persona</h3>
+                    <h3 className="font-semibold text-lg">Transición Personal</h3>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Enfocado en tu desarrollo personal: energía, hábitos, bienestar, relaciones personales y autoconocimiento.
+                      Tu versión más auténtica: energía, hábitos, relaciones significativas, bienestar y autoconocimiento profundo.
                     </p>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Energía</span>
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Relaciones</span>
-                      <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Bienestar</span>
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Quién Eres</span>
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Cómo Te Sientes</span>
+                      <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Relaciones</span>
                     </div>
                   </div>
                 </div>
@@ -352,14 +358,14 @@ export default function DespegaOnboarding() {
                 <div className="flex items-start gap-3">
                   <Checkbox checked={caminoProfesional} />
                   <div>
-                    <h3 className="font-semibold text-lg">Camino Profesional</h3>
+                    <h3 className="font-semibold text-lg">Transición Profesional</h3>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Enfocado en tu desarrollo de carrera: enfoque, productividad, networking, plan ejecutivo y habilidades laborales.
+                      Tu rol en el mundo: enfoque, productividad, networking, estrategia de carrera y dominio de tu expertise.
                     </p>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Enfoque</span>
-                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Plan Ejecutivo</span>
-                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Carrera</span>
+                      <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Tu Rol</span>
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Tu Estrategia</span>
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Tu Carrera</span>
                     </div>
                   </div>
                 </div>
@@ -372,7 +378,7 @@ export default function DespegaOnboarding() {
               size="lg"
               disabled={!caminoPersona && !caminoProfesional}
             >
-              Continuar al Diagnóstico
+              Continuar al Espejo
             </Button>
           </CardContent>
         </Card>
@@ -380,7 +386,7 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 3: Test A1 Base
+  // STEP 3: Test A1 Base - "El Espejo"
   if (step === "test") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -388,9 +394,9 @@ export default function DespegaOnboarding() {
           <CardHeader>
             <div className="space-y-4">
               <div>
-                <CardTitle>Test A1 Base - Despega Cerebral</CardTitle>
+                <CardTitle>El Espejo - Tu Diagnóstico Inicial</CardTitle>
                 <CardDescription>
-                  Este diagnóstico nos ayuda a entender tu punto de partida y personalizar tu ruta.
+                  Miramos profundo. No para juzgar, sino para ver desde dónde realmente estás transitando.
                 </CardDescription>
               </div>
               <div className="space-y-2">
@@ -463,22 +469,23 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 4: Results
+  // STEP 4: Results - "Tu Punto de Partida Revelado"
   if (step === "results" && results) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Tu Diagnóstico Inicial</CardTitle>
+            <CardTitle className="text-2xl">Tu Punto de Partida Revelado</CardTitle>
             <CardDescription>
-              Basado en tus respuestas, hemos creado tu perfil de desarrollo
+              El espejo ha mostrado quién eres hoy. Ahora construimos tu puente hacia quién quieres ser.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="text-center p-4 bg-primary/10 rounded-lg">
-              <p className="text-sm text-muted-foreground">Nivel General</p>
+            <div className="text-center p-4 bg-primary/10 rounded-lg border-l-4 border-primary">
+              <p className="text-sm text-muted-foreground">Tu Estado Actual</p>
               <p className="text-3xl font-bold capitalize mt-1">{results.nivel}</p>
-              <p className="text-lg text-muted-foreground">{(results.total * 20).toFixed(0)}% de potencial actual</p>
+              <p className="text-lg text-muted-foreground">Potencial disponible: {(results.total * 20).toFixed(0)}%</p>
+              <p className="text-xs text-muted-foreground mt-2">Este es tu punto de partida para la transición</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

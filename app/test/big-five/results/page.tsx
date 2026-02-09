@@ -232,6 +232,25 @@ export default function BigFiveResults() {
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: 5 Dimensiones Despega</h1>
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
+        {/* PUENTE DE TRANSICION SECTION */}
+        <div className="mb-8 p-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950 rounded-lg">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="h-5 w-5 text-purple-600" />
+            <h2 className="text-2xl font-bold">Tu Puente de Transición</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-6">No es tu perfil fijo. Es cómo evolucionas en cada dimensión.</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-blue-500">
+              <h4 className="font-semibold mb-2">Eres Ahora</h4>
+              <p className="text-xs text-muted-foreground">Tu perfil en las 5 dimensiones</p>
+            </div>
+            <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-purple-500">
+              <h4 className="font-semibold mb-2">Puedes Ser</h4>
+              <p className="text-xs text-muted-foreground">Mayor flexibilidad y equilibrio en cada área</p>
+            </div>
+          </div>
+        </div>
+
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10 gap-2">
             <TabsTrigger value="summary" className="flex items-center gap-2">
