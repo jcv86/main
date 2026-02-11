@@ -54,7 +54,8 @@ export default function DespegaOnboarding() {
   const calculateResults = async () => {
     setLoading(true)
     
-    // Calculate scores based on assessment
+    // Calculate raw scores from responses
+    // MÁS = +2 points, MENOS = -1 point
     const scores = { D: 0, I: 0, S: 0, C: 0 }
 
     DISC_TEST_QUESTIONS.forEach((q) => {
@@ -63,14 +64,21 @@ export default function DespegaOnboarding() {
       if (response?.menos) scores[response.menos] -= 1
     })
 
-    // Normalize to 0-100
+    console.log("[v0] Raw scores before normalization:", scores)
+
+    // Normalize to 0-100 scale
+    // Formula: (score + 50) / 100 * 100 ensures center point at 50
+    // This creates a balanced scale where 50 is neutral
     const normalizedScores = {
-      D: Math.max(0, Math.min(100, ((scores.D + 50) / 100) * 100)),
-      I: Math.max(0, Math.min(100, ((scores.I + 50) / 100) * 100)),
-      S: Math.max(0, Math.min(100, ((scores.S + 50) / 100) * 100)),
-      C: Math.max(0, Math.min(100, ((scores.C + 50) / 100) * 100)),
+      D: Math.max(0, Math.min(100, Math.round((scores.D + 56) / 1.12))),
+      I: Math.max(0, Math.min(100, Math.round((scores.I + 56) / 1.12))),
+      S: Math.max(0, Math.min(100, Math.round((scores.S + 56) / 1.12))),
+      C: Math.max(0, Math.min(100, Math.round((scores.C + 56) / 1.12))),
     }
 
+    console.log("[v0] Normalized scores (0-100):", normalizedScores)
+
+    // Find dominant and secondary profiles based on highest scores
     const sorted = Object.entries(normalizedScores)
       .sort(([, a], [, b]) => b - a)
       .map(([key]) => key as "D" | "I" | "S" | "C")
@@ -81,6 +89,10 @@ export default function DespegaOnboarding() {
       secondaryProfile: sorted[1],
       total: (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4,
     }
+    
+    console.log("[v0] Final results:", finalResults)
+    console.log("[v0] Dominant profile:", finalResults.dominantProfile, "Score:", finalResults[finalResults.dominantProfile])
+    console.log("[v0] Secondary profile:", finalResults.secondaryProfile, "Score:", finalResults[finalResults.secondaryProfile])
     
     setResults(finalResults)
     setStep("results")
