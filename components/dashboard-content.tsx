@@ -184,30 +184,91 @@ export function DashboardContent() {
       </div>
 
       {/* Test Results Section */}
-      {testResults && (
+      {testResults?.test_results && (
         <Card>
           <CardHeader>
-            <CardTitle>Mi Perfil de Personalidad</CardTitle>
+            <CardTitle>Mi Perfil de Personalidad DISC</CardTitle>
+            <CardDescription>
+              Resultado de tu evaluación de personalidad
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {/* DISC Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {testResults.test_results && Object.entries(testResults.test_results)
-                  .filter(([key]) => ['d_score', 'i_score', 's_score', 'c_score'].includes(key))
-                  .map(([key, value]: any) => (
-                    <div key={key} className="p-4 bg-muted rounded-lg">
-                      <div className="text-sm font-medium mb-2">{key.replace('_score', '').toUpperCase()}</div>
-                      <div className="text-2xl font-bold mb-2">{value || 0}%</div>
-                      <Progress value={value || 0} />
-                    </div>
-                  ))}
+                {/* D Score */}
+                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">⚡</span>
+                    <span className="text-2xl font-bold text-red-600">{testResults.test_results.d_score || 0}%</span>
+                  </div>
+                  <p className="text-sm font-medium text-red-700 dark:text-red-300">Dominancia</p>
+                  <Progress value={testResults.test_results.d_score || 0} className="mt-2" />
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">Decisión y Resultados</p>
+                </div>
+
+                {/* I Score */}
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🌟</span>
+                    <span className="text-2xl font-bold text-yellow-600">{testResults.test_results.i_score || 0}%</span>
+                  </div>
+                  <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Influencia</p>
+                  <Progress value={testResults.test_results.i_score || 0} className="mt-2" />
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">Entusiasmo y Conexión</p>
+                </div>
+
+                {/* S Score */}
+                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🛡️</span>
+                    <span className="text-2xl font-bold text-green-600">{testResults.test_results.s_score || 0}%</span>
+                  </div>
+                  <p className="text-sm font-medium text-green-700 dark:text-green-300">Estabilidad</p>
+                  <Progress value={testResults.test_results.s_score || 0} className="mt-2" />
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">Paciencia y Apoyo</p>
+                </div>
+
+                {/* C Score */}
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🔍</span>
+                    <span className="text-2xl font-bold text-blue-600">{testResults.test_results.c_score || 0}%</span>
+                  </div>
+                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Cumplimiento</p>
+                  <Progress value={testResults.test_results.c_score || 0} className="mt-2" />
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Precisión y Análisis</p>
+                </div>
               </div>
-              {testResults.test_results?.dominant_profile && (
-                <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
-                  <p className="text-sm font-medium">Perfil Dominante</p>
-                  <p className="text-lg font-bold">{testResults.test_results.dominant_profile}</p>
+
+              {/* Dominant Profile */}
+              {testResults.test_results.dominant_profile && (
+                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border border-primary/30">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Tu Perfil Dominante</p>
+                  <p className="text-2xl font-bold text-primary">{testResults.test_results.dominant_profile}</p>
+                  {testResults.test_results.secondary_profile && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Perfil Secundario: <span className="font-semibold">{testResults.test_results.secondary_profile}</span>
+                    </p>
+                  )}
                 </div>
               )}
+
+              {/* Caminos Activos */}
+              <div className="grid grid-cols-2 gap-4">
+                {testResults.test_results.camino_persona && (
+                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
+                    <p className="text-sm font-medium text-purple-700 dark:text-purple-300">Camino Personal</p>
+                    <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Activado</p>
+                  </div>
+                )}
+                {testResults.test_results.camino_profesional && (
+                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Camino Profesional</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Activado</p>
+                  </div>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
