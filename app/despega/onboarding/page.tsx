@@ -91,10 +91,17 @@ export default function DespegaOnboarding() {
         }),
       })
 
+      console.log("[v0] Save response status:", response.status)
+      
       if (response.ok) {
+        const data = await response.json()
+        console.log("[v0] Save response data:", data)
         setTimeout(() => {
           router.push("/dashboard?refetch=true")
         }, 2000)
+      } else {
+        const errorData = await response.json()
+        console.error("[v0] Save failed with status", response.status, ":", errorData)
       }
     } catch (error) {
       console.error("[v0] Error saving test results:", error)

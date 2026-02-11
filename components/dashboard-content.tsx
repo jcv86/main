@@ -117,6 +117,21 @@ export function DashboardContent() {
 
   return (
     <div className="space-y-6">
+      {/* Debug Info - Remove in production */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card className="bg-yellow-50 border-yellow-200">
+          <CardHeader>
+            <CardTitle className="text-sm">DEBUG INFO</CardTitle>
+          </CardHeader>
+          <CardContent className="text-xs space-y-1 font-mono">
+            <p>User: {sessionUser?.email}</p>
+            <p>Tests Completed: {userData?.tests_completed || 0}</p>
+            <p>Has Test Results: {testResults ? 'YES' : 'NO'}</p>
+            <p>Refresh Key: {refreshKey}</p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Tests Completados */}
