@@ -51,6 +51,26 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </CardHeader>
         </Card>
 
+        {/* Info Cards */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+            <CardContent className="pt-6">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">¿Qué significa esto?</h3>
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                Tu perfil muestra cómo naturalmente interactúas con el mundo. No es una etiqueta limitante, sino una brújula para entenderte mejor y desarrollarte.
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+            <CardContent className="pt-6">
+              <h3 className="font-semibold text-green-900 dark:text-green-100 mb-2">Tu mayor fortaleza</h3>
+              <p className="text-sm text-green-800 dark:text-green-200">
+                Tu perfil es tu superpoder. Los siguientes pasos te ayudarán a amplificar tus fortalezas y trabajar en tus áreas de desarrollo.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Primary Profile - Left Section */}
           <div className="lg:col-span-2 space-y-6">
@@ -76,7 +96,10 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
               <CardContent className="space-y-6 pt-6">
                 {/* Scores Grid */}
                 <div>
-                  <h3 className="font-semibold mb-4 text-lg">Tu Perfil de Personalidad</h3>
+                  <h3 className="font-semibold mb-2 text-lg">Tu Perfil de Personalidad</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                    Cada dimensión representa una parte de cómo interactúas con el mundo. Una puntuación alta no es mejor que una baja, solo es diferente.
+                  </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {scores.map((score) => (
                       <div
@@ -260,6 +283,44 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
             </Card>
           </div>
         </div>
+
+        {/* Context Section */}
+        <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-800">
+          <CardHeader>
+            <CardTitle className="text-lg">¿Qué Sigue?</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <div className="text-2xl min-w-fit">📚</div>
+                <div>
+                  <h4 className="font-semibold">Libros Recomendados</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    Hemos seleccionado libros específicos para tu perfil que acelerarán tu aprendizaje y desarrollo personal.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-2xl min-w-fit">🎯</div>
+                <div>
+                  <h4 className="font-semibold">Tu Plan Personalizado</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    En tu dashboard encontrarás estrategias y acciones diseñadas específicamente para aprovechar tu perfil al máximo.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-2xl min-w-fit">🚀</div>
+                <div>
+                  <h4 className="font-semibold">Evolución Continua</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    Este es tu punto de partida. A través de la práctica y el aprendizaje, desarrollarás todas las dimensiones del perfil DISC.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Call to Action */}
         <div className="flex flex-wrap gap-3 justify-center pt-6 pb-4">

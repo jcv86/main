@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { DiscResultsPage } from "@/components/disc-results-page"
 import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
 
-type Step = "intro" | "camino" | "test" | "results"
+type Step = "intro" | "instructions" | "camino" | "test" | "results"
 
 export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
@@ -128,7 +128,7 @@ export default function DespegaOnboarding() {
               </p>
             </div>
 
-            <Button onClick={() => setStep("camino")} className="w-full" size="lg">
+            <Button onClick={() => setStep("instructions")} className="w-full" size="lg">
               Comenzar Mi Transición
             </Button>
           </CardContent>
@@ -137,7 +137,64 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 2: Selector de Camino
+  // STEP 2: Instrucciones
+  if (step === "instructions") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Cómo Funciona Este Test</CardTitle>
+            <CardDescription className="text-base mt-2">
+              Una guía rápida para aprovechar al máximo tu evaluación
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <h3 className="font-semibold text-foreground mb-2">✓ Sin Respuestas Correctas o Incorrectas</h3>
+                <p className="text-sm text-foreground">
+                  No hay respuestas buenas ni malas. Tu honestidad es lo más importante. Responde según cómo realmente eres, no como crees que deberías ser.
+                </p>
+              </div>
+
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <h3 className="font-semibold text-foreground mb-2">✓ Responde Rápidamente</h3>
+                <p className="text-sm text-foreground">
+                  Para cada pregunta, elige la opción que MÁS te describe y la que MENOS te describe. Tu primer instinto suele ser el más preciso.
+                </p>
+              </div>
+
+              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                <h3 className="font-semibold text-foreground mb-2">✓ Perfil de Personalidad DISC</h3>
+                <p className="text-sm text-foreground mb-2">
+                  Identificaremos tu estilo en 4 dimensiones:
+                </p>
+                <ul className="text-sm space-y-1 text-foreground">
+                  <li><strong>D (Dominancia)</strong> - Resultados, decisión y desafío</li>
+                  <li><strong>I (Influencia)</strong> - Entusiasmo, persuasión y conexión</li>
+                  <li><strong>S (Estabilidad)</strong> - Paciencia, apoyo y consistencia</li>
+                  <li><strong>C (Cumplimiento)</strong> - Precisión, análisis y calidad</li>
+                </ul>
+              </div>
+
+              <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                <h3 className="font-semibold text-foreground mb-2">✓ Próximos Pasos</h3>
+                <p className="text-sm text-foreground">
+                  Después del test verás tu perfil personalizado, libros recomendados según tu estilo, y un plan de desarrollo adaptado a ti.
+                </p>
+              </div>
+            </div>
+
+            <Button onClick={() => setStep("camino")} className="w-full" size="lg">
+              Entendido, Continuar
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // STEP 3: Selector de Camino
   if (step === "camino") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -209,8 +266,13 @@ export default function DespegaOnboarding() {
               <div>
                 <CardTitle>Tu Perfil de Personalidad</CardTitle>
                 <CardDescription>
-                  Elige la opción que MÁS te describes y la que MENOS te describe
+                  Para cada pregunta, elige cómo eres REALMENTE en la mayoría de las situaciones
                 </CardDescription>
+              </div>
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-foreground">
+                  💡 <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
+                </p>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
