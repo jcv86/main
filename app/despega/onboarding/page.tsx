@@ -107,6 +107,7 @@ export default function DespegaOnboarding() {
       total,
     }
     setResults(finalResults)
+    setStep("results")
 
     // Save to database
     if (userId) {
@@ -132,29 +133,33 @@ export default function DespegaOnboarding() {
           console.error("[v0] Error saving user profile:", profileError.message)
         }
 
-        // Save test results
-        const { error: discError } = await supabase.from("despega_disc_results").insert({
-          user_id: userId,
-          d_score: Math.round(normalizedScores.D),
-          i_score: Math.round(normalizedScores.I),
-          s_score: Math.round(normalizedScores.S),
-          c_score: Math.round(normalizedScores.C),
-          dominant_profile: dominantProfile,
-          secondary_profile: secondaryProfile,
-          respuestas: responses,
-          completed_at: new Date().toISOString(),
+        // Save test results to unified table (simpler schema)
+        const { error: testError } = await supabase.from("unified_test_results").insert({
+          user_email: userEmail,
+          test_type: "disc",
+          test_results: {
+            d_score: Math.round(normalizedScores.D),
+            i_score: Math.round(normalizedScores.I),
+            s_score: Math.round(normalizedScores.S),
+            c_score: Math.round(normalizedScores.C),
+            dominant_profile: dominantProfile,
+            secondary_profile: secondaryProfile,
+          },
         })
         
-        if (discError) {
-          console.error("[v0] Error saving DISC results:", discError.message)
+        if (testError) {
+          console.error("[v0] Error saving test results:", testError.message)
+        } else {
+          console.log("[v0] Successfully saved DISC test results")
         }
 
-        // Redirect to dashboard after 2 seconds
+        // Redirect to dashboard after 3 seconds
         setTimeout(() => {
           router.push("/dashboard?refetch=true")
-        }, 2000)
+        }, 3000)
       } catch (error) {
         console.error("[v0] Unexpected error:", error)
+        // Still allow user to see results even if save fails
       }
     }
 
@@ -426,27 +431,32 @@ export default function DespegaOnboarding() {
   }
 
   // STEP 4: Results - "Tu Punto de Partida Revelado"
+  // STEP 4: Results - Display Despega Profile
   if (step === "results" && results) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Tu Punto de Partida Revelado</CardTitle>
-            <CardDescription>
-              El espejo ha mostrado quién eres hoy. Ahora construimos tu puente hacia quién quieres ser.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="text-center p-4 bg-primary/10 rounded-lg border-l-4 border-primary">
-              <p className="text-sm text-muted-foreground">Tu Estado Actual</p>
-              <p className="text-3xl font-bold capitalize mt-1">{results.nivel}</p>
-              <p className="text-lg text-muted-foreground">Potencial disponible: {(results.total * 20).toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground mt-2">Este es tu punto de partida para la transición</p>
-            </div>
+      <DiscResultsPage
+        results={results}
+        caminoPersona={caminoPersona}
+        caminoProfesional={caminoProfesional}
+      />
+    )
+  }
 
-            {/* Radar Chart */}
-            <div className="bg-white p-4 rounded-lg border">
-              <CompetencyRadarChart
+  // Fallback - shouldn't reach here
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Procesando...</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Por favor, espera mientras procesamos tus respuestas.</p>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
                 data={[
                   {
                     name: "Energía",
