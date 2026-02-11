@@ -29,6 +29,7 @@ import {
 import { createClient } from "@/lib/supabase/client"
 import { useSession } from "@/components/session-wrapper"
 import { BetterMeIntegration } from "@/components/betterme-integration"
+import { TestResultsSection } from "@/components/test-results-section"
 interface TestResult {
   id: string
   name: string
@@ -623,6 +624,9 @@ export function DashboardContent() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Test Results Section - Large */}
+            <TestResultsSection />
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

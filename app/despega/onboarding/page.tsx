@@ -55,7 +55,6 @@ export default function DespegaOnboarding() {
     setLoading(true)
     
     // Calculate raw scores from responses
-    // MÁS = +2 points, MENOS = -1 point
     const scores = { D: 0, I: 0, S: 0, C: 0 }
 
     DISC_TEST_QUESTIONS.forEach((q) => {
@@ -64,17 +63,72 @@ export default function DespegaOnboarding() {
       if (response?.menos) scores[response.menos] -= 1
     })
 
-    console.log("[v0] Raw scores before normalization:", scores)
+    console.log("[v0] Raw scores:", scores)
 
     // Normalize to 0-100 scale
-    // Formula: (score + 50) / 100 * 100 ensures center point at 50
-    // This creates a balanced scale where 50 is neutral
     const normalizedScores = {
       D: Math.max(0, Math.min(100, Math.round((scores.D + 56) / 1.12))),
       I: Math.max(0, Math.min(100, Math.round((scores.I + 56) / 1.12))),
       S: Math.max(0, Math.min(100, Math.round((scores.S + 56) / 1.12))),
       C: Math.max(0, Math.min(100, Math.round((scores.C + 56) / 1.12))),
     }
+
+    console.log("[v0] Normalized scores:", normalizedScores)
+
+    // Find dominant and secondary profiles
+    const sorted = Object.entries(normalizedScores)
+      .sort(([, a], [, b]) => b - a)
+      .map(([key]) => key as "D" | "I" | "S" | "C")
+
+    const finalResults = {
+      ...normalizedScores,
+      dominantProfile: sorted[0],
+      secondaryProfile: sorted[1],
+      total: (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4,
+    }
+    
+    console.log("[v0] Final results:", finalResults)
+    
+    setResults(finalResults)
+    setStep("results")
+
+    // Save to database
+    try {
+      const response = await fetch("/api/despega/save-test-results", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dominantProfile: finalResults.dominantProfile,
+          secondaryProfile: finalResults.secondaryProfile,
+          scores: normalizedScores,
+          caminoPersona,
+          caminoProfesional,
+        }),
+      })
+
+      if (response.ok) {
+        console.log("[v0] Test results saved successfully")
+        
+        // Invalidate cache
+        try {
+          await fetch("/api/despega/invalidate-cache", { method: "POST" })
+        } catch (cacheError) {
+          console.error("[v0] Error invalidating cache:", cacheError)
+        }
+        
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          router.push("/dashboard?refetch=true")
+        }, 2000)
+      } else {
+        console.error("[v0] Failed to save test results")
+      }
+    } catch (error) {
+      console.error("[v0] Error saving test results:", error)
+    }
+
+    setLoading(false)
+  }
 
     console.log("[v0] Normalized scores (0-100):", normalizedScores)
 
