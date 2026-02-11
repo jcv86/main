@@ -322,7 +322,7 @@ export default function DespegaOnboarding() {
                 disabled={!bothSelected}
                 className="flex-1"
               >
-                {currentQuestion === DISC_TEST_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
+                {currentQuestion === TEST_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
               </Button>
             </div>
           </CardContent>
