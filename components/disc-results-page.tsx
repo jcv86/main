@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { DESPEGA_PROFILES, getDespegarProfile, getBookRecommendations } from "@/lib/despega-profiles"
 import { useRouter } from "next/navigation"
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from "recharts"
+// Recharts removed to avoid dependency issues - using simple visual instead
 
 interface DiscResultsProps {
   results: {
@@ -28,14 +28,6 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: D
   const dominantProfile = getDespegarProfile(results.dominantProfile, context)
   const secondaryProfile = getDespegarProfile(results.secondaryProfile, context)
   const books = getBookRecommendations(results.dominantProfile)
-
-  // Data for radar chart
-  const radarData = [
-    { name: "Impulsor", D: results.D, fullMark: 100 },
-    { name: "Catalizador", I: results.I, fullMark: 100 },
-    { name: "Estabilizador", S: results.S, fullMark: 100 },
-    { name: "Arquitecto", C: results.C, fullMark: 100 },
-  ]
 
   const scores = [
     { dimension: "D", label: "Impulsor", value: results.D, color: "#EF4444", icon: "⚡" },
@@ -182,25 +174,70 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: D
 
           {/* Right Section - Radar Chart & Books */}
           <div className="space-y-6">
-            {/* Radar Chart */}
+            {/* Radar Chart - Simple SVG version */}
             <Card className="shadow-xl">
               <CardHeader>
                 <CardTitle className="text-lg">Tu Perfil Visual</CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <RadarChart data={radarData}>
-                    <PolarGrid stroke="#e2e8f0" />
-                    <PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} />
-                    <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                    <Radar name="D" dataKey="D" stroke="#EF4444" fill="#EF4444" fillOpacity={0.15} />
-                    <Radar name="I" dataKey="I" stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.15} />
-                    <Radar name="S" dataKey="S" stroke="#10B981" fill="#10B981" fillOpacity={0.15} />
-                    <Radar name="C" dataKey="C" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.15} />
-                    <Legend wrapperStyle={{ fontSize: 11 }} />
-                    <Tooltip />
-                  </RadarChart>
-                </ResponsiveContainer>
+                <div className="relative w-full h-80 flex items-center justify-center">
+                  <svg viewBox="0 0 300 300" className="w-full h-full" style={{ maxWidth: "300px", maxHeight: "300px" }}>
+                    {/* Circles */}
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <circle
+                        key={`circle-${i}`}
+                        cx="150"
+                        cy="150"
+                        r={30 * i}
+                        fill="none"
+                        stroke="#e2e8f0"
+                        strokeWidth="1"
+                      />
+                    ))}
+                    
+                    {/* Axes */}
+                    {["D", "I", "S", "C"].map((dim, idx) => {
+                      const angle = (idx * 90 * Math.PI) / 180
+                      const x = 150 + 150 * Math.cos(angle)
+                      const y = 150 + 150 * Math.sin(angle)
+                      return (
+                        <line key={`line-${dim}`} x1="150" y1="150" x2={x} y2={y} stroke="#e2e8f0" strokeWidth="1" />
+                      )
+                    })}
+                    
+                    {/* Data polygons */}
+                    {[
+                      { dim: "D", color: "#EF4444", value: results.D },
+                      { dim: "I", color: "#F59E0B", value: results.I },
+                      { dim: "S", color: "#10B981", value: results.S },
+                      { dim: "C", color: "#3B82F6", value: results.C },
+                    ].map(({ dim, color, value }, idx) => {
+                      const scale = value / 100
+                      const angle = (idx * 90 * Math.PI) / 180
+                      const x = 150 + 150 * scale * Math.cos(angle)
+                      const y = 150 + 150 * scale * Math.sin(angle)
+                      return (
+                        <circle
+                          key={`point-${dim}`}
+                          cx={x}
+                          cy={y}
+                          r="4"
+                          fill={color}
+                        />
+                      )
+                    })}
+                  </svg>
+                  
+                  {/* Labels */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="grid grid-cols-2 gap-8 text-center">
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 text-xs font-bold text-red-600">D</div>
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-600">I</div>
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-green-600">S</div>
+                      <div className="absolute left-2 top-1/2 -translate-y-1/2 text-xs font-bold text-blue-600">C</div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
