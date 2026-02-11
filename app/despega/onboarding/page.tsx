@@ -219,7 +219,7 @@ export default function DespegaOnboarding() {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Pregunta {currentQuestion + 1} de {DISC_TEST_QUESTIONS.length}</span>
+                  <span>Pregunta {currentQuestion + 1} de {TEST_QUESTIONS.length}</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
                 <Progress value={progress} />
