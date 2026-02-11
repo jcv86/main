@@ -187,55 +187,55 @@ export function DashboardContent() {
       {testResults?.test_results && (
         <Card>
           <CardHeader>
-            <CardTitle>Mi Perfil de Personalidad DISC</CardTitle>
+            <CardTitle>Mi Perfil Despega Cerebral</CardTitle>
             <CardDescription>
               Resultado de tu evaluación de personalidad
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {/* DISC Scores Grid */}
+              {/* Perfil Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {/* D Score */}
+                {/* D Score - Impulsor */}
                 <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">⚡</span>
                     <span className="text-2xl font-bold text-red-600">{testResults.test_results.d_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-red-700 dark:text-red-300">Dominancia</p>
+                  <p className="text-sm font-medium text-red-700 dark:text-red-300">Impulsor</p>
                   <Progress value={testResults.test_results.d_score || 0} className="mt-2" />
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">Decisión y Resultados</p>
                 </div>
 
-                {/* I Score */}
+                {/* I Score - Catalizador */}
                 <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">🌟</span>
+                    <span className="text-2xl">✨</span>
                     <span className="text-2xl font-bold text-yellow-600">{testResults.test_results.i_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Influencia</p>
+                  <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Catalizador</p>
                   <Progress value={testResults.test_results.i_score || 0} className="mt-2" />
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">Entusiasmo y Conexión</p>
                 </div>
 
-                {/* S Score */}
+                {/* S Score - Estabilizador */}
                 <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">🛡️</span>
+                    <span className="text-2xl">🌱</span>
                     <span className="text-2xl font-bold text-green-600">{testResults.test_results.s_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-green-700 dark:text-green-300">Estabilidad</p>
+                  <p className="text-sm font-medium text-green-700 dark:text-green-300">Estabilizador</p>
                   <Progress value={testResults.test_results.s_score || 0} className="mt-2" />
                   <p className="text-xs text-green-600 dark:text-green-400 mt-1">Paciencia y Apoyo</p>
                 </div>
 
-                {/* C Score */}
+                {/* C Score - Arquitecto */}
                 <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">🔍</span>
+                    <span className="text-2xl">🏗️</span>
                     <span className="text-2xl font-bold text-blue-600">{testResults.test_results.c_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Cumplimiento</p>
+                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Arquitecto</p>
                   <Progress value={testResults.test_results.c_score || 0} className="mt-2" />
                   <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Precisión y Análisis</p>
                 </div>
