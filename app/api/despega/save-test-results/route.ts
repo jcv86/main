@@ -51,6 +51,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Update a1_progress to increment tests_completed
+    const { data: progressData, error: progressError } = await supabase
+      .from("a1_progress")
+      .select("*")
+      .eq("user_id", user.id)
+      .single()
+
+    if (progressError && progressError.code !== "PGRST116") {
+      console.error("[v0] Error fetching progress:", progressError)
+    }
+
+    const currentTests = progressData?.tests_completed || 0
+
+    const { error: updateError } = await supabase
+      .from("a1_progress")
+      .upsert({
+        user_id: user.id,
+        tests_completed: currentTests + 1,
+        cerebral_completed: true,
+        last_updated: new Date().toISOString(),
+      })
+
+    if (updateError) {
+      console.error("[v0] Error updating progress:", updateError)
+      // Don't fail the entire request, test results are saved
+    }
+
     console.log("[v0] Test results saved successfully")
 
     return NextResponse.json({
