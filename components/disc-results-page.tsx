@@ -7,7 +7,7 @@ import { DESPEGA_PROFILES, getDespegarProfile, getBookRecommendations } from "@/
 import { useRouter } from "next/navigation"
 // Recharts removed to avoid dependency issues - using simple visual instead
 
-interface DiscResultsProps {
+interface ResultsProps {
   results: {
     D: number
     I: number
@@ -21,7 +21,7 @@ interface DiscResultsProps {
   caminoProfesional: boolean
 }
 
-export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: DiscResultsProps) {
+export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: ResultsProps) {
   const router = useRouter()
   const context = caminoProfesional ? "profesional" : "personal"
 
@@ -76,7 +76,7 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: D
               <CardContent className="space-y-6 pt-6">
                 {/* Scores Grid */}
                 <div>
-                  <h3 className="font-semibold mb-4 text-lg">Tu Composición DISC</h3>
+                  <h3 className="font-semibold mb-4 text-lg">Tu Perfil de Personalidad</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {scores.map((score) => (
                       <div

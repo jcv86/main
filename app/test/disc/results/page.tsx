@@ -126,7 +126,7 @@ export default function DISCResultsPage() {
       } else {
         toast({
           title: "No hay resultados",
-          description: "No se encontraron resultados del test DISC",
+          description: "No se encontraron resultados de tu evaluación",
           variant: "destructive",
         })
       }
@@ -199,12 +199,12 @@ export default function DISCResultsPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle>No se encontraron resultados</CardTitle>
-            <CardDescription>Parece que aún no has completado el test DISC.</CardDescription>
+            <CardDescription>Parece que aún no has completado tu evaluación.</CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <Button onClick={() => router.push("/test/disc")} className="w-full">
               <Brain className="h-4 w-4 mr-2" />
-              Realizar Test DISC
+              Realizar Evaluación
             </Button>
             <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")} className="w-full">
               {isDemoMode ? "Volver al Inicio" : "Volver al Dashboard"}

@@ -9,8 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 import { DiscResultsPage } from "@/components/disc-results-page"
 
-// Simple fallback test questions (28 DISC-based)
-const DISC_TEST_QUESTIONS = [
+// Test questions for personality assessment
+const TEST_QUESTIONS = [
   {
     id: 1,
     pregunta: "Cuando enfrento un desafío importante, soy más:",
@@ -63,11 +63,11 @@ export default function DespegaOnboarding() {
     getUser()
   }, [supabase])
 
-  const question = DISC_TEST_QUESTIONS[currentQuestion]
-  const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
+  const question = TEST_QUESTIONS[currentQuestion]
+  const progress = ((currentQuestion + 1) / TEST_QUESTIONS.length) * 100
 
   const handleNext = () => {
-    if (currentQuestion < DISC_TEST_QUESTIONS.length - 1) {
+    if (currentQuestion < TEST_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
       calculateResults()
@@ -77,10 +77,10 @@ export default function DespegaOnboarding() {
   const calculateResults = async () => {
     setLoading(true)
     
-    // Calculate DISC scores
+    // Calculate scores based on assessment
     const scores = { D: 0, I: 0, S: 0, C: 0 }
 
-    DISC_TEST_QUESTIONS.forEach((q) => {
+    TEST_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
       if (response?.mas) scores[response.mas] += 2
       if (response?.menos) scores[response.menos] -= 1
@@ -118,13 +118,13 @@ export default function DespegaOnboarding() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Bienvenido a Despega Cerebral</CardTitle>
             <CardDescription className="text-lg mt-2">
-              Descubre tu perfil DISC y comienza tu viaje de transformación personal y profesional.
+              Descubre tu perfil de personalidad y comienza tu viaje de transformación personal y profesional.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
               <p className="text-sm text-foreground">
-                Este test utiliza la metodología DISC para revelarte tu perfil de personalidad y potencial de desarrollo.
+                Este test te ayudará a revelarte tu perfil de personalidad y potencial de desarrollo a través de una evaluación personalizada.
               </p>
             </div>
 

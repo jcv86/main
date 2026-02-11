@@ -200,7 +200,7 @@ export default function TestMetricsPage() {
         messageCount={messageCount}
         coachType="sofia"
         conversationCategory="autoconocimiento"
-        suggestedAction="Completa el test DISC para conocer tu estilo de comunicación"
+        suggestedAction="Completa tu evaluación de personalidad para conocer tu estilo de comunicación"
       />
     </div>
   )

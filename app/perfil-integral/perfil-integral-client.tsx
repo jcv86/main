@@ -478,7 +478,7 @@ export function PerfilIntegralClient() {
               ) : (
                 <div className="text-center py-12">
                   <Zap className="h-16 w-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-                  <p className="text-muted-foreground mb-4">Completa el test DISC para descubrir cómo actúas</p>
+                  <p className="text-muted-foreground mb-4">Completa tu evaluación de personalidad para descubrir cómo actúas</p>
                 </div>
               )}
             </CardContent>
