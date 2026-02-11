@@ -1,3 +1,4 @@
+// Dashboard component - displays real user data from Supabase
 "use client"
 
 import { useState, useEffect } from "react"
