@@ -14,7 +14,7 @@ import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 // Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
 // DISC mapping: D→plan_ejecutivo, I→relaciones, S→energia, C→enfoque
 const TEST_A1_QUESTIONS = [
-  // DISC-S (Steadiness) → ENERGÍA
+  // DISC-S (Steadiness) → ENERGÍA (7 preguntas)
   {
     id: 1,
     category: "energia",
@@ -27,9 +27,82 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Mantengo serenidad y veo lo positivo en el cambio" },
     ],
   },
-  // DISC-C (Conscientiousness) → ENFOQUE
   {
     id: 2,
+    category: "energia",
+    question: "¿Cómo describes tu nivel de energía durante el día?",
+    options: [
+      { value: 1, label: "Bajo, me fatigo rápidamente" },
+      { value: 2, label: "Generalmente bajo" },
+      { value: 3, label: "Normal y equilibrado" },
+      { value: 4, label: "Generalmente alto" },
+      { value: 5, label: "Muy alto, puedo mantener ritmo constante" },
+    ],
+  },
+  {
+    id: 3,
+    category: "energia",
+    question: "¿Con qué frecuencia haces ejercicio físico?",
+    options: [
+      { value: 1, label: "Casi nunca" },
+      { value: 2, label: "Ocasionalmente" },
+      { value: 3, label: "1-2 veces por semana" },
+      { value: 4, label: "3-4 veces por semana" },
+      { value: 5, label: "Diariamente o casi diariamente" },
+    ],
+  },
+  {
+    id: 4,
+    category: "energia",
+    question: "¿Cuántas horas de sueño promedio necesitas?",
+    options: [
+      { value: 1, label: "Menos de 5 horas" },
+      { value: 2, label: "5-6 horas" },
+      { value: 3, label: "6-7 horas" },
+      { value: 4, label: "7-8 horas" },
+      { value: 5, label: "8+ horas" },
+    ],
+  },
+  {
+    id: 5,
+    category: "energia",
+    question: "¿Qué tan consistente es tu rutina diaria?",
+    options: [
+      { value: 1, label: "Muy inconsistente, cada día es diferente" },
+      { value: 2, label: "Mayormente inconsistente" },
+      { value: 3, label: "Parcialmente consistente" },
+      { value: 4, label: "Mayormente consistente" },
+      { value: 5, label: "Muy consistente, horarios fijos" },
+    ],
+  },
+  {
+    id: 6,
+    category: "energia",
+    question: "¿Cómo manejas el estrés y la presión?",
+    options: [
+      { value: 1, label: "Me abruma fácilmente" },
+      { value: 2, label: "Me cuesta gestionar" },
+      { value: 3, label: "Lo llevo razonablemente bien" },
+      { value: 4, label: "Gestiono bien el estrés" },
+      { value: 5, label: "Prospero bajo presión" },
+    ],
+  },
+  {
+    id: 7,
+    category: "energia",
+    question: "¿Practicas técnicas de relajación o meditación?",
+    options: [
+      { value: 1, label: "Nunca" },
+      { value: 2, label: "Rara vez" },
+      { value: 3, label: "Ocasionalmente" },
+      { value: 4, label: "Regularmente" },
+      { value: 5, label: "Diariamente" },
+    ],
+  },
+
+  // DISC-C (Conscientiousness) → ENFOQUE (7 preguntas)
+  {
+    id: 8,
     category: "enfoque",
     question: "Cuando trabajas en algo importante, ¿cuál es tu enfoque?",
     options: [
@@ -40,9 +113,82 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Profundizo al máximo nivel, verificando cada detalle" },
     ],
   },
-  // DISC-I (Influence) → RELACIONES
   {
-    id: 3,
+    id: 9,
+    category: "enfoque",
+    question: "¿Cuánto tiempo puedes mantener concentración profunda?",
+    options: [
+      { value: 1, label: "Menos de 15 minutos" },
+      { value: 2, label: "15-30 minutos" },
+      { value: 3, label: "30-60 minutos" },
+      { value: 4, label: "1-2 horas" },
+      { value: 5, label: "Más de 2 horas" },
+    ],
+  },
+  {
+    id: 10,
+    category: "enfoque",
+    question: "¿Qué tan importante es la calidad en tu trabajo?",
+    options: [
+      { value: 1, label: "Priorizo terminar rápido sobre la calidad" },
+      { value: 2, label: "Busco equilibrio entre velocidad y calidad" },
+      { value: 3, label: "Calidad es importante, pero aceptable 80%" },
+      { value: 4, label: "Busco alta calidad en todo lo que hago" },
+      { value: 5, label: "La excelencia es no negociable" },
+    ],
+  },
+  {
+    id: 11,
+    category: "enfoque",
+    question: "¿Con qué frecuencia revisas tus notificaciones?",
+    options: [
+      { value: 1, label: "Constantemente" },
+      { value: 2, label: "Cada 5-10 minutos" },
+      { value: 3, label: "Cada 15-30 minutos" },
+      { value: 4, label: "Ocasionalmente" },
+      { value: 5, label: "Casi nunca, gestiono mejor" },
+    ],
+  },
+  {
+    id: 12,
+    category: "enfoque",
+    question: "¿Qué tan claro tienes tu plan diario?",
+    options: [
+      { value: 1, label: "Muy confuso, sin dirección" },
+      { value: 2, label: "Confuso, poco organizado" },
+      { value: 3, label: "Parcialmente claro" },
+      { value: 4, label: "Bastante claro" },
+      { value: 5, label: "Cristal claro, bien organizado" },
+    ],
+  },
+  {
+    id: 13,
+    category: "enfoque",
+    question: "¿Cuántas prioridades principales completas por día?",
+    options: [
+      { value: 1, label: "Menos de 1" },
+      { value: 2, label: "1 prioridad" },
+      { value: 3, label: "2-3 prioridades" },
+      { value: 4, label: "4-5 prioridades" },
+      { value: 5, label: "6+ prioridades" },
+    ],
+  },
+  {
+    id: 14,
+    category: "enfoque",
+    question: "¿Usas herramientas o sistemas para organización?",
+    options: [
+      { value: 1, label: "No, trabajo sin sistema" },
+      { value: 2, label: "Raramente" },
+      { value: 3, label: "Ocasionalmente uso herramientas" },
+      { value: 4, label: "Regularmente uso sistemas" },
+      { value: 5, label: "Sistema consolidado y efectivo" },
+    ],
+  },
+
+  // DISC-I (Influence) → RELACIONES (7 preguntas)
+  {
+    id: 15,
     category: "relaciones",
     question: "En grupos o reuniones, ¿cuál es tu rol natural?",
     options: [
@@ -53,69 +199,162 @@ const TEST_A1_QUESTIONS = [
       { value: 5, label: "Conecto personas e inspiro participación" },
     ],
   },
-  // DISC-D (Dominance) → PLAN EJECUTIVO
   {
-    id: 4,
+    id: 16,
+    category: "relaciones",
+    question: "¿Con qué frecuencia te conectas con tu red profesional?",
+    options: [
+      { value: 1, label: "Casi nunca" },
+      { value: 2, label: "Ocasionalmente" },
+      { value: 3, label: "Mensualmente" },
+      { value: 4, label: "Semanalmente" },
+      { value: 5, label: "Constantemente" },
+    ],
+  },
+  {
+    id: 17,
+    category: "relaciones",
+    question: "¿Cómo es tu capacidad para influir en otros?",
+    options: [
+      { value: 1, label: "Me cuesta influir" },
+      { value: 2, label: "Influyo en ciertos contextos" },
+      { value: 3, label: "Capacidad moderada de influencia" },
+      { value: 4, label: "Puedo persuadir e influir claramente" },
+      { value: 5, label: "Inspiro y motivo con facilidad natural" },
+    ],
+  },
+  {
+    id: 18,
+    category: "relaciones",
+    question: "¿Practicas la escucha activa?",
+    options: [
+      { value: 1, label: "Rara vez, pienso en mi respuesta" },
+      { value: 2, label: "Ocasionalmente escucho realmente" },
+      { value: 3, label: "Intento escuchar, pero a veces fallo" },
+      { value: 4, label: "Generalmente practico escucha activa" },
+      { value: 5, label: "Siempre me enfoco en escuchar realmente" },
+    ],
+  },
+  {
+    id: 19,
+    category: "relaciones",
+    question: "¿Qué tan cómodo estás pidiendo ayuda?",
+    options: [
+      { value: 1, label: "Muy incómodo, prefiero solo" },
+      { value: 2, label: "Incómodo, lo evito" },
+      { value: 3, label: "Neutral, a veces pido" },
+      { value: 4, label: "Bastante cómodo pidiendo" },
+      { value: 5, label: "Muy cómodo, lo hago naturalmente" },
+    ],
+  },
+  {
+    id: 20,
+    category: "relaciones",
+    question: "¿Cuántas relaciones significativas mantienes activamente?",
+    options: [
+      { value: 1, label: "Ninguna o muy pocas" },
+      { value: 2, label: "1-3 relaciones" },
+      { value: 3, label: "4-8 relaciones" },
+      { value: 4, label: "9-15 relaciones" },
+      { value: 5, label: "Más de 15 relaciones" },
+    ],
+  },
+  {
+    id: 21,
+    category: "relaciones",
+    question: "¿Expresas gratitud regularmente?",
+    options: [
+      { value: 1, label: "Rara vez" },
+      { value: 2, label: "Ocasionalmente" },
+      { value: 3, label: "A veces me acuerdo" },
+      { value: 4, label: "Regularmente expreso gratitud" },
+      { value: 5, label: "Diariamente, es un hábito" },
+    ],
+  },
+
+  // DISC-D (Dominance) → PLAN EJECUTIVO (7 preguntas)
+  {
+    id: 22,
     category: "plan_ejecutivo",
     question: "Cuando estableces un objetivo, ¿qué tan directo es tu camino?",
     options: [
       { value: 1, label: "No tengo metas claras ni ejecuto bien" },
       { value: 2, label: "Tengo metas pero me cuesta ejecutarlas" },
       { value: 3, label: "Balanceo metas con flexibilidad en el proceso" },
-      { value: 4, label: "Ejecuto con determinación hacia mis objetivos" },
-      { value: 5, label: "Avanzo rápido hacia resultados con enfoque implacable" },
+      { value: 4, label: "Tengo metas claras y ejecución firme" },
+      { value: 5, label: "Metas cristalinas y ejecución imparable" },
     ],
   },
-  // DISC-S (Steadiness) → ENERGÍA (relaciones interpersonales)
   {
-    id: 5,
-    category: "energia",
-    question: "¿Cómo prefieres trabajar con otros?",
-    options: [
-      { value: 1, label: "Prefiero evitar el trabajo en equipo" },
-      { value: 2, label: "Trabajo en equipo pero necesito autonomía" },
-      { value: 3, label: "Me adapto bien a distintos estilos de equipo" },
-      { value: 4, label: "Disfruto la colaboración y la armonía grupal" },
-      { value: 5, label: "Busco crear ambiente de confianza y apoyo mutuo" },
-    ],
-  },
-  // DISC-C (Conscientiousness) → ENFOQUE (calidad y precisión)
-  {
-    id: 6,
-    category: "enfoque",
-    question: "¿Qué importancia tiene la calidad en tu trabajo?",
-    options: [
-      { value: 1, label: "Me importa terminar rápido más que la calidad" },
-      { value: 2, label: "Busco equilibrio entre velocidad y calidad" },
-      { value: 3, label: "Calidad es importante, pero no siempre es perfecta" },
-      { value: 4, label: "Busco alta calidad en todo lo que hago" },
-      { value: 5, label: "La excelencia es no negociable, reviso todo meticulosamente" },
-    ],
-  },
-  // DISC-I (Influence) → RELACIONES (networking, influencia)
-  {
-    id: 7,
-    category: "relaciones",
-    question: "¿Cómo es tu capacidad de influencia sobre otros?",
-    options: [
-      { value: 1, label: "Me cuesta influir o persuadir a otros" },
-      { value: 2, label: "Puedo influir en ciertos contextos" },
-      { value: 3, label: "Tengo capacidad moderada para influir" },
-      { value: 4, label: "Puedo persuadir e influir de manera clara" },
-      { value: 5, label: "Inspiro y motivo a otros con facilidad natural" },
-    ],
-  },
-  // DISC-D (Dominance) → PLAN EJECUTIVO (liderazgo, decisiones)
-  {
-    id: 8,
+    id: 23,
     category: "plan_ejecutivo",
-    question: "Ante decisiones difíciles o conflictos, ¿cómo actúas?",
+    question: "Ante decisiones difíciles, ¿cómo actúas?",
     options: [
-      { value: 1, label: "Evito decidir o los delego siempre" },
+      { value: 1, label: "Evito decidir o las delego siempre" },
       { value: 2, label: "Me cuesta tomar decisiones difíciles" },
       { value: 3, label: "Decido con análisis de consecuencias" },
       { value: 4, label: "Decido firmemente cuando es necesario" },
-      { value: 5, label: "Tomo decisiones rápidas y resolutivas, sin titubear" },
+      { value: 5, label: "Decido rápido y resolutivo, sin titubear" },
+    ],
+  },
+  {
+    id: 24,
+    category: "plan_ejecutivo",
+    question: "¿Con qué frecuencia planificas tu semana?",
+    options: [
+      { value: 1, label: "Nunca planificar" },
+      { value: 2, label: "Ocasionalmente" },
+      { value: 3, label: "Semanalmente, sin rigor" },
+      { value: 4, label: "Semanalmente con estructura" },
+      { value: 5, label: "Diariamente, con revisión" },
+    ],
+  },
+  {
+    id: 25,
+    category: "plan_ejecutivo",
+    question: "¿Qué tan bien ejecutas lo que planificas?",
+    options: [
+      { value: 1, label: "Muy mal, planeo pero no ejecuto" },
+      { value: 2, label: "Mal, bajo porcentaje de ejecución" },
+      { value: 3, label: "Regular, alrededor del 50%" },
+      { value: 4, label: "Bien, buena tasa de ejecución" },
+      { value: 5, label: "Excelente, casi todo se ejecuta" },
+    ],
+  },
+  {
+    id: 26,
+    category: "plan_ejecutivo",
+    question: "¿Tienes un ritual matutino establecido?",
+    options: [
+      { value: 1, label: "No, sin rutina" },
+      { value: 2, label: "Muy irregular" },
+      { value: 3, label: "Sí, de 5-10 minutos" },
+      { value: 4, label: "Sí, de 10-30 minutos" },
+      { value: 5, label: "Sí, de 30+ minutos, bien establecido" },
+    ],
+  },
+  {
+    id: 27,
+    category: "plan_ejecutivo",
+    question: "¿Cómo es tu seguimiento de objetivos?",
+    options: [
+      { value: 1, label: "Bajo, pierdo el hilo rápidamente" },
+      { value: 2, label: "Débil, olvido mis objetivos" },
+      { value: 3, label: "Ocasional, a veces recuerdo" },
+      { value: 4, label: "Bueno, mantengo seguimiento" },
+      { value: 5, label: "Excelente, siempre enfocado" },
+    ],
+  },
+  {
+    id: 28,
+    category: "plan_ejecutivo",
+    question: "¿Cuántas decisiones importantes tomas por semana?",
+    options: [
+      { value: 1, label: "Ninguna o muy pocas" },
+      { value: 2, label: "1-2 decisiones" },
+      { value: 3, label: "3-5 decisiones" },
+      { value: 4, label: "6-10 decisiones" },
+      { value: 5, label: "Más de 10 decisiones" },
     ],
   },
 ]
