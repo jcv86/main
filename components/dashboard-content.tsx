@@ -82,10 +82,16 @@ export function DashboardContent() {
   // Auto-refetch when coming back from test completion
   useEffect(() => {
     if (shouldRefetch) {
-      console.log("[v0] Refetch triggered, reloading data...")
-      setRefreshKey(prev => prev + 1)
-      // Clean up the URL
-      window.history.replaceState({}, "", "/dashboard")
+      console.log("[v0] Refetch triggered, waiting before reload...")
+      // Add a small delay to allow database to update
+      const timer = setTimeout(() => {
+        console.log("[v0] Executing refetch...")
+        setRefreshKey(prev => prev + 1)
+        // Clean up the URL
+        window.history.replaceState({}, "", "/dashboard")
+      }, 800)
+      
+      return () => clearTimeout(timer)
     }
   }, [shouldRefetch])
 

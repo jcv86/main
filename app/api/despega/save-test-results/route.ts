@@ -21,8 +21,11 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (authError || !user) {
+      console.error("[v0] Auth error:", authError)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
+
+    console.log("[v0] User ID:", user.id, "Email:", user.email)
 
     // Save to unified_test_results
     const { data: testData, error: testError } = await supabase
@@ -51,38 +54,51 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update a1_progress to increment tests_completed
-    const { data: progressData, error: progressError } = await supabase
+    console.log("[v0] Test results saved successfully:", testData)
+
+    // Get or create a1_progress record
+    const { data: progressData, error: fetchError } = await supabase
       .from("a1_progress")
       .select("*")
       .eq("user_id", user.id)
       .single()
 
-    if (progressError && progressError.code !== "PGRST116") {
-      console.error("[v0] Error fetching progress:", progressError)
-    }
+    console.log("[v0] Fetched progress data:", progressData, "Error:", fetchError)
 
-    const currentTests = progressData?.tests_completed || 0
+    // If no progress record exists, create one. Otherwise, increment tests_completed
+    const testsCompleted = (progressData?.tests_completed || 0) + 1
 
-    const { error: updateError } = await supabase
+    const { data: updatedProgress, error: updateError } = await supabase
       .from("a1_progress")
       .upsert({
         user_id: user.id,
-        tests_completed: currentTests + 1,
+        tests_completed: testsCompleted,
         cerebral_completed: true,
         last_updated: new Date().toISOString(),
+      }, {
+        onConflict: "user_id"
       })
+      .select()
 
     if (updateError) {
       console.error("[v0] Error updating progress:", updateError)
-      // Don't fail the entire request, test results are saved
+    } else {
+      console.log("[v0] Progress updated successfully:", updatedProgress)
     }
 
-    console.log("[v0] Test results saved successfully")
+    // Verify the update was applied
+    const { data: verifyProgress } = await supabase
+      .from("a1_progress")
+      .select("*")
+      .eq("user_id", user.id)
+      .single()
+
+    console.log("[v0] Verified progress after update:", verifyProgress)
 
     return NextResponse.json({
       success: true,
       data: testData,
+      progress: updatedProgress,
     })
   } catch (error) {
     console.error("[v0] API error:", error)
