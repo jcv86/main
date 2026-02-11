@@ -57,7 +57,19 @@ export function TestResultsSection() {
   }
 
   if (!results) {
-    return null
+    return (
+      <Card className="border-dashed shadow-md">
+        <CardHeader>
+          <CardTitle className="text-base">Completa tu Evaluación</CardTitle>
+          <CardDescription>Descubre tu perfil respondiendo el test de personalidad</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Aún no has completado tu evaluación de personalidad. Hazlo ahora para descubrir tu perfil y obtener recomendaciones personalizadas de libros.
+          </p>
+        </CardContent>
+      </Card>
+    )
   }
 
   const { test_results } = results

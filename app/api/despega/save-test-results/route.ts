@@ -51,32 +51,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update user profile to mark onboarding as complete
-    const { error: profileError } = await supabase
-      .from("despega_user_profiles")
-      .upsert(
-        {
-          user_id: user.id,
-          camino_persona_active: caminoPersona,
-          camino_profesional_active: caminoProfesional,
-          camino_foco:
-            caminoPersona && caminoProfesional
-              ? "ambos"
-              : caminoPersona
-                ? "persona"
-                : "profesional",
-          onboarding_completed: true,
-          disc_profile: dominantProfile,
-          disc_secondary: secondaryProfile,
-          a1_test_completed: true,
-          a1_test_completed_at: new Date().toISOString(),
-        },
-        { onConflict: "user_id" }
-      )
-
-    if (profileError) {
-      console.error("[v0] Error updating profile:", profileError)
-    }
+    console.log("[v0] Test results saved successfully")
 
     return NextResponse.json({
       success: true,
