@@ -221,31 +221,6 @@ export function DashboardContent() {
     </div>
   )
 }
-  name: string
-  email: string
-  completedTests: number
-  totalTests: number
-  level: string
-  points: number
-}
-
-interface ActiveGoal {
-  id: string
-  name: string
-  type: "personal" | "laboral" | "mixto"
-  progress: number
-  dueDate: string
-  origin: string
-}
-
-interface BookInProgress {
-  id: string
-  title: string
-  author: string
-  progress: number
-  lastRead: string
-  cover?: string
-}
 
 interface SimulationHistory {
   id: string
