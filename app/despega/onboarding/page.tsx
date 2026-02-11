@@ -8,30 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
 import { DiscResultsPage } from "@/components/disc-results-page"
-
-// Test questions for personality assessment
-const TEST_QUESTIONS = [
-  {
-    id: 1,
-    pregunta: "Cuando enfrento un desafío importante, soy más:",
-    opciones: [
-      { texto: "Decidido y directo", dimension: "D" as const },
-      { texto: "Optimista e inspirador", dimension: "I" as const },
-      { texto: "Estable y considerado", dimension: "S" as const },
-      { texto: "Analítico y preciso", dimension: "C" as const },
-    ],
-  },
-  {
-    id: 2,
-    pregunta: "Mi energía típica durante el día es:",
-    opciones: [
-      { texto: "Impulsivo y acelerado", dimension: "D" as const },
-      { texto: "Entusiasta y sociable", dimension: "I" as const },
-      { texto: "Sereno y consistente", dimension: "S" as const },
-      { texto: "Enfocado y meticuloso", dimension: "C" as const },
-    ],
-  },
-]
+import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
 
 type Step = "intro" | "camino" | "test" | "results"
 
@@ -63,11 +40,11 @@ export default function DespegaOnboarding() {
     getUser()
   }, [supabase])
 
-  const question = TEST_QUESTIONS[currentQuestion]
-  const progress = ((currentQuestion + 1) / TEST_QUESTIONS.length) * 100
+  const question = DISC_TEST_QUESTIONS[currentQuestion]
+  const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
 
   const handleNext = () => {
-    if (currentQuestion < TEST_QUESTIONS.length - 1) {
+    if (currentQuestion < DISC_TEST_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
       calculateResults()
@@ -80,7 +57,7 @@ export default function DespegaOnboarding() {
     // Calculate scores based on assessment
     const scores = { D: 0, I: 0, S: 0, C: 0 }
 
-    TEST_QUESTIONS.forEach((q) => {
+    DISC_TEST_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
       if (response?.mas) scores[response.mas] += 2
       if (response?.menos) scores[response.menos] -= 1
@@ -219,7 +196,7 @@ export default function DespegaOnboarding() {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Pregunta {currentQuestion + 1} de {TEST_QUESTIONS.length}</span>
+                  <span>Pregunta {currentQuestion + 1} de {DISC_TEST_QUESTIONS.length}</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
                 <Progress value={progress} />
@@ -322,7 +299,7 @@ export default function DespegaOnboarding() {
                 disabled={!bothSelected}
                 className="flex-1"
               >
-                {currentQuestion === TEST_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
+                {currentQuestion === DISC_TEST_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
               </Button>
             </div>
           </CardContent>
