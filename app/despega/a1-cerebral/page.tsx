@@ -8,48 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
-import { UnifiedTestSystem } from "@/lib/unified-test-system"
 import { useToast } from "@/hooks/use-toast"
-import { CompetencyRadarChart } from "@/components/competency-radar-chart"
+import { ArrowLeft, ArrowRight } from "lucide-react"
+import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
+import { DiscResultsPage } from "@/components/disc-results-page"
 
-// ALL 28 QUESTIONS - Varied scoring weights to prevent 100% on perfect answers
-const A1_QUESTIONS = [
-  { id: 1, area: "energia", type: "scale", text: "¿Cuántas horas duermes por noche?", min: 4, max: 10, minLabel: "4 horas", maxLabel: "10 horas" },
-  { id: 2, area: "energia", type: "multiple", text: "¿Cómo describes tu energía general durante el día?", options: ["Muy baja", "Baja", "Normal", "Buena", "Excelente"], weights: [0.1, 0.3, 0.5, 0.8, 1.0] },
-  { id: 3, area: "energia", type: "multiple", text: "¿Con qué frecuencia haces ejercicio?", options: ["Nunca", "1-2 veces/semana", "3-4 veces/semana", "5-6 veces/semana", "Diariamente"], weights: [0.0, 0.4, 0.7, 0.85, 0.95] },
-  { id: 4, area: "energia", type: "scale", text: "¿Qué tan consistente es tu rutina de sueño?", min: 1, max: 10, minLabel: "Inconsistente", maxLabel: "Consistente" },
-  { id: 5, area: "energia", type: "scale", text: "¿Cuánta hidratación diaria tienes?", min: 0, max: 10, minLabel: "Casi nada", maxLabel: "10+ vasos" },
-  { id: 6, area: "energia", type: "multiple", text: "¿Cómo manejas el estrés y la presión?", options: ["Me abruma fácilmente", "Me cuesta gestionar", "Lo llevo bien", "Gestiono bien el estrés", "Prospero bajo presión"], weights: [0.1, 0.3, 0.55, 0.8, 0.95] },
-  { id: 7, area: "energia", type: "scale", text: "¿Cuántos momentos de descanso activo tomas diariamente?", min: 0, max: 5, minLabel: "Ninguno", maxLabel: "5+ momentos" },
-  
-  { id: 8, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo puedes concentrarte profundamente?", options: ["< 15 min", "15-30 min", "30-60 min", "1-2 horas", "> 2 horas"], weights: [0.2, 0.4, 0.65, 0.85, 0.98] },
-  { id: 9, area: "enfoque", type: "multiple", text: "¿Con qué frecuencia revisas notificaciones?", options: ["Constantemente", "Cada 5-10 min", "Cada 15-30 min", "Ocasionalmente", "Casi nunca"], weights: [1.0, 0.8, 0.6, 0.3, 0.1] },
-  { id: 10, area: "enfoque", type: "scale", text: "¿Cuántas tareas principales completas al día?", min: 1, max: 10, minLabel: "1 tarea", maxLabel: "10+ tareas" },
-  { id: 11, area: "enfoque", type: "scale", text: "¿Qué tan claro tienes tu plan diario?", min: 1, max: 10, minLabel: "Confuso", maxLabel: "Muy claro" },
-  { id: 12, area: "enfoque", type: "multiple", text: "¿Cuánto tiempo pierdes en tareas no prioritarias?", options: ["> 50%", "30-50%", "20-30%", "10-20%", "< 10%"], weights: [1.0, 0.75, 0.5, 0.25, 0.05] },
-  { id: 13, area: "enfoque", type: "multiple", text: "¿Qué importancia tiene la calidad en tu trabajo?", options: ["Me importa terminar rápido", "Busco equilibrio", "Calidad importante", "Alta calidad en todo", "Excelencia no negociable"], weights: [0.1, 0.35, 0.6, 0.8, 0.95] },
-  { id: 14, area: "enfoque", type: "scale", text: "¿Con qué frecuencia revisas tu sistema de organización?", min: 0, max: 7, minLabel: "Nunca", maxLabel: "Diariamente" },
-  
-  { id: 15, area: "relaciones", type: "multiple", text: "¿Con qué frecuencia contactas amigos/colegas?", options: ["Casi nunca", "Mensual", "Quincenal", "Semanal", "Varias veces/semana"], weights: [0.15, 0.35, 0.55, 0.8, 0.95] },
-  { id: 16, area: "relaciones", type: "scale", text: "¿Cómo describes tu escucha activa?", min: 1, max: 10, minLabel: "Pienso en mi respuesta", maxLabel: "Escucho realmente" },
-  { id: 17, area: "relaciones", type: "multiple", text: "¿Cuántas relaciones profesionales significativas?", options: ["Ninguna", "1-3", "4-8", "9-15", "> 15"], weights: [0.1, 0.35, 0.6, 0.8, 0.9] },
-  { id: 18, area: "relaciones", type: "scale", text: "¿Facilidad para expresar gratitud?", min: 1, max: 10, minLabel: "Me cuesta", maxLabel: "Facilidad" },
-  { id: 19, area: "relaciones", type: "scale", text: "¿Comodidad pidiendo ayuda?", min: 1, max: 10, minLabel: "Incómodo", maxLabel: "Cómodo" },
-  { id: 20, area: "relaciones", type: "multiple", text: "¿Cómo es tu capacidad de influencia sobre otros?", options: ["Me cuesta influir", "Puedo influir en ciertos contextos", "Capacidad moderada", "Puedo persuadir claramente", "Inspiro y motivo con facilidad"], weights: [0.1, 0.3, 0.55, 0.8, 0.95] },
-  { id: 21, area: "relaciones", type: "scale", text: "¿Qué tan presente estás en conversaciones?", min: 1, max: 10, minLabel: "Distante", maxLabel: "Completamente presente" },
-  
-  { id: 22, area: "plan_ejecutivo", type: "scale", text: "¿Claridad sobre tus metas principales?", min: 1, max: 10, minLabel: "Confuso", maxLabel: "Cristal claro" },
-  { id: 23, area: "plan_ejecutivo", type: "multiple", text: "¿Con qué frecuencia planificas tu semana?", options: ["Nunca", "Ocasionalmente", "Semanalmente", "2x/semana", "Diariamente"], weights: [0.05, 0.25, 0.6, 0.8, 0.95] },
-  { id: 24, area: "plan_ejecutivo", type: "scale", text: "¿Decisiones importantes por semana?", min: 0, max: 20, minLabel: "Ninguna", maxLabel: "Muchas" },
-  { id: 25, area: "plan_ejecutivo", type: "multiple", text: "¿Qué tan bien ejecutas lo que planificas?", options: ["Muy mal", "Mal", "Regular", "Bien", "Excelente"], weights: [0.05, 0.25, 0.5, 0.75, 0.92] },
-  { id: 26, area: "plan_ejecutivo", type: "multiple", text: "¿Tienes un ritual matutino?", options: ["No", "Irregular", "Sí (5-10 min)", "Sí (10-30 min)", "Sí (30+ min)"], weights: [0.1, 0.3, 0.55, 0.8, 0.98] },
-  { id: 27, area: "plan_ejecutivo", type: "multiple", text: "Ante decisiones difíciles, ¿cómo actúas?", options: ["Evito decidir", "Me cuesta tomar decisiones", "Decido con análisis", "Decido firmemente", "Decido rápido y resolutivo"], weights: [0.05, 0.25, 0.55, 0.8, 0.95] },
-  { id: 28, area: "plan_ejecutivo", type: "scale", text: "¿Cómo es tu seguimiento de objetivos?", min: 1, max: 10, minLabel: "Bajo, pierdo el hilo", maxLabel: "Excelente, siempre enfocado" },
-]
+// Using 28 DISC questions from library
+const A1_QUESTIONS = DISC_TEST_QUESTIONS
 
 export default function A1CerebralPage() {
   const router = useRouter()
