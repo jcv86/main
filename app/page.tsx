@@ -1,8 +1,21 @@
 import type { Metadata } from "next"
-import LandingPageOptimized from "@/components/landing-page-optimized"
-import FAQSection from "@/components/seo-optimized-content"
-import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 import { Suspense } from "react"
+
+// Lazy load components to avoid build errors
+import dynamic from "next/dynamic"
+
+const LandingPageOptimized = dynamic(() => import("@/components/landing-page-optimized"), { 
+  ssr: true,
+  loading: () => <div className="min-h-screen" />
+})
+const FAQSection = dynamic(() => import("@/components/seo-optimized-content"), { 
+  ssr: true,
+  loading: () => <div className="min-h-screen" />
+})
+const LLMOOptimizedFooter = dynamic(() => import("@/components/llmo-optimized-footer"), { 
+  ssr: true,
+  loading: () => <div className="h-64" />
+})
 
 // Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {

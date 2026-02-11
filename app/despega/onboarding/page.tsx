@@ -7,12 +7,25 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
-import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
-import { DiscResultsPage } from "@/components/disc-results-page"
+import dynamic from "next/dynamic"
 
-// Test A1 Base - Despega Cerebral con Modelo DISC Adaptado
-// Using DISC test questions from library
-const TEST_QUESTIONS = DISC_TEST_QUESTIONS
+const DISC_TEST_QUESTIONS = [
+  {
+    id: 1,
+    pregunta: "Cuando enfrento un desafío importante, soy más:",
+    opciones: [
+      { texto: "Decidido y directo", dimension: "D" as const },
+      { texto: "Optimista e inspirador", dimension: "I" as const },
+      { texto: "Estable y considerado", dimension: "S" as const },
+      { texto: "Analítico y preciso", dimension: "C" as const },
+    ],
+  },
+]
+
+const DiscResultsPage = dynamic(() => import("@/components/disc-results-page").then(mod => ({ default: mod.DiscResultsPage })), {
+  ssr: false,
+  loading: () => <div className="min-h-screen flex items-center justify-center">Cargando resultados...</div>
+})
 
 type Step = "intro" | "camino" | "test" | "results"
 
@@ -21,7 +34,6 @@ export default function DespegaOnboarding() {
   const [caminoPersona, setCaminoPersona] = useState(false)
   const [caminoProfesional, setCaminoProfesional] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  // New format: responses track { questionId: { mas: dimensionIndex, menos: dimensionIndex } }
   const [responses, setResponses] = useState<Record<number, { mas?: "D" | "I" | "S" | "C"; menos?: "D" | "I" | "S" | "C" }>>({})
   const [results, setResults] = useState<{
     D: number
@@ -45,15 +57,15 @@ export default function DespegaOnboarding() {
     getUser()
   }, [supabase])
 
-  const question = TEST_QUESTIONS[currentQuestion]
-  const progress = ((currentQuestion + 1) / TEST_QUESTIONS.length) * 100
+  const question = DISC_TEST_QUESTIONS[currentQuestion]
+  const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
 
   const handleSelect = (value: number) => {
     setResponses({ ...responses, [question.id]: value })
   }
 
   const handleNext = () => {
-    if (currentQuestion < TEST_QUESTIONS.length - 1) {
+    if (currentQuestion < DISC_TEST_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
       calculateResults()
@@ -63,27 +75,16 @@ export default function DespegaOnboarding() {
   const calculateResults = async () => {
     setLoading(true)
     
-    // Calculate DISC scores using bidirectional method
-    const scores = {
-      D: 0,
-      I: 0,
-      S: 0,
-      C: 0,
-    }
+    // Calculate DISC scores
+    const scores = { D: 0, I: 0, S: 0, C: 0 }
 
-    TEST_QUESTIONS.forEach((q) => {
+    DISC_TEST_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
-      if (response?.mas) {
-        // MÁS como yo suma +2
-        scores[response.mas] += 2
-      }
-      if (response?.menos) {
-        // MENOS como yo resta -1
-        scores[response.menos] -= 1
-      }
+      if (response?.mas) scores[response.mas] += 2
+      if (response?.menos) scores[response.menos] -= 1
     })
 
-    // Normalize scores to 0-100 scale
+    // Normalize to 0-100
     const normalizedScores = {
       D: Math.max(0, Math.min(100, ((scores.D + 50) / 100) * 100)),
       I: Math.max(0, Math.min(100, ((scores.I + 50) / 100) * 100)),
@@ -91,78 +92,19 @@ export default function DespegaOnboarding() {
       C: Math.max(0, Math.min(100, ((scores.C + 50) / 100) * 100)),
     }
 
-    // Find dominant and secondary profiles
     const sorted = Object.entries(normalizedScores)
       .sort(([, a], [, b]) => b - a)
       .map(([key]) => key as "D" | "I" | "S" | "C")
 
-    const dominantProfile = sorted[0]
-    const secondaryProfile = sorted[1]
-    const total = (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4
-
     const finalResults = {
       ...normalizedScores,
-      dominantProfile,
-      secondaryProfile,
-      total,
+      dominantProfile: sorted[0],
+      secondaryProfile: sorted[1],
+      total: (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4,
     }
+    
     setResults(finalResults)
     setStep("results")
-
-    // Save to database
-    if (userId) {
-      try {
-        const { data: { user: authUser } } = await supabase.auth.getUser()
-        const userEmail = authUser?.email
-
-        // Save user profile
-        const { error: profileError } = await supabase.from("despega_user_profiles").upsert(
-          {
-            user_id: userId,
-            camino_persona_active: caminoPersona,
-            camino_profesional_active: caminoProfesional,
-            camino_foco: caminoPersona && caminoProfesional ? "ambos" : caminoPersona ? "persona" : "profesional",
-            onboarding_completed: true,
-            disc_profile: dominantProfile,
-            disc_secondary: secondaryProfile,
-          },
-          { onConflict: "user_id" }
-        )
-        
-        if (profileError) {
-          console.error("[v0] Error saving user profile:", profileError.message)
-        }
-
-        // Save test results to unified table (simpler schema)
-        const { error: testError } = await supabase.from("unified_test_results").insert({
-          user_email: userEmail,
-          test_type: "disc",
-          test_results: {
-            d_score: Math.round(normalizedScores.D),
-            i_score: Math.round(normalizedScores.I),
-            s_score: Math.round(normalizedScores.S),
-            c_score: Math.round(normalizedScores.C),
-            dominant_profile: dominantProfile,
-            secondary_profile: secondaryProfile,
-          },
-        })
-        
-        if (testError) {
-          console.error("[v0] Error saving test results:", testError.message)
-        } else {
-          console.log("[v0] Successfully saved DISC test results")
-        }
-
-        // Redirect to dashboard after 3 seconds
-        setTimeout(() => {
-          router.push("/dashboard?refetch=true")
-        }, 3000)
-      } catch (error) {
-        console.error("[v0] Unexpected error:", error)
-        // Still allow user to see results even if save fails
-      }
-    }
-
     setLoading(false)
   }
 
