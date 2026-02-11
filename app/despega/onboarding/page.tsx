@@ -137,119 +137,247 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 2: Instrucciones
+  // STEP 2: Instrucciones Detalladas
   if (step === "instructions") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="text-center space-y-2 mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
-              Cómo Funciona Este Test
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+        <div className="max-w-5xl mx-auto space-y-8 pb-8">
+          {/* Hero Section */}
+          <div className="text-center space-y-3 py-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+              Descubre Tu Perfil DISC
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-lg">
-              Tu viaje de autoconocimiento en 3 minutos
+            <p className="text-xl text-slate-600 dark:text-slate-400">
+              Entiende cómo actúas, cómo interactúas, y cómo impulsar tu mejor versión
             </p>
+            <div className="flex justify-center gap-3 text-sm text-slate-600 dark:text-slate-400 pt-2">
+              <span>⏱️ 3 minutos</span>
+              <span>•</span>
+              <span>📊 Resultados inmediatos</span>
+              <span>•</span>
+              <span>🎯 100% Preciso</span>
+            </div>
           </div>
 
-          {/* Section 1: Sin respuestas correctas */}
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-300 dark:border-blue-700 shadow-lg overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex gap-4">
-                <div className="text-4xl">✓</div>
-                <div className="space-y-2 flex-1">
-                  <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100">Sin Respuestas Correctas</h3>
-                  <p className="text-blue-800 dark:text-blue-200">
-                    No hay buenas ni malas respuestas. Tu honestidad es lo único que importa. Responde según cómo REALMENTE eres, no como crees que deberías ser.
-                  </p>
-                </div>
-              </div>
+          {/* What is DISC */}
+          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+            <CardContent className="pt-8">
+              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-50">¿Qué es el Modelo DISC?</h2>
+              <p className="text-slate-700 dark:text-slate-300 mb-4 text-lg leading-relaxed">
+                DISC es una teoría psicológica de personalidad que describe <strong>cómo actúas naturalmente</strong> en diferentes situaciones. Es como una brújula que te ayuda a entender tu estilo único de comunicación, trabajo y relaciones.
+              </p>
+              <p className="text-slate-600 dark:text-slate-400 mb-4">
+                DISC son 4 letras que representan los 4 estilos de personalidad principales. La mayoría de personas tienen un estilo dominante, pero todos tenemos un poco de cada uno en diferentes contextos.
+              </p>
+              <p className="text-slate-600 dark:text-slate-400">
+                <strong>Importante:</strong> No hay perfil mejor o peor. Cada estilo tiene fortalezas únicas y valiosas. El objetivo es entenderte para maximizar tu potencial.
+              </p>
             </CardContent>
           </Card>
 
-          {/* Section 2: Responde rápidamente */}
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-300 dark:border-green-700 shadow-lg overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex gap-4">
-                <div className="text-4xl">⚡</div>
-                <div className="space-y-2 flex-1">
-                  <h3 className="text-xl font-bold text-green-900 dark:text-green-100">Responde Rápidamente</h3>
-                  <p className="text-green-800 dark:text-green-200">
-                    Para cada pregunta: elige la opción que MÁS te describe y la que MENOS te describe. Tu primer instinto suele ser el más preciso.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 3: Las 4 Dimensiones DISC */}
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 border-purple-300 dark:border-purple-700 shadow-lg overflow-hidden">
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex gap-4">
-                <div className="text-4xl">🧠</div>
-                <div>
-                  <h3 className="text-xl font-bold text-purple-900 dark:text-purple-100">Tu Perfil DISC en 4 Dimensiones</h3>
-                  <p className="text-sm text-purple-800 dark:text-purple-200 mt-1">
-                    Cada dimensión representa un estilo de personalidad único. Todos tenemos un poco de cada uno.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                {/* D */}
-                <div className="p-4 bg-red-100 dark:bg-red-900/40 rounded-lg border-2 border-red-400 dark:border-red-600">
-                  <div className="text-3xl mb-2">⚡</div>
-                  <p className="font-bold text-red-900 dark:text-red-100 mb-1">D - Dominancia</p>
-                  <p className="text-xs text-red-800 dark:text-red-200">Decisión, resultados, liderazgo</p>
-                </div>
-
-                {/* I */}
-                <div className="p-4 bg-yellow-100 dark:bg-yellow-900/40 rounded-lg border-2 border-yellow-400 dark:border-yellow-600">
-                  <div className="text-3xl mb-2">🌟</div>
-                  <p className="font-bold text-yellow-900 dark:text-yellow-100 mb-1">I - Influencia</p>
-                  <p className="text-xs text-yellow-800 dark:text-yellow-200">Entusiasmo, conexión, persuasión</p>
-                </div>
-
-                {/* S */}
-                <div className="p-4 bg-green-100 dark:bg-green-900/40 rounded-lg border-2 border-green-400 dark:border-green-600">
-                  <div className="text-3xl mb-2">🛡️</div>
-                  <p className="font-bold text-green-900 dark:text-green-100 mb-1">S - Estabilidad</p>
-                  <p className="text-xs text-green-800 dark:text-green-200">Paciencia, apoyo, consistencia</p>
-                </div>
-
-                {/* C */}
-                <div className="p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border-2 border-blue-400 dark:border-blue-600">
-                  <div className="text-3xl mb-2">🔍</div>
-                  <p className="font-bold text-blue-900 dark:text-blue-100 mb-1">C - Cumplimiento</p>
-                  <p className="text-xs text-blue-800 dark:text-blue-200">Precisión, análisis, calidad</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Section 4: Qué Obtendrás */}
-          <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-950 dark:to-indigo-900 border-indigo-300 dark:border-indigo-700 shadow-lg overflow-hidden">
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex gap-4">
-                <div className="text-4xl">🎁</div>
-                <div className="space-y-2 flex-1">
-                  <h3 className="text-xl font-bold text-indigo-900 dark:text-indigo-100">Qué Obtendrás</h3>
-                  <div className="grid md:grid-cols-2 gap-2 mt-3">
-                    <div className="p-3 bg-indigo-200/50 dark:bg-indigo-800/50 rounded border-l-4 border-indigo-600">
-                      <p className="font-semibold text-indigo-900 dark:text-indigo-100">Tu Perfil Único</p>
-                      <p className="text-xs text-indigo-800 dark:text-indigo-200">Descubre cómo eres naturalmente</p>
+          {/* The 4 Dimensions */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Los 4 Estilos DISC</h2>
+            
+            {/* D - Dominance */}
+            <Card className="border-l-8 border-l-red-500 shadow-lg overflow-hidden">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="md:col-span-1">
+                    <div className="text-6xl mb-3">⚡</div>
+                    <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">D</h3>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">DOMINANCIA</p>
+                    <div className="w-8 h-1 bg-red-500 rounded mt-2"></div>
+                  </div>
+                  <div className="md:col-span-3 space-y-3">
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Uso Activo de Fuerza</p>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        Los D superan resistencias en el ambiente mediante acción directa y decisiva.
+                      </p>
                     </div>
-                    <div className="p-3 bg-indigo-200/50 dark:bg-indigo-800/50 rounded border-l-4 border-indigo-600">
-                      <p className="font-semibold text-indigo-900 dark:text-indigo-100">Tus Fortalezas</p>
-                      <p className="text-xs text-indigo-800 dark:text-indigo-200">Qué haces mejor que nadie</p>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Orientados a resultados, toman decisiones rápidamente, lideran con confianza, van directo al punto</p>
+                      </div>
+                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
+                      </div>
+                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Motivación Laboral</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Control, poder, resultados tangibles, desafíos, ambientes dinámicos</p>
+                      </div>
+                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Preferencias</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Liderazgo, emprendimiento, cambio, competencia, autonomía</p>
+                      </div>
                     </div>
-                    <div className="p-3 bg-indigo-200/50 dark:bg-indigo-800/50 rounded border-l-4 border-indigo-600">
-                      <p className="font-semibold text-indigo-900 dark:text-indigo-100">Áreas de Crecimiento</p>
-                      <p className="text-xs text-indigo-800 dark:text-indigo-200">Dónde desarrollarte más</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* I - Influence */}
+            <Card className="border-l-8 border-l-yellow-500 shadow-lg overflow-hidden">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="md:col-span-1">
+                    <div className="text-6xl mb-3">🌟</div>
+                    <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">I</h3>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">INFLUENCIA</p>
+                    <div className="w-8 h-1 bg-yellow-500 rounded mt-2"></div>
+                  </div>
+                  <div className="md:col-span-3 space-y-3">
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Uso de Encanto</p>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        Los I superan obstáculos mediante carisma, persuasión y conexión con otras personas.
+                      </p>
                     </div>
-                    <div className="p-3 bg-indigo-200/50 dark:bg-indigo-800/50 rounded border-l-4 border-indigo-600">
-                      <p className="font-semibold text-indigo-900 dark:text-indigo-100">Plan Personalizado</p>
-                      <p className="text-xs text-indigo-800 dark:text-indigo-200">Próximos pasos claros</p>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Entusiastas, carismáticos, conectan fácilmente, optimistas, amantes de atención</p>
+                      </div>
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Comunicación, entusiasmo, carisma, persuasión, energía positiva, empatía</p>
+                      </div>
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Motivación Laboral</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Reconocimiento, actividad social, diversión, visibilidad, colaboración</p>
+                      </div>
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Preferencias</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Ventas, presentaciones, networking, trabajo en equipo, creatividad</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* S - Steadiness */}
+            <Card className="border-l-8 border-l-green-500 shadow-lg overflow-hidden">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="md:col-span-1">
+                    <div className="text-6xl mb-3">🛡️</div>
+                    <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">S</h3>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">ESTABILIDAD</p>
+                    <div className="w-8 h-1 bg-green-500 rounded mt-2"></div>
+                  </div>
+                  <div className="md:col-span-3 space-y-3">
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Aceptación Voluntaria</p>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        Los S aceptan voluntariamente los requisitos, con paciencia, apoyo y consistencia.
+                      </p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Confiables, pacientes, colaborativos, apoyan a otros, crean armonía, evitan conflictos</p>
+                      </div>
+                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
+                      </div>
+                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Motivación Laboral</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
+                      </div>
+                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Preferencias</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Roles de apoyo, servicio al cliente, coaching, ambientes estables</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* C - Conscientiousness */}
+            <Card className="border-l-8 border-l-blue-500 shadow-lg overflow-hidden">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="md:col-span-1">
+                    <div className="text-6xl mb-3">🔍</div>
+                    <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">C</h3>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">CUMPLIMIENTO</p>
+                    <div className="w-8 h-1 bg-blue-500 rounded mt-2"></div>
+                  </div>
+                  <div className="md:col-span-3 space-y-3">
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Adaptación Cautelosa</p>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        Los C se adaptan cautelosamente, con precisión, análisis y enfoque en calidad.
+                      </p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, les importa detalle, datos y corrección</p>
+                      </div>
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
+                      </div>
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Motivación Laboral</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, datos, trabajo bien hecho, estándares altos, competencia técnica</p>
+                      </div>
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Preferencias</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Roles técnicos, análisis, investigación, procesos claros, documentación</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Key Points */}
+          <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
+            <CardContent className="pt-8">
+              <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Puntos Clave Importantes</h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="text-2xl min-w-fit">✓</div>
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100">Sin respuestas correctas</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="text-2xl min-w-fit">✓</div>
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100">Honestidad total</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Responde como REALMENTE eres, no como crees que deberías ser.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="text-2xl min-w-fit">✓</div>
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100">Primer instinto</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="text-2xl min-w-fit">✓</div>
+                    <div>
+                      <p className="font-semibold text-slate-900 dark:text-slate-100">Estilo flexible</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Adaptamos nuestro estilo según el contexto y las personas.</p>
                     </div>
                   </div>
                 </div>
@@ -257,28 +385,50 @@ export default function DespegaOnboarding() {
             </CardContent>
           </Card>
 
-          {/* Section 5: After Test */}
-          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border-orange-300 dark:border-orange-700 shadow-lg overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex gap-4">
-                <div className="text-4xl">📚</div>
-                <div className="space-y-2 flex-1">
-                  <h3 className="text-xl font-bold text-orange-900 dark:text-orange-100">Después del Test</h3>
-                  <p className="text-orange-800 dark:text-orange-200">
-                    Recibirás libros recomendados personalizados, un análisis profundo de tu perfil, y un plan de acción adaptado a tu estilo único.
-                  </p>
+          {/* What You'll Get */}
+          <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 border-2 border-emerald-300 dark:border-emerald-700 shadow-lg">
+            <CardContent className="pt-8">
+              <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Qué Obtendrás de Este Test</h2>
+              <div className="space-y-4">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+                  <div className="text-3xl min-w-fit">📊</div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">Tu Perfil Personalizado</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
+                  <div className="text-3xl min-w-fit">🎯</div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">Insights Accionables</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+                  <div className="text-3xl min-w-fit">📚</div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">Libros Recomendados</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
+                  <div className="text-3xl min-w-fit">🚀</div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">Plan de Acción</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Pasos claros y concretos para tu transición profesional y personal</p>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* CTA */}
-          <div className="space-y-4 pt-4">
-            <Button onClick={() => setStep("camino")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
-              Entendido, Comenzar Mi Test
+          <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent dark:from-slate-900 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
+            <Button onClick={() => setStep("camino")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
+              Entiendo, Comenzar Mi Test
             </Button>
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-              ⏱️ Tiempo estimado: 3 minutos | 100% Honestidad = 100% Precisión
+              Este test toma ~3 minutos. Responde con honestidad para resultados precisos.
             </p>
           </div>
         </div>
