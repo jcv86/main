@@ -28,20 +28,15 @@ export default function DespegaOnboarding() {
     total: number
   } | null>(null)
   const [loading, setLoading] = useState(false)
-  const [userId, setUserId] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) setUserId(user.id)
-    }
-    getUser()
-  }, [supabase])
-
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
+  const currentResponse = responses[question?.id] || {}
+  const selectedMas = currentResponse.mas
+  const selectedMenos = currentResponse.menos
+  const bothSelected = selectedMas && selectedMenos
 
   const handleNext = () => {
     if (currentQuestion < DISC_TEST_QUESTIONS.length - 1) {
@@ -54,7 +49,6 @@ export default function DespegaOnboarding() {
   const calculateResults = async () => {
     setLoading(true)
     
-    // Calculate raw scores from responses
     const scores = { D: 0, I: 0, S: 0, C: 0 }
 
     DISC_TEST_QUESTIONS.forEach((q) => {
@@ -63,9 +57,6 @@ export default function DespegaOnboarding() {
       if (response?.menos) scores[response.menos] -= 1
     })
 
-    console.log("[v0] Raw scores:", scores)
-
-    // Normalize to 0-100 scale
     const normalizedScores = {
       D: Math.max(0, Math.min(100, Math.round((scores.D + 56) / 1.12))),
       I: Math.max(0, Math.min(100, Math.round((scores.I + 56) / 1.12))),
@@ -73,9 +64,6 @@ export default function DespegaOnboarding() {
       C: Math.max(0, Math.min(100, Math.round((scores.C + 56) / 1.12))),
     }
 
-    console.log("[v0] Normalized scores:", normalizedScores)
-
-    // Find dominant and secondary profiles
     const sorted = Object.entries(normalizedScores)
       .sort(([, a], [, b]) => b - a)
       .map(([key]) => key as "D" | "I" | "S" | "C")
@@ -87,12 +75,9 @@ export default function DespegaOnboarding() {
       total: (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4,
     }
     
-    console.log("[v0] Final results:", finalResults)
-    
     setResults(finalResults)
     setStep("results")
 
-    // Save to database
     try {
       const response = await fetch("/api/despega/save-test-results", {
         method: "POST",
@@ -107,21 +92,9 @@ export default function DespegaOnboarding() {
       })
 
       if (response.ok) {
-        console.log("[v0] Test results saved successfully")
-        
-        // Invalidate cache
-        try {
-          await fetch("/api/despega/invalidate-cache", { method: "POST" })
-        } catch (cacheError) {
-          console.error("[v0] Error invalidating cache:", cacheError)
-        }
-        
-        // Redirect after 2 seconds
         setTimeout(() => {
           router.push("/dashboard?refetch=true")
         }, 2000)
-      } else {
-        console.error("[v0] Failed to save test results")
       }
     } catch (error) {
       console.error("[v0] Error saving test results:", error)
@@ -130,18 +103,106 @@ export default function DespegaOnboarding() {
     setLoading(false)
   }
 
-  const question = DISC_TEST_QUESTIONS[currentQuestion]
-    const bothSelected = selectedMas && selectedMenos
+  // STEP 1: Intro
+  if (step === "intro") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Bienvenido a Despega Cerebral</CardTitle>
+            <CardDescription className="text-lg mt-2">
+              Descubre tu perfil de personalidad y comienza tu viaje de transformación personal y profesional.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-foreground">
+                Este test te ayudará a revelarte tu perfil de personalidad y potencial de desarrollo a través de una evaluación personalizada.
+              </p>
+            </div>
 
+            <Button onClick={() => setStep("camino")} className="w-full" size="lg">
+              Comenzar Mi Transición
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // STEP 2: Selector de Camino
+  if (step === "camino") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Elige Tu Camino</CardTitle>
+            <CardDescription>
+              Selecciona los aspectos de tu vida en los que deseas crecer.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div 
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  caminoPersona ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                }`}
+                onClick={() => setCaminoPersona(!caminoPersona)}
+              >
+                <div className="flex items-start gap-3">
+                  <Checkbox checked={caminoPersona} />
+                  <div>
+                    <h3 className="font-semibold text-lg">Transición Personal</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Autoconocimiento, hábitos y relaciones significativas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  caminoProfesional ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                }`}
+                onClick={() => setCaminoProfesional(!caminoProfesional)}
+              >
+                <div className="flex items-start gap-3">
+                  <Checkbox checked={caminoProfesional} />
+                  <div>
+                    <h3 className="font-semibold text-lg">Transición Profesional</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Carrera, enfoque y excelencia profesional.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => setStep("test")} 
+              className="w-full" 
+              size="lg"
+              disabled={!caminoPersona && !caminoProfesional}
+            >
+              Continuar al Test
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // STEP 3: Test
+  if (step === "test") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-3xl">
           <CardHeader>
             <div className="space-y-4">
               <div>
-                <CardTitle>Tu Perfil DISC</CardTitle>
+                <CardTitle>Tu Perfil de Personalidad</CardTitle>
                 <CardDescription>
-                  Elige la opción que MÁS te describe y la que MENOS te describe
+                  Elige la opción que MÁS te describes y la que MENOS te describe
                 </CardDescription>
               </div>
               <div className="space-y-2">
@@ -154,7 +215,7 @@ export default function DespegaOnboarding() {
             </div>
           </CardHeader>
           <CardContent className="space-y-8">
-            <h3 className="text-lg font-semibold text-center">{question.pregunta}</h3>
+            <h3 className="text-lg font-semibold text-center">{question?.pregunta}</h3>
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* MÁS COMO YO */}
@@ -163,7 +224,7 @@ export default function DespegaOnboarding() {
                   ✓ MÁS como yo
                 </h4>
                 <div className="space-y-2">
-                  {question.opciones.map((option) => (
+                  {question?.opciones.map((option) => (
                     <div
                       key={option.texto}
                       onClick={() =>
@@ -201,7 +262,7 @@ export default function DespegaOnboarding() {
                   ✗ MENOS como yo
                 </h4>
                 <div className="space-y-2">
-                  {question.opciones.map((option) => (
+                  {question?.opciones.map((option) => (
                     <div
                       key={option.texto}
                       onClick={() =>
@@ -246,7 +307,7 @@ export default function DespegaOnboarding() {
               )}
               <Button 
                 onClick={handleNext}
-                disabled={!bothSelected}
+                disabled={!bothSelected || loading}
                 className="flex-1"
               >
                 {currentQuestion === DISC_TEST_QUESTIONS.length - 1 ? "Ver Resultados" : "Siguiente"}
@@ -269,12 +330,11 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // Fallback
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle>Procesando...</CardTitle>
+          <CardTitle>Cargando...</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">Por favor, espera.</p>
