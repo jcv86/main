@@ -457,21 +457,6 @@ export default function DespegaOnboarding() {
   )
 }
 
-  // Fallback - shouldn't reach here
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Procesando...</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Por favor, espera mientras procesamos tus respuestas.</p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
                 data={[
                   {
                     name: "Energía",
