@@ -110,29 +110,127 @@ export default function DespegaOnboarding() {
     setLoading(false)
   }
 
-  // STEP 1: Intro
+  // STEP 1: Intro - Despega Cerebral
   if (step === "intro") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Bienvenido a Despega Cerebral</CardTitle>
-            <CardDescription className="text-lg mt-2">
-              Descubre tu perfil de personalidad y comienza tu viaje de transformación personal y profesional.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <p className="text-sm text-foreground">
-                Este test te ayudará a revelarte tu perfil de personalidad y potencial de desarrollo a través de una evaluación personalizada.
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+        <div className="max-w-3xl mx-auto py-12 space-y-8">
+          {/* Hero Section */}
+          <div className="text-center space-y-4">
+            <div className="space-y-2">
+              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
+                Despega Cerebral
+              </h1>
+              <p className="text-xl text-slate-600 dark:text-slate-400">
+                Tu punto de partida en DespegaTuCarrera
               </p>
             </div>
+          </div>
 
-            <Button onClick={() => setStep("instructions")} className="w-full" size="lg">
-              Comenzar Mi Transición
+          {/* Main Content */}
+          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+            <CardContent className="pt-8 space-y-6">
+              <div className="space-y-4">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                  Antes de hablar de metas, decisiones o próximos pasos, necesitamos entender algo más profundo: <strong>tu patrón natural de acción</strong>.
+                </p>
+                
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Todos tenemos una forma particular de movernos frente a desafíos, cambios, presión y oportunidades. No es una etiqueta. No es una caja. <strong>Es un patrón.</strong>
+                </p>
+
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 my-4">
+                  <p className="text-slate-700 dark:text-slate-300">
+                    En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-slate-600 dark:text-slate-400">
+                    ✓ No hay respuestas correctas o incorrectas.
+                  </p>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    ✓ No hay perfiles mejores que otros.
+                  </p>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    ✓ Existen distintos patrones naturales de acción.
+                  </p>
+                </div>
+
+                <p className="text-slate-700 dark:text-slate-300 italic pt-2">
+                  En unos minutos descubrirás cuál describe mejor tu forma de moverte en el mundo.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Why Start Here Section */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+              <CardContent className="pt-8">
+                <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 mb-3">¿Qué es Despega Cerebral?</h3>
+                <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                  Es la base de tu recorrido dentro de DespegaTuCarrera. Se inspira en marcos conductuales ampliamente estudiados, pero no busca encasillarte.
+                </p>
+                <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed mt-3">
+                  Su objetivo es identificar tendencias de comportamiento que influyen en cómo tomas decisiones, enfrentas conflictos, lideras o colaboras.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900">
+              <CardContent className="pt-8">
+                <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-3">¿Por qué empezar por aquí?</h3>
+                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed font-semibold">
+                  Porque sin autoconocimiento, cualquier meta es aleatoria.
+                </p>
+                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed mt-3">
+                  DespegaTuCarrera no parte por decirte qué hacer. Parte por ayudarte a entender cómo funcionas.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Key Instructions */}
+          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+            <CardHeader>
+              <CardTitle className="text-2xl">Indicaciones antes de comenzar</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex gap-4">
+                <div className="text-2xl min-w-fit">1️⃣</div>
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-slate-100">Responde con honestidad total</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-2xl min-w-fit">2️⃣</div>
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-slate-100">Tu primer impulso es el más preciso</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-2xl min-w-fit">3️⃣</div>
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-slate-100">Este es tu punto de partida</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Primero claridad. Luego dirección.</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* CTA */}
+          <div className="space-y-3">
+            <Button onClick={() => setStep("instructions")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
+              Cuando estés listo, comienza
             </Button>
-          </CardContent>
-        </Card>
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+              ⏱️ Tiempo estimado: 3 minutos
+            </p>
+          </div>
+        </div>
       </div>
     )
   }
