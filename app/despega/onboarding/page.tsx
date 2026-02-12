@@ -319,7 +319,7 @@ export default function DespegaOnboarding() {
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, detallistasles, orientados a datos</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
                       </div>
                       <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Fortalezas</p>
@@ -341,12 +341,7 @@ export default function DespegaOnboarding() {
           </div>
 
           {/* Key Points */}
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Confiables, pacientes, colaborativos, apoyan a otros, crean armonía, evitan conflictos</p>
-                      </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
+          <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
                       </div>
                       <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
                         <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Motivación Laboral</p>
