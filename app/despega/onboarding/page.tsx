@@ -549,72 +549,58 @@ export default function DespegaOnboarding() {
             <CardContent className="pt-8 space-y-6">
               <div className="space-y-4">
                 <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                  Despega Cerebral es el primer paso, y también el más importante. A partir de aquí, tu recorrido dentro de DespegaTuCarrera se ajustará a tu forma natural de actuar.
+                  Despega Cerebral es el primer paso <strong>y la base de todo lo que viene después</strong>.
                 </p>
 
                 <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                  <p className="text-slate-700 dark:text-slate-300">
-                    <strong>Las rutas que explores, las metas que trabajes y el contexto que analices no serán genéricos: se adaptarán a tu patrón.</strong>
+                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Una vez entiendas tu patrón, exploraremos juntos <strong>"Tu Dirección Clara"</strong>: no solo qué hacer, sino cómo avanzar según tu forma natural.
                   </p>
                 </div>
 
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Primero entendemos cómo funcionas. Luego construimos sobre eso.
+                  Primero entendemos cómo funcionas. Luego construimos tu camino sobre eso.
                 </p>
               </div>
 
-              {/* Visual representation of the personalization */}
-              <div className="grid md:grid-cols-3 gap-4 mt-8">
-                <div className="p-4 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="font-semibold text-red-900 dark:text-red-100 mb-2">Entendimiento</p>
-                  <p className="text-sm text-red-800 dark:text-red-200">Descubrimos tu patrón único</p>
+              {/* Three pillars of direction clarity */}
+              <div className="space-y-3 pt-4">
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  "Tu Dirección Clara" incluye:
+                </p>
+                <div className="space-y-2">
+                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="font-medium text-blue-900 dark:text-blue-100 text-sm mb-1">Tu Dirección Más Natural</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">El camino que mejor se alinea con cómo actúas</p>
+                  </div>
+                  <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                    <p className="font-medium text-emerald-900 dark:text-emerald-100 text-sm mb-1">Posibles Direcciones Alineadas</p>
+                    <p className="text-sm text-emerald-800 dark:text-emerald-200">Alternativas viables según tu perfil</p>
+                  </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="font-medium text-amber-900 dark:text-amber-100 text-sm mb-1">Tu Forma de Avanzar con Claridad</p>
+                    <p className="text-sm text-amber-800 dark:text-amber-200">Los pasos específicos para tu transición</p>
+                  </div>
                 </div>
-                <div className="flex items-center justify-center">
-                  <div className="text-2xl text-slate-400 dark:text-slate-600">→</div>
-                </div>
-                <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                  <p className="font-semibold text-emerald-900 dark:text-emerald-100 mb-2">Personalización</p>
-                  <p className="text-sm text-emerald-800 dark:text-emerald-200">Adaptamos todo a ti</p>
-                </div>
+              </div>
+
+              {/* Why clarity matters */}
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 mt-4">
+                <p className="text-sm font-semibold text-red-900 dark:text-red-100 mb-2">Por qué esto importa</p>
+                <p className="text-sm text-red-800 dark:text-red-200">
+                  Si alguien recibe un resultado y no siente "dirección clara", puede generar fricción. Por eso conectamos patrón + dirección + forma de avanzar.
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Key Benefits */}
-          <div className="space-y-3">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Lo que descubrirás</h2>
-            <div className="space-y-2">
-              <div className="flex gap-3 p-3 bg-white dark:bg-slate-800 rounded-lg shadow">
-                <span className="text-2xl min-w-fit">🧭</span>
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Tu Dirección Clara</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Qué rol, carrera o transición se alinea mejor contigo</p>
-                </div>
-              </div>
-              <div className="flex gap-3 p-3 bg-white dark:bg-slate-800 rounded-lg shadow">
-                <span className="text-2xl min-w-fit">🎯</span>
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Tu Plan Personalizado</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Metas y pasos concretos según tu perfil</p>
-                </div>
-              </div>
-              <div className="flex gap-3 p-3 bg-white dark:bg-slate-800 rounded-lg shadow">
-                <span className="text-2xl min-w-fit">📚</span>
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Recursos Adaptados</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Libros, métodos y herramientas para ti</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* CTA */}
           <div className="space-y-3 pt-4">
             <Button onClick={() => setStep("camino")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
-              Estoy Listo, Veamos Mi Patrón
+              Veamos Mi Patrón y Mi Dirección
             </Button>
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-              El test dura ~3 minutos. Responde con honestidad total.
+              El test dura ~3 minutos. Responde con total honestidad.
             </p>
           </div>
         </div>
