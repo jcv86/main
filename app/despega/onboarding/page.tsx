@@ -342,64 +342,6 @@ export default function DespegaOnboarding() {
 
           {/* Key Points */}
           <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
-                      </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Motivación Laboral</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
-                      </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Preferencias</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Roles de apoyo, servicio al cliente, coaching, ambientes estables</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* C - Conscientiousness */}
-            <Card className="border-l-8 border-l-blue-500 shadow-lg overflow-hidden">
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-4 gap-6">
-                  <div className="md:col-span-1">
-                    <div className="text-6xl mb-3">🔍</div>
-                    <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">C</h3>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">CUMPLIMIENTO</p>
-                    <div className="w-8 h-1 bg-blue-500 rounded mt-2"></div>
-                  </div>
-                  <div className="md:col-span-3 space-y-3">
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Adaptación Cautelosa</p>
-                      <p className="text-slate-700 dark:text-slate-300">
-                        Los C se adaptan cautelosamente, con precisión, análisis y enfoque en calidad.
-                      </p>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, les importa detalle, datos y corrección</p>
-                      </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
-                      </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Motivación Laboral</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, datos, trabajo bien hecho, estándares altos, competencia técnica</p>
-                      </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Preferencias</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Roles técnicos, análisis, investigación, procesos claros, documentación</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Key Points */}
-          <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Puntos Clave Importantes</h2>
               <div className="grid md:grid-cols-2 gap-6">
