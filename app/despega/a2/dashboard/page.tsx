@@ -85,32 +85,6 @@ export default function A2DashboardPage() {
       }
     }
 
-        if (missionData) {
-          setMission(missionData)
-
-          // Load stats
-          const { data: actionsData } = await supabase
-            .from("a2_user_daily_actions")
-            .select("*")
-            .eq("user_id", user.id)
-            .eq("mission_id", profileData.a2_mission_id)
-
-          if (actionsData) {
-            const completed = actionsData.filter(a => a.completed).length
-            setStats({
-              actionsCompleted: completed,
-              streak: Math.floor(Math.random() * 7) + 1, // Simulated
-              totalActions: 25, // Simulated total
-              successRate: Math.round((completed / 25) * 100),
-              sprintProgress: Math.round((completed / 25) * 100),
-            })
-          }
-        }
-      }
-
-      setLoading(false)
-    }
-
     loadData()
   }, [supabase, router])
 

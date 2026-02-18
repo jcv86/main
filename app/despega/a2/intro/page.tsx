@@ -150,13 +150,6 @@ export default function A2IntroPage() {
     </div>
   )
 }
-      }
-
-      setLoading(false)
-    }
-
-    loadData()
-  }, [supabase, router])
 
   if (loading) {
     return (
