@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase-server"
 
 export const runtime = "nodejs"
 
@@ -24,56 +23,39 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category") || "business"
     const limit = parseInt(searchParams.get("limit") || "10")
 
-    const supabase = await createClient()
-
-    // Verificar si hay cache válido (menos de 4 horas)
-    const { data: cachedNews } = await supabase
-      .from("despega_news_cache")
-      .select("*")
-      .eq("category", category)
-      .gte("cached_at", new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString())
-      .order("published_at", { ascending: false })
-      .limit(limit)
-
-    if (cachedNews && cachedNews.length > 0) {
-      console.log(`[v0] Using cached news for category: ${category}`)
-      return NextResponse.json({
-        success: true,
-        source: "cache",
-        data: cachedNews,
-      })
-    }
-
-    // Si no hay cache, obtener de NewsAPI
+    // Si no hay API key, retornar error
     if (!NEWSAPI_KEY) {
-      console.error("[v0] NEWSAPI_KEY not configured - cannot fetch news")
+      console.error("[v0] NEWSAPI_KEY not configured")
       return NextResponse.json(
         { error: "NewsAPI key not configured" },
         { status: 500 }
       )
     }
 
-    console.log(`[v0] Fetching fresh news from NewsAPI for category: ${category}`)
-
+    // Seleccionar query aleatoria para variedad
     const query = SEARCH_QUERIES[Math.floor(Math.random() * SEARCH_QUERIES.length)]
-    const newsApiUrl = new URL(NEWSAPI_ENDPOINT)
-    newsApiUrl.searchParams.append("q", query)
-    newsApiUrl.searchParams.append("sortBy", "publishedAt")
-    newsApiUrl.searchParams.append("language", "es")
-    newsApiUrl.searchParams.append("pageSize", String(limit * 2))
-    newsApiUrl.searchParams.append("apiKey", NEWSAPI_KEY)
 
-    const response = await fetch(newsApiUrl.toString())
+    console.log(`[v0] Fetching news for query: ${query}`)
 
-    if (!response.ok) {
-      console.error(`[v0] NewsAPI error: ${response.status} ${response.statusText}`)
+    // Llamar a NewsAPI
+    const newsResponse = await fetch(
+      `${NEWSAPI_ENDPOINT}?q=${encodeURIComponent(query)}&language=es&sortBy=publishedAt&pageSize=${limit}`,
+      {
+        headers: {
+          "X-API-Key": NEWSAPI_KEY,
+        },
+      }
+    )
+
+    if (!newsResponse.ok) {
+      console.error(`[v0] NewsAPI returned ${newsResponse.status}`)
       return NextResponse.json(
-        { error: `NewsAPI returned ${response.status}` },
-        { status: response.status }
+        { error: `NewsAPI error: ${newsResponse.status}` },
+        { status: newsResponse.status }
       )
     }
 
-    const newsData = await response.json()
+    const newsData = await newsResponse.json()
 
     if (!newsData.articles || newsData.articles.length === 0) {
       console.log("[v0] No articles found from NewsAPI")
@@ -84,35 +66,27 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Procesar y cachear artículos
-    const articlesToCache = newsData.articles.slice(0, limit).map((article: any) => ({
+    // Transformar artículos de NewsAPI
+    const formattedArticles = newsData.articles.map((article: any) => ({
+      id: article.url,
       title: article.title,
       description: article.description,
+      image_url: article.urlToImage,
       content: article.content,
       url: article.url,
-      image_url: article.urlToImage,
-      source: article.source.name,
+      source: article.source?.name || "NewsAPI",
       author: article.author,
       published_at: article.publishedAt,
-      category: category,
-      relevance_score: calculateRelevance(article, category),
+      category,
+      relevance_score: 75,
     }))
 
-    // Guardar en cache
-    const { error: insertError } = await supabase
-      .from("despega_news_cache")
-      .insert(articlesToCache)
-
-    if (insertError) {
-      console.error(`[v0] Error caching news: ${insertError.message}`)
-    } else {
-      console.log(`[v0] Cached ${articlesToCache.length} articles`)
-    }
+    console.log(`[v0] Loaded ${formattedArticles.length} articles from NewsAPI`)
 
     return NextResponse.json({
       success: true,
       source: "newsapi",
-      data: articlesToCache,
+      data: formattedArticles,
     })
   } catch (error) {
     console.error("[v0] Error in news feed endpoint:", error)
@@ -121,45 +95,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-// Calcular score de relevancia basado en palabras clave
-function calculateRelevance(article: any, category: string): number {
-  const text = `${article.title} ${article.description}`.toLowerCase()
-  const keywords: Record<string, string[]> = {
-    business: [
-      "emprendedor",
-      "startup",
-      "negocio",
-      "empresa",
-      "inversión",
-      "mercado",
-    ],
-    technology: [
-      "ia",
-      "tech",
-      "software",
-      "digital",
-      "innovación",
-      "algoritmo",
-    ],
-    career: [
-      "carrera",
-      "empleo",
-      "laboral",
-      "profesional",
-      "trabajo",
-      "contratación",
-    ],
-    leadership: ["liderazgo", "ceo", "ejecutivo", "director", "gerente"],
-  }
-
-  const relevantKeywords = keywords[category] || keywords.business
-  let score = 50
-
-  for (const keyword of relevantKeywords) {
-    if (text.includes(keyword)) score += 10
-  }
-
-  return Math.min(score, 100)
 }
