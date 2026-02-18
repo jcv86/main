@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { createServerClient } from "@/lib/supabase/server"
 
 export const runtime = "nodejs"
 
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category") || "business"
     const limit = parseInt(searchParams.get("limit") || "10")
 
-    const supabase = createClient()
+    const supabase = createServerClient()
 
     // Verificar si hay cache válido (menos de 4 horas)
     const { data: cachedNews } = await supabase
