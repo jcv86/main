@@ -2,6 +2,7 @@
 
 import { CoachProvider } from '@/contexts/coach-context'
 import { CoachSidebar } from '@/components/coach-sidebar'
+import { NewsTicker } from '@/components/news-ticker'
 
 export default function DespegaLayout({
   children,
@@ -11,6 +12,7 @@ export default function DespegaLayout({
   return (
     <CoachProvider>
       <div className="min-h-screen">
+        <NewsTicker />
         {children}
       </div>
       <CoachSidebar />
