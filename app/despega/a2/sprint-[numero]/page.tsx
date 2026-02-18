@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useCoach } from "@/contexts/coach-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -32,6 +33,7 @@ interface Sprint {
 export default function SprintViewerPage() {
   const params = useParams()
   const sprintNumber = parseInt(params.numero as string) || 1
+  const { updateProgress } = useCoach()
   
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
@@ -291,6 +293,8 @@ export default function SprintViewerPage() {
     // Persist to database
     const { data: { user } } = await supabase.auth.getUser()
     if (user && mission) {
+      console.log('[v0] Action completed, updating database and coach...')
+      
       await supabase
         .from("a2_user_daily_actions")
         .upsert({
@@ -299,6 +303,10 @@ export default function SprintViewerPage() {
           action_id: actionId,
           completed: !actions.find(a => a.id === actionId)?.completed
         })
+
+      // Update coach with new progress
+      console.log('[v0] Triggering coach update...')
+      await updateProgress()
     }
   }
 
