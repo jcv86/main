@@ -28,18 +28,58 @@ export default function A4NoticiasPage() {
   }, [searchQuery, news])
 
   const loadNews = async () => {
-    const { data } = await supabase
-      .from('biblioteca')
-      .select('*')
-      .eq('is_featured', true)
-      .order('created_at', { ascending: false })
-      .limit(30)
-
-    if (data) {
-      setNews(data)
-      setFilteredNews(data)
+    try {
+      console.log("[v0] Fetching news from NewsAPI endpoint")
+      
+      // Intentar obtener de nuestro endpoint que usa NewsAPI + cache
+      const response = await fetch(`/api/despega/a4-news-feed?category=business&limit=20`)
+      
+      if (!response.ok) {
+        console.error("[v0] Failed to fetch from NewsAPI endpoint, falling back to biblioteca")
+        // Fallback a biblioteca si NewsAPI falla
+        const { data } = await supabase
+          .from('biblioteca')
+          .select('*')
+          .eq('is_featured', true)
+          .order('created_at', { ascending: false })
+          .limit(30)
+        
+        if (data) {
+          setNews(data)
+          setFilteredNews(data)
+        }
+        setLoading(false)
+        return
+      }
+      
+      const result = await response.json()
+      
+      if (result.success && result.data) {
+        console.log(`[v0] Loaded ${result.data.length} news from ${result.source}`)
+        
+        // Transformar datos de NewsAPI al formato esperado
+        const formattedNews = result.data.map((article: any) => ({
+          id: article.url || article.id,
+          title: article.title,
+          description: article.description,
+          cover_url: article.image_url || article.urlToImage,
+          content: article.content,
+          url: article.url,
+          source: article.source || 'NewsAPI',
+          published_at: article.published_at,
+          category: article.category || 'business',
+          relevance_score: article.relevance_score || 50,
+        }))
+        
+        setNews(formattedNews)
+        setFilteredNews(formattedNews)
+      }
+      
+      setLoading(false)
+    } catch (error) {
+      console.error("[v0] Error loading news:", error)
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const filterNews = () => {
@@ -52,7 +92,8 @@ export default function A4NoticiasPage() {
     const filtered = news.filter(item =>
       item.title?.toLowerCase().includes(query) ||
       item.description?.toLowerCase().includes(query) ||
-      item.key_topics?.some((t: string) => t.toLowerCase().includes(query))
+      item.source?.toLowerCase().includes(query) ||
+      item.category?.toLowerCase().includes(query)
     )
     setFilteredNews(filtered)
   }
