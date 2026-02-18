@@ -20,7 +20,6 @@ import {
   Crown,
   Medal,
 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 
 interface Achievement {
   id: number

@@ -28,11 +28,7 @@ import {
   Globe,
   Lock,
   Send,
-  Target,
-  TrendingUp,
-  Award,
 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 
 interface BookClub {
   id: number
