@@ -44,6 +44,14 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    if (!supabase || !supabase.auth) {
+      console.error("[v0] Supabase client initialization failed")
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      )
+    }
+
     // Get authenticated user
     const {
       data: { user },
