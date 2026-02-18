@@ -1,0 +1,296 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { useCoach } from '@/contexts/coach-context'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight } from 'lucide-react'
+
+export default function A3Page() {
+  const [loading, setLoading] = useState(true)
+  const [userProfile, setUserProfile] = useState<any>(null)
+  const [a3Progress, setA3Progress] = useState<any>(null)
+  const router = useRouter()
+  const supabase = createClient()
+  const { progress } = useCoach()
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      // Load user profile
+      const { data: profile } = await supabase
+        .from('despega_user_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+
+      setUserProfile(profile)
+
+      // Load A3 progress if exists
+      const { data: a3Data } = await supabase
+        .from('despega_a3_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+
+      if (a3Data) {
+        setA3Progress(a3Data)
+      }
+    } catch (error) {
+      console.log('[v0] Error loading A3 data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Cargando entrenamientos...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <Badge className="bg-purple-600 hover:bg-purple-700">A3 - ENTRENAMIENTOS</Badge>
+            <Badge variant="outline">Fase Avanzada</Badge>
+          </div>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50">
+            A3: Entrenamientos Avanzados
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-400">
+            Simulaciones realistas, feedback en tiempo real, y entrenamientos para dominar cualquier escenario profesional.
+          </p>
+        </div>
+
+        {/* Hero Card */}
+        <Card className="border-0 bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Target className="w-6 h-6" />
+              Tu Jornada A3: De la Teoría a la Maestría
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-purple-100">
+              Has aprendido sobre ti (A1), construido nuevas acciones (A2), y expandido tu contexto (A4). Ahora es tiempo de ENTRENAR como lo harías en la vida real: con presión real, feedback real, y resultados reales.
+            </p>
+            <p className="text-purple-100">
+              A3 te pone en simulaciones progresivas donde practicas hasta la maestría.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card className="bg-white dark:bg-slate-800 shadow-md">
+            <CardContent className="pt-6">
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                {a3Progress?.sessions_completed || 0}
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Sesiones Completadas</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white dark:bg-slate-800 shadow-md">
+            <CardContent className="pt-6">
+              <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                {a3Progress?.employability_score || 'Calcular'}
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Score de Empleabilidad</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white dark:bg-slate-800 shadow-md">
+            <CardContent className="pt-6">
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                {a3Progress?.hours_trained || 0}h
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Horas Entrenadas</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white dark:bg-slate-800 shadow-md">
+            <CardContent className="pt-6">
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {a3Progress?.interviews_mastered || 0}
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Entrevistas Dominadas</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Training Options */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Diagnosis Card */}
+          <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-purple-600" />
+                Diagnosis de Empleabilidad
+              </CardTitle>
+              <CardDescription>
+                Evaluación inicial para calibrar tu nivel
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Cuestionario rápido que evalúa tu claridad de perfil, fortalezas, gaps, y nivel de preparación para entrenamientos.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ 5 preguntas clave</li>
+                <li>✓ Identifica gaps de habilidades</li>
+                <li>✓ Calibra dificultad de entrenamientos</li>
+              </ul>
+              <Link href="/despega/a3/diagnosis" className="block">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  Comenzar Diagnosis <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Interview Simulations Card */}
+          <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Video className="w-5 h-5 text-indigo-600" />
+                Simulaciones de Entrevista
+              </CardTitle>
+              <CardDescription>
+                4 tipos progresivos de entrenamientos
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                De lo básico a lo avanzado: guiada, estructurada, desafiante, y bajo presión máxima.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Feedback inmediato en video</li>
+                <li>✓ Análisis de comportamiento multimodal</li>
+                <li>✓ Preguntas adaptativas</li>
+              </ul>
+              <Link href="/despega/a3/simulations" className="block">
+                <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                  Ir a Simulaciones <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Behavioral Analysis Card */}
+          <Card className="border-2 border-blue-200 dark:border-blue-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-blue-600" />
+                Análisis Multimodal
+              </CardTitle>
+              <CardDescription>
+                Visual, voz, y lenguaje corporal
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Feedback detallado sobre postura, contacto visual, tono de voz, gestos, y coherencia emocional.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Detección de microexpresiones</li>
+                <li>✓ Análisis de confianza y coherencia</li>
+                <li>✓ Recomendaciones específicas</li>
+              </ul>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700" disabled>
+                Próximamente
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Progress & History Card */}
+          <Card className="border-2 border-green-200 dark:border-green-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-green-600" />
+                Mi Progreso
+              </CardTitle>
+              <CardDescription>
+                Historial y mejora en el tiempo
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Visualiza tu evolución a través de todas tus simulaciones y entrenamientos.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Comparación antes/después</li>
+                <li>✓ Habilidades mejoradas</li>
+                <li>✓ Certificados logrados</li>
+              </ul>
+              <Link href="/despega/a3/progress" className="block">
+                <Button className="w-full bg-green-600 hover:bg-green-700">
+                  Ver Progreso <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Coach Context Card */}
+        <Card className="border-0 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-purple-600" />
+              Tu Coach A3 en Cada Paso
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-slate-700 dark:text-slate-300">
+              Sofia y Dani acompañan cada entrenamiento. Pueden analizar tu video en tiempo real, explicar gaps, y sugerir ajustes específicos para mejorar.
+            </p>
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+                "Veo que tu tono es muy rápido al hablar. Intenta desacelerar en los puntos clave - da espacio para que la otra persona procese. Aquí está el video analizado..."
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tips */}
+        <Card className="border-0 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
+          <CardContent className="pt-6 flex gap-3">
+            <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
+            <div>
+              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo aprovechar A3</div>
+              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
+                <li>✓ Comienza con diagnosis para entender tu nivel actual</li>
+                <li>✓ Elige simulaciones según tu objetivo (básico → avanzado)</li>
+                <li>✓ Revisa feedback del coach después de cada sesión</li>
+                <li>✓ Repite el mismo tipo hasta dominar, luego sube dificultad</li>
+                <li>✓ Practica mínimo 3 veces por semana para avance real</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+  )
+}

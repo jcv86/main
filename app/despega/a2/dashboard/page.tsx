@@ -260,11 +260,31 @@ export default function A2DashboardPage() {
             </Button>
           </Link>
           <Link href="/despega/a2/coach">
-            <Button variant="outline" className="w-full h-14" size="lg" className="bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900">
+            <Button variant="outline" className="w-full h-14" size="lg">
               💬 Chat Coach
             </Button>
           </Link>
         </div>
+
+        {/* Transition to A3 Card */}
+        <Card className="border-2 border-purple-300 dark:border-purple-600 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              Próximo: A3 - Entrenamientos Avanzados
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-slate-700 dark:text-slate-300">
+              Una vez completes tu sprint 1, accede a A3 para entrenamientos avanzados con simulaciones de entrevistas y evaluaciones personalizadas.
+            </p>
+            <Link href="/despega/a3">
+              <Button className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600">
+                Ir a A3 - Entrenamientos <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
 
         {/* Info Box */}
         <Card className="border-0 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500">
