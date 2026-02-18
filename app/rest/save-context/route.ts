@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         a3: a3_data,
         a4: a4_data,
       }),
-      guardado_en: new Date().toISOString(),
+      // Note: Timestamps are auto-managed by Supabase (created_at, updated_at)
     }
 
     // Delete old context (keep only latest)
