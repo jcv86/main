@@ -12,7 +12,13 @@ export async function POST(request: NextRequest) {
       caminoProfesional,
     } = body
 
-    const supabase = createClient()
+    // Create server client
+    const supabase = await createClient()
+
+    if (!supabase) {
+      console.error("[v0] Failed to create Supabase client")
+      return NextResponse.json({ error: "Server error" }, { status: 500 })
+    }
 
     // Get authenticated user
     const {
