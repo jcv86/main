@@ -177,151 +177,150 @@ export default function DespegaHub() {
     : 0
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Dashboard Despega</h1>
-          <p className="text-muted-foreground mt-1">Tu centro de desarrollo integral</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        {/* Welcome Section */}
+        <div className="mb-12">
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white text-balance">
+              Tu Transformación de 90 Días Comienza Ahora
+            </h1>
+            <p className="text-xl text-slate-300 max-w-2xl">
+              Basado en tu evaluación inicial, aquí está tu ruta personalizada de desarrollo
+            </p>
+          </div>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{rankings?.score_general || 0}</div>
-                <div className="text-sm text-muted-foreground">Puntos Totales</div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold">#{rankings?.rank_general || "-"}</div>
-                <div className="text-sm text-muted-foreground">Ranking General</div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold">{Math.round(totalProgress)}%</div>
-                <div className="text-sm text-muted-foreground">Progreso Total</div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold capitalize">{a1Results?.nivel_detectado || "-"}</div>
-                <div className="text-sm text-muted-foreground">Tu Nivel</div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Caminos Activos */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Tus Caminos Activos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-3">
-              {profile?.camino_persona_active && (
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
-                  Camino Persona
-                </Badge>
-              )}
-              {profile?.camino_profesional_active && (
-                <Badge variant="secondary" className="bg-orange-100 text-orange-800 hover:bg-orange-200">
-                  Camino Profesional
-                </Badge>
-              )}
+        {/* Hero Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          {/* Puntos */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
+            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
+              <div className="text-sm text-slate-400 font-medium">PUNTOS TOTALES</div>
+              <div className="text-4xl font-bold text-white">{rankings?.score_general || 0}</div>
+              <div className="text-xs text-slate-400">Gana más completando tareas</div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Diagnóstico A1 Resumen */}
+          {/* Ranking */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
+            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
+              <div className="text-sm text-slate-400 font-medium">TU RANKING</div>
+              <div className="text-4xl font-bold text-white">#{rankings?.rank_general || "-"}</div>
+              <div className="text-xs text-slate-400">De todos los usuarios</div>
+            </div>
+          </div>
+
+          {/* Progreso */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
+            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
+              <div className="text-sm text-slate-400 font-medium">PROGRESO TOTAL</div>
+              <div className="text-4xl font-bold text-white">{Math.round(totalProgress)}%</div>
+              <div className="text-xs text-slate-400">De tu transformación</div>
+            </div>
+          </div>
+
+          {/* Nivel */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
+            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
+              <div className="text-sm text-slate-400 font-medium">TU NIVEL</div>
+              <div className="text-4xl font-bold text-white capitalize">{a1Results?.nivel_detectado || "-"}</div>
+              <div className="text-xs text-slate-400">Detectado en A1</div>
+            </div>
+          </div>
+        </div>
+
+        {/* A1 Diagnóstico */}
         {a1Results && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Tu Diagnóstico A1</CardTitle>
-              <CardDescription>Resultados de tu evaluación inicial</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Energía</span>
-                    <span className="font-medium">{a1Results.score_energia}%</span>
+          <div className="mb-12">
+            <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-white mb-2">Tu Perfil DISC</h2>
+              <p className="text-slate-400 mb-8">Estas son tus dimensiones clave de personalidad</p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                  { label: "Energía", value: a1Results.score_energia, color: "from-blue-500 to-cyan-500" },
+                  { label: "Enfoque", value: a1Results.score_enfoque, color: "from-purple-500 to-pink-500" },
+                  { label: "Relaciones", value: a1Results.score_relaciones, color: "from-green-500 to-emerald-500" },
+                  { label: "Plan Ejecutivo", value: a1Results.score_plan_ejecutivo, color: "from-orange-500 to-red-500" },
+                ].map((item, idx) => (
+                  <div key={idx} className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-slate-300">{item.label}</span>
+                      <span className={`text-xl font-bold bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}>
+                        {item.value}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className={`h-full bg-gradient-to-r ${item.color} transition-all duration-500`}
+                        style={{ width: `${item.value}%` }}
+                      />
+                    </div>
                   </div>
-                  <Progress value={a1Results.score_energia} className="h-2" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Enfoque</span>
-                    <span className="font-medium">{a1Results.score_enfoque}%</span>
-                  </div>
-                  <Progress value={a1Results.score_enfoque} className="h-2" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Relaciones</span>
-                    <span className="font-medium">{a1Results.score_relaciones}%</span>
-                  </div>
-                  <Progress value={a1Results.score_relaciones} className="h-2" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Plan Ejecutivo</span>
-                    <span className="font-medium">{a1Results.score_plan_ejecutivo}%</span>
-                  </div>
-                  <Progress value={a1Results.score_plan_ejecutivo} className="h-2" />
-                </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Los 4 Pilares */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Los 4 Pilares</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {PILARES.map((pilar) => {
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-white mb-6">Tu Ruta de 90 Días</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {PILARES.map((pilar, idx) => {
               const progress = getPilarProgress(pilar.id)
+              const colors = [
+                "from-blue-600 to-cyan-600",
+                "from-green-600 to-emerald-600",
+                "from-purple-600 to-pink-600",
+                "from-orange-600 to-red-600",
+              ]
+              const gradientBg = colors[idx % colors.length]
+
               return (
                 <Link key={pilar.id} href={pilar.href}>
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow h-full">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg ${pilar.lightColor} flex items-center justify-center text-xl`}>
-                            {pilar.icon}
+                  <div className="group cursor-pointer h-full">
+                    <div className={`absolute inset-0 bg-gradient-to-r ${gradientBg} rounded-xl opacity-0 group-hover:opacity-10 blur transition duration-300`} />
+                    <div className="relative bg-slate-800 border border-slate-700 rounded-xl p-8 hover:border-slate-600 transition h-full space-y-6">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-3 flex-1">
+                          <div className="flex items-center gap-3">
+                            <span className="text-4xl">{pilar.icon}</span>
+                            <div>
+                              <h3 className="text-xl font-bold text-white">{pilar.name}</h3>
+                              <p className="text-sm text-slate-400">{pilar.description}</p>
+                            </div>
                           </div>
-                          <div>
-                            <CardTitle className="text-lg">{pilar.name}</CardTitle>
-                            <CardDescription className="text-sm">{pilar.description}</CardDescription>
-                          </div>
-                        </div>
-                        <Badge variant="outline" className={`${pilar.lightColor} ${pilar.textColor} border-0`}>
-                          Ciclo {progress.ciclo_actual}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Día {progress.ciclo_dia} de {progress.ciclo_actual}</span>
-                          <span className="font-medium">{progress.progreso}%</span>
-                        </div>
-                        <Progress value={progress.progreso} className="h-2" />
-                        <div className="flex justify-between text-xs text-muted-foreground pt-1">
-                          <span>{progress.score} puntos</span>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-400">Día {progress.ciclo_dia} de {progress.ciclo_actual}</span>
+                          <span className={`text-lg font-bold bg-gradient-to-r ${gradientBg} bg-clip-text text-transparent`}>
+                            {progress.progreso}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
+                          <div 
+                            className={`h-full bg-gradient-to-r ${gradientBg} transition-all duration-500`}
+                            style={{ width: `${progress.progreso}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between items-center text-xs text-slate-400 pt-2">
+                          <span>⚡ {progress.score} puntos</span>
+                          <span className={`bg-gradient-to-r ${gradientBg} bg-clip-text text-transparent font-semibold`}>
+                            Ciclo {progress.ciclo_actual}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </Link>
               )
             })}
@@ -329,39 +328,61 @@ export default function DespegaHub() {
         </div>
 
         {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Acciones Rápidas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/a2/dashboard">
-                  <span className="text-2xl mb-1">🧭</span>
-                  <span className="text-sm">Mi Sprint</span>
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/rankings">
-                  <span className="text-2xl mb-1">🏆</span>
-                  <span className="text-sm">Rankings</span>
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/a4/noticias">
-                  <span className="text-2xl mb-1">📰</span>
-                  <span className="text-sm">Noticias</span>
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/a4/biblioteca">
-                  <span className="text-2xl mb-1">📚</span>
-                  <span className="text-sm">Biblioteca</span>
-                </Link>
-              </Button>
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Acciones Rápidas</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { href: "/despega/a2/dashboard", icon: "🧭", label: "Mi Sprint" },
+              { href: "/despega/rankings", icon: "🏆", label: "Rankings" },
+              { href: "/despega/a4/noticias", icon: "📰", label: "Noticias" },
+              { href: "/despega/a4/biblioteca", icon: "📚", label: "Biblioteca" },
+            ].map((action, idx) => (
+              <Link key={idx} href={action.href}>
+                <button className="w-full group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-700 to-slate-600 rounded-xl opacity-0 group-hover:opacity-100 blur transition duration-300" />
+                  <div className="relative bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2 group-hover:border-slate-600 transition">
+                    <div className="text-3xl">{action.icon}</div>
+                    <div className="text-sm font-medium text-white">{action.label}</div>
+                  </div>
+                </button>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Next Steps */}
+        {profile && (
+          <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Próximos Pasos</h2>
+            <div className="space-y-4">
+              {!profile.camino_persona_active && (
+                <div className="flex items-start gap-4 pb-4 border-b border-slate-700">
+                  <div className="text-2xl">1️⃣</div>
+                  <div>
+                    <h3 className="font-semibold text-white">Activa tu Camino Persona</h3>
+                    <p className="text-sm text-slate-400">Desarrolla tu propósito personal y claridad de vida</p>
+                  </div>
+                </div>
+              )}
+              {!profile.camino_profesional_active && (
+                <div className="flex items-start gap-4 pb-4 border-b border-slate-700">
+                  <div className="text-2xl">2️⃣</div>
+                  <div>
+                    <h3 className="font-semibold text-white">Activa tu Camino Profesional</h3>
+                    <p className="text-sm text-slate-400">Transforma tu carrera en los próximos 90 días</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-start gap-4">
+                <div className="text-2xl">🎯</div>
+                <div>
+                  <h3 className="font-semibold text-white">Completa tus Sprints</h3>
+                  <p className="text-sm text-slate-400">Cada día, una pequeña acción. 90 días, una transformación</p>
+                </div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        )}
       </div>
     </div>
   )
