@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useCoach } from "@/contexts/coach-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { ArrowLeft, Newspaper, BookOpen, Bookmark } from "lucide-react"
+import { ArrowLeft, Newspaper, BookOpen, Bookmark, Zap, Trophy, TrendingUp } from "lucide-react"
 import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
 
@@ -16,12 +17,46 @@ export default function A4Page() {
   const [newsItems, setNewsItems] = useState<any[]>([])
   const [modules, setModules] = useState<any[]>([])
   const [savedResources, setSavedResources] = useState<Set<string>>(new Set())
-  const [activeTab, setActiveTab] = useState("noticias")
+  const [activeTab, setActiveTab] = useState("dashboard")
+  const [userStats, setUserStats] = useState({
+    pointsEarned: 0,
+    testsCompleted: 0,
+    resourcesUsed: 0,
+    streak: 0,
+    badges: [],
+  })
+  const { progress } = useCoach()
   const supabase = createClient()
 
   useEffect(() => {
     loadData()
+    loadUserStats()
   }, [])
+
+  const loadUserStats = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // Load user's A4 progress stats
+      const { data: stats } = await supabase
+        .from("despega_pilar_progress")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("pilar", "a4")
+        .single()
+
+      if (stats) {
+        setUserStats(prev => ({
+          ...prev,
+          pointsEarned: stats.score || 0,
+          streak: stats.ciclo_dia || 0,
+        }))
+      }
+    } catch (error) {
+      console.log("[v0] Error loading user stats:", error)
+    }
+  }
 
   const loadData = async () => {
     // Load news
@@ -126,26 +161,160 @@ export default function A4Page() {
           </Card>
         </div>
 
-        {/* Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="noticias">
-              <Newspaper className="w-4 h-4 mr-2" />
-              Noticias
-            </TabsTrigger>
-            <TabsTrigger value="modulos">
-              <BookOpen className="w-4 h-4 mr-2" />
-              Módulos
-            </TabsTrigger>
-            <TabsTrigger value="coaching">
-              <span className="mr-2">🎯</span>
-              Coaching
-            </TabsTrigger>
-            <TabsTrigger value="plan">
-              <span className="mr-2">📋</span>
-              Tu Plan
-            </TabsTrigger>
-          </TabsList>
+        {/* Enhanced Tab Triggers */}
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="noticias" className="flex items-center gap-2">
+            <Newspaper className="w-4 h-4" />
+            Noticias
+          </TabsTrigger>
+          <TabsTrigger value="modulos" className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4" />
+            Módulos
+          </TabsTrigger>
+          <TabsTrigger value="biblioteca" className="flex items-center gap-2">
+            <Bookmark className="w-4 h-4" />
+            Biblioteca
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Dashboard Tab */}
+        <TabsContent value="dashboard" className="space-y-6">
+          {/* Advanced Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Puntos Acumulados</p>
+                    <div className="text-3xl font-bold">{userStats.pointsEarned}</div>
+                  </div>
+                  <Zap className="w-8 h-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Tests Completados</p>
+                    <div className="text-3xl font-bold">{userStats.testsCompleted}</div>
+                  </div>
+                  <Trophy className="w-8 h-8 text-purple-600" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Recursos Usados</p>
+                    <div className="text-3xl font-bold">{userStats.resourcesUsed}</div>
+                  </div>
+                  <BookOpen className="w-8 h-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Racha Actual</p>
+                    <div className="text-3xl font-bold">{userStats.streak} días</div>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-orange-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Welcome Card */}
+          <Card className="border-2 border-cyan-200 bg-gradient-to-r from-cyan-50 via-blue-50 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">🌍</span>
+                Bienvenido a A4: Tu Identidad en Acción
+              </CardTitle>
+              <CardDescription>
+                Aquí te conectas con la realidad del mercado, aprendes contexto profesional y vives tu transformación
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm">A4 es donde tu nueva identidad cobra vida. Explora noticias relevantes, completa tests de contexto, accede a recursos curados y aprende de tu coach IA.</p>
+              <div className="flex flex-wrap gap-2">
+                <Badge>Noticias en Tiempo Real</Badge>
+                <Badge>Tests Gamificados</Badge>
+                <Badge>Biblioteca Curada</Badge>
+                <Badge>Coach IA Contextual</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Newspaper className="w-5 h-5" />
+                  Últimas Noticias
+                </CardTitle>
+                <CardDescription>Contexto del mercado que importa</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Lee noticias relevantes al mercado y completa preguntas reflexivas para ganar puntos.</p>
+                <Button className="w-full">Ir a Noticias</Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <BookOpen className="w-5 h-5" />
+                  Módulos de Aprendizaje
+                </CardTitle>
+                <CardDescription>Habilidades para tu nueva identidad</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Aprende sobre mercado, negociación, liderazgo y más con módulos interactivos.</p>
+                <Button className="w-full">Explorar Módulos</Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Bookmark className="w-5 h-5" />
+                  Biblioteca Curada
+                </CardTitle>
+                <CardDescription>Recursos de calidad verificada</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Accede a artículos, libros, podcasts y videos recomendados para tu contexto.</p>
+                <Button className="w-full">Ver Biblioteca</Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Trophy className="w-5 h-5" />
+                  Mis Logros
+                </CardTitle>
+                <CardDescription>Badges y reconocimientos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">{userStats.badges.length} badges desbloqueados. Sigue aprendiendo para ganar más.</p>
+                <Button className="w-full">Ver Logros</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
           <TabsContent value="noticias" className="space-y-6">
             <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
