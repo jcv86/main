@@ -1,5 +1,6 @@
-import { createClient } from "@supabase/supabase-js"
+import { createServerClient } from "@supabase/ssr"
 import { NextRequest, NextResponse } from "next/server"
+import { cookies } from "next/headers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,13 +25,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create server client directly
-    const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-    if (!supabase) {
-      console.error("[v0] Failed to create Supabase client")
-      return NextResponse.json({ error: "Server error" }, { status: 500 })
-    }
+    // Create server client with cookies
+    const cookieStore = await cookies()
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // Handle error
+          }
+        },
+      },
+    })
 
     // Get authenticated user
     const {
