@@ -248,15 +248,20 @@ export default function A2DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           <Link href="/despega/a2/sprint-1">
             <Button className="w-full h-14" size="lg">
-              Continuar con Sprint 1 <ArrowRight className="ml-2 w-4 h-4" />
+              Continuar Sprint <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
           <Link href="/despega/a2/bitacora">
             <Button variant="outline" className="w-full h-14" size="lg">
-              📖 Ir a tu Bitácora
+              📖 Bitácora
+            </Button>
+          </Link>
+          <Link href="/despega/a2/coach">
+            <Button variant="outline" className="w-full h-14" size="lg" className="bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900">
+              💬 Chat Coach
             </Button>
           </Link>
         </div>

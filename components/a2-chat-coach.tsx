@@ -26,9 +26,16 @@ export function A2ChatCoach({
   const [mounted, setMounted] = useState(false)
   const supabase = createClient()
 
+  const scrollToBottom = () => {
+    const messagesContainer = document.querySelector('[data-messages-container]')
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight
+    }
+  }
+
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    scrollToBottom()
+  }, [messages])
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -91,104 +98,116 @@ export function A2ChatCoach({
   if (!mounted) return null
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <Card className="border-l-4 border-l-amber-500">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-amber-600" />
-            A2 – Profundización Cognitiva
-          </CardTitle>
-          <CardDescription>
-            Exploramos matices y contextos del patrón identificado sin etiquetar
-          </CardDescription>
-        </CardHeader>
+    <div className="w-full flex flex-col h-full">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <MessageCircle className="w-5 h-5 text-blue-600" />
+          Profundización Cognitiva
+        </CardTitle>
+        <CardDescription>
+          Explora variaciones, contextos y tensiones sin etiquetarnos
+        </CardDescription>
+      </CardHeader>
 
-        <CardContent className="space-y-4">
-          {/* Context Summary */}
-          <div className="bg-amber-50 p-3 rounded-lg text-sm space-y-2">
-            <div className="font-medium text-amber-900">Patrón de A1:</div>
-            <div className="text-amber-800">{a1Pattern}</div>
-
-            {variantContexts.length > 0 && (
-              <>
-                <div className="font-medium text-amber-900 mt-2">Contextos explorables:</div>
-                <div className="flex flex-wrap gap-1">
-                  {variantContexts.map((context, i) => (
-                    <Badge key={i} variant="outline" className="bg-white">
-                      {context}
-                    </Badge>
-                  ))}
-                </div>
-              </>
-            )}
+      <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden">
+        {/* Context Summary */}
+        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg space-y-3 border border-blue-200 dark:border-blue-800">
+          <div className="font-medium text-blue-900 dark:text-blue-100 flex items-center gap-2">
+            <MessageCircle className="w-4 h-4" />
+            Tu Patrón en A1
           </div>
+          <div className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">{a1Pattern}</div>
 
-          {/* Messages */}
-          <div className="space-y-3 max-h-96 overflow-y-auto bg-slate-50 p-3 rounded-lg">
-            {messages.length === 0 ? (
-              <div className="text-center text-muted-foreground text-sm py-6">
-                Pregunta sobre variaciones, contextos o tensiones del patrón
+          {variantContexts.length > 0 && (
+            <div className="pt-2 border-t border-blue-200 dark:border-blue-800 space-y-2">
+              <div className="font-medium text-blue-900 dark:text-blue-100 text-sm">Contextos a explorar:</div>
+              <div className="flex flex-wrap gap-2">
+                {variantContexts.map((context, i) => (
+                  <Badge key={i} variant="secondary" className="bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
+                    {context}
+                  </Badge>
+                ))}
               </div>
-            ) : (
-              messages.map((msg, i) => (
+            </div>
+          )}
+        </div>
+
+        {/* Messages Container */}
+        <div 
+          data-messages-container
+          className="flex-1 space-y-3 overflow-y-auto bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800"
+        >
+          {messages.length === 0 ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center text-slate-600 dark:text-slate-400 text-sm space-y-2">
+                <MessageCircle className="w-8 h-8 text-slate-400 mx-auto opacity-50" />
+                <p>Inicia con una pregunta sobre variaciones o contextos de tu patrón</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-xs p-3 rounded-lg text-sm ${
+                    className={`max-w-sm px-4 py-3 rounded-xl text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-slate-900 border border-slate-200"
+                        ? "bg-blue-600 dark:bg-blue-700 text-white rounded-br-none"
+                        : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 border border-slate-200 dark:border-slate-700 rounded-bl-none"
                     }`}
                   >
                     <div>{msg.content}</div>
                     {msg.type && (
-                      <div className="text-xs mt-1 opacity-60">
-                        [{msg.type}]
+                      <div className={`text-xs mt-1 opacity-70 ${msg.role === "coach" ? "text-blue-600 dark:text-blue-400" : "text-blue-100"}`}>
+                        {msg.type}
                       </div>
                     )}
                   </div>
                 </div>
-              ))
-            )}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="bg-white text-slate-900 border border-slate-200 p-3 rounded-lg">
-                  <Loader className="w-4 h-4 animate-spin" />
+              ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 border border-slate-200 dark:border-slate-700 px-4 py-3 rounded-xl rounded-bl-none">
+                    <div className="flex gap-2 items-center">
+                      <Loader className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400" />
+                      <span className="text-sm">El Coach reflexiona...</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </>
+          )}
+        </div>
 
-          {/* Coherence Warning */}
-          <Alert className="bg-amber-50 border-amber-200">
-            <AlertCircle className="w-4 h-4 text-amber-600" />
-            <AlertDescription className="text-amber-800 text-sm">
-              A2 busca profundizar sin etiquetar. No son diagnósticos ni definiciones de quién eres.
-            </AlertDescription>
-          </Alert>
+        {/* Alert */}
+        <Alert className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
+          <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+            A2 expande tu comprensión, no etiqueta. Tus respuestas son tuyas.
+          </AlertDescription>
+        </Alert>
 
-          {/* Input Form */}
-          <form onSubmit={handleSendMessage} className="flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="¿Cómo se manifiesta este patrón en otros contextos?"
-              disabled={loading}
-              className="text-sm"
-            />
-            <Button
-              type="submit"
-              disabled={loading || !input.trim()}
-              size="sm"
-              className="bg-amber-600 hover:bg-amber-700"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+        {/* Input Form */}
+        <form onSubmit={handleSendMessage} className="flex gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="¿Cómo se manifiesta en otros contextos?"
+            disabled={loading}
+            className="text-sm"
+          />
+          <Button
+            type="submit"
+            disabled={loading || !input.trim()}
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600"
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </form>
+      </CardContent>
     </div>
   )
 }
