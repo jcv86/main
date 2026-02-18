@@ -66,21 +66,21 @@ const PILARES = [
   {
     id: "a4_realidad",
     name: "A4: La Realidad",
-    description: "Dónde vive tu identidad - Noticias, Coaching, Plan",
+    description: "Dónde vive tu identidad - Noticias, Cultura, Biblioteca",
     color: "bg-cyan-500",
     lightColor: "bg-cyan-100",
     textColor: "text-cyan-800",
-    href: "/despega/a4-base",
+    href: "/despega/a4",
     icon: "🌍",
   },
   {
-    id: "aterrizaje",
-    name: "Aterrizaje",
-    description: "CV, LinkedIn, Entrevistas, Negociación",
-    color: "bg-orange-500",
-    lightColor: "bg-orange-100",
-    textColor: "text-orange-800",
-    href: "/despega/aterrizaje",
+    id: "a3_entrenamientos",
+    name: "A3: Entrenamientos Avanzados",
+    description: "Simulaciones y feedback en tiempo real",
+    color: "bg-purple-500",
+    lightColor: "bg-purple-100",
+    textColor: "text-purple-800",
+    href: "/despega/a3",
     icon: "🎯",
   },
 ]
@@ -336,9 +336,9 @@ export default function DespegaHub() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/rutas">
-                  <span className="text-2xl mb-1">🛤️</span>
-                  <span className="text-sm">Ver Rutas</span>
+                <Link href="/despega/a2/dashboard">
+                  <span className="text-2xl mb-1">🧭</span>
+                  <span className="text-sm">Mi Sprint</span>
                 </Link>
               </Button>
               <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
@@ -348,13 +348,13 @@ export default function DespegaHub() {
                 </Link>
               </Button>
               <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/despega/misiones">
-                  <span className="text-2xl mb-1">✅</span>
-                  <span className="text-sm">Misiones del Día</span>
+                <Link href="/despega/a4/noticias">
+                  <span className="text-2xl mb-1">📰</span>
+                  <span className="text-sm">Noticias</span>
                 </Link>
               </Button>
               <Button variant="outline" asChild className="h-auto py-4 flex-col bg-transparent">
-                <Link href="/biblioteca">
+                <Link href="/despega/a4/biblioteca">
                   <span className="text-2xl mb-1">📚</span>
                   <span className="text-sm">Biblioteca</span>
                 </Link>
