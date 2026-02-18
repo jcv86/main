@@ -61,12 +61,13 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (contextError) {
-      console.warn('[v0] No coach context found for user:', user_id)
+      // This is expected for new users - silently return null context
+      console.log('[v0] Coach context not found for new user:', user_id)
       // Return empty context if not found
       return NextResponse.json({
         success: true,
         context: null,
-        message: 'No context available yet',
+        message: 'No context available yet - user is likely new',
       })
     }
 
