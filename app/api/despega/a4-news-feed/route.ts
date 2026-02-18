@@ -46,14 +46,11 @@ export async function GET(request: NextRequest) {
 
     // Si no hay cache, obtener de NewsAPI
     if (!NEWSAPI_KEY) {
-      console.warn("[v0] NEWSAPI_KEY not configured, returning mock news")
-      // Fallback a noticias mock
-      const mockNews = getMockNews(category, limit)
-      return NextResponse.json({
-        success: true,
-        source: "mock",
-        data: mockNews,
-      })
+      console.error("[v0] NEWSAPI_KEY not configured - cannot fetch news")
+      return NextResponse.json(
+        { error: "NewsAPI key not configured" },
+        { status: 500 }
+      )
     }
 
     console.log(`[v0] Fetching fresh news from NewsAPI for category: ${category}`)
@@ -69,25 +66,21 @@ export async function GET(request: NextRequest) {
     const response = await fetch(newsApiUrl.toString())
 
     if (!response.ok) {
-      console.error(`[v0] NewsAPI error: ${response.status}, returning mock data`)
-      const mockNews = getMockNews(category, limit)
-      return NextResponse.json({
-        success: true,
-        source: "mock",
-        data: mockNews,
-      })
+      console.error(`[v0] NewsAPI error: ${response.status} ${response.statusText}`)
+      return NextResponse.json(
+        { error: `NewsAPI returned ${response.status}` },
+        { status: response.status }
+      )
     }
 
     const newsData = await response.json()
 
     if (!newsData.articles || newsData.articles.length === 0) {
-      console.log("[v0] No articles found from NewsAPI, returning mock data")
-      // Retornar noticias mock si NewsAPI no retorna datos
-      const mockNews = getMockNews(category, limit)
+      console.log("[v0] No articles found from NewsAPI")
       return NextResponse.json({
         success: true,
-        source: "mock",
-        data: mockNews,
+        source: "newsapi",
+        data: [],
       })
     }
 
@@ -169,77 +162,4 @@ function calculateRelevance(article: any, category: string): number {
   }
 
   return Math.min(score, 100)
-}
-
-// Noticias mock para demostración
-function getMockNews(category: string, limit: number) {
-  const mockArticles = [
-    {
-      id: "mock-1",
-      title: "Liderazgo Ágil: La Clave del Éxito en 2025",
-      description: "Descubre cómo los líderes modernos están transformando sus organizaciones con metodologías ágiles y empoderación de equipos.",
-      content: "En el panorama empresarial actual, el liderazgo ágil se ha convertido en un diferenciador clave...",
-      url: "https://example.com/liderazgo-agil",
-      image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop",
-      source: "Despega Insights",
-      author: "Coach Sofia",
-      published_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-      category: "business",
-      relevance_score: 85,
-    },
-    {
-      id: "mock-2",
-      title: "Transformación Digital: De la Teoría a la Práctica",
-      description: "Las empresas más innovadoras ya no hablan de transformación digital, la viven. Aquí están sus estrategias probadas.",
-      content: "La transformación digital no es solo sobre tecnología, es sobre cultura y mentalidad...",
-      url: "https://example.com/transformacion-digital",
-      image_url: "https://images.unsplash.com/photo-1460925895917-aeb19be489c7?w=500&h=300&fit=crop",
-      source: "Tech & Business",
-      author: "Dani Coach",
-      published_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-      category: "technology",
-      relevance_score: 78,
-    },
-    {
-      id: "mock-3",
-      title: "El Futuro del Trabajo: Remoto, Híbrido o Presencial",
-      description: "Análisis profundo sobre cómo las empresas están redefiniendo la forma en que trabajamos.",
-      content: "Después de la pandemia, el mundo del trabajo nunca será igual...",
-      url: "https://example.com/futuro-trabajo",
-      image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop",
-      source: "LinkedIn News",
-      author: "Career Coach",
-      published_at: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-      category: "career",
-      relevance_score: 80,
-    },
-    {
-      id: "mock-4",
-      title: "Startups Exitosas: Lo que Debes Saber",
-      description: "Historias de éxito de startups que revolucionaron sus industrias en menos de 5 años.",
-      content: "Cada gran empresa fue una vez una startup...",
-      url: "https://example.com/startups",
-      image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop",
-      source: "Emprendimiento.com",
-      author: "Business Analyst",
-      published_at: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
-      category: "business",
-      relevance_score: 75,
-    },
-    {
-      id: "mock-5",
-      title: "Inteligencia Artificial en la Empresa: Casos de Uso Reales",
-      description: "Cómo empresas líderes están implementando IA para aumentar productividad y eficiencia.",
-      content: "La inteligencia artificial ya no es del futuro, es del presente...",
-      url: "https://example.com/ia-empresarial",
-      image_url: "https://images.unsplash.com/photo-1677442d019cecf3d88c5656e6c34e3b7d3f4d6e?w=500&h=300&fit=crop",
-      source: "Tech Innovation",
-      author: "Innovation Lead",
-      published_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-      category: "technology",
-      relevance_score: 82,
-    },
-  ]
-
-  return mockArticles.slice(0, limit)
 }
