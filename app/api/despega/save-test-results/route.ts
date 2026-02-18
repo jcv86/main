@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
@@ -12,8 +12,20 @@ export async function POST(request: NextRequest) {
       caminoProfesional,
     } = body
 
-    // Create server client
-    const supabase = await createClient()
+    // Get Supabase credentials from env
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error("[v0] Missing Supabase credentials")
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      )
+    }
+
+    // Create server client directly
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
     if (!supabase) {
       console.error("[v0] Failed to create Supabase client")
