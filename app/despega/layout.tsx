@@ -1,6 +1,5 @@
-import { CoachProvider } from '@/contexts/coach-context'
-import { CoachSidebar } from '@/components/coach-sidebar'
-import { NewsTicker } from '@/components/news-ticker'
+import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
+import { CoachSidebarWrapper } from '@/components/coach-sidebar-wrapper'
 
 export default function DespegaLayout({
   children,
@@ -8,12 +7,11 @@ export default function DespegaLayout({
   children: React.ReactNode
 }) {
   return (
-    <CoachProvider>
+    <CoachProviderWrapper>
       <div className="min-h-screen">
-        <NewsTicker />
         {children}
       </div>
-      <CoachSidebar />
-    </CoachProvider>
+      <CoachSidebarWrapper />
+    </CoachProviderWrapper>
   )
 }
