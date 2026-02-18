@@ -13,13 +13,15 @@ export function createClient() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-    // En producción, estas variables DEBEN estar configuradas
+    // En desarrollo sin variables, retornar null sin lanzar error
+    // El CoachProvider y otros componentes manejarán esto gracefully
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error(
-        `Supabase credentials not found. Required env vars:\n` +
+      console.warn(
+        `[v0] Supabase credentials not found. App will work in limited mode.\n` +
         `- NEXT_PUBLIC_SUPABASE_URL: ${supabaseUrl ? '✓' : '✗'}\n` +
         `- NEXT_PUBLIC_SUPABASE_ANON_KEY: ${supabaseKey ? '✓' : '✗'}`
       )
+      return null as any
     }
 
     // Crear instancia única del cliente
@@ -51,8 +53,9 @@ export function createClient() {
     return supabaseInstance
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
-    console.error("Supabase client creation failed:", errorMsg)
-    throw new Error(`Fatal: Cannot initialize Supabase client. ${errorMsg}`)
+    console.error("[v0] Supabase client creation failed:", errorMsg)
+    // Return null instead of throwing to allow app to continue
+    return null as any
   }
 }
 
