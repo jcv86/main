@@ -65,7 +65,7 @@ export function useA3Training() {
 
         // CONEXIÓN A3→A4: Personalizar feed de noticias
         try {
-          const personalizeResponse = await fetch('/api/despega/personalize-a4-feed', {
+          const personalizeResponse = await fetch('/rest/personalize-feed', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

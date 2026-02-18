@@ -150,7 +150,7 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
       // COACH OMNIPRESENTE: Obtener contexto completo de A1+A2+A3+A4
       console.log('[v0] Loading omnipresent coach context...')
       try {
-        const contextResponse = await fetch(`/api/despega/get-coach-context?user_id=${uid}`)
+        const contextResponse = await fetch(`/rest/coach-context?user_id=${uid}`)
         if (contextResponse.ok) {
           const contextData = await contextResponse.json()
           if (contextData.context && contextData.context.contexto_completo) {

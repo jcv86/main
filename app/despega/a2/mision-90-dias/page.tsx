@@ -141,7 +141,7 @@ export default function Mision90DiasPage() {
       // CONEXIÓN A2→A3: Asignar entrenamientos automáticamente
       console.log("[v0] Starting A2→A3 connection...")
       try {
-        const assignResponse = await fetch("/api/despega/assign-trainings", {
+        const assignResponse = await fetch("/rest/assign-trainings", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
