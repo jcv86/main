@@ -58,12 +58,19 @@ export async function GET(request: NextRequest) {
       .eq('user_id', user_id)
       .order('guardado_en', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
 
     if (contextError) {
+      console.error('[v0] Error querying coach context:', contextError)
+      return NextResponse.json(
+        { error: 'Failed to retrieve context' },
+        { status: 500 }
+      )
+    }
+
+    if (!contextSnapshot) {
       // This is expected for new users - silently return null context
       console.log('[v0] Coach context not found for new user:', user_id)
-      // Return empty context if not found
       return NextResponse.json({
         success: true,
         context: null,

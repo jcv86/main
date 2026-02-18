@@ -1,7 +1,5 @@
-'use client'
-
-import { CoachProvider } from '@/contexts/coach-context'
-import { CoachSidebar } from '@/components/coach-sidebar'
+import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
+import { CoachSidebarWrapper } from '@/components/coach-sidebar-wrapper'
 
 export default function A4Layout({
   children,
@@ -9,11 +7,11 @@ export default function A4Layout({
   children: React.ReactNode
 }) {
   return (
-    <CoachProvider>
+    <CoachProviderWrapper>
       <div className="min-h-screen">
         {children}
       </div>
-      <CoachSidebar />
-    </CoachProvider>
+      <CoachSidebarWrapper />
+    </CoachProviderWrapper>
   )
 }
