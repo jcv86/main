@@ -55,12 +55,12 @@ const PILARES = [
   },
   {
     id: "a2_rutas",
-    name: "A2-A3: Exploración & Ensayo",
-    description: "Explora identidades futuras y practica",
+    name: "A2: Rutas de Transformación",
+    description: "Tu motor de avance: 90 días de acciones personalizadas",
     color: "bg-green-500",
     lightColor: "bg-green-100",
     textColor: "text-green-800",
-    href: "/despega/rutas",
+    href: "/despega/a2/intro",
     icon: "🧭",
   },
   {
