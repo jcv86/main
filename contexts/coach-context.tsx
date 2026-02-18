@@ -36,16 +36,40 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
     'Bienvenido a tu transformación de 90 días',
   ])
   const [isLoadingCoach, setIsLoadingCoach] = useState(false)
+  const [supabaseError, setSupabaseError] = useState<string | null>(null)
 
-  const supabase = createClient()
+  // Create supabase client only on first render
+  const supabaseRef = React.useRef<any>(null)
+
+  useEffect(() => {
+    try {
+      supabaseRef.current = createClient()
+    } catch (error) {
+      console.error('[v0] Failed to initialize Supabase client:', error)
+      setSupabaseError('Supabase configuration error')
+    }
+  }, [])
 
   // Initialize user and load progress
   useEffect(() => {
     const initCoach = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
+        if (!supabaseRef.current) {
+          console.warn('[v0] Supabase client not initialized')
+          return
+        }
+
+        const { data: { user }, error } = await supabaseRef.current.auth.getUser()
         
-        if (!user) return
+        if (error) {
+          console.warn('[v0] User not authenticated:', error.message)
+          return
+        }
+
+        if (!user) {
+          console.warn('[v0] No user session found')
+          return
+        }
 
         setUserId(user.id)
         setUserName(user.email?.split('@')[0] || 'Usuario')
@@ -59,29 +83,39 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    initCoach()
+    // Wait for supabase to be ready
+    const timer = setTimeout(() => {
+      initCoach()
+    }, 100)
+
+    return () => clearTimeout(timer)
   }, [])
 
   const loadProgress = async (uid: string) => {
     try {
       setIsLoadingCoach(true)
 
+      if (!supabaseRef.current) {
+        console.warn('[v0] Supabase client not available')
+        return
+      }
+
       // Get user profile and stats
-      const { data: profile } = await supabase
+      const { data: profile } = await supabaseRef.current
         .from('despega_user_profiles')
         .select('*')
         .eq('user_id', uid)
         .single()
 
       // Get bitácora entries for stats
-      const { data: bitacora } = await supabase
+      const { data: bitacora } = await supabaseRef.current
         .from('a2_user_bitacora')
         .select('*')
         .eq('user_id', uid)
         .order('created_at', { ascending: false })
 
       // Get daily actions completed
-      const { data: dailyActions } = await supabase
+      const { data: dailyActions } = await supabaseRef.current
         .from('a2_user_daily_actions')
         .select('*')
         .eq('user_id', uid)
