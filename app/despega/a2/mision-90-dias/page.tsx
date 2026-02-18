@@ -138,6 +138,29 @@ export default function Mision90DiasPage() {
         .update({ a2_mission_id: mission.id })
         .eq("user_id", user.id)
 
+      // CONEXIÓN A2→A3: Asignar entrenamientos automáticamente
+      console.log("[v0] Starting A2→A3 connection...")
+      try {
+        const assignResponse = await fetch("/api/despega/assign-trainings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: user.id,
+            a2_theme: routeSelected,
+            a2_mission_id: mission.id,
+          }),
+        })
+
+        if (assignResponse.ok) {
+          const assignData = await assignResponse.json()
+          console.log("[v0] A3 trainings assigned:", assignData.assignments_count)
+        } else {
+          console.warn("[v0] Failed to assign trainings (non-critical)")
+        }
+      } catch (error) {
+        console.warn("[v0] Error in A2→A3 connection (non-critical):", error)
+      }
+
       // Navigate to sprint view
       setTimeout(() => {
         router.push("/despega/a2/sprint-1")

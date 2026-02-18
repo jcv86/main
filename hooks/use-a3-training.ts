@@ -62,6 +62,29 @@ export function useA3Training() {
         if (insertError) throw insertError
 
         console.log('[v0] Training session created:', data?.id)
+
+        // CONEXIÓN A3→A4: Personalizar feed de noticias
+        try {
+          const personalizeResponse = await fetch('/api/despega/personalize-a4-feed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: user.id,
+              training_tema: skillTarget,
+              training_id: data?.id,
+            }),
+          })
+
+          if (personalizeResponse.ok) {
+            const personalizeData = await personalizeResponse.json()
+            console.log('[v0] A4 feed personalized for training:', skillTarget)
+          } else {
+            console.warn('[v0] Failed to personalize A4 feed (non-critical)')
+          }
+        } catch (error) {
+          console.warn('[v0] Error in A3→A4 connection (non-critical):', error)
+        }
+
         setError(null)
         return data
 

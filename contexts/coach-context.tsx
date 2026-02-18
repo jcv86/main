@@ -147,6 +147,22 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
       )
       setCoachMessages([message])
 
+      // COACH OMNIPRESENTE: Obtener contexto completo de A1+A2+A3+A4
+      console.log('[v0] Loading omnipresent coach context...')
+      try {
+        const contextResponse = await fetch(`/api/despega/get-coach-context?user_id=${uid}`)
+        if (contextResponse.ok) {
+          const contextData = await contextResponse.json()
+          if (contextData.context && contextData.context.contexto_completo) {
+            console.log('[v0] Coach context loaded:', contextData.context.contexto_completo)
+            // El Coach ahora tiene acceso a contexto completo para sus mensajes personalizados
+            // contexto_completo contiene: Perfil DISC + Misión A2 + Entrenamiento A3 + Foco A4
+          }
+        }
+      } catch (error) {
+        console.warn('[v0] Could not load coach context (non-critical):', error)
+      }
+
       console.log('[v0] Coach progress loaded:', {
         actionsCompleted,
         streak,

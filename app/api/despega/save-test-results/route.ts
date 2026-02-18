@@ -133,13 +133,135 @@ export async function POST(request: NextRequest) {
 
     console.log("[v0] Verified progress after update:", verifyProgress)
 
+    // CONEXIÓN A1→A2: Generar recomendaciones personalizadas basadas en DISC
+    console.log("[v0] Starting A1→A2 connection logic...")
+    
+    const a2Recommendations = generateA2Recommendations(dominantProfile, secondaryProfile)
+    
+    // Guardar recomendaciones en tabla de rutas sugeridas
+    const { data: a2SuggestedRoutes, error: routesError } = await supabase
+      .from('a2_suggested_routes')
+      .insert({
+        user_id: user.id,
+        perfil_dominante: dominantProfile,
+        perfil_secundario: secondaryProfile,
+        rutas_recomendadas: a2Recommendations,
+        disc_scores: {
+          d: Math.round(scores.D),
+          i: Math.round(scores.I),
+          s: Math.round(scores.S),
+          c: Math.round(scores.C),
+        },
+        creado_en: new Date().toISOString(),
+      })
+      .select()
+
+    if (routesError) {
+      console.warn("[v0] Error saving A2 suggestions (non-critical):", routesError)
+    } else {
+      console.log("[v0] A2 recommendations saved:", a2SuggestedRoutes)
+    }
+
     return NextResponse.json({
       success: true,
       data: testData,
       progress: updatedProgress,
+      a2_recommendations: a2Recommendations,
     })
   } catch (error) {
     console.error("[v0] API error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
+
+/**
+ * Genera recomendaciones de rutas A2 basadas en el perfil DISC
+ */
+function generateA2Recommendations(
+  dominant: string,
+  secondary: string
+): Array<{ ruta: string; enfoque: string; razon: string }> {
+  const recommendations: Record<
+    string,
+    Array<{ ruta: string; enfoque: string; razon: string }>
+  > = {
+    D: [
+      {
+        ruta: "Liderazgo Estratégico",
+        enfoque: "decisiones",
+        razon:
+          "Tu perfil D prospera tomando decisiones rápidas. Desarrolla estrategia a nivel ejecutivo.",
+      },
+      {
+        ruta: "Emprendimiento",
+        enfoque: "visión",
+        razon: "Necesitas autonomía y resultados. Ideal para iniciar proyectos.",
+      },
+      {
+        ruta: "Transformación Digital",
+        enfoque: "impacto",
+        razon: "Lidera cambios disruptivos con tu orientación hacia resultados.",
+      },
+    ],
+    I: [
+      {
+        ruta: "Comunicación Efectiva",
+        enfoque: "influencia",
+        razon:
+          "Tu energía y carisma I es tu mayor fortaleza. Domina la persuasión y presentaciones.",
+      },
+      {
+        ruta: "Liderazgo de Equipos",
+        enfoque: "motivación",
+        razon: "Inspiras a otros. Desarrolla habilidades de coaching y delegación.",
+      },
+      {
+        ruta: "Ventas y Negociación",
+        enfoque: "cierre",
+        razon:
+          "Tu capacidad de conexión es valiosa. Convierte relaciones en resultados.",
+      },
+    ],
+    S: [
+      {
+        ruta: "Gestión de Procesos",
+        enfoque: "estabilidad",
+        razon:
+          "Tu consistencia S es perfecta para sistemas. Mejora eficiencia operativa.",
+      },
+      {
+        ruta: "Coaching y Mentoreo",
+        enfoque: "apoyo",
+        razon: "Eres natural apoyando a otros. Formalizalo como experto.",
+      },
+      {
+        ruta: "Gestión de Proyectos",
+        enfoque: "continuidad",
+        razon:
+          "Tu confiabilidad S asegura ejecución. Domina metodologías ágiles.",
+      },
+    ],
+    C: [
+      {
+        ruta: "Análisis y Estrategia",
+        enfoque: "precisión",
+        razon:
+          "Tu pensamiento crítico C es invaluable. Especialízate en data-driven decisions.",
+      },
+      {
+        ruta: "Calidad y Mejora Continua",
+        enfoque: "excelencia",
+        razon:
+          "Buscas perfección. Lidera iniciativas de excelencia organizacional.",
+      },
+      {
+        ruta: "Compliance y Riesgos",
+        enfoque: "control",
+        razon: "Tu atención al detalle es crítica para roles de gobernanza.",
+      },
+    ],
+  }
+
+  return recommendations[dominant] || recommendations.D
+}
+
