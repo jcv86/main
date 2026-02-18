@@ -466,8 +466,10 @@ export default function SprintViewerPage() {
               <p className="text-sm text-slate-700 dark:text-slate-300">
                 Al final de cada semana, reflexiona: ¿Qué salió bien? ¿Qué fue más difícil? ¿Qué aprendiste?
               </p>
-              <Button variant="outline" className="mt-2">
-                Ir a tu Bitácora
+              <Button variant="outline" asChild>
+                <Link href="/despega/a2/bitacora">
+                  Ir a tu Bitácora
+                </Link>
               </Button>
             </CardContent>
           </Card>

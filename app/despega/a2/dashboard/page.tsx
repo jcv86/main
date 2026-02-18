@@ -219,9 +219,11 @@ export default function A2DashboardPage() {
               Continuar con Sprint 1 <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
-          <Button variant="outline" className="w-full h-14" size="lg">
-            📖 Ir a tu Bitácora
-          </Button>
+          <Link href="/despega/a2/bitacora">
+            <Button variant="outline" className="w-full h-14" size="lg">
+              📖 Ir a tu Bitácora
+            </Button>
+          </Link>
         </div>
 
         {/* Info Box */}
