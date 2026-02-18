@@ -11,6 +11,8 @@ import Link from "next/link"
 import { ArrowLeft, Newspaper, BookOpen, Bookmark, Zap, Trophy, TrendingUp } from "lucide-react"
 import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
+import { A4GamifiedTests } from "@/components/a4-gamified-tests"
+import { A4ResourceLibrary } from "@/components/a4-resource-library"
 
 export default function A4Page() {
   const [loading, setLoading] = useState(true)
@@ -324,134 +326,8 @@ export default function A4Page() {
             <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
           </TabsContent>
 
-          <TabsContent value="coaching" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-xl">🎯</span>
-                  Tu Coach IA - Guía de Transición
-                </CardTitle>
-                <CardDescription>
-                  Sofia & Dani acompañan tu transformación. Pregunta sobre cualquier aspecto de tu nueva identidad en el contexto real.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Sofia</CardTitle>
-                      <CardDescription>Coach de Transición Personal</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm mb-4">Especializada en guiar tu transformación de identidad con empatía y profundidad emocional.</p>
-                      <Button variant="outline" className="w-full">Hablar con Sofia</Button>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Dani</CardTitle>
-                      <CardDescription>Coach de Transición Profesional</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm mb-4">Experto en navegar el mercado y transformar tu identidad profesional en oportunidades reales.</p>
-                      <Button variant="outline" className="w-full">Hablar con Dani</Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="plan" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-xl">📋</span>
-                  Tu Plan de Acción - Elige Tu Ritmo
-                </CardTitle>
-                <CardDescription>
-                  Pasos concretos para vivir tu nueva identidad. Elige 30, 60 o 90 días según tu disponibilidad y ritmo de transición.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                  {/* Plan 30 días */}
-                  <Card className="border-2 border-orange-200 bg-orange-50 dark:bg-orange-900/20">
-                    <CardHeader>
-                      <CardTitle className="text-lg">30 Días - Intenso</CardTitle>
-                      <CardDescription>Transformación acelerada</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 1: Asentamiento</div>
-                        <p className="text-muted-foreground">Diagnóstico y comunicación de cambios</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 2-3: Exploración Activa</div>
-                        <p className="text-muted-foreground">Oportunidades y práctica intensiva</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 4: Decisión</div>
-                        <p className="text-muted-foreground">Primer cambio concreto implementado</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Plan 60 días */}
-                  <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-                    <CardHeader>
-                      <CardTitle className="text-lg">60 Días - Balanceado</CardTitle>
-                      <CardDescription>Transición sostenible</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 1-2: Asentamiento</div>
-                        <p className="text-muted-foreground">Consolidar nuevo entendimiento</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 3-7: Exploración Activa</div>
-                        <p className="text-muted-foreground">Búsqueda profunda y networking</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 8-9: Integración</div>
-                        <p className="text-muted-foreground">Implementar cambios principales</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Plan 90 días */}
-                  <Card className="border-2 border-green-200 bg-green-50 dark:bg-green-900/20 ring-2 ring-green-300 dark:ring-green-700">
-                    <CardHeader>
-                      <CardTitle className="text-lg">90 Días - Completo</CardTitle>
-                      <CardDescription>Transformación profunda (Recomendado)</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 1-2: Asentamiento</div>
-                        <p className="text-muted-foreground">Consolidar tu nuevo entendimiento</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 3-6: Exploración Activa</div>
-                        <p className="text-muted-foreground">Buscar oportunidades, conectar, practicar</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 7-12: Integración</div>
-                        <p className="text-muted-foreground">Decisiones finales y vivir tu nueva identidad</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
-                  <CardContent className="pt-6">
-                    <p className="text-sm text-muted-foreground mb-4">
-                      <strong>¿Cuál elegir?</strong> Si es tu primera transición importante, recomendamos 90 días. Si ya tienes experiencia, 30-60 días puede ser suficiente. Tu coach IA te puede ayudar a elegir según tu contexto.
-                    </p>
-                    <Button className="w-full">Crear Mi Plan Personalizado</Button>
-                  </CardContent>
-                </Card>
-              </CardContent>
-            </Card>
+          <TabsContent value="biblioteca" className="space-y-6">
+            <A4ResourceLibrary />
           </TabsContent>
         </Tabs>
 
@@ -460,12 +336,13 @@ export default function A4Page() {
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-cyan-600 text-lg">💡</div>
             <div>
-              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - La Realidad: Tu Identidad en Acción</div>
+              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">
-                <li>✓ <strong>Noticias:</strong> Entiende el contexto del mercado donde vivirá tu nueva identidad</li>
-                <li>✓ <strong>Coaching:</strong> Sofia y Dani te guían en decisiones reales y transiciones concretas</li>
-                <li>✓ <strong>Tu Plan:</strong> 90 días estructurados para que tu transformación sea real, no teórica</li>
-                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu nueva identidad profesional</li>
+                <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
+                <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
+                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
+                <li>✓ <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
+                <li>✓ <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
               </ul>
             </div>
           </CardContent>
