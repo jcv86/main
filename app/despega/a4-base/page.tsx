@@ -324,18 +324,18 @@ export default function A4Page() {
           </div>
         </TabsContent>
 
-          <TabsContent value="noticias" className="space-y-6">
-            <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
-          </TabsContent>
+        <TabsContent value="noticias" className="space-y-6">
+          <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
+        </TabsContent>
 
-          <TabsContent value="modulos" className="space-y-6">
-            <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
-          </TabsContent>
+        <TabsContent value="modulos" className="space-y-6">
+          <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
+        </TabsContent>
 
-          <TabsContent value="biblioteca" className="space-y-6">
-            <A4ResourceLibrary />
-          </TabsContent>
-        </Tabs>
+        <TabsContent value="biblioteca" className="space-y-6">
+          <A4ResourceLibrary />
+        </TabsContent>
+      </Tabs>
 
         {/* Tips */}
         <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
