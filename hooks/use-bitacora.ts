@@ -28,12 +28,17 @@ export function useBitacora() {
   const loadEntries = async () => {
     try {
       setLoading(true)
+      console.log("[v0] Loading bitácora entries...")
+      
       const { data: { user } } = await supabase.auth.getUser()
       
       if (!user) {
+        console.error("[v0] No user found for bitácora")
         setError('No user found')
         return
       }
+
+      console.log("[v0] Fetching bitácora for user:", user.id)
 
       const { data, error: queryError } = await supabase
         .from('a2_user_bitacora')
@@ -41,10 +46,16 @@ export function useBitacora() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
-      if (queryError) throw queryError
+      if (queryError) {
+        console.error("[v0] Error fetching bitácora:", queryError)
+        throw queryError
+      }
+      
+      console.log("[v0] Bitácora entries loaded:", data?.length || 0)
       setEntries(data || [])
       setError(null)
     } catch (err: any) {
+      console.error("[v0] Bitácora load error:", err.message)
       setError(err.message)
     } finally {
       setLoading(false)
@@ -54,9 +65,16 @@ export function useBitacora() {
   // Add new entry
   const addEntry = async (entry: Omit<BitacoraEntry, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
     try {
+      console.log("[v0] Adding new bitácora entry...")
+      
       const { data: { user } } = await supabase.auth.getUser()
       
-      if (!user) throw new Error('No user found')
+      if (!user) {
+        console.error("[v0] No user found for bitácora entry")
+        throw new Error('No user found')
+      }
+
+      console.log("[v0] Saving entry for user:", user.id, "Title:", entry.title)
 
       const { data, error: insertError } = await supabase
         .from('a2_user_bitacora')
@@ -69,11 +87,16 @@ export function useBitacora() {
         .select()
         .single()
 
-      if (insertError) throw insertError
+      if (insertError) {
+        console.error("[v0] Error inserting bitácora entry:", insertError)
+        throw insertError
+      }
       
+      console.log("[v0] Bitácora entry saved successfully:", data?.id)
       setEntries([data, ...entries])
       return data
     } catch (err: any) {
+      console.error("[v0] Bitácora save error:", err.message)
       setError(err.message)
       throw err
     }

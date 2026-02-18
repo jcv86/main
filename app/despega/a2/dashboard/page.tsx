@@ -14,6 +14,7 @@ export default function A2DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [mission, setMission] = useState<any>(null)
+  const [debugInfo, setDebugInfo] = useState<any>(null)
   const [stats, setStats] = useState({
     actionsCompleted: 0,
     streak: 0,
@@ -26,29 +27,63 @@ export default function A2DashboardPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        router.push("/login")
-        return
-      }
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (!user) {
+          router.push("/login")
+          return
+        }
 
-      // Load user profile
-      const { data: profileData } = await supabase
-        .from("despega_user_profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .single()
+        console.log('[v0] Dashboard loading data for user:', user.id)
 
-      if (profileData?.a2_mission_id) {
-        setUserProfile(profileData)
-
-        // Load mission
-        const { data: missionData } = await supabase
-          .from("a2_user_missions")
+        // Load user profile
+        const { data: profileData } = await supabase
+          .from("despega_user_profiles")
           .select("*")
-          .eq("id", profileData.a2_mission_id)
+          .eq("user_id", user.id)
           .single()
+
+        console.log('[v0] Profile data loaded:', profileData)
+
+        if (profileData?.a2_mission_id) {
+          setUserProfile(profileData)
+
+          // Load mission
+          const { data: missionData } = await supabase
+            .from("a2_user_missions")
+            .select("*")
+            .eq("id", profileData.a2_mission_id)
+            .single()
+
+          console.log('[v0] Mission data loaded:', missionData)
+          setMission(missionData)
+
+          // Load A2 bitácora for stats
+          const { data: bitacoraData } = await supabase
+            .from("a2_user_bitacora")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false })
+
+          console.log('[v0] Bitácora data loaded:', bitacoraData?.length || 0, 'entries')
+
+          // Store debug info
+          setDebugInfo({
+            userId: user.id,
+            userEmail: user.email,
+            profileExists: !!profileData,
+            missionExists: !!missionData,
+            bitacoraEntries: bitacoraData?.length || 0,
+            timestamp: new Date().toISOString()
+          })
+        }
+      } catch (error) {
+        console.error('[v0] Dashboard load error:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
         if (missionData) {
           setMission(missionData)
@@ -234,6 +269,37 @@ export default function A2DashboardPage() {
             </p>
           </CardContent>
         </Card>
+
+        {/* Debug Info - Visible for development/verification */}
+        {debugInfo && (
+          <Card className="border-0 bg-slate-100 dark:bg-slate-800 border-l-4 border-l-amber-500">
+            <CardHeader>
+              <CardTitle className="text-sm">Estado de Datos (Debug)</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+              <div className="flex justify-between">
+                <span>Usuario:</span>
+                <code className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">{debugInfo.userId?.slice(0, 8)}...</code>
+              </div>
+              <div className="flex justify-between">
+                <span>Perfil guardado:</span>
+                <Badge variant={debugInfo.profileExists ? "default" : "destructive"}>
+                  {debugInfo.profileExists ? "✓" : "✗"}
+                </Badge>
+              </div>
+              <div className="flex justify-between">
+                <span>Misión guardada:</span>
+                <Badge variant={debugInfo.missionExists ? "default" : "destructive"}>
+                  {debugInfo.missionExists ? "✓" : "✗"}
+                </Badge>
+              </div>
+              <div className="flex justify-between">
+                <span>Entradas en Bitácora:</span>
+                <Badge variant="outline">{debugInfo.bitacoraEntries}</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
