@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
-import { ArrowLeft, Search, Bookmark, BookmarkCheck, TrendingUp } from 'lucide-react'
+import { ArrowLeft, Search, Bookmark, TrendingUp } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -216,11 +216,13 @@ export default function A4NoticiasPage() {
                             onClick={() => toggleSave(item.id)}
                             className="w-10 h-10 p-0"
                           >
-                            {savedItems.has(item.id) ? (
-                              <BookmarkCheck className="w-5 h-5 text-primary fill-primary" />
-                            ) : (
-                              <Bookmark className="w-5 h-5" />
-                            )}
+                            <Bookmark 
+                              className={`w-5 h-5 transition-all ${
+                                savedItems.has(item.id) 
+                                  ? 'text-primary fill-primary' 
+                                  : 'text-muted-foreground'
+                              }`}
+                            />
                           </Button>
                         </div>
                       </div>
