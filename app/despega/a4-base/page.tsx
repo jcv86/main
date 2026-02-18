@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { ArrowLeft, Newspaper, BookOpen, Bookmark, Zap, Trophy, TrendingUp } from "lucide-react"
+import { ArrowLeft, Newspaper, BookOpen, Bookmark, Zap, Trophy, TrendingUp, Brain } from "lucide-react"
 import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
 import { A4GamifiedTests } from "@/components/a4-gamified-tests"
@@ -270,21 +270,25 @@ export default function A4Page() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">Lee noticias relevantes al mercado y completa preguntas reflexivas para ganar puntos.</p>
-                <Button className="w-full">Ir a Noticias</Button>
+                <Link href="/despega/a4/noticias">
+                  <Button className="w-full">Ir a Noticias</Button>
+                </Link>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-lg transition">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <BookOpen className="w-5 h-5" />
-                  Módulos de Aprendizaje
+                  <Brain className="w-5 h-5" />
+                  Cultura General
                 </CardTitle>
-                <CardDescription>Habilidades para tu nueva identidad</CardDescription>
+                <CardDescription>Expande tu contexto profesional</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">Aprende sobre mercado, negociación, liderazgo y más con módulos interactivos.</p>
-                <Button className="w-full">Explorar Módulos</Button>
+                <p className="text-sm text-muted-foreground mb-4">Tests sobre economía, tecnología, negocios y futuro del trabajo. Gana puntos y badges.</p>
+                <Link href="/despega/a4/cultura-general">
+                  <Button className="w-full">Hacer Tests</Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -298,7 +302,9 @@ export default function A4Page() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">Accede a artículos, libros, podcasts y videos recomendados para tu contexto.</p>
-                <Button className="w-full">Ver Biblioteca</Button>
+                <Link href="/despega/a4/biblioteca">
+                  <Button className="w-full">Ver Biblioteca</Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -312,7 +318,7 @@ export default function A4Page() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">{userStats.badges.length} badges desbloqueados. Sigue aprendiendo para ganar más.</p>
-                <Button className="w-full">Ver Logros</Button>
+                <Button className="w-full" disabled>Ver Logros (próximamente)</Button>
               </CardContent>
             </Card>
           </div>
