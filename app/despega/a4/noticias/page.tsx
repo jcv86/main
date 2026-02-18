@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,7 +16,6 @@ export default function A4NoticiasPage() {
   const [filteredNews, setFilteredNews] = useState<any[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set())
-  const supabase = createClient()
 
   useEffect(() => {
     loadNews()
@@ -31,30 +29,18 @@ export default function A4NoticiasPage() {
     try {
       console.log("[v0] Fetching news from NewsAPI endpoint")
       
-      // Intentar obtener de nuestro endpoint que usa NewsAPI + cache
+      // Obtener de nuestro endpoint que usa NewsAPI
       const response = await fetch(`/api/despega/a4-news-feed?category=business&limit=20`)
       
       if (!response.ok) {
-        console.error("[v0] Failed to fetch from NewsAPI endpoint, falling back to biblioteca")
-        // Fallback a biblioteca si NewsAPI falla
-        const { data } = await supabase
-          .from('biblioteca')
-          .select('*')
-          .eq('is_featured', true)
-          .order('created_at', { ascending: false })
-          .limit(30)
-        
-        if (data) {
-          setNews(data)
-          setFilteredNews(data)
-        }
+        console.error("[v0] Failed to fetch from NewsAPI endpoint:", response.status)
         setLoading(false)
         return
       }
       
       const result = await response.json()
       
-      if (result.success && result.data) {
+      if (result.success && result.data && result.data.length > 0) {
         console.log(`[v0] Loaded ${result.data.length} news from ${result.source}`)
         
         // Transformar datos de NewsAPI al formato esperado
@@ -66,13 +52,15 @@ export default function A4NoticiasPage() {
           content: article.content,
           url: article.url,
           source: article.source || 'NewsAPI',
-          published_at: article.published_at,
+          published_at: article.published_at || new Date().toISOString(),
           category: article.category || 'business',
           relevance_score: article.relevance_score || 50,
         }))
         
         setNews(formattedNews)
         setFilteredNews(formattedNews)
+      } else {
+        console.warn("[v0] No news data received from endpoint")
       }
       
       setLoading(false)
