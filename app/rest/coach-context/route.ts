@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       .from('coach_context_snapshots')
       .select('*')
       .eq('user_id', user_id)
-      .order('guardado_en', { ascending: false })
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle()
 
