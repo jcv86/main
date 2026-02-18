@@ -164,7 +164,8 @@ export default function A4Page() {
         </div>
 
         {/* Enhanced Tab Triggers */}
-        <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Dashboard

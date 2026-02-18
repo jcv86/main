@@ -31,9 +31,9 @@ export default function A2IntroPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900 dark:border-slate-50 mx-auto"></div>
           <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu A2...</p>
         </div>
-      </div>
-    )
-  }
+    </div>
+  )
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
