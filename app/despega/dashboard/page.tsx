@@ -18,18 +18,26 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        // Simulate loading user data from Supabase
-        // En producción, esto vendría de un endpoint /api/user/dashboard
-        const mockData = {
-          name: 'María',
-          email: 'maria@example.com',
-          discProfile: { D: 25, I: 50, S: 15, C: 10 },
-          dominantProfile: 'I',
-          progressPercent: 0,
-          a2_mission: null,
-          a3_trainings: [],
+        console.log('[v0] Loading user data from dashboard endpoint')
+        
+        // Call the dashboard data endpoint
+        const response = await fetch('/rest/dashboard-data')
+        
+        if (!response.ok) {
+          console.error('[v0] Failed to fetch dashboard data:', response.status)
+          setLoading(false)
+          return
         }
-        setUserData(mockData)
+        
+        const data = await response.json()
+        console.log('[v0] Dashboard data loaded:', {
+          name: data.name,
+          progressPercent: data.progressPercent,
+          hasA2Mission: !!data.a2_mission,
+          trainingsCount: data.a3_trainings?.length || 0
+        })
+        
+        setUserData(data)
       } catch (error) {
         console.error('[v0] Error loading dashboard:', error)
       } finally {
