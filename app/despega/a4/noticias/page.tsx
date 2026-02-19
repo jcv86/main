@@ -27,45 +27,62 @@ export default function A4NoticiasPage() {
 
   const loadNews = async () => {
     try {
-      console.log("[v0] Fetching news from NewsAPI endpoint")
+      console.log("[v0] Fetching personalized news from /rest/personalize-feed")
       
-      // Obtener de nuestro endpoint que usa NewsAPI
-      const response = await fetch(`/api/despega/a4-news-feed?category=business&limit=20`)
+      // Get user ID from auth
+      const authResponse = await fetch('/auth/user')
+      const auth = await authResponse.json()
+      const user_id = auth.user?.id
+      
+      if (!user_id) {
+        console.error("[v0] User not authenticated")
+        setLoading(false)
+        return
+      }
+
+      // Call personalization endpoint
+      const response = await fetch('/rest/personalize-feed', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id,
+          training_tema: 'liderazgo', // Default theme
+        }),
+      })
       
       if (!response.ok) {
-        console.error("[v0] Failed to fetch from NewsAPI endpoint:", response.status)
+        console.error("[v0] Failed to fetch personalized news:", response.status)
         setLoading(false)
         return
       }
       
       const result = await response.json()
       
-      if (result.success && result.data && result.data.length > 0) {
-        console.log(`[v0] Loaded ${result.data.length} news from ${result.source}`)
+      if (result.articles && result.articles.length > 0) {
+        console.log(`[v0] Loaded ${result.articles.length} personalized news articles`)
         
-        // Transformar datos de NewsAPI al formato esperado
-        const formattedNews = result.data.map((article: any) => ({
-          id: article.url || article.id,
+        // Transform personalized news format
+        const formattedNews = result.articles.map((article: any) => ({
+          id: article.url || Math.random().toString(),
           title: article.title,
           description: article.description,
-          cover_url: article.image_url || article.urlToImage,
+          cover_url: article.image,
           content: article.content,
           url: article.url,
-          source: article.source || 'NewsAPI',
+          source: article.source_name || 'NewsAPI',
           published_at: article.published_at || new Date().toISOString(),
-          category: article.category || 'business',
-          relevance_score: article.relevance_score || 50,
+          relevance_score: article.relevance_score || 0,
         }))
         
         setNews(formattedNews)
         setFilteredNews(formattedNews)
       } else {
-        console.warn("[v0] No news data received from endpoint")
+        console.warn("[v0] No personalized news data received")
       }
       
       setLoading(false)
     } catch (error) {
-      console.error("[v0] Error loading news:", error)
+      console.error("[v0] Error loading personalized news:", error)
       setLoading(false)
     }
   }

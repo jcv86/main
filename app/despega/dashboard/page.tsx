@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DashboardHero } from '@/components/dashboard-hero'
+import { DashboardMetrics } from '@/components/dashboard-metrics'
+import { TransformationTimeline } from '@/components/transformation-timeline'
 import { PillarCard } from '@/components/pillar-card'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { BookOpen, Zap, Target, Globe, MessageCircle } from 'lucide-react'
+import { BookOpen, Zap, Target, Globe, MessageCircle, ArrowRight } from 'lucide-react'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -75,6 +77,22 @@ export default function DashboardPage() {
           dominantProfile={userData.dominantProfile}
           progressPercent={userData.progressPercent}
         />
+
+        {/* Metrics */}
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-6">
+            Tu Progreso
+          </h2>
+          <DashboardMetrics 
+            daysCompleted={userData.progressPercent}
+            trainingsCompleted={userData.a3_trainings?.length || 0}
+            articlesRead={Math.floor(userData.progressPercent / 10)}
+            currentStreak={Math.floor(userData.progressPercent / 15)}
+          />
+        </div>
+
+        {/* Timeline */}
+        <TransformationTimeline progressPercent={userData.progressPercent} />
 
         {/* Misión Section */}
         {userData.a2_mission ? (

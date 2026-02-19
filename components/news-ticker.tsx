@@ -18,16 +18,30 @@ export function NewsTicker() {
   useEffect(() => {
     const loadNews = async () => {
       try {
-        const response = await fetch('/api/despega/a4-news-feed?limit=5')
-        if (response.ok) {
-          const result = await response.json()
-          if (result.data && result.data.length > 0) {
-            const formattedNews = result.data.slice(0, 3).map((article: any) => ({
-              id: article.id || article.url,
-              title: article.title,
-              url: article.url,
-            }))
-            setNews(formattedNews)
+        // Get user ID from auth
+        const authResponse = await fetch('/auth/user')
+        const auth = await authResponse.json()
+        const user_id = auth.user?.id
+
+        if (user_id) {
+          const response = await fetch('/rest/personalize-feed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id,
+              training_tema: 'liderazgo',
+            }),
+          })
+          if (response.ok) {
+            const result = await response.json()
+            if (result.articles && result.articles.length > 0) {
+              const formattedNews = result.articles.slice(0, 3).map((article: any) => ({
+                id: article.url || Math.random().toString(),
+                title: article.title,
+                url: article.url,
+              }))
+              setNews(formattedNews)
+            }
           }
         }
       } catch (error) {
