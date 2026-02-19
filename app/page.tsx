@@ -4,10 +4,6 @@ import { Suspense } from "react"
 // Lazy load components to avoid build errors
 import dynamic from "next/dynamic"
 
-const LandingPageOptimized = dynamic(() => import("@/components/landing-page-optimized"), { 
-  ssr: true,
-  loading: () => <div className="min-h-screen" />
-})
 const FAQSection = dynamic(() => import("@/components/seo-optimized-content"), { 
   ssr: true,
   loading: () => <div className="min-h-screen" />
@@ -154,8 +150,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <LandingPageOptimized />
-
       <Suspense fallback={null}>
         <FAQSection faqs={faqs} />
       </Suspense>
