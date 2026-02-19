@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
-import { AdminNavbar } from "@/components/admin-navbar"
+// import { AdminNavbar } from "@/components/admin-navbar" // TODO: Re-enable when template issue resolved
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -121,7 +121,6 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
           <SessionWrapper>
-            <AdminNavbar />
             {children}
             <Toaster />
           </SessionWrapper>
