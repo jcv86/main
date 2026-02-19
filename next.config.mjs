@@ -13,8 +13,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: false,
-  productionBrowserSourceMaps: false,
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -29,14 +27,6 @@ const nextConfig = {
         ...config.resolve.fallback,
         '@swc/helpers': false,
         '@swc/core': false,
-      }
-    }
-    // For development, disable hot reload if it causes issues
-    if (dev && !isServer) {
-      config.watchOptions = {
-        poll: 1000,
-        aggregateTimeout: 300,
-        ignored: ['node_modules', '.next', 'dist'],
       }
     }
     return config
