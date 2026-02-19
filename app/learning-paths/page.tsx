@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { LearningPathCard } from "@/components/learning-path-card"
 import { SkillGapAnalysis } from "@/components/skill-gap-analysis"
 import { Sparkles, Search, TrendingUp, Target, BookOpen, Filter, Award } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 
 export default function LearningPathsPage() {
   const [searchQuery, setSearchQuery] = useState("")

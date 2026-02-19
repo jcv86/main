@@ -24,7 +24,6 @@ import {
   Volume2,
 } from "lucide-react"
 import { generateText } from "ai"
-import { supabase } from "@/lib/supabase"
 
 interface ReadingInsight {
   id: string

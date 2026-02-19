@@ -35,6 +35,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
+import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 import { EnhancedCoachFlow } from "@/components/enhanced-coach-flow"
 
 interface MBTIResult {
@@ -805,6 +806,36 @@ export default function MBTIResultsPage() {
 
           {/* Dimensiones MBTI */}
           <TabsContent value="dimensiones" className="space-y-6">
+            <CompetencyRadarChart
+              data={[
+                {
+                  name: "Extraversión",
+                  value: mbtiResult.e_score,
+                  fullMark: 100,
+                },
+                {
+                  name: "Intuición",
+                  value: mbtiResult.n_score,
+                  fullMark: 100,
+                },
+                {
+                  name: "Sentimiento",
+                  value: mbtiResult.f_score,
+                  fullMark: 100,
+                },
+                {
+                  name: "Percepción",
+                  value: mbtiResult.p_score,
+                  fullMark: 100,
+                },
+              ]}
+              title="Tu Perfil de Personalidad MBTI"
+              description="Las 4 dimensiones principales de tu tipo de personalidad"
+              strokeColor="#a855f7"
+              fillColor="#a855f7"
+              height={400}
+            />
+
             <Card>
               <CardHeader>
                 <CardTitle>Tus 4 Dimensiones de Personalidad</CardTitle>

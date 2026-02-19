@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
 import { Toaster } from "@/components/ui/toaster"
-import { AdminNavbar } from "@/components/admin-navbar"
+// import { AdminNavbar } from "@/components/admin-navbar" // TODO: Re-enable when template issue resolved
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Plataforma líder en Chile para desarrollo profesional. Descubre tu potencial con tests psicométricos (DISC, MBTI, Big Five), accede a 120+ libros profesionales y recibe coaching personalizado con IA. Aprende de expertos en liderazgo, productividad e inteligencia emocional.",
+    "Plataforma líder en Chile para desarrollo profesional. Descubre tu potencial con evaluaciones psicométricas, accede a 120+ libros profesionales y recibe coaching personalizado con IA. Aprende de expertos en liderazgo, productividad e inteligencia emocional.",
   keywords: [
     "desarrollo profesional Chile",
-    "tests psicométricos",
+    "evaluaciones psicométricas",
     "coaching con inteligencia artificial",
-    "test DISC Chile",
+    "evaluación personalidad",
     "test MBTI en español",
     "Big Five personalidad",
     "inteligencia emocional test",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "orientación vocacional",
     "coaching carrera profesional",
     "libros desarrollo personal",
-    "test RIASEC Chile",
+    "evaluación vocacional Chile",
     "evaluación soft skills",
     "mentor virtual IA",
     "planificación carrera",
@@ -121,7 +121,6 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
           <SessionWrapper>
-            <AdminNavbar />
             {children}
             <Toaster />
           </SessionWrapper>

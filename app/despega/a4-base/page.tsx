@@ -2,26 +2,63 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useCoach } from "@/contexts/coach-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { ArrowLeft, Newspaper, BookOpen, Bookmark } from "lucide-react"
+import { ArrowLeft, Newspaper, BookOpen, Bookmark, Zap, Trophy, TrendingUp, Brain } from "lucide-react"
 import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
+import { A4GamifiedTests } from "@/components/a4-gamified-tests"
+import { A4ResourceLibrary } from "@/components/a4-resource-library"
 
 export default function A4Page() {
   const [loading, setLoading] = useState(true)
   const [newsItems, setNewsItems] = useState<any[]>([])
   const [modules, setModules] = useState<any[]>([])
   const [savedResources, setSavedResources] = useState<Set<string>>(new Set())
-  const [activeTab, setActiveTab] = useState("noticias")
+  const [activeTab, setActiveTab] = useState("dashboard")
+  const [userStats, setUserStats] = useState({
+    pointsEarned: 0,
+    testsCompleted: 0,
+    resourcesUsed: 0,
+    streak: 0,
+    badges: [],
+  })
+  const { progress } = useCoach()
   const supabase = createClient()
 
   useEffect(() => {
     loadData()
+    loadUserStats()
   }, [])
+
+  const loadUserStats = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // Load user's A4 progress stats
+      const { data: stats } = await supabase
+        .from("despega_pilar_progress")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("pilar", "a4")
+        .single()
+
+      if (stats) {
+        setUserStats(prev => ({
+          ...prev,
+          pointsEarned: stats.score || 0,
+          streak: stats.ciclo_dia || 0,
+        }))
+      }
+    } catch (error) {
+      console.log("[v0] Error loading user stats:", error)
+    }
+  }
 
   const loadData = async () => {
     // Load news
@@ -126,177 +163,193 @@ export default function A4Page() {
           </Card>
         </div>
 
-        {/* Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        {/* Enhanced Tab Triggers */}
+        <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="noticias">
-              <Newspaper className="w-4 h-4 mr-2" />
-              Noticias
-            </TabsTrigger>
-            <TabsTrigger value="modulos">
-              <BookOpen className="w-4 h-4 mr-2" />
-              Módulos
-            </TabsTrigger>
-            <TabsTrigger value="coaching">
-              <span className="mr-2">🎯</span>
-              Coaching
-            </TabsTrigger>
-            <TabsTrigger value="plan">
-              <span className="mr-2">📋</span>
-              Tu Plan
-            </TabsTrigger>
-          </TabsList>
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="noticias" className="flex items-center gap-2">
+            <Newspaper className="w-4 h-4" />
+            Noticias
+          </TabsTrigger>
+          <TabsTrigger value="modulos" className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4" />
+            Módulos
+          </TabsTrigger>
+          <TabsTrigger value="biblioteca" className="flex items-center gap-2">
+            <Bookmark className="w-4 h-4" />
+            Biblioteca
+          </TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="noticias" className="space-y-6">
-            <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
-          </TabsContent>
-
-          <TabsContent value="modulos" className="space-y-6">
-            <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
-          </TabsContent>
-
-          <TabsContent value="coaching" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-xl">🎯</span>
-                  Tu Coach IA - Guía de Transición
-                </CardTitle>
-                <CardDescription>
-                  Sofia & Dani acompañan tu transformación. Pregunta sobre cualquier aspecto de tu nueva identidad en el contexto real.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Sofia</CardTitle>
-                      <CardDescription>Coach de Transición Personal</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm mb-4">Especializada en guiar tu transformación de identidad con empatía y profundidad emocional.</p>
-                      <Button variant="outline" className="w-full">Hablar con Sofia</Button>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Dani</CardTitle>
-                      <CardDescription>Coach de Transición Profesional</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm mb-4">Experto en navegar el mercado y transformar tu identidad profesional en oportunidades reales.</p>
-                      <Button variant="outline" className="w-full">Hablar con Dani</Button>
-                    </CardContent>
-                  </Card>
+        {/* Dashboard Tab */}
+        <TabsContent value="dashboard" className="space-y-6">
+          {/* Advanced Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Puntos Acumulados</p>
+                    <div className="text-3xl font-bold">{userStats.pointsEarned}</div>
+                  </div>
+                  <Zap className="w-8 h-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="plan" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-xl">📋</span>
-                  Tu Plan de Acción - Elige Tu Ritmo
-                </CardTitle>
-                <CardDescription>
-                  Pasos concretos para vivir tu nueva identidad. Elige 30, 60 o 90 días según tu disponibilidad y ritmo de transición.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                  {/* Plan 30 días */}
-                  <Card className="border-2 border-orange-200 bg-orange-50 dark:bg-orange-900/20">
-                    <CardHeader>
-                      <CardTitle className="text-lg">30 Días - Intenso</CardTitle>
-                      <CardDescription>Transformación acelerada</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 1: Asentamiento</div>
-                        <p className="text-muted-foreground">Diagnóstico y comunicación de cambios</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 2-3: Exploración Activa</div>
-                        <p className="text-muted-foreground">Oportunidades y práctica intensiva</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-orange-900 dark:text-orange-100">Semana 4: Decisión</div>
-                        <p className="text-muted-foreground">Primer cambio concreto implementado</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Plan 60 días */}
-                  <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-                    <CardHeader>
-                      <CardTitle className="text-lg">60 Días - Balanceado</CardTitle>
-                      <CardDescription>Transición sostenible</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 1-2: Asentamiento</div>
-                        <p className="text-muted-foreground">Consolidar nuevo entendimiento</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 3-7: Exploración Activa</div>
-                        <p className="text-muted-foreground">Búsqueda profunda y networking</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-blue-900 dark:text-blue-100">Semana 8-9: Integración</div>
-                        <p className="text-muted-foreground">Implementar cambios principales</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Plan 90 días */}
-                  <Card className="border-2 border-green-200 bg-green-50 dark:bg-green-900/20 ring-2 ring-green-300 dark:ring-green-700">
-                    <CardHeader>
-                      <CardTitle className="text-lg">90 Días - Completo</CardTitle>
-                      <CardDescription>Transformación profunda (Recomendado)</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 1-2: Asentamiento</div>
-                        <p className="text-muted-foreground">Consolidar tu nuevo entendimiento</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 3-6: Exploración Activa</div>
-                        <p className="text-muted-foreground">Buscar oportunidades, conectar, practicar</p>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="font-semibold text-green-900 dark:text-green-100">Semana 7-12: Integración</div>
-                        <p className="text-muted-foreground">Decisiones finales y vivir tu nueva identidad</p>
-                      </div>
-                    </CardContent>
-                  </Card>
+            
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Tests Completados</p>
+                    <div className="text-3xl font-bold">{userStats.testsCompleted}</div>
+                  </div>
+                  <Trophy className="w-8 h-8 text-purple-600" />
                 </div>
-
-                <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200">
-                  <CardContent className="pt-6">
-                    <p className="text-sm text-muted-foreground mb-4">
-                      <strong>¿Cuál elegir?</strong> Si es tu primera transición importante, recomendamos 90 días. Si ya tienes experiencia, 30-60 días puede ser suficiente. Tu coach IA te puede ayudar a elegir según tu contexto.
-                    </p>
-                    <Button className="w-full">Crear Mi Plan Personalizado</Button>
-                  </CardContent>
-                </Card>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+            
+            <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Recursos Usados</p>
+                    <div className="text-3xl font-bold">{userStats.resourcesUsed}</div>
+                  </div>
+                  <BookOpen className="w-8 h-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Racha Actual</p>
+                    <div className="text-3xl font-bold">{userStats.streak} días</div>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-orange-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Welcome Card */}
+          <Card className="border-2 border-cyan-200 bg-gradient-to-r from-cyan-50 via-blue-50 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">🌍</span>
+                Bienvenido a A4: Tu Identidad en Acción
+              </CardTitle>
+              <CardDescription>
+                Aquí te conectas con la realidad del mercado, aprendes contexto profesional y vives tu transformación
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm">A4 es donde tu nueva identidad cobra vida. Explora noticias relevantes, completa tests de contexto, accede a recursos curados y aprende de tu coach IA.</p>
+              <div className="flex flex-wrap gap-2">
+                <Badge>Noticias en Tiempo Real</Badge>
+                <Badge>Tests Gamificados</Badge>
+                <Badge>Biblioteca Curada</Badge>
+                <Badge>Coach IA Contextual</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Newspaper className="w-5 h-5" />
+                  Últimas Noticias
+                </CardTitle>
+                <CardDescription>Contexto del mercado que importa</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Lee noticias relevantes al mercado y completa preguntas reflexivas para ganar puntos.</p>
+                <Link href="/despega/a4/noticias">
+                  <Button className="w-full">Ir a Noticias</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Brain className="w-5 h-5" />
+                  Cultura General
+                </CardTitle>
+                <CardDescription>Expande tu contexto profesional</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Tests sobre economía, tecnología, negocios y futuro del trabajo. Gana puntos y badges.</p>
+                <Link href="/despega/a4/cultura-general">
+                  <Button className="w-full">Hacer Tests</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Bookmark className="w-5 h-5" />
+                  Biblioteca Curada
+                </CardTitle>
+                <CardDescription>Recursos de calidad verificada</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Accede a artículos, libros, podcasts y videos recomendados para tu contexto.</p>
+                <Link href="/despega/a4/biblioteca">
+                  <Button className="w-full">Ver Biblioteca</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Trophy className="w-5 h-5" />
+                  Mis Logros
+                </CardTitle>
+                <CardDescription>Badges y reconocimientos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">{userStats.badges.length} badges desbloqueados. Sigue aprendiendo para ganar más.</p>
+                <Button className="w-full" disabled>Ver Logros (próximamente)</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="noticias" className="space-y-6">
+          <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
+        </TabsContent>
+
+        <TabsContent value="modulos" className="space-y-6">
+          <A4LearningModules modules={modules} onCompleteModule={handleCompleteModule} />
+        </TabsContent>
+
+        <TabsContent value="biblioteca" className="space-y-6">
+          <A4ResourceLibrary />
+        </TabsContent>
+      </Tabs>
 
         {/* Tips */}
         <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-cyan-600 text-lg">💡</div>
             <div>
-              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - La Realidad: Tu Identidad en Acción</div>
+              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">
-                <li>✓ <strong>Noticias:</strong> Entiende el contexto del mercado donde vivirá tu nueva identidad</li>
-                <li>✓ <strong>Coaching:</strong> Sofia y Dani te guían en decisiones reales y transiciones concretas</li>
-                <li>✓ <strong>Tu Plan:</strong> 90 días estructurados para que tu transformación sea real, no teórica</li>
-                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu nueva identidad profesional</li>
+                <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
+                <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
+                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
+                <li>✓ <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
+                <li>✓ <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
               </ul>
             </div>
           </CardContent>

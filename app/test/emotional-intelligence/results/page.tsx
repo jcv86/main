@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { CompetencyRadarChart } from "@/components/competency-radar-chart"
 import {
   Activity,
   Book,
@@ -690,6 +691,19 @@ export default function EmotionalIntelligenceResults() {
 
           {/* Competencies Tab */}
           <TabsContent value="competencies" className="space-y-6">
+            <CompetencyRadarChart
+              data={Object.entries(results.competency_scores).map(([key, score]) => ({
+                name: competencyInfo[key as keyof typeof competencyInfo].name,
+                value: score,
+                fullMark: 100,
+              }))}
+              title="Tu Perfil de Inteligencia Emocional"
+              description="Visualización de tus 5 competencias emocionales"
+              strokeColor="#ef4444"
+              fillColor="#ef4444"
+              height={400}
+            />
+
             <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
