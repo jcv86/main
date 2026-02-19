@@ -97,7 +97,7 @@ export default function DespegaOnboarding() {
         const data = await response.json()
         console.log("[v0] Save response data:", data)
         setTimeout(() => {
-          router.push("/dashboard?refetch=true")
+          router.push("/despega/a1/resultado")
         }, 2000)
       } else {
         const errorData = await response.json()
