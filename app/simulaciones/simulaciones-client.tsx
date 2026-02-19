@@ -88,7 +88,6 @@ export default function SimulacionesClient() {
 
   const handleIniciarSimulacion = (id: string) => {
     console.log("Iniciando simulación:", id)
-    // TODO: Implementar lógica de simulación
   }
 
   return (

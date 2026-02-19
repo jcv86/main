@@ -53,8 +53,6 @@ export default function ReadingAnalyticsDashboard() {
   const [monthlyGoal, setMonthlyGoal] = useState(5)
   const [loading, setLoading] = useState(true)
 
-  const userEmail = "demo@example.com"
-
   useEffect(() => {
     loadAnalytics()
   }, [])
@@ -63,7 +61,15 @@ export default function ReadingAnalyticsDashboard() {
     try {
       setLoading(true)
 
-      // Load reading progress data
+      // Get authenticated user
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      if (authError || !user) {
+        console.error('[v0] User not authenticated')
+        setLoading(false)
+        return
+      }
+
+      // Load reading progress data using user ID (not email)
       const { data: progressData, error: progressError } = await supabase
         .from("user_reading_progress")
         .select(`
@@ -74,7 +80,7 @@ export default function ReadingAnalyticsDashboard() {
             category
           )
         `)
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
 
       if (progressError) throw progressError
 
@@ -82,7 +88,7 @@ export default function ReadingAnalyticsDashboard() {
       const { data: reviewsData, error: reviewsError } = await supabase
         .from("book_reviews")
         .select("*")
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
 
       if (reviewsError) throw reviewsError
 
@@ -90,7 +96,7 @@ export default function ReadingAnalyticsDashboard() {
       const { data: sessionsData, error: sessionsError } = await supabase
         .from("reading_sessions")
         .select("*")
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
         .order("session_start", { ascending: false })
 
       if (sessionsError) throw sessionsError

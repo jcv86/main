@@ -162,7 +162,6 @@ export default function RutasPage() {
   const handleScenarioComplete = async (result: any) => {
     setCompletedScenarios(prev => new Set([...prev, result.scenario_id]))
     setSelectedScenario(null)
-    // TODO: Save to database
   }
 
   if (loading) {

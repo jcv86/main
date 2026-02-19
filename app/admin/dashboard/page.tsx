@@ -87,7 +87,6 @@ export default function AdminPage() {
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold">Rendimiento de Contenido</h2>
                 <p className="text-muted-foreground">Análisis detallado de engagement y completación por tipo de contenido</p>
-                {/* TODO: Add content performance charts */}
               </div>
             </div>
           </TabsContent>

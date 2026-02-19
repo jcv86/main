@@ -67,8 +67,6 @@ export default function EnhancedAICoach({ testType, testResults, userProfile, cl
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
 
-  const userEmail = "demo@example.com" // In real app, get from auth
-
   useEffect(() => {
     initializeChat()
     loadConversationHistory()

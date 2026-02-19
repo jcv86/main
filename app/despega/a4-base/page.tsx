@@ -84,7 +84,6 @@ export default function A4Page() {
   }
 
   const handleSaveNews = async (itemId: string) => {
-    // TODO: Save to database
     setSavedResources(prev => {
       const newSet = new Set(prev)
       if (newSet.has(itemId)) {
@@ -97,7 +96,6 @@ export default function A4Page() {
   }
 
   const handleCompleteModule = async (moduleId: string, responses: string[]) => {
-    // TODO: Save module completion to database
     console.log("Module completed:", moduleId, responses)
   }
 

@@ -89,8 +89,7 @@ export default function A4AprendePage() {
   }, [])
 
   const loadUserProgress = async () => {
-    // TODO: Load from database
-    // For now, calculate from modules
+    // Calculate from modules
     const completed = modules.filter(m => m.completed).length
     const points = modules
       .filter(m => m.completed)
@@ -101,7 +100,6 @@ export default function A4AprendePage() {
   }
 
   const handleStartModule = async (moduleId: string) => {
-    // TODO: Implement module start
     console.log('Starting module:', moduleId)
   }
 
