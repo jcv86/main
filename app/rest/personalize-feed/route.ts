@@ -2,140 +2,168 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-/**
- * POST /api/despega/personalize-a4-feed
- * Personaliza el feed de noticias de A4 basado en el tema actual de entrenamientos
- * Se llama cuando A3 está activo para mostrar noticias relevantes
- */
+const NEWSAPI_KEY = process.env.NEWSAPI_KEY
+const NEWSAPI_URL = 'https://newsapi.org/v2/everything'
+
+// Mapeo de temas a keywords de noticias
+const themeKeywordMap: Record<string, string[]> = {
+  liderazgo: ['liderazgo', 'leadership', 'CEO', 'management', 'estrategia'],
+  comunicacion: ['comunicación', 'presentaciones', 'storytelling', 'influencia', 'equipo'],
+  emprendimiento: ['startup', 'emprendedor', 'innovación', 'negocios', 'inversión'],
+  'transformacion-digital': ['inteligencia artificial', 'automatización', 'tecnología', 'digital', 'datos'],
+  gestion: ['gestión', 'procesos', 'calidad', 'mejora continua', 'operaciones'],
+  'desarrollo-personal': ['productividad', 'crecimiento', 'habilidades', 'bienestar', 'coaching'],
+  ventas: ['ventas', 'comercial', 'clientes', 'ingresos', 'business development'],
+  default: ['negocios', 'carrera', 'mercado laboral'],
+}
+
+// Tags por perfil DISC para scoring
+const discTagMap: Record<string, string[]> = {
+  D: ['decisión', 'liderazgo', 'resultados', 'estrategia', 'competencia', 'éxito'],
+  I: ['comunicación', 'equipo', 'influencia', 'relaciones', 'colaboración', 'conexión'],
+  S: ['estabilidad', 'proceso', 'calidad', 'consistencia', 'apoyo', 'confianza'],
+  C: ['análisis', 'datos', 'precisión', 'sistema', 'excelencia', 'mejora'],
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { user_id, training_tema, training_id } = body
 
-    if (!user_id || !training_tema) {
-      return NextResponse.json(
-        { error: 'Missing required fields: user_id, training_tema' },
-        { status: 400 }
-      )
+    if (!user_id) {
+      return NextResponse.json({ error: 'user_id required' }, { status: 400 })
     }
 
-    // Get Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[v0] Missing Supabase credentials')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
+    // Get server cookies
     const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              )
+            } catch {
+              // Handle error
+            }
+          },
         },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
+      }
+    )
 
-    console.log(`[v0] Personalizing A4 feed for user ${user_id} with tema: ${training_tema}`)
-
-    // Create personalized feed entry
-    const { data: feedEntry, error: feedError } = await supabase
-      .from('a4_personalized_feeds')
-      .insert({
-        user_id,
-        training_id,
-        tema_actual: training_tema,
-        keywords: generateKeywords(training_tema),
-        preferencias: {
-          idioma: 'es',
-          tono: 'profesional',
-          relevancia_minima: 0.7,
-        },
-        activo: true,
-        creado_en: new Date().toISOString(),
-      })
-      .select()
+    // Get user profile (DISC)
+    const { data: profile } = await supabase
+      .from('despega_user_profiles')
+      .select('*')
+      .eq('user_id', user_id)
       .single()
 
-    if (feedError || !feedEntry) {
-      console.error('[v0] Error creating personalized feed:', feedError)
-      return NextResponse.json(
-        { error: 'Error creating personalized feed' },
-        { status: 500 }
+    const discProfile = profile?.perfil_dominante || 'D'
+    const keywords = themeKeywordMap[training_tema] || themeKeywordMap.default
+    const discTags = discTagMap[discProfile as keyof typeof discTagMap] || discTagMap.D
+
+    console.log(`[v0] Personalizing A4 feed for user ${user_id}`, {
+      theme: training_tema,
+      disc: discProfile,
+      keywords_count: keywords.length,
+      tags_count: discTags.length,
+    })
+
+    // Fetch personalized news from top keywords
+    const newsResults = await Promise.all(
+      keywords.slice(0, 3).map((keyword) =>
+        fetch(
+          `${NEWSAPI_URL}?q=${encodeURIComponent(keyword)}&language=es&sortBy=publishedAt&pageSize=3`,
+          { headers: { Authorization: `Bearer ${NEWSAPI_KEY}` } }
+        )
+          .then((r) => r.json())
+          .then((data) => data.articles || [])
+          .catch(() => [])
       )
+    )
+
+    const allArticles = newsResults.flat()
+
+    // Score articles by tag relevance and DISC match
+    const scoredArticles = allArticles
+      .slice(0, 5)
+      .map((article: any) => {
+        const title = (article.title || '').toLowerCase()
+        const description = (article.description || '').toLowerCase()
+        const content = (article.content || '').toLowerCase()
+        const fullText = `${title} ${description} ${content}`
+
+        let relevanceScore = 0
+
+        // Score by DISC tags (more important)
+        discTags.forEach((tag) => {
+          if (fullText.includes(tag.toLowerCase())) {
+            relevanceScore += 15
+          }
+        })
+
+        // Score by theme keywords (medium importance)
+        keywords.forEach((keyword) => {
+          if (fullText.includes(keyword.toLowerCase())) {
+            relevanceScore += 8
+          }
+        })
+
+        return {
+          source_id: article.source?.id || 'unknown',
+          source_name: article.source?.name || 'Unknown Source',
+          title: article.title,
+          description: article.description,
+          url: article.url,
+          image: article.urlToImage,
+          published_at: article.publishedAt,
+          relevance_score: relevanceScore,
+          content: article.content,
+        }
+      })
+      .filter((a) => a.relevance_score > 0)
+      .sort((a, b) => b.relevance_score - a.relevance_score)
+
+    // Save personalized feed record
+    if (training_id) {
+      const { error: feedError } = await supabase.from('a4_personalized_feeds').insert({
+        user_id,
+        training_module_id: training_id,
+        keywords: keywords,
+        disc_profile: discProfile,
+        disc_tags: discTags,
+        active: true,
+      })
+
+      if (feedError) {
+        console.warn('[v0] Error saving personalized feed record:', feedError)
+      }
     }
 
-    console.log(`[v0] Created personalized A4 feed for user ${user_id}`)
+    console.log(
+      `[v0] A4 feed personalized: ${scoredArticles.length} articles scored for ${discProfile} profile`
+    )
 
     return NextResponse.json({
       success: true,
-      feed_id: feedEntry.id,
-      tema: training_tema,
-      keywords: generateKeywords(training_tema),
+      theme: training_tema,
+      disc_profile: discProfile,
+      articles_count: scoredArticles.length,
+      articles: scoredArticles,
+      keywords,
+      disc_tags: discTags,
     })
   } catch (error) {
-    console.error('[v0] Error in personalize-a4-feed:', error)
+    console.error('[v0] Error personalizing A4 feed:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to personalize feed' },
       { status: 500 }
     )
   }
-}
-
-/**
- * Genera keywords relevantes basadas en el tema
- */
-function generateKeywords(tema: string): string[] {
-  const keywordMap: Record<string, string[]> = {
-    liderazgo: ['liderazgo', 'management', 'dirección', 'equipos', 'decisiones'],
-    emprendimiento: [
-      'startup',
-      'negocio',
-      'inversión',
-      'emprendedor',
-      'financiamiento',
-    ],
-    'transformación digital': [
-      'tecnología',
-      'digitalización',
-      'innovación',
-      'ai',
-      'automatización',
-    ],
-    'comunicación efectiva': [
-      'comunicación',
-      'presentación',
-      'oratoria',
-      'influencia',
-      'persuasión',
-    ],
-    'gestión de tiempo': [
-      'productividad',
-      'eficiencia',
-      'organización',
-      'prioridades',
-      'enfoque',
-    ],
-  }
-
-  return (
-    keywordMap[tema.toLowerCase()] || [
-      tema.toLowerCase(),
-      'mercado',
-      'tendencias',
-    ]
-  )
 }
