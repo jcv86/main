@@ -1,5 +1,13 @@
-# Vercel cache invalidation - force clean build 2026-02-03
+# Vercel cache invalidation - force clean build 2026-02-20T12:00:00Z
 *.log
 .next/cache
 .turbo
 node_modules/.cache
+.git
+.gitignore
+README.md
+.env.local
+.env.example
+cypress
+e2e
+coverage
