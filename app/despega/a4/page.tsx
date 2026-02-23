@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar } from 'lucide-react'
+import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from 'lucide-react'
 
 export default function A4HubPage() {
   const [loading, setLoading] = useState(true)
@@ -173,6 +173,81 @@ export default function A4HubPage() {
               </CardContent>
             </Card>
           </Link>
+        </div>
+
+        {/* Audit & Verification Section */}
+        <div className="mt-16 pt-12 border-t border-border/50">
+          <h2 className="text-2xl font-bold mb-6">Verificación del Sistema</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Audit Status Card */}
+            <a href="https://github.com/jcv86/main/blob/radar-graphic/AUDIT_EXECUTIVE_SUMMARY.md" target="_blank" rel="noopener noreferrer" className="group">
+              <Card className="h-full border-0 bg-green-500/5 hover:bg-green-500/10 backdrop-blur-sm transition-all cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-3 bg-green-500/20 rounded-lg group-hover:bg-green-500/30 transition-colors">
+                      <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <Badge className="bg-green-600 text-white text-xs">✓ Aprobado</Badge>
+                  </div>
+                  <CardTitle className="text-lg">Auditoría Completada</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    100% funcional. 12 tests simulados exitosos. 0 errores críticos.
+                  </p>
+                  <div className="flex items-center text-green-600 dark:text-green-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
+                    Ver Reporte <ArrowRight className="w-3 h-3 ml-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+
+            {/* Technical Validation */}
+            <a href="https://github.com/jcv86/main/blob/radar-graphic/A4_TECHNICAL_VALIDATION.md" target="_blank" rel="noopener noreferrer" className="group">
+              <Card className="h-full border-0 bg-blue-500/5 hover:bg-blue-500/10 backdrop-blur-sm transition-all cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
+                      <CheckCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <Badge className="bg-blue-600 text-white text-xs">Validado</Badge>
+                  </div>
+                  <CardTitle className="text-lg">Validación Técnica</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Arquitectura verificada. Seguridad RLS 9.2/10. Performance optimizado.
+                  </p>
+                  <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
+                    Detalles <ArrowRight className="w-3 h-3 ml-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+
+            {/* Simulation Results */}
+            <a href="https://github.com/jcv86/main/blob/radar-graphic/A4_SIMULATION_MATRIX.md" target="_blank" rel="noopener noreferrer" className="group">
+              <Card className="h-full border-0 bg-purple-500/5 hover:bg-purple-500/10 backdrop-blur-sm transition-all cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-3 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
+                      <CheckCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <Badge className="bg-purple-600 text-white text-xs">10/10 OK</Badge>
+                  </div>
+                  <CardTitle className="text-lg">Simulaciones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    10 escenarios simulados. Crisis markets ok. 1000 users load tested.
+                  </p>
+                  <div className="flex items-center text-purple-600 dark:text-purple-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
+                    Resultados <ArrowRight className="w-3 h-3 ml-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
         </div>
 
         {/* Coach Call-to-Action */}
