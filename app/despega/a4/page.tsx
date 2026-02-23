@@ -68,16 +68,16 @@ export default function A4HubPage() {
       {/* Only render if authenticated and loaded */}
       {!loading && isAuthenticated && (
         <div className="container mx-auto px-4 py-12 max-w-6xl">
-        {/* Hero Section */}
-        <div className="mb-16">
-          <div className="text-center max-w-3xl mx-auto mb-8">
-            <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
-              <Globe className="w-3 h-3 mr-2" />
-              Fase A4: Contexto & Cultura
-            </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-              Entiende el Mundo Real
-            </h1>
+          {/* Hero Section */}
+          <div className="mb-16">
+            <div className="text-center max-w-3xl mx-auto mb-8">
+              <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
+                <Globe className="w-3 h-3 mr-2" />
+                Fase A4: Contexto & Cultura
+              </Badge>
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
+                Entiende el Mundo Real
+              </h1>
             <p className="text-xl text-muted-foreground text-balance mb-8">
               Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
             </p>
@@ -298,7 +298,6 @@ export default function A4HubPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
         </div>
       )}
     </div>
