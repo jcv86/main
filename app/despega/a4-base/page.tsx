@@ -13,6 +13,7 @@ import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
 import { A4GamifiedTests } from "@/components/a4-gamified-tests"
 import { A4ResourceLibrary } from "@/components/a4-resource-library"
+import { A4RadarEstrategico } from "@/components/a4-radar-estrategico"
 
 export default function A4Page() {
   const [loading, setLoading] = useState(true)
@@ -162,8 +163,12 @@ export default function A4Page() {
         </div>
 
         {/* Enhanced Tab Triggers */}
-        <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="radar" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="radar" className="flex items-center gap-2">
+            <Brain className="w-4 h-4" />
+            Radar
+          </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Dashboard
@@ -181,6 +186,11 @@ export default function A4Page() {
             Biblioteca
           </TabsTrigger>
         </TabsList>
+
+        {/* Radar Estratégico Tab */}
+        <TabsContent value="radar" className="space-y-6">
+          <A4RadarEstrategico />
+        </TabsContent>
 
         {/* Dashboard Tab */}
         <TabsContent value="dashboard" className="space-y-6">
