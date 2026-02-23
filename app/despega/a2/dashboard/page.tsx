@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { useA4Calibration } from "@/hooks/use-a4-calibration"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -16,7 +15,6 @@ export default function A2DashboardPage() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [mission, setMission] = useState<any>(null)
   const [debugInfo, setDebugInfo] = useState<any>(null)
-  const calibration = useA4Calibration()
   const [stats, setStats] = useState({
     actionsCompleted: 0,
     streak: 0,

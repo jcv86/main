@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useA4Calibration } from '@/hooks/use-a4-calibration'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -15,7 +14,6 @@ export default function A3Page() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [a3Progress, setA3Progress] = useState<any>(null)
-  const calibration = useA4Calibration()
   const router = useRouter()
   const supabase = createClient()
   const { progress } = useCoach()

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { useA4Calibration } from "@/hooks/use-a4-calibration"
 import { TestIntroScreen } from "@/components/test-intro-screen"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -20,7 +19,6 @@ const A1_QUESTIONS = DISC_TEST_QUESTIONS
 export default function A1CerebralPage() {
   const router = useRouter()
   const supabase = createClient()
-  const calibration = useA4Calibration()
   const [stage, setStage] = useState<"intro" | "test" | "results">("intro")
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState<Record<number, any>>({})
@@ -68,38 +66,15 @@ export default function A1CerebralPage() {
   }, [])
 
   const getProfileContent = (dimension: string, score: number) => {
-    // Adjust explanation depth based on A4 Strategic Score
-    // depthLevel: 1 (beginner - simple), 2 (intermediate - moderate), 3 (advanced - deep)
-    const depthLevel = calibration?.depthLevel || 1
-    
-    // Helper to adjust text depth
-    const adjustDepth = (simple: string, moderate: string, deep: string) => {
-      if (depthLevel === 3) return deep
-      if (depthLevel === 2) return moderate
-      return simple
-    }
-    
     // Return content based on Juan Vial structure: natural behavior, connections, what can be uncomfortable, daily thinking, growth opportunities
     const profileContent: Record<string, Record<string, any>> = {
       energia: {
         label: "Estabilidad y Energía",
         naturalBehavior: score > 70 
-          ? adjustDepth(
-              "Tienes equilibrio personal consistente.",
-              "Actúas con consistencia y equilibrio personal. Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral.",
-              "Demuestras una arquitectura energética sofisticada: mantienes equilibrio dinámico en contextos complejos. Tu energía no solo es sostenida sino estratégicamente canalizada. Te expresas desde la calma porque has integrado prácticamente la autorregulación, permitiéndote buscar el bienestar integral como sistema, no como evento."
-            )
+          ? "Actúas con consistencia y equilibrio personal. Tu energía es sostenida, permitiendo que mantengas un rendimiento constante. Te expresas desde la calma, buscando siempre el bienestar integral."
           : score > 50
-          ? adjustDepth(
-              "Tu energía fluctúa a veces.",
-              "Buscas mantener un equilibrio en tu energía, aunque a veces fluctúa. Reconoces la importancia del descanso y la actividad física, aunque no siempre logres consistencia.",
-              "Intentas mantener equilibrio energético pero experimentas fluctuaciones predecibles en contextos de cambio. Reconoces intelectualmente la importancia del descanso y actividad física, pero la ejecución sistemática es incompleta. Hay brechas entre tu intención y tu práctica."
-            )
-          : adjustDepth(
-              "Tu energía requiere atención.",
-              "Tu energía es variable y requiere atención. A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.",
-              "Tu gestión energética es inconsistente y reactiva. Experimentas ciclos de agotamiento que indican falta de sistema de recuperación. La variable crítica es crear una estructura mínima que genere recuperación automática, no voluntaria."
-            ),
+          ? "Buscas mantener un equilibrio en tu energía, aunque a veces fluctúa. Reconoces la importancia del descanso y la actividad física, aunque no siempre logres consistencia."
+          : "Tu energía es variable y requiere atención. A menudo te sientes agotado o sin consistencia en tus hábitos. Recuperar el equilibrio es clave para tu rendimiento.",
         
         connections: score > 70
           ? "Te conectas bien con personas que valoran el bienestar, la consistencia y el balance. Te sientes a gusto en entornos donde hay ritmo, orden y cuidado personal."

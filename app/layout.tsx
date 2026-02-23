@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
+import { CoachStrategicProvider } from "@/components/coach-strategic-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -119,10 +120,12 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
-          <SessionWrapper>
-            {children}
-            <Toaster />
-          </SessionWrapper>
+          <CoachStrategicProvider>
+            <SessionWrapper>
+              {children}
+              <Toaster />
+            </SessionWrapper>
+          </CoachStrategicProvider>
         </ThemeProvider>
 
         <Analytics />
