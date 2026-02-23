@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe } from 'lucide-react'
+import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar } from 'lucide-react'
 
 export default function A4HubPage() {
   const [loading, setLoading] = useState(true)
@@ -81,7 +81,30 @@ export default function A4HubPage() {
         </div>
 
         {/* Main Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+          {/* Radar Estratégico - Featured First */}
+          <Link href="/despega/a4/radar" className="group lg:col-span-2">
+            <Card className="h-full border-0 bg-gradient-to-br from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer text-white">
+              <CardHeader>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
+                    <Radar className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs bg-blue-500/20 text-blue-200">Lectura del Día</Badge>
+                </div>
+                <CardTitle className="text-2xl text-slate-50">Radar Estratégico</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-300 mb-6">
+                  Análisis estructurado de noticias con 7 capas cognitivas. Entiende qué está pasando realmente, no solo qué dicen que pasó. Delta vs ayer, nivel de energía, narrativa, weak signals.
+                </p>
+                <div className="flex items-center text-blue-300 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                  Ver Radar <ArrowRight className="w-4 h-4 ml-2" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
           {/* News Feed */}
           <Link href="/despega/a4/noticias" className="group">
             <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
