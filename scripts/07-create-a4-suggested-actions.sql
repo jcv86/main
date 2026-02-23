@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS a4_suggested_actions (
   action_description TEXT NOT NULL,
   difficulty_level VARCHAR CHECK (difficulty_level IN ('beginner', 'intermediate', 'advanced')),
   estimated_time_minutes INT,
-  impact_score INT (0-100),
+  impact_score INT CHECK (impact_score >= 0 AND impact_score <= 100),
   completed BOOLEAN DEFAULT FALSE,
   completed_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT NOW(),

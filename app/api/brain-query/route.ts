@@ -147,6 +147,19 @@ export async function POST(request: NextRequest) {
 
         personality = personalityData?.[0] || null
         console.log("[v0] Personality data:", !!personality)
+        
+        // Fetch A4 Strategic Score for enriched context
+        const { data: a4ScoreData } = await supabase
+          .from("a4_strategic_scores")
+          .select("score, trend, level")
+          .eq("user_id", actualUserId)
+          .order("created_at", { ascending: false })
+          .limit(1)
+        
+        if (a4ScoreData?.[0]) {
+          userContext.a4_strategic_score = a4ScoreData[0]
+          console.log("[v0] A4 Strategic Score:", a4ScoreData[0].score)
+        }
       } else {
         console.log("[v0] Skipping personality query - no valid user UUID")
       }
@@ -213,6 +226,15 @@ export async function POST(request: NextRequest) {
             contextDescription += ` - ${JSON.stringify(test.results).substring(0, 200)}`
           }
         })
+      }
+
+      // Add A4 Strategic Context if available
+      if (userContext.a4_strategic_score) {
+        contextDescription += `\n\nContexto Estratégico A4:`
+        contextDescription += `\n- Puntaje Estratégico: ${userContext.a4_strategic_score.score}/100`
+        contextDescription += `\n- Nivel: ${userContext.a4_strategic_score.level}`
+        contextDescription += `\n- Tendencia: ${userContext.a4_strategic_score.trend}`
+        contextDescription += "\n\nEl usuario está en fase de análisis estratégico del mercado y su contexto profesional."
       }
 
       if (userContext.hasPersonalityData) {
