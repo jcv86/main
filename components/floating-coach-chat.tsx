@@ -18,62 +18,18 @@ interface Message {
 }
 
 interface FloatingCoachChatProps {
-  categoryId: PromptCategoryId
+  coach: "sofia" | "dani"
   userEmail: string
-  onBack: () => void
+  onTyping?: (isTyping: boolean) => void
+  onMessageReceived?: (message: string) => void
 }
 
-export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoachChatProps) {
+export function FloatingCoachChat({ coach, userEmail, onTyping, onMessageReceived }: FloatingCoachChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [sessionId, setSessionId] = useState<string>("")
-  const [promptVariantId, setPromptVariantId] = useState<string>("")
-  const [promptVersion, setPromptVersion] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const categoryData = PROMPT_CATEGORIES[categoryId]
-  
-  if (!categoryData) {
-    return (
-      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
-        <p className="text-lg text-muted-foreground mb-4">
-          Lo sentimos, esta categoría no está disponible.
-        </p>
-        <Button onClick={onBack}>Volver</Button>
-      </div>
-    )
-  }
-
-  const coach = categoryData.coach === "sofia" ? "sofia" : categoryData.coach === "dani" ? "dani" : "sofia"
-  const conversationCategory = categoryId
-
-  useEffect(() => {
-    setSessionId(crypto.randomUUID())
-
-    const initializeCoach = async () => {
-      const systemPrompt = getEnhancedSystemPrompt({
-        category: categoryId,
-      })
-
-      const welcomeMessage: Message = {
-        id: "1",
-        content: getWelcomeMessage(categoryId),
-        sender: "ai",
-        timestamp: new Date(),
-        coach: coach,
-      }
-      setMessages([welcomeMessage])
-    }
-
-    initializeCoach()
-  }, [categoryId, userEmail])
-
-  useEffect(() => {
-    if (sessionId && promptVariantId && userEmail) {
-      // trackPromptUsage(sessionId, promptVariantId, userEmail)
-    }
-  }, [sessionId, promptVariantId, userEmail])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -94,6 +50,9 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
     const currentMessage = inputMessage
     setInputMessage("")
     setIsLoading(true)
+    
+    // Notify parent that AI is typing
+    onTyping?.(true)
 
     try {
       const response = await fetch("/api/brain-query", {
@@ -110,9 +69,9 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
           userEmail: userEmail,
           testType: "General",
           testResults: {},
-          conversationCategory: conversationCategory,
-          promptVariantId: promptVariantId,
-          promptVersion: promptVersion,
+          conversationCategory: "general",
+          promptVariantId: "",
+          promptVersion: "",
         }),
       })
 
@@ -129,7 +88,11 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
         timestamp: new Date(),
         coach: coach,
       }
+      
       setMessages((prev) => [...prev, aiResponse])
+      
+      // Notify parent of the AI message
+      onMessageReceived?.(data.response.substring(0, 50) + (data.response.length > 50 ? "..." : ""))
     } catch (error) {
       console.error("[v0] Error getting AI response:", error)
       const errorMessage: Message = {
@@ -142,20 +105,21 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
       setMessages((prev) => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
+      onTyping?.(false)
     }
   }
 
-  const quickStartQuestions = SUGGESTED_QUESTIONS[categoryId] || []
+  const coachName = coach === "sofia" ? "Sofía" : "Dani"
+  const coachGreeting = coach === "sofia" 
+    ? "Hola, soy Sofía. Aquí estoy para ayudarte a entender mejor quién eres y qué quieres lograr."
+    : "Hola, soy Dani. Estoy aquí para acompañarte en tu desarrollo profesional."
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
+      <div className="p-4 border-b flex items-center gap-3 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20">
         <div className="flex-1">
-          <h3 className="font-semibold text-sm">{categoryData.name}</h3>
-          <p className="text-xs text-muted-foreground">{categoryData.description}</p>
+          <h3 className="font-semibold text-sm">{coachName}</h3>
+          <p className="text-xs text-muted-foreground">Conversación privada</p>
         </div>
       </div>
 
