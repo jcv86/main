@@ -1,25 +1,39 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowLeft, Search, Bookmark, TrendingUp } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export default function A4NoticiasPage() {
   const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [news, setNews] = useState<any[]>([])
   const [filteredNews, setFilteredNews] = useState<any[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set())
+  const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
-    loadNews()
-  }, [])
+    const checkAuth = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error || !user) {
+        router.push('/auth/signin')
+        return
+      }
+      setIsAuthenticated(true)
+      loadNews()
+    }
+    checkAuth()
+  }, [supabase, router])
 
   useEffect(() => {
     filterNews()

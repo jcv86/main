@@ -6,36 +6,68 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from 'lucide-react'
 
 export default function A4HubPage() {
   const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [newsCount, setNewsCount] = useState(0)
   const [resourcesCount, setResourcesCount] = useState(0)
   const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
-    loadStats()
-  }, [])
+    const checkAuthAndLoadStats = async () => {
+      try {
+        // Check authentication
+        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        
+        if (authError || !user) {
+          console.log('[v0] User not authenticated, redirecting to login')
+          router.push('/auth/signin')
+          return
+        }
 
-  const loadStats = async () => {
-    const { count: newsData } = await supabase
-      .from('biblioteca')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_featured', true)
+        setIsAuthenticated(true)
 
-    const { count: resourcesData } = await supabase
-      .from('biblioteca')
-      .select('*', { count: 'exact', head: true })
+        // Load stats only if authenticated
+        const { count: newsData } = await supabase
+          .from('biblioteca')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_featured', true)
 
-    setNewsCount(newsData || 0)
-    setResourcesCount(resourcesData || 0)
-    setLoading(false)
-  }
+        const { count: resourcesData } = await supabase
+          .from('biblioteca')
+          .select('*', { count: 'exact', head: true })
+
+        setNewsCount(newsData || 0)
+        setResourcesCount(resourcesData || 0)
+      } catch (error) {
+        console.error('[v0] Error loading A4 page:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAuthAndLoadStats()
+  }, [supabase, router])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      {/* Show loading state */}
+      {loading && (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Cargando A4...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Only render if authenticated and loaded */}
+      {!loading && isAuthenticated && (
+        <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Hero Section */}
         <div className="mb-16">
           <div className="text-center max-w-3xl mx-auto mb-8">
@@ -267,6 +299,8 @@ export default function A4HubPage() {
           </CardContent>
         </Card>
       </div>
+        </div>
+      )}
     </div>
   )
 }
