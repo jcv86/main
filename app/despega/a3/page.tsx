@@ -70,35 +70,64 @@ export default function A3Page() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Badge className="bg-purple-600 hover:bg-purple-700">A3 - ENTRENAMIENTOS</Badge>
-            <Badge variant="outline">Fase Avanzada</Badge>
+        {/* WELCOME HERO - A3 VERSION */}
+        <div className="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-800 dark:to-amber-800 rounded-lg p-8 text-white shadow-lg">
+          <div className="max-w-3xl">
+            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Aterrizaje y Simulación</p>
+            <h1 className="text-4xl font-bold mb-3">Entrena como profesional antes de hacerlo en vivo</h1>
+            <p className="text-lg text-orange-50 mb-4">
+              Completaste tu descubrimiento personal en A1 y tu plan en A2. Ahora es momento de practicar en simulaciones realistas. 
+              A3 te pone en escenarios desafiantes donde practicas entrevistas, presentaciones y decisiones estratégicas con feedback en tiempo real.
+            </p>
+            <div className="flex gap-3">
+              <Button className="bg-white text-orange-700 hover:bg-orange-50 font-semibold" size="lg">
+                Comenzar Entrenamientos
+              </Button>
+              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+                Ver Guía
+              </Button>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50">
-            A3: Entrenamientos Avanzados
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Simulaciones realistas, feedback en tiempo real, y entrenamientos para dominar cualquier escenario profesional.
-          </p>
         </div>
 
-        {/* Hero Card */}
-        <Card className="border-0 bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl">
+        {/* QUICK START GUIDE - A3 VERSION */}
+        <Card className="border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Target className="w-6 h-6" />
-              Tu Jornada A3: De la Teoría a la Maestría
+            <CardTitle className="text-xl flex items-center gap-2">
+              <span className="text-2xl">🎯</span> Tu Entrenamiento A3 - Primeros Pasos
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-purple-100">
-              Has aprendido sobre ti (A1), construido nuevas acciones (A2), y expandido tu contexto (A4). Ahora es tiempo de ENTRENAR como lo harías en la vida real: con presión real, feedback real, y resultados reales.
-            </p>
-            <p className="text-purple-100">
-              A3 te pone en simulaciones progresivas donde practicas hasta la maestría.
-            </p>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">1</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Entiende los Módulos de Entrenamiento</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">2</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Comienza con el Módulo de Entrevistas</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">3</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Practica en Progresión</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">4</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Registra tu Empleabilidad</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 

@@ -4,7 +4,7 @@ import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Flame, TrendingUp, Smile, MessageCircle } from 'lucide-react'
+import { Flame, TrendingUp, Smile, MessageCircle, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 export function CoachSidebar() {
@@ -31,6 +31,24 @@ export function CoachSidebar() {
         </CardHeader>
 
         <CardContent className="space-y-4">
+          {/* GLOBAL JOURNEY PROGRESS */}
+          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-3 rounded-lg border border-indigo-200 dark:border-indigo-800">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-indigo-900 dark:text-indigo-100 flex items-center gap-1">
+                <Zap className="w-3 h-3" />
+                Tu Viaje
+              </span>
+              <Badge className="bg-indigo-600 text-white text-xs">50%</Badge>
+            </div>
+            <div className="flex gap-1 items-center text-xs font-medium">
+              <span className="text-green-600 dark:text-green-400">A1 ✓</span>
+              <span className="text-yellow-600 dark:text-yellow-400">A2 ▮</span>
+              <span className="text-slate-400">A3 ○</span>
+              <span className="text-slate-400">A4 ○</span>
+            </div>
+            <Progress value={50} className="h-1.5 mt-2 bg-slate-300 dark:bg-slate-700" />
+          </div>
+
           {/* Coach Message */}
           <div className="bg-white dark:bg-slate-800 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-sm leading-relaxed text-slate-700 dark:text-slate-300 min-h-16">
             {isLoadingCoach ? (
@@ -109,10 +127,15 @@ export function CoachSidebar() {
             {currentProgress.actionsCompleted} acciones completadas
           </Badge>
 
-          {/* CTA */}
-          <Link href="/despega/a2/coach" className="block text-center text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 py-2 border-t border-slate-200 dark:border-slate-800 mt-3">
-            Abrir conversación completa →
-          </Link>
+          {/* Quick Links */}
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-2">
+            <Link href="/despega/journey-summary" className="block text-center text-xs font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 py-1">
+              📊 Ver Resumen del Viaje
+            </Link>
+            <Link href="/despega/a2/coach" className="block text-center text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 py-1">
+              💬 Abrir Chat Completo
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
