@@ -8,6 +8,12 @@ import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { validateEnvironment } from "@/lib/env-validation"
+
+// Validate environment on startup
+if (typeof window === "undefined") {
+  validateEnvironment()
+}
 
 const inter = Inter({ subsets: ["latin"] })
 
