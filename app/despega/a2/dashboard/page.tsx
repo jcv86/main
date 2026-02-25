@@ -299,16 +299,3 @@ export default function A2DashboardPage() {
     </div>
   )
 }
-                </Badge>
-              </div>
-              <div className="flex justify-between">
-                <span>Entradas en Bitácora:</span>
-                <Badge variant="outline">{debugInfo.bitacoraEntries}</Badge>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-    </div>
-  )
-}
