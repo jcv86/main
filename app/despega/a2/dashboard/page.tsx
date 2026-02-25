@@ -35,16 +35,12 @@ export default function A2DashboardPage() {
           return
         }
 
-        console.log('[v0] Dashboard loading data for user:', user.id)
-
         // Load user profile
         const { data: profileData } = await supabase
           .from("despega_user_profiles")
           .select("*")
           .eq("user_id", user.id)
           .single()
-
-        console.log('[v0] Profile data loaded:', profileData)
 
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)
@@ -56,7 +52,6 @@ export default function A2DashboardPage() {
             .eq("id", profileData.a2_mission_id)
             .single()
 
-          console.log('[v0] Mission data loaded:', missionData)
           setMission(missionData)
 
           // Load A2 bitácora for stats
@@ -65,8 +60,6 @@ export default function A2DashboardPage() {
             .select("*")
             .eq("user_id", user.id)
             .order("created_at", { ascending: false })
-
-          console.log('[v0] Bitácora data loaded:', bitacoraData?.length || 0, 'entries')
 
           // Store debug info
           setDebugInfo({
@@ -79,7 +72,7 @@ export default function A2DashboardPage() {
           })
         }
       } catch (error) {
-        console.error('[v0] Dashboard load error:', error)
+        // Handle error silently
       } finally {
         setLoading(false)
       }
@@ -101,195 +94,211 @@ export default function A2DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
-      <div className="max-w-4xl mx-auto py-12 space-y-8">
-        {/* Header */}
-        <div className="space-y-3">
-          <Badge variant="outline" className="w-fit">
-            Tu Progreso en A2
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
-            Dashboard de Transformación
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            {mission?.objective || "Tu misión de 90 días"}
-          </p>
+      <div className="max-w-6xl mx-auto py-8 space-y-8">
+        
+        {/* WELCOME HERO - NEW */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-800 rounded-lg p-8 text-white shadow-lg">
+          <div className="max-w-3xl">
+            <p className="text-green-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Construcción del Puente</p>
+            <h1 className="text-4xl font-bold mb-3">Bienvenido a tu transformación de 90 días</h1>
+            <p className="text-lg text-green-50 mb-4">
+              Acabas de descubrir tu perfil DISC en A1. Ahora en A2, vamos a construir tu ruta personal hacia el cambio profesional que deseas. 
+              Este es tu espacio para planificar, aprender y actuar consistentemente.
+            </p>
+            <div className="flex gap-3">
+              <Button className="bg-white text-green-700 hover:bg-green-50 font-semibold" size="lg">
+                Comenzar Ahora
+              </Button>
+              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+                Ver Guía
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Completed Actions */}
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-4 text-center">
-              <Activity className="w-6 h-6 mx-auto mb-2 text-green-600 dark:text-green-400" />
-              <div className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-                {stats.actionsCompleted}
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Acciones completadas
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Streak */}
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-4 text-center">
-              <Zap className="w-6 h-6 mx-auto mb-2 text-amber-600 dark:text-amber-400" />
-              <div className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-                {stats.streak}
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Días de racha
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Success Rate */}
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="w-6 h-6 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
-              <div className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-                {stats.successRate}%
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Tasa de éxito
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Sprint Progress */}
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-4 text-center">
-              <BookOpen className="w-6 h-6 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
-              <div className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-                {stats.sprintProgress}%
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Sprint actual
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Sprint Progress Overview */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
-            Tus 3 Sprints
-          </h2>
-
-          {[1, 2, 3].map((sprintNum) => (
-            <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-              <Card className="border-0 shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">
-                          Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
-                        </h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                          Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}
-                        </p>
-                      </div>
-                      <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        sprintNum === 1
-                          ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
-                          : sprintNum === 2
-                          ? "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
-                          : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
-                      }`}>
-                        {sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-600 dark:text-slate-400">Progreso</span>
-                        <span className="font-semibold text-slate-900 dark:text-slate-50">
-                          {sprintNum === 1 ? stats.sprintProgress : sprintNum === 2 ? 0 : 0}%
-                        </span>
-                      </div>
-                      <Progress value={sprintNum === 1 ? stats.sprintProgress : 0} className="h-2" />
-                    </div>
-
-                    <div className="flex items-center justify-end text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors">
-                      Explorar Sprint <ArrowRight className="ml-2 w-4 h-4" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <Link href="/despega/a2/sprint-1">
-            <Button className="w-full h-14" size="lg">
-              Continuar Sprint <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </Link>
-          <Link href="/despega/a2/bitacora">
-            <Button variant="outline" className="w-full h-14" size="lg">
-              📖 Bitácora
-            </Button>
-          </Link>
-          <Link href="/despega/a2/coach">
-            <Button variant="outline" className="w-full h-14" size="lg">
-              💬 Chat Coach
-            </Button>
-          </Link>
-        </div>
-
-        {/* Transition to A3 Card */}
-        <Card className="border-2 border-purple-300 dark:border-purple-600 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
+        {/* QUICK START GUIDE - NEW */}
+        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-2xl">🎯</span>
-              Próximo: A3 - Entrenamientos Avanzados
+            <CardTitle className="text-xl flex items-center gap-2">
+              <span className="text-2xl">🧭</span> Primeros Pasos - Haz esto ahora
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300">
-              Una vez completes tu sprint 1, accede a A3 para entrenamientos avanzados con simulaciones de entrevistas y evaluaciones personalizadas.
-            </p>
-            <Link href="/despega/a3">
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600">
-                Ir a A3 - Entrenamientos <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Perfil DISC</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Comprende tus fortalezas y áreas de desarrollo. Tu perfil es la base de tu plan.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Empieza Sprint 1: Fundamentos (Días 1-30)</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye los pilares básicos con acciones pequeñas y consistentes. Una acción diaria cambia todo.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Habla con tu Coach</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu coach personalizará la ruta según tu perfil. Hazle preguntas, él te guiará.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Registra tu Progreso</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Usa la Bitácora para registrar acciones. Los datos nutren tu plan de mejora.</p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        {/* Info Box */}
-        <Card className="border-0 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500">
-          <CardContent className="p-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300">
-              <strong>💡 Recuerda:</strong> Consistencia sobre perfección. Una pequeña acción diaria crea transformaciones extraordinarias en 90 días.
-            </p>
+        {/* CTA SECTION - SIMPLIFIED */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <Link href="/despega/a2/sprint-1" className="md:col-span-2">
+            <Button className="w-full h-16 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold shadow-lg" size="lg">
+              ▶️ Comenzar Sprint 1: Fundamentos (Días 1-30) <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </Link>
+        </div>
+
+        {/* TWO COLUMN LAYOUT */}
+        <div className="grid md:grid-cols-3 gap-6">
+          
+          {/* LEFT: COACH SECTION - PROMINENT */}
+          <div className="md:col-span-1">
+            <Card className="border-2 border-purple-400 dark:border-purple-600 bg-gradient-to-b from-purple-50 to-transparent dark:from-purple-900/30 dark:to-transparent h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <span className="text-2xl">💬</span> Tu Coach
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <strong>Travis</strong> es tu coach de transformación. Él está aquí para guiarte, responder preguntas y personalizar tu ruta según tu progreso.
+                </p>
+                <Link href="/despega/a2/coach">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                    💬 Chat con Coach
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* RIGHT: SPRINTS OVERVIEW */}
+          <div className="md:col-span-2">
+            <Card className="border-0 shadow-md">
+              <CardHeader>
+                <CardTitle className="text-lg">Tu Plan de 90 Días</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[1, 2, 3].map((sprintNum) => (
+                  <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
+                    <div className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-slate-900 dark:text-slate-50">
+                            Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
+                          </h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                            Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}
+                          </p>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          sprintNum === 1
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
+                            : sprintNum === 2
+                            ? "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
+                            : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
+                        }`}>
+                          {sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}
+                        </div>
+                      </div>
+                      {sprintNum === 1 && (
+                        <div className="mt-3">
+                          <div className="flex items-center justify-between text-sm mb-1">
+                            <span className="text-slate-600 dark:text-slate-400">Progreso</span>
+                            <span className="font-semibold">{stats.sprintProgress}%</span>
+                          </div>
+                          <Progress value={stats.sprintProgress} className="h-2" />
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+        </div>
+
+        {/* STATS SIMPLIFIED */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <Activity className="w-5 h-5 mx-auto mb-2 text-green-600 dark:text-green-400" />
+              <div className="text-2xl font-bold">{stats.actionsCompleted}</div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Acciones</p>
+            </CardContent>
+          </Card>
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <Zap className="w-5 h-5 mx-auto mb-2 text-amber-600 dark:text-amber-400" />
+              <div className="text-2xl font-bold">{stats.streak}</div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Racha</p>
+            </CardContent>
+          </Card>
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <TrendingUp className="w-5 h-5 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
+              <div className="text-2xl font-bold">{stats.successRate}%</div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Éxito</p>
+            </CardContent>
+          </Card>
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <BookOpen className="w-5 h-5 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
+              <div className="text-2xl font-bold">{stats.sprintProgress}%</div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Sprint</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* ADDITIONAL RESOURCES */}
+        <Card className="border-0 bg-amber-50 dark:bg-amber-900/20">
+          <CardHeader>
+            <CardTitle className="text-lg">Recursos Disponibles</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-3">
+              <Link href="/despega/a2/bitacora">
+                <Button variant="outline" className="w-full justify-center">
+                  📖 Bitácora
+                </Button>
+              </Link>
+              <Link href="/despega/a4-base">
+                <Button variant="outline" className="w-full justify-center">
+                  🌍 Contexto Macro (A4)
+                </Button>
+              </Link>
+              <Link href="/despega/a3">
+                <Button variant="outline" className="w-full justify-center">
+                  🎯 Entrenamientos (A3)
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
 
-        {/* Debug Info - Visible for development/verification */}
-        {debugInfo && (
-          <Card className="border-0 bg-slate-100 dark:bg-slate-800 border-l-4 border-l-amber-500">
-            <CardHeader>
-              <CardTitle className="text-sm">Estado de Datos (Debug)</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-              <div className="flex justify-between">
-                <span>Usuario:</span>
-                <code className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">{debugInfo.userId?.slice(0, 8)}...</code>
-              </div>
-              <div className="flex justify-between">
-                <span>Perfil guardado:</span>
-                <Badge variant={debugInfo.profileExists ? "default" : "destructive"}>
-                  {debugInfo.profileExists ? "✓" : "✗"}
-                </Badge>
-              </div>
-              <div className="flex justify-between">
-                <span>Misión guardada:</span>
-                <Badge variant={debugInfo.missionExists ? "default" : "destructive"}>
-                  {debugInfo.missionExists ? "✓" : "✗"}
+      </div>
+    </div>
+  )
+}
                 </Badge>
               </div>
               <div className="flex justify-between">
