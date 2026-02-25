@@ -136,9 +136,7 @@ export default function A4Page() {
         {/* QUICK START GUIDE - A4 VERSION */}
         <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <span className="text-2xl">🔍</span> Cómo Usar A4 - Primeros Pasos
-            </CardTitle>
+            <CardTitle className="text-xl">Primeros Pasos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -177,11 +175,11 @@ export default function A4Page() {
         {/* Original Header - Simplified */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
-              🌍
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white">
+              A4
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Tu Dashboard A4</h2>
+              <h2 className="text-2xl font-bold">Dashboard de Contexto Estratégico</h2>
               <p className="text-muted-foreground">Radar, Noticias, Módulos y Recursos</p>
             </div>
           </div>

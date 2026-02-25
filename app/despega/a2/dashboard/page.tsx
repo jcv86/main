@@ -99,11 +99,11 @@ export default function A2DashboardPage() {
         {/* WELCOME HERO - NEW */}
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-800 rounded-lg p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-green-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Construcción del Puente</p>
-            <h1 className="text-4xl font-bold mb-3">Bienvenido a tu transformación de 90 días</h1>
+            <p className="text-green-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
+            <h1 className="text-4xl font-bold mb-3">Tu plan de transformación de 90 días</h1>
             <p className="text-lg text-green-50 mb-4">
-              Acabas de descubrir tu perfil DISC en A1. Ahora en A2, vamos a construir tu ruta personal hacia el cambio profesional que deseas. 
-              Este es tu espacio para planificar, aprender y actuar consistentemente.
+              Ya conoces tu perfil. Ahora vamos a construir un plan concreto y acciones específicas para tu cambio profesional. 
+              Este es tu espacio para planificar, aprender y ejecutar consistentemente.
             </p>
             <div className="flex gap-3">
               <Button className="bg-white text-green-700 hover:bg-green-50 font-semibold" size="lg">
@@ -119,9 +119,7 @@ export default function A2DashboardPage() {
         {/* QUICK START GUIDE - NEW */}
         <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <span className="text-2xl">🧭</span> Primeros Pasos - Haz esto ahora
-            </CardTitle>
+            <CardTitle className="text-xl">Primeros Pasos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -135,22 +133,22 @@ export default function A2DashboardPage() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Empieza Sprint 1: Fundamentos (Días 1-30)</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye los pilares básicos con acciones pequeñas y consistentes. Una acción diaria cambia todo.</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Comienza Sprint 1: Fundamentos (Días 1-30)</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye los pilares básicos con acciones pequeñas y consistentes.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Habla con tu Coach</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu coach personalizará la ruta según tu perfil. Hazle preguntas, él te guiará.</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Trabaja con tu Coach</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu coach personalizará la ruta según tu perfil y progreso.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</div>
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-50">Registra tu Progreso</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Usa la Bitácora para registrar acciones. Los datos nutren tu plan de mejora.</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Usa la Bitácora para documentar acciones y mejorar continuamente.</p>
                 </div>
               </div>
             </div>
@@ -161,7 +159,7 @@ export default function A2DashboardPage() {
         <div className="grid md:grid-cols-2 gap-4">
           <Link href="/despega/a2/sprint-1" className="md:col-span-2">
             <Button className="w-full h-16 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold shadow-lg" size="lg">
-              ▶️ Comenzar Sprint 1: Fundamentos (Días 1-30) <ArrowRight className="ml-2 w-5 h-5" />
+              Comenzar Sprint 1: Fundamentos (Días 1-30) <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </Link>
         </div>
@@ -173,17 +171,15 @@ export default function A2DashboardPage() {
           <div className="md:col-span-1">
             <Card className="border-2 border-purple-400 dark:border-purple-600 bg-gradient-to-b from-purple-50 to-transparent dark:from-purple-900/30 dark:to-transparent h-full">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <span className="text-2xl">💬</span> Tu Coach
-                </CardTitle>
+                <CardTitle className="text-lg">Tu Coach</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-slate-700 dark:text-slate-300">
-                  <strong>Travis</strong> es tu coach de transformación. Él está aquí para guiarte, responder preguntas y personalizar tu ruta según tu progreso.
+                  <strong>Travis</strong> es tu coach de transformación. Está disponible para guiarte, responder preguntas y personalizar tu ruta según tu progreso y resultados.
                 </p>
                 <Link href="/despega/a2/coach">
                   <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                    💬 Chat con Coach
+                    Hablar con Coach
                   </Button>
                 </Link>
               </CardContent>
@@ -278,17 +274,17 @@ export default function A2DashboardPage() {
             <div className="grid md:grid-cols-3 gap-3">
               <Link href="/despega/a2/bitacora">
                 <Button variant="outline" className="w-full justify-center">
-                  📖 Bitácora
+                  Bitácora
                 </Button>
               </Link>
               <Link href="/despega/a4-base">
                 <Button variant="outline" className="w-full justify-center">
-                  🌍 Contexto Macro (A4)
+                  Contexto Macro (A4)
                 </Button>
               </Link>
               <Link href="/despega/a3">
                 <Button variant="outline" className="w-full justify-center">
-                  🎯 Entrenamientos (A3)
+                  Entrenamientos (A3)
                 </Button>
               </Link>
             </div>

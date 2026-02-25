@@ -4,7 +4,7 @@ import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Flame, TrendingUp, Smile, MessageCircle, Zap } from 'lucide-react'
+import { Flame, TrendingUp, Smile, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export function CoachSidebar() {
@@ -34,10 +34,7 @@ export function CoachSidebar() {
           {/* GLOBAL JOURNEY PROGRESS */}
           <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-3 rounded-lg border border-indigo-200 dark:border-indigo-800">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-indigo-900 dark:text-indigo-100 flex items-center gap-1">
-                <Zap className="w-3 h-3" />
-                Tu Viaje
-              </span>
+              <span className="text-xs font-bold text-indigo-900 dark:text-indigo-100">Progreso General</span>
               <Badge className="bg-indigo-600 text-white text-xs">50%</Badge>
             </div>
             <div className="flex gap-1 items-center text-xs font-medium">

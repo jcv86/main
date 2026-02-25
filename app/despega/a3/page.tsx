@@ -93,9 +93,7 @@ export default function A3Page() {
         {/* QUICK START GUIDE - A3 VERSION */}
         <Card className="border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20">
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <span className="text-2xl">🎯</span> Tu Entrenamiento A3 - Primeros Pasos
-            </CardTitle>
+            <CardTitle className="text-xl">Primeros Pasos en Entrenamientos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

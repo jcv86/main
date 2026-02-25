@@ -285,37 +285,37 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </div>
         </div>
 
-        {/* ¿Qué Sigue? - Next Steps */}
+        {/* Context Section */}
         <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-800">
           <CardHeader>
-            <CardTitle className="text-lg">¿Qué Sigue?</CardTitle>
+            <CardTitle className="text-lg">Próximos Pasos</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex gap-3">
-                <div className="text-2xl min-w-fit">📚</div>
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-sm font-bold text-indigo-700 dark:text-indigo-300 flex-shrink-0">1</div>
                 <div>
-                  <h4 className="font-semibold">Libros Recomendados</h4>
+                  <h4 className="font-semibold">Libros y Recursos Recomendados</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Hemos seleccionado libros específicos para tu perfil que acelerarán tu aprendizaje y desarrollo personal.
+                    Basados en tu perfil DISC, hemos seleccionado recursos específicos para acelerar tu aprendizaje.
                   </p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="text-2xl min-w-fit">🎯</div>
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-sm font-bold text-indigo-700 dark:text-indigo-300 flex-shrink-0">2</div>
                 <div>
-                  <h4 className="font-semibold">Tu Plan Personalizado</h4>
+                  <h4 className="font-semibold">Plan Personalizado</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    En tu dashboard encontrarás estrategias y acciones diseñadas específicamente para aprovechar tu perfil al máximo.
+                    Tu dashboard contiene estrategias y acciones diseñadas específicamente para tu transformación profesional.
                   </p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="text-2xl min-w-fit">🚀</div>
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-sm font-bold text-indigo-700 dark:text-indigo-300 flex-shrink-0">3</div>
                 <div>
-                  <h4 className="font-semibold">Evolución Continua</h4>
+                  <h4 className="font-semibold">Desarrollo Continuo</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    Este es tu punto de partida. A través de la práctica y el aprendizaje, desarrollarás todas las dimensiones del perfil DISC.
+                    Este es tu punto de partida. A través de práctica consistente, desarrollarás todas las dimensiones de tu potencial profesional.
                   </p>
                 </div>
               </div>
@@ -323,31 +323,27 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </CardContent>
         </Card>
 
-        {/* Tu Viaje Despega - Phase Navigation */}
-        <Card className="border-2 border-green-500 bg-green-50 dark:bg-green-950/30">
+        {/* Fases Siguientes */}
+        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
           <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <span>🗺️</span> Tu Viaje en Despega Tu Carrera
-            </CardTitle>
-            <CardDescription>Has completado la Fase A1. Aquí están las siguientes fases de transformación:</CardDescription>
+            <CardTitle className="text-lg">Tu Ruta de Transformación</CardTitle>
+            <CardDescription>Completaste la Fase A1. Aquí están las fases siguientes del programa:</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Phase A2 */}
             <div className="border-l-4 border-blue-500 pl-4 py-2">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <h4 className="font-bold text-blue-900 dark:text-blue-100">Fase A2: Exploración y Construcción del Puente</h4>
+                  <h4 className="font-bold text-blue-900 dark:text-blue-100">Fase A2: Exploración y Plan de Acción</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Descubre rutas de aprendizaje personalizadas, crea tu plan de 90 días y comienza a construir el puente hacia tu nueva versión profesional.
+                    Construye un plan de 90 días personalizado y comienza con las primeras acciones. Este es el puente hacia tu nueva versión profesional.
                   </p>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={() => router.push("/despega/a2/dashboard")}
-                  className="bg-blue-600 hover:bg-blue-700 text-white ml-2"
-                >
-                  Ir a A2 <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
+                <Link href="/despega/a2/dashboard">
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white ml-2 whitespace-nowrap">
+                    Ir a A2 <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -355,37 +351,33 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
             <div className="border-l-4 border-orange-500 pl-4 py-2">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <h4 className="font-bold text-orange-900 dark:text-orange-100">Fase A3: Aterrizaje y Simulación</h4>
+                  <h4 className="font-bold text-orange-900 dark:text-orange-100">Fase A3: Aterrizaje y Entrenamiento</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Practica en simulaciones realistas, participa en entrevistas de entrenamiento y recibe feedback IA en tiempo real. Vive la experiencia de tu nueva identidad.
+                    Participa en simulaciones y entrenamientos prácticos con feedback instantáneo. Prepárate para situaciones reales.
                   </p>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={() => router.push("/despega/a3")}
-                  className="bg-orange-600 hover:bg-orange-700 text-white ml-2"
-                >
-                  Ir a A3 <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
+                <Link href="/despega/a3">
+                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white ml-2 whitespace-nowrap">
+                    Ir a A3 <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
               </div>
             </div>
 
             {/* Phase A4 */}
-            <div className="border-l-4 border-purple-500 pl-4 py-2">
+            <div className="border-l-4 border-cyan-500 pl-4 py-2">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <h4 className="font-bold text-purple-900 dark:text-purple-100">Fase A4: La Realidad y Contexto Estratégico</h4>
+                  <h4 className="font-bold text-cyan-900 dark:text-cyan-100">Fase A4: Contexto Estratégico</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Entiende el contexto macroeconómico, accede a noticias filtradas por tu perfil y prepárate para decisiones estratégicas en tu transformación profesional.
+                    Accede a análisis de mercado, oportunidades y contexto estratégico para tomar decisiones informadas en tu transformación.
                   </p>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={() => router.push("/despega/a4-base")}
-                  className="bg-purple-600 hover:bg-purple-700 text-white ml-2"
-                >
-                  Ir a A4 <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
+                <Link href="/despega/a4-base">
+                  <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700 text-white ml-2 whitespace-nowrap">
+                    Ir a A4 <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </CardContent>
