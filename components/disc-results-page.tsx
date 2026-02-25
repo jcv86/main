@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { DESPEGA_PROFILES, getDespegarProfile, getBookRecommendations } from "@/lib/despega-profiles"
 import { useRouter } from "next/navigation"
+import { ArrowRight } from "lucide-react"
 // Recharts removed to avoid dependency issues - using simple visual instead
 
 interface ResultsProps {
@@ -284,7 +285,7 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </div>
         </div>
 
-        {/* Context Section */}
+        {/* ¿Qué Sigue? - Next Steps */}
         <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-800">
           <CardHeader>
             <CardTitle className="text-lg">¿Qué Sigue?</CardTitle>
@@ -322,20 +323,97 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </CardContent>
         </Card>
 
+        {/* Tu Viaje Despega - Phase Navigation */}
+        <Card className="border-2 border-green-500 bg-green-50 dark:bg-green-950/30">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span>🗺️</span> Tu Viaje en Despega Tu Carrera
+            </CardTitle>
+            <CardDescription>Has completado la Fase A1. Aquí están las siguientes fases de transformación:</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Phase A2 */}
+            <div className="border-l-4 border-blue-500 pl-4 py-2">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h4 className="font-bold text-blue-900 dark:text-blue-100">Fase A2: Exploración y Construcción del Puente</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Descubre rutas de aprendizaje personalizadas, crea tu plan de 90 días y comienza a construir el puente hacia tu nueva versión profesional.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => router.push("/despega/a2/dashboard")}
+                  className="bg-blue-600 hover:bg-blue-700 text-white ml-2"
+                >
+                  Ir a A2 <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Phase A3 */}
+            <div className="border-l-4 border-orange-500 pl-4 py-2">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h4 className="font-bold text-orange-900 dark:text-orange-100">Fase A3: Aterrizaje y Simulación</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Practica en simulaciones realistas, participa en entrevistas de entrenamiento y recibe feedback IA en tiempo real. Vive la experiencia de tu nueva identidad.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => router.push("/despega/a3")}
+                  className="bg-orange-600 hover:bg-orange-700 text-white ml-2"
+                >
+                  Ir a A3 <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Phase A4 */}
+            <div className="border-l-4 border-purple-500 pl-4 py-2">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h4 className="font-bold text-purple-900 dark:text-purple-100">Fase A4: La Realidad y Contexto Estratégico</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Entiende el contexto macroeconómico, accede a noticias filtradas por tu perfil y prepárate para decisiones estratégicas en tu transformación profesional.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => router.push("/despega/a4-base")}
+                  className="bg-purple-600 hover:bg-purple-700 text-white ml-2"
+                >
+                  Ir a A4 <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Call to Action */}
         <div className="flex flex-wrap gap-3 justify-center pt-6 pb-4">
           <Button
             size="lg"
+            onClick={() => router.push("/despega/a2/dashboard")}
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg"
+          >
+            Comenzar Fase A2: Exploración
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
             onClick={() => router.push("/dashboard?refetch=true")}
-            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg"
+            className="shadow-md"
           >
             Ir a Mi Dashboard
           </Button>
           <Button
             size="lg"
-            variant="outline"
+            variant="ghost"
             onClick={() => router.push("/despega")}
-            className="shadow-md"
+            className="shadow-sm"
           >
             Volver a Inicio
           </Button>
