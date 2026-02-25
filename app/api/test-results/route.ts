@@ -105,19 +105,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
-      console.log("Database not available, returning mock response")
-    }
-
-    // Return mock response
-    return NextResponse.json({
-      id: Date.now(),
-      ...testResult,
-    })
-  } catch (error) {
-    console.error("Error saving test results:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
-  }
-}
 
 function generateMockEIResult() {
   return {
