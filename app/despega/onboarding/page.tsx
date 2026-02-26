@@ -28,8 +28,47 @@ export default function DespegaOnboarding() {
     total: number
   } | null>(null)
   const [loading, setLoading] = useState(false)
+  const [onboardingChecked, setOnboardingChecked] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  // Check if user already completed onboarding
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push("/login")
+          return
+        }
+
+        const { data: profile, error } = await supabase
+          .from("despega_user_profiles")
+          .select("onboarding_cerebral_completed")
+          .eq("user_email", user.email)
+          .single()
+
+        if (profile?.onboarding_cerebral_completed) {
+          // User already completed onboarding, redirect to journey
+          router.push("/despega/journey")
+        }
+      } catch (error) {
+        console.log("[v0] Checking onboarding status...")
+      } finally {
+        setOnboardingChecked(true)
+      }
+    }
+
+    checkOnboardingStatus()
+  }, [supabase, router])
+
+  if (!onboardingChecked) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Cargando...</p>
+      </div>
+    )
+  }
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
@@ -79,6 +118,16 @@ export default function DespegaOnboarding() {
     setStep("results")
 
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      // Mark onboarding as completed
+      if (user) {
+        await supabase
+          .from("despega_user_profiles")
+          .update({ onboarding_cerebral_completed: true })
+          .eq("user_email", user.email)
+      }
+
       const response = await fetch("/api/despega/save-test-results", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
