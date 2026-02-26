@@ -1,18 +1,19 @@
 export function validateEnvironment() {
+  // Only validate required variables
   const requiredVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
   ]
 
-  const optionalVars = [
+  // Optional variables that enhance functionality but aren't required
+  // Only warn about these in production
+  const optionalVarsForProduction = [
     "OPENAI_API_KEY",
-    "VERCEL_ENV",
-    "NEXT_PUBLIC_APP_URL",
   ]
 
   const missing: string[] = []
-  const warnings: string[] = []
+  const isProduction = process.env.VERCEL_ENV === "production"
 
   // Check required variables
   for (const variable of requiredVars) {
@@ -21,10 +22,13 @@ export function validateEnvironment() {
     }
   }
 
-  // Check optional variables
-  for (const variable of optionalVars) {
-    if (!process.env[variable]) {
-      warnings.push(variable)
+  // Check optional variables only in production
+  const missingOptional: string[] = []
+  if (isProduction) {
+    for (const variable of optionalVarsForProduction) {
+      if (!process.env[variable]) {
+        missingOptional.push(variable)
+      }
     }
   }
 
@@ -34,15 +38,17 @@ export function validateEnvironment() {
     throw new Error(message)
   }
 
-  if (warnings.length > 0) {
-    console.warn(`Missing optional environment variables: ${warnings.join(", ")}`)
+  if (missingOptional.length > 0) {
+    console.warn(
+      `Missing optional environment variables in production: ${missingOptional.join(", ")}. App will work but some features may be limited.`
+    )
   }
 
-  console.log("Environment validation passed")
+  const env = isProduction ? "production" : "development"
+  console.log(`Environment validation passed (${env} mode)`)
 }
 
-// Validate on app startup
+// Validate on app startup (server-side only)
 if (typeof window === "undefined") {
-  // Server-side only
   validateEnvironment()
 }
