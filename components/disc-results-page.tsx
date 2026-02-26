@@ -323,61 +323,76 @@ export function DiscResultsPage({ results, caminoPersona, caminoProfesional }: R
           </CardContent>
         </Card>
 
-        {/* Fases Siguientes */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
+        {/* Fases Siguientes - Enhanced */}
+        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
           <CardHeader>
-            <CardTitle className="text-lg">Tu Ruta de Transformación</CardTitle>
-            <CardDescription>Completaste la Fase A1. Aquí están las fases siguientes del programa:</CardDescription>
+            <CardTitle className="text-xl">Tu Próximo Paso: Definir Tu Futuro</CardTitle>
+            <CardDescription>Ya te conoces mejor. Ahora, construye tu plan personalizado y entiende el contexto del mercado.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Phase A2 */}
-            <div className="border-l-4 border-blue-500 pl-4 py-2">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h4 className="font-bold text-blue-900 dark:text-blue-100">Fase A2: Exploración y Plan de Acción</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Construye un plan de 90 días personalizado y comienza con las primeras acciones. Este es el puente hacia tu nueva versión profesional.
-                  </p>
-                </div>
+          <CardContent className="space-y-6">
+            {/* MAIN CTA - A2 + A4 TOGETHER */}
+            <div className="bg-white dark:bg-slate-900 rounded-lg p-6 border-2 border-dashed border-green-300 dark:border-green-700">
+              <h4 className="font-bold text-lg mb-2 text-green-900 dark:text-green-100">Las Fases A2 y A4 Van Juntas (4 semanas)</h4>
+              <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">
+                Define tu plan de transformación (A2) mientras entiendes el contexto del mercado (A4). Se retroalimentan entre sí.
+              </p>
+              <div className="grid md:grid-cols-2 gap-3 mb-4">
                 <Link href="/despega/a2/dashboard">
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white ml-2 whitespace-nowrap">
-                    Ir a A2 <ArrowRight className="w-4 h-4 ml-1" />
+                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold" size="lg">
+                    Ir a A2: Tu Plan <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
-              </div>
-            </div>
-
-            {/* Phase A3 */}
-            <div className="border-l-4 border-orange-500 pl-4 py-2">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h4 className="font-bold text-orange-900 dark:text-orange-100">Fase A3: Aterrizaje y Entrenamiento</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Participa en simulaciones y entrenamientos prácticos con feedback instantáneo. Prepárate para situaciones reales.
-                  </p>
-                </div>
-                <Link href="/despega/a3">
-                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white ml-2 whitespace-nowrap">
-                    Ir a A3 <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Phase A4 */}
-            <div className="border-l-4 border-cyan-500 pl-4 py-2">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h4 className="font-bold text-cyan-900 dark:text-cyan-100">Fase A4: Contexto Estratégico</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Accede a análisis de mercado, oportunidades y contexto estratégico para tomar decisiones informadas en tu transformación.
-                  </p>
-                </div>
                 <Link href="/despega/a4-base">
-                  <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700 text-white ml-2 whitespace-nowrap">
-                    Ir a A4 <ArrowRight className="w-4 h-4 ml-1" />
+                  <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold" size="lg">
+                    Ir a A4: Contexto <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 italic">
+                O accede a ambas desde tu Dashboard de Jornada
+              </p>
+            </div>
+
+            {/* JOURNEY DASHBOARD LINK */}
+            <div className="text-center">
+              <Link href="/despega/journey">
+                <Button variant="outline" className="w-full md:w-auto">
+                  Ver Mi Dashboard de Jornada Completa
+                </Button>
+              </Link>
+            </div>
+
+            {/* Phase Grid - Informational */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Phase A2 */}
+              <div className="border-l-4 border-green-500 pl-4 py-3 bg-white dark:bg-slate-900/50 rounded">
+                <h5 className="font-bold text-green-900 dark:text-green-100 mb-1">Fase A2: Tu Plan</h5>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                  Crea un plan de 90 días personalizado con sprints semanales, bitácora de progreso y coaching IA.
+                </p>
+                <p className="text-xs text-green-700 dark:text-green-300 font-semibold">Semanas 2-5</p>
+              </div>
+
+              {/* Phase A4 */}
+              <div className="border-l-4 border-cyan-500 pl-4 py-3 bg-white dark:bg-slate-900/50 rounded">
+                <h5 className="font-bold text-cyan-900 dark:text-cyan-100 mb-1">Fase A4: Contexto Estratégico</h5>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                  Accede a noticias del mercado, análisis de oportunidades y recursos curados para tu transformación.
+                </p>
+                <p className="text-xs text-cyan-700 dark:text-cyan-300 font-semibold">Semanas 2-5 (paralelo)</p>
+              </div>
+            </div>
+
+            {/* Phase A3 - Coming Soon */}
+            <div className="border-l-4 border-orange-500 pl-4 py-3 bg-orange-50 dark:bg-orange-950/20 rounded">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h5 className="font-bold text-orange-900 dark:text-orange-100 mb-1">Fase A3: Tu Práctica</h5>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                    Entrenamientos inteligentes usando tu plan de A2 + contexto de A4. Feedback instantáneo y repetición deliberada.
+                  </p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300 font-semibold">Disponible después de A2+A4 (Semanas 6-13)</p>
+                </div>
               </div>
             </div>
           </CardContent>
