@@ -239,7 +239,7 @@ export default function MBTIResultsPage() {
           .from("test_results")
           .select("*")
           .eq("user_id", user?.id)
-          .eq("test_name", "Mapa de Personalidad Despega")
+          .eq("test_name", "Despega Resonancia")
           .order("created_at", { ascending: false })
           .limit(1)
           .single()

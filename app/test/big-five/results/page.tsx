@@ -122,7 +122,7 @@ export default function BigFiveResults() {
     setLoading(true)
     try {
       const email = user.email
-      const result = await UnifiedTestSystem.loadTestResult(email, "5 Dimensiones Despega")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Despega Brújula")
 
       if (result.success && result.data) {
         setTestResult(result.data)
@@ -131,7 +131,7 @@ export default function BigFiveResults() {
           .from("ai_interpretations")
           .select("*")
           .eq("user_email", email)
-          .eq("test_name", "5 Dimensiones Despega")
+          .eq("test_name", "Despega Brújula")
           .order("generated_at", { ascending: false })
           .limit(1)
 
@@ -225,11 +225,11 @@ export default function BigFiveResults() {
             Back to Tests
           </Button>
           <Badge variant="secondary">
-            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
+                  <Brain className="h-4 w-4 mr-1" />Despega Brújula
           </Badge>
         </div>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: 5 Dimensiones Despega</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Despega Brújula</h1>
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}

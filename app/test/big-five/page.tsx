@@ -201,14 +201,14 @@ export default function BigFiveTest() {
     }
 
     try {
-      console.log("[v0] Submitting 5 Dimensiones Despega test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "5 Dimensiones Despega", results, duration)
+    console.log("[v0] Submitting Despega Brújula test results to database...")
+    const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Despega Brújula", results, duration)
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
       }
 
-      console.log("[v0] 5 Dimensiones Despega test results saved successfully to database")
+      console.log("[v0] Despega Brújula test results saved successfully to database")
       setCompletionData({
         scores,
         overallScore,
@@ -232,7 +232,7 @@ export default function BigFiveTest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading 5 Dimensiones Despega...</p>
+          <p className="text-gray-600">Loading Despega Brújula...</p>
         </div>
       </div>
     )
@@ -321,7 +321,7 @@ export default function BigFiveTest() {
             Back to Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
-            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
+              <Brain className="h-4 w-4 mr-1" />Despega Brújula
           </Badge>
         </div>
 
@@ -330,7 +330,7 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">5 Dimensiones Despega</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Despega Brújula</h2>
                 <p className="text-gray-600">
                   Question {currentQuestion + 1} of {bigFiveQuestions.length}
                 </p>
