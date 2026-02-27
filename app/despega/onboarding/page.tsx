@@ -45,40 +45,20 @@ export default function DespegaOnboarding() {
           return
         }
 
-        console.log("[v0] Checking onboarding for user:", user.id, user.email)
-
-        // First, check if profile exists
-        const { data: profile, error: selectError } = await supabase
-          .from("despega_user_profiles")
-          .select("onboarding_cerebral_completed, user_id")
+        // Check a1_progress table for cerebral_completed
+        const { data: progress } = await supabase
+          .from("a1_progress")
+          .select("cerebral_completed")
           .eq("user_id", user.id)
           .maybeSingle()
 
-        console.log("[v0] Profile lookup result:", profile, "Error:", selectError)
-
-        // If profile doesn't exist, create it
-        if (!profile) {
-          console.log("[v0] Profile doesn't exist, creating new one...")
-          const { data: newProfile, error: createError } = await supabase
-            .from("despega_user_profiles")
-            .insert({
-              user_id: user.id,
-              onboarding_cerebral_completed: false,
-            })
-            .select()
-            .single()
-
-          console.log("[v0] Profile created:", newProfile, "Error:", createError)
-          setOnboardingAlreadyCompleted(false)
-        } else if (profile.onboarding_cerebral_completed === true) {
-          console.log("[v0] User already completed onboarding")
+        if (progress?.cerebral_completed === true) {
           setOnboardingAlreadyCompleted(true)
         } else {
-          console.log("[v0] User has profile but not completed yet")
           setOnboardingAlreadyCompleted(false)
         }
       } catch (error) {
-        console.log("[v0] Error checking onboarding status:", error)
+        console.error("Error checking onboarding status:", error)
       } finally {
         setOnboardingChecked(true)
       }
@@ -145,14 +125,16 @@ export default function DespegaOnboarding() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       
-      // Mark onboarding as completed
+      // Mark cerebral test as completed in a1_progress
       if (user) {
-        console.log("[v0] Marking onboarding complete for user:", user.id)
-        const { data, error } = await supabase
-          .from("despega_user_profiles")
-          .update({ onboarding_cerebral_completed: true })
+        const { error } = await supabase
+          .from("a1_progress")
+          .update({ cerebral_completed: true })
           .eq("user_id", user.id)
-        console.log("[v0] Update result:", data, "Error:", error)
+        
+        if (error) {
+          console.error("Error marking cerebral as completed:", error)
+        }
       }
 
       const response = await fetch("/api/despega/save-test-results", {
@@ -167,17 +149,14 @@ export default function DespegaOnboarding() {
         }),
       })
 
-      console.log("[v0] Save response status:", response.status)
-      
       if (response.ok) {
         const data = await response.json()
-        console.log("[v0] Save response data:", data)
         setTimeout(() => {
           router.push("/despega/a1/resultado")
         }, 2000)
       } else {
         const errorData = await response.json()
-        console.error("[v0] Save failed with status", response.status, ":", errorData)
+        console.error("Error saving test results:", errorData)
       }
     } catch (error) {
       console.error("[v0] Error saving test results:", error)
