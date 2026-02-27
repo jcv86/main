@@ -70,12 +70,12 @@ export async function POST(request: NextRequest) {
       .from("despega_user_profiles")
       .select("*")
       .eq("user_id", user.id)
-      .single()
+      .maybeSingle()
 
     console.log("[v0] Existing profile:", existingProfile, "Error:", profileFetchError)
 
     let profileData
-    if (!existingProfile || profileFetchError) {
+    if (!existingProfile) {
       // Create new profile if it doesn't exist
       const { data: newProfile, error: createError } = await supabase
         .from("despega_user_profiles")

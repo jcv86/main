@@ -45,19 +45,37 @@ export default function DespegaOnboarding() {
           return
         }
 
-        const { data: profile, error } = await supabase
+        console.log("[v0] Checking onboarding for user:", user.id, user.email)
+
+        // First, check if profile exists
+        const { data: profile, error: selectError } = await supabase
           .from("despega_user_profiles")
-          .select("onboarding_cerebral_completed")
+          .select("onboarding_cerebral_completed, user_id")
           .eq("user_id", user.id)
           .maybeSingle()
 
-        console.log("[v0] Checking onboarding status for user:", user.id, user.email)
-        console.log("[v0] Profile data:", profile)
-        console.log("[v0] Query error:", error)
+        console.log("[v0] Profile lookup result:", profile, "Error:", selectError)
 
-        if (profile?.onboarding_cerebral_completed === true) {
+        // If profile doesn't exist, create it
+        if (!profile) {
+          console.log("[v0] Profile doesn't exist, creating new one...")
+          const { data: newProfile, error: createError } = await supabase
+            .from("despega_user_profiles")
+            .insert({
+              user_id: user.id,
+              onboarding_cerebral_completed: false,
+            })
+            .select()
+            .single()
+
+          console.log("[v0] Profile created:", newProfile, "Error:", createError)
+          setOnboardingAlreadyCompleted(false)
+        } else if (profile.onboarding_cerebral_completed === true) {
           console.log("[v0] User already completed onboarding")
           setOnboardingAlreadyCompleted(true)
+        } else {
+          console.log("[v0] User has profile but not completed yet")
+          setOnboardingAlreadyCompleted(false)
         }
       } catch (error) {
         console.log("[v0] Error checking onboarding status:", error)
@@ -579,7 +597,7 @@ export default function DespegaOnboarding() {
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
-                  <div className="text-3xl min-w-fit">🚀</div>
+                  <div className="text-3xl min-w-fit">���</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Plan de Acción</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Pasos claros y concretos para tu transición profesional y personal</p>
