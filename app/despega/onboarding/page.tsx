@@ -147,10 +147,12 @@ export default function DespegaOnboarding() {
       
       // Mark onboarding as completed
       if (user) {
-        await supabase
+        console.log("[v0] Marking onboarding complete for user:", user.id)
+        const { data, error } = await supabase
           .from("despega_user_profiles")
           .update({ onboarding_cerebral_completed: true })
-          .eq("user_email", user.email)
+          .eq("user_id", user.id)
+        console.log("[v0] Update result:", data, "Error:", error)
       }
 
       const response = await fetch("/api/despega/save-test-results", {
