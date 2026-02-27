@@ -32,6 +32,8 @@ export default function DespegaOnboarding() {
   const router = useRouter()
   const supabase = createClient()
 
+  const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
+
   // Check if user already completed onboarding
   useEffect(() => {
     const checkOnboardingStatus = async () => {
@@ -50,12 +52,10 @@ export default function DespegaOnboarding() {
 
         console.log("[v0] Checking onboarding status for user:", user.id)
         console.log("[v0] Profile data:", profile)
-        console.log("[v0] Profile error:", error)
 
         if (profile?.onboarding_cerebral_completed) {
-          console.log("[v0] User already completed onboarding, redirecting...")
-          // User already completed onboarding, redirect to journey
-          router.push("/despega/journey")
+          console.log("[v0] User already completed onboarding")
+          setOnboardingAlreadyCompleted(true)
         }
       } catch (error) {
         console.log("[v0] Error checking onboarding status:", error)
@@ -309,6 +309,19 @@ export default function DespegaOnboarding() {
               <span>•</span>
               <span>🎯 100% Preciso</span>
             </div>
+
+            {onboardingAlreadyCompleted && (
+              <div className="mt-6 p-4 bg-blue-100 border-l-4 border-blue-500 rounded">
+                <p className="text-blue-800 font-semibold">
+                  ✓ Ya has completado tu Despega Cerebral. Tus resultados están guardados.
+                </p>
+                <p className="text-blue-700 text-sm mt-2">
+                  <Link href="/despega/journey" className="underline hover:text-blue-900 font-semibold">
+                    Ver mi dashboard →
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
 
           {/* What is DISC */}
