@@ -45,15 +45,20 @@ export default function DespegaOnboarding() {
         const { data: profile, error } = await supabase
           .from("despega_user_profiles")
           .select("onboarding_cerebral_completed")
-          .eq("user_email", user.email)
+          .eq("user_id", user.id)
           .single()
 
+        console.log("[v0] Checking onboarding status for user:", user.id)
+        console.log("[v0] Profile data:", profile)
+        console.log("[v0] Profile error:", error)
+
         if (profile?.onboarding_cerebral_completed) {
+          console.log("[v0] User already completed onboarding, redirecting...")
           // User already completed onboarding, redirect to journey
           router.push("/despega/journey")
         }
       } catch (error) {
-        console.log("[v0] Checking onboarding status...")
+        console.log("[v0] Error checking onboarding status:", error)
       } finally {
         setOnboardingChecked(true)
       }

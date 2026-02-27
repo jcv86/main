@@ -65,6 +65,56 @@ export async function POST(request: NextRequest) {
 
     console.log("[v0] User ID:", user.id, "Email:", user.email)
 
+    // First, ensure despega_user_profiles exists and update onboarding_cerebral_completed
+    const { data: existingProfile, error: profileFetchError } = await supabase
+      .from("despega_user_profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single()
+
+    console.log("[v0] Existing profile:", existingProfile, "Error:", profileFetchError)
+
+    let profileData
+    if (!existingProfile || profileFetchError) {
+      // Create new profile if it doesn't exist
+      const { data: newProfile, error: createError } = await supabase
+        .from("despega_user_profiles")
+        .insert({
+          user_id: user.id,
+          onboarding_cerebral_completed: true,
+          onboarding_cerebral_completed_at: new Date().toISOString(),
+          a1_test_completed: true,
+          a1_test_completed_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
+
+      if (createError) {
+        console.error("[v0] Error creating profile:", createError)
+      } else {
+        profileData = newProfile
+        console.log("[v0] Profile created successfully:", profileData)
+      }
+    } else {
+      // Update existing profile
+      const { data: updatedProfile, error: updateError } = await supabase
+        .from("despega_user_profiles")
+        .update({
+          onboarding_cerebral_completed: true,
+          onboarding_cerebral_completed_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id)
+        .select()
+        .single()
+
+      if (updateError) {
+        console.error("[v0] Error updating profile:", updateError)
+      } else {
+        profileData = updatedProfile
+        console.log("[v0] Profile updated successfully:", profileData)
+      }
+    }
+
     // Save to unified_test_results
     const { data: testData, error: testError } = await supabase
       .from("unified_test_results")
