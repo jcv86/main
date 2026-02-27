@@ -37,35 +37,44 @@ export default function DespegaOnboarding() {
 
   // Check if user already completed onboarding by looking for existing test results
   useEffect(() => {
+    let isMounted = true
+    
     const checkOnboardingStatus = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-          router.push("/login")
+          if (isMounted) router.push("/login")
           return
         }
 
         // Look for existing Despega Cerebral test results
-        const { data: results } = await supabase
+        const { data: results, error } = await supabase
           .from("a1_tests_results")
           .select("id")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
-          .limit(1)
+          .maybeSingle()
 
-        if (results && results.length > 0) {
-          console.log("[v0] User already completed onboarding, redirecting to dashboard")
+        if (!isMounted) return
+        
+        if (results) {
+          // User already completed onboarding
           router.push("/despega/journey")
           return
         }
-      } catch (error) {
-        console.error("[v0] Error checking onboarding status:", error)
-      } finally {
+        
         setOnboardingChecked(true)
+      } catch (error) {
+        console.error("[v0] Error checking onboarding:", error)
+        if (isMounted) setOnboardingChecked(true)
       }
     }
 
     checkOnboardingStatus()
+    
+    return () => {
+      isMounted = false
+    }
   }, [supabase, router])
 
   if (!onboardingChecked) {
