@@ -35,55 +35,33 @@ export default function DespegaOnboarding() {
 
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
 
-  // Check if user already completed onboarding by looking for existing test results
+  // Check if user already completed onboarding
   useEffect(() => {
-    let isMounted = true
-    
-    const checkOnboardingStatus = async () => {
+    const checkOnboarding = async () => {
       try {
-        console.log("[v0] Checking onboarding status...")
         const { data: { user } } = await supabase.auth.getUser()
-        console.log("[v0] Current user:", user?.id, user?.email)
-        
-        if (!user) {
-          console.log("[v0] No user found, redirecting to login")
-          if (isMounted) router.push("/login")
-          return
-        }
+        if (!user) return
 
-        // Look for existing Despega Cerebral test results
-        console.log("[v0] Looking for Despega Cerebral results...")
-        const { data: results, error } = await supabase
+        // Look for existing test result
+        const { data: results } = await supabase
           .from("a1_tests_results")
-          .select("id, created_at")
+          .select("id")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
-          .maybeSingle()
+          .limit(1)
 
-        console.log("[v0] Query results:", results, "Error:", error)
-
-        if (!isMounted) return
-        
-        if (results) {
-          console.log("[v0] User already completed onboarding, redirecting to journey")
-          router.push("/despega/journey")
-          return
+        if (results?.length > 0) {
+          router.push("/despega/a1/resultado")
+        } else {
+          setOnboardingChecked(true)
         }
-        
-        console.log("[v0] User has not completed onboarding yet, allowing access to page")
+      } catch {
         setOnboardingChecked(true)
-      } catch (error) {
-        console.error("[v0] Error checking onboarding:", error)
-        if (isMounted) setOnboardingChecked(true)
       }
     }
 
-    checkOnboardingStatus()
-    
-    return () => {
-      isMounted = false
-    }
-  }, [supabase, router])
+    checkOnboarding()
+  }, [])
 
   if (!onboardingChecked) {
     return (
