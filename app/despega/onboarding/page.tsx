@@ -54,12 +54,12 @@ export default function DespegaOnboarding() {
           .limit(1)
 
         if (results && results.length > 0) {
-          setOnboardingAlreadyCompleted(true)
-        } else {
-          setOnboardingAlreadyCompleted(false)
+          console.log("[v0] User already completed onboarding, redirecting to dashboard")
+          router.push("/despega/journey")
+          return
         }
       } catch (error) {
-        setOnboardingAlreadyCompleted(false)
+        console.error("[v0] Error checking onboarding status:", error)
       } finally {
         setOnboardingChecked(true)
       }
