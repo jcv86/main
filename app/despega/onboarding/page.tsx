@@ -41,28 +41,36 @@ export default function DespegaOnboarding() {
     
     const checkOnboardingStatus = async () => {
       try {
+        console.log("[v0] Checking onboarding status...")
         const { data: { user } } = await supabase.auth.getUser()
+        console.log("[v0] Current user:", user?.id, user?.email)
+        
         if (!user) {
+          console.log("[v0] No user found, redirecting to login")
           if (isMounted) router.push("/login")
           return
         }
 
         // Look for existing Despega Cerebral test results
+        console.log("[v0] Looking for Despega Cerebral results...")
         const { data: results, error } = await supabase
           .from("a1_tests_results")
-          .select("id")
+          .select("id, created_at")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
           .maybeSingle()
 
+        console.log("[v0] Query results:", results, "Error:", error)
+
         if (!isMounted) return
         
         if (results) {
-          // User already completed onboarding
+          console.log("[v0] User already completed onboarding, redirecting to journey")
           router.push("/despega/journey")
           return
         }
         
+        console.log("[v0] User has not completed onboarding yet, allowing access to page")
         setOnboardingChecked(true)
       } catch (error) {
         console.error("[v0] Error checking onboarding:", error)
