@@ -144,6 +144,34 @@ export async function POST(request: NextRequest) {
 
     console.log("[v0] Test results saved successfully:", testData)
 
+    // Also save to a1_tests_results with test_name for onboarding check
+    const { error: a1TestError } = await supabase
+      .from("a1_tests_results")
+      .insert({
+        user_id: user.id,
+        test_name: "Despega Cerebral",
+        test_type: "personality",
+        score: Math.round((scores.D + scores.I + scores.S + scores.C) / 4),
+        profile_type: dominantProfile,
+        responses: {
+          d_score: Math.round(scores.D),
+          i_score: Math.round(scores.I),
+          s_score: Math.round(scores.S),
+          c_score: Math.round(scores.C),
+          dominant_profile: dominantProfile,
+          secondary_profile: secondaryProfile,
+          camino_persona: caminoPersona,
+          camino_profesional: caminoProfesional,
+        },
+        completed_at: new Date().toISOString(),
+      })
+
+    if (a1TestError) {
+      console.warn("[v0] Warning: Could not save to a1_tests_results:", a1TestError)
+    } else {
+      console.log("[v0] Saved to a1_tests_results successfully")
+    }
+
     // Get or create a1_progress record
     const { data: progressData, error: fetchError } = await supabase
       .from("a1_progress")

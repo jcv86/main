@@ -35,7 +35,7 @@ export default function DespegaOnboarding() {
 
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
 
-  // Check if user already completed onboarding
+  // Check if user already completed onboarding by looking for existing test results
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       try {
@@ -45,20 +45,21 @@ export default function DespegaOnboarding() {
           return
         }
 
-        // Check a1_progress table for cerebral_completed
-        const { data: progress } = await supabase
-          .from("a1_progress")
-          .select("cerebral_completed")
+        // Look for existing Despega Cerebral test results
+        const { data: results } = await supabase
+          .from("a1_tests_results")
+          .select("id")
           .eq("user_id", user.id)
-          .maybeSingle()
+          .eq("test_name", "Despega Cerebral")
+          .limit(1)
 
-        if (progress?.cerebral_completed === true) {
+        if (results && results.length > 0) {
           setOnboardingAlreadyCompleted(true)
         } else {
           setOnboardingAlreadyCompleted(false)
         }
       } catch (error) {
-        console.error("Error checking onboarding status:", error)
+        setOnboardingAlreadyCompleted(false)
       } finally {
         setOnboardingChecked(true)
       }
