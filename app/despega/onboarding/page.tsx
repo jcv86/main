@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { DiscResultsPage } from "@/components/disc-results-page"
 import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
 
@@ -48,12 +49,13 @@ export default function DespegaOnboarding() {
           .from("despega_user_profiles")
           .select("onboarding_cerebral_completed")
           .eq("user_id", user.id)
-          .single()
+          .maybeSingle()
 
-        console.log("[v0] Checking onboarding status for user:", user.id)
+        console.log("[v0] Checking onboarding status for user:", user.id, user.email)
         console.log("[v0] Profile data:", profile)
+        console.log("[v0] Query error:", error)
 
-        if (profile?.onboarding_cerebral_completed) {
+        if (profile?.onboarding_cerebral_completed === true) {
           console.log("[v0] User already completed onboarding")
           setOnboardingAlreadyCompleted(true)
         }
