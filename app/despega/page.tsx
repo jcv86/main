@@ -35,11 +35,15 @@ interface Rankings {
 }
 
 interface A1Results {
-  score_energia: number
-  score_enfoque: number
-  score_relaciones: number
-  score_plan_ejecutivo: number
-  nivel_detectado: string
+  score_energia?: number
+  score_enfoque?: number
+  score_relaciones?: number
+  score_plan_ejecutivo?: number
+  nivel_detectado?: string
+  profile_type?: string
+  profile_description?: string
+  resultados?: any
+  score_total?: number
 }
 
 const PILARES = [
@@ -91,6 +95,7 @@ export default function DespegaHub() {
   const [pilaresProgress, setPilaresProgress] = useState<PilarProgress[]>([])
   const [rankings, setRankings] = useState<Rankings | null>(null)
   const [a1Results, setA1Results] = useState<A1Results | null>(null)
+  const [userName, setUserName] = useState<string>("")
   const router = useRouter()
   const supabase = createClient()
 
@@ -103,6 +108,10 @@ export default function DespegaHub() {
           router.push("/login")
           return
         }
+
+        // Get user name from metadata or email
+        const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || "User"
+        setUserName(fullName)
 
         // Check if onboarding is completed by looking for test results
         const { data: testResults } = await supabase
@@ -193,7 +202,7 @@ export default function DespegaHub() {
         <div className="mb-12">
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white text-balance">
-              Hola{profile?.nombre ? `, ${profile.nombre}` : ""}! 👋
+              Hola{userName ? `, ${userName}` : ""}! 👋
             </h1>
             <p className="text-xl text-slate-300 max-w-2xl">
               Tu Transformación de 90 Días Comienza Ahora
@@ -266,22 +275,22 @@ export default function DespegaHub() {
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[
-                  { label: "Energía", value: a1Results.score_energia, color: "from-blue-500 to-cyan-500" },
-                  { label: "Enfoque", value: a1Results.score_enfoque, color: "from-purple-500 to-pink-500" },
-                  { label: "Relaciones", value: a1Results.score_relaciones, color: "from-green-500 to-emerald-500" },
-                  { label: "Plan Ejecutivo", value: a1Results.score_plan_ejecutivo, color: "from-orange-500 to-red-500" },
+                  { label: "Energía", value: (a1Results?.resultados?.score_energia || a1Results?.score_energia || 0), color: "from-blue-500 to-cyan-500" },
+                  { label: "Enfoque", value: (a1Results?.resultados?.score_enfoque || a1Results?.score_enfoque || 0), color: "from-purple-500 to-pink-500" },
+                  { label: "Relaciones", value: (a1Results?.resultados?.score_relaciones || a1Results?.score_relaciones || 0), color: "from-green-500 to-emerald-500" },
+                  { label: "Plan Ejecutivo", value: (a1Results?.resultados?.score_plan_ejecutivo || a1Results?.score_plan_ejecutivo || 0), color: "from-orange-500 to-red-500" },
                 ].map((item, idx) => (
                   <div key={idx} className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-slate-300">{item.label}</span>
                       <span className={`text-xl font-bold bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}>
-                        {item.value}%
+                        {Math.round(item.value)}%
                       </span>
                     </div>
                     <div className="w-full bg-slate-600 rounded-full h-2 overflow-hidden">
                       <div 
                         className={`h-full bg-gradient-to-r ${item.color} transition-all duration-500`}
-                        style={{ width: `${item.value}%` }}
+                        style={{ width: `${Math.round(item.value)}%` }}
                       />
                     </div>
                   </div>
