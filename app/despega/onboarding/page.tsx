@@ -29,47 +29,13 @@ export default function DespegaOnboarding() {
     total: number
   } | null>(null)
   const [loading, setLoading] = useState(false)
-  const [onboardingChecked, setOnboardingChecked] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
 
-  // Check if user already completed onboarding
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
-
-        // Look for existing test result
-        const { data: results } = await supabase
-          .from("a1_tests_results")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("test_name", "Despega Cerebral")
-          .limit(1)
-
-        if (results?.length > 0) {
-          router.push("/despega/a1/resultado")
-        } else {
-          setOnboardingChecked(true)
-        }
-      } catch {
-        setOnboardingChecked(true)
-      }
-    }
-
-    checkOnboarding()
-  }, [])
-
-  if (!onboardingChecked) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Cargando...</p>
-      </div>
-    )
-  }
+  // Note: Server-side redirect is handled by layout.tsx
+  // If user reaches here, they haven't completed the onboarding yet
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
