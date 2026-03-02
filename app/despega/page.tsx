@@ -96,75 +96,69 @@ export default function DespegaHub() {
 
   useEffect(() => {
     const loadData = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        router.push("/login")
-        return
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (!user) {
+          router.push("/login")
+          return
+        }
+
+        // Check if onboarding is completed by looking for test results
+        const { data: testResults } = await supabase
+          .from("a1_tests_results")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("test_name", "Despega Cerebral")
+          .limit(1)
+
+        // Always load profile data regardless of test completion
+        const { data: profileData } = await supabase
+          .from("despega_user_profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single()
+
+        setProfile(profileData)
+
+        // Load pilares progress
+        const { data: pilaresData } = await supabase
+          .from("despega_pilar_progress")
+          .select("*")
+          .eq("user_id", user.id)
+
+        if (pilaresData) {
+          setPilaresProgress(pilaresData)
+        }
+
+        // Load rankings
+        const { data: rankingsData } = await supabase
+          .from("despega_rankings")
+          .select("*")
+          .eq("user_id", user.id)
+          .single()
+
+        if (rankingsData) {
+          setRankings(rankingsData)
+        }
+
+        // Load A1 test results
+        const { data: a1Data } = await supabase
+          .from("despega_a1_test_results")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single()
+
+        if (a1Data) {
+          setA1Results(a1Data)
+        }
+      } catch (error) {
+        console.error("[v0] Error loading dashboard:", error)
+      } finally {
+        setLoading(false)
       }
-
-      console.log("[v0] Dashboard - Checking for completed test for user:", user.id)
-
-      // Check if onboarding is completed by looking for test results
-      const { data: testResults, error: testError } = await supabase
-        .from("a1_tests_results")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("test_name", "Despega Cerebral")
-        .limit(1)
-
-      console.log("[v0] Dashboard - Test results query result:", testResults, "Error:", testError)
-
-      if (!testResults || testResults.length === 0) {
-        console.log("[v0] Dashboard - No test results found, showing onboarding prompts")
-        // Don't redirect - let user see dashboard or prompt to complete test
-      } else {
-        console.log("[v0] Dashboard - Test results found, loading profile...")
-
-      // Get user profile
-      const { data: profileData } = await supabase
-        .from("despega_user_profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .single()
-
-      setProfile(profileData)
-
-      // Load pilares progress
-      const { data: pilaresData } = await supabase
-        .from("despega_pilar_progress")
-        .select("*")
-        .eq("user_id", user.id)
-
-      if (pilaresData) {
-        setPilaresProgress(pilaresData)
-      }
-
-      // Load rankings
-      const { data: rankingsData } = await supabase
-        .from("despega_rankings")
-        .select("*")
-        .eq("user_id", user.id)
-        .single()
-
-      if (rankingsData) {
-        setRankings(rankingsData)
-      }
-
-      // Load A1 test results
-      const { data: a1Data } = await supabase
-        .from("despega_a1_test_results")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single()
-
-      if (a1Data) {
-        setA1Results(a1Data)
-      }
-
-      setLoading(false)
     }
 
     loadData()
@@ -192,6 +186,9 @@ export default function DespegaHub() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
+        {/* Onboarding Prompt if not completed */}
+        {/* This will be checked elsewhere - for now, just load the dashboard */}
+        
         {/* Welcome Section */}
         <div className="mb-12">
           <div className="space-y-4">
