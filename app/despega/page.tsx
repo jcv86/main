@@ -193,9 +193,12 @@ export default function DespegaHub() {
         <div className="mb-12">
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white text-balance">
-              Tu Transformación de 90 Días Comienza Ahora
+              Hola{profile?.nombre ? `, ${profile.nombre}` : ""}! 👋
             </h1>
             <p className="text-xl text-slate-300 max-w-2xl">
+              Tu Transformación de 90 Días Comienza Ahora
+            </p>
+            <p className="text-lg text-slate-400 max-w-2xl">
               Basado en tu evaluación inicial, aquí está tu ruta personalizada de desarrollo
             </p>
           </div>
@@ -247,9 +250,19 @@ export default function DespegaHub() {
         {/* A1 Diagnóstico */}
         {a1Results && (
           <div className="mb-12">
-            <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Tu Perfil de Personalidad</h2>
-              <p className="text-slate-400 mb-8">Estas son tus dimensiones clave de personalidad</p>
+            <div className="bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 rounded-2xl p-8 md:p-12">
+              <div className="flex items-start justify-between mb-8">
+                <div>
+                  <h2 className="text-3xl font-bold text-white mb-2">Tu Perfil de Personalidad</h2>
+                  <p className="text-slate-300">Tu resultado del Despega Cerebral</p>
+                </div>
+                {a1Results.profile_type && (
+                  <div className="text-6xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
+                    {a1Results.profile_type}
+                  </div>
+                )}
+              </div>
+              <p className="text-slate-300 mb-8">{a1Results.profile_description || "Estas son tus dimensiones clave de personalidad"}</p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[
@@ -265,7 +278,7 @@ export default function DespegaHub() {
                         {item.value}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                    <div className="w-full bg-slate-600 rounded-full h-2 overflow-hidden">
                       <div 
                         className={`h-full bg-gradient-to-r ${item.color} transition-all duration-500`}
                         style={{ width: `${item.value}%` }}
