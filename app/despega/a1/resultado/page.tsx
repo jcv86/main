@@ -89,14 +89,32 @@ export default function A1ResultadoPage() {
           .single()
 
         if (testResults) {
+          console.log("[v0] Found test results:", testResults)
           setTestData(testResults)
-          // Parse scores from responses or use score field
-          const scores = testResults.responses || {
-            D: testResults.responses?.d_score || 0,
-            I: testResults.responses?.i_score || 0,
-            S: testResults.responses?.s_score || 0,
-            C: testResults.responses?.c_score || 0,
+          
+          // Parse scores from responses object
+          let parsedScores: DiscScores = { D: 0, I: 0, S: 0, C: 0 }
+          
+          // Try to get scores from responses.d_score, i_score, s_score, c_score
+          if (testResults.responses) {
+            parsedScores = {
+              D: testResults.responses.d_score || 0,
+              I: testResults.responses.i_score || 0,
+              S: testResults.responses.s_score || 0,
+              C: testResults.responses.c_score || 0,
+            }
           }
+          
+          setScores(parsedScores)
+          
+          // Find dominant profile
+          const dominantProf = testResults.responses?.dominant_profile || testResults.profile_type || 'D'
+          setDominantProfile(dominantProf)
+          console.log("[v0] Set dominant profile:", dominantProf)
+        } else {
+          console.log("[v0] No test results found, redirecting to onboarding")
+          router.push('/despega/onboarding')
+        }
           setScores(scores as DiscScores)
 
           // Find dominant profile from profile_type or calculate
@@ -107,6 +125,7 @@ export default function A1ResultadoPage() {
         }
       } catch (error) {
         console.error('[v0] Error loading test results:', error)
+        console.log("[v0] Redirecting to onboarding due to error")
         router.push('/despega/onboarding')
       } finally {
         setLoading(false)
