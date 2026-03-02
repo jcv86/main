@@ -103,18 +103,25 @@ export default function DespegaHub() {
         return
       }
 
+      console.log("[v0] Dashboard - Checking for completed test for user:", user.id)
+
       // Check if onboarding is completed by looking for test results
-      const { data: testResults } = await supabase
+      const { data: testResults, error: testError } = await supabase
         .from("a1_tests_results")
         .select("id")
         .eq("user_id", user.id)
         .eq("test_name", "Despega Cerebral")
         .limit(1)
 
+      console.log("[v0] Dashboard - Test results query result:", testResults, "Error:", testError)
+
       if (!testResults || testResults.length === 0) {
+        console.log("[v0] Dashboard - No test results found, redirecting to onboarding")
         router.push("/despega/onboarding")
         return
       }
+
+      console.log("[v0] Dashboard - Test results found, loading profile...")
 
       // Get user profile
       const { data: profileData } = await supabase
