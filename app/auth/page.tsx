@@ -54,8 +54,8 @@ export default function AuthPage() {
       if (success) {
         setMessage({ type: "success", text: "¡Inicio de sesión exitoso!" })
         setTimeout(() => {
-          // Redirect to onboarding instead of dashboard for new users
-          router.push("/despega/onboarding")
+          // Redirect to dashboard instead of onboarding
+          router.push("/despega")
         }, 1000)
       } else {
         setMessage({ type: "error", text: "Credenciales inválidas. Intenta de nuevo." })

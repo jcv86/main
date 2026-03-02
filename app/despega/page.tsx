@@ -116,12 +116,10 @@ export default function DespegaHub() {
       console.log("[v0] Dashboard - Test results query result:", testResults, "Error:", testError)
 
       if (!testResults || testResults.length === 0) {
-        console.log("[v0] Dashboard - No test results found, redirecting to onboarding")
-        router.push("/despega/onboarding")
-        return
-      }
-
-      console.log("[v0] Dashboard - Test results found, loading profile...")
+        console.log("[v0] Dashboard - No test results found, showing onboarding prompts")
+        // Don't redirect - let user see dashboard or prompt to complete test
+      } else {
+        console.log("[v0] Dashboard - Test results found, loading profile...")
 
       // Get user profile
       const { data: profileData } = await supabase

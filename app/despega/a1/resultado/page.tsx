@@ -68,13 +68,13 @@ export default function A1ResultadoPage() {
       try {
         const supabase = createClient()
         if (!supabase) {
-          router.push('/despega/onboarding')
+          setLoading(false)
           return
         }
 
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-          router.push('/despega/onboarding')
+          setLoading(false)
           return
         }
 
@@ -112,21 +112,10 @@ export default function A1ResultadoPage() {
           setDominantProfile(dominantProf)
           console.log("[v0] Set dominant profile:", dominantProf)
         } else {
-          console.log("[v0] No test results found, redirecting to onboarding")
-          router.push('/despega/onboarding')
-        }
-          setScores(scores as DiscScores)
-
-          // Find dominant profile from profile_type or calculate
-          const dominantProf = testResults.profile_type || testResults.responses?.dominant_profile || 'D'
-          setDominantProfile(dominantProf)
-        } else {
-          router.push('/despega/onboarding')
+          console.log("[v0] No test results found")
         }
       } catch (error) {
         console.error('[v0] Error loading test results:', error)
-        console.log("[v0] Redirecting to onboarding due to error")
-        router.push('/despega/onboarding')
       } finally {
         setLoading(false)
       }
