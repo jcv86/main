@@ -103,17 +103,25 @@ export default function DespegaHub() {
         return
       }
 
-      // Check if onboarding is completed
+      // Check if onboarding is completed by looking for test results
+      const { data: testResults } = await supabase
+        .from("a1_tests_results")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("test_name", "Despega Cerebral")
+        .limit(1)
+
+      if (!testResults || testResults.length === 0) {
+        router.push("/despega/onboarding")
+        return
+      }
+
+      // Get user profile
       const { data: profileData } = await supabase
         .from("despega_user_profiles")
         .select("*")
         .eq("user_id", user.id)
         .single()
-
-      if (!profileData || !profileData.onboarding_completed) {
-        router.push("/despega/onboarding")
-        return
-      }
 
       setProfile(profileData)
 
