@@ -34,8 +34,31 @@ export default function DespegaOnboarding() {
 
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
 
-  // Note: Server-side redirect is handled by layout.tsx
-  // If user reaches here, they haven't completed the onboarding yet
+  // Check if user already completed onboarding
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return
+
+        // Look for existing test results
+        const { data: results } = await supabase
+          .from("a1_tests_results")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("test_name", "Despega Cerebral")
+          .limit(1)
+
+        if (results && results.length > 0) {
+          setOnboardingAlreadyCompleted(true)
+        }
+      } catch (error) {
+        console.error("Error checking onboarding status:", error)
+      }
+    }
+
+    checkStatus()
+  }, [])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
@@ -240,9 +263,30 @@ export default function DespegaOnboarding() {
 
           {/* CTA */}
           <div className="space-y-3">
-            <Button onClick={() => setStep("instructions")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
-              Cuando estés listo, comienza
-            </Button>
+            {onboardingAlreadyCompleted ? (
+              <>
+                <Button 
+                  onClick={() => router.push("/despega/a1/resultado")} 
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue-600 hover:bg-blue-700"
+                >
+                  Ver mi resultado
+                </Button>
+                <Button 
+                  onClick={() => {
+                    setStep("instructions")
+                    setOnboardingAlreadyCompleted(false)
+                  }} 
+                  variant="outline"
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg"
+                >
+                  Repetir el test
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => setStep("instructions")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
+                Cuando estés listo, comienza
+              </Button>
+            )}
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
               ⏱️ Tiempo estimado: 3 minutos
             </p>
