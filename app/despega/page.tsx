@@ -248,7 +248,7 @@ export default function DespegaHub() {
         {a1Results && (
           <div className="mb-12">
             <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Tu Perfil DISC</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">Tu Perfil de Personalidad</h2>
               <p className="text-slate-400 mb-8">Estas son tus dimensiones clave de personalidad</p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

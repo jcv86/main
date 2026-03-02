@@ -155,7 +155,7 @@ export default function A1ResultadoPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-20 space-y-12">
-        {/* Main DISC Profile Card */}
+        {/* Perfil Principal */}
         <div className={`rounded-2xl p-8 md:p-12 bg-gradient-to-br ${profile.color} shadow-2xl border border-white/10`}>
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="text-6xl md:text-7xl">{profile.icon}</div>
@@ -178,7 +178,7 @@ export default function A1ResultadoPage() {
           </div>
         </div>
 
-        {/* DISC Score Bars */}
+        {/* Puntuaciones de Dimensiones */}
         <div className="grid md:grid-cols-2 gap-6">
           {(['D', 'I', 'S', 'C'] as const).map((letter) => {
             const score = scores[letter]
