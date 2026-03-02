@@ -151,17 +151,30 @@ export default function DespegaHub() {
           setRankings(rankingsData)
         }
 
-        // Load A1 test results
-        const { data: a1Data } = await supabase
-          .from("despega_a1_test_results")
+        // Load A1 test results from a1_tests_results table (where onboarding results are saved)
+        const { data: a1Data, error: a1Error } = await supabase
+          .from("a1_tests_results")
           .select("*")
           .eq("user_id", user.id)
+          .eq("test_name", "Despega Cerebral")
           .order("created_at", { ascending: false })
           .limit(1)
           .single()
 
+        console.log("[v0] A1 test results query:", { a1Data, a1Error })
+
         if (a1Data) {
-          setA1Results(a1Data)
+          // Map the responses to the expected format
+          const mappedData = {
+            ...a1Data,
+            profile_type: a1Data.profile_type || a1Data.responses?.dominant_profile || "D",
+            score_energia: a1Data.responses?.d_score || 0,
+            score_enfoque: a1Data.responses?.i_score || 0,
+            score_relaciones: a1Data.responses?.s_score || 0,
+            score_plan_ejecutivo: a1Data.responses?.c_score || 0,
+          }
+          console.log("[v0] Mapped A1 data:", mappedData)
+          setA1Results(mappedData)
         }
       } catch (error) {
         console.error("[v0] Error loading dashboard:", error)
