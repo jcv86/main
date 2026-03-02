@@ -78,26 +78,30 @@ export default function A1ResultadoPage() {
           return
         }
 
-        // Get latest test results
+        // Get latest test results from a1_tests_results
         const { data: testResults } = await supabase
-          .from('despega_test_results')
+          .from('a1_tests_results')
           .select('*')
           .eq('user_id', user.id)
+          .eq('test_name', 'Despega Cerebral')
           .order('created_at', { ascending: false })
           .limit(1)
           .single()
 
         if (testResults) {
           setTestData(testResults)
-          const parsedScores = testResults.scores as DiscScores
-          setScores(parsedScores)
+          // Parse scores from responses or use score field
+          const scores = testResults.responses || {
+            D: testResults.responses?.d_score || 0,
+            I: testResults.responses?.i_score || 0,
+            S: testResults.responses?.s_score || 0,
+            C: testResults.responses?.c_score || 0,
+          }
+          setScores(scores as DiscScores)
 
-          // Find dominant profile
-          const maxScore = Math.max(parsedScores.D, parsedScores.I, parsedScores.S, parsedScores.C)
-          const dominant = Object.keys(parsedScores).find(
-            key => parsedScores[key as keyof DiscScores] === maxScore
-          ) as string
-          setDominantProfile(dominant)
+          // Find dominant profile from profile_type or calculate
+          const dominantProf = testResults.profile_type || testResults.responses?.dominant_profile || 'D'
+          setDominantProfile(dominantProf)
         } else {
           router.push('/despega/onboarding')
         }
