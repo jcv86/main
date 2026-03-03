@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { executeCanonRules, validateCanonActions } from '@/lib/canon-rules-engine'
 import { generateRoute30Days, generateRoute60Days, generateRoute90Days, saveRoute } from '@/lib/canon-routes-generator'
 
