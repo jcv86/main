@@ -15,24 +15,10 @@ type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "re
 
 export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
-  const [caminoPersona, setCaminoPersona] = useState(false)
-  const [caminoProfesional, setCaminoProfesional] = useState(false)
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, { mas?: "D" | "I" | "S" | "C"; menos?: "D" | "I" | "S" | "C" }>>({})
-  const [results, setResults] = useState<{
-    D: number
-    I: number
-    S: number
-    C: number
-    dominantProfile: "D" | "I" | "S" | "C"
-    secondaryProfile: "D" | "I" | "S" | "C"
-    total: number
-  } | null>(null)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClient()
-
+  const [loading, setLoading] = useState(true)
+  const [responses, setResponses] = useState<Record<number, string>>({})
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
+  const [skipConozcamonos, setSkipConozcamonos] = useState(false)
   const [c1Responses, setC1Responses] = useState<Record<number, string>>({})
   const [c2Step1Responses, setC2Step1Responses] = useState<Record<number, string>>({})
   const [c2Step2Responses, setC2Step2Responses] = useState<Record<number, string>>({})
@@ -139,8 +125,10 @@ export default function DespegaOnboarding() {
 
       if (response.ok) {
         const data = await response.json()
+        console.log("[v0] Test results saved, moving to Conozcámonos 2 Paso 1")
         setTimeout(() => {
-          // After test results, go to Conozcámonos 2 Paso 1 instead of results page
+          // After test completion, ALWAYS go to Conozcámonos 2 Paso 1
+          // Don't show results yet - complete the CANON journey first
           setStep("conozcamonos2-paso1")
         }, 1500)
       } else {
@@ -893,6 +881,35 @@ export default function DespegaOnboarding() {
 
   // STEP 5: Conozcámonos 2 - Paso 1
   if (step === "conozcamonos2-paso1") {
+    const handleC2Step1Continue = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          console.error("[v0] No user found")
+          return
+        }
+
+        // Save C2-Paso1 responses to database
+        const { error } = await supabase
+          .from("canon_conozcamonos_2_responses")
+          .insert({
+            user_id: user.id,
+            paso: 1,
+            responses: c2Step1Responses,
+            created_at: new Date().toISOString(),
+          })
+
+        if (error) {
+          console.error("[v0] Error saving C2-Paso1:", error)
+        } else {
+          console.log("[v0] C2-Paso1 saved successfully, moving to Paso 2")
+          setStep("conozcamonos2-paso2")
+        }
+      } catch (err) {
+        console.error("[v0] Error in C2-Paso1 handler:", err)
+      }
+    }
+
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
@@ -913,9 +930,7 @@ export default function DespegaOnboarding() {
                 Por favor, espera mientras generamos tu ruta personalizada...
               </p>
               <Button 
-                onClick={() => {
-                  setStep("conozcamonos2-paso2")
-                }} 
+                onClick={handleC2Step1Continue} 
                 className="w-full"
               >
                 Continuar
@@ -929,6 +944,35 @@ export default function DespegaOnboarding() {
 
   // STEP 6: Conozcámonos 2 - Paso 2
   if (step === "conozcamonos2-paso2") {
+    const handleC2Step2Complete = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          console.error("[v0] No user found")
+          return
+        }
+
+        // Save C2-Paso2 responses to database
+        const { error } = await supabase
+          .from("canon_conozcamonos_2_responses")
+          .insert({
+            user_id: user.id,
+            paso: 2,
+            responses: c2Step2Responses,
+            created_at: new Date().toISOString(),
+          })
+
+        if (error) {
+          console.error("[v0] Error saving C2-Paso2:", error)
+        } else {
+          console.log("[v0] C2-Paso2 saved successfully, moving to dashboard")
+          router.push("/despega")
+        }
+      } catch (err) {
+        console.error("[v0] Error in C2-Paso2 handler:", err)
+      }
+    }
+
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
@@ -946,9 +990,7 @@ export default function DespegaOnboarding() {
             </div>
             <div className="space-y-4">
               <Button 
-                onClick={() => {
-                  router.push("/despega/a1/resultado")
-                }} 
+                onClick={handleC2Step2Complete} 
                 className="w-full"
               >
                 Ver mi Ruta Personalizada
@@ -960,7 +1002,7 @@ export default function DespegaOnboarding() {
                 variant="outline"
                 className="w-full"
               >
-                Ir al Dashboard
+                Saltar por ahora
               </Button>
             </div>
           </CardContent>
