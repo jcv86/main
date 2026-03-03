@@ -18,6 +18,7 @@ export default function DespegaOnboarding() {
   const [loading, setLoading] = useState(true)
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
+  const [isFirstCompletion, setIsFirstCompletion] = useState(true)
   const [skipConozcamonos, setSkipConozcamonos] = useState(false)
   const [c1Responses, setC1Responses] = useState<Record<number, string>>({})
   const [c2Step1Responses, setC2Step1Responses] = useState<Record<number, string>>({})
@@ -126,6 +127,8 @@ export default function DespegaOnboarding() {
       if (response.ok) {
         const data = await response.json()
         console.log("[v0] Test results saved, moving to Conozcámonos 2 Paso 1")
+        // Mark this as first completion - don't show retry buttons
+        setIsFirstCompletion(true)
         setTimeout(() => {
           // After test completion, ALWAYS go to Conozcámonos 2 Paso 1
           // Don't show results yet - complete the CANON journey first
@@ -255,7 +258,7 @@ export default function DespegaOnboarding() {
 
           {/* CTA */}
           <div className="space-y-3">
-            {onboardingAlreadyCompleted ? (
+            {onboardingAlreadyCompleted && !isFirstCompletion ? (
               <>
                 <Button 
                   onClick={() => router.push("/despega/a1/resultado")} 
@@ -267,6 +270,7 @@ export default function DespegaOnboarding() {
                   onClick={() => {
                     setStep("instructions")
                     setOnboardingAlreadyCompleted(false)
+                    setIsFirstCompletion(true)
                   }} 
                   variant="outline"
                   className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg"
