@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { CanonDashboardSection } from "@/components/canon-dashboard-section"
 
 interface UserProfile {
   camino_persona_active: boolean
@@ -312,6 +313,11 @@ export default function DespegaHub() {
             </div>
           </div>
         )}
+
+        {/* CANON Route Display - Ruta personalizada con trazabilidad */}
+        <div className="mb-12">
+          <CanonDashboardSection />
+        </div>
 
         {/* Los 4 Pilares */}
         <div className="mb-12">
