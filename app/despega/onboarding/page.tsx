@@ -11,7 +11,7 @@ import Link from "next/link"
 import { DiscResultsPage } from "@/components/disc-results-page"
 import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
 
-type Step = "intro" | "instructions" | "camino" | "test" | "results"
+type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "results" | "conozcamonos2-paso1" | "conozcamonos2-paso2"
 
 export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
@@ -33,6 +33,9 @@ export default function DespegaOnboarding() {
   const supabase = createClient()
 
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
+  const [c1Responses, setC1Responses] = useState<Record<number, string>>({})
+  const [c2Step1Responses, setC2Step1Responses] = useState<Record<number, string>>({})
+  const [c2Step2Responses, setC2Step2Responses] = useState<Record<number, string>>({})
 
   // Check if user already completed onboarding
   useEffect(() => {
@@ -137,8 +140,9 @@ export default function DespegaOnboarding() {
       if (response.ok) {
         const data = await response.json()
         setTimeout(() => {
-          router.push("/despega/a1/resultado")
-        }, 2000)
+          // After test results, go to Conozcámonos 2 Paso 1 instead of results page
+          setStep("conozcamonos2-paso1")
+        }, 1500)
       } else {
         const errorData = await response.json()
         console.error("Error saving test results:", errorData)
@@ -887,16 +891,81 @@ export default function DespegaOnboarding() {
     )
   }
 
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Cargando...</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Por favor, espera.</p>
-        </CardContent>
-      </Card>
-    </div>
-  )
+  // STEP 5: Conozcámonos 2 - Paso 1
+  if (step === "conozcamonos2-paso1") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Conozcámonos - Paso 1</CardTitle>
+            <CardDescription>
+              Ahora generaremos tu ruta personalizada de 30 días. Responde 9 preguntas cortas.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
+                Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Por favor, espera mientras generamos tu ruta personalizada...
+              </p>
+              <Button 
+                onClick={() => {
+                  setStep("conozcamonos2-paso2")
+                }} 
+                className="w-full"
+              >
+                Continuar
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // STEP 6: Conozcámonos 2 - Paso 2
+  if (step === "conozcamonos2-paso2") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Conozcámonos - Paso 2</CardTitle>
+            <CardDescription>
+              Últimas preguntas para personalizar tu ruta a 60 y 90 días.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+              <p className="text-sm text-emerald-900 dark:text-emerald-100">
+                Tu ruta de 30 días está lista. ¿Quieres extender a 60 y 90 días?
+              </p>
+            </div>
+            <div className="space-y-4">
+              <Button 
+                onClick={() => {
+                  router.push("/despega/a1/resultado")
+                }} 
+                className="w-full"
+              >
+                Ver mi Ruta Personalizada
+              </Button>
+              <Button 
+                onClick={() => {
+                  router.push("/despega")
+                }} 
+                variant="outline"
+                className="w-full"
+              >
+                Ir al Dashboard
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 }
