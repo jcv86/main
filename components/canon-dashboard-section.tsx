@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { CanonRouteDisplay } from '@/components/canon-route-display'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 interface TraceabilityItem {
   missionId: string
@@ -103,13 +105,32 @@ export function CanonDashboardSection() {
 
   if (!missions || missions.length === 0) {
     return (
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
         <CardHeader>
-          <CardTitle className="text-white">Ruta no generada</CardTitle>
-          <CardDescription>Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
+          <CardTitle className="text-white text-2xl">Ruta no generada</CardTitle>
+          <CardDescription className="text-slate-300">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-slate-300">Todavía no hemos generado tu ruta de 30/60/90 días. Completa el test para comenzar.</p>
+        <CardContent className="space-y-4">
+          <p className="text-slate-300">
+            Todavía no hemos generado tu ruta de 30/60/90 días. Responde 9 preguntas más sobre tu contexto de ejecución y generaremos acciones personalizadas basadas en el motor CANON.
+          </p>
+          <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 space-y-3">
+            <p className="text-sm text-slate-300">
+              <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
+            </p>
+            <p className="text-sm text-slate-300">
+              <span className="font-semibold text-blue-400">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
+            </p>
+            <p className="text-sm text-slate-300">
+              <span className="font-semibold text-purple-400">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
+            </p>
+          </div>
+          <Link href="/despega/onboarding?step=conozcamonos2-paso1" className="block mt-6">
+            <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg">
+              Generar mi Ruta Personalizada →
+            </Button>
+          </Link>
+          <p className="text-xs text-slate-400 text-center">Tiempo estimado: 3 minutos</p>
         </CardContent>
       </Card>
     )
