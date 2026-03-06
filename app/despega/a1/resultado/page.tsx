@@ -61,6 +61,7 @@ export default function A1ResultadoPage() {
   const [testData, setTestData] = useState<any>(null)
   const [scores, setScores] = useState<DiscScores | null>(null)
   const [dominantProfile, setDominantProfile] = useState<string>('')
+  const [c1Context, setC1Context] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -111,6 +112,20 @@ export default function A1ResultadoPage() {
           const dominantProf = testResults.responses?.dominant_profile || testResults.profile_type || 'D'
           setDominantProfile(dominantProf)
           console.log("[v0] Set dominant profile:", dominantProf)
+
+          // Load C1 context for informe personalization
+          const { data: c1Data } = await supabase
+            .from('canon_conozcamonos_1_responses')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single()
+
+          if (c1Data) {
+            console.log("[v0] Found C1 context:", c1Data)
+            setC1Context(c1Data.responses)
+          }
         } else {
           console.log("[v0] No test results found")
         }
@@ -220,7 +235,37 @@ export default function A1ResultadoPage() {
                     <p className="text-slate-400 text-sm mt-2">
                       Especialmente diseñada para tu perfil {profile.name}
                     </p>
-                  </div>
+        </div>
+
+        {/* Contexto C1 Personalizado - WOW #1 */}
+        {c1Context && (
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 border border-slate-600 rounded-2xl p-8 md:p-12">
+            <h3 className="text-2xl font-bold text-white mb-6">Tu Contexto Personalizado</h3>
+            <div className="space-y-4">
+              {c1Context[3] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-blue-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu desafío actual:</p>
+                  <p className="text-white font-semibold">{c1Context[3]}</p>
+                </div>
+              )}
+              {c1Context[4] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-emerald-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu objetivo para 90 días:</p>
+                  <p className="text-white font-semibold">{c1Context[4]}</p>
+                </div>
+              )}
+              {c1Context[1] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-purple-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu situación actual:</p>
+                  <p className="text-white font-semibold">{c1Context[1]}</p>
+                </div>
+              )}
+            </div>
+            <p className="text-sm text-slate-400 mt-6 italic">
+              Este perfil ha sido personalizado según tus respuestas. No podría escribirse sin el contexto que compartiste.
+            </p>
+          </div>
+        )}
                 </div>
               </div>
             ))}

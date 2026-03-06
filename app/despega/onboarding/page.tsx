@@ -666,14 +666,113 @@ export default function DespegaOnboarding() {
 
           {/* CTA */}
           <div className="space-y-3 pt-4">
-            <Button onClick={() => setStep("camino")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
-              Veamos Mi Patrón y Mi Dirección
-            </Button>
+                <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue-600 hover:bg-blue-700">
+                  Continuar con Conozcámonos
+                </Button>
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
               El test dura ~3 minutos. Responde con total honestidad.
             </p>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  // STEP 2.5: Conozcámonos 1 - 7 preguntas pre-test para contextualizar
+  if (step === "conozcamonos1") {
+    const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
+    const c1Questions = [
+      { id: 1, q: "¿Cuál es tu situación laboral actual?", type: "select", opts: ["Empleado", "Independiente", "Desempleado", "Estudiante"] },
+      { id: 2, q: "¿Años de experiencia profesional?", type: "select", opts: ["<1 año", "1-3", "3-5", "5-10", "10+"] },
+      { id: 3, q: "¿Cuál es tu mayor desafío ahora?", type: "text" },
+      { id: 4, q: "¿Tu objetivo para 90 días?", type: "text" },
+      { id: 5, q: "¿Con quién vives?", type: "select", opts: ["Solo", "Pareja", "Familia", "Compañeros"] },
+      { id: 6, q: "¿Cuánto tiempo diario para dedicar?", type: "select", opts: ["<30min", "30-60min", "1-2h", "2+ horas"] },
+      { id: 7, q: "¿Qué tipo de apoyo necesitas?", type: "text" },
+    ]
+    
+    const currentC1Q = c1Questions[c1CurrentQuestion]
+    const c1Progress = ((c1CurrentQuestion + 1) / c1Questions.length) * 100
+
+    const handleC1Next = () => {
+      if (c1CurrentQuestion < c1Questions.length - 1) {
+        setC1CurrentQuestion(c1CurrentQuestion + 1)
+      } else {
+        // Save C1 responses to BD and move to test
+        const saveC1 = async () => {
+          try {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (!user) return
+
+            const { error } = await supabase
+              .from("canon_conozcamonos_1_responses")
+              .insert({
+                user_id: user.id,
+                responses: c1Responses,
+                created_at: new Date().toISOString(),
+              })
+
+            if (error) {
+              console.error("[v0] Error saving C1 responses:", error)
+            } else {
+              console.log("[v0] C1 responses saved successfully")
+              setStep("test")
+            }
+          } catch (err) {
+            console.error("[v0] Error in C1 save:", err)
+          }
+        }
+        saveC1()
+      }
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Conozcámonos - Contexto Inicial</CardTitle>
+            <CardDescription>7 preguntas para personalizar tu experiencia</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Progress value={c1Progress} className="h-2" />
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">{currentC1Q.q}</p>
+              {currentC1Q.type === "select" ? (
+                <div className="grid gap-2">
+                  {currentC1Q.opts?.map((opt: string) => (
+                    <Button 
+                      key={opt}
+                      variant="outline"
+                      onClick={() => {
+                        setC1Responses({ ...c1Responses, [currentC1Q.id]: opt })
+                        handleC1Next()
+                      }}
+                      className="justify-start"
+                    >
+                      {opt}
+                    </Button>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Tu respuesta..."
+                    value={c1Responses[currentC1Q.id] || ""}
+                    onChange={(e) => setC1Responses({ ...c1Responses, [currentC1Q.id]: e.target.value })}
+                    className="w-full p-2 border rounded-md"
+                  />
+                  <Button 
+                    onClick={handleC1Next}
+                    className="w-full"
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
