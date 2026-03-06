@@ -899,35 +899,45 @@ export default function DespegaOnboarding() {
                   ✓ MÁS como yo
                 </h4>
                 <div className="space-y-2">
-                  {question?.opciones.map((option) => (
-                    <div
-                      key={option.texto}
-                      onClick={() =>
-                        setResponses({
-                          ...responses,
-                          [question.id]: { ...currentResponse, mas: option.dimension },
-                        })
-                      }
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedMas === option.dimension
-                          ? "border-green-500 bg-green-50"
-                          : "border-gray-200 hover:border-green-300"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                          selectedMas === option.dimension
-                            ? "border-green-500 bg-green-500"
-                            : "border-gray-300"
-                        }`}>
-                          {selectedMas === option.dimension && (
-                            <span className="text-white text-sm">✓</span>
-                          )}
+                  {question?.opciones.map((option) => {
+                    const isDisabledInMas = selectedMenos === option.dimension
+                    return (
+                      <div
+                        key={option.texto}
+                        onClick={() => {
+                          if (!isDisabledInMas) {
+                            setResponses({
+                              ...responses,
+                              [question.id]: { ...currentResponse, mas: option.dimension },
+                            })
+                          }
+                        }}
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                          isDisabledInMas
+                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            : selectedMas === option.dimension
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200 hover:border-green-300"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                            selectedMas === option.dimension
+                              ? "border-green-500 bg-green-500"
+                              : "border-gray-300"
+                          }`}>
+                            {selectedMas === option.dimension && (
+                              <span className="text-white text-sm">✓</span>
+                            )}
+                          </div>
+                          <span className={`text-sm ${isDisabledInMas ? "text-gray-500" : ""}`}>
+                            {option.texto}
+                            {isDisabledInMas && " (Ya seleccionado en MENOS como yo)"}
+                          </span>
                         </div>
-                        <span className="text-sm">{option.texto}</span>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
 
@@ -937,35 +947,45 @@ export default function DespegaOnboarding() {
                   ✗ MENOS como yo
                 </h4>
                 <div className="space-y-2">
-                  {question?.opciones.map((option) => (
-                    <div
-                      key={option.texto}
-                      onClick={() =>
-                        setResponses({
-                          ...responses,
-                          [question.id]: { ...currentResponse, menos: option.dimension },
-                        })
-                      }
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedMenos === option.dimension
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-200 hover:border-red-300"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                          selectedMenos === option.dimension
-                            ? "border-red-500 bg-red-500"
-                            : "border-gray-300"
-                        }`}>
-                          {selectedMenos === option.dimension && (
-                            <span className="text-white text-sm">✗</span>
-                          )}
+                  {question?.opciones.map((option) => {
+                    const isDisabledInMenos = selectedMas === option.dimension
+                    return (
+                      <div
+                        key={option.texto}
+                        onClick={() => {
+                          if (!isDisabledInMenos) {
+                            setResponses({
+                              ...responses,
+                              [question.id]: { ...currentResponse, menos: option.dimension },
+                            })
+                          }
+                        }}
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                          isDisabledInMenos
+                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            : selectedMenos === option.dimension
+                            ? "border-red-500 bg-red-50"
+                            : "border-gray-200 hover:border-red-300"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                            selectedMenos === option.dimension
+                              ? "border-red-500 bg-red-500"
+                              : "border-gray-300"
+                          }`}>
+                            {selectedMenos === option.dimension && (
+                              <span className="text-white text-sm">✗</span>
+                            )}
+                          </div>
+                          <span className={`text-sm ${isDisabledInMenos ? "text-gray-500" : ""}`}>
+                            {option.texto}
+                            {isDisabledInMenos && " (Ya seleccionado en MÁS como yo)"}
+                          </span>
                         </div>
-                        <span className="text-sm">{option.texto}</span>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>
