@@ -20,6 +20,7 @@ export default function DespegaOnboarding() {
   const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
   const [c2Paso1Question, setC2Paso1Question] = useState(0)
   const [c2Paso2Question, setC2Paso2Question] = useState(0)
+  const [c2Paso1Loading, setC2Paso1Loading] = useState(false)
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [results, setResults] = useState<any>(null)
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
@@ -1057,7 +1058,6 @@ export default function DespegaOnboarding() {
 
   // STEP 5: Conozcámonos 2 - Paso 1
   if (step === "conozcamonos2-paso1") {
-    const [c2Paso1Loading, setC2Paso1Loading] = useState(false)
     const C2_PASO1_QUESTIONS = [
       { id: 1, q: "¿Cuánto tiempo disponible tienes diariamente?", type: "select", opts: ["<30 min", "30-60 min", "1-2 horas", "2+ horas"] },
       { id: 2, q: "¿Cuál es tu meta principal en 30 días?", type: "select", opts: ["Exploración", "Consolidación", "Escalamiento", "Cambio total"] },
