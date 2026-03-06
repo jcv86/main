@@ -38,7 +38,22 @@ export default function DespegaOnboarding() {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) return
 
-        // Look for existing test results
+        // Check if C2-Paso2 is completed (user fully onboarded)
+        const { data: c2Data } = await supabase
+          .from("canon_conozcamonos_2_responses")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("paso", 2)
+          .limit(1)
+
+        if (c2Data && c2Data.length > 0) {
+          console.log("[v0] User fully completed onboarding, redirecting to dashboard with route")
+          // User is fully onboarded - redirect to dashboard where route should be generated
+          router.push("/despega")
+          return
+        }
+
+        // Look for existing test results (A1 completed but not C2)
         const { data: results } = await supabase
           .from("a1_tests_results")
           .eq("user_id", user.id)
@@ -46,20 +61,35 @@ export default function DespegaOnboarding() {
           .limit(1)
 
         if (results && results.length > 0) {
-          console.log("[v0] User already completed A1 test, jumping to C2-Paso1")
-          setOnboardingAlreadyCompleted(true)
-          // JUMP DIRECTLY TO C2-PASO1 if already completed A1
-          setStep("conozcamonos2-paso1")
+          console.log("[v0] User completed A1 test, checking C2 status...")
+          
+          // Check if C2-Paso1 is completed
+          const { data: c2Paso1 } = await supabase
+            .from("canon_conozcamonos_2_responses")
+            .select("*")
+            .eq("user_id", user.id)
+            .eq("paso", 1)
+            .limit(1)
+
+          if (c2Paso1 && c2Paso1.length > 0) {
+            console.log("[v0] User completed C2-Paso1, jumping to C2-Paso2")
+            setOnboardingAlreadyCompleted(true)
+            setStep("conozcamonos2-paso2")
+          } else {
+            console.log("[v0] User completed A1, jumping to C2-Paso1")
+            setOnboardingAlreadyCompleted(true)
+            setStep("conozcamonos2-paso1")
+          }
         }
       } catch (error) {
-        console.error("Error checking onboarding status:", error)
+        console.error("[v0] Error checking onboarding status:", error)
       } finally {
         setLoading(false)
       }
     }
 
     checkStatus()
-  }, [])
+  }, [router])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
