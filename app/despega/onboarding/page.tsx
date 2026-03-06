@@ -17,6 +17,7 @@ export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
   const [isFirstCompletion, setIsFirstCompletion] = useState(true)
@@ -686,7 +687,6 @@ export default function DespegaOnboarding() {
 
   // STEP 2.5: Conozcámonos 1 - 7 preguntas pre-test para contextualizar
   if (step === "conozcamonos1") {
-    const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
     const c1Questions = [
       { id: 1, q: "¿Cuál es tu situación laboral actual?", type: "select", opts: ["Empleado", "Independiente", "Desempleado", "Estudiante"] },
       { id: 2, q: "¿Años de experiencia profesional?", type: "select", opts: ["<1 año", "1-3", "3-5", "5-10", "10+"] },
@@ -730,6 +730,7 @@ export default function DespegaOnboarding() {
         // Save C1 responses to BD
         const saveC1 = async () => {
           try {
+            const supabase = createClient()
             const { data: { user } } = await supabase.auth.getUser()
             if (!user) return
 
@@ -745,6 +746,7 @@ export default function DespegaOnboarding() {
               console.error("[v0] Error saving C1 responses:", error)
             } else {
               console.log("[v0] C1 responses saved successfully (sanitized)")
+              setC1CurrentQuestion(0)
               setStep("test")
             }
           } catch (err) {
