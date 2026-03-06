@@ -1057,6 +1057,7 @@ export default function DespegaOnboarding() {
 
   // STEP 5: Conozcámonos 2 - Paso 1
   if (step === "conozcamonos2-paso1") {
+    const [c2Paso1Loading, setC2Paso1Loading] = useState(false)
     const C2_PASO1_QUESTIONS = [
       { id: 1, q: "¿Cuánto tiempo disponible tienes diariamente?", type: "select", opts: ["<30 min", "30-60 min", "1-2 horas", "2+ horas"] },
       { id: 2, q: "¿Cuál es tu meta principal en 30 días?", type: "select", opts: ["Exploración", "Consolidación", "Escalamiento", "Cambio total"] },
@@ -1071,36 +1072,26 @@ export default function DespegaOnboarding() {
 
     const currentC2Q = C2_PASO1_QUESTIONS[c2Paso1Question] || C2_PASO1_QUESTIONS[0]
     const c2Progress = ((c2Paso1Question + 1) / C2_PASO1_QUESTIONS.length) * 100
+    const isLastQuestion = c2Paso1Question === C2_PASO1_QUESTIONS.length - 1
+    const isCurrentQuestionAnswered = c2Step1Responses[currentC2Q.id] !== undefined
 
     const handleC2Step1Next = async () => {
-      // Save current answer
-      if (currentC2Q.type === "range" || currentC2Q.type === "select" || currentC2Q.type === "text") {
-        const value = c2Paso1Question === 2 ? parseInt((document.querySelector('[type="range"]') as HTMLInputElement)?.value || "5") : c2Step1Responses[currentC2Q.id]
-        if (value !== undefined) {
-          setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: value })
-        }
-      }
-
       if (c2Paso1Question < C2_PASO1_QUESTIONS.length - 1) {
         setC2Paso1Question(c2Paso1Question + 1)
       } else {
-        // All questions answered - trigger route generation
+        // All questions answered - save to DB
+        setC2Paso1Loading(true)
+        console.log("[v0] Saving C2-Paso1 responses:", c2Step1Responses)
         try {
           const supabase = createClient()
           const { data: { user } } = await supabase.auth.getUser()
           if (!user) {
             console.error("[v0] No user found")
+            setC2Paso1Loading(false)
             return
           }
 
-          // NIVEL 4: Validate C2-Paso1 responses for contradictions
-          const validateC2Responses = (responses: any): { adjusted: any; issues: string[] } => {
-            const adjusted = { ...responses }
-            const issues: string[] = []
-            return { adjusted, issues }
-          }
-
-          const { adjusted: validatedResponses, issues } = validateC2Responses(c2Step1Responses)
+          console.log("[v0] User found, saving responses...")
           
           // Save C2-Paso1 responses to database
           const { error } = await supabase
@@ -1108,13 +1099,13 @@ export default function DespegaOnboarding() {
             .insert({
               user_id: user.id,
               paso: 1,
-              responses: validatedResponses,
-              validation_issues: issues,
+              responses: c2Step1Responses,
               created_at: new Date().toISOString(),
             })
 
           if (error) {
             console.error("[v0] Error saving C2-Paso1:", error)
+            setC2Paso1Loading(false)
             return
           }
 
@@ -1123,6 +1114,7 @@ export default function DespegaOnboarding() {
           setStep("conozcamonos2-paso2")
         } catch (err) {
           console.error("[v0] Error saving C2-Paso1:", err)
+          setC2Paso1Loading(false)
         }
       }
     }
@@ -1161,8 +1153,11 @@ export default function DespegaOnboarding() {
                       variant={c2Step1Responses[currentC2Q.id] === opt ? "default" : "outline"}
                       onClick={() => {
                         setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: opt })
-                        setTimeout(handleC2Step1Next, 300)
+                        if (!isLastQuestion) {
+                          setTimeout(() => handleC2Step1Next(), 300)
+                        }
                       }}
+                      disabled={c2Paso1Loading}
                       className="justify-start w-full"
                     >
                       {opt}
@@ -1184,8 +1179,12 @@ export default function DespegaOnboarding() {
                   <div className="text-center text-lg font-semibold">
                     {c2Step1Responses[currentC2Q.id] || 5} / {currentC2Q.max}
                   </div>
-                  <Button onClick={handleC2Step1Next} className="w-full">
-                    Continuar
+                  <Button 
+                    onClick={handleC2Step1Next} 
+                    className="w-full"
+                    disabled={c2Paso1Loading}
+                  >
+                    {isLastQuestion ? (c2Paso1Loading ? 'Guardando...' : 'Terminar y Continuar') : 'Continuar'}
                   </Button>
                 </div>
               )}
@@ -1198,10 +1197,21 @@ export default function DespegaOnboarding() {
                     onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: e.target.value })}
                     className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
                     rows={3}
+                    disabled={c2Paso1Loading}
                   />
-                  <Button onClick={handleC2Step1Next} className="w-full" disabled={!c2Step1Responses[currentC2Q.id]}>
-                    Continuar
+                  <Button 
+                    onClick={handleC2Step1Next} 
+                    className="w-full" 
+                    disabled={!isCurrentQuestionAnswered || c2Paso1Loading}
+                  >
+                    {isLastQuestion ? (c2Paso1Loading ? 'Guardando...' : 'Terminar y Continuar') : 'Continuar'}
                   </Button>
+                </div>
+              )}
+
+              {isLastQuestion && isCurrentQuestionAnswered && (
+                <div className="text-xs text-slate-500 text-center pt-2">
+                  Haz click en "Terminar y Continuar" para generar tu ruta
                 </div>
               )}
             </div>
