@@ -16,6 +16,7 @@ type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "re
 export default function DespegaOnboarding() {
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
+  const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
   const [isFirstCompletion, setIsFirstCompletion] = useState(true)
