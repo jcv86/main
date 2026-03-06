@@ -101,10 +101,11 @@ export default function DespegaOnboarding() {
       total: (normalizedScores.D + normalizedScores.I + normalizedScores.S + normalizedScores.C) / 4,
     }
     
+    console.log("[v0] Calculated results:", finalResults)
     setResults(finalResults)
-    setStep("results")
 
     try {
+      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       
       // Mark cerebral test as completed in a1_progress
@@ -115,7 +116,7 @@ export default function DespegaOnboarding() {
           .eq("user_id", user.id)
         
         if (error) {
-          console.error("Error marking cerebral as completed:", error)
+          console.error("[v0] Error marking cerebral as completed:", error)
         }
       }
 
@@ -133,20 +134,19 @@ export default function DespegaOnboarding() {
 
       if (response.ok) {
         const data = await response.json()
-        console.log("[v0] Test results saved, moving to Conozcámonos 2 Paso 1")
-        // Mark this as first completion - don't show retry buttons
-        setIsFirstCompletion(true)
-        setTimeout(() => {
-          // After test completion, ALWAYS go to Conozcámonos 2 Paso 1
-          // Don't show results yet - complete the CANON journey first
-          setStep("conozcamonos2-paso1")
-        }, 1500)
+        console.log("[v0] Test results saved successfully")
+        // Set step to results to show the results page
+        setStep("results")
       } else {
         const errorData = await response.json()
-        console.error("Error saving test results:", errorData)
+        console.error("[v0] Error saving test results:", errorData)
+        // Still show results even if save failed
+        setStep("results")
       }
     } catch (error) {
-      console.error("[v0] Error saving test results:", error)
+      console.error("[v0] Error in calculateResults:", error)
+      // Still show results even if error
+      setStep("results")
     }
 
     setLoading(false)
