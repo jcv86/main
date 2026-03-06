@@ -809,104 +809,17 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 4: Mostrar Resultados del Test A1
+  // STEP 4: Mostrar Resultados del Test A1 - usando nuevo componente mejorado
   if (step === "results" && results) {
-    const profile = results.dominantProfile
-    const profileData: Record<string, any> = {
-      D: { name: 'Impulsor', icon: '⚡', color: 'from-red-500 to-orange-500', text: 'text-red-700' },
-      I: { name: 'Catalizador', icon: '✨', color: 'from-yellow-500 to-orange-400', text: 'text-yellow-700' },
-      S: { name: 'Estabilizador', icon: '🛡️', color: 'from-green-500 to-teal-500', text: 'text-green-700' },
-      C: { name: 'Arquitecto', icon: '🧠', color: 'from-blue-500 to-indigo-500', text: 'text-blue-700' },
-    }
-    const pData = profileData[profile] || { name: profile, icon: '✨', color: 'from-slate-500 to-slate-600', text: 'text-slate-700' }
-
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold text-white">Tu Perfil Despega Cerebral</h1>
-            <p className="text-slate-300">Basado en tus respuestas del test</p>
-          </div>
-
-          {/* Main Profile Card */}
-          <Card className={`bg-gradient-to-br ${pData.color} border-0 text-white p-8`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-5xl font-bold mb-2">{pData.icon}</h2>
-                <h3 className="text-3xl font-bold mb-4">{pData.name}</h3>
-                <p className="text-sm opacity-90">Tu perfil dominante</p>
-              </div>
-              <div className="text-right">
-                <div className="text-6xl font-bold opacity-30">{profile}</div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Scores Grid */}
-          <div className="grid grid-cols-4 gap-4">
-            {(['D', 'I', 'S', 'C'] as const).map((key) => {
-              const scoreData: Record<string, string> = { D: 'Impulsor', I: 'Catalizador', S: 'Estabilizador', C: 'Arquitecto' }
-              const colors: Record<string, string> = { D: 'bg-red-500', I: 'bg-yellow-500', S: 'bg-green-500', C: 'bg-blue-500' }
-              return (
-                <Card key={key} className="bg-slate-800 border-slate-700">
-                  <CardContent className="pt-6 text-center">
-                    <div className={`text-3xl font-bold ${colors[key]} text-center mb-2 rounded`}>
-                      {Math.round(results[key])}
-                    </div>
-                    <p className="text-sm text-slate-300">{scoreData[key]}</p>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-
-          {/* C1 Context Display */}
-          {c1Responses && Object.keys(c1Responses).length > 0 && (
-            <Card className="bg-slate-800 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">Tu Contexto Inicial</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {c1Responses[3] && (
-                  <div className="bg-slate-700/50 p-3 rounded-lg border-l-4 border-blue-400">
-                    <p className="text-xs text-slate-400 mb-1">Tu mayor desafío:</p>
-                    <p className="text-white text-sm">{c1Responses[3]}</p>
-                  </div>
-                )}
-                {c1Responses[4] && (
-                  <div className="bg-slate-700/50 p-3 rounded-lg border-l-4 border-emerald-400">
-                    <p className="text-xs text-slate-400 mb-1">Tu objetivo para 90 días:</p>
-                    <p className="text-white text-sm">{c1Responses[4]}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Next Step Section */}
-          <Card className="bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border-emerald-700/30">
-            <CardContent className="pt-6 space-y-4 text-center">
-              <p className="text-slate-100 font-semibold">
-                Ahora que conocemos tu perfil DISC, vamos a crear tu ruta personalizada.
-              </p>
-              <p className="text-sm text-slate-300">
-                Responde 9 preguntas más sobre tu contexto de ejecución y generaremos tu plan de 30/60/90 días.
-              </p>
-              <Button 
-                onClick={() => {
-                  setC1CurrentQuestion(0)
-                  setStep("conozcamonos2-paso1")
-                }}
-                className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg"
-              >
-                Generar mi Ruta Personalizada →
-              </Button>
-              <p className="text-xs text-slate-400">Tiempo estimado: 3 minutos</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <DiscResultsPage 
+        results={results}
+        c1Context={c1Responses}
+        onContinue={() => {
+          setC1CurrentQuestion(0)
+          setStep("conozcamonos2-paso1")
+        }}
+      />
     )
   }
 
@@ -1131,6 +1044,11 @@ export default function DespegaOnboarding() {
         results={results}
         caminoPersona={caminoPersona}
         caminoProfesional={caminoProfesional}
+        c1Context={c1Responses}
+        onContinue={() => {
+          setC1CurrentQuestion(0)
+          setStep("conozcamonos2-paso1")
+        }}
       />
     )
   }
