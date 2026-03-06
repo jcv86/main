@@ -2,6 +2,59 @@ import { createClient } from '@/lib/supabase/server'
 import { CANON_RULES, evaluateRules } from '@/lib/canon-rules-engine'
 import { generateRoute30Days } from '@/lib/canon-routes-generator'
 
+// NIVEL 4: Validación y Sanitización
+const sanitizeText = (text: string, maxLength: number = 200): string => {
+  if (!text) return ''
+  // Remove URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g
+  let sanitized = text.replace(urlRegex, '')
+  // Remove insultos/spam patterns
+  const spamPatterns = /[!]{3,}|[*]{3,}|viagra|casino|poker|xxx/gi
+  sanitized = sanitized.replace(spamPatterns, '')
+  // Trim and limit length
+  return sanitized.trim().slice(0, maxLength)
+}
+
+const validateResponses = (responses: any): { valid: boolean; errors: string[]; adjusted: any } => {
+  const errors: string[] = []
+  const adjusted = { ...responses }
+
+  // Check for contradictions
+  if (adjusted.tiempo_disponible_diario_minutos && adjusted.no_disponibilidad_periodos) {
+    if (adjusted.tiempo_disponible_diario_minutos < 15 && adjusted.no_disponibilidad_periodos.includes('mañana')) {
+      errors.push('Contradicción: no disponible en mañana pero solo 15 min diarios')
+      adjusted.no_disponibilidad_periodos = adjusted.no_disponibilidad_periodos.filter((p: string) => p !== 'mañana')
+    }
+  }
+
+  // Validate energy-session duration compatibility
+  if (adjusted.energia_nivel && adjusted.session_duration) {
+    if (adjusted.energia_nivel <= 3 && adjusted.session_duration > 45) {
+      errors.push('Ajuste: energía baja pero sesiones largas, reduciendo a sesiones cortas')
+      adjusted.session_duration = 15
+    }
+  }
+
+  // Validate objectives viability
+  if (adjusted.meta_30_dias && adjusted.tiempo_disponible_diario_minutos) {
+    const tiempoTotal = adjusted.tiempo_disponible_diario_minutos * 30
+    if (tiempoTotal < 300 && adjusted.meta_30_dias === 'cambio-carrera') {
+      errors.push('Ajuste: objetivo de cambio de carrera requiere mínimo 300 min/mes, reduciendo a meta de especialización')
+      adjusted.meta_30_dias = 'especializacion'
+    }
+  }
+
+  // Sanitize text fields
+  if (adjusted.contexto_vida) {
+    adjusted.contexto_vida = sanitizeText(adjusted.contexto_vida, 200)
+  }
+  if (adjusted.metrica_exito) {
+    adjusted.metrica_exito = sanitizeText(adjusted.metrica_exito, 150)
+  }
+
+  return { valid: errors.length === 0, errors, adjusted }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -28,8 +81,14 @@ export async function POST(request: Request) {
       return Response.json({ error: 'C2 responses not found' }, { status: 404 })
     }
 
-    // 2. Evaluate rules to get actions
-    const actions = evaluateRules(CANON_RULES, c2Responses.responses || {})
+    // NIVEL 4: Validate and adjust responses
+    const { valid, errors, adjusted } = validateResponses(c2Responses.responses || {})
+    if (errors.length > 0) {
+      console.log('[v0] Nivel 4 validations found issues:', errors)
+    }
+
+    // 2. Evaluate rules to get actions (using adjusted responses)
+    const actions = evaluateRules(CANON_RULES, adjusted)
     console.log('[v0] Evaluated rules, got', actions.length, 'actions')
 
     // 3. Generate 30-day route

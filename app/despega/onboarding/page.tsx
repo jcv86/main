@@ -698,7 +698,30 @@ export default function DespegaOnboarding() {
       if (c1CurrentQuestion < c1Questions.length - 1) {
         setC1CurrentQuestion(c1CurrentQuestion + 1)
       } else {
-        // Save C1 responses to BD and move to test
+        // NIVEL 4: Sanitize C1 responses before saving
+        const sanitizeTextInput = (text: string, maxLength: number = 200): string => {
+          if (!text) return ''
+          // Remove URLs
+          const urlRegex = /(https?:\/\/[^\s]+)/g
+          let sanitized = text.replace(urlRegex, '')
+          // Remove spam patterns
+          const spamPatterns = /[!]{3,}|viagra|casino|poker/gi
+          sanitized = sanitized.replace(spamPatterns, '')
+          // Trim and limit
+          return sanitized.trim().slice(0, maxLength)
+        }
+
+        const sanitizedResponses: Record<number, string> = {}
+        Object.keys(c1Responses).forEach(key => {
+          const val = c1Responses[parseInt(key)]
+          if (typeof val === 'string') {
+            sanitizedResponses[parseInt(key)] = sanitizeTextInput(val)
+          } else {
+            sanitizedResponses[parseInt(key)] = val
+          }
+        })
+
+        // Save C1 responses to BD
         const saveC1 = async () => {
           try {
             const { data: { user } } = await supabase.auth.getUser()
@@ -708,14 +731,14 @@ export default function DespegaOnboarding() {
               .from("canon_conozcamonos_1_responses")
               .insert({
                 user_id: user.id,
-                responses: c1Responses,
+                responses: sanitizedResponses,
                 created_at: new Date().toISOString(),
               })
 
             if (error) {
               console.error("[v0] Error saving C1 responses:", error)
             } else {
-              console.log("[v0] C1 responses saved successfully")
+              console.log("[v0] C1 responses saved successfully (sanitized)")
               setStep("test")
             }
           } catch (err) {
@@ -992,13 +1015,45 @@ export default function DespegaOnboarding() {
           return
         }
 
-        // Save C2-Paso1 responses to database
+        // NIVEL 4: Validate C2-Paso1 responses for contradictions
+        const validateC2Responses = (responses: any): { adjusted: any; issues: string[] } => {
+          const adjusted = { ...responses }
+          const issues: string[] = []
+
+          // Check for time vs goals contradiction
+          if (adjusted.tiempo_disponible_diario < 30 && adjusted.meta_30 === 'cambio-total') {
+            issues.push('Ajuste: <30 min/día no soporta meta ambiciosa, escalando a 60 min recomendado')
+            adjusted.tiempo_disponible_diario = 60
+          }
+
+          // Check energy vs session duration mismatch
+          if (adjusted.energia_nivel <= 3 && adjusted.duracion_sesion > 45) {
+            issues.push('Ajuste: energía baja pero sesiones largas, reduciendo a 15 min sesiones')
+            adjusted.duracion_sesion = 15
+          }
+
+          // Check no-negociables vs available time
+          if (adjusted.no_negociables && adjusted.no_negociables.length > 3 && adjusted.tiempo_disponible_diario < 60) {
+            issues.push('Nota: muchas restricciones + poco tiempo = necesitarás priorizar duramente')
+          }
+
+          return { adjusted, issues }
+        }
+
+        const { adjusted: validatedResponses, issues } = validateC2Responses(c2Step1Responses)
+        
+        if (issues.length > 0) {
+          console.log('[v0] Nivel 4 detected issues in C2-Paso1:', issues)
+        }
+
+        // Save C2-Paso1 responses to database (with validated/adjusted values)
         const { error } = await supabase
           .from("canon_conozcamonos_2_responses")
           .insert({
             user_id: user.id,
             paso: 1,
-            responses: c2Step1Responses,
+            responses: validatedResponses,
+            validation_issues: issues,
             created_at: new Date().toISOString(),
           })
 
@@ -1007,7 +1062,7 @@ export default function DespegaOnboarding() {
           return
         }
 
-        console.log("[v0] C2-Paso1 saved successfully, triggering route generation...")
+        console.log("[v0] C2-Paso1 saved successfully (with Nivel 4 validation), triggering route generation...")
 
         // TRIGGER: Generate route via API endpoint
         try {
