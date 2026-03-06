@@ -28,22 +28,27 @@ export default function DespegaOnboarding() {
   useEffect(() => {
     const checkStatus = async () => {
       try {
+        const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) return
 
         // Look for existing test results
         const { data: results } = await supabase
           .from("a1_tests_results")
-          .select("id")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
           .limit(1)
 
         if (results && results.length > 0) {
+          console.log("[v0] User already completed A1 test, jumping to C2-Paso1")
           setOnboardingAlreadyCompleted(true)
+          // JUMP DIRECTLY TO C2-PASO1 if already completed A1
+          setStep("conozcamonos2-paso1")
         }
       } catch (error) {
         console.error("Error checking onboarding status:", error)
+      } finally {
+        setLoading(false)
       }
     }
 

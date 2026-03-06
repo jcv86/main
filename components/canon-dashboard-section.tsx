@@ -125,7 +125,7 @@ export function CanonDashboardSection() {
               <span className="font-semibold text-purple-400">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>
-          <Link href="/despega/onboarding?step=conozcamonos2-paso1" className="block mt-6">
+          <Link href="/despega/onboarding" className="block mt-6">
             <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg">
               Generar mi Ruta Personalizada →
             </Button>
