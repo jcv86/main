@@ -1055,85 +1055,73 @@ export default function DespegaOnboarding() {
 
   // STEP 5: Conozcámonos 2 - Paso 1
   if (step === "conozcamonos2-paso1") {
-    const handleC2Step1Continue = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          console.error("[v0] No user found")
-          return
+    const C2_PASO1_QUESTIONS = [
+      { id: 1, q: "¿Cuánto tiempo disponible tienes diariamente?", type: "select", opts: ["<30 min", "30-60 min", "1-2 horas", "2+ horas"] },
+      { id: 2, q: "¿Cuál es tu meta principal en 30 días?", type: "select", opts: ["Exploración", "Consolidación", "Escalamiento", "Cambio total"] },
+      { id: 3, q: "Nivel de energía actual (1-10)", type: "range", min: 1, max: 10 },
+      { id: 4, q: "Duración ideal de sesiones de trabajo", type: "select", opts: ["15 min", "30 min", "45 min", "60+ min"] },
+      { id: 5, q: "¿Trabajas mejor solo o en equipo?", type: "select", opts: ["Solo", "Equipo pequeño", "Ambos", "Depende"] },
+      { id: 6, q: "Obstáculos principales (máx 3)", type: "text" },
+      { id: 7, q: "¿Tienes compromisos no-negociables?", type: "select", opts: ["Ninguno", "1-2", "3-5", "5+"] },
+      { id: 8, q: "Ambiente de trabajo preferido", type: "select", opts: ["Casa", "Oficina", "Café", "Exterior"] },
+      { id: 9, q: "¿Necesitas supervisión/accountability?", type: "select", opts: ["No", "Ocasional", "Semanal", "Diaria"] },
+    ]
+
+    const currentC2Q = C2_PASO1_QUESTIONS[currentQuestion] || C2_PASO1_QUESTIONS[0]
+    const c2Progress = ((currentQuestion + 1) / C2_PASO1_QUESTIONS.length) * 100
+
+    const handleC2Step1Next = async () => {
+      // Save current answer
+      if (currentC2Q.type === "range" || currentC2Q.type === "select" || currentC2Q.type === "text") {
+        const value = currentQuestion === 2 ? parseInt((document.querySelector('[type="range"]') as HTMLInputElement)?.value || "5") : c2Step1Responses[currentC2Q.id]
+        if (value !== undefined) {
+          setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: value })
         }
+      }
 
-        // NIVEL 4: Validate C2-Paso1 responses for contradictions
-        const validateC2Responses = (responses: any): { adjusted: any; issues: string[] } => {
-          const adjusted = { ...responses }
-          const issues: string[] = []
-
-          // Check for time vs goals contradiction
-          if (adjusted.tiempo_disponible_diario < 30 && adjusted.meta_30 === 'cambio-total') {
-            issues.push('Ajuste: <30 min/día no soporta meta ambiciosa, escalando a 60 min recomendado')
-            adjusted.tiempo_disponible_diario = 60
-          }
-
-          // Check energy vs session duration mismatch
-          if (adjusted.energia_nivel <= 3 && adjusted.duracion_sesion > 45) {
-            issues.push('Ajuste: energía baja pero sesiones largas, reduciendo a 15 min sesiones')
-            adjusted.duracion_sesion = 15
-          }
-
-          // Check no-negociables vs available time
-          if (adjusted.no_negociables && adjusted.no_negociables.length > 3 && adjusted.tiempo_disponible_diario < 60) {
-            issues.push('Nota: muchas restricciones + poco tiempo = necesitarás priorizar duramente')
-          }
-
-          return { adjusted, issues }
-        }
-
-        const { adjusted: validatedResponses, issues } = validateC2Responses(c2Step1Responses)
-        
-        if (issues.length > 0) {
-          console.log('[v0] Nivel 4 detected issues in C2-Paso1:', issues)
-        }
-
-        // Save C2-Paso1 responses to database (with validated/adjusted values)
-        const { error } = await supabase
-          .from("canon_conozcamonos_2_responses")
-          .insert({
-            user_id: user.id,
-            paso: 1,
-            responses: validatedResponses,
-            validation_issues: issues,
-            created_at: new Date().toISOString(),
-          })
-
-        if (error) {
-          console.error("[v0] Error saving C2-Paso1:", error)
-          return
-        }
-
-        console.log("[v0] C2-Paso1 saved successfully (with Nivel 4 validation), triggering route generation...")
-
-        // TRIGGER: Generate route via API endpoint
+      if (currentQuestion < C2_PASO1_QUESTIONS.length - 1) {
+        setCurrentQuestion(currentQuestion + 1)
+      } else {
+        // All questions answered - trigger route generation
         try {
-          const generateResponse = await fetch('/api/despega/canon-generate-route', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user.id }),
-          })
-
-          if (generateResponse.ok) {
-            const routeData = await generateResponse.json()
-            console.log("[v0] Route generated successfully:", routeData)
-          } else {
-            console.error("[v0] Error generating route:", await generateResponse.json())
+          const supabase = createClient()
+          const { data: { user } } = await supabase.auth.getUser()
+          if (!user) {
+            console.error("[v0] No user found")
+            return
           }
-        } catch (routeError) {
-          console.error("[v0] Error calling route generation endpoint:", routeError)
-        }
 
-        // Move to Paso 2
-        setStep("conozcamonos2-paso2")
-      } catch (err) {
-        console.error("[v0] Error in C2-Paso1 handler:", err)
+          // NIVEL 4: Validate C2-Paso1 responses for contradictions
+          const validateC2Responses = (responses: any): { adjusted: any; issues: string[] } => {
+            const adjusted = { ...responses }
+            const issues: string[] = []
+            return { adjusted, issues }
+          }
+
+          const { adjusted: validatedResponses, issues } = validateC2Responses(c2Step1Responses)
+          
+          // Save C2-Paso1 responses to database
+          const { error } = await supabase
+            .from("canon_conozcamonos_2_responses")
+            .insert({
+              user_id: user.id,
+              paso: 1,
+              responses: validatedResponses,
+              validation_issues: issues,
+              created_at: new Date().toISOString(),
+            })
+
+          if (error) {
+            console.error("[v0] Error saving C2-Paso1:", error)
+            return
+          }
+
+          console.log("[v0] C2-Paso1 saved successfully, moving to Paso 2...")
+          setCurrentQuestion(0)
+          setStep("conozcamonos2-paso2")
+        } catch (err) {
+          console.error("[v0] Error saving C2-Paso1:", err)
+        }
       }
     }
 
@@ -1145,6 +1133,13 @@ export default function DespegaOnboarding() {
             <CardDescription>
               Ahora generaremos tu ruta personalizada de 30 días. Responde 9 preguntas cortas.
             </CardDescription>
+            <div className="pt-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Pregunta {currentQuestion + 1} de {C2_PASO1_QUESTIONS.length}</span>
+                <span>{Math.round(c2Progress)}%</span>
+              </div>
+              <Progress value={c2Progress} />
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
@@ -1152,16 +1147,61 @@ export default function DespegaOnboarding() {
                 Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
               </p>
             </div>
+
             <div className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Por favor, espera mientras generamos tu ruta personalizada...
-              </p>
-              <Button 
-                onClick={handleC2Step1Continue} 
-                className="w-full"
-              >
-                Continuar
-              </Button>
+              <h3 className="text-lg font-semibold">{currentC2Q.q}</h3>
+
+              {currentC2Q.type === "select" && (
+                <div className="space-y-2">
+                  {currentC2Q.opts?.map((opt: string) => (
+                    <Button
+                      key={opt}
+                      variant={c2Step1Responses[currentC2Q.id] === opt ? "default" : "outline"}
+                      onClick={() => {
+                        setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: opt })
+                        setTimeout(handleC2Step1Next, 300)
+                      }}
+                      className="justify-start w-full"
+                    >
+                      {opt}
+                    </Button>
+                  ))}
+                </div>
+              )}
+
+              {currentC2Q.type === "range" && (
+                <div className="space-y-4">
+                  <input
+                    type="range"
+                    min={currentC2Q.min}
+                    max={currentC2Q.max}
+                    defaultValue={c2Step1Responses[currentC2Q.id] || 5}
+                    onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: parseInt(e.target.value) })}
+                    className="w-full"
+                  />
+                  <div className="text-center text-lg font-semibold">
+                    {c2Step1Responses[currentC2Q.id] || 5} / {currentC2Q.max}
+                  </div>
+                  <Button onClick={handleC2Step1Next} className="w-full">
+                    Continuar
+                  </Button>
+                </div>
+              )}
+
+              {currentC2Q.type === "text" && (
+                <div className="space-y-2">
+                  <textarea
+                    placeholder="Escribe aquí..."
+                    value={c2Step1Responses[currentC2Q.id] || ""}
+                    onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: e.target.value })}
+                    className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                    rows={3}
+                  />
+                  <Button onClick={handleC2Step1Next} className="w-full" disabled={!c2Step1Responses[currentC2Q.id]}>
+                    Continuar
+                  </Button>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
