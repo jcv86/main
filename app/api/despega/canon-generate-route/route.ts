@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { CANON_RULES, evaluateRules } from '@/lib/canon-rules-engine'
+import { CANON_RULES, executeCanonRules } from '@/lib/canon-rules-engine'
 import { generateRoute30Days } from '@/lib/canon-routes-generator'
 
 // NIVEL 4: Validación y Sanitización
@@ -66,8 +66,17 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // 1. Get C2-Paso1 responses
-    const { data: c2Responses, error: c2Error } = await supabase
+    // 1. Get C1 responses (if any)
+    const { data: c1Responses } = await supabase
+      .from('canon_conozcamonos_1_responses')
+      .select('responses')
+      .eq('user_id', user_id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    // 2. Get C2-Paso1 responses
+    const { data: c2Paso1Responses, error: c2Error } = await supabase
       .from('canon_conozcamonos_2_responses')
       .select('*')
       .eq('user_id', user_id)
@@ -76,23 +85,49 @@ export async function POST(request: Request) {
       .limit(1)
       .single()
 
-    if (c2Error || !c2Responses) {
+    if (c2Error || !c2Paso1Responses) {
       console.error('[v0] Error fetching C2 responses:', c2Error)
       return Response.json({ error: 'C2 responses not found' }, { status: 404 })
     }
 
-    // NIVEL 4: Validate and adjust responses
-    const { valid, errors, adjusted } = validateResponses(c2Responses.responses || {})
+    // 3. Get C2-Paso2 responses (if any)
+    const { data: c2Paso2Responses } = await supabase
+      .from('canon_conozcamonos_2_responses')
+      .select('responses')
+      .eq('user_id', user_id)
+      .eq('paso', 2)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    // 4. Get DISC profile
+    const { data: a1Results } = await supabase
+      .from('a1_tests_results')
+      .select('result')
+      .eq('user_id', user_id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    const profileType = a1Results?.result?.dominantProfile || 'D'
+
+    // NIVEL 4: Validate and adjust C2-Paso1 responses
+    const { valid, errors, adjusted } = validateResponses(c2Paso1Responses.responses || {})
     if (errors.length > 0) {
       console.log('[v0] Nivel 4 validations found issues:', errors)
     }
 
-    // 2. Evaluate rules to get actions (using adjusted responses)
-    const actions = evaluateRules(CANON_RULES, adjusted)
-    console.log('[v0] Evaluated rules, got', actions.length, 'actions')
+    // 2. Execute rules to get actions
+    const actions = executeCanonRules(
+      c1Responses?.responses || {},
+      adjusted,
+      c2Paso2Responses?.responses || {},
+      profileType
+    )
+    console.log('[v0] Executed rules, got', actions.length, 'actions')
 
     // 3. Generate 30-day route
-    const route30 = generateRoute30Days(actions, c2Responses.responses || {})
+    const route30 = generateRoute30Days(actions, c2Paso1Responses.responses || {})
 
     // 4. Check if route already exists for this user+cycle
     const { data: existingRoute } = await supabase
@@ -152,7 +187,7 @@ export async function POST(request: Request) {
       action_id: action.id,
       action_title: action.title,
       source_response_ids: action.trazability_source_response_ids,
-      source_response_text: JSON.stringify(action.trazability_source_response_ids.map(id => c2Responses.responses?.[id] || 'N/A')),
+      source_response_text: JSON.stringify(action.trazability_source_response_ids.map(id => c2Paso1Responses.responses?.[id] || 'N/A')),
       created_at: new Date().toISOString(),
     }))
 
