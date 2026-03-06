@@ -14,6 +14,7 @@ import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
 type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "results" | "conozcamonos2-paso1" | "conozcamonos2-paso2"
 
 export default function DespegaOnboarding() {
+  const router = useRouter()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
