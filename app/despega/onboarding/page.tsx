@@ -18,6 +18,8 @@ export default function DespegaOnboarding() {
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
+  const [c2Paso1Question, setC2Paso1Question] = useState(0)
+  const [c2Paso2Question, setC2Paso2Question] = useState(0)
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [results, setResults] = useState<any>(null)
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
@@ -1067,20 +1069,20 @@ export default function DespegaOnboarding() {
       { id: 9, q: "¿Necesitas supervisión/accountability?", type: "select", opts: ["No", "Ocasional", "Semanal", "Diaria"] },
     ]
 
-    const currentC2Q = C2_PASO1_QUESTIONS[currentQuestion] || C2_PASO1_QUESTIONS[0]
-    const c2Progress = ((currentQuestion + 1) / C2_PASO1_QUESTIONS.length) * 100
+    const currentC2Q = C2_PASO1_QUESTIONS[c2Paso1Question] || C2_PASO1_QUESTIONS[0]
+    const c2Progress = ((c2Paso1Question + 1) / C2_PASO1_QUESTIONS.length) * 100
 
     const handleC2Step1Next = async () => {
       // Save current answer
       if (currentC2Q.type === "range" || currentC2Q.type === "select" || currentC2Q.type === "text") {
-        const value = currentQuestion === 2 ? parseInt((document.querySelector('[type="range"]') as HTMLInputElement)?.value || "5") : c2Step1Responses[currentC2Q.id]
+        const value = c2Paso1Question === 2 ? parseInt((document.querySelector('[type="range"]') as HTMLInputElement)?.value || "5") : c2Step1Responses[currentC2Q.id]
         if (value !== undefined) {
           setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: value })
         }
       }
 
-      if (currentQuestion < C2_PASO1_QUESTIONS.length - 1) {
-        setCurrentQuestion(currentQuestion + 1)
+      if (c2Paso1Question < C2_PASO1_QUESTIONS.length - 1) {
+        setC2Paso1Question(c2Paso1Question + 1)
       } else {
         // All questions answered - trigger route generation
         try {
@@ -1117,7 +1119,7 @@ export default function DespegaOnboarding() {
           }
 
           console.log("[v0] C2-Paso1 saved successfully, moving to Paso 2...")
-          setCurrentQuestion(0)
+          setC2Paso2Question(0)
           setStep("conozcamonos2-paso2")
         } catch (err) {
           console.error("[v0] Error saving C2-Paso1:", err)
@@ -1135,7 +1137,7 @@ export default function DespegaOnboarding() {
             </CardDescription>
             <div className="pt-4 space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Pregunta {currentQuestion + 1} de {C2_PASO1_QUESTIONS.length}</span>
+                <span>Pregunta {c2Paso1Question + 1} de {C2_PASO1_QUESTIONS.length}</span>
                 <span>{Math.round(c2Progress)}%</span>
               </div>
               <Progress value={c2Progress} />
