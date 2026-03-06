@@ -905,10 +905,31 @@ export default function DespegaOnboarding() {
 
         if (error) {
           console.error("[v0] Error saving C2-Paso1:", error)
-        } else {
-          console.log("[v0] C2-Paso1 saved successfully, moving to Paso 2")
-          setStep("conozcamonos2-paso2")
+          return
         }
+
+        console.log("[v0] C2-Paso1 saved successfully, triggering route generation...")
+
+        // TRIGGER: Generate route via API endpoint
+        try {
+          const generateResponse = await fetch('/api/despega/canon-generate-route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: user.id }),
+          })
+
+          if (generateResponse.ok) {
+            const routeData = await generateResponse.json()
+            console.log("[v0] Route generated successfully:", routeData)
+          } else {
+            console.error("[v0] Error generating route:", await generateResponse.json())
+          }
+        } catch (routeError) {
+          console.error("[v0] Error calling route generation endpoint:", routeError)
+        }
+
+        // Move to Paso 2
+        setStep("conozcamonos2-paso2")
       } catch (err) {
         console.error("[v0] Error in C2-Paso1 handler:", err)
       }
