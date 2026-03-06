@@ -1254,32 +1254,79 @@ export default function DespegaOnboarding() {
 
   // STEP 6: Conozcámonos 2 - Paso 2
   if (step === "conozcamonos2-paso2") {
-    const handleC2Step2Complete = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          console.error("[v0] No user found")
-          return
-        }
+    const C2_PASO2_QUESTIONS = [
+      { id: 1, q: "Tu meta prioritaria en 30 días", type: "text" },
+      { id: 2, q: "¿Qué necesitas lograr en 60 días?", type: "text" },
+      { id: 3, q: "Tu visión para 90 días", type: "text" },
+      { id: 4, q: "Métrica o indicador de éxito", type: "text" },
+      { id: 5, q: "¿Qué apoyo/recurso necesitas?", type: "text" },
+    ]
 
-        // Save C2-Paso2 responses to database
-        const { error } = await supabase
-          .from("canon_conozcamonos_2_responses")
-          .insert({
-            user_id: user.id,
-            paso: 2,
-            responses: c2Step2Responses,
-            created_at: new Date().toISOString(),
-          })
+    const currentC2Step2Q = C2_PASO2_QUESTIONS[c2Paso2Question] || C2_PASO2_QUESTIONS[0]
+    const c2Step2Progress = ((c2Paso2Question + 1) / C2_PASO2_QUESTIONS.length) * 100
+    const isLastQuestion = c2Paso2Question === C2_PASO2_QUESTIONS.length - 1
+    const isCurrentQuestionAnswered = c2Step2Responses[currentC2Step2Q.id] !== undefined
 
-        if (error) {
-          console.error("[v0] Error saving C2-Paso2:", error)
-        } else {
-          console.log("[v0] C2-Paso2 saved successfully, moving to dashboard")
+    const handleC2Step2Next = async () => {
+      if (c2Paso2Question < C2_PASO2_QUESTIONS.length - 1) {
+        setC2Paso2Question(c2Paso2Question + 1)
+      } else {
+        // All questions answered - save to DB and trigger route generation
+        setC2Paso1Loading(true)
+        console.log("[v0] Saving C2-Paso2 responses:", c2Step2Responses)
+        try {
+          const { data: { user } } = await supabase.auth.getUser()
+          if (!user) {
+            console.error("[v0] No user found")
+            setC2Paso1Loading(false)
+            return
+          }
+
+          console.log("[v0] User found, saving C2-Paso2 responses...")
+          
+          // Save C2-Paso2 responses to database
+          const { error } = await supabase
+            .from("canon_conozcamonos_2_responses")
+            .insert({
+              user_id: user.id,
+              paso: 2,
+              responses: c2Step2Responses,
+              created_at: new Date().toISOString(),
+            })
+
+          if (error) {
+            console.error("[v0] Error saving C2-Paso2:", error)
+            setC2Paso1Loading(false)
+            return
+          }
+
+          console.log("[v0] C2-Paso2 saved successfully, triggering route generation...")
+          
+          // Trigger route generation
+          try {
+            const generateResponse = await fetch('/api/despega/canon-generate-route', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ user_id: user.id }),
+            })
+
+            if (generateResponse.ok) {
+              const routeData = await generateResponse.json()
+              console.log("[v0] Route generated successfully:", routeData)
+            } else {
+              const errorData = await generateResponse.json()
+              console.error("[v0] Error generating route:", errorData)
+            }
+          } catch (routeError) {
+            console.error("[v0] Error calling route generation endpoint:", routeError)
+          }
+
+          console.log("[v0] Redirecting to dashboard...")
           router.push("/despega")
+        } catch (err) {
+          console.error("[v0] Error saving C2-Paso2:", err)
+          setC2Paso1Loading(false)
         }
-      } catch (err) {
-        console.error("[v0] Error in C2-Paso2 handler:", err)
       }
     }
 
@@ -1291,29 +1338,49 @@ export default function DespegaOnboarding() {
             <CardDescription>
               Últimas preguntas para personalizar tu ruta a 60 y 90 días.
             </CardDescription>
+            <div className="pt-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Pregunta {c2Paso2Question + 1} de {C2_PASO2_QUESTIONS.length}</span>
+                <span>{Math.round(c2Step2Progress)}%</span>
+              </div>
+              <Progress value={c2Step2Progress} />
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
               <p className="text-sm text-emerald-900 dark:text-emerald-100">
-                Tu ruta de 30 días está lista. ¿Quieres extender a 60 y 90 días?
+                Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
               </p>
             </div>
+
             <div className="space-y-4">
-              <Button 
-                onClick={handleC2Step2Complete} 
-                className="w-full"
-              >
-                Ver mi Ruta Personalizada
-              </Button>
-              <Button 
-                onClick={() => {
-                  router.push("/despega")
-                }} 
-                variant="outline"
-                className="w-full"
-              >
-                Saltar por ahora
-              </Button>
+              <h3 className="text-lg font-semibold">{currentC2Step2Q.q}</h3>
+
+              {currentC2Step2Q.type === "text" && (
+                <div className="space-y-2">
+                  <textarea
+                    placeholder="Escribe aquí..."
+                    value={c2Step2Responses[currentC2Step2Q.id] || ""}
+                    onChange={(e) => setC2Step2Responses({ ...c2Step2Responses, [currentC2Step2Q.id]: e.target.value })}
+                    className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                    rows={3}
+                    disabled={c2Paso1Loading}
+                  />
+                  <Button 
+                    onClick={handleC2Step2Next} 
+                    className="w-full" 
+                    disabled={!isCurrentQuestionAnswered || c2Paso1Loading}
+                  >
+                    {isLastQuestion ? (c2Paso1Loading ? 'Generando ruta...' : 'Completar y Generar Ruta') : 'Continuar'}
+                  </Button>
+                </div>
+              )}
+
+              {isLastQuestion && isCurrentQuestionAnswered && (
+                <div className="text-xs text-slate-500 text-center pt-2">
+                  Haz click en "Completar y Generar Ruta" para crear tu plan personalizado
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
