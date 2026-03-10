@@ -321,7 +321,7 @@ export default function DespegaOnboarding() {
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setStep("instructions")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
+              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
                 Cuando estés listo, comienza
               </Button>
             )}
@@ -634,85 +634,11 @@ export default function DespegaOnboarding() {
 
           {/* CTA */}
           <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent dark:from-slate-900 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
-            <Button onClick={() => setStep("next-steps")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
+            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
               Entiendo, Comenzar Mi Test
             </Button>
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
               Este test toma ~3 minutos. Responde con honestidad para resultados precisos.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // STEP 2.5: Lo que viene después
-  if (step === "next-steps") {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 flex items-center justify-center">
-        <div className="max-w-2xl w-full space-y-8">
-          <div className="text-center space-y-3">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
-              Lo que viene después
-            </h1>
-          </div>
-
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
-            <CardContent className="pt-8 space-y-6">
-              <div className="space-y-4">
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                  Despega Cerebral es el primer paso <strong>y la base de todo lo que viene después</strong>.
-                </p>
-
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                    Una vez entiendas tu patrón, exploraremos juntos <strong>"Tu Dirección Clara"</strong>: no solo qué hacer, sino cómo avanzar según tu forma natural.
-                  </p>
-                </div>
-
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Primero entendemos cómo funcionas. Luego construimos tu camino sobre eso.
-                </p>
-              </div>
-
-              {/* Three pillars of direction clarity */}
-              <div className="space-y-3 pt-4">
-                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  "Tu Dirección Clara" incluye:
-                </p>
-                <div className="space-y-2">
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <p className="font-medium text-blue-900 dark:text-blue-100 text-sm mb-1">Tu Dirección Más Natural</p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200">El camino que mejor se alinea con cómo actúas</p>
-                  </div>
-                  <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                    <p className="font-medium text-emerald-900 dark:text-emerald-100 text-sm mb-1">Posibles Direcciones Alineadas</p>
-                    <p className="text-sm text-emerald-800 dark:text-emerald-200">Alternativas viables según tu perfil</p>
-                  </div>
-                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <p className="font-medium text-amber-900 dark:text-amber-100 text-sm mb-1">Tu Forma de Avanzar con Claridad</p>
-                    <p className="text-sm text-amber-800 dark:text-amber-200">Los pasos específicos para tu transición</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Why clarity matters */}
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 mt-4">
-                <p className="text-sm font-semibold text-red-900 dark:text-red-100 mb-2">Por qué esto importa</p>
-                <p className="text-sm text-red-800 dark:text-red-200">
-                  Si alguien recibe un resultado y no siente "dirección clara", puede generar fricción. Por eso conectamos patrón + dirección + forma de avanzar.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* CTA */}
-          <div className="space-y-3 pt-4">
-                <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue-600 hover:bg-blue-700">
-                  Continuar con Conozcámonos
-                </Button>
-            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-              El test dura ~3 minutos. Responde con total honestidad.
             </p>
           </div>
         </div>
@@ -782,7 +708,7 @@ export default function DespegaOnboarding() {
             } else {
               console.log("[v0] C1 responses saved successfully (sanitized)")
               setC1CurrentQuestion(0)
-              setStep("test")
+              setStep("instructions")
             }
           } catch (err) {
             console.error("[v0] Error in C1 save:", err)
