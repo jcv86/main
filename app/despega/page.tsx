@@ -123,13 +123,15 @@ export default function DespegaHub() {
           .limit(1)
 
         // Always load profile data regardless of test completion
-        const { data: profileData } = await supabase
+        const { data: profileDataArray } = await supabase
           .from("despega_user_profiles")
           .select("*")
           .eq("user_id", user.id)
-          .single()
+          .maybeSingle()
 
-        setProfile(profileData)
+        if (profileDataArray) {
+          setProfile(profileDataArray)
+        }
 
         // Load pilares progress
         const { data: pilaresData } = await supabase
@@ -142,25 +144,26 @@ export default function DespegaHub() {
         }
 
         // Load rankings
-        const { data: rankingsData } = await supabase
+        const { data: rankingsDataArray } = await supabase
           .from("despega_rankings")
           .select("*")
           .eq("user_id", user.id)
-          .single()
+          .maybeSingle()
 
-        if (rankingsData) {
-          setRankings(rankingsData)
+        if (rankingsDataArray) {
+          setRankings(rankingsDataArray)
         }
 
         // Load A1 test results from a1_tests_results table (where onboarding results are saved)
-        const { data: a1Data, error: a1Error } = await supabase
+        const { data: a1DataArray, error: a1Error } = await supabase
           .from("a1_tests_results")
           .select("*")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
           .order("created_at", { ascending: false })
           .limit(1)
-          .single()
+
+        const a1Data = a1DataArray && a1DataArray.length > 0 ? a1DataArray[0] : null
 
         console.log("[v0] A1 test results query:", { a1Data, a1Error })
 
@@ -179,6 +182,7 @@ export default function DespegaHub() {
         }
       } catch (error) {
         console.error("[v0] Error loading dashboard:", error)
+        // Don't redirect on error - let the dashboard render with partial data
       } finally {
         setLoading(false)
       }
