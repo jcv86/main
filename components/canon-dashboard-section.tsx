@@ -34,25 +34,38 @@ export function CanonDashboardSection() {
     const loadCanonData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user) {
+          console.log('[v0] No user found')
+          setLoading(false)
+          return
+        }
 
         console.log('[v0] Loading CANON route data for user:', user.id)
 
-        // Get user profile
-        const { data: profileData } = await supabase
+        // Get user profile (with error handling for no data)
+        const { data: profileData, error: profileError } = await supabase
           .from('despega_user_profiles')
           .select('*')
           .eq('user_id', user.id)
-          .single()
+          .maybeSingle()
 
-        // Get generated routes
-        const { data: routeData } = await supabase
+        if (profileError) {
+          console.warn('[v0] Error getting profile:', profileError)
+        }
+
+        // Get generated routes (with error handling for no data)
+        const { data: routeDataArray, error: routeError } = await supabase
           .from('canon_generated_routes')
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(1)
-          .single()
+
+        if (routeError) {
+          console.error('[v0] Error fetching routes:', routeError)
+        }
+
+        const routeData = routeDataArray && routeDataArray.length > 0 ? routeDataArray[0] : null
 
         if (routeData && routeData.route_data) {
           console.log('[v0] Found route data:', routeData)
