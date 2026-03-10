@@ -1228,7 +1228,8 @@ export default function DespegaOnboarding() {
 
           console.log("[v0] C2-Paso2 saved successfully, triggering route generation...")
           
-          // Trigger route generation
+          // Trigger route generation and wait for it
+          let routeGenerated = false
           try {
             const generateResponse = await fetch('/api/despega/canon-generate-route', {
               method: 'POST',
@@ -1239,6 +1240,7 @@ export default function DespegaOnboarding() {
             if (generateResponse.ok) {
               const routeData = await generateResponse.json()
               console.log("[v0] Route generated successfully:", routeData)
+              routeGenerated = true
             } else {
               const errorData = await generateResponse.json()
               console.error("[v0] Error generating route:", errorData)
@@ -1247,7 +1249,11 @@ export default function DespegaOnboarding() {
             console.error("[v0] Error calling route generation endpoint:", routeError)
           }
 
+          // Wait a moment to ensure data is persisted before redirecting
+          await new Promise(resolve => setTimeout(resolve, 1000))
+
           console.log("[v0] Redirecting to dashboard...")
+          setC2Paso1Loading(false)
           router.push("/despega")
         } catch (err) {
           console.error("[v0] Error saving C2-Paso2:", err)
@@ -1258,58 +1264,87 @@ export default function DespegaOnboarding() {
 
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle>Conozcámonos - Paso 2</CardTitle>
-            <CardDescription>
-              Últimas preguntas para personalizar tu ruta a 60 y 90 días.
-            </CardDescription>
-            <div className="pt-4 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Pregunta {c2Paso2Question + 1} de {C2_PASO2_QUESTIONS.length}</span>
-                <span>{Math.round(c2Step2Progress)}%</span>
+        {c2Paso1Loading && c2Paso2Question === C2_PASO2_QUESTIONS.length - 1 && c2Step2Responses[currentC2Step2Q.id] ? (
+          // Success screen while generating and redirecting
+          <Card className="w-full max-w-2xl">
+            <CardContent className="pt-12 pb-12 space-y-6 text-center">
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
               </div>
-              <Progress value={c2Step2Progress} />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
-              <p className="text-sm text-emerald-900 dark:text-emerald-100">
-                Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">{currentC2Step2Q.q}</h3>
-
-              {currentC2Step2Q.type === "text" && (
-                <div className="space-y-2">
-                  <textarea
-                    placeholder="Escribe aquí..."
-                    value={c2Step2Responses[currentC2Step2Q.id] || ""}
-                    onChange={(e) => setC2Step2Responses({ ...c2Step2Responses, [currentC2Step2Q.id]: e.target.value })}
-                    className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
-                    rows={3}
-                    disabled={c2Paso1Loading}
-                  />
-                  <Button 
-                    onClick={handleC2Step2Next} 
-                    className="w-full" 
-                    disabled={!isCurrentQuestionAnswered || c2Paso1Loading}
-                  >
-                    {isLastQuestion ? (c2Paso1Loading ? 'Generando ruta...' : 'Completar y Generar Ruta') : 'Continuar'}
-                  </Button>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold text-emerald-600">¡Excelente!</h2>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Tu ruta personalizada se está generando...
+                </p>
+              </div>
+              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4 space-y-2">
+                <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
+                  Se está creando tu plan personalizado de 30/60/90 días basado en:
+                </p>
+                <ul className="text-xs text-emerald-800 dark:text-emerald-200 space-y-1 text-left">
+                  <li>✓ Tu perfil DISC</li>
+                  <li>✓ Tu contexto personal y profesional</li>
+                  <li>✓ Tu ambiente de ejecución</li>
+                  <li>✓ Tus objetivos 30/60/90</li>
+                </ul>
+              </div>
+              <p className="text-xs text-slate-500">Redirigiendo en un momento...</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="w-full max-w-2xl">
+            <CardHeader>
+              <CardTitle>Conozcámonos - Paso 2</CardTitle>
+              <CardDescription>
+                Últimas preguntas para personalizar tu ruta a 60 y 90 días.
+              </CardDescription>
+              <div className="pt-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Pregunta {c2Paso2Question + 1} de {C2_PASO2_QUESTIONS.length}</span>
+                  <span>{Math.round(c2Step2Progress)}%</span>
                 </div>
-              )}
+                <Progress value={c2Step2Progress} />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+                <p className="text-sm text-emerald-900 dark:text-emerald-100">
+                  Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
+                </p>
+              </div>
 
-              {isLastQuestion && isCurrentQuestionAnswered && (
-                <div className="text-xs text-slate-500 text-center pt-2">
-                  Haz click en "Completar y Generar Ruta" para crear tu plan personalizado
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">{currentC2Step2Q.q}</h3>
+
+                {currentC2Step2Q.type === "text" && (
+                  <div className="space-y-2">
+                    <textarea
+                      placeholder="Escribe aquí..."
+                      value={c2Step2Responses[currentC2Step2Q.id] || ""}
+                      onChange={(e) => setC2Step2Responses({ ...c2Step2Responses, [currentC2Step2Q.id]: e.target.value })}
+                      className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                      rows={3}
+                      disabled={c2Paso1Loading}
+                    />
+                    <Button 
+                      onClick={handleC2Step2Next} 
+                      className="w-full" 
+                      disabled={!isCurrentQuestionAnswered || c2Paso1Loading}
+                    >
+                      {isLastQuestion ? (c2Paso1Loading ? 'Generando ruta...' : 'Completar y Generar Ruta') : 'Continuar'}
+                    </Button>
+                  </div>
+                )}
+
+                {isLastQuestion && isCurrentQuestionAnswered && (
+                  <div className="text-xs text-slate-500 text-center pt-2">
+                    Haz click en "Completar y Generar Ruta" para crear tu plan personalizado
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     )
   }
