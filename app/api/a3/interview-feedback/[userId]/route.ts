@@ -1,7 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { generateText } from 'ai'
-import { openai } from '@ai-sdk/openai'
 
 interface InterviewResponse {
   questionId: string
@@ -59,10 +57,26 @@ export async function POST(
 
     const userProfile = a1Results?.profile_type || 'D'
 
-    // Use OpenAI to analyze the response
-    const { text: feedbackText } = await generateText({
-      model: openai('gpt-4o-mini'),
-      prompt: `
+    // Call OpenAI API directly for interview feedback
+    console.log('[v0] Calling OpenAI API directly for A3 interview feedback')
+    
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      throw new Error('OPENAI_API_KEY environment variable is not set')
+    }
+
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'user',
+            content: `
 You are an expert interview coach analyzing a candidate's response to an interview question.
 
 Interview Type: ${interviewType}
@@ -71,7 +85,7 @@ Question: "${question.pregunta}"
 Suggested Answer: "${question.sugerencia_respuesta}"
 Candidate's Response: "${responseText}"
 
-Provide structured feedback in JSON format with:
+Provide structured feedback in JSON format ONLY (no additional text):
 {
   "scores": {
     "content": 0-100,
@@ -87,7 +101,23 @@ Provide structured feedback in JSON format with:
 
 Be specific and constructive. Consider the candidate's DISC profile (${userProfile}) in your feedback.
 `
+          }
+        ],
+        max_tokens: 1000,
+        temperature: 0.7,
+      }),
     })
+
+    if (!openaiResponse.ok) {
+      const error = await openaiResponse.json()
+      console.error('[v0] OpenAI API error:', error)
+      throw new Error(`OpenAI API error: ${error.error?.message || openaiResponse.statusText}`)
+    }
+
+    const openaiData = await openaiResponse.json()
+    const feedbackText = openaiData.choices?.[0]?.message?.content || ''
+    console.log('[v0] OpenAI feedback received:', feedbackText.substring(0, 100) + '...')
+
     let feedback
 
     try {
