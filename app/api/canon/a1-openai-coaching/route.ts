@@ -4,10 +4,15 @@ export async function POST(request: NextRequest) {
   try {
     console.log('[v0] A1→OpenAI: Generando coaching personalizado post-test...')
     
-    const { a1Profile, c1Responses } = await request.json()
+    const body = await request.json()
+    const { a1Profile, c1Responses } = body
 
     if (!a1Profile) {
-      throw new Error('A1 profile requerido')
+      console.error('[v0] A1→OpenAI: Missing a1Profile')
+      return NextResponse.json(
+        { success: false, error: 'a1Profile requerido' },
+        { status: 400 }
+      )
     }
 
     const apiKey = process.env.OPENAI_API_KEY

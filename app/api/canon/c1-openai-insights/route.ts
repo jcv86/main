@@ -4,10 +4,23 @@ export async function POST(request: NextRequest) {
   try {
     console.log('[v0] C1→OpenAI: Generando insights contextuales pre-A1...')
     
-    const { c1Responses, userContext } = await request.json()
+    const body = await request.json()
+    const { c1Responses, userContext } = body
 
-    if (!c1Responses || Object.keys(c1Responses).length === 0) {
-      throw new Error('C1 responses requeridas')
+    if (!c1Responses) {
+      console.error('[v0] C1→OpenAI: Missing c1Responses')
+      return NextResponse.json(
+        { success: false, error: 'c1Responses requerida' },
+        { status: 400 }
+      )
+    }
+
+    if (Object.keys(c1Responses).length === 0) {
+      console.error('[v0] C1→OpenAI: Empty c1Responses')
+      return NextResponse.json(
+        { success: false, error: 'c1Responses no puede estar vacío' },
+        { status: 400 }
+      )
     }
 
     const apiKey = process.env.OPENAI_API_KEY
