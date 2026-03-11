@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CheckCircle2, TrendingUp, Award, Target, Lightbulb, Download } from 'lucide-react'
+import { CanonRouteVisualization } from '@/components/canon-route-visualization'
 
 export default function CycleCompletionPage() {
   const [loading, setLoading] = useState(true)
