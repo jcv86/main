@@ -32,13 +32,13 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: `You are a DISC profile coach. A user has these responses:
-- Prefers quick decisions: strongly agree
-- Values relationships: neutral
-- Enjoys detailed analysis: agree
-- Likes being in charge: strongly agree
+            content: `Eres un coach de perfil DISC. Un usuario tiene estas respuestas:
+- Prefiere decisiones rápidas: muy de acuerdo
+- Valora las relaciones: neutral
+- Disfruta del análisis detallado: de acuerdo
+- Le gusta estar a cargo: muy de acuerdo
 
-Based on this, provide a JSON insight about their DISC profile (D/I/S/C dominant type), their strengths, and one key insight for their career development in 3-4 sentences.`
+Basándote en esto, proporciona un insight JSON sobre su tipo de perfil DISC dominante (D/I/S/C), sus fortalezas, y un insight clave para su desarrollo de carrera en 3-4 oraciones.`
           }
         ],
         max_tokens: 300,
@@ -66,12 +66,12 @@ Based on this, provide a JSON insight about their DISC profile (D/I/S/C dominant
         messages: [
           {
             role: "user",
-            content: `You are a career strategist. A user with DISC profile D (Dominant/Driver) has these goals:
-- 30 days: Master negotiation skills
-- 60 days: Lead a cross-functional team
-- 90 days: Get a promotion
+            content: `Eres un estratega de carrera. Un usuario con perfil DISC D (Dominante/Impulsor) tiene estos objetivos:
+- 30 días: Dominar habilidades de negociación
+- 60 días: Liderar un equipo multifuncional
+- 90 días: Obtener una promoción
 
-Provide 3 key strategic insights about their 90-day journey. Focus on how their D profile can be leveraged and where they need to compensate. Format as bullet points.`
+Proporciona 3 insights estratégicos clave sobre su viaje de 90 días. Enfócate en cómo aprovechar su perfil D y dónde necesita compensar. Formatea como viñetas.`
           }
         ],
         max_tokens: 400,
@@ -99,10 +99,10 @@ Provide 3 key strategic insights about their 90-day journey. Focus on how their 
         messages: [
           {
             role: "user",
-            content: `You are an interview coach. A D-profile candidate (assertive, results-driven) is practicing interview responses. Their answer about handling conflict:
-"I tell them my decision and why it's the best path forward."
+            content: `Eres un coach de entrevistas. Un candidato con perfil D (asertivo, orientado a resultados) está practicando respuestas de entrevista. Su respuesta sobre manejar conflictos:
+"Les digo mi decisión y por qué es el mejor camino."
 
-Provide 2 specific coaching insights: 1) What's working well, 2) One phrase they should adjust to show empathy. Keep it brief.`
+Proporciona 2 insights de coaching específicos: 1) Qué está funcionando bien, 2) Una frase que deberían ajustar para mostrar empatía. Mantente breve.`
           }
         ],
         max_tokens: 300,
@@ -130,10 +130,10 @@ Provide 2 specific coaching insights: 1) What's working well, 2) One phrase they
         messages: [
           {
             role: "user",
-            content: `You are a market strategist. Given this news headline:
-"AI adoption accelerates in business decision-making - Fortune 500 companies report 40% productivity gains"
+            content: `Eres un estratega de mercado. Dada esta noticia:
+"La adopción de IA se acelera en la toma de decisiones empresariales - Las empresas Fortune 500 reportan ganancias de productividad del 40%"
 
-For a D-profile professional aiming for a promotion, provide 2 actionable insights on how they can leverage this trend in their 90-day plan. Keep it to 2-3 sentences.`
+Para un profesional con perfil D que apunta a una promoción, proporciona 2 insights accionables sobre cómo pueden aprovechar esta tendencia en su plan de 90 días. Mantén de 2-3 oraciones.`
           }
         ],
         max_tokens: 250,
@@ -161,14 +161,14 @@ For a D-profile professional aiming for a promotion, provide 2 actionable insigh
         messages: [
           {
             role: "user",
-            content: `You are synthesizing a complete career development journey. Here are insights from 4 phases:
+            content: `Estás sintetizando un viaje completo de desarrollo de carrera. Aquí hay insights de 4 fases:
 
-A1 (Who they are): DISC D-profile - decisive, results-oriented, competitive
-A2 (Their plan): 90-day journey to promotion via negotiation → team leadership → promotion
-A3 (Their practice): Interview training showing they need to add empathy to decision-making
-A4 (Market context): AI adoption accelerating - opportunity to lead AI-driven initiatives
+A1 (Quién es): Perfil DISC D - decisivo, orientado a resultados, competitivo
+A2 (Su plan): Viaje de 90 días para promoción vía negociación → liderazgo de equipo → promoción
+A3 (Su práctica): Entrenamiento de entrevista mostrando que necesita agregar empatía a su toma de decisiones
+A4 (Contexto de mercado): Adopción de IA acelerada - oportunidad de liderar iniciativas impulsadas por IA
 
-Synthesize 1 powerful meta-insight that ties all 4 phases together. This is the "brain" insight that guides their entire journey. Keep it to 2-3 sentences.`
+Sintetiza 1 insight poderoso que une las 4 fases. Este es el insight "cerebro" que guía todo su viaje. Mantén de 2-3 oraciones.`
           }
         ],
         max_tokens: 300,

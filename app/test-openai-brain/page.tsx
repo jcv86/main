@@ -44,8 +44,8 @@ export default function TestOpenAIInsightsPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-white">OpenAI Brain Cycle Validation</h1>
-          <p className="text-purple-200">Test that OpenAI is providing insights throughout A1→A4 cycle with the Brain system</p>
+          <h1 className="text-4xl font-bold text-white">Validación del Ciclo BRAIN de OpenAI</h1>
+          <p className="text-purple-200">Verifica que OpenAI proporcione insights en todo el ciclo A1→A4 con el sistema BRAIN</p>
         </div>
 
         {/* Main Test Button */}
@@ -59,12 +59,12 @@ export default function TestOpenAIInsightsPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Running A1-A4 OpenAI Test...
+                  Ejecutando test A1-A4 de OpenAI...
                 </>
               ) : (
                 <>
                   <Zap className="w-5 h-5 mr-2" />
-                  Test OpenAI Insights Across A1→A4
+                  Validar Insights de OpenAI A1→A4
                 </>
               )}
             </Button>
@@ -77,7 +77,7 @@ export default function TestOpenAIInsightsPage() {
             <CardContent className="pt-6 flex gap-3">
               <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <p className="font-semibold text-red-100">Test Failed</p>
+                <p className="font-semibold text-red-100">Test Fallido</p>
                 <p className="text-red-200 text-sm mt-1">{error}</p>
               </div>
             </CardContent>
@@ -92,21 +92,21 @@ export default function TestOpenAIInsightsPage() {
               <CardHeader>
                 <CardTitle className="text-green-400 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
-                  Performance Metrics
+                  Métricas de Rendimiento
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Total Time</p>
+                    <p className="text-xs text-slate-400">Tiempo Total</p>
                     <p className="text-lg font-bold text-white">{results.performance.total_ms}ms</p>
                   </div>
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Avg Phase</p>
+                    <p className="text-xs text-slate-400">Promedio Fase</p>
                     <p className="text-lg font-bold text-white">{results.performance.avg_phase_ms}ms</p>
                   </div>
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Phases</p>
+                    <p className="text-xs text-slate-400">Fases</p>
                     <p className="text-lg font-bold text-white">{results.validation.insights_generated}</p>
                   </div>
                 </div>
@@ -116,7 +116,7 @@ export default function TestOpenAIInsightsPage() {
             {/* A1 Insights */}
             <Card className="bg-slate-900/50 border-blue-500/30">
               <CardHeader>
-                <CardTitle className="text-blue-400">A1: DISC Profile Insights</CardTitle>
+                <CardTitle className="text-blue-400">A1: Insights del Perfil DISC</CardTitle>
                 <CardDescription className="text-blue-200">
                   {results.performance.phases.a1}ms
                 </CardDescription>
@@ -131,7 +131,7 @@ export default function TestOpenAIInsightsPage() {
             {/* A2 Insights */}
             <Card className="bg-slate-900/50 border-emerald-500/30">
               <CardHeader>
-                <CardTitle className="text-emerald-400">A2: Route Strategy Insights</CardTitle>
+                <CardTitle className="text-emerald-400">A2: Insights de Estrategia de Ruta</CardTitle>
                 <CardDescription className="text-emerald-200">
                   {results.performance.phases.a2}ms
                 </CardDescription>
@@ -146,7 +146,7 @@ export default function TestOpenAIInsightsPage() {
             {/* A3 Insights */}
             <Card className="bg-slate-900/50 border-orange-500/30">
               <CardHeader>
-                <CardTitle className="text-orange-400">A3: Training Feedback</CardTitle>
+                <CardTitle className="text-orange-400">A3: Feedback de Entrenamientos</CardTitle>
                 <CardDescription className="text-orange-200">
                   {results.performance.phases.a3}ms
                 </CardDescription>
@@ -161,7 +161,7 @@ export default function TestOpenAIInsightsPage() {
             {/* A4 Insights */}
             <Card className="bg-slate-900/50 border-purple-500/30">
               <CardHeader>
-                <CardTitle className="text-purple-400">A4: Strategic Context Insights</CardTitle>
+                <CardTitle className="text-purple-400">A4: Insights de Contexto Estratégico</CardTitle>
                 <CardDescription className="text-purple-200">
                   {results.performance.phases.a4}ms
                 </CardDescription>
@@ -177,10 +177,10 @@ export default function TestOpenAIInsightsPage() {
             <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50">
               <CardHeader>
                 <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
-                  🧠 BRAIN: Master Insight Chain
+                  🧠 BRAIN: Cadena de Insight Maestro
                 </CardTitle>
                 <CardDescription className="text-purple-200">
-                  Consolidated meta-insight connecting all 4 phases ({results.performance.phases.brain}ms)
+                  Insight consolidado que conecta las 4 fases ({results.performance.phases.brain}ms)
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -192,7 +192,7 @@ export default function TestOpenAIInsightsPage() {
                 <div className="mt-4 p-3 bg-slate-800/50 rounded flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-400" />
                   <span className="text-sm text-slate-300">
-                    This insight guides the entire journey, connecting A1 (who they are) → A2 (where they go) → A3 (how they practice) → A4 (what they know)
+                    Este insight guía todo el viaje, conectando A1 (quién eres) → A2 (dónde vas) → A3 (cómo practicas) → A4 (qué sabes)
                   </span>
                 </div>
               </CardContent>
@@ -201,23 +201,23 @@ export default function TestOpenAIInsightsPage() {
             {/* Validation Summary */}
             <Card className="bg-slate-900/50 border-slate-700">
               <CardHeader>
-                <CardTitle>Validation Summary</CardTitle>
+                <CardTitle>Resumen de Validación</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">All phases completed</span>
+                  <span className="text-slate-300">Todas las fases completadas</span>
                   <Badge className={results.validation.all_phases_completed ? 'bg-green-600' : 'bg-red-600'}>
-                    {results.validation.all_phases_completed ? 'PASSED' : 'FAILED'}
+                    {results.validation.all_phases_completed ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Brain chain connected</span>
+                  <span className="text-slate-300">Cadena BRAIN conectada</span>
                   <Badge className={results.validation.brain_connected ? 'bg-green-600' : 'bg-red-600'}>
-                    {results.validation.brain_connected ? 'PASSED' : 'FAILED'}
+                    {results.validation.brain_connected ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">API response time</span>
+                  <span className="text-slate-300">Tiempo de respuesta API</span>
                   <Badge variant={results.performance.total_ms < 10000 ? 'default' : 'destructive'}>
                     {results.performance.total_ms}ms
                   </Badge>
@@ -230,14 +230,14 @@ export default function TestOpenAIInsightsPage() {
         {/* Instructions */}
         <Card className="bg-slate-900/50 border-slate-700">
           <CardHeader>
-            <CardTitle className="text-sm">How This Test Works</CardTitle>
+            <CardTitle className="text-sm">Cómo Funciona Este Test</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-slate-300 space-y-2">
-            <p>1. <strong>A1 Phase:</strong> OpenAI analyzes DISC profile from test responses</p>
-            <p>2. <strong>A2 Phase:</strong> OpenAI generates strategic route insights for 90-day plan</p>
-            <p>3. <strong>A3 Phase:</strong> OpenAI coaches on interview response (training feedback)</p>
-            <p>4. <strong>A4 Phase:</strong> OpenAI connects market trends to career strategy</p>
-            <p>5. <strong>BRAIN Phase:</strong> OpenAI synthesizes meta-insight that ties everything together</p>
+            <p>1. <strong>Fase A1:</strong> OpenAI analiza el perfil DISC desde respuestas del test</p>
+            <p>2. <strong>Fase A2:</strong> OpenAI genera insights de estrategia para plan de 90 días</p>
+            <p>3. <strong>Fase A3:</strong> OpenAI entrena la respuesta de entrevista (feedback)</p>
+            <p>4. <strong>Fase A4:</strong> OpenAI conecta tendencias del mercado con estrategia de carrera</p>
+            <p>5. <strong>Fase BRAIN:</strong> OpenAI sintetiza el insight maestro que une todo</p>
           </CardContent>
         </Card>
       </div>

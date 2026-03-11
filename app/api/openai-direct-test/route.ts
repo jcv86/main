@@ -2,17 +2,17 @@ import { NextResponse, NextRequest } from "next/server"
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("[v0] Testing direct OpenAI API (no Vercel AI SDK)...")
+    console.log("[v0] Probando API directa de OpenAI (sin Vercel AI SDK)...")
     
     const apiKey = process.env.OPENAI_API_KEY
-    console.log("[v0] API Key exists:", !!apiKey)
-    console.log("[v0] API Key starts with sk-:", apiKey?.startsWith("sk-"))
+    console.log("[v0] API Key existe:", !!apiKey)
+    console.log("[v0] API Key comienza con sk-:", apiKey?.startsWith("sk-"))
     
     if (!apiKey) {
-      throw new Error("OPENAI_API_KEY environment variable is not set")
+      throw new Error("OPENAI_API_KEY variable de entorno no está configurada")
     }
 
-    // Call OpenAI API directly
+    // Llamar a la API de OpenAI directamente
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: "Say 'Hello from direct OpenAI API!' in Spanish in just one sentence"
+            content: "Di '¡Hola desde la API directa de OpenAI!' en español en solo una oración"
           }
         ],
         max_tokens: 50,
@@ -34,16 +34,16 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       const error = await response.json()
-      console.error("[v0] OpenAI API error:", error)
-      throw new Error(`OpenAI API error: ${error.error?.message || response.statusText}`)
+      console.error("[v0] Error de API OpenAI:", error)
+      throw new Error(`Error de API OpenAI: ${error.error?.message || response.statusText}`)
     }
 
     const data = await response.json()
-    console.log("[v0] OpenAI response received:", data.choices?.[0]?.message?.content)
+    console.log("[v0] Respuesta de OpenAI recibida:", data.choices?.[0]?.message?.content)
 
     return NextResponse.json({
       success: true,
-      message: "Direct OpenAI API call successful!",
+      message: "¡Llamada exitosa a la API directa de OpenAI!",
       response: data.choices?.[0]?.message?.content,
       model: data.model,
       usage: data.usage,
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error: any) {
-    console.error("[v0] Direct OpenAI test error:", error)
+    console.error("[v0] Error en test de API directa de OpenAI:", error)
 
     return NextResponse.json(
       {
