@@ -65,7 +65,8 @@ export default function LandingPageOptimized() {
             </Link>
           </div>
 
-          {/* Trust Indicators */}
+          {/* Trust Indicators - HIDDEN */}
+          {/*
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-foreground mb-12 opacity-75">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -118,10 +119,13 @@ export default function LandingPageOptimized() {
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
+          {/* Badge "Tu Puente de Transformación" - HIDDEN */}
+          {/*
           <Badge className="mb-4 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800">
             <Target className="h-3 w-3 mr-1" />
             Tu Puente de Transformación
           </Badge>
+          */}
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Tu Viaje en{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
@@ -343,10 +347,13 @@ export default function LandingPageOptimized() {
           <div className="absolute inset-0 bg-grid-white/10"></div>
           <CardContent className="py-16 px-8 relative z-10">
             <div className="text-center">
+              {/* Badge "100% Gratis - Sin Tarjeta de Crédito" - HIDDEN */}
+              {/*
               <Badge className="mb-6 bg-white/20 text-white border-0 backdrop-blur-sm">
                 <Sparkles className="h-4 w-4 mr-2" />
                 100% Gratis - Sin Tarjeta de Crédito
               </Badge>
+              */}
               <h2 className="text-4xl md:text-5xl font-bold mb-6">¿Sientes que estás en una encrucijada?</h2>
               <p className="text-xl mb-10 text-purple-100 max-w-2xl mx-auto">
                 No es crisis. Es el momento perfecto. Únete a más de 10,000 personas que ya están transitando y descubriendo su siguiente versión con Despega Tu Carrera
