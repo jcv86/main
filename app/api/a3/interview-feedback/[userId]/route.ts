@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { Anthropic } from '@anthropic-ai/sdk'
+import { generateText } from 'ai'
+import { openai } from '@ai-sdk/openai'
 
 interface InterviewResponse {
   questionId: string
@@ -58,10 +59,10 @@ export async function POST(
 
     const userProfile = a1Results?.profile_type || 'D'
 
-    // Use Claude AI to analyze the response
-    const anthropic = new Anthropic()
-
-    const analysisPrompt = `
+    // Use OpenAI to analyze the response
+    const { text: feedbackText } = await generateText({
+      model: openai('gpt-4o-mini'),
+      prompt: `
 You are an expert interview coach analyzing a candidate's response to an interview question.
 
 Interview Type: ${interviewType}
@@ -86,19 +87,7 @@ Provide structured feedback in JSON format with:
 
 Be specific and constructive. Consider the candidate's DISC profile (${userProfile}) in your feedback.
 `
-
-    const analysis = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      messages: [
-        {
-          role: 'user',
-          content: analysisPrompt
-        }
-      ]
     })
-
-    const feedbackText = analysis.content[0].type === 'text' ? analysis.content[0].text : ''
     let feedback
 
     try {
