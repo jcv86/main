@@ -121,6 +121,31 @@ export function ConozcamonosDosComponent({
           c1Responses
         )
 
+        // Enrich route with OpenAI master insight
+        console.log('[v0] C2: Enriqueciendo ruta con OpenAI...')
+        let enrichedRoute = generatedRoute
+        try {
+          const enrichRes = await fetch('/api/canon/c2-openai-route-enhancement', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              c2Responses,
+              generatedRoute,
+              a1Profile: a1ProfileType
+            })
+          })
+
+          if (enrichRes.ok) {
+            const enrichData = await enrichRes.json()
+            enrichedRoute = enrichData.enrichedRoute
+            console.log('[v0] C2: Ruta enriquecida exitosamente')
+          } else {
+            console.warn('[v0] C2: No se pudo enriquecer ruta, continuando con base')
+          }
+        } catch (error) {
+          console.warn('[v0] C2: Error enriqueciendo ruta:', error)
+        }
+
         // Save to database
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
@@ -129,12 +154,12 @@ export function ConozcamonosDosComponent({
           await supabase.from("canon_conozcamonos_2_responses").insert({
             user_id: user.id,
             responses: c2Responses,
-            ruta_generada: generatedRoute,
+            ruta_generada: enrichedRoute,
             completed_at: new Date()
           })
         }
 
-        onComplete(c2Responses, generatedRoute)
+        onComplete(c2Responses, enrichedRoute)
       } catch (error) {
         console.error("[v0] Error in C2 completion:", error)
       } finally {
