@@ -7,8 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, XCircle, Loader } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default function AuthDebugPage() {
-  const { data: session, status } = useSession()
+  const sessionResult = useSession()
+  const { data: session, status } = sessionResult || { data: null, status: "unauthenticated" }
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
