@@ -1,194 +1,191 @@
 # BRANDBOOK - Despega Tu Carrera
 
-## Brand Identity
+## Sistema de 4 Pilares (NOMBRES AMIGABLES - NO CÓDIGOS TÉCNICOS)
 
-**Name:** Despega Tu Carrera
-**Tagline:** Tu Siguiente Versión Empieza Aquí
-**Core Purpose:** Acompañar transiciones de identidad profesional conscientes mediante tests científicos, exploración de narrativas, y coaching con IA personalizado.
+**REGLA DE ORO**: En la UI siempre mostrar nombres amigables. NUNCA "A1", "A2", "A3", "A4", "C1", "C2".
 
-**Core Values:**
-- Empoderamiento sin juzgar
-- Transformación consciente (no crisis)
-- Acompañamiento científico + emocional
-- Privacidad absoluta
-- Narrativas de transformación reales
+### Pilar 1: **El Ritual - Quién Eres Ahora**
+- **Código Interno**: A1 (Despega Cerebral test)
+- **Color**: Púrpura (#A855F7)
+- **Icono**: Ritual/Círculo meditativo
+- **Descripción**: Descubre tu verdadero perfil sin filtros, con diagnósticos profundos basados en liderdisc.com
+- **Componentes**:
+  - Evaluación Integral: Personalidad, valores, emociones
+  - Tests Científicos: 6 evaluaciones validadas
+  - Punto de Partida: De dónde realmente estás
+  - Análisis Personal: 15-20 minutos por test
+- **Outcome**: Perfil Despega Cerebral (D/I/S/C - pero siempre llamarlo "perfil de liderazgo")
 
----
+### Pilar 2: **Exploración & Ensayo**
+- **Código Interno**: A2-A3 (Ruta personalizada + Entrenamientos)
+- **Color**: Azul (#3B82F6)
+- **Icono**: Bombilla/Exploración
+- **Descripción**: Explora identidades futuras y practica nuevas versiones de ti
+- **Componentes**:
+  - 120+ Libros Profesionales: Narrativas de transformación
+  - Búsqueda Semántica: Respuestas de la transición
+  - 100+ Recursos Web: Estrategias y ejemplos reales
+  - Exploración Continua: Nuevos contenidos cada mes
+- **Outcome**: Ruta 30/60/90 días + plan de entrenamiento
 
-## Visual System
-
-### Color Palette
-
-#### Primary Colors
-- **Primary Blue**: `hsl(221.2 83.2% 53.3%)` / `#3b82f6`
-  - Light mode: Full vibrancy
-  - Dark mode: `hsl(217.2 91.2% 59.8%)`
-  - Used for: CTAs, highlights, interactive elements
-
-#### Neutrals (Semantic)
-- **Background**: `#ffffff` (light) / `#0f172a` (dark)
-- **Foreground**: `hsl(222.2 84% 4.9%)` (text)
-- **Card**: Matches background
-- **Border**: `hsl(214.3 31.8% 91.4%)`
-- **Muted**: `hsl(210 40% 96%)`
-- **Muted Foreground**: `hsl(215.4 16.3% 46.9%)`
-
-#### Accent (Secondary)
-- **Accent**: `hsl(210 40% 96%)` 
-- Used for: Supporting elements, alternates
-- NOT used for primary CTAs
-
-#### Status Colors
-- **Destructive**: `hsl(0 84.2% 60.2%)` - Errors, warnings
-- **Success**: `hsl(142.1 70.6% 45.3%)` - Completions, achievements
-- **Info**: Primary Blue
-
-### Typography
-
-- **Font Family**: Inter (system)
-- **Weight Scale**: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
-- **Size Scale**: 
-  - `text-xs`: 12px
-  - `text-sm`: 14px
-  - `text-base`: 16px
-  - `text-lg`: 18px
-  - `text-xl`: 20px
-  - `text-2xl`: 24px
-  - `text-4xl`: 36px
-
-#### Hierarchy
-- **H1** (36px, bold): Page titles, main headings
-- **H2** (24px, semibold): Section titles
-- **H3** (20px, semibold): Subsection titles
-- **Body** (16px, regular): Default text
-- **Label** (14px, medium): Form labels, badges
-- **Caption** (12px, regular): Metadata, hints
-
-### Spacing Scale
-- `2px`, `4px`, `8px`, `12px`, `16px` (1rem), `24px`, `32px`, `40px`, `48px`, `64px`
-- Use gaps for component spacing, not margins
-- Consistent padding: typically 16px-24px for card content
-
-### Radius
-- Default radius: `0.75rem` (12px)
-- Used consistently across buttons, cards, inputs
-
-### Shadows
-- **Subtle**: `0 1px 2px 0 rgba(0, 0, 0, 0.05)`
-- **Medium**: `0 4px 6px -1px rgba(0, 0, 0, 0.1)`
-- **Large**: `0 20px 25px -5px rgba(0, 0, 0, 0.1)`
-- **Hover**: Lift element with larger shadow
+### Pilar 3: **La Realidad - Dónde Vive**
+- **Código Interno**: A4 (Contexto estratégico + Market intel)
+- **Color**: Turquesa (#06B6D4)
+- **Icono**: Globo/Mercado
+- **Descripción**: Noticias del mercado, coaching IA y plan de acción para vivir tu nueva identidad
+- **Componentes**:
+  - Noticias del Mercado: Contexto y oportunidades en tiempo real
+  - Coach IA Personalizado: Sofía & Dani acompañan 24/7
+  - Plan de Acción - 30, 60 o 90 Días: Elige tu ritmo
+  - Contexto Chileno: Adaptado al mercado local
+- **Outcome**: Plan de transición accionable + insights estratégicos
 
 ---
 
-## Component Guidelines
+## Paleta de Colores
 
-### Buttons
-- **Primary (CTA)**: Blue background, white text
-- **Secondary**: Gray background, dark text
-- **Ghost**: Transparent, text only
-- **Disabled**: Muted opacity 50%
-- **Loading**: Show spinner, disable interaction
-- Minimal padding: `h-10` (2.5rem) standard
+### Pilares (Por fase)
+- **El Ritual** (#A855F7): Púrpura vibrante - Descubrimiento
+- **Exploración** (#3B82F6): Azul primario - Crecimiento
+- **La Realidad** (#06B6D4): Turquesa - Acción
 
-### Cards
-- **Background**: White (light) / Dark slate (dark)
-- **Border**: Optional, `border-border`
-- **Shadow**: On hover, elevate
-- **Padding**: 16px-24px internal spacing
-- **Radius**: 12px standard
-
-### Forms
-- **Input/Textarea**: 
-  - Border: `border-border`
-  - Focus: Ring of primary color
-  - Placeholder: Muted foreground
-  - Disabled: Muted background
-- **Labels**: Medium weight, clear contrast
-- **Error**: Red border + error message in destructive color
-- **Success**: Green checkmark, success color
-
-### Progress/Status
-- **Progress Bar**: Primary color, smooth transitions
-- **Completed**: Green checkmark + accent color
-- **In Progress**: Primary blue + pulse animation
-- **Pending**: Muted gray + subtle styling
+### Sistema de Diseño (Semantic Tokens)
+- **Primario**: `text-foreground` (texto principal)
+- **Secundario**: `text-muted-foreground` (texto secundario)
+- **Fondo**: `bg-background` (fondo general)
+- **Cards**: `bg-card` (fondo de cards)
+- **Bordes**: `border-border` (bordes)
+- **Acento**: `text-accent` / `bg-accent/10` (elementos destacados)
+- **Éxito**: Verde (#22c55e)
+- **Advertencia**: Naranja (#f97316)
+- **Error**: Rojo (#ef4444)
 
 ### Dark Mode
-- All components must support dark mode
-- Use CSS variables for colors (NOT hardcoded)
-- Ensure WCAG AA contrast in both modes
-- Dark backgrounds use dark slate, not black
+- Automático con CSS variables en `globals.css`
+- Usar `dark:` prefix en Tailwind solo cuando se necesite override
+- Transparencias para oscuro: `bg-primary/5 dark:bg-primary/5`
 
 ---
 
-## Messaging Guidelines
+## Tipografía
 
-### Tone of Voice
-- **Not**: Corporate, clinical, judgmental
-- **Yes**: Empowering, scientific, reflective, personal
-- Avoid "should", "must", "improve" (judgmental)
-- Use: "expand", "discover", "explore", "contextualize"
-
-### Language Standards
-- **Spanish**: Primarily es-ES (Spain) with inclusive language
-- **No DISC terminology**: Use "Despega Cerebral" (A1 test)
-- **Narrative-focused**: Use transformation stories, not metrics
-- **Inclusive**: No gender stereotypes, multiple identity paths
-
-### Key Phrases
-- "Tu siguiente versión"
-- "Transformación consciente"
-- "Descubre quién eres"
-- "Sin juzgar, sin cambiar"
-- "Tu puente de transición"
+- **Font Family**: Inter (definido en layout.tsx)
+- **Jerarquía**:
+  - H1: `text-4xl font-bold` - Títulos de página
+  - H2: `text-2xl font-semibold` - Títulos de sección
+  - H3: `text-lg font-semibold` - Subtítulos
+  - Body: `text-base` - Texto normal
+  - Caption: `text-sm` o `text-xs` - Metadata
 
 ---
 
-## Implementation Requirements
+## Lenguaje & Terminología
 
-### All Components MUST:
-1. Use CSS variables from `globals.css` (NOT hardcoded colors)
-2. Support dark mode with proper contrast
-3. Use semantic tokens: `foreground`, `background`, `primary`, `accent`, `muted-foreground`, `border`
-4. Follow spacing scale (no arbitrary margins)
-5. Include proper ARIA labels and accessible focus states
-6. Work on mobile (responsive first)
+### ✅ SIEMPRE Usar
+- "Despega Tu Carrera"
+- "El Ritual - Quién Eres Ahora"
+- "Exploración & Ensayo"
+- "La Realidad - Dónde Vive"
+- "Despega Cerebral" (para el test A1)
+- "Perfil de Liderazgo" (en lugar de DISC profile)
+- "Transformación" (no "mejora" o "cambio")
 
-### All Pages MUST:
-1. Use Inter font via layout.tsx
-2. Have clear visual hierarchy
-3. Include proper SEO metadata
-4. Follow color guidelines (max 3-5 colors per page)
-5. Implement dark mode support
-6. Have accessible contrast ratios (WCAG AA minimum)
-
-### Sections (Consistent Across All)
-- **Header**: Primary color for links/CTAs
-- **Navigation**: Clear, accessible, responsive
-- **Cards**: Hover states with elevation
-- **Forms**: Proper validation, loading states
-- **CTAs**: Primary blue, clear messaging
-- **Footer**: Muted background, standard layout
+### ❌ NUNCA Usar
+- "A1", "A2", "A3", "A4", "C1", "C2" (en UI)
+- "DISC" (siempre "Despega Cerebral")
+- "Test" (usar "Evaluación", "Descubrimiento")
+- "Mejorar" (usar "Expandir", "Desarrollar")
+- Códigos técnicos
 
 ---
 
-## File References
-- Color tokens: `app/globals.css` (lines 6-59)
-- Tailwind config: `tailwind.config.ts`
-- Design tokens CSS variables: See `:root` in globals.css
-- Typography: `layout.tsx` imports Inter font
+## Componentes Clave
+
+### Progress Tracker
+- Mostrar 3 fases: "El Ritual" → "Exploración" → "La Realidad"
+- Color de pilar (púrpura/azul/turquesa)
+- Estados: Completado (accent), En Curso (primary), Pendiente (muted)
+- Incluir descripción inspiradora
+
+### Milestone Cards (30/60/90)
+- Título: "Día 30", "Día 60", "Día 90"
+- Objetivo principal
+- 3 tareas clave (con checkmarks)
+- Indicador de intensidad (suave/moderada/alta)
+- Colores según intensidad
+
+### Dashboard Principal
+- Header: "Tu Transformación" + Progreso
+- 3 secciones por pilar (El Ritual / Exploración / La Realidad)
+- Cada sección: Progreso, Próximos pasos, Coach IA
+- CTAs claramente visibles
+
+### Navigation
+- Links a los 3 pilares (NO códigos técnicos)
+- Indicador de posición actual
+- Accesible en mobile y desktop
 
 ---
 
-## Audit Checklist
-- [ ] No hardcoded colors (use CSS variables)
-- [ ] No "DISC" terminology
-- [ ] All text uses semantic colors (foreground, muted-foreground)
-- [ ] Dark mode supported and tested
-- [ ] Spacing follows scale (no arbitrary px values)
-- [ ] Cards, buttons, inputs follow guidelines
-- [ ] Typography hierarchy is clear
-- [ ] All components responsive
-- [ ] Accessible contrast ratios
-- [ ] Messaging uses brand tone
+## Guías de Implementación
+
+### Para Todas las Páginas/Componentes
+1. ✅ Usar nombres amigables (El Ritual, Exploración, etc)
+2. ✅ Colores del brandbook (púrpura/azul/turquesa por fase)
+3. ✅ CSS variables (NO hardcoded colors)
+4. ✅ Dark mode soportado
+5. ✅ Tipografía: Inter con jerarquía clara
+6. ✅ Spacing: Usar gap classes (no márgenes arbitrarios)
+7. ✅ Responsive: Mobile-first
+8. ✅ Contraste WCAG AA mínimo
+9. ✅ Sin DISC terminology
+10. ✅ Tono: Empoderador, reflexivo, científico
+
+### Ejemplo Correcto
+```tsx
+// El Ritual - Quién Eres Ahora
+<div className="bg-purple-50/50 dark:bg-purple-950/10 border border-purple-200/30">
+  <h2 className="text-foreground text-2xl font-semibold">
+    El Ritual - Quién Eres Ahora
+  </h2>
+  <p className="text-muted-foreground">
+    Descubre tu verdadero perfil sin filtros
+  </p>
+</div>
+```
+
+### Ejemplo Incorrecto ❌
+```tsx
+// DON'T DO THIS
+<div className="bg-purple-100">
+  <h2 className="text-purple-900">A1: Despega Cerebral Test</h2>
+  <p className="text-purple-700">DISC assessment</p>
+</div>
+```
+
+---
+
+## Checklist de Auditoría Completa
+
+- [ ] Home page: Usa nombres amigables en cards
+- [ ] Onboarding: C1 → A1 → C2 → Ruta (nombres amigables)
+- [ ] Dashboard: 3 pilares con colores correctos
+- [ ] Componentes CANON: Sin referencias a "A1/A2/A3/A4"
+- [ ] Dark mode: Testeado en todas las páginas
+- [ ] Colores: Solo usando tokens de brandbook
+- [ ] Tipografía: Inter con jerarquía clara
+- [ ] Spacing: Consistente, sin valores arbitrarios
+- [ ] Sin DISC: Cambiar a "Despega Cerebral"
+- [ ] Contraste: WCAG AA mínimo
+- [ ] Tono: Inspirador, no juzgador
+- [ ] Responsive: Funciona en móvil
+
+---
+
+## Referencias de Archivos
+- Colores: `app/globals.css` (variables CSS)
+- Tailwind: `tailwind.config.ts`
+- Tipografía: `app/layout.tsx` (Inter font)
+- Componentes: `components/`
+- Páginas: `app/` y `app/despega/`
+

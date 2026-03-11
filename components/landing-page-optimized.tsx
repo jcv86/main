@@ -136,7 +136,7 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <RefreshCw className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">A1: El Ritual - Quién Eres Ahora</CardTitle>
+              <CardTitle className="text-2xl">El Ritual - Quién Eres Ahora</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
                 Descubre tu verdadero perfil sin filtros, con diagnósticos profundos
               </p>
@@ -180,7 +180,7 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Lightbulb className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">A2-A3: Exploración & Ensayo</CardTitle>
+              <CardTitle className="text-2xl">Exploración & Ensayo</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
                 Explora identidades futuras y practica nuevas versiones de ti
               </p>
@@ -224,7 +224,7 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Globe className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">A4: La Realidad - Dónde Vive</CardTitle>
+              <CardTitle className="text-2xl">La Realidad - Dónde Vive</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
                 Noticias del mercado, coaching IA y plan de acción para vivir tu nueva identidad
               </p>

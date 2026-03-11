@@ -371,17 +371,17 @@ export default function DespegaOnboarding() {
             )}
           </div>
 
-          {/* What is DISC */}
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+          {/* Qué es El Ritual - Quién Eres Ahora */}
+          <Card className="border-0 shadow-lg bg-card">
             <CardContent className="pt-8">
-              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-50">Tu Perfil Despega Cerebral</h2>
-              <p className="text-slate-700 dark:text-slate-300 mb-4 text-lg leading-relaxed">
-                En Despega, el test de personalidad identifica cómo actúas naturalmente en diferentes situaciones. Es como una brújula que te ayuda a entender tu estilo único de comunicación, trabajo y relaciones.
+              <h2 className="text-2xl font-bold mb-4 text-foreground">El Ritual - Quién Eres Ahora</h2>
+              <p className="text-muted-foreground mb-4 text-lg leading-relaxed">
+                En Despega, el test de liderazgo identifica cómo actúas naturalmente en diferentes situaciones. Es como una brújula que te ayuda a entender tu estilo único de comunicación, trabajo y relaciones.
               </p>
-              <p className="text-slate-600 dark:text-slate-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Existen 4 perfiles principales: <strong>Impulsor, Catalizador, Estabilizador y Arquitecto</strong>. La mayoría de personas tiene un perfil dominante, pero todos tenemos un poco de cada uno en diferentes contextos.
               </p>
-              <p className="text-slate-600 dark:text-slate-400">
+              <p className="text-muted-foreground">
                 <strong>Importante:</strong> No hay perfil mejor o peor. Cada uno tiene fortalezas únicas y valiosas. El objetivo es entenderte para maximizar tu potencial.
               </p>
             </CardContent>
@@ -389,7 +389,7 @@ export default function DespegaOnboarding() {
 
           {/* The 4 Dimensions */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Los 4 Perfiles Despega Cerebral</h2>
+            <h2 className="text-2xl font-bold text-foreground">Los 4 Perfiles de Liderazgo</h2>
             
             {/* D - Impulsor */}
             <Card className="border-l-8 border-l-red-500 shadow-lg overflow-hidden">
@@ -1284,7 +1284,7 @@ export default function DespegaOnboarding() {
                   Se está creando tu plan personalizado de 30/60/90 días basado en:
                 </p>
                 <ul className="text-xs text-emerald-800 dark:text-emerald-200 space-y-1 text-left">
-                  <li>✓ Tu perfil DISC</li>
+                  <li>✓ Tu Perfil de Liderazgo</li>
                   <li>✓ Tu contexto personal y profesional</li>
                   <li>✓ Tu ambiente de ejecución</li>
                   <li>✓ Tus objetivos 30/60/90</li>
