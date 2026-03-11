@@ -14,6 +14,7 @@ export default function A4HubPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [newsCount, setNewsCount] = useState(0)
   const [resourcesCount, setResourcesCount] = useState(0)
+  const [userProfile, setUserProfile] = useState<any>(null)
   const supabase = createClient()
   const router = useRouter()
 
@@ -31,12 +32,38 @@ export default function A4HubPage() {
 
         setIsAuthenticated(true)
 
-        // Load stats only if authenticated
-        const { count: newsData } = await supabase
+        // Get user DISC profile from A1 test results
+        const { data: a1Results } = await supabase
+          .from('a1_tests_results')
+          .select('result, profile_type')
+          .eq('user_id', user.id)
+          .eq('test_name', 'Despega Cerebral')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (a1Results) {
+          console.log('[v0] User DISC profile:', a1Results.profile_type || a1Results.result?.dominantProfile)
+          setUserProfile(a1Results)
+        }
+
+        // Load personalized stats based on DISC profile
+        const profileType = a1Results?.profile_type || a1Results?.result?.dominantProfile
+
+        // Filter news/resources by DISC profile if available
+        let newsQuery = supabase
           .from('biblioteca')
           .select('*', { count: 'exact', head: true })
           .eq('is_featured', true)
 
+        // Add DISC filter if profile exists
+        if (profileType) {
+          newsQuery = newsQuery.or(`target_profiles.cs.{${profileType}},target_profiles.is.null`)
+        }
+
+        const { count: newsData } = await newsQuery
+
+        // Load all resources for user (personalization handled in sub-pages)
         const { count: resourcesData } = await supabase
           .from('biblioteca')
           .select('*', { count: 'exact', head: true })
@@ -84,12 +111,12 @@ export default function A4HubPage() {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <div className="text-center">
                   <p className="text-3xl font-bold text-primary mb-1">{newsCount}</p>
-                  <p className="text-sm text-muted-foreground">Artículos Destacados</p>
+                  <p className="text-sm text-muted-foreground">Artículos para Ti</p>
                 </div>
               </CardContent>
             </Card>
@@ -97,7 +124,23 @@ export default function A4HubPage() {
               <CardContent className="pt-6">
                 <div className="text-center">
                   <p className="text-3xl font-bold text-primary mb-1">{resourcesCount}</p>
-                  <p className="text-sm text-muted-foreground">Recursos Curados</p>
+                  <p className="text-sm text-muted-foreground">Recursos Totales</p>
+                </div>
+              </CardContent>
+            </Card>
+            {userProfile && (
+              <Card className="border-0 bg-primary/5 backdrop-blur-sm col-span-1 md:col-span-2">
+                <CardContent className="pt-6">
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">Tu Perfil DISC</p>
+                    <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-lg font-bold">
+                      {userProfile.profile_type || userProfile.result?.dominantProfile || 'N/A'}
+                    </Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Personalizando contenido para ti</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
                 </div>
               </CardContent>
             </Card>

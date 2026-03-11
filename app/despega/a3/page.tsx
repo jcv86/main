@@ -14,6 +14,7 @@ export default function A3Page() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [a3Progress, setA3Progress] = useState<any>(null)
+  const [userDiscProfile, setUserDiscProfile] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
   const { progress } = useCoach()
@@ -35,16 +36,32 @@ export default function A3Page() {
         .from('despega_user_profiles')
         .select('*')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
       setUserProfile(profile)
+
+      // Get user DISC profile from A1 test results
+      const { data: a1Results } = await supabase
+        .from('a1_tests_results')
+        .select('result, profile_type')
+        .eq('user_id', user.id)
+        .eq('test_name', 'Despega Cerebral')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (a1Results) {
+        const discProfile = a1Results.profile_type || a1Results.result?.dominantProfile
+        console.log('[v0] User DISC profile for A3 personalization:', discProfile)
+        setUserDiscProfile(discProfile)
+      }
 
       // Load A3 progress if exists
       const { data: a3Data } = await supabase
         .from('despega_a3_progress')
         .select('*')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
       if (a3Data) {
         setA3Progress(a3Data)
@@ -53,6 +70,16 @@ export default function A3Page() {
       console.log('[v0] Error loading A3 data:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const getDiscDescription = () => {
+    switch (userDiscProfile?.toUpperCase()) {
+      case 'D': return 'Entrenamientos de Liderazgo Decisivo - Enfocados en tomar decisiones rápidas, delegar y manejar conflictos'
+      case 'I': return 'Entrenamientos de Influencia - Enfocados en persuasión, networking, y construcción de relaciones estratégicas'
+      case 'S': return 'Entrenamientos de Colaboración - Enfocados en empatía, trabajo en equipo, y apoyo a otros'
+      case 'C': return 'Entrenamientos de Precisión - Enfocados en análisis, validación de datos, y excelencia técnica'
+      default: return 'Entrenamientos Personalizados'
     }
   }
 
@@ -73,12 +100,18 @@ export default function A3Page() {
         {/* WELCOME HERO - A3 VERSION */}
         <div className="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-800 dark:to-amber-800 rounded-lg p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Aterrizaje y Simulación</p>
+            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Aterrizaje y Entrenamiento</p>
             <h1 className="text-4xl font-bold mb-3">Entrena como profesional antes de hacerlo en vivo</h1>
             <p className="text-lg text-orange-50 mb-4">
-              Completaste tu descubrimiento personal en A1 y tu plan en A2. Ahora es momento de practicar en simulaciones realistas. 
+              Completaste tu descubrimiento personal en A1 y tu plan en A2. Ahora es momento de practicar en entrenamientos realistas. 
               A3 te pone en escenarios desafiantes donde practicas entrevistas, presentaciones y decisiones estratégicas con feedback en tiempo real.
             </p>
+            {userDiscProfile && (
+              <div className="mb-4 p-3 bg-white/20 rounded-lg border border-white/30">
+                <p className="text-sm text-orange-100 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
+                <p className="text-base font-bold text-white">{getDiscDescription()}</p>
+              </div>
+            )}
             <div className="flex gap-3">
               <Button className="bg-white text-orange-700 hover:bg-orange-50 font-semibold" size="lg">
                 Comenzar Entrenamientos
