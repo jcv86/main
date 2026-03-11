@@ -1,6 +1,19 @@
-// CANON Rules Engine - Nivel 3
-// Motor que mapea Respuesta → Regla → Salida con Trazabilidad
-// Este es el corazón inteligente que genera acciones personalizadas
+// CANON Rules Engine v1.1 - Nivel 3-4
+// Motor que mapea Respuesta → Regla → Salida con Trazabilidad Completa
+// Incluye validación de contradicciones, factores de riesgo, y stress-testing
+
+export interface C2Responses {
+  tiempo_disponible_diario_minutos: number
+  energia_nivel_actual: number
+  barreras_principales: string[]
+  formato_preferido: "video" | "texto" | "audio" | "mixto"
+  soporte_necesario: "autodidacta" | "grupo" | "mentor" | "estructura"
+  contexto_vida: string
+  metrica_exito: string
+  expectativa_30_dias: string
+  expectativa_60_dias: string
+  expectativa_90_dias: string
+}
 
 export interface CanonRule {
   id: string
@@ -24,229 +37,256 @@ export interface CanonAction {
   success_metric: string
 }
 
-// ========== REGLAS DEL MOTOR ==========
-
-export const CANON_RULES: CanonRule[] = [
-  // REGLA 1: Detectar productividad como foco
-  {
-    id: 'focus-productivity',
-    priority: 9,
-    condition: (responses) => {
-      const focusArea = responses[1] // Pregunta 1 de C2-Paso1
-      return focusArea?.includes('Productividad') || focusArea?.includes('efectividad')
-    },
-    output: (responses) => ({
-      id: 'mission-productivity-audit',
-      type: 'mission',
-      title: 'Auditoría de Productividad Personal',
-      description: 'Mapea tu semana actual: dónde gastan tu tiempo, qué te distrae, dónde pierdes horas. Esto es tu baseline.',
-      duration: 60,
-      frequency: 'weekly',
-      phase: 30,
-      tags: ['productividad', 'baseline', 'semana-1'],
-      trazability_source_response_ids: [1], // Vino de pregunta 1
-      difficulty: 'easy',
-      success_metric: 'Documento completado con 7+ patrones identificados'
-    }),
-    trazability: 'Usuario seleccionó "Productividad y efectividad" como foco principal'
-  },
-
-  // REGLA 2: Detectar obstáculos emocionales (miedo, confianza)
-  {
-    id: 'detect-fear-obstacle',
-    priority: 8,
-    condition: (responses) => {
-      const obstacles = responses[2]?.toLowerCase() || ''
-      const fear = responses[7]?.toLowerCase() || ''
-      return obstacles.includes('miedo') || obstacles.includes('miedo') || fear.includes('fracaso') || fear.includes('rechazo')
-    },
-    output: (responses) => ({
-      id: 'mission-fear-mapping',
-      type: 'reflection',
-      title: 'Mapeando tu Relación con el Miedo',
-      description: 'Reflexión guiada: ¿De dónde vienen tus miedos? ¿Son reales o imaginarios? ¿Qué pasaría si intentas?',
-      duration: 30,
-      frequency: 'weekly',
-      phase: 30,
-      tags: ['mentalidad', 'miedo', 'confianza'],
-      trazability_source_response_ids: [2, 7],
-      difficulty: 'hard',
-      success_metric: 'Reflexión escrita (min 200 palabras) identificando raíz del miedo'
-    }),
-    trazability: 'Obstáculos incluyen "miedo" y/o mayor miedo identificado en pregunta 7'
-  },
-
-  // REGLA 3: Tiempo limitado = acciones micro
-  {
-    id: 'limited-time-micro-actions',
-    priority: 7,
-    condition: (responses) => {
-      const daysPerWeek = responses[3] // Pregunta 3
-      const timePerSession = responses[4] // Pregunta 4
-      return daysPerWeek === '1 día' || timePerSession === '15-30 minutos'
-    },
-    output: (responses) => ({
-      id: 'mission-micro-actions-30',
-      type: 'habit',
-      title: '5 Mini-Acciones Diarias (15 min máximo)',
-      description: 'Si tu tiempo es limitado, no luchas contra ello: abraza microacciones. 5 cosas pequeñas, máximo 3 minutos cada una.',
-      duration: 15,
-      frequency: 'daily',
-      phase: 30,
-      tags: ['tiempo-limitado', 'eficiencia', 'hábitos'],
-      trazability_source_response_ids: [3, 4],
-      difficulty: 'easy',
-      success_metric: 'Completar 5 microacciones (verificar en app)'
-    }),
-    trazability: 'Usuario disponible solo 1 día/semana O sesiones de 15-30 minutos'
-  },
-
-  // REGLA 4: Falta de apoyo = mentor virtual
-  {
-    id: 'no-support-mentor-virtual',
-    priority: 8,
-    condition: (responses) => {
-      const support = responses[8] // Pregunta 8
-      return support === 'No tengo apoyo actualmente'
-    },
-    output: (responses) => ({
-      id: 'mission-mentor-virtual-setup',
-      type: 'learning',
-      title: 'Construye tu Mentor Virtual',
-      description: 'Sin apoyo humano? Crea tu "junta asesora": selecciona 3-5 personas (vivas, muertas, libros) cuya sabiduría seguirás.',
-      duration: 45,
-      frequency: 'weekly',
-      phase: 30,
-      tags: ['apoyo', 'mentoría', 'comunidad'],
-      trazability_source_response_ids: [8],
-      difficulty: 'medium',
-      success_metric: 'Lista de 3-5 mentores con 1 lección concreta de cada uno'
-    }),
-    trazability: 'Usuario indicó no tener apoyo actual (respuesta 8)'
-  },
-
-  // REGLA 5: Ambición alta (visión clara en 90) = plan agresivo
-  {
-    id: 'high-ambition-aggressive-plan',
-    priority: 9,
-    condition: (responses) => {
-      const objective = responses[4]?.toLowerCase() || ''
-      const vision90 = responses[11]?.toLowerCase() || ''
-      const ambitious = objective.includes('cambio') || objective.includes('promoci') || vision90.includes('líder') || vision90.includes('nuevo')
-      return ambitious
-    },
-    output: (responses) => ({
-      id: 'mission-90-day-milestone-sprint',
-      type: 'mission',
-      title: 'Hito 90: Tu Transformación en Acelerador',
-      description: 'Tu visión es ambiciosa. Desglosaremos en sprints de 30 días: cada 30 días, visible checkpoint.',
-      duration: 120,
-      frequency: 'twice-weekly',
-      phase: 30,
-      tags: ['ambición', 'sprints', 'hitos'],
-      trazability_source_response_ids: [4, 11],
-      difficulty: 'hard',
-      success_metric: '3 hitos mensales definidos y 1 completado en mes 1'
-    }),
-    trazability: 'Objetivo incluye "cambio" o visión a 90 días es ambiciosa'
-  },
-
-  // REGLA 6: Primera acción hoy = momentum real
-  {
-    id: 'first-action-today-momentum',
-    priority: 10, // MÁXIMA PRIORIDAD: "acción ahora"
-    condition: (responses) => {
-      return Object.keys(responses).length > 0 // Siempre se aplica
-    },
-    output: (responses) => ({
-      id: 'mission-action-today',
-      type: 'mission',
-      title: 'Tu Primera Acción: HOY',
-      description: responses[9] || 'Identifica 1 cosa que harás HOY. No mañana. No la próxima semana. Hoy en las próximas 2 horas.',
-      duration: 5, // Micro-acción
-      frequency: 'daily',
-      phase: 30,
-      tags: ['momentum', 'acción-inmediata', 'primer-paso'],
-      trazability_source_response_ids: [9],
-      difficulty: 'easy',
-      success_metric: 'Acción completada y reportada'
-    }),
-    trazability: 'Generada automáticamente: "acción hoy si tuvieras energía ilimitada"'
-  }
-]
-
-// ========== MOTOR EJECUTOR ==========
-
-export function executeCanonRules(
-  conozcamonos1Responses: Record<number, any>,
-  conozcamonos2Paso1Responses: Record<number, any>,
-  conozcamonos2Paso2Responses: Record<number, any>,
-  a1ProfileType: string // D, I, S, C
-): CanonAction[] {
-  // Merge all responses
-  const allResponses = {
-    ...conozcamonos1Responses,
-    ...conozcamonos2Paso1Responses,
-    ...conozcamonos2Paso2Responses,
-    profile_type: a1ProfileType
-  }
-
-  // Execute rules in priority order
-  const appliedRules = CANON_RULES.sort((a, b) => b.priority - a.priority)
-    .filter(rule => rule.condition(allResponses))
-    .map(rule => ({
-      action: rule.output(allResponses),
-      trazability: rule.trazability
-    }))
-
-  console.log('[v0] Applied rules:', appliedRules.length, 'actions generated')
-
-  return appliedRules.map(r => r.action)
+export interface GeneratedRoute {
+  mision_30: MisionMilestone
+  mision_60: MisionMilestone
+  mision_90: MisionMilestone
+  recomendaciones_personalizadas: string[]
+  contradicciones_detectadas: string[]
+  factores_riesgo: string[]
+  factores_exito: string[]
 }
 
-// ========== STRESS TEST (Nivel 4) ==========
+export interface MisionMilestone {
+  objetivo_principal: string
+  tareas_clave: string[]
+  metricas: string[]
+  formato_recomendado: string
+  intensidad: "suave" | "moderada" | "alta"
+  soporte_recomendado: string[]
+}
 
-export function validateCanonActions(actions: CanonAction[]): {
-  valid: boolean
-  issues: string[]
-  suggestions: string[]
-} {
-  const issues: string[] = []
-  const suggestions: string[] = []
+// ========== CLASE PRINCIPAL: CANON RULES ENGINE ==========
 
-  // Validación 1: No más de 7 acciones en fase 30
-  const phase30Actions = actions.filter(a => a.phase === 30)
-  if (phase30Actions.length > 7) {
-    issues.push(`Demasiadas acciones en fase 30: ${phase30Actions.length} (máx 7)`)
-    suggestions.push('Combinando acciones similares para evitar saturación')
+export class CanonRulesEngine {
+  /**
+   * Genera una ruta personalizada completa basada en todas las respuestas
+   */
+  static generateRoute(
+    c2Responses: C2Responses,
+    a1Profile: string,
+    c1Context: Record<number, string>
+  ): GeneratedRoute {
+    const reglas = this.evaluateRules(c2Responses, a1Profile)
+    const contradicciones = this.detectContradicciones(c2Responses)
+    const factoresRiesgo = this.identifyRiskFactors(c2Responses)
+    const factoresExito = this.identifySuccessFactors(c2Responses, a1Profile)
+
+    return {
+      mision_30: this.generateMilestone30(c2Responses, reglas),
+      mision_60: this.generateMilestone60(c2Responses, reglas),
+      mision_90: this.generateMilestone90(c2Responses, reglas),
+      recomendaciones_personalizadas: reglas.recomendaciones,
+      contradicciones_detectadas: contradicciones,
+      factores_riesgo: factoresRiesgo,
+      factores_exito: factoresExito,
+    }
   }
 
-  // Validación 2: Balance entre tipos
-  const typeCount = {
-    mission: actions.filter(a => a.type === 'mission').length,
-    habit: actions.filter(a => a.type === 'habit').length,
-    learning: actions.filter(a => a.type === 'learning').length,
-    reflection: actions.filter(a => a.type === 'reflection').length
+  private static evaluateRules(c2: C2Responses, profile: string) {
+    const recomendaciones: string[] = []
+    const reglas = {
+      tiempoIntensidad: this.evaluateTimeRules(c2.tiempo_disponible_diario_minutos),
+      energiaIntensidad: this.evaluateEnergyRules(c2.energia_nivel_actual),
+      barrierasAjustes: this.evaluateBarrierRules(c2.barreras_principales),
+      formatoRecomendado: this.evaluateFormatRules(c2.formato_preferido),
+      soporteEstructura: this.evaluateSupportRules(c2.soporte_necesario),
+    }
+
+    // Combina reglas para generar recomendaciones coherentes
+    if (c2.tiempo_disponible_diario_minutos < 30) {
+      recomendaciones.push(
+        "Enfocamos en micro-sesiones de 15 min máximo para máxima consistencia"
+      )
+      recomendaciones.push(
+        "Formato audio/video corto es ideal para tu restricción de tiempo"
+      )
+    } else if (c2.tiempo_disponible_diario_minutos >= 60) {
+      recomendaciones.push(
+        "Tienes espacio para profundizar - incluimos desafíos opcionales"
+      )
+      recomendaciones.push(
+        "Sesiones de 45-60 min permiten práctica real y feedback"
+      )
+    }
+
+    if (c2.energia_nivel_actual <= 4) {
+      recomendaciones.push(
+        "Primer mes enfocado en pequeñas victorias para construir momentum"
+      )
+      recomendaciones.push(
+        "Aumentamos intensidad gradualmente a medida que gana energía"
+      )
+    }
+
+    if (c2.barreras_principales.includes("confianza")) {
+      recomendaciones.push(
+        "Incluimos validaciones frecuentes y feedback positivo en cada paso"
+      )
+    }
+
+    if (c2.soporte_necesario === "mentor") {
+      recomendaciones.push(
+        "Recomendamos sesiones semanales con un coach especializado"
+      )
+    } else if (c2.soporte_necesario === "grupo") {
+      recomendaciones.push(
+        "Integración en comunidad de aprendizaje con accountability partners"
+      )
+    }
+
+    return { ...reglas, recomendaciones }
   }
 
-  if (typeCount.mission === 0) {
-    suggestions.push('Agregando una misión transformadora para momentum')
+  private static evaluateTimeRules(minutos: number) {
+    if (minutos < 15) return "muy_corta"
+    if (minutos < 30) return "corta"
+    if (minutos < 60) return "moderada"
+    return "extensa"
   }
 
-  // Validación 3: Tiempo total no debe exceder disponibilidad
-  const totalWeeklyMinutes = actions.reduce((sum, action) => {
-    const frequency = action.frequency === 'daily' ? 7 : action.frequency === 'twice-weekly' ? 2 : 1
-    return sum + (action.duration * frequency)
-  }, 0)
-
-  if (totalWeeklyMinutes > 420) { // 7 horas/semana
-    issues.push(`Carga excesiva: ${Math.round(totalWeeklyMinutes / 60)}h/semana (máx 7h)`)
-    suggestions.push('Reduciendo frecuencia de algunas acciones')
+  private static evaluateEnergyRules(nivel: number) {
+    if (nivel <= 3) return "baja"
+    if (nivel <= 6) return "media"
+    return "alta"
   }
 
-  return {
-    valid: issues.length === 0,
-    issues,
-    suggestions
+  private static evaluateBarrierRules(barreras: string[]) {
+    const ajustes: Record<string, string> = {}
+    if (barreras.includes("tiempo")) ajustes.tiempo = "micro-sesiones"
+    if (barreras.includes("dinero")) ajustes.recursos = "contenido_gratuito"
+    if (barreras.includes("confianza")) ajustes.confianza = "mas_validacion"
+    if (barreras.includes("contexto")) ajustes.contexto = "flexible_timing"
+    return ajustes
+  }
+
+  private static evaluateFormatRules(formato: string) {
+    return formato === "mixto" ? ["video", "texto", "audio"] : [formato]
+  }
+
+  private static evaluateSupportRules(soporte: string) {
+    const estructuras: Record<string, string[]> = {
+      autodidacta: ["recursos_self_paced", "checklists_claros"],
+      grupo: ["comunidad", "accountability_partners"],
+      mentor: ["sesiones_semanales", "seguimiento_personalizado"],
+      estructura: ["calendario_diario", "recordatorios", "micro_goals"],
+    }
+    return estructuras[soporte] || []
+  }
+
+  private static detectContradicciones(c2: C2Responses): string[] {
+    const contradicciones: string[] = []
+
+    // Si dice poco tiempo pero expects gran cambio
+    if (
+      c2.tiempo_disponible_diario_minutos < 30 &&
+      c2.expectativa_90_dias.toLowerCase().includes("carrera")
+    ) {
+      contradicciones.push(
+        "⚠️ Esperas un cambio de carrera en 90 días con <30 min/día. Esto es muy agresivo. Recomendamos recalibrar el objetivo o aumentar tiempo."
+      )
+    }
+
+    // Si energía baja pero expects resultados inmediatos
+    if (c2.energia_nivel_actual <= 3 && c2.expectativa_30_dias.length < 10) {
+      contradicciones.push(
+        "⚠️ Tu energía es baja pero esperas resultados en 30 días. Sugerimos enfocarnos primero en recuperar energía."
+      )
+    }
+
+    // Si barreras = "todo" pero soporte = "autodidacta"
+    if (
+      c2.barreras_principales.length >= 4 &&
+      c2.soporte_necesario === "autodidacta"
+    ) {
+      contradicciones.push(
+        "⚠️ Tienes múltiples barreras pero elegiste ser autodidacta. Considera soporte de grupo o mentor."
+      )
+    }
+
+    return contradicciones
+  }
+
+  private static identifyRiskFactors(c2: C2Responses): string[] {
+    const riesgos: string[] = []
+
+    if (c2.tiempo_disponible_diario_minutos < 15) {
+      riesgos.push("Consistencia baja por tiempo muy limitado")
+    }
+    if (c2.energia_nivel_actual <= 2) {
+      riesgos.push("Riesgo de abandono por energía muy baja")
+    }
+    if (
+      c2.barreras_principales.includes("confianza") &&
+      c2.soporte_necesario === "autodidacta"
+    ) {
+      riesgos.push("Sin validación externa, confianza puede disminuir")
+    }
+
+    return riesgos
+  }
+
+  private static identifySuccessFactors(c2: C2Responses, profile: string): string[] {
+    const factores: string[] = []
+
+    if (c2.energia_nivel_actual >= 7) {
+      factores.push("Alta energía = momentum natural para lograr más")
+    }
+    if (c2.tiempo_disponible_diario_minutos >= 45) {
+      factores.push("Tiempo suficiente para práctica real y consolidación")
+    }
+    if (c2.soporte_necesario === "mentor" || c2.soporte_necesario === "grupo") {
+      factores.push("Soporte externo aumenta accountability y resultados")
+    }
+    if (c2.barreras_principales.length === 0) {
+      factores.push("Sin barreras percibidas = alta probabilidad de éxito")
+    }
+
+    return factores
+  }
+
+  private static generateMilestone30(c2: C2Responses, reglas: any): MisionMilestone {
+    return {
+      objetivo_principal: "Establecer la base y generar primer momentum",
+      tareas_clave: [
+        "Día 1-5: Claridad - entender exactamente qué quieres lograr",
+        "Día 6-15: Primeros pasos - tomar acción pequeña pero consistente",
+        "Día 16-30: Consolidar - celebrar primeras victorias",
+      ],
+      metricas: ["Consistencia: 80% de sesiones completadas", "Energía: mantener o +1 nivel"],
+      formato_recomendado: reglas.formatoRecomendado || "mixto",
+      intensidad: c2.energia_nivel_actual <= 3 ? "suave" : "moderada",
+      soporte_recomendado: reglas.soporteEstructura,
+    }
+  }
+
+  private static generateMilestone60(c2: C2Responses, reglas: any): MisionMilestone {
+    return {
+      objetivo_principal: "Profundizar habilidades y aumentar desafío",
+      tareas_clave: [
+        "Ampliar práctica a contextos más retadores",
+        "Recibir feedback estructurado",
+        "Ajustar estrategia según resultados del mes 1-2",
+      ],
+      metricas: ["Profundidad: práctica real en contexto laboral", "Feedback: +1 mejora percibida"],
+      formato_recomendado: reglas.formatoRecomendado || "mixto",
+      intensidad: "moderada",
+      soporte_recomendado: reglas.soporteEstructura,
+    }
+  }
+
+  private static generateMilestone90(c2: C2Responses, reglas: any): MisionMilestone {
+    return {
+      objetivo_principal: "Integración completa - nuevo hábito instalado",
+      tareas_clave: [
+        "Aplicar aprendizajes en decisiones reales",
+        "Medir impacto real en carrera/vida",
+        "Planear siguientes 90 días",
+      ],
+      metricas: ["Sostenibilidad: nuevo comportamiento es automático", "Impacto: métrica de éxito alcanzada"],
+      formato_recomendado: reglas.formatoRecomendado || "mixto",
+      intensidad: "moderada",
+      soporte_recomendado: reglas.soporteEstructura,
+    }
   }
 }

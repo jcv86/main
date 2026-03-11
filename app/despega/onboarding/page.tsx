@@ -10,8 +10,10 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { DiscResultsPage } from "@/components/disc-results-page"
 import { DISC_TEST_QUESTIONS } from "@/lib/disc-test-questions"
+import { ConozcamonosUnoComponent } from "@/components/conozcamonos-uno-component"
+import { ConozcamonosDosComponent } from "@/components/conozcamonos-dos-component"
 
-type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "results" | "conozcamonos2-paso1" | "conozcamonos2-paso2"
+type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "results" | "conozcamonos2" | "route-generated"
 
 export default function DespegaOnboarding() {
   const router = useRouter()

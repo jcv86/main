@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { CanonDashboardSection } from "@/components/canon-dashboard-section"
+import { CanonProgressCard } from "@/components/canon-progress-card"
 
 interface UserProfile {
   camino_persona_active: boolean
