@@ -7,6 +7,11 @@ export async function POST(request: NextRequest) {
     const { c2Responses, generatedRoute, a1Profile } = await request.json()
 
     if (!c2Responses || !generatedRoute) {
+      console.error('[v0] C2→OpenAI: Missing required data', { 
+        hasC2: !!c2Responses, 
+        hasRoute: !!generatedRoute,
+        body: await request.json().catch(() => 'Parse error') 
+      })
       throw new Error('C2 responses y generatedRoute requeridas')
     }
 

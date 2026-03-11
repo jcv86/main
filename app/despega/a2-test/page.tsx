@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react"
+import { CanonRulesEngine } from "@/lib/canon-rules-engine"
 
 interface TestResult {
   phase: string
@@ -13,6 +14,107 @@ interface TestResult {
   data?: any
   error?: string
 }
+
+export default function A2TestPage() {
+  const [results, setResults] = useState<Record<string, TestResult>>({})
+  const [isRunning, setIsRunning] = useState(false)
+
+  // Mock data for testing
+  const mockC1Responses = {
+    1: "Soy un profesional con 10 años en tech, busco pasar de individual contributor a líder",
+    2: "Inseguridad sobre si realmente tengo capacidad de liderazgo",
+    3: "Tengo 45 minutos diarios disponibles",
+    4: "Prefiero videos cortos + articles",
+    5: "Necesito un mentor que me guíe paso a paso",
+    6: "Trabajo en una startup, ambiente rápido y competitivo",
+    7: "Quiero que en 90 días haya liderado un proyecto importante"
+  }
+
+  const mockA1Profile = "D" // Dominante - rápido, decisivo
+
+  const mockC2Responses = {
+    tiempo_disponible_diario_minutos: 45,
+    energia_nivel_actual: 7,
+    barreras_principales: ["confianza"],
+    formato_preferido: "mixto",
+    soporte_necesario: "mentor",
+    contexto_vida: "Trabajo en startup, busco promoción",
+    metrica_exito: "Liderar proyecto de 3 personas exitosamente",
+    expectativa_30_dias: "Claridad sobre mi estilo de liderazgo",
+    expectativa_90_dias: "Posición de líder en la empresa"
+  }
+
+  const testPhase = async (phaseName: string, endpoint: string, payload: any) => {
+    setResults(prev => ({
+      ...prev,
+      [phaseName]: { phase: phaseName, status: "loading" }
+    }))
+
+    try {
+      console.log(`[v0] Testing ${phaseName}...`)
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+
+      const data = await response.json()
+      console.log(`[v0] ${phaseName} success:`, data)
+
+      setResults(prev => ({
+        ...prev,
+        [phaseName]: {
+          phase: phaseName,
+          status: "success",
+          data: data
+        }
+      }))
+    } catch (error) {
+      console.error(`[v0] ${phaseName} error:`, error)
+      setResults(prev => ({
+        ...prev,
+        [phaseName]: {
+          phase: phaseName,
+          status: "error",
+          error: error instanceof Error ? error.message : "Unknown error"
+        }
+      }))
+    }
+  }
+
+  const runFullTest = async () => {
+    setIsRunning(true)
+    setResults({})
+
+    // Test C1 → OpenAI
+    await testPhase("C1 Insights", "/api/canon/c1-openai-insights", { c1Responses: mockC1Responses })
+
+    // Test A1 → OpenAI
+    await testPhase("A1 Coaching", "/api/canon/a1-openai-coaching", { 
+      a1Profile: mockA1Profile, 
+      c1Context: mockC1Responses 
+    })
+
+    // Test C2 → Route Enhancement
+    // First generate the route using CANON rules engine
+    const generatedRoute = CanonRulesEngine.generateRoute(
+      mockC2Responses as any,
+      mockA1Profile,
+      mockC1Responses
+    )
+
+    await testPhase("C2 Route", "/api/canon/c2-openai-route-enhancement", {
+      c2Responses: mockC2Responses,
+      generatedRoute: generatedRoute,
+      a1Profile: mockA1Profile
+    })
+
+    setIsRunning(false)
+  }
 
 export default function A2TestPage() {
   const [results, setResults] = useState<Record<string, TestResult>>({})
