@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
       timestamps: {},
     }
 
-    // PHASE A1: DISC Analysis Insights
-    console.log("[v0] A1: Generating DISC analysis insights...")
+    // PHASE A1: Despega Cerebral Discovery Insights
+    console.log("[v0] A1: Generating Despega Cerebral discovery insights...")
     const a1Start = Date.now()
     const a1Response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -32,13 +32,21 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: `Eres un coach de perfil DISC. Un usuario tiene estas respuestas:
+            content: `Eres un coach personal que descubre quién es realmente la gente. Un usuario ha contestado así:
 - Prefiere decisiones rápidas: muy de acuerdo
 - Valora las relaciones: neutral
 - Disfruta del análisis detallado: de acuerdo
 - Le gusta estar a cargo: muy de acuerdo
 
-Basándote en esto, proporciona un insight JSON sobre su tipo de perfil DISC dominante (D/I/S/C), sus fortalezas, y un insight clave para su desarrollo de carrera en 3-4 oraciones.`
+Habla directamente al usuario como si lo conocieras profundamente. Tu trabajo es hacerlo decir "¡Oh, eso soy yo!"
+
+Explícale:
+1. QUIÉN ES (el patrón que no sabía que tenía)
+2. POR QUÉ ES ASÍ (los instintos que lo mueven)
+3. QUÉ SIGNIFICA PARA SU CARRERA (la oportunidad que no ve)
+
+Usa lenguaje cálido, inteligente, sin jargón. Haz que se sienta VISTO. Máximo 4 oraciones.
+Termina con una frase que lo haga pensar diferente sobre sí mismo.`
           }
         ],
         max_tokens: 300,
@@ -50,10 +58,10 @@ Basándote en esto, proporciona un insight JSON sobre su tipo de perfil DISC dom
     const a1Data = await a1Response.json()
     results.a1_insights = a1Data.choices?.[0]?.message?.content
     results.timestamps.a1 = Date.now() - a1Start
-    console.log("[v0] A1 Insights: DISC profile analysis generated")
+    console.log("[v0] A1 Insights: Despega Cerebral discovery generated")
 
-    // PHASE A2: Route Generation Insights
-    console.log("[v0] A2: Generating personalized route insights...")
+    // PHASE A2: 90-Day Path Clarity
+    console.log("[v0] A2: Generating your 90-day path clarity...")
     const a2Start = Date.now()
     const a2Response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -66,12 +74,16 @@ Basándote en esto, proporciona un insight JSON sobre su tipo de perfil DISC dom
         messages: [
           {
             role: "user",
-            content: `Eres un estratega de carrera. Un usuario con perfil DISC D (Dominante/Impulsor) tiene estos objetivos:
-- 30 días: Dominar habilidades de negociación
-- 60 días: Liderar un equipo multifuncional
-- 90 días: Obtener una promoción
+            content: `Eres un mentor que ayuda a la gente a ver su camino claro. Este usuario quiere una promoción en 90 días. Sabe tomar decisiones rápidas y es orientado a resultados, pero necesita mejorar en escuchar otros.
 
-Proporciona 3 insights estratégicos clave sobre su viaje de 90 días. Enfócate en cómo aprovechar su perfil D y dónde necesita compensar. Formatea como viñetas.`
+IMPORTANTE: Habla COMO SI YA CREES EN ÉL. Tu tono debe ser: "Yo veo quién puedes ser."
+
+Dile (como amigo que confía):
+1. POR QUÉ su naturaleza es perfecta PARA esto (su superpower oculto)
+2. EL ÚNICO GIRO que cambia todo (lo que muchos no ven)
+3. LOS 3 MOVIMIENTOS clave: 30 días, 60 días, 90 días
+
+Sé directo, motivador, real. Como un coach que ya cree en el jugador. 3-4 viñetas máximo.`
           }
         ],
         max_tokens: 400,
@@ -83,10 +95,10 @@ Proporciona 3 insights estratégicos clave sobre su viaje de 90 días. Enfócate
     const a2Data = await a2Response.json()
     results.a2_insights = a2Data.choices?.[0]?.message?.content
     results.timestamps.a2 = Date.now() - a2Start
-    console.log("[v0] A2 Insights: Route strategy generated")
+    console.log("[v0] A2 Insights: Path clarity generated")
 
-    // PHASE A3: Training Recommendation Insights
-    console.log("[v0] A3: Generating training recommendations...")
+    // PHASE A3: Training Feedback Reality Check
+    console.log("[v0] A3: Generating training feedback...")
     const a3Start = Date.now()
     const a3Response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -99,10 +111,18 @@ Proporciona 3 insights estratégicos clave sobre su viaje de 90 días. Enfócate
         messages: [
           {
             role: "user",
-            content: `Eres un coach de entrevistas. Un candidato con perfil D (asertivo, orientado a resultados) está practicando respuestas de entrevista. Su respuesta sobre manejar conflictos:
+            content: `Eres un coach en entrevistas que es brutal pero amoroso. Un candidato está practicando. Cuando le preguntan cómo maneja conflictos, dice:
 "Les digo mi decisión y por qué es el mejor camino."
 
-Proporciona 2 insights de coaching específicos: 1) Qué está funcionando bien, 2) Una frase que deberían ajustar para mostrar empatía. Mantente breve.`
+IMPORTANTE: Tu feedback debe hacerlo sentir ENTENDIDO pero también desafiado.
+
+Habla directamente:
+1. LO BRILLANTE EN SU RESPUESTA (qué le da poder)
+2. EL COSTO OCULTO (por qué esto le cuesta la promoción)
+3. LA FRASE EXACTA QUE DEBE CAMBIAR (y por qué funciona mejor)
+4. UNA VERDAD que lo haga crecer (no es crítica, es invitación)
+
+Sé honesto como un verdadero coach - que te ama pero no te permite quedarte chico.`
           }
         ],
         max_tokens: 300,
@@ -116,8 +136,8 @@ Proporciona 2 insights de coaching específicos: 1) Qué está funcionando bien,
     results.timestamps.a3 = Date.now() - a3Start
     console.log("[v0] A3 Insights: Training feedback generated")
 
-    // PHASE A4: Strategic News Insights
-    console.log("[v0] A4: Generating personalized strategic insights...")
+    // PHASE A4: Market Intelligence for Your Moment
+    console.log("[v0] A4: Generating your market intelligence...")
     const a4Start = Date.now()
     const a4Response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -130,10 +150,16 @@ Proporciona 2 insights de coaching específicos: 1) Qué está funcionando bien,
         messages: [
           {
             role: "user",
-            content: `Eres un estratega de mercado. Dada esta noticia:
+            content: `Eres un estratega que ayuda a gente a ver las oportunidades invisibles. Esta noticia está pasando AHORA:
 "La adopción de IA se acelera en la toma de decisiones empresariales - Las empresas Fortune 500 reportan ganancias de productividad del 40%"
 
-Para un profesional con perfil D que apunta a una promoción, proporciona 2 insights accionables sobre cómo pueden aprovechar esta tendencia en su plan de 90 días. Mantén de 2-3 oraciones.`
+Este usuario (rápido en decisiones, orientado a resultados, buscando promoción) necesita saber:
+1. POR QUÉ esta tendencia es SU MOMENTO específico (no de otros)
+2. LA CONEXIÓN entre quién es + lo que está pasando = su oportunidad
+3. QUÉ HACER ESTA SEMANA para prepararse
+
+Hazlo sonar como un descubrimiento que cambia su perspectiva - una puerta que acaba de abrirse para él.
+Haz que sienta que el mercado lo está llamando. 2-3 líneas.`
           }
         ],
         max_tokens: 250,
@@ -145,10 +171,10 @@ Para un profesional con perfil D que apunta a una promoción, proporciona 2 insi
     const a4Data = await a4Response.json()
     results.a4_insights = a4Data.choices?.[0]?.message?.content
     results.timestamps.a4 = Date.now() - a4Start
-    console.log("[v0] A4 Insights: Strategic context generated")
+    console.log("[v0] A4 Insights: Market intelligence generated")
 
-    // BRAIN CHAIN: Consolidate all insights
-    console.log("[v0] BRAIN: Consolidating all insights into coherent chain...")
+    // BRAIN CHAIN: The Master Insight That Ties Everything
+    console.log("[v0] BRAIN: Synthesizing your master insight...")
     const brainStart = Date.now()
     const brainResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -161,17 +187,20 @@ Para un profesional con perfil D que apunta a una promoción, proporciona 2 insi
         messages: [
           {
             role: "user",
-            content: `Estás sintetizando un viaje completo de desarrollo de carrera. Aquí hay insights de 4 fases:
+            content: `Eres un sabio que ve el cuadro completo. Acabas de recopilar intel sobre alguien:
 
-A1 (Quién es): Perfil DISC D - decisivo, orientado a resultados, competitivo
-A2 (Su plan): Viaje de 90 días para promoción vía negociación → liderazgo de equipo → promoción
-A3 (Su práctica): Entrenamiento de entrevista mostrando que necesita agregar empatía a su toma de decisiones
-A4 (Contexto de mercado): Adopción de IA acelerada - oportunidad de liderar iniciativas impulsadas por IA
+QUIÉN ES (Despega Cerebral): Toma decisiones rápidas, va al punto, compite para ganar, liderazgo natural
+SU RUTA (90 días): Ir de impulsor a líder que lleva gente con él hacia una promoción
+SU PRÁCTICA (La verdad): Es tan directo que a veces suena frío - necesita incluir a la gente en sus decisiones
+SU MOMENTO (El mercado): IA está cambiando quién dirige - y gente como él tiene un superpoder oculto
 
-Sintetiza 1 insight poderoso que une las 4 fases. Este es el insight "cerebro" que guía todo su viaje. Mantén de 2-3 oraciones.`
+Ahora, dame UNA SOLA FRASE ÉPICA que lo UNA TODO. Una verdad que cuando la lea, dirá "Así es. Eso es exactamente lo que necesitaba escuchar."
+
+No es estrategia. Es el AHA que lo despierta.
+1 oración. Poderosa. Que sea sobre quién puede llegar a ser.`
           }
         ],
-        max_tokens: 300,
+        max_tokens: 150,
         temperature: 0.9,
       }),
     })
@@ -180,7 +209,7 @@ Sintetiza 1 insight poderoso que une las 4 fases. Este es el insight "cerebro" q
     const brainData = await brainResponse.json()
     results.brain_chain = brainData.choices?.[0]?.message?.content
     results.timestamps.brain = Date.now() - brainStart
-    console.log("[v0] BRAIN: Meta-insight generated")
+    console.log("[v0] BRAIN: Master insight synthesized")
 
     const totalTime = Object.values(results.timestamps).reduce((a: number, b: number) => a + (b as number), 0)
 

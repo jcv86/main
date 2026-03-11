@@ -44,30 +44,33 @@ export default function TestOpenAIInsightsPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-white">Validación del Ciclo BRAIN de OpenAI</h1>
-          <p className="text-purple-200">Verifica que OpenAI proporcione insights en todo el ciclo A1→A4 con el sistema BRAIN</p>
+          <h1 className="text-5xl font-bold text-white">Descubre Quién Eres Realmente</h1>
+          <p className="text-lg text-purple-100">Tu viaje de 90 días comienza aquí. 5 fases. 1 insight que lo cambia todo.</p>
         </div>
 
         {/* Main Test Button */}
-        <Card className="bg-purple-900/30 border-purple-500/50">
-          <CardContent className="pt-6">
+        <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50 shadow-2xl">
+          <CardContent className="pt-8 pb-8">
             <Button 
               onClick={runTest} 
               disabled={loading}
-              className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-lg"
+              className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Ejecutando test A1-A4 de OpenAI...
+                  <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+                  Generando tus insights personalizados...
                 </>
               ) : (
                 <>
-                  <Zap className="w-5 h-5 mr-2" />
-                  Validar Insights de OpenAI A1→A4
+                  <Zap className="w-5 h-5 mr-3" />
+                  Comenzar Mi Viaje de Descubrimiento
                 </>
               )}
             </Button>
+            <p className="text-center text-sm text-purple-200 mt-3">
+              Responde 41 preguntas → obtén un plan personalizado de 90 días
+            </p>
           </CardContent>
         </Card>
 
@@ -116,13 +119,13 @@ export default function TestOpenAIInsightsPage() {
             {/* A1 Insights */}
             <Card className="bg-slate-900/50 border-blue-500/30">
               <CardHeader>
-                <CardTitle className="text-blue-400">A1: Insights del Perfil DISC</CardTitle>
+                <CardTitle className="text-blue-400">Fase 1: Quién Eres Realmente (Despega Cerebral)</CardTitle>
                 <CardDescription className="text-blue-200">
-                  {results.performance.phases.a1}ms
+                  Tu patrón natural de comportamiento - descubierto
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-sm">
+                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a1_insights}
                 </p>
               </CardContent>
@@ -131,13 +134,13 @@ export default function TestOpenAIInsightsPage() {
             {/* A2 Insights */}
             <Card className="bg-slate-900/50 border-emerald-500/30">
               <CardHeader>
-                <CardTitle className="text-emerald-400">A2: Insights de Estrategia de Ruta</CardTitle>
+                <CardTitle className="text-emerald-400">Fase 2: Tu Camino Claro (Ruta 90 Días)</CardTitle>
                 <CardDescription className="text-emerald-200">
-                  {results.performance.phases.a2}ms
+                  Exactamente qué hacer para lograr tu objetivo
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-sm">
+                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a2_insights}
                 </p>
               </CardContent>
@@ -146,13 +149,13 @@ export default function TestOpenAIInsightsPage() {
             {/* A3 Insights */}
             <Card className="bg-slate-900/50 border-orange-500/30">
               <CardHeader>
-                <CardTitle className="text-orange-400">A3: Feedback de Entrenamientos</CardTitle>
+                <CardTitle className="text-orange-400">Fase 3: Feedback Honesto (Entrenamientos)</CardTitle>
                 <CardDescription className="text-orange-200">
-                  {results.performance.phases.a3}ms
+                  Lo que está bien + lo que necesitas cambiar para ser líder
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-sm">
+                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a3_insights}
                 </p>
               </CardContent>
@@ -161,38 +164,38 @@ export default function TestOpenAIInsightsPage() {
             {/* A4 Insights */}
             <Card className="bg-slate-900/50 border-purple-500/30">
               <CardHeader>
-                <CardTitle className="text-purple-400">A4: Insights de Contexto Estratégico</CardTitle>
+                <CardTitle className="text-purple-400">Fase 4: Tu Momento Ahora (Contexto de Mercado)</CardTitle>
                 <CardDescription className="text-purple-200">
-                  {results.performance.phases.a4}ms
+                  Por qué ahora es tu mejor momento para actuar
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-sm">
+                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a4_insights}
                 </p>
               </CardContent>
             </Card>
 
             {/* Brain Chain - The Master Insight */}
-            <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50">
+            <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50 shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
-                  🧠 BRAIN: Cadena de Insight Maestro
+                  Tu Insight Maestro: El Que Lo Cambia Todo
                 </CardTitle>
                 <CardDescription className="text-purple-200">
-                  Insight consolidado que conecta las 4 fases ({results.performance.phases.brain}ms)
+                  Una verdad poderosa que conecta las 4 fases
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-slate-900/50 p-4 rounded-lg border border-purple-500/30">
-                  <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-semibold">
-                    {results.results.brain_chain}
+                <div className="bg-slate-900/70 p-6 rounded-lg border-2 border-purple-400/50">
+                  <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-lg font-bold text-center">
+                    "{results.results.brain_chain}"
                   </p>
                 </div>
-                <div className="mt-4 p-3 bg-slate-800/50 rounded flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-slate-300">
-                    Este insight guía todo el viaje, conectando A1 (quién eres) → A2 (dónde vas) → A3 (cómo practicas) → A4 (qué sabes)
+                <div className="mt-4 p-4 bg-purple-950/50 rounded flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0" />
+                  <span className="text-sm text-purple-100">
+                    Este es el insight que te guía en cada decisión los próximos 90 días
                   </span>
                 </div>
               </CardContent>
@@ -230,14 +233,17 @@ export default function TestOpenAIInsightsPage() {
         {/* Instructions */}
         <Card className="bg-slate-900/50 border-slate-700">
           <CardHeader>
-            <CardTitle className="text-sm">Cómo Funciona Este Test</CardTitle>
+            <CardTitle>Cómo Funciona Tu Viaje de Descubrimiento</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-slate-300 space-y-2">
-            <p>1. <strong>Fase A1:</strong> OpenAI analiza el perfil DISC desde respuestas del test</p>
-            <p>2. <strong>Fase A2:</strong> OpenAI genera insights de estrategia para plan de 90 días</p>
-            <p>3. <strong>Fase A3:</strong> OpenAI entrena la respuesta de entrevista (feedback)</p>
-            <p>4. <strong>Fase A4:</strong> OpenAI conecta tendencias del mercado con estrategia de carrera</p>
-            <p>5. <strong>Fase BRAIN:</strong> OpenAI sintetiza el insight maestro que une todo</p>
+          <CardContent className="text-sm text-slate-300 space-y-3">
+            <p className="font-semibold text-slate-100">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
+            <div className="space-y-2 text-slate-400">
+              <p><span className="text-blue-300 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
+              <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
+              <p><span className="text-orange-300 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
+              <p><span className="text-purple-300 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>
+              <p className="pt-2"><span className="text-pink-300 font-semibold">Insight Maestro:</span> Una verdad que une las 4 fases y te guía cada día</p>
+            </div>
           </CardContent>
         </Card>
       </div>

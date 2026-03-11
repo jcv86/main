@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server"
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("[v0] Probando API directa de OpenAI (sin Vercel AI SDK)...")
+    console.log("[v0] Probando API directa de OpenAI (sistema Despega Cerebral)...")
     
     const apiKey = process.env.OPENAI_API_KEY
     console.log("[v0] API Key existe:", !!apiKey)
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: "Di '¡Hola desde la API directa de OpenAI!' en español en solo una oración"
+            content: "Di '¡Hola desde Despega Cerebral - tu coach de carrera personal!' en español en solo una oración"
           }
         ],
         max_tokens: 50,
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "¡Llamada exitosa a la API directa de OpenAI!",
+      message: "¡Llamada exitosa a Despega Cerebral!",
       response: data.choices?.[0]?.message?.content,
       model: data.model,
       usage: data.usage,
