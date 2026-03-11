@@ -7,8 +7,15 @@ const validateEnvVars = () => {
   const required = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "NEXTAUTH_SECRET"]
   const missing = required.filter(key => !process.env[key])
   
+  console.log("[v0] NextAuth Loading - Checking env vars:")
+  console.log("[v0] GOOGLE_CLIENT_ID exists:", !!process.env.GOOGLE_CLIENT_ID)
+  console.log("[v0] GOOGLE_CLIENT_SECRET exists:", !!process.env.GOOGLE_CLIENT_SECRET)
+  console.log("[v0] NEXTAUTH_SECRET exists:", !!process.env.NEXTAUTH_SECRET)
+  console.log("[v0] LINKEDIN_CLIENT_ID exists:", !!process.env.LINKEDIN_CLIENT_ID)
+  console.log("[v0] LINKEDIN_CLIENT_SECRET exists:", !!process.env.LINKEDIN_CLIENT_SECRET)
+  
   if (missing.length > 0) {
-    console.error("[v0] Missing required environment variables:", missing)
+    console.error("[v0] CRITICAL: Missing required environment variables:", missing)
   }
   
   return {
@@ -21,6 +28,14 @@ const validateEnvVars = () => {
 }
 
 const envVars = validateEnvVars()
+
+// Validate critical credentials exist before creating config
+if (!envVars.googleClientId || !envVars.googleClientSecret) {
+  console.error("[v0] FATAL: Google OAuth credentials missing! Deployment will fail during auth attempts.")
+  console.error("[v0] Make sure these Vercel env vars are set:")
+  console.error("[v0]   - GOOGLE_CLIENT_ID")
+  console.error("[v0]   - GOOGLE_CLIENT_SECRET")
+}
 
 export const authConfig = {
   providers: [
