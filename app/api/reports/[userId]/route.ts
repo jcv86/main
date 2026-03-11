@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { generate } from '@react-pdf/renderer'
 import PDFDocument from '../../components/PDFDocument'
