@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
-import SimulacionesClient from "./simulaciones-client"
+import EntrenamientoEntrevistasClient from "./simulaciones-client"
 
 export const metadata: Metadata = {
-  title: "Simulaciones DTC | Practica Entrevistas y Conversaciones",
+  title: "Entrenamiento de Entrevistas | Practica y Mejora",
   description:
-    "Practica entrevistas laborales y conversaciones difíciles con IA. Mejora tus habilidades de comunicación en un entorno seguro.",
+    "Entrenamiento profesional de entrevistas laborales con IA. Practica con escenarios realistas y recibe feedback detallado.",
 }
 
-export default function SimulacionesPage() {
-  return <SimulacionesClient />
+export default function EntrenamientoEntrevistasPage() {
+  return <EntrenamientoEntrevistasClient />
 }

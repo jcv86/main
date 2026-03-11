@@ -29,16 +29,16 @@
 - **Outcome**: Plan personalizado 30/60/90 días
 
 ### Pilar 3: **Entrenamiento - Practica Siendo**
-- **Código Interno**: A3 (Entrenamientos e Simulaciones)
+- **Código Interno**: A3 (Entrenamientos de Entrevistas)
 - **Color**: Naranja (#F97316)
 - **Icono**: Flecha/Entrenamiento
-- **Descripción**: Simulaciones de entrevistas, escenarios reales y feedback para practicar tu nueva identidad
+- **Descripción**: Entrenamiento de entrevistas con escenarios reales y feedback para practicar tu nueva identidad
 - **Componentes**:
-  - Simulaciones de Entrevistas: Escenarios realistas con múltiples opciones
-  - Feedback Conductual: Análisis de tus respuestas en tiempo real
-  - Progresión Inteligente: Dificultad adaptada a tu nivel
-  - Coach IA: Acompañamiento personalizado en entrenamientos
-- **Outcome**: Confianza y preparación para enfrentar la nueva realidad
+  - Entrenamiento de Entrevistas: Escenarios realistas con múltiples opciones de respuesta
+  - Feedback Conductual: Análisis detallado de tus respuestas en tiempo real
+  - Progresión Inteligente: Dificultad que se adapta a tu nivel
+  - Coach IA: Acompañamiento personalizado en cada sesión de entrenamiento
+- **Outcome**: Confianza y preparación para enfrentar entrevistas reales
 
 ### Pilar 4: **La Realidad - Vive Tu Nueva Identidad**
 - **Código Interno**: A4 (Contexto estratégico + Market intel)

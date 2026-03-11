@@ -233,7 +233,7 @@ export default function LandingPageOptimized() {
               </div>
               <CardTitle className="text-2xl">Entrenamiento - Practica Siendo</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
-                Simulaciones de entrevistas reales con feedback instantáneo
+                Entrenamiento de entrevistas con escenarios reales y feedback
               </p>
             </CardHeader>
             <CardContent>
@@ -241,8 +241,8 @@ export default function LandingPageOptimized() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Simulaciones de Entrevistas</p>
-                    <p className="text-sm text-foreground opacity-75">Escenarios realistas con múltiples opciones</p>
+                    <p className="font-medium">Entrenamiento de Entrevistas</p>
+                    <p className="text-sm text-foreground opacity-75">Escenarios realistas con múltiples opciones de respuesta</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -263,7 +263,7 @@ export default function LandingPageOptimized() {
                   <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Coach IA Personalizado</p>
-                    <p className="text-sm text-foreground opacity-75">Acompañamiento en cada simulación</p>
+                    <p className="text-sm text-foreground opacity-75">Acompañamiento en cada sesión de entrenamiento</p>
                   </div>
                 </li>
               </ul>

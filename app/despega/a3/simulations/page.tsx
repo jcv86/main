@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, Play, Clock, Users, TrendingUp } from 'lucide-react'
 
-const SIMULATION_TYPES = [
+const ENTRENAMIENTO_TYPES = [
   {
     id: 'guided',
     name: 'Entrevista Guiada',
@@ -102,23 +102,23 @@ export default function SimulationsPage() {
           </p>
         </div>
 
-        {/* Simulation Types Grid */}
+        {/* Entrenamiento Types Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {SIMULATION_TYPES.map((sim) => {
-            const IconComponent = sim.icon
+          {ENTRENAMIENTO_TYPES.map((ent) => {
+            const IconComponent = ent.icon
             return (
-              <Card key={sim.id} className="border-2 hover:shadow-lg transition flex flex-col">
+              <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <IconComponent className="w-6 h-6 text-slate-400" />
-                    <Badge className={sim.difficultyColor}>{sim.difficulty}</Badge>
+                    <Badge className={ent.difficultyColor}>{ent.difficulty}</Badge>
                   </div>
-                  <CardTitle>{sim.name}</CardTitle>
-                  <CardDescription className="text-base">{sim.subtitle}</CardDescription>
+                  <CardTitle>{ent.name}</CardTitle>
+                  <CardDescription className="text-base">{ent.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {sim.description}
+                    {ent.description}
                   </p>
 
                   <div className="space-y-2">
@@ -126,7 +126,7 @@ export default function SimulationsPage() {
                       Incluye:
                     </div>
                     <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                      {sim.features.map((feature, idx) => (
+                      {ent.features.map((feature, idx) => (
                         <li key={idx}>✓ {feature}</li>
                       ))}
                     </ul>
@@ -134,11 +134,11 @@ export default function SimulationsPage() {
 
                   <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
                     <Clock className="w-4 h-4" />
-                    Duración: {sim.duration}
+                    Duración: {ent.duration}
                   </div>
 
                   <Button className="w-full mt-4" disabled>
-                    {sim.action} (Próximamente)
+                    {ent.action} (Próximamente)
                   </Button>
                 </CardContent>
               </Card>
@@ -151,13 +151,13 @@ export default function SimulationsPage() {
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en simulaciones</div>
+              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
                 <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
-                <li>✓ Revisa el feedback del coach después de cada simulación</li>
+                <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
                 <li>✓ Identifica patrones en tus fortalezas y debilidades</li>
-                <li>✓ Practica 3-4 simulaciones por semana para avance real</li>
-                <li>✓ Repite la misma simulación si necesitas reforzar un aspecto específico</li>
+                <li>✓ Practica 3-4 entrenamientos por semana para avance real</li>
+                <li>✓ Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
               </ul>
             </div>
           </CardContent>
