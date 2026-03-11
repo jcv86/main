@@ -265,7 +265,8 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works Section - HIDDEN (Duplicate of Features Section) */}
+      {/* 
       <section className="container mx-auto px-4 py-20 bg-card rounded-3xl my-16 border border-border">
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
@@ -331,6 +332,7 @@ export default function LandingPageOptimized() {
           </Card>
         </div>
       </section>
+      */}
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
