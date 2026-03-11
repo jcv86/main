@@ -2,16 +2,36 @@ import type { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 
+// Validate env vars at startup
+const validateEnvVars = () => {
+  const required = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "NEXTAUTH_SECRET"]
+  const missing = required.filter(key => !process.env[key])
+  
+  if (missing.length > 0) {
+    console.error("[v0] Missing required environment variables:", missing)
+  }
+  
+  return {
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    linkedinClientId: process.env.LINKEDIN_CLIENT_ID,
+    linkedinClientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+    nextAuthSecret: process.env.NEXTAUTH_SECRET,
+  }
+}
+
+const envVars = validateEnvVars()
+
 export const authConfig = {
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: envVars.googleClientId || "",
+      clientSecret: envVars.googleClientSecret || "",
       allowDangerousEmailAccountLinking: true,
     }),
     LinkedIn({
-      clientId: process.env.LINKEDIN_CLIENT_ID,
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+      clientId: envVars.linkedinClientId || "",
+      clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
     }),
   ],
@@ -23,6 +43,7 @@ export const authConfig = {
   session: {
     strategy: "jwt",
   },
+  secret: envVars.nextAuthSecret,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
