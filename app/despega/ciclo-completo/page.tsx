@@ -160,7 +160,7 @@ export default function CycleCompletionPage() {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm font-medium">{Math.round(overallProgress)}% Completado</span>
-                <span className="text-sm text-muted-foreground">{Math.floor(overallProgress / 33.33)}/3 Pilares</span>
+                <span className="text-sm text-muted-foreground">{Math.floor(overallProgress / 25)}/4 Pilares</span>
               </div>
               <Progress value={overallProgress} className="h-3" />
             </div>

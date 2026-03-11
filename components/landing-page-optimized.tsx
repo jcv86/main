@@ -129,15 +129,15 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Tu Viaje en{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              3 Pilares de Tu Transformación
+              4 Pilares de Tu Transformación
             </span>
           </h2>
           <p className="text-xl text-foreground max-w-3xl mx-auto opacity-75">
-            No es un camino lineal. Es un ritual de exploración que te lleva de quién eres ahora, a quién quieres ser
+            Desde quién eres ahora, a cómo prácticas siendo, hasta vivir tu nueva realidad
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           <Card className="bg-card border-2 border-purple-100 dark:border-purple-900/50 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transition-all group">
             <CardHeader className="pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -187,9 +187,9 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Lightbulb className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">Exploración & Ensayo</CardTitle>
+              <CardTitle className="text-2xl">Exploración - Aprende Nuevas Formas</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
-                Explora identidades futuras y practica nuevas versiones de ti
+                Descubre tu ruta de 30/60/90 días con 120+ recursos y estrategias reales
               </p>
             </CardHeader>
             <CardContent>
@@ -218,8 +218,52 @@ export default function LandingPageOptimized() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Exploración Continua</p>
-                    <p className="text-sm text-foreground opacity-75">Nuevos contenidos cada mes</p>
+                    <p className="font-medium">Plan Personalizado</p>
+                    <p className="text-sm text-foreground opacity-75">Ruta 30/60/90 días según tu ritmo</p>
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card border-2 border-orange-100 dark:border-orange-900/50 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-xl transition-all group">
+            <CardHeader className="pb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Zap className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl">Entrenamiento - Practica Siendo</CardTitle>
+              <p className="text-sm text-foreground opacity-75 mt-2">
+                Simulaciones de entrevistas reales con feedback instantáneo
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Simulaciones de Entrevistas</p>
+                    <p className="text-sm text-foreground opacity-75">Escenarios realistas con múltiples opciones</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Feedback Conductual</p>
+                    <p className="text-sm text-foreground opacity-75">Análisis de tus respuestas en tiempo real</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Progresión Adaptada</p>
+                    <p className="text-sm text-foreground opacity-75">Dificultad que crece con tu nivel</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Coach IA Personalizado</p>
+                    <p className="text-sm text-foreground opacity-75">Acompañamiento en cada simulación</p>
                   </div>
                 </li>
               </ul>
@@ -231,9 +275,9 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Globe className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">La Realidad - Dónde Vive</CardTitle>
+              <CardTitle className="text-2xl">La Realidad - Vive Tu Nueva Identidad</CardTitle>
               <p className="text-sm text-foreground opacity-75 mt-2">
-                Noticias del mercado, coaching IA y plan de acción para vivir tu nueva identidad
+                Inteligencia de mercado, coaching 24/7 y plan de acción
               </p>
             </CardHeader>
             <CardContent>
@@ -249,7 +293,7 @@ export default function LandingPageOptimized() {
                   <CheckCircle2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Coach IA Personalizado</p>
-                    <p className="text-sm text-foreground opacity-75">Sofia & Dani acompañan tu transición 24/7</p>
+                    <p className="text-sm text-foreground opacity-75">Sofía & Dani acompañan 24/7</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">

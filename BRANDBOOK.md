@@ -16,29 +16,41 @@
   - Análisis Personal: 15-20 minutos por test
 - **Outcome**: Perfil Despega Cerebral (D/I/S/C - pero siempre llamarlo "perfil de liderazgo")
 
-### Pilar 2: **Exploración & Ensayo**
-- **Código Interno**: A2-A3 (Ruta personalizada + Entrenamientos)
+### Pilar 2: **Exploración - Aprende Nuevas Formas**
+- **Código Interno**: A2 (Ruta personalizada)
 - **Color**: Azul (#3B82F6)
 - **Icono**: Bombilla/Exploración
-- **Descripción**: Explora identidades futuras y practica nuevas versiones de ti
+- **Descripción**: Descubre tu ruta de 30/60/90 días con 120+ recursos, libros y estrategias reales
 - **Componentes**:
   - 120+ Libros Profesionales: Narrativas de transformación
   - Búsqueda Semántica: Respuestas de la transición
   - 100+ Recursos Web: Estrategias y ejemplos reales
   - Exploración Continua: Nuevos contenidos cada mes
-- **Outcome**: Ruta 30/60/90 días + plan de entrenamiento
+- **Outcome**: Plan personalizado 30/60/90 días
 
-### Pilar 3: **La Realidad - Dónde Vive**
+### Pilar 3: **Entrenamiento - Practica Siendo**
+- **Código Interno**: A3 (Entrenamientos e Simulaciones)
+- **Color**: Naranja (#F97316)
+- **Icono**: Flecha/Entrenamiento
+- **Descripción**: Simulaciones de entrevistas, escenarios reales y feedback para practicar tu nueva identidad
+- **Componentes**:
+  - Simulaciones de Entrevistas: Escenarios realistas con múltiples opciones
+  - Feedback Conductual: Análisis de tus respuestas en tiempo real
+  - Progresión Inteligente: Dificultad adaptada a tu nivel
+  - Coach IA: Acompañamiento personalizado en entrenamientos
+- **Outcome**: Confianza y preparación para enfrentar la nueva realidad
+
+### Pilar 4: **La Realidad - Vive Tu Nueva Identidad**
 - **Código Interno**: A4 (Contexto estratégico + Market intel)
 - **Color**: Turquesa (#06B6D4)
 - **Icono**: Globo/Mercado
-- **Descripción**: Noticias del mercado, coaching IA y plan de acción para vivir tu nueva identidad
+- **Descripción**: Noticias del mercado, coaching IA 24/7 y plan de acción para materializar tu transición
 - **Componentes**:
   - Noticias del Mercado: Contexto y oportunidades en tiempo real
   - Coach IA Personalizado: Sofía & Dani acompañan 24/7
   - Plan de Acción - 30, 60 o 90 Días: Elige tu ritmo
-  - Contexto Chileno: Adaptado al mercado local
-- **Outcome**: Plan de transición accionable + insights estratégicos
+  - Contexto Chileno: Adaptado al mercado y oportunidades locales
+- **Outcome**: Transición accionable con inteligencia de mercado
 
 ---
 
@@ -46,7 +58,8 @@
 
 ### Pilares (Por fase)
 - **El Ritual** (#A855F7): Púrpura vibrante - Descubrimiento
-- **Exploración** (#3B82F6): Azul primario - Crecimiento
+- **Exploración** (#3B82F6): Azul primario - Aprendizaje
+- **Entrenamiento** (#F97316): Naranja vibrante - Práctica
 - **La Realidad** (#06B6D4): Turquesa - Acción
 
 ### Sistema de Diseño (Semantic Tokens)
