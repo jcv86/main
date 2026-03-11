@@ -21,9 +21,9 @@ interface CanonRouteVisualizationProps {
 }
 
 const intensidadColors = {
-  suave: { bg: "bg-green-50 dark:bg-green-950/20", border: "border-green-200 dark:border-green-800", badge: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100" },
-  moderada: { bg: "bg-blue-50 dark:bg-blue-950/20", border: "border-blue-200 dark:border-blue-800", badge: "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100" },
-  alta: { bg: "bg-orange-50 dark:bg-orange-950/20", border: "border-orange-200 dark:border-orange-800", badge: "bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-100" }
+  suave: { bg: "bg-accent/10 dark:bg-accent/5", border: "border-accent/30 dark:border-accent/40", badge: "bg-accent/20 dark:bg-accent/10 text-foreground" },
+  moderada: { bg: "bg-primary/10 dark:bg-primary/5", border: "border-primary/30 dark:border-primary/40", badge: "bg-primary/20 dark:bg-primary/10 text-foreground" },
+  alta: { bg: "bg-orange-100/50 dark:bg-orange-950/30", border: "border-orange-300/50 dark:border-orange-700/50", badge: "bg-orange-200/70 dark:bg-orange-900/50 text-orange-900 dark:text-orange-100" }
 }
 
 function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: number }) {
@@ -38,7 +38,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
         <CardHeader>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-1">
+              <div className="text-4xl font-bold text-foreground mb-1">
                 Día {milestone.days}
               </div>
               <CardDescription className="text-sm">
@@ -47,8 +47,8 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
                 {milestone.days === 90 && "Integración completa"}
               </CardDescription>
             </div>
-            <div className="p-2 rounded-lg bg-white dark:bg-slate-800">
-              <IconComponent className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+            <div className="p-2 rounded-lg bg-muted">
+              <IconComponent className="w-5 h-5 text-foreground" />
             </div>
           </div>
 
@@ -65,19 +65,19 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
         <CardContent className="space-y-4">
           {/* Objetivo */}
           <div>
-            <h4 className="font-semibold text-slate-900 dark:text-slate-50 mb-2">Objetivo Principal</h4>
-            <p className="text-sm text-slate-700 dark:text-slate-300">
+            <h4 className="font-semibold text-foreground mb-2">Objetivo Principal</h4>
+            <p className="text-sm text-muted-foreground">
               {milestone.objetivo}
             </p>
           </div>
 
           {/* Tareas */}
           <div>
-            <h4 className="font-semibold text-slate-900 dark:text-slate-50 mb-2">Tareas Clave</h4>
+            <h4 className="font-semibold text-foreground mb-2">Tareas Clave</h4>
             <ul className="space-y-2">
               {milestone.tareas.slice(0, 3).map((tarea, idx) => (
-                <li key={idx} className="flex gap-2 text-sm text-slate-700 dark:text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                <li key={idx} className="flex gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span>{tarea}</span>
                 </li>
               ))}

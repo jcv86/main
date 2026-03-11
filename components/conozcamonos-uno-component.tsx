@@ -83,14 +83,14 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background p-4 overflow-y-auto">
       <div className="max-w-3xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+          <h2 className="text-4xl font-bold text-foreground mb-2">
             Conozcámonos
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground">
             Antes de descubrir tu patrón Despega Cerebral, queremos entender tu contexto real.
           </p>
         </div>
@@ -98,10 +98,10 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
         {/* Progress */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-semibold text-muted-foreground">
               Pregunta {currentQuestion + 1} de {C1_QUESTIONS.length}
             </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-semibold text-muted-foreground">
               {Math.round(progress)}%
             </span>
           </div>
@@ -109,9 +109,9 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
         </div>
 
         {/* Question Card */}
-        <Card className="mb-8 border-0 shadow-lg bg-white dark:bg-slate-900">
+        <Card className="mb-8 border-0 shadow-lg">
           <CardHeader className="pb-4">
-            <CardTitle className="text-2xl text-slate-900 dark:text-slate-50">
+            <CardTitle className="text-2xl text-foreground">
               {question.question}
             </CardTitle>
             {question.subtitle && (
@@ -137,22 +137,22 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
                 type="text"
               />
             )}
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {currentResponse.length} caracteres
             </p>
           </CardContent>
         </Card>
 
         {/* Info Card */}
-        <Card className="mb-8 bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900">
+        <Card className="mb-8 bg-primary/5 border-primary/30">
           <CardContent className="pt-6">
             <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                <p className="text-sm font-semibold text-foreground mb-1">
                   ¿Por qué estas preguntas?
                 </p>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
+                <p className="text-sm text-muted-foreground">
                   Tu contexto real ayuda a personalizar tu informe Despega Cerebral. Los datos que compartes permiten generar una ruta de 90 días que tenga sentido en tu vida actual.
                 </p>
               </div>
@@ -200,126 +200,6 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
           variant="ghost"
           className="w-full mt-4"
           disabled={isLoading}
-        >
-          Volver
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
-      <div className="max-w-3xl mx-auto py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-            Conozcámonos
-          </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Antes de descubrir tu patrón Despega Cerebral, queremos entender tu contexto real.
-          </p>
-        </div>
-
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-              Pregunta {currentQuestion + 1} de {C1_QUESTIONS.length}
-            </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-              {Math.round(progress)}%
-            </span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-
-        {/* Question Card */}
-        <Card className="mb-8 border-0 shadow-lg bg-white dark:bg-slate-900">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-2xl text-slate-900 dark:text-slate-50">
-              {question.question}
-            </CardTitle>
-            {question.subtitle && (
-              <CardDescription className="text-base mt-2">
-                {question.subtitle}
-              </CardDescription>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {question.type === "textarea" ? (
-              <Textarea
-                value={currentResponse}
-                onChange={(e) => handleResponseChange(e.target.value)}
-                placeholder={question.placeholder}
-                className="min-h-32 text-base resize-none"
-              />
-            ) : (
-              <Input
-                value={currentResponse}
-                onChange={(e) => handleResponseChange(e.target.value)}
-                placeholder={question.placeholder}
-                className="text-base h-12"
-                type="text"
-              />
-            )}
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {currentResponse.length} caracteres
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Info Card */}
-        <Card className="mb-8 bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900">
-          <CardContent className="pt-6">
-            <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">
-                  ¿Por qué estas preguntas?
-                </p>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  Tu contexto real ayuda a personalizar tu informe Despega Cerebral. Los datos que compartes permiten generar una ruta de 90 días que tenga sentido en tu vida actual.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex gap-3">
-          <Button
-            onClick={handlePrevious}
-            disabled={currentQuestion === 0}
-            variant="outline"
-            className="flex-1 h-12"
-          >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Anterior
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={!isValid && currentResponse.length < 3}
-            className="flex-1 h-12"
-          >
-            {currentQuestion === C1_QUESTIONS.length - 1 ? (
-              <>
-                Completar
-                <CheckCircle2 className="w-4 h-4 ml-2" />
-              </>
-            ) : (
-              <>
-                Siguiente
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </>
-            )}
-          </Button>
-        </div>
-
-        <Button
-          onClick={onBack}
-          variant="ghost"
-          className="w-full mt-4"
         >
           Volver
         </Button>

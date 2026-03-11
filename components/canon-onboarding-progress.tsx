@@ -24,16 +24,16 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
       {/* Visual Progress Line */}
       <div className="mb-8">
         <div className="flex justify-between mb-2">
-          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            Tu viaje de transformación
+          <span className="text-sm font-semibold text-foreground">
+            Tu transformación CANON
           </span>
-          <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+          <span className="text-sm font-semibold text-muted-foreground">
             {currentIndex + 1} de {steps.length}
           </span>
         </div>
-        <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-500"
+            className="h-full bg-primary rounded-full transition-all duration-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -42,7 +42,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
       {/* Steps */}
       <div className="relative">
         {/* Connection lines */}
-        <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-800" />
+        <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-border" />
 
         <div className="space-y-6">
           {steps.map((step, index) => {
@@ -55,16 +55,16 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                 {/* Icon */}
                 <div className="absolute left-0 top-0">
                   {isCompleted ? (
-                    <div className="flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-950 rounded-full">
-                      <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    <div className="flex items-center justify-center w-12 h-12 bg-accent/20 dark:bg-accent/10 rounded-full">
+                      <CheckCircle2 className="w-6 h-6 text-accent" />
                     </div>
                   ) : isCurrent ? (
-                    <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-full">
-                      <div className="w-6 h-6 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
+                    <div className="flex items-center justify-center w-12 h-12 bg-primary/20 dark:bg-primary/10 rounded-full">
+                      <div className="w-6 h-6 rounded-full bg-primary animate-pulse" />
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full">
-                      <Circle className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+                    <div className="flex items-center justify-center w-12 h-12 bg-muted rounded-full">
+                      <Circle className="w-5 h-5 text-muted-foreground" />
                     </div>
                   )}
                 </div>
@@ -72,10 +72,10 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                 {/* Content */}
                 <div className={`p-4 rounded-lg border ${
                   isCurrent
-                    ? "border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/20"
+                    ? "border-primary/50 bg-primary/5"
                     : isCompleted
-                    ? "border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/10"
-                    : "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/30"
+                    ? "border-accent/50 bg-accent/5"
+                    : "border-border bg-card"
                 }`}>
                   <h4 className={`font-semibold ${
                     isCurrent
