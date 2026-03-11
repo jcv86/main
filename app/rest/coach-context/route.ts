@@ -69,19 +69,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (!contextSnapshot) {
-      // Initialize default context for new users
+      // Initialize default context for new users - use only existing columns
       console.log('[v0] Coach context not found for new user:', user_id)
       
       const defaultContext = {
         user_id: user_id,
-        a1_profile: null,
-        a1_insights: null,
-        a2_route: null,
-        a2_progress: null,
-        a3_training: null,
-        a3_feedback: null,
-        a4_market_intel: null,
-        coaching_history: [],
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }
@@ -93,7 +85,7 @@ export async function GET(request: NextRequest) {
           .insert([defaultContext])
         
         if (insertError) {
-          console.log('[v0] Could not initialize default context (table may not exist yet):', insertError.message)
+          console.log('[v0] Could not initialize default context:', insertError.message)
         } else {
           console.log('[v0] Initialized default context for new user:', user_id)
         }
