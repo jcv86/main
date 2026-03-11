@@ -122,7 +122,7 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Tu Viaje en{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              4 fases de transición
+              3 Pilares de Tu Transformación
             </span>
           </h2>
           <p className="text-xl text-foreground max-w-3xl mx-auto opacity-75">

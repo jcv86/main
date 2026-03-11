@@ -183,7 +183,7 @@ export default function TestOpenAIInsightsPage() {
                   Tu Insight Maestro: El Que Lo Cambia Todo
                 </CardTitle>
                 <CardDescription className="text-purple-200">
-                  Una verdad poderosa que conecta las 4 fases
+                  Una verdad poderosa que conecta los 3 Pilares
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -242,7 +242,7 @@ export default function TestOpenAIInsightsPage() {
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
               <p><span className="text-orange-300 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
               <p><span className="text-purple-300 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>
-              <p className="pt-2"><span className="text-pink-300 font-semibold">Insight Maestro:</span> Una verdad que une las 4 fases y te guía cada día</p>
+              <p className="pt-2"><span className="text-pink-300 font-semibold">Insight Maestro:</span> Una verdad que une los 3 Pilares y te guía cada día</p>
             </div>
           </CardContent>
         </Card>
