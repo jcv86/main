@@ -105,9 +105,10 @@ export default function A4HubPage() {
               <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
                 Entiende el Mundo Real
               </h1>
-            <p className="text-xl text-muted-foreground text-balance mb-8">
-              Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
-            </p>
+              <p className="text-xl text-muted-foreground text-balance mb-8">
+                Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
+              </p>
+            </div>
           </div>
 
           {/* Quick Stats */}
@@ -141,9 +142,6 @@ export default function A4HubPage() {
                 </CardContent>
               </Card>
             )}
-                </div>
-              </CardContent>
-            </Card>
             <Card className="border-0 bg-card/50 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <div className="text-center">
@@ -153,10 +151,9 @@ export default function A4HubPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
 
-        {/* Main Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+          {/* Main Sections */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
           {/* Radar Estratégico - Featured First */}
           <Link href="/despega/a4/radar" className="group lg:col-span-2">
             <Card className="h-full border-0 bg-gradient-to-br from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer text-white">
