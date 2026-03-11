@@ -69,34 +69,17 @@ export async function GET(request: NextRequest) {
     }
 
     if (!contextSnapshot) {
-      // Initialize default context for new users - use only existing columns
+      // Return empty context for new users WITHOUT inserting (schema cache issue)
       console.log('[v0] Coach context not found for new user:', user_id)
-      
-      const defaultContext = {
-        user_id: user_id,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      }
-      
-      // Try to save default context (non-blocking)
-      try {
-        const { error: insertError } = await supabase
-          .from('coach_context_snapshots')
-          .insert([defaultContext])
-        
-        if (insertError) {
-          console.log('[v0] Could not initialize default context:', insertError.message)
-        } else {
-          console.log('[v0] Initialized default context for new user:', user_id)
-        }
-      } catch (e) {
-        console.log('[v0] Error initializing default context:', e)
-      }
       
       return NextResponse.json({
         success: true,
-        context: defaultContext,
-        message: 'New user context initialized',
+        context: {
+          user_id: user_id,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        message: 'New user context (empty)',
         isNewUser: true,
       })
     }
