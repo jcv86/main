@@ -273,13 +273,14 @@ export default function LandingPageOptimized() {
             Tu Ritual de Entrada
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Comienza tu transición en{" "}
+            Descubre Los{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              3 pasos
+              3 Pilares
             </span>
+            {" "}De Tu Transformación
           </h2>
           <p className="text-xl text-foreground max-w-3xl mx-auto opacity-75">
-            El viaje comienza cuando reconoces que estás en transición
+            Todo comienza con el autoconocimiento. Luego, la exploración. Finalmente, la acción.
           </p>
         </div>
 
@@ -292,9 +293,9 @@ export default function LandingPageOptimized() {
               <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
                 <Brain className="h-7 w-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3">El Espejo: Quién Eres</h3>
+              <h3 className="text-xl font-bold mb-3">El Ritual - Quién Eres Ahora</h3>
               <p className="text-foreground opacity-75">
-                Realiza tests que miran profundo. No para juzgar, para partir de donde realmente estás hoy.
+                Descubre tu verdadero perfil sin filtros. Tests científicos que te muestran exactamente quién eres hoy.
               </p>
             </CardContent>
           </Card>
@@ -307,9 +308,9 @@ export default function LandingPageOptimized() {
               <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
                 <Target className="h-7 w-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3">La Brújula: Hacia Dónde</h3>
+              <h3 className="text-xl font-bold mb-3">Exploración & Ensayo</h3>
               <p className="text-foreground opacity-75">
-                Explora narrativas de transformación. Descubre nuevas versiones de ti en historias reales.
+                Explora identidades futuras. 120+ recursos, narrativas reales y nuevas versiones de ti para practicar.
               </p>
             </CardContent>
           </Card>
@@ -322,9 +323,9 @@ export default function LandingPageOptimized() {
               <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-4">
                 <Zap className="h-7 w-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3">El Puente: Cómo Llegar</h3>
+              <h3 className="text-xl font-bold mb-3">La Realidad - Dónde Vive</h3>
               <p className="text-foreground opacity-75">
-                Tu coach IA te acompaña 24/7. Paso a paso, construimos tu camino de transformación.
+                Coach IA 24/7, noticias del mercado y tu plan de acción. Construye tu puente a la nueva identidad.
               </p>
             </CardContent>
           </Card>
