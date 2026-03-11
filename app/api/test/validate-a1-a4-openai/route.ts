@@ -32,21 +32,21 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: `Eres un coach personal que descubre quién es realmente la gente. Un usuario ha contestado así:
+            content: `Eres un experto en estilos de liderazgo basado en liderdisc.com. Un usuario tiene este patrón:
 - Prefiere decisiones rápidas: muy de acuerdo
 - Valora las relaciones: neutral
 - Disfruta del análisis detallado: de acuerdo
 - Le gusta estar a cargo: muy de acuerdo
 
-Habla directamente al usuario como si lo conocieras profundamente. Tu trabajo es hacerlo decir "¡Oh, eso soy yo!"
+Este es su estilo de liderazgo natural. No es "bueno" ni "malo" - es SU FORMA ÚNICA DE LIDERAR.
 
-Explícale:
-1. QUIÉN ES (el patrón que no sabía que tenía)
-2. POR QUÉ ES ASÍ (los instintos que lo mueven)
-3. QUÉ SIGNIFICA PARA SU CARRERA (la oportunidad que no ve)
+Explícale (para que diga "¡Oh, eso soy yo!"):
+1. QUIÉN ES COMO LÍDER (su patrón natural de tomar decisiones y actuar)
+2. LA FORTALEZA CENTRAL que otros no ven en él
+3. CUÁNDO PROSPERA (en qué situaciones su estilo es exactamente lo que se necesita)
 
-Usa lenguaje cálido, inteligente, sin jargón. Haz que se sienta VISTO. Máximo 4 oraciones.
-Termina con una frase que lo haga pensar diferente sobre sí mismo.`
+Usa lenguaje que le haga sentir comprendido y valorado - no juzgado. Máximo 4 oraciones.
+Haz que entienda que su forma de ser es su superpoder, no algo que deba cambiar.`
           }
         ],
         max_tokens: 300,
@@ -74,16 +74,19 @@ Termina con una frase que lo haga pensar diferente sobre sí mismo.`
         messages: [
           {
             role: "user",
-            content: `Eres un mentor que ayuda a la gente a ver su camino claro. Este usuario quiere una promoción en 90 días. Sabe tomar decisiones rápidas y es orientado a resultados, pero necesita mejorar en escuchar otros.
+            content: `Eres un experto en desarrollo de liderazgo basado en liderdisc.com. Este usuario (líder rápido, decisivo, orientado a resultados) quiere una promoción en 90 días.
 
-IMPORTANTE: Habla COMO SI YA CREES EN ÉL. Tu tono debe ser: "Yo veo quién puedes ser."
+Su estilo es su fortaleza. El desarrollo no es sobre "cambiar" sino sobre ADAPTABILIDAD - poder ajustar su enfoque según lo que cada situación exige.
 
-Dile (como amigo que confía):
-1. POR QUÉ su naturaleza es perfecta PARA esto (su superpower oculto)
-2. EL ÚNICO GIRO que cambia todo (lo que muchos no ven)
-3. LOS 3 MOVIMIENTOS clave: 30 días, 60 días, 90 días
+Dile:
+1. POR QUÉ su estilo de liderazgo es exactamente lo que su empresa necesita AHORA
+2. LAS 3 ADAPTACIONES que ampliarán su impacto (sin perder su esencia):
+   - Día 30: Primero esto
+   - Día 60: Luego esto
+   - Día 90: Finalmente esto
+3. CÓMO estos ajustes lo llevan a la promoción (mostrando que mantiene su fortaleza)
 
-Sé directo, motivador, real. Como un coach que ya cree en el jugador. 3-4 viñetas máximo.`
+Haz que sienta que está EXPANDIENDO su liderazgo, no "mejorando" porque estaba mal. Es evolución, no corrección.`
           }
         ],
         max_tokens: 400,
@@ -111,18 +114,17 @@ Sé directo, motivador, real. Como un coach que ya cree en el jugador. 3-4 viñe
         messages: [
           {
             role: "user",
-            content: `Eres un coach en entrevistas que es brutal pero amoroso. Un candidato está practicando. Cuando le preguntan cómo maneja conflictos, dice:
+            content: `Eres un coach de liderazgo en entrevistas basado en liderdisc.com. Un candidato está practicando y dice sobre cómo maneja conflictos:
 "Les digo mi decisión y por qué es el mejor camino."
 
-IMPORTANTE: Tu feedback debe hacerlo sentir ENTENDIDO pero también desafiado.
+IMPORTANTE: Su respuesta no es "incorrecta". Es su estilo natural. El coaching es mostrarle CUÁNDO ADAPTAR su enfoque sin perder su esencia.
 
-Habla directamente:
-1. LO BRILLANTE EN SU RESPUESTA (qué le da poder)
-2. EL COSTO OCULTO (por qué esto le cuesta la promoción)
-3. LA FRASE EXACTA QUE DEBE CAMBIAR (y por qué funciona mejor)
-4. UNA VERDAD que lo haga crecer (no es crítica, es invitación)
+Habla así:
+1. LO QUE VES EN SU RESPUESTA: su claridad y decisión (su fortaleza real)
+2. EL AJUSTE DE CONTEXTO: cuándo su enfoque es perfecto VS. cuándo el entrevistador espera escuchar también otras perspectivas
+3. LA ADAPTACIÓN ESPECÍFICA: una frase/enfoque que expande su comunicación manteniendo su autenticidad
 
-Sé honesto como un verdadero coach - que te ama pero no te permite quedarte chico.`
+NO le digas que está mal. Explica que está aprendiendo a LEER EL CONTEXTO y ajustarse - eso es liderazgo verdadero.`
           }
         ],
         max_tokens: 300,
@@ -150,16 +152,15 @@ Sé honesto como un verdadero coach - que te ama pero no te permite quedarte chi
         messages: [
           {
             role: "user",
-            content: `Eres un estratega que ayuda a gente a ver las oportunidades invisibles. Esta noticia está pasando AHORA:
+            content: `Eres un experto en oportunidades estratégicas de liderazgo basado en liderdisc.com. Esta tendencia está pasando AHORA:
 "La adopción de IA se acelera en la toma de decisiones empresariales - Las empresas Fortune 500 reportan ganancias de productividad del 40%"
 
-Este usuario (rápido en decisiones, orientado a resultados, buscando promoción) necesita saber:
-1. POR QUÉ esta tendencia es SU MOMENTO específico (no de otros)
-2. LA CONEXIÓN entre quién es + lo que está pasando = su oportunidad
-3. QUÉ HACER ESTA SEMANA para prepararse
+Este usuario (líder decisivo, rápido, orientado a resultados) necesita ver:
+1. POR QUÉ su estilo de liderazgo está PERFECTAMENTE ALINEADO con esta momento
+2. LA OPORTUNIDAD ÚNICA: dónde él, con su forma de ser, puede liderar algo que otros no ven
+3. EL MOVIMIENTO A HACER: qué hacer esta semana para posicionarse
 
-Hazlo sonar como un descubrimiento que cambia su perspectiva - una puerta que acaba de abrirse para él.
-Haz que sienta que el mercado lo está llamando. 2-3 líneas.`
+Hazlo sonar como "El mercado te está llamando exactamente ahora" - no como que tiene que cambiar, sino que su momento llegó.`
           }
         ],
         max_tokens: 250,
@@ -187,17 +188,20 @@ Haz que sienta que el mercado lo está llamando. 2-3 líneas.`
         messages: [
           {
             role: "user",
-            content: `Eres un sabio que ve el cuadro completo. Acabas de recopilar intel sobre alguien:
+            content: `Eres un sabio en estilos de liderazgo basado en liderdisc.com. Aquí está todo lo que descubrimos sobre alguien:
 
-QUIÉN ES (Despega Cerebral): Toma decisiones rápidas, va al punto, compite para ganar, liderazgo natural
-SU RUTA (90 días): Ir de impulsor a líder que lleva gente con él hacia una promoción
-SU PRÁCTICA (La verdad): Es tan directo que a veces suena frío - necesita incluir a la gente en sus decisiones
-SU MOMENTO (El mercado): IA está cambiando quién dirige - y gente como él tiene un superpoder oculto
+QUIÉN ES (Despega Cerebral): Líder decisivo, rápido, orientado a resultados - su forma ÚNICA de liderar
+SU RUTA (90 días): Llegar a una promoción usando EXACTAMENTE quién es, no a pesar de quién es
+SU PRÁCTICA (Expansión): Aprender a leer CUÁNDO ADAPTAR su enfoque según contexto (sin perder su esencia)
+SU MOMENTO (El mercado): La tendencia de IA acelera decisiones rápidas - su hora llegó
 
-Ahora, dame UNA SOLA FRASE ÉPICA que lo UNA TODO. Una verdad que cuando la lea, dirá "Así es. Eso es exactamente lo que necesitaba escuchar."
+Ahora, UN SOLO INSIGHT que lo DESPIERTE. Una verdad que cuando la lea dirá "Eso es. Eso es exactamente lo que necesitaba entender."
 
-No es estrategia. Es el AHA que lo despierta.
-1 oración. Poderosa. Que sea sobre quién puede llegar a ser.`
+La verdad NO es sobre "mejorar" o "cambiar". Es sobre COMPRENDER EL PODER de su estilo y cuándo aplicarlo en cada situación.
+
+1 sola oración. Poderosa. Basada en liderdisc.com. Que lo haga decir "Mi forma de ser NO es el problema - es la solución."
+
+Termina con una visión: el líder que puede ser si aprende a adaptar sin perder su esencia.`
           }
         ],
         max_tokens: 150,
