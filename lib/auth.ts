@@ -66,7 +66,31 @@ export const authConfig = {
       return !!auth
     },
     signIn: async ({ user, account, profile }) => {
-      console.log("[v0] SignIn callback - user:", user?.email, "provider:", account?.provider)
+      console.log("[v0] SignIn callback START")
+      console.log("[v0]   - user.email:", user?.email)
+      console.log("[v0]   - provider:", account?.provider)
+      console.log("[v0]   - profile.emailAddress:", (profile as any)?.emailAddress)
+      
+      // LinkedIn might not return email in user object, check profile
+      if (account?.provider === "linkedin") {
+        const email = user?.email || (profile as any)?.emailAddress || (profile as any)?.email
+        if (!email) {
+          console.error("[v0] SignIn FAILED - LinkedIn profile missing email!")
+          return false
+        }
+        console.log("[v0] LinkedIn signIn validated - email:", email)
+      }
+      
+      // Google always has email
+      if (account?.provider === "google") {
+        if (!user?.email) {
+          console.error("[v0] SignIn FAILED - Google profile missing email!")
+          return false
+        }
+        console.log("[v0] Google signIn validated - email:", user.email)
+      }
+      
+      console.log("[v0] SignIn callback DONE - allowing signin")
       return true
     },
     redirect: async ({ url, baseUrl }) => {
@@ -105,18 +129,31 @@ export const authConfig = {
     jwt: async ({ token, account, profile, user }) => {
       console.log("[v0] JWT callback - token.sub:", token.sub, "user:", user?.email)
       
+      // On initial signin, populate from user object
       if (user) {
         token.email = user.email
         token.name = user.name
         token.image = user.image
+        console.log("[v0] JWT - populated from user:", user.email)
       }
       
+      // On initial signin, save account info
       if (account) {
         token.accessToken = account.access_token
         token.provider = account.provider
-        token.linkedinProfile = profile
+        
+        // For LinkedIn, also store the profile email if user.email is missing
+        if (account.provider === "linkedin" && profile) {
+          token.linkedinProfile = profile
+          const linkedinEmail = (profile as any)?.emailAddress || (profile as any)?.email
+          if (linkedinEmail && !token.email) {
+            token.email = linkedinEmail
+            console.log("[v0] JWT - using LinkedIn email:", linkedinEmail)
+          }
+        }
       }
       
+      console.log("[v0] JWT callback DONE - token.email:", token.email)
       return token
     },
     session: async ({ session, token }) => {
