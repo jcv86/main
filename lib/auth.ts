@@ -3,6 +3,7 @@ import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 
 // Validate env vars at startup
+// Force redeploy with new Google OAuth credentials
 const validateEnvVars = () => {
   const required = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "NEXTAUTH_SECRET"]
   const missing = required.filter(key => !process.env[key])
