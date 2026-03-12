@@ -70,35 +70,53 @@ export const authConfig = {
       return true
     },
     jwt: async ({ token, account, profile, user }) => {
+      console.log("[v0] JWT callback - user:", user?.email, "account:", account?.provider)
+      
       // First time user logs in
       if (user) {
         token.email = user.email || ""
         token.name = user.name || ""
         token.image = user.image || ""
+        console.log("[v0] JWT set token from user - email:", token.email)
       }
       
       // Save provider and access token
       if (account) {
         token.accessToken = account.access_token
         token.provider = account.provider
+        console.log("[v0] JWT set token from account - provider:", account.provider)
       }
       
+      console.log("[v0] JWT callback DONE - token.email:", token.email)
       return token
     },
     session: async ({ session, token }) => {
+      console.log("[v0] Session callback - token.email:", token.email, "session.user:", session?.user?.email)
+      
       // Populate session from token
       if (session.user) {
         session.user.id = token.sub || ""
-        session.user.email = token.email as string
-        session.user.name = token.name as string
-        session.user.image = token.image as string
+        session.user.email = (token.email as string) || ""
+        session.user.name = (token.name as string) || ""
+        session.user.image = (token.image as string) || ""
+        console.log("[v0] Session callback DONE - session.user.email:", session.user.email)
+      } else {
+        console.log("[v0] Session callback WARNING - session.user is undefined!")
       }
       
       return session
     },
     redirect: async ({ url, baseUrl }) => {
-      // Always redirect to onboarding after signin
-      return `${baseUrl}/despega/conozcamonos-1`
+      console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
+      
+      try {
+        const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
+        console.log("[v0] Redirecting to:", redirectUrl)
+        return redirectUrl
+      } catch (error) {
+        console.error("[v0] Redirect error:", error)
+        return `${baseUrl}/despega/conozcamonos-1`
+      }
     },
   },
 } satisfies NextAuthConfig
