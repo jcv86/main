@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { CANON_RULES, executeCanonRules } from '@/lib/canon-rules-engine'
+import { CanonRulesEngine } from '@/lib/canon-rules-engine'
 import { generateRoute30Days } from '@/lib/canon-routes-generator'
 
 // NIVEL 4: Validación y Sanitización
