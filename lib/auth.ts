@@ -69,6 +69,31 @@ export const authConfig = {
       console.log("[v0] SignIn callback - user:", user?.email, "provider:", account?.provider)
       return true
     },
+    redirect: async ({ url, baseUrl }) => {
+      console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
+      
+      // If the user is being redirected back to the signin page, send them to the app instead
+      if (url.includes("/auth/signin")) {
+        console.log("[v0] User redirected from signin, sending to /despega/conozcamonos-1")
+        return `${baseUrl}/despega/conozcamonos-1`
+      }
+      
+      // Allow relative URLs
+      if (url.startsWith("/")) {
+        console.log("[v0] Allowing relative URL:", url)
+        return `${baseUrl}${url}`
+      }
+      
+      // Allow same-origin URLs
+      if (new URL(url).origin === baseUrl) {
+        console.log("[v0] Allowing same-origin URL:", url)
+        return url
+      }
+      
+      // Default to home
+      console.log("[v0] Defaulting to /despega/conozcamonos-1")
+      return `${baseUrl}/despega/conozcamonos-1`
+    },
     jwt: async ({ token, account, profile, user }) => {
       console.log("[v0] JWT callback - token.sub:", token.sub, "user:", user?.email)
       
