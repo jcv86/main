@@ -118,11 +118,11 @@ export async function POST(request: Request) {
     }
 
     // 2. Execute rules to get actions
-    const actions = executeCanonRules(
+    const rulesEngine = new CanonRulesEngine(profileType)
+    const actions = rulesEngine.generateActionsFromResponses(
       c1Responses?.responses || {},
       adjusted,
-      c2Paso2Responses?.responses || {},
-      profileType
+      c2Paso2Responses?.responses || {}
     )
     console.log('[v0] Executed rules, got', actions.length, 'actions')
 

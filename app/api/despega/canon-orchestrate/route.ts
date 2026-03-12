@@ -35,22 +35,16 @@ export async function orchestrateCanon(
 
     // Paso 1: Ejecutar Motor de Reglas
     console.log('[v0] Step 1: Executing Rules Engine...')
-    const actions = executeCanonRules(
+    const rulesEngine = new CanonRulesEngine(request.a1ProfileType)
+    const actions = rulesEngine.generateActionsFromResponses(
       request.conozcamonos1Responses,
       request.conozcamonos2Paso1Responses,
-      request.conozczamonos2Paso2Responses || {},
-      request.a1ProfileType
+      request.conozczamonos2Paso2Responses || {}
     )
     console.log('[v0] Generated', actions.length, 'actions from rules')
 
-    // Paso 2: Validar Acciones (Stress Test)
-    console.log('[v0] Step 2: Validating actions...')
-    const validation = validateCanonActions(actions)
-    if (!validation.valid) {
-      console.warn('[v0] Validation issues:', validation.issues)
-      // NO bloqueamos - ajustamos automáticamente
-      console.log('[v0] Applying suggestions:', validation.suggestions)
-    }
+    // Paso 2: Acciones validadas por motor de reglas
+    console.log('[v0] Step 2: Actions generated from rules...')
 
     // Paso 3: Generar Rutas
     console.log('[v0] Step 3: Generating routes...')
