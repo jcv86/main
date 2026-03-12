@@ -62,23 +62,42 @@ export const authConfig = {
   secret: envVars.nextAuthSecret,
   callbacks: {
     authorized: async ({ auth }) => {
+      console.log("[v0] Authorized callback - auth exists:", !!auth)
       return !!auth
     },
-    jwt: async ({ token, account, profile }) => {
+    signIn: async ({ user, account, profile }) => {
+      console.log("[v0] SignIn callback - user:", user?.email, "provider:", account?.provider)
+      return true
+    },
+    jwt: async ({ token, account, profile, user }) => {
+      console.log("[v0] JWT callback - token.sub:", token.sub, "user:", user?.email)
+      
+      if (user) {
+        token.email = user.email
+        token.name = user.name
+        token.image = user.image
+      }
+      
       if (account) {
         token.accessToken = account.access_token
         token.provider = account.provider
         token.linkedinProfile = profile
       }
+      
       return token
     },
     session: async ({ session, token }) => {
+      console.log("[v0] Session callback - token.sub:", token.sub, "session.user:", session?.user?.email)
+      
       if (session.user) {
         session.user.id = token.sub || ""
+        session.user.email = (token.email as string) || session.user.email
+        session.user.name = (token.name as string) || session.user.name
+        session.user.image = (token.image as string) || session.user.image
         ;(session as any).accessToken = token.accessToken
         ;(session as any).provider = token.provider
-        ;(session as any).linkedinProfile = token.linkedinProfile
       }
+      
       return session
     },
   },
