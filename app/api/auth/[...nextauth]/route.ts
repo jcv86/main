@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// Added SupabaseAdapter for session storage - force redeploy v11
+// Fixed RLS policies for OAuth user creation - force redeploy v12
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
