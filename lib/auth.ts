@@ -72,27 +72,35 @@ export const authConfig = {
     redirect: async ({ url, baseUrl }) => {
       console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
       
-      // If the user is being redirected back to the signin page, send them to the app instead
-      if (url.includes("/auth/signin")) {
-        console.log("[v0] User redirected from signin, sending to /despega/conozcamonos-1")
+      try {
+        // If no URL provided, default to onboarding
+        if (!url) {
+          console.log("[v0] No URL provided, defaulting to /despega/conozcamonos-1")
+          return `${baseUrl}/despega/conozcamonos-1`
+        }
+
+        // Parse the URL safely
+        const parsedUrl = new URL(url, baseUrl)
+        
+        // If redirecting back to signin, send to onboarding instead
+        if (parsedUrl.pathname.includes("/auth/signin")) {
+          console.log("[v0] User redirected from signin, sending to /despega/conozcamonos-1")
+          return `${baseUrl}/despega/conozcamonos-1`
+        }
+        
+        // Allow relative URLs
+        if (parsedUrl.origin === new URL(baseUrl).origin) {
+          console.log("[v0] Allowing same-origin URL:", url)
+          return url
+        }
+        
+        // Default to onboarding
+        console.log("[v0] Defaulting to /despega/conozcamonos-1")
+        return `${baseUrl}/despega/conozcamonos-1`
+      } catch (error) {
+        console.error("[v0] Redirect callback error:", error)
         return `${baseUrl}/despega/conozcamonos-1`
       }
-      
-      // Allow relative URLs
-      if (url.startsWith("/")) {
-        console.log("[v0] Allowing relative URL:", url)
-        return `${baseUrl}${url}`
-      }
-      
-      // Allow same-origin URLs
-      if (new URL(url).origin === baseUrl) {
-        console.log("[v0] Allowing same-origin URL:", url)
-        return url
-      }
-      
-      // Default to home
-      console.log("[v0] Defaulting to /despega/conozcamonos-1")
-      return `${baseUrl}/despega/conozcamonos-1`
     },
     jwt: async ({ token, account, profile, user }) => {
       console.log("[v0] JWT callback - token.sub:", token.sub, "user:", user?.email)
