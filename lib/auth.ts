@@ -30,13 +30,13 @@ const validateEnvVars = () => {
 
 const envVars = validateEnvVars()
 
-// Validate critical credentials exist before creating config
-if (!envVars.googleClientId || !envVars.googleClientSecret) {
-  console.error("[v0] FATAL: Google OAuth credentials missing! Deployment will fail during auth attempts.")
-  console.error("[v0] Make sure these Vercel env vars are set:")
-  console.error("[v0]   - GOOGLE_CLIENT_ID")
-  console.error("[v0]   - GOOGLE_CLIENT_SECRET")
+// CRITICAL: Verify secret exists before creating auth config
+if (!envVars.nextAuthSecret) {
+  console.error("[v0] CRITICAL ERROR: NEXTAUTH_SECRET is not set! Session creation will fail.")
+  console.error("[v0] Add NEXTAUTH_SECRET to Vercel Environment Variables immediately.")
 }
+
+console.log("[v0] NextAuth Config - Secret set:", !!envVars.nextAuthSecret, "Length:", envVars.nextAuthSecret?.length || 0)
 
 export const authConfig = {
   providers: [
@@ -87,7 +87,11 @@ export const authConfig = {
       return token
     },
     session: async ({ session, token }) => {
-      console.log("[v0] Session callback - token.sub:", token.sub, "session.user:", session?.user?.email)
+      console.log("[v0] Session callback START")
+      console.log("[v0]   - token.sub:", token.sub)
+      console.log("[v0]   - token.email:", token.email)
+      console.log("[v0]   - session.user exists:", !!session?.user)
+      console.log("[v0]   - session.user.email:", session?.user?.email)
       
       if (session.user) {
         session.user.id = token.sub || ""
@@ -96,6 +100,10 @@ export const authConfig = {
         session.user.image = (token.image as string) || session.user.image
         ;(session as any).accessToken = token.accessToken
         ;(session as any).provider = token.provider
+        
+        console.log("[v0] Session callback DONE - session.user.id:", session.user.id, "email:", session.user.email)
+      } else {
+        console.log("[v0] Session callback ERROR - session.user is undefined!")
       }
       
       return session
