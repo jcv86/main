@@ -1,6 +1,8 @@
 import type { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
+import { SupabaseAdapter } from "@auth/supabase-adapter"
+import { createClient } from "@/lib/supabase/server"
 
 // Validate env vars at startup
 // Force redeploy with new Google OAuth credentials
@@ -38,7 +40,7 @@ if (!envVars.nextAuthSecret) {
 
 console.log("[v0] NextAuth Config - Secret set:", !!envVars.nextAuthSecret, "Length:", envVars.nextAuthSecret?.length || 0)
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   providers: [
     Google({
       clientId: envVars.googleClientId || "",
@@ -51,15 +53,19 @@ export const authConfig = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
+  adapter: SupabaseAdapter({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    secret: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  }),
+  session: {
+    strategy: "jwt",
+  },
+  secret: envVars.nextAuthSecret,
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
     error: "/auth/error",
   },
-  session: {
-    strategy: "jwt",
-  },
-  secret: envVars.nextAuthSecret,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
