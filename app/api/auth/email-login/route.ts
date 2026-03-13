@@ -20,14 +20,18 @@ export async function POST(req: Request) {
 
     // Query user from database
     const supabase = await createClient()
+    console.log('[v0] Email login - querying user:', email)
+    
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, email, name, password_hash, role')
+      .select('id, email, password_hash, role')
       .eq('email', email)
       .single()
 
+    console.log('[v0] Query result - error:', error?.message, 'user:', user?.email)
+
     if (error || !user) {
-      console.log('[v0] User not found:', email)
+      console.log('[v0] User not found:', email, 'error:', error)
       return Response.json(
         { message: 'Email o contraseña incorrectos' },
         { status: 401 }
