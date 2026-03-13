@@ -1,444 +1,324 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { CanonDashboardSection } from "@/components/canon-dashboard-section"
-import { CanonProgressCard } from "@/components/canon-progress-card"
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { calculateReadinessScore, type ReadinessScore } from '@/lib/readiness-score'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Loader2, CheckCircle2, Clock, AlertCircle, TrendingUp } from 'lucide-react'
 
-interface UserProfile {
-  camino_persona_active: boolean
-  camino_profesional_active: boolean
-  camino_foco: string
-  onboarding_completed: boolean
-  a1_test_completed: boolean
+interface UserProgress {
+  a1_completed: boolean
+  a2_completed: boolean
+  a3_progress: any
+  a4_active: boolean
 }
 
-interface PilarProgress {
-  pilar: string
-  progreso: number
-  score: number
-  ciclo_actual: string
-  ciclo_dia: number
-}
-
-interface Rankings {
-  score_general: number
-  rank_general: number
-  score_pilar_a1: number
-  score_pilar_a2: number
-  score_aterrizaje: number
-  score_base: number
-}
-
-interface A1Results {
-  score_energia?: number
-  score_enfoque?: number
-  score_relaciones?: number
-  score_plan_ejecutivo?: number
-  nivel_detectado?: string
-  profile_type?: string
-  profile_description?: string
-  resultados?: any
-  score_total?: number
-}
-
-const PILARES = [
-  {
-    id: "a1_cerebral",
-    name: "A1: El Ritual",
-    description: "Descubre quién eres ahora",
-    color: "bg-blue-500",
-    lightColor: "bg-blue-100",
-    textColor: "text-blue-800",
-    href: "/despega/a1-cerebral",
-    icon: "🔄",
-  },
-  {
-    id: "a2_rutas",
-    name: "A2: Rutas de Transformación",
-    description: "Tu motor de avance: 90 días de acciones personalizadas",
-    color: "bg-green-500",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
-    href: "/despega/a2/intro",
-    icon: "🧭",
-  },
-  {
-    id: "a4_realidad",
-    name: "A4: La Realidad",
-    description: "Dónde vive tu identidad - Noticias, Cultura, Biblioteca",
-    color: "bg-cyan-500",
-    lightColor: "bg-cyan-100",
-    textColor: "text-cyan-800",
-    href: "/despega/a4",
-    icon: "🌍",
-  },
-  {
-    id: "a3_entrenamientos",
-    name: "A3: Entrenamientos Avanzados",
-    description: "Simulaciones y feedback en tiempo real",
-    color: "bg-purple-500",
-    lightColor: "bg-purple-100",
-    textColor: "text-purple-800",
-    href: "/despega/a3",
-    icon: "🎯",
-  },
-]
-
-export default function DespegaHub() {
+export default function DespegazoDashboard() {
+  const [readiness, setReadiness] = useState<ReadinessScore | null>(null)
+  const [progress, setProgress] = useState<UserProgress | null>(null)
   const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [pilaresProgress, setPilaresProgress] = useState<PilarProgress[]>([])
-  const [rankings, setRankings] = useState<Rankings | null>(null)
-  const [a1Results, setA1Results] = useState<A1Results | null>(null)
-  const [userName, setUserName] = useState<string>("")
+  const [userName, setUserName] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        
-        if (!user) {
-          router.push("/login")
-          return
-        }
+    loadUserProgress()
+  }, [])
 
-        // Get user name from metadata or email
-        const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || "User"
-        setUserName(fullName)
-
-        // Check if onboarding is completed by looking for test results
-        const { data: testResults } = await supabase
-          .from("a1_tests_results")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("test_name", "Despega Cerebral")
-          .limit(1)
-
-        // Always load profile data regardless of test completion
-        const { data: profileDataArray } = await supabase
-          .from("despega_user_profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle()
-
-        if (profileDataArray) {
-          setProfile(profileDataArray)
-        }
-
-        // Load pilares progress
-        const { data: pilaresData } = await supabase
-          .from("despega_pilar_progress")
-          .select("*")
-          .eq("user_id", user.id)
-
-        if (pilaresData) {
-          setPilaresProgress(pilaresData)
-        }
-
-        // Load rankings
-        const { data: rankingsDataArray } = await supabase
-          .from("despega_rankings")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle()
-
-        if (rankingsDataArray) {
-          setRankings(rankingsDataArray)
-        }
-
-        // Load A1 test results from a1_tests_results table (where onboarding results are saved)
-        const { data: a1DataArray, error: a1Error } = await supabase
-          .from("a1_tests_results")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("test_name", "Despega Cerebral")
-          .order("created_at", { ascending: false })
-          .limit(1)
-
-        const a1Data = a1DataArray && a1DataArray.length > 0 ? a1DataArray[0] : null
-
-        console.log("[v0] A1 test results query:", { a1Data, a1Error })
-
-        if (a1Data) {
-          // Map the responses to the expected format
-          const mappedData = {
-            ...a1Data,
-            profile_type: a1Data.profile_type || a1Data.responses?.dominant_profile || "D",
-            score_energia: a1Data.responses?.d_score || 0,
-            score_enfoque: a1Data.responses?.i_score || 0,
-            score_relaciones: a1Data.responses?.s_score || 0,
-            score_plan_ejecutivo: a1Data.responses?.c_score || 0,
-          }
-          console.log("[v0] Mapped A1 data:", mappedData)
-          setA1Results(mappedData)
-        }
-      } catch (error) {
-        console.error("[v0] Error loading dashboard:", error)
-        // Don't redirect on error - let the dashboard render with partial data
-      } finally {
-        setLoading(false)
+  const loadUserProgress = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.id) {
+        router.push('/auth/signin')
+        return
       }
+
+      // Get user name
+      setUserName(user.email?.split('@')[0] || 'User')
+
+      // Check A1
+      const { data: a1 } = await supabase
+        .from('user_a1_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      // Check A2
+      const { data: a2 } = await supabase
+        .from('user_a2_routes')
+        .select('*')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      // Check A3
+      const { data: interview0 } = await supabase
+        .from('user_a3_interview_0')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      const { data: cv } = await supabase
+        .from('user_a3_cv')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      const { data: market } = await supabase
+        .from('user_a3_market_insights')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      const { data: sims } = await supabase
+        .from('user_a3_simulations')
+        .select('id')
+        .eq('user_id', user.id)
+
+      // Check A4
+      const { data: a4 } = await supabase
+        .from('user_a4_radar')
+        .select('*')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      const userProgress: UserProgress = {
+        a1_completed: !!a1?.length,
+        a2_completed: !!a2?.length,
+        a3_progress: {
+          interview_0: !!interview0?.length,
+          cv_prepared: !!cv?.length,
+          market_insights: !!market?.length,
+          simulations_done: sims?.length || 0
+        },
+        a4_active: !!a4?.length
+      }
+
+      setProgress(userProgress)
+
+      // Calculate readiness
+      const score = calculateReadinessScore(
+        userProgress.a1_completed,
+        a1?.[0],
+        userProgress.a2_completed,
+        a2?.[0],
+        userProgress.a3_progress,
+        userProgress.a4_active
+      )
+
+      setReadiness(score)
+      console.log('[v0] Progress loaded')
+    } catch (err) {
+      console.error('[v0] Error loading progress:', err)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    loadData()
-  }, [supabase, router])
-
-  if (loading) {
+  if (loading || !progress || !readiness) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-          <p className="mt-4 text-muted-foreground">Cargando tu dashboard...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <p className="text-slate-600 dark:text-slate-400">Cargando tu dashboard...</p>
         </div>
       </div>
     )
   }
 
-  const getPilarProgress = (pilarId: string) => {
-    return pilaresProgress.find(p => p.pilar === pilarId) || { progreso: 0, score: 0, ciclo_actual: "30", ciclo_dia: 1 }
-  }
+  const stages = [
+    {
+      name: 'A1: Origen',
+      description: 'Conozcamonos + DISC + Report',
+      completed: progress.a1_completed,
+      href: '/despega/a1-report',
+      score: readiness.a1_completeness
+    },
+    {
+      name: 'A2: Ruta',
+      description: '30/60/90 días personalizados',
+      completed: progress.a2_completed,
+      href: '/despega/a2-routes',
+      score: readiness.a2_completeness
+    },
+    {
+      name: 'A3: Impulso',
+      description: 'Interview + CV + Simulaciones',
+      completed:
+        progress.a3_progress.interview_0 &&
+        progress.a3_progress.cv_prepared &&
+        progress.a3_progress.market_insights,
+      href: '/despega/a3-dashboard',
+      score: readiness.a3_completeness
+    },
+    {
+      name: 'A4: Radar',
+      description: 'News + Progress + Monitoring',
+      completed: progress.a4_active,
+      href: '/despega/a4-radar',
+      score: readiness.a4_completeness
+    }
+  ]
 
-  const totalProgress = pilaresProgress.length > 0 
-    ? pilaresProgress.reduce((acc, p) => acc + p.progreso, 0) / pilaresProgress.length 
-    : 0
+  const scoreColor =
+    readiness.overall_score >= 80
+      ? 'text-green-600 dark:text-green-400'
+      : readiness.overall_score >= 60
+      ? 'text-yellow-600 dark:text-yellow-400'
+      : 'text-orange-600 dark:text-orange-400'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
-        {/* Onboarding Prompt if not completed */}
-        {/* This will be checked elsewhere - for now, just load the dashboard */}
-        
-        {/* Welcome Section */}
-        <div className="mb-12">
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-white text-balance">
-              Hola{userName ? `, ${userName}` : ""}! 👋
-            </h1>
-            <p className="text-xl text-slate-300 max-w-2xl">
-              Tu Transformación de 90 Días Comienza Ahora
-            </p>
-            <p className="text-lg text-slate-400 max-w-2xl">
-              Basado en tu evaluación inicial, aquí está tu ruta personalizada de desarrollo
-            </p>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+            Hola {userName}! Tu Transformación Despega
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-400">
+            Sigue tu progreso a través de A1, A2, A3, A4
+          </p>
         </div>
 
-        {/* Hero Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {/* Puntos */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
-            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
-              <div className="text-sm text-slate-400 font-medium">PUNTOS TOTALES</div>
-              <div className="text-4xl font-bold text-white">{rankings?.score_general || 0}</div>
-              <div className="text-xs text-slate-400">Gana más completando tareas</div>
-            </div>
-          </div>
-
-          {/* Ranking */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
-            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
-              <div className="text-sm text-slate-400 font-medium">TU RANKING</div>
-              <div className="text-4xl font-bold text-white">#{rankings?.rank_general || "-"}</div>
-              <div className="text-xs text-slate-400">De todos los usuarios</div>
-            </div>
-          </div>
-
-          {/* Progreso */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
-            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
-              <div className="text-sm text-slate-400 font-medium">PROGRESO TOTAL</div>
-              <div className="text-4xl font-bold text-white">{Math.round(totalProgress)}%</div>
-              <div className="text-xs text-slate-400">De tu transformación</div>
-            </div>
-          </div>
-
-          {/* Nivel */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300" />
-            <div className="relative bg-slate-800 rounded-xl p-6 space-y-2">
-              <div className="text-sm text-slate-400 font-medium">TU NIVEL</div>
-              <div className="text-4xl font-bold text-white capitalize">{a1Results?.nivel_detectado || "-"}</div>
-              <div className="text-xs text-slate-400">Detectado en A1</div>
-            </div>
-          </div>
-        </div>
-
-        {/* A1 Diagnóstico */}
-        {a1Results && (
-          <div className="mb-12">
-            <div className="bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 rounded-2xl p-8 md:p-12">
-              <div className="flex items-start justify-between mb-8">
-                <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">Tu Perfil de Personalidad</h2>
-                  <p className="text-slate-300">Tu resultado del Despega Cerebral</p>
-                </div>
-                {a1Results.profile_type && (
-                  <div className="text-6xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
-                    {a1Results.profile_type}
-                  </div>
-                )}
+        {/* Readiness Score */}
+        <Card className="p-8 mb-12 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center">
+              <div className={`text-6xl font-bold ${scoreColor} mb-2`}>
+                {readiness.overall_score}
               </div>
-              <p className="text-slate-300 mb-8">{a1Results.profile_description || "Estas son tus dimensiones clave de personalidad"}</p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {[
-                  { label: "Energía", value: (a1Results?.resultados?.score_energia || a1Results?.score_energia || 0), color: "from-blue-500 to-cyan-500" },
-                  { label: "Enfoque", value: (a1Results?.resultados?.score_enfoque || a1Results?.score_enfoque || 0), color: "from-purple-500 to-pink-500" },
-                  { label: "Relaciones", value: (a1Results?.resultados?.score_relaciones || a1Results?.score_relaciones || 0), color: "from-green-500 to-emerald-500" },
-                  { label: "Plan Ejecutivo", value: (a1Results?.resultados?.score_plan_ejecutivo || a1Results?.score_plan_ejecutivo || 0), color: "from-orange-500 to-red-500" },
-                ].map((item, idx) => (
-                  <div key={idx} className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-slate-300">{item.label}</span>
-                      <span className={`text-xl font-bold bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}>
-                        {Math.round(item.value)}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-slate-600 rounded-full h-2 overflow-hidden">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${item.color} transition-all duration-500`}
-                        style={{ width: `${Math.round(item.value)}%` }}
-                      />
-                    </div>
+              <p className="text-slate-600 dark:text-slate-400 text-sm">Readiness Score</p>
+            </div>
+
+            <div className="md:col-span-2">
+              <h3 className="font-bold text-slate-900 dark:text-white mb-4">
+                Recomendación:
+              </h3>
+              <div className="space-y-2">
+                {readiness.recommendations.map((rec, i) => (
+                  <div key={i} className="flex gap-2 items-start">
+                    <TrendingUp className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-slate-700 dark:text-slate-300">{rec}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        )}
+        </Card>
 
-        {/* CANON Route Display - Ruta personalizada con trazabilidad */}
-        <div className="mb-12">
-          <CanonDashboardSection />
+        {/* Strengths and Gaps */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          <Card className="p-6 border-l-4 border-green-500">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+              Fortalezas
+            </h3>
+            <ul className="space-y-2">
+              {readiness.strengths.length > 0 ? (
+                readiness.strengths.map((strength, i) => (
+                  <li key={i} className="flex gap-2 text-slate-700 dark:text-slate-300">
+                    <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                    {strength}
+                  </li>
+                ))
+              ) : (
+                <p className="text-slate-500">Completa más etapas</p>
+              )}
+            </ul>
+          </Card>
+
+          <Card className="p-6 border-l-4 border-orange-500">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+              Áreas de Mejora
+            </h3>
+            <ul className="space-y-2">
+              {readiness.gaps.length > 0 ? (
+                readiness.gaps.map((gap, i) => (
+                  <li key={i} className="flex gap-2 text-slate-700 dark:text-slate-300">
+                    <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
+                    {gap}
+                  </li>
+                ))
+              ) : (
+                <p className="text-slate-500">¡Excelente, todo completo!</p>
+              )}
+            </ul>
+          </Card>
         </div>
 
-        {/* Los 4 Pilares */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">Tu Ruta de 90 Días</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {PILARES.map((pilar, idx) => {
-              const progress = getPilarProgress(pilar.id)
-              const colors = [
-                "from-blue-600 to-cyan-600",
-                "from-green-600 to-emerald-600",
-                "from-purple-600 to-pink-600",
-                "from-orange-600 to-red-600",
-              ]
-              const gradientBg = colors[idx % colors.length]
+        {/* Progress by Stage */}
+        <div className="space-y-6 mb-12">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Progreso por Etapa
+          </h2>
 
-              return (
-                <Link key={pilar.id} href={pilar.href}>
-                  <div className="group cursor-pointer h-full">
-                    <div className={`absolute inset-0 bg-gradient-to-r ${gradientBg} rounded-xl opacity-0 group-hover:opacity-10 blur transition duration-300`} />
-                    <div className="relative bg-slate-800 border border-slate-700 rounded-xl p-8 hover:border-slate-600 transition h-full space-y-6">
-                      <div className="flex items-start justify-between">
-                        <div className="space-y-3 flex-1">
-                          <div className="flex items-center gap-3">
-                            <span className="text-4xl">{pilar.icon}</span>
-                            <div>
-                              <h3 className="text-xl font-bold text-white">{pilar.name}</h3>
-                              <p className="text-sm text-slate-400">{pilar.description}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+          {stages.map((stage, i) => (
+            <Card key={i} className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    {stage.name}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    {stage.description}
+                  </p>
+                </div>
+                {stage.completed && (
+                  <Badge className="bg-green-600 hover:bg-green-700">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                    Completo
+                  </Badge>
+                )}
+              </div>
 
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-slate-400">Día {progress.ciclo_dia} de {progress.ciclo_actual}</span>
-                          <span className={`text-lg font-bold bg-gradient-to-r ${gradientBg} bg-clip-text text-transparent`}>
-                            {progress.progreso}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
-                          <div 
-                            className={`h-full bg-gradient-to-r ${gradientBg} transition-all duration-500`}
-                            style={{ width: `${progress.progreso}%` }}
-                          />
-                        </div>
-                        <div className="flex justify-between items-center text-xs text-slate-400 pt-2">
-                          <span>⚡ {progress.score} puntos</span>
-                          <span className={`bg-gradient-to-r ${gradientBg} bg-clip-text text-transparent font-semibold`}>
-                            Ciclo {progress.ciclo_actual}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-600 dark:text-slate-400">Progreso</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">
+                    {Math.round(stage.score)}%
+                  </span>
+                </div>
+                <Progress value={stage.score} className="h-2" />
+              </div>
+
+              <Button
+                onClick={() => router.push(stage.href)}
+                variant={stage.completed ? 'outline' : 'default'}
+                className={stage.completed ? '' : 'bg-purple-600 hover:bg-purple-700'}
+              >
+                {stage.completed ? 'Ver Detalles' : 'Continuar'}
+              </Button>
+            </Card>
+          ))}
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Acciones Rápidas</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { href: "/despega/a2/dashboard", icon: "🧭", label: "Mi Sprint" },
-              { href: "/despega/rankings", icon: "🏆", label: "Rankings" },
-              { href: "/despega/a4/noticias", icon: "📰", label: "Noticias" },
-              { href: "/despega/a4/biblioteca", icon: "📚", label: "Biblioteca" },
-            ].map((action, idx) => (
-              <Link key={idx} href={action.href}>
-                <button className="w-full group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-700 to-slate-600 rounded-xl opacity-0 group-hover:opacity-100 blur transition duration-300" />
-                  <div className="relative bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2 group-hover:border-slate-600 transition">
-                    <div className="text-3xl">{action.icon}</div>
-                    <div className="text-sm font-medium text-white">{action.label}</div>
-                  </div>
-                </button>
-              </Link>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+          <Button
+            onClick={() => router.push('/despega/conozcamonos-1')}
+            variant="outline"
+            className="h-12"
+          >
+            <Clock className="w-4 h-4 mr-2" />
+            Comenzar o Continuar
+          </Button>
+          <Button
+            onClick={() => loadUserProgress()}
+            className="h-12 bg-purple-600 hover:bg-purple-700"
+          >
+            Actualizar Progreso
+          </Button>
         </div>
 
-        {/* Next Steps */}
-        {profile && (
-          <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Próximos Pasos</h2>
-            <div className="space-y-4">
-              {!profile.camino_persona_active && (
-                <div className="flex items-start gap-4 pb-4 border-b border-slate-700">
-                  <div className="text-2xl">1️⃣</div>
-                  <div>
-                    <h3 className="font-semibold text-white">Activa tu Camino Persona</h3>
-                    <p className="text-sm text-slate-400">Desarrolla tu propósito personal y claridad de vida</p>
-                  </div>
-                </div>
-              )}
-              {!profile.camino_profesional_active && (
-                <div className="flex items-start gap-4 pb-4 border-b border-slate-700">
-                  <div className="text-2xl">2️⃣</div>
-                  <div>
-                    <h3 className="font-semibold text-white">Activa tu Camino Profesional</h3>
-                    <p className="text-sm text-slate-400">Transforma tu carrera en los próximos 90 días</p>
-                  </div>
-                </div>
-              )}
-              <div className="flex items-start gap-4">
-                <div className="text-2xl">🎯</div>
-                <div>
-                  <h3 className="font-semibold text-white">Completa tus Sprints</h3>
-                  <p className="text-sm text-slate-400">Cada día, una pequeña acción. 90 días, una transformación</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Footer */}
+        <Card className="p-6 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
+          <p className="text-blue-900 dark:text-blue-200 text-sm">
+            <strong>Consejo:</strong> Tu Readiness Score se actualiza automáticamente conforme completas cada etapa. 
+            Alcanza 80+ para estar completamente listo para aplicar a oportunidades.
+          </p>
+        </Card>
       </div>
     </div>
   )

@@ -88,6 +88,30 @@ export default function AdminPage() {
                 <h2 className="text-xl font-semibold">Rendimiento de Contenido</h2>
                 <p className="text-muted-foreground">Análisis detallado de engagement y completación por tipo de contenido</p>
               </div>
+
+              {/* Coach IA Stats */}
+              <div className="space-y-4 border-t pt-6">
+                <h2 className="text-xl font-semibold">Coach IA Transversal</h2>
+                <p className="text-muted-foreground">Sistema de coaching automático integrado en A1-A4</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-lg border bg-card">
+                    <p className="text-sm text-muted-foreground">Conversaciones Activas</p>
+                    <p className="text-2xl font-bold mt-2">-</p>
+                  </div>
+                  <div className="p-4 rounded-lg border bg-card">
+                    <p className="text-sm text-muted-foreground">Satisfacción Promedio</p>
+                    <p className="text-2xl font-bold mt-2">-</p>
+                  </div>
+                  <div className="p-4 rounded-lg border bg-card">
+                    <p className="text-sm text-muted-foreground">Respuestas Generadas</p>
+                    <p className="text-2xl font-bold mt-2">-</p>
+                  </div>
+                  <div className="p-4 rounded-lg border bg-card">
+                    <p className="text-sm text-muted-foreground">Tiempo Promedio</p>
+                    <p className="text-2xl font-bold mt-2">-</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

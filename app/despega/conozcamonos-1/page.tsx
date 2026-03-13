@@ -66,8 +66,8 @@ export default function Conozcamonos1Page() {
 
       console.log('[v0] Conozcámonos 1 saved successfully')
 
-      // Redirect to A1 test
-      router.push('/despega/onboarding')
+      // Redirect to DISC Assessment (next step in A1 Origen)
+      router.push('/despega/disc-assessment')
     } catch (err) {
       console.error('[v0] Error saving Conozcámonos 1:', err)
       setError('Error al guardar tus respuestas. Intenta de nuevo.')
