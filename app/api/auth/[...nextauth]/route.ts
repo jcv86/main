@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// Added Supabase query logging to diagnose email login - v18
+// Fixed email login - removed non-existent role/name columns - v19
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

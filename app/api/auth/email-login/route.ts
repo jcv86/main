@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, email, password_hash, role')
+      .select('id, email, password_hash')
       .eq('email', email)
       .single()
 
@@ -56,14 +56,12 @@ export async function POST(req: Request) {
       )
     }
 
-    console.log('[v0] User authenticated:', email, 'role:', user.role)
+    console.log('[v0] User authenticated:', email)
 
     // Create JWT token with user data
     const token = await new SignJWT({
       sub: user.id,
       email: user.email,
-      name: user.name,
-      role: user.role,
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('30d')
@@ -86,8 +84,6 @@ export async function POST(req: Request) {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
-        role: user.role,
       },
     })
   } catch (error) {
