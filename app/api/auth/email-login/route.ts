@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 import { jwtVerify, SignJWT } from 'jose'
+import bcrypt from 'bcrypt'
 
 const secret = new TextEncoder().encode(
   process.env.NEXTAUTH_SECRET || 'dev-secret-key'
@@ -17,19 +18,48 @@ export async function POST(req: Request) {
       )
     }
 
-    // For demo, accept any email with password "demo"
-    if (password !== 'demo') {
+    // Query user from database
+    const supabase = await createClient()
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, email, name, password_hash, role')
+      .eq('email', email)
+      .single()
+
+    if (error || !user) {
+      console.log('[v0] User not found:', email)
       return Response.json(
-        { message: 'Contraseña incorrecta' },
+        { message: 'Email o contraseña incorrectos' },
         { status: 401 }
       )
     }
 
-    // Create JWT token
+    // Verify password
+    if (!user.password_hash) {
+      console.log('[v0] User has no password hash:', email)
+      return Response.json(
+        { message: 'Este usuario no tiene contraseña configurada' },
+        { status: 401 }
+      )
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password_hash)
+    if (!passwordMatch) {
+      console.log('[v0] Password mismatch for user:', email)
+      return Response.json(
+        { message: 'Email o contraseña incorrectos' },
+        { status: 401 }
+      )
+    }
+
+    console.log('[v0] User authenticated:', email, 'role:', user.role)
+
+    // Create JWT token with user data
     const token = await new SignJWT({
-      sub: email,
-      email,
-      name: email.split('@')[0],
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('30d')
@@ -44,9 +74,17 @@ export async function POST(req: Request) {
       maxAge: 30 * 24 * 60 * 60,
     })
 
+    console.log('[v0] Session created for user:', email)
+
     return Response.json({
       success: true,
       message: 'Sesión iniciada',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
     })
   } catch (error) {
     console.error('[v0] Email login error:', error)
