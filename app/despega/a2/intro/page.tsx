@@ -136,7 +136,7 @@ export default function A2IntroPage() {
         {/* CTA */}
         <div className="space-y-3">
           <Button 
-            onClick={() => router.push("/despega/a2/camino")}
+            onClick={() => router.push("/despega/conozcamonos-2")}
             className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg"
             size="lg"
           >

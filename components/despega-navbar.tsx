@@ -31,28 +31,32 @@ const stages = [
     name: 'A2: Ruta',
     icon: MapPin,
     routes: [
+      { label: 'A2 Intro', href: '/despega/a2/intro' },
       { label: 'Conozcámonos 2', href: '/despega/conozcamonos-2' },
-      { label: 'Rutas 30/60/90', href: '/despega/a2-routes' },
+      { label: 'Dashboard A2', href: '/despega/a2/dashboard' },
+      { label: 'Rutas 30/60/90', href: '/despega/a2/rutas' },
     ]
   },
   {
     name: 'A3: Impulso',
     icon: Zap,
     routes: [
+      { label: 'Dashboard A3', href: '/despega/a3' },
       { label: 'Interview 0', href: '/despega/interview-0' },
-      { label: 'Dashboard A3', href: '/despega/a3-dashboard' },
-      { label: 'CV Builder', href: '/despega/cv-builder' },
-      { label: 'Market Insights', href: '/despega/market-insights' },
-      { label: 'Simulaciones', href: '/despega/interview-simulations' },
+      { label: 'Simulaciones', href: '/despega/a3/simulations' },
+      { label: 'Progreso', href: '/despega/a3/progress' },
     ]
   },
   {
     name: 'A4: Radar',
     icon: Radar,
     routes: [
-      { label: 'Radar & News', href: '/despega/a4-radar' },
+      { label: 'Dashboard A4', href: '/despega/a4' },
+      { label: 'Radar', href: '/despega/a4/radar' },
+      { label: 'Noticias', href: '/despega/a4/noticias' },
+      { label: 'Biblioteca', href: '/despega/a4/biblioteca' },
     ]
-  }
+  },
 ]
 
 export function DespeganNavbar() {

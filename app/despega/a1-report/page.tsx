@@ -83,7 +83,7 @@ export default function A1ReportPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
         <Card className="max-w-md p-8">
           <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
-          <Button onClick={() => router.push('/despega/disc-assessment')} className="w-full">
+          <Button onClick={() => router.push('/despega/a1-cerebral')} className="w-full">
             Volver a la Evaluación
           </Button>
         </Card>
@@ -260,7 +260,7 @@ export default function A1ReportPage() {
             Volver
           </Button>
           <Button
-            onClick={() => router.push('/despega/conozcamonos-2')}
+            onClick={() => router.push('/despega/a2/intro')}
             className="bg-purple-600 hover:bg-purple-700"
           >
             Continuar a A2 Ruta

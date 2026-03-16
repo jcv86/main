@@ -73,8 +73,8 @@ export default function Conozcamonos2Page() {
 
       console.log('[v0] Conozcamonos 2 saved successfully')
 
-      // Redirect to A2 routes dashboard
-      router.push('/despega/a2-routes')
+      // Redirect to A2 dashboard
+      router.push('/despega/a2/dashboard')
     } catch (err) {
       console.error('[v0] Error saving Conozcamonos 2:', err)
       setError('Error al guardar tus respuestas. Intenta de nuevo.')
