@@ -19,7 +19,7 @@ export default function JourneySummaryPage() {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        router.push('/login')
+        router.push('/auth/signin')
         return
       }
       setLoading(false)

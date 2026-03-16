@@ -27,7 +27,7 @@ export default function A3Page() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        router.push('/login')
+        router.push('/auth/signin')
         return
       }
 
