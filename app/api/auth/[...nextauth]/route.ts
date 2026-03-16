@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// Expanded A3 (Guided Training, CV ATS, Job Matching) and A4 (Personalized News, Context Tests) - force redeploy v29
+// Clean build - MVP A1→A4 complete and stable. Flujo oficial operativo. Próximo: enriquecimiento funcional - force redeploy v30
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
