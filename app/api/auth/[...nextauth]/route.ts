@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// Fixed all /login redirects to /auth/signin and verified complete A1-A4 flow - force redeploy v28
+// Expanded A3 (Guided Training, CV ATS, Job Matching) and A4 (Personalized News, Context Tests) - force redeploy v29
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

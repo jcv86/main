@@ -245,6 +245,52 @@ export default function A4HubPage() {
               </CardContent>
             </Card>
           </Link>
+
+          {/* Noticias Personalizadas */}
+          <Link href="/despega/a4/noticias-personalizadas" className="group">
+            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
+              <CardHeader>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-3 bg-indigo-500/10 rounded-lg group-hover:bg-indigo-500/20 transition-colors">
+                    <Globe className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">Tu Perfil</Badge>
+                </div>
+                <CardTitle className="text-xl">Noticias Personalizadas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-6">
+                  Contenido filtrado según tu perfil DISC, industrias de interés, y ruta de desarrollo profesional.
+                </p>
+                <div className="flex items-center text-indigo-600 dark:text-indigo-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                  Mis Noticias <ArrowRight className="w-4 h-4 ml-2" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Pruebas & Contexto */}
+          <Link href="/despega/a4/pruebas-contexto" className="group">
+            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
+              <CardHeader>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-3 bg-rose-500/10 rounded-lg group-hover:bg-rose-500/20 transition-colors">
+                    <Award className="w-6 h-6 text-rose-600 dark:text-rose-400" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">Gamificado</Badge>
+                </div>
+                <CardTitle className="text-xl">Pruebas de Contexto</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-6">
+                  Tests interactivos sobre situaciones reales, preguntas de criterio profesional, y dilemmas empresariales.
+                </p>
+                <div className="flex items-center text-rose-600 dark:text-rose-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                  Resolver Pruebas <ArrowRight className="w-4 h-4 ml-2" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Audit & Verification Section */}

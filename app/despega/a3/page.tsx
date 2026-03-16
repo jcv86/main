@@ -285,6 +285,90 @@ export default function A3Page() {
             </CardContent>
           </Card>
 
+          {/* Entrenamiento Guiado Card */}
+          <Card className="border-2 border-rose-200 dark:border-rose-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-rose-600" />
+                Entrenamiento Guiado
+              </CardTitle>
+              <CardDescription>
+                Práctica estructurada con mentor IA
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Sesiones paso a paso con un mentor IA que te guía, explica qué mejorar, y práctica contigo.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Módulos temáticos (STAR, Técnicas, Negociación)</li>
+                <li>✓ Explicación de mejores prácticas</li>
+                <li>✓ Práctica repetida con retroalimentación</li>
+              </ul>
+              <Link href="/despega/a3/entrenamiento-guiado" className="block">
+                <Button className="w-full bg-rose-600 hover:bg-rose-700">
+                  Entrenamiento Guiado <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* CV ATS Card */}
+          <Card className="border-2 border-cyan-200 dark:border-cyan-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-cyan-600" />
+                CV ATS Optimizado
+              </CardTitle>
+              <CardDescription>
+                Tu CV según tu desempeño DTC
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Construido automáticamente según lo que demostraste en DTC. Formatos: estándar, ATS, y actualizable según vacantes.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Extrae información de A1 y A2</li>
+                <li>✓ Múltiples formatos exportables</li>
+                <li>✓ Optimizado para ATS</li>
+              </ul>
+              <Link href="/despega/a3/cv-ats" className="block">
+                <Button className="w-full bg-cyan-600 hover:bg-cyan-700">
+                  Mi CV ATS <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Ajuste por Vacante Card */}
+          <Card className="border-2 border-teal-200 dark:border-teal-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-teal-600" />
+                Ajuste por Vacante
+              </CardTitle>
+              <CardDescription>
+                Personaliza CV y respuestas por oferta
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Pega una oferta de trabajo y obtén: CV ajustado, respuestas personalizadas, y simulación específica.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Análisis de JD</li>
+                <li>✓ Mapeo de skills vs vacante</li>
+                <li>✓ CV y respuestas personalizadas</li>
+              </ul>
+              <Link href="/despega/a3/ajuste-por-vacante" className="block">
+                <Button className="w-full bg-teal-600 hover:bg-teal-700">
+                  Ajustar a Vacante <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           {/* Progress & History Card */}
           <Card className="border-2 border-green-200 dark:border-green-800 hover:shadow-lg transition">
             <CardHeader>

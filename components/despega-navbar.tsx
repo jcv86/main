@@ -42,8 +42,12 @@ const stages = [
     icon: Zap,
     routes: [
       { label: 'Dashboard A3', href: '/despega/a3' },
+      { label: 'Diagnosis', href: '/despega/a3/diagnosis' },
       { label: 'Interview 0', href: '/despega/interview-0' },
+      { label: 'Entrenamiento Guiado', href: '/despega/a3/entrenamiento-guiado' },
       { label: 'Simulaciones', href: '/despega/a3/simulations' },
+      { label: 'CV ATS', href: '/despega/a3/cv-ats' },
+      { label: 'Ajuste por Vacante', href: '/despega/a3/ajuste-por-vacante' },
       { label: 'Progreso', href: '/despega/a3/progress' },
     ]
   },
@@ -52,8 +56,11 @@ const stages = [
     icon: Radar,
     routes: [
       { label: 'Dashboard A4', href: '/despega/a4' },
-      { label: 'Radar', href: '/despega/a4/radar' },
-      { label: 'Noticias', href: '/despega/a4/noticias' },
+      { label: 'Radar Estratégico', href: '/despega/a4/radar' },
+      { label: 'Noticias Mercado', href: '/despega/a4/noticias' },
+      { label: 'Noticias Personalizadas', href: '/despega/a4/noticias-personalizadas' },
+      { label: 'Cultura General', href: '/despega/a4/aprender' },
+      { label: 'Pruebas & Contexto', href: '/despega/a4/pruebas-contexto' },
       { label: 'Biblioteca', href: '/despega/a4/biblioteca' },
     ]
   },
