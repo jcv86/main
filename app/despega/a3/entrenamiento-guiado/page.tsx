@@ -92,7 +92,7 @@ export default function GuidedTrainingPage() {
     const Icon = selectedModule.icon
 
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Header */}
           <Button
@@ -214,12 +214,12 @@ export default function GuidedTrainingPage() {
             </div>
           </Card>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -326,6 +326,6 @@ export default function GuidedTrainingPage() {
           })}
         </div>
       </div>
-    </main>
+    </div>
   )
 }

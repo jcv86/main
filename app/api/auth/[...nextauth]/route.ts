@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v35 - Fixed all syntax errors: simulations main→div, disc-assessment redirect to a1-cerebral. A3 fully operational. All routes accessible. - force redeploy v35
+// PRODUCTION BUILD v36 - Fixed all main tags replaced with div (main is JSX reserved word). All A3 syntax errors resolved. Build ready. - force redeploy v36
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

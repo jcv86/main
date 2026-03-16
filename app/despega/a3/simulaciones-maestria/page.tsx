@@ -152,7 +152,7 @@ export default function GuidedInterviewPage() {
 
   if (submitted && score !== null) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
         <div className="max-w-2xl mx-auto space-y-8">
           <div className="text-center space-y-4">
             <div className="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
@@ -194,12 +194,12 @@ export default function GuidedInterviewPage() {
             </Button>
           </div>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3/simulations">
@@ -341,6 +341,6 @@ export default function GuidedInterviewPage() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   )
 }
