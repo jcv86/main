@@ -23,7 +23,7 @@ const stages = [
     icon: CheckCircle2,
     routes: [
       { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
-      { label: 'DISC Assessment', href: '/despega/disc-assessment' },
+      { label: 'A1 Cerebral Assessment', href: '/despega/a1-cerebral' },
       { label: 'A1 Report', href: '/despega/a1-report' },
     ]
   },

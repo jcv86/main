@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// Added complete navigation bar for all A1-A4 routes and admin - force redeploy v25
+// Fixed A1 Assessment - using correct A1 Cerebral route instead of DISC - force redeploy v26
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

@@ -1,47 +1,188 @@
-// DISC Assessment - 28 preguntas de evaluación de personalidad
-// Basado en el modelo DISC: Dominance, Influence, Steadiness, Conscientiousness
+// A1 ORIGEN - 28 Preguntas Base "Más/Menos/Como Yo"
+// Basadas en el modelo conductual para diagnóstico Despega Cerebral
+// Formato: El usuario elige entre Más (soy así), Menos (no soy así), Como yo (es relativo)
 
-export interface DiscQuestion {
+export interface A1Question {
   id: number
   text: string
-  category: 'D' | 'I' | 'S' | 'C'
+  category: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
   trait: string
 }
 
-export const DISC_QUESTIONS: DiscQuestion[] = [
-  // DOMINANCE (D) - Conducir, Controlar, Decidir
-  { id: 1, text: "Prefiero tomar decisiones rápidamente, incluso sin toda la información", category: 'D', trait: 'decision_speed' },
-  { id: 2, text: "Me gusta estar en control de las situaciones y ser responsable de resultados", category: 'D', trait: 'control' },
-  { id: 3, text: "Soy competitivo y busco constantemente ganar o superar a otros", category: 'D', trait: 'competitiveness' },
-  { id: 4, text: "Me agrada desafiar el status quo y proponer nuevas formas de hacer las cosas", category: 'D', trait: 'challenge' },
-  { id: 5, text: "Prefiero enfrentar conflictos directamente en lugar de evitarlos", category: 'D', trait: 'directness' },
-  { id: 6, text: "Soy directo en mi comunicación, incluso si puedo herir sentimientos", category: 'D', trait: 'bluntness' },
-  { id: 7, text: "Me motiva la oportunidad de liderar y dirigir a otros", category: 'D', trait: 'leadership' },
+export const A1_PREGUNTAS_BASE: A1Question[] = [
+  // DOMINANCIA - Tendencia a dirigir, decidir rápido, enfrentar desafíos
+  { 
+    id: 1, 
+    text: "Tomo decisiones rápidamente, incluso sin tener toda la información",
+    category: 'dominancia',
+    trait: 'rapidez_decisión'
+  },
+  { 
+    id: 2, 
+    text: "Prefiero estar en control de mis proyectos y decisiones",
+    category: 'dominancia',
+    trait: 'necesidad_control'
+  },
+  { 
+    id: 3, 
+    text: "Me energiza competir y ganar en lo que hago",
+    category: 'dominancia',
+    trait: 'competitividad'
+  },
+  { 
+    id: 4, 
+    text: "Me gusta desafiar el status quo y proponer nuevas ideas",
+    category: 'dominancia',
+    trait: 'desafío_normas'
+  },
+  { 
+    id: 5, 
+    text: "Enfrento conflictos de frente sin evitarlos",
+    category: 'dominancia',
+    trait: 'dirección_conflictos'
+  },
+  { 
+    id: 6, 
+    text: "Soy directo en mis palabras, a veces sin filtro",
+    category: 'dominancia',
+    trait: 'franqueza'
+  },
+  { 
+    id: 7, 
+    text: "Me motiva liderar personas y proyectos",
+    category: 'dominancia',
+    trait: 'orientación_liderazgo'
+  },
 
-  // INFLUENCE (I) - Inspirar, Influir, Impresionar
-  { id: 8, text: "Disfruto interactuando con personas nuevas y haciendo nuevos amigos", category: 'I', trait: 'sociability' },
-  { id: 9, text: "Soy entusiasta y contagio mi energía a otros", category: 'I', trait: 'enthusiasm' },
-  { id: 10, text: "Prefiero hablar y persuadir antes que escribir o analizar datos", category: 'I', trait: 'communication_style' },
-  { id: 11, text: "Me encanta ser el centro de atención en grupos o reuniones", category: 'I', trait: 'attention_seeking' },
-  { id: 12, text: "Soy optimista y veo el lado positivo de las situaciones", category: 'I', trait: 'optimism' },
-  { id: 13, text: "Me motivan los elogios y el reconocimiento de otros", category: 'I', trait: 'recognition' },
-  { id: 14, text: "Prefiero ambiente dinámico y variado al trabajo rutinario", category: 'I', trait: 'variety' },
+  // INFLUENCIA - Tendencia a inspirar, conectar, comunicar
+  { 
+    id: 8, 
+    text: "Disfruto conocer gente nueva y hacer conexiones",
+    category: 'influencia',
+    trait: 'sociabilidad'
+  },
+  { 
+    id: 9, 
+    text: "Tengo mucha energía y la contagio a otros",
+    category: 'influencia',
+    trait: 'energía_contagio'
+  },
+  { 
+    id: 10, 
+    text: "Prefiero hablar y persuadir antes que analizar datos",
+    category: 'influencia',
+    trait: 'estilo_comunicación'
+  },
+  { 
+    id: 11, 
+    text: "Me gusta ser el foco de atención en grupos",
+    category: 'influencia',
+    trait: 'visibilidad'
+  },
+  { 
+    id: 12, 
+    text: "Soy optimista y encuentro lo positivo en todo",
+    category: 'influencia',
+    trait: 'optimismo'
+  },
+  { 
+    id: 13, 
+    text: "Busco reconocimiento y elogios por mi trabajo",
+    category: 'influencia',
+    trait: 'búsqueda_reconocimiento'
+  },
+  { 
+    id: 14, 
+    text: "Prefiero un ambiente dinámico y variado al trabajo repetitivo",
+    category: 'influencia',
+    trait: 'rechazo_monotonía'
+  },
 
-  // STEADINESS (S) - Servir, Sostener, Apoyar
-  { id: 15, text: "Valoro la estabilidad y predictibilidad en mi trabajo y vida", category: 'S', trait: 'stability' },
-  { id: 16, text: "Soy paciente y puedo esperar a que las cosas se desarrollen naturalmente", category: 'S', trait: 'patience' },
-  { id: 17, text: "Me gusta trabajar en equipo y colaborar con otros", category: 'S', trait: 'teamwork' },
-  { id: 18, text: "Prefiero evitar cambios abruptos y adaptar gradualmente", category: 'S', trait: 'change_resistance' },
-  { id: 19, text: "Soy buen oyente y disfruto ayudando a otros con sus problemas", category: 'S', trait: 'empathy' },
-  { id: 20, text: "Valoro las relaciones personales sobre el logro individual", category: 'S', trait: 'relationships' },
-  { id: 21, text: "Soy leal y consistente en mis compromisos", category: 'S', trait: 'loyalty' },
+  // ESTABILIDAD - Tendencia a apoyar, colaborar, mantener
+  { 
+    id: 15, 
+    text: "Valoro la estabilidad y previsibilidad",
+    category: 'estabilidad',
+    trait: 'valor_estabilidad'
+  },
+  { 
+    id: 16, 
+    text: "Soy paciente y puedo esperar a que las cosas se desarrollen",
+    category: 'estabilidad',
+    trait: 'paciencia'
+  },
+  { 
+    id: 17, 
+    text: "Me gusta trabajar en equipo y colaborar",
+    category: 'estabilidad',
+    trait: 'orientación_equipo'
+  },
+  { 
+    id: 18, 
+    text: "Prefiero cambios graduales antes que transformaciones abruptas",
+    category: 'estabilidad',
+    trait: 'ritmo_cambio'
+  },
+  { 
+    id: 19, 
+    text: "Soy buen oyente y me gusta ayudar a otros",
+    category: 'estabilidad',
+    trait: 'empatía'
+  },
+  { 
+    id: 20, 
+    text: "Las relaciones personales son más importantes que los logros individuales",
+    category: 'estabilidad',
+    trait: 'prioridad_relaciones'
+  },
+  { 
+    id: 21, 
+    text: "Soy leal y cumplo mis compromisos",
+    category: 'estabilidad',
+    trait: 'lealtad'
+  },
 
-  // CONSCIENTIOUSNESS (C) - Cumplir, Comprobar, Calcular
-  { id: 22, text: "Me agrada analizar datos y información antes de tomar decisiones", category: 'C', trait: 'analysis' },
-  { id: 23, text: "Soy detallista y me preocupa que todo esté correcto", category: 'C', trait: 'attention_detail' },
-  { id: 24, text: "Prefiero seguir procedimientos establecidos y normas", category: 'C', trait: 'compliance' },
-  { id: 25, text: "Soy crítico y cuestiono las cosas que no tienen lógica clara", category: 'C', trait: 'criticism' },
-  { id: 26, text: "Me motiva hacer un trabajo de alta calidad, incluso si toma más tiempo", category: 'C', trait: 'quality' },
-  { id: 27, text: "Prefiero trabajar solo en tareas complejas que requieren concentración", category: 'C', trait: 'independence' },
-  { id: 28, text: "Soy cauteloso y prefiero analizar riesgos antes de actuar", category: 'C', trait: 'caution' },
+  // CONCIENCIA - Tendencia a analizar, verificar, cumplir
+  { 
+    id: 22, 
+    text: "Analizo datos e información antes de decidir",
+    category: 'conciencia',
+    trait: 'análisis_previo'
+  },
+  { 
+    id: 23, 
+    text: "Soy detallista y me preocupa que todo esté correcto",
+    category: 'conciencia',
+    trait: 'atención_detalles'
+  },
+  { 
+    id: 24, 
+    text: "Prefiero seguir procesos establecidos y reglas",
+    category: 'conciencia',
+    trait: 'cumplimiento_normas'
+  },
+  { 
+    id: 25, 
+    text: "Cuestiono lo que no tiene lógica clara",
+    category: 'conciencia',
+    trait: 'espíritu_crítico'
+  },
+  { 
+    id: 26, 
+    text: "Me motiva hacer trabajo de alta calidad, aunque tome más tiempo",
+    category: 'conciencia',
+    trait: 'excelencia'
+  },
+  { 
+    id: 27, 
+    text: "Prefiero trabajar en tareas complejas que requieren concentración",
+    category: 'conciencia',
+    trait: 'profundidad'
+  },
+  { 
+    id: 28, 
+    text: "Soy cauteloso y analizo riesgos antes de actuar",
+    category: 'conciencia',
+    trait: 'análisis_riesgos'
+  },
 ]
