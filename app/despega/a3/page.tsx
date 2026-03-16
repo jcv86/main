@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight } from 'lucide-react'
+import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle } from 'lucide-react'
 
 export default function A3Page() {
   const [loading, setLoading] = useState(true)
@@ -364,6 +364,62 @@ export default function A3Page() {
               <Link href="/despega/a3/ajuste-por-vacante" className="block">
                 <Button className="w-full bg-teal-600 hover:bg-teal-700">
                   Ajustar a Vacante <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Analytics & Dashboard Card */}
+          <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-purple-600" />
+                Mi Dashboard A3
+              </CardTitle>
+              <CardDescription>
+                Analytics y métricas de desempeño
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Visualiza tu puntuación general, fortalezas, áreas de mejora, y tendencias en el tiempo.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Puntuación general</li>
+                <li>✓ Gráficos de progreso</li>
+                <li>✓ Comparativa de simulaciones</li>
+              </ul>
+              <Link href="/despega/a3/analytics" className="block">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  Ver Dashboard <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Feedback & Coaching Card */}
+          <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-indigo-600" />
+                Feedback del Coach
+              </CardTitle>
+              <CardDescription>
+                Análisis detallado y recomendaciones
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Recibe feedback específico de tu Coach IA con identificación de fortalezas, áreas de mejora e insights.
+              </p>
+              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                <li>✓ Análisis por simulación</li>
+                <li>✓ Recomendaciones accionables</li>
+                <li>✓ Seguimiento de mejoras</li>
+              </ul>
+              <Link href="/despega/a3/feedback" className="block">
+                <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                  Ver Feedback <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
             </CardContent>

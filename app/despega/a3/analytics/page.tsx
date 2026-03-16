@@ -1,0 +1,250 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import Link from 'next/link'
+import { ArrowLeft, TrendingUp, Target, Zap, Award, BarChart3 } from 'lucide-react'
+
+export default function A3AnalyticsPage() {
+  const [userData, setUserData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    loadAnalytics()
+  }, [])
+
+  const loadAnalytics = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // En producción, esto traería datos reales de la base de datos
+      const mockData = {
+        totalScore: 72,
+        interventionCount: 3,
+        simulationAttempts: 5,
+        averageResponseTime: 2.3,
+        trainingCompletion: 45,
+        strengths: ['Comunicación', 'STAR Method', 'Manejo de presión'],
+        improvements: ['Detalles técnicos', 'Ejemplos cuantificables', 'Cerrar con poder']
+      }
+      setUserData(mockData)
+    } catch (error) {
+      console.log('[v0] Error loading analytics:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Cargando analytics...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="max-w-5xl mx-auto space-y-6">
+        {/* Header */}
+        <Link href="/despega/a3">
+          <Button variant="outline" className="mb-4">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver a A3
+          </Button>
+        </Link>
+
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Mi Progreso en A3
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            Análisis detallado de tu desempeño, fortalezas y áreas de mejora
+          </p>
+        </div>
+
+        {/* Overall Score */}
+        <Card className="bg-gradient-to-br from-purple-600 to-blue-600 text-white border-0">
+          <CardContent className="pt-8 pb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-lg font-semibold opacity-90 mb-2">Tu Puntuación A3</p>
+                <p className="text-6xl font-bold">{userData?.totalScore || 0}%</p>
+                <p className="text-sm opacity-75 mt-2">Nivel: Intermediate - En camino a Avanzado</p>
+              </div>
+              <Award className="w-20 h-20 opacity-30" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Key Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[
+            {
+              icon: Zap,
+              label: 'Simulaciones',
+              value: userData?.simulationAttempts,
+              total: 10,
+              color: 'text-blue-600'
+            },
+            {
+              icon: Target,
+              label: 'Entrenamientos',
+              value: userData?.trainingCompletion,
+              total: 100,
+              suffix: '%',
+              color: 'text-purple-600'
+            },
+            {
+              icon: TrendingUp,
+              label: 'Mejora',
+              value: '+12%',
+              subtitle: 'última semana',
+              color: 'text-green-600'
+            },
+            {
+              icon: BarChart3,
+              label: 'Consistencia',
+              value: '85%',
+              subtitle: 'en respuestas',
+              color: 'text-amber-600'
+            }
+          ].map((metric, idx) => {
+            const Icon = metric.icon
+            return (
+              <Card key={idx}>
+                <CardContent className="pt-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <Icon className={`w-6 h-6 ${metric.color}`} />
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{metric.label}</p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                    {metric.value}{metric.suffix}
+                  </p>
+                  {metric.subtitle && (
+                    <p className="text-xs text-slate-500 mt-1">{metric.subtitle}</p>
+                  )}
+                  {metric.total && (
+                    <Progress value={(metric.value / metric.total) * 100} className="mt-2 h-1" />
+                  )}
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        {/* Fortalezas & Mejoras */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Strengths */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-green-600" />
+                Tus Fortalezas
+              </CardTitle>
+              <CardDescription>Lo que haces muy bien en entrevistas</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {userData?.strengths.map((strength: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+                  <span className="text-green-600 dark:text-green-400 font-bold">+</span>
+                  <span className="text-slate-700 dark:text-slate-300">{strength}</span>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Improvements */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-orange-600" />
+                Áreas de Mejora
+              </CardTitle>
+              <CardDescription>En qué debes enfocarte</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {userData?.improvements.map((improvement: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
+                  <span className="text-orange-600 dark:text-orange-400 font-bold">→</span>
+                  <span className="text-slate-700 dark:text-slate-300">{improvement}</span>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Performance Timeline */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Progreso en el Tiempo</CardTitle>
+            <CardDescription>Tus mejoras simulaciones de entrevista</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { date: 'Hace 2 sem', score: 55, level: 'Básico' },
+                { date: 'Hace 1 sem', score: 63, level: 'Intermedio' },
+                { date: 'Esta semana', score: 72, level: 'Intermedio-Avanzado' }
+              ].map((entry, idx) => (
+                <div key={idx} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{entry.date}</span>
+                    <Badge variant="secondary">{entry.level}</Badge>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Progress value={entry.score} className="flex-1 h-2" />
+                    <span className="font-bold text-slate-900 dark:text-white w-10 text-right">{entry.score}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recommendations */}
+        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <CardHeader>
+            <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
+          </CardHeader>
+          <CardContent className="text-slate-700 dark:text-slate-300 space-y-3">
+            <p>
+              Basado en tu análisis: Tu comunicación es excepcional, pero necesitas ser más específico con números.
+            </p>
+            <ol className="list-decimal list-inside space-y-2 text-sm">
+              <li>Practica la lección "Acción y Resultados" en Guided Training</li>
+              <li>Intenta 3 más simulaciones con enfoque en cuantificación</li>
+              <li>Revisa tus grabaciones para identificar dónde falta claridad</li>
+              <li>Ajusta tu CV para destacar logros mensurables</li>
+            </ol>
+          </CardContent>
+        </Card>
+
+        {/* Next Steps */}
+        <div className="flex gap-4 flex-wrap">
+          <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
+            <Button className="w-full bg-blue-600 hover:bg-blue-700">
+              <Zap className="w-4 h-4 mr-2" />
+              Siguiente Simulación
+            </Button>
+          </Link>
+          <Link href="/despega/a3/entrenamiento-guiado" className="flex-1">
+            <Button variant="outline" className="w-full">
+              <Target className="w-4 h-4 mr-2" />
+              Continuar Entrenamiento
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </main>
+  )
+}
