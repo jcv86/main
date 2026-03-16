@@ -106,6 +106,21 @@ export default function SimulationsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {ENTRENAMIENTO_TYPES.map((ent) => {
             const IconComponent = ent.icon
+            const getRouteLink = () => {
+              switch(ent.id) {
+                case 'guided':
+                  return '/despega/a3/simulaciones-guiado'
+                case 'structured':
+                  return '/despega/a3/simulaciones-estructurada'
+                case 'challenging':
+                  return '/despega/a3/simulaciones-desafiante'
+                case 'high-pressure':
+                  return '/despega/a3/simulaciones-maestria'
+                default:
+                  return '#'
+              }
+            }
+            
             return (
               <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
@@ -137,8 +152,42 @@ export default function SimulationsPage() {
                     Duración: {ent.duration}
                   </div>
 
-                  <Button className="w-full mt-4" disabled>
-                    {ent.action} (Próximamente)
+                  <Link href={getRouteLink()}>
+                    <Button className="w-full mt-4">
+                      {ent.action} →
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+                  <CardTitle>{ent.name}</CardTitle>
+                  <CardDescription className="text-base">{ent.subtitle}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 space-y-4">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    {ent.description}
+                  </p>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      Incluye:
+                    </div>
+                    <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                      {ent.features.map((feature, idx) => (
+                        <li key={idx}>✓ {feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
+                    <Clock className="w-4 h-4" />
+                    Duración: {ent.duration}
+                  </div>
+
+                  <Button className="w-full mt-4">
+                    {ent.action} {ent.id === 'guided' ? '→' : ''}
                   </Button>
                 </CardContent>
               </Card>
