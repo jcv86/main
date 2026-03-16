@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// FULLY OPERATIONAL A3 - All 4 simulation levels (Guided→Structured→Challenging→Mastery) now clickable. All A3 routes active. All navigation fixed. - force redeploy v33
+// CLEAN BUILD v34 - Fixed simulations page duplicated JSX. All A3 syntax errors resolved. Fully navigable and operational. - force redeploy v34
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

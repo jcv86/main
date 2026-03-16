@@ -162,38 +162,6 @@ export default function SimulationsPage() {
             )
           })}
         </div>
-                  <CardTitle>{ent.name}</CardTitle>
-                  <CardDescription className="text-base">{ent.subtitle}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-4">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {ent.description}
-                  </p>
-
-                  <div className="space-y-2">
-                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
-                      Incluye:
-                    </div>
-                    <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                      {ent.features.map((feature, idx) => (
-                        <li key={idx}>✓ {feature}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
-                    <Clock className="w-4 h-4" />
-                    Duración: {ent.duration}
-                  </div>
-
-                  <Button className="w-full mt-4">
-                    {ent.action} {ent.id === 'guided' ? '→' : ''}
-                  </Button>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
 
         {/* Tips Card */}
         <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
