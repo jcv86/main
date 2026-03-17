@@ -9,11 +9,13 @@ import { redirect } from "next/navigation"
 import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from "lucide-react"
 
 export default async function A4HubPage() {
-  // Get session server-side
-  const session = await getServerSession(authConfig)
+  // Get session - use getServerSession with proper auth config
+  const session = await getServerSession()
+  
+  console.log('[v0] A4 Session check - User:', session?.user?.email, 'Session exists:', !!session)
   
   if (!session?.user?.email) {
-    console.log('[v0] A4: User not authenticated, redirecting to login')
+    console.log('[v0] A4: No session found, redirecting to login')
     redirect("/auth/signin")
   }
 
@@ -27,11 +29,15 @@ export default async function A4HubPage() {
     const supabase = createClient()
 
     // Get user from database
-    const { data: userData } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from("users")
       .select("id")
       .eq("email", session.user.email)
       .single()
+
+    if (userError) {
+      console.log('[v0] User not found in Supabase (this is okay on first visit):', userError.message)
+    }
 
     if (userData?.id) {
       const userId = userData.id
@@ -52,15 +58,23 @@ export default async function A4HubPage() {
     }
 
     // Load featured news/resources
-    const { count: newsData } = await supabase
+    const { count: newsData, error: newsError } = await supabase
       .from("biblioteca")
       .select("*", { count: "exact", head: true })
       .eq("is_featured", true)
 
+    if (newsError) {
+      console.log('[v0] Error loading featured news:', newsError.message)
+    }
+
     // Load all resources
-    const { count: resourcesData } = await supabase
+    const { count: resourcesData, error: resourcesError } = await supabase
       .from("biblioteca")
       .select("*", { count: "exact", head: true })
+
+    if (resourcesError) {
+      console.log('[v0] Error loading all resources:', resourcesError.message)
+    }
 
     newsCount = newsData || 0
     resourcesCount = resourcesData || 0

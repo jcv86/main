@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v49 - Completely rebuilt A4 server component cleanly: Removed problematic edits, created fresh async server component with proper JSX. No syntax errors. - force redeploy v49
+// PRODUCTION BUILD v50 - Fixed A4 auth redirect: Changed getServerSession() to use default config instead of passing authConfig directly. Session detection now works properly. - force redeploy v50
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
