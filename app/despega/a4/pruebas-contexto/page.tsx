@@ -1,123 +1,74 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Loader2, Lightbulb, AlertCircle } from "lucide-react"
+import Link from "next/link"
+import { ArrowLeft, CheckSquare } from "lucide-react"
 
 export default function PruebasContextoPage() {
-  const [loading, setLoading] = useState(true)
-  const { user, loading: authLoading } = useAuthRedirect()
-
-  useEffect(() => {
-    if (authLoading || !user?.id) return
-    
-    const loadData = async () => {
-      try {
-        await new Promise(resolve => setTimeout(resolve, 300))
-        setLoading(false)
-      } catch (error) {
-        console.error('[v0] Error loading pruebas:', error)
-        setLoading(false)
-      }
-    }
-
-    loadData()
-  }, [authLoading, user?.id])
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    )
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    )
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <Lightbulb className="w-8 h-8 text-primary" />
-          <h1 className="text-4xl font-bold">Pruebas & Contexto</h1>
-        </div>
-        <p className="text-muted-foreground text-lg">
-          Mini tests para entrenar tu pensamiento crítico
-        </p>
-      </div>
-
-      {/* Main Content */}
-      <div className="space-y-6">
-        {/* Available Tests */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            { title: "¿Qué pasó hoy?", desc: "Razon en vivo sobre noticias", difficulty: "Media" },
-            { title: "Interpretación de Datos", desc: "Analiza gráficos económicos", difficulty: "Alta" },
-            { title: "Impacto Personal", desc: "¿Cómo te afecta esta noticia?", difficulty: "Media" },
-            { title: "Weak Signals", desc: "Identifica señales débiles", difficulty: "Alta" },
-          ].map((test) => (
-            <Card key={test.title} className="border-0 bg-card/70 hover:bg-card transition-colors">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-lg">{test.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">{test.desc}</p>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">{test.difficulty}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" size="sm" className="w-full">Intentar</Button>
-              </CardContent>
-            </Card>
-          ))}
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
+        {/* Header */}
+        <div className="mb-12">
+          <Link href="/despega/a4">
+            <Button variant="ghost" className="mb-6 -ml-2">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver a A4
+            </Button>
+          </Link>
+          <div className="max-w-3xl">
+            <Badge className="mb-4">
+              <CheckSquare className="w-3 h-3 mr-2" />
+              Pruebas & Contexto
+            </Badge>
+            <h1 className="text-4xl font-bold mb-4">Tests de Contexto y Análisis</h1>
+            <p className="text-lg text-muted-foreground">
+              Pruebas prácticas para desarrollar tu capacidad de análisis contextual y toma de decisiones.
+            </p>
+          </div>
         </div>
 
-        {/* Stats */}
-        <Card className="border-0 bg-card/70 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Puntuación Global</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <p className="text-3xl font-bold text-primary">0</p>
-                <p className="text-sm text-muted-foreground">Puntos</p>
+        {/* Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Tipos de Pruebas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <p className="font-medium text-sm">Análisis de Casos</p>
+                <p className="text-xs text-muted-foreground">Escenarios reales del mercado laboral</p>
               </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-primary">0</p>
-                <p className="text-sm text-muted-foreground">Tests</p>
+              <div>
+                <p className="font-medium text-sm">Interpretación de Datos</p>
+                <p className="text-xs text-muted-foreground">Lee gráficos y extrae conclusiones</p>
               </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-primary">--</p>
-                <p className="text-sm text-muted-foreground">Promedio</p>
+              <div>
+                <p className="font-medium text-sm">Mini Decisiones</p>
+                <p className="text-xs text-muted-foreground">Elige la mejor opción en situaciones profesionales</p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              <div>
+                <p className="font-medium text-sm">Weak Signal Detection</p>
+                <p className="text-xs text-muted-foreground">Identifica señales débiles importante</p>
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Coming Soon */}
-        <Card className="border-0 bg-amber-500/10 backdrop-blur-sm">
-          <CardContent className="pt-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-sm">Próximamente</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Las pruebas interactivas estarán disponibles pronto. Entrena tu pensamiento crítico respondiendo preguntas sobre noticias reales.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+          <Card className="bg-muted/50">
+            <CardHeader>
+              <Badge className="w-fit">Próximamente</Badge>
+            </CardHeader>
+            <CardContent className="space-y-2 text-sm">
+              <p>✓ Tests adaptativos a tu nivel</p>
+              <p>✓ Retroalimentación instantánea</p>
+              <p>✓ Explicaciones detalladas</p>
+              <p>✓ Certificados de competencia</p>
+              <p>✓ Benchmarking comunitario</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )
