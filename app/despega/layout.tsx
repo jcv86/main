@@ -1,5 +1,4 @@
 import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
-import { CoachSidebarWrapper } from '@/components/coach-sidebar-wrapper'
 import { DespeganNavbar } from '@/components/despega-navbar'
 
 export default function DespegaLayout({
@@ -15,7 +14,6 @@ export default function DespegaLayout({
           {children}
         </main>
       </div>
-      <CoachSidebarWrapper />
     </CoachProviderWrapper>
   )
 }
