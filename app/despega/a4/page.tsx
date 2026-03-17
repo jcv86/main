@@ -18,54 +18,59 @@ export default function A4HubPage() {
   const supabase = createClient()
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Check authentication via Supabase
-        const { data: { user }, error: userError } = await supabase.auth.getUser()
+    // Subscribe to auth state changes instead of checking once
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('[v0] A4 Auth state changed:', event, 'Session:', !!session)
         
-        if (userError || !user) {
-          console.log('[v0] A4: User not authenticated, redirecting to login')
+        if (!session?.user) {
+          console.log('[v0] A4: No session, redirecting to login')
           router.push("/auth/signin")
+          setLoading(false)
           return
         }
 
-        console.log('[v0] A4 User authenticated:', user.email)
+        try {
+          console.log('[v0] A4 User authenticated:', session.user.email)
 
-        // Get user Despega profile
-        const { data: despegarProfile } = await supabase
-          .from("despega_cerebral_perfil")
-          .select("tipo_perfil")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
-          .maybeSingle()
+          // Get user Despega profile
+          const { data: despegarProfile } = await supabase
+            .from("despega_cerebral_perfil")
+            .select("tipo_perfil")
+            .eq("user_id", session.user.id)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle()
 
-        if (despegarProfile) {
-          console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
-          setUserProfile(despegarProfile)
+          if (despegarProfile) {
+            console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
+            setUserProfile(despegarProfile)
+          }
+
+          // Load featured news/resources
+          const { count: newsData } = await supabase
+            .from("biblioteca")
+            .select("*", { count: "exact", head: true })
+            .eq("is_featured", true)
+
+          // Load all resources
+          const { count: resourcesData } = await supabase
+            .from("biblioteca")
+            .select("*", { count: "exact", head: true })
+
+          setNewsCount(newsData || 0)
+          setResourcesCount(resourcesData || 0)
+          setLoading(false)
+        } catch (error) {
+          console.error('[v0] Error loading A4 data:', error)
+          setLoading(false)
         }
-
-        // Load featured news/resources
-        const { count: newsData } = await supabase
-          .from("biblioteca")
-          .select("*", { count: "exact", head: true })
-          .eq("is_featured", true)
-
-        // Load all resources
-        const { count: resourcesData } = await supabase
-          .from("biblioteca")
-          .select("*", { count: "exact", head: true })
-
-        setNewsCount(newsData || 0)
-        setResourcesCount(resourcesData || 0)
-      } catch (error) {
-        console.error('[v0] Error loading A4 data:', error)
-      } finally {
-        setLoading(false)
       }
-    }
+    )
 
-    loadData()
+    return () => {
+      subscription?.unsubscribe()
+    }
   }, [])
 
   // Show loading state

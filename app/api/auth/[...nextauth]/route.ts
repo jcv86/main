@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v52 - Fixed A4 infinite redirect loop: Changed useEffect dependency array from [supabase, router] to []. Effect now runs only once on mount, preventing re-authentication checks that trigger false redirects. - force redeploy v52
+// PRODUCTION BUILD v53 - Fixed A4 redirect issue: Changed from getUser() to onAuthStateChange() subscription to properly wait for session to load. Now waits for real auth state before checking, preventing premature redirects. - force redeploy v53
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
