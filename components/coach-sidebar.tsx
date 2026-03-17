@@ -43,7 +43,6 @@ export function CoachSidebar() {
               onClick={() => setIsMinimized(true)}
               className="p-1 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition-colors"
               aria-label="Minimizar"
-              title="Minimizar"
             >
               <ChevronUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </button>
@@ -62,7 +61,7 @@ export function CoachSidebar() {
               <span className="text-slate-400">A3 ○</span>
               <span className="text-slate-400">A4 ○</span>
             </div>
-            <Progress value={50} className="h-1.5 mt-2 bg-slate-300 dark:bg-slate-700" />
+            <Progress value={50} className="h-1.5 mt-2" />
           </div>
 
           <div className="bg-white dark:bg-slate-800 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-sm leading-relaxed text-slate-700 dark:text-slate-300 min-h-16">
@@ -76,20 +75,18 @@ export function CoachSidebar() {
           </div>
 
           <div className="space-y-3">
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-xs font-medium">
-                <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                  <Flame className="w-3 h-3 text-orange-500" />
-                  Racha
-                </span>
-                <span className="font-bold text-orange-600 dark:text-orange-400">
-                  {currentProgress.streak}d
-                </span>
-              </div>
+            <div className="flex items-center justify-between text-xs font-medium">
+              <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                <Flame className="w-3 h-3 text-orange-500" />
+                Racha
+              </span>
+              <span className="font-bold text-orange-600 dark:text-orange-400">
+                {currentProgress.streak}d
+              </span>
             </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-xs font-medium">
+            <div>
+              <div className="flex items-center justify-between text-xs font-medium mb-1">
                 <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                   <TrendingUp className="w-3 h-3 text-green-500" />
                   Tasa de éxito
@@ -98,10 +95,7 @@ export function CoachSidebar() {
                   {currentProgress.successRate}%
                 </span>
               </div>
-              <Progress 
-                value={currentProgress.successRate} 
-                className="h-1.5 bg-slate-200 dark:bg-slate-700"
-              />
+              <Progress value={currentProgress.successRate} className="h-1.5" />
             </div>
 
             <div className="flex items-center justify-between text-xs font-medium">
@@ -118,29 +112,26 @@ export function CoachSidebar() {
               </div>
             </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-xs font-medium">
+            <div>
+              <div className="flex items-center justify-between text-xs font-medium mb-1">
                 <span className="text-slate-700 dark:text-slate-300">Sprint</span>
                 <span className="font-bold text-blue-600 dark:text-blue-400">
                   {currentProgress.sprintProgress}%
                 </span>
               </div>
-              <Progress 
-                value={currentProgress.sprintProgress} 
-                className="h-1.5 bg-slate-200 dark:bg-slate-700"
-              />
+              <Progress value={currentProgress.sprintProgress} className="h-1.5" />
             </div>
           </div>
 
-          <Badge variant="outline" className="w-full justify-center bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100">
+          <Badge variant="outline" className="w-full justify-center">
             {currentProgress.actionsCompleted} acciones completadas
           </Badge>
 
           <div className="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-2">
-            <Link href="/despega/journey-summary" className="block text-center text-xs font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 py-1">
+            <Link href="/despega/journey-summary" className="block text-center text-xs font-medium text-purple-600 hover:text-purple-700 py-1">
               📊 Ver Resumen del Viaje
             </Link>
-            <Link href="/despega/a2/coach" className="block text-center text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 py-1">
+            <Link href="/despega/a2/coach" className="block text-center text-xs font-medium text-blue-600 hover:text-blue-700 py-1">
               💬 Abrir Chat Completo
             </Link>
           </div>
