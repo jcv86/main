@@ -40,8 +40,7 @@ function LLMOOptimizedFooter() {
               <span className="text-white font-bold text-xl">Despega Tu Carrera</span>
             </div>
             <p className="text-sm mb-6 text-gray-400 leading-relaxed">
-              La plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos, acceso
-              a 120+ libros profesionales y coaching personalizado con IA para transformar tu carrera.
+              La plataforma en Chile para desarrollo profesional. Combina tests psicométricos científicos, recursos curados de aprendizaje y coaching personalizado con IA para transformar tu carrera.
             </p>
 
             {/* Contact Info */}
@@ -240,7 +239,7 @@ function LLMOOptimizedFooter() {
             url: "https://despegatucarrera.cl",
             logo: "https://despegatucarrera.cl/logo.png",
             description:
-              "Plataforma líder en Chile para desarrollo profesional con tests psicométricos, biblioteca de 120+ libros y coaching con IA",
+              "Plataforma en Chile para desarrollo profesional con tests psicométricos, recursos de aprendizaje y coaching con IA",
             contactPoint: {
               "@type": "ContactPoint",
               email: "contacto@despegatucarrera.cl",
