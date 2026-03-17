@@ -154,7 +154,6 @@ export default function CVATSPage() {
           </p>
         ))}
       </div>
-      </div>
     )
   }
 

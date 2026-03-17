@@ -203,7 +203,7 @@ export default function A3DashboardPage() {
               </Card>
             )
           })}
-        </Card>
+        </div>
 
         {/* Tips */}
         <Card className="p-6 mb-8 border-l-4 border-blue-500">
