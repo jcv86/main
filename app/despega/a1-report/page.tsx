@@ -289,6 +289,24 @@ export default function A1ReportPage() {
           </div>
         </Card>
 
+        {/* C2 CTA Section */}
+        <Card className="mb-8 border-2 border-purple-300 dark:border-purple-700 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+          <CardHeader>
+            <CardTitle className="text-xl text-purple-900 dark:text-purple-100">Siguiente Paso: Diseña tu Ruta</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-purple-800 dark:text-purple-200 mb-4">
+              Ahora que conoces tu perfil DISC, es tiempo de diseñar una ruta de 90 días personalizada basada en tu diagnóstico. Descubre en qué enfocarte y cómo avanzar.
+            </p>
+            <Button
+              onClick={() => router.push('/despega/conozcamonos-2')}
+              className="w-full bg-purple-600 hover:bg-purple-700"
+            >
+              Diseña tu Ruta de 90 Días →
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* Navigation */}
         <div className="flex gap-4 justify-between">
           <Button
