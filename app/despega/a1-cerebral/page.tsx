@@ -430,16 +430,28 @@ export default function A1CerebralPage() {
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Cargando tu perfil...</p>
+          <p className="text-gray-600">Verificando autenticación...</p>
         </div>
       </div>
     )
   }
 
-  // STAGE 1: INTRO
-  if (stage === "intro") {
+  if (!user) {
     return (
-      <TestIntroScreen
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Necesitas autenticarte para acceder a A1</p>
+          <Button onClick={() => window.location.href = '/auth/signin'}>Ir a Login</Button>
+        </div>
+      </div>
+    )
+  }
+
+  // Render based on stage - only if user exists
+  const renderStage = () => {
+    if (stage === "intro") {
+      return (
+        <TestIntroScreen
         testName="Despega Cerebral™"
         testDescription="Tu Perfil de Comportamiento Profesional"
         whatItMeasures={[
@@ -581,6 +593,28 @@ export default function A1CerebralPage() {
     )
   }
 
+  // STAGE 3: RESULTS
+  if (stage === "results") {
+    return (
+      <DiscResultsPage
+        profile={{
+          energia: calculateDISCScores().energia,
+          enfoque: calculateDISCScores().enfoque,
+          relaciones: calculateDISCScores().relaciones,
+          plan_ejecutivo: calculateDISCScores().plan_ejecutivo,
+          primary: 'energia',
+          primaryScore: 75,
+          secondary: 'enfoque',
+          secondaryScore: 65
+        }}
+        answers={answers}
+      />
+    )
+  }
+
+  return null
+}
+
   // Map questions to DISC-style categories
   const calculateResults = () => {
     return calculateDISCScores()
@@ -632,8 +666,7 @@ export default function A1CerebralPage() {
     return info[dim] || info.energia
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
+  return renderStage()
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">

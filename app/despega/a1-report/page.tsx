@@ -122,6 +122,28 @@ export default function A1ReportPage() {
     }
   }
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <p className="text-slate-600 dark:text-slate-400">Verificando autenticación...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-slate-600 dark:text-slate-400">Necesitas autenticarte</p>
+          <Button onClick={() => window.location.href = '/auth/signin'}>Ir a Login</Button>
+        </div>
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">

@@ -59,13 +59,27 @@ export default function A4HubPage() {
     loadData()
   }, [authLoading, user?.id, supabase])
 
-  // Show loading state
-  if (authLoading || loading) {
+  // Show loading state while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Cargando A4...</p>
+          <p className="text-muted-foreground">Verificando autenticación...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If no user after auth check is done, show login link
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Necesitas autenticarte para acceder a A4</p>
+          <Link href="/auth/signin">
+            <Button>Ir a Login</Button>
+          </Link>
         </div>
       </div>
     )

@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v54 - SYSTEMATIC FIX: Created useAuthRedirect hook with onAuthStateChange(). Applied consistently across A1 Cerebral, A1 Report, A2 Routes, A3, A3 Dashboard, A4. No more premature redirects - all pages wait for session to be fully loaded before checking auth. - force redeploy v54
+// PRODUCTION BUILD v55 - FIXED AUTH REDIRECT LOOP: Updated useAuthRedirect hook to NOT redirect on INITIAL_SESSION event, only on explicit SIGNED_OUT. Fixed A1 Cerebral, A1 Report to handle loading/auth states properly - shows login link instead of auto-redirecting. Only shows content when user confirmed. - force redeploy v55
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
