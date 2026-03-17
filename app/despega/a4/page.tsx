@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle, Loader2 } from "lucide-react"
 
 export default function A4HubPage() {
@@ -14,67 +14,53 @@ export default function A4HubPage() {
   const [newsCount, setNewsCount] = useState(0)
   const [resourcesCount, setResourcesCount] = useState(0)
   const [userProfile, setUserProfile] = useState<any>(null)
-  const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
   useEffect(() => {
-    // Subscribe to auth state changes instead of checking once
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('[v0] A4 Auth state changed:', event, 'Session:', !!session)
-        
-        if (!session?.user) {
-          console.log('[v0] A4: No session, redirecting to login')
-          router.push("/auth/signin")
-          setLoading(false)
-          return
+    if (authLoading || !user?.id) return
+    
+    const loadData = async () => {
+      try {
+        // Get user Despega profile
+        const { data: despegarProfile } = await supabase
+          .from("despega_cerebral_perfil")
+          .select("tipo_perfil")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (despegarProfile) {
+          console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
+          setUserProfile(despegarProfile)
         }
 
-        try {
-          console.log('[v0] A4 User authenticated:', session.user.email)
+        // Load featured news/resources
+        const { count: newsData } = await supabase
+          .from("biblioteca")
+          .select("*", { count: "exact", head: true })
+          .eq("is_featured", true)
 
-          // Get user Despega profile
-          const { data: despegarProfile } = await supabase
-            .from("despega_cerebral_perfil")
-            .select("tipo_perfil")
-            .eq("user_id", session.user.id)
-            .order("created_at", { ascending: false })
-            .limit(1)
-            .maybeSingle()
+        // Load all resources
+        const { count: resourcesData } = await supabase
+          .from("biblioteca")
+          .select("*", { count: "exact", head: true })
 
-          if (despegarProfile) {
-            console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
-            setUserProfile(despegarProfile)
-          }
-
-          // Load featured news/resources
-          const { count: newsData } = await supabase
-            .from("biblioteca")
-            .select("*", { count: "exact", head: true })
-            .eq("is_featured", true)
-
-          // Load all resources
-          const { count: resourcesData } = await supabase
-            .from("biblioteca")
-            .select("*", { count: "exact", head: true })
-
-          setNewsCount(newsData || 0)
-          setResourcesCount(resourcesData || 0)
-          setLoading(false)
-        } catch (error) {
-          console.error('[v0] Error loading A4 data:', error)
-          setLoading(false)
-        }
+        setNewsCount(newsData || 0)
+        setResourcesCount(resourcesData || 0)
+      } catch (error) {
+        console.error('[v0] Error loading A4 data:', error)
+      } finally {
+        setLoading(false)
       }
-    )
-
-    return () => {
-      subscription?.unsubscribe()
     }
-  }, [])
+
+    loadData()
+  }, [authLoading, user?.id, supabase])
 
   // Show loading state
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
         <div className="text-center">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { TestIntroScreen } from "@/components/test-intro-screen"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,26 +20,20 @@ const A1_QUESTIONS = DISC_TEST_QUESTIONS
 export default function A1CerebralPage() {
   const router = useRouter()
   const supabase = createClient()
+  const { user, loading: authLoading } = useAuthRedirect()
   const [stage, setStage] = useState<"intro" | "test" | "results">("intro")
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState<Record<number, any>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [userLevel, setUserLevel] = useState<"principiante" | "intermedio" | "avanzado" | null>(null)
-  const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   // Load user and their level
   useEffect(() => {
+    if (authLoading || !user?.id) return
+
     const loadUserLevel = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          setLoading(false)
-          return
-        }
-
-        setUserId(user.id)
-
         // Try to get user level from previous test results
         const { data: testResults } = await supabase
           .from("despega_a1_test_results")
@@ -63,7 +58,7 @@ export default function A1CerebralPage() {
     }
 
     loadUserLevel()
-  }, [])
+  }, [authLoading, user?.id, supabase])
 
   const getProfileContent = (dimension: string, score: number) => {
     // Return content based on Juan Vial structure: natural behavior, connections, what can be uncomfortable, daily thinking, growth opportunities

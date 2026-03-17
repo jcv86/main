@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle } from 'lucide-react'
 
 export default function A3Page() {
@@ -15,27 +15,22 @@ export default function A3Page() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [a3Progress, setA3Progress] = useState<any>(null)
   const [userDiscProfile, setUserDiscProfile] = useState<string | null>(null)
-  const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
   const { progress } = useCoach()
 
   useEffect(() => {
+    if (authLoading || !user?.id) return
     loadData()
-  }, [])
+  }, [authLoading, user?.id])
 
   const loadData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/signin')
-        return
-      }
-
       // Load user profile
       const { data: profile } = await supabase
         .from('despega_user_profiles')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .maybeSingle()
 
       setUserProfile(profile)
@@ -44,7 +39,7 @@ export default function A3Page() {
       const { data: a1Results } = await supabase
         .from('a1_tests_results')
         .select('result, profile_type')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .eq('test_name', 'Despega Cerebral')
         .order('created_at', { ascending: false })
         .limit(1)

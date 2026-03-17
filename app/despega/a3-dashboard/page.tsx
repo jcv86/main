@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -19,33 +19,28 @@ export default function A3DashboardPage() {
   const [progress, setProgress] = useState<A3Progress | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
   useEffect(() => {
+    if (authLoading || !user?.id) return
     loadProgress()
-  }, [])
+  }, [authLoading, user?.id])
 
   const loadProgress = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) {
-        router.push('/auth/signin')
-        return
-      }
-
       // Check Interview 0
       const { data: interview } = await supabase
         .from('user_a3_interview_0')
         .select('id')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .limit(1)
 
       // Check CV
       const { data: cv } = await supabase
         .from('user_a3_cv')
         .select('id')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .limit(1)
 
       // Check Market Insights

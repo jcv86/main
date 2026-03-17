@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { generatePersonalizedRoute, type PersonalizedRoute } from '@/lib/route-generator'
 import { calculateDiscProfile } from '@/lib/disc-calculator'
 import { Card } from '@/components/ui/card'
@@ -15,26 +15,21 @@ export default function A2RoutesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [expandedMilestone, setExpandedMilestone] = useState<30 | 60 | 90 | null>(30)
-  const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
   useEffect(() => {
+    if (authLoading || !user?.id) return
     loadAndGenerateRoute()
-  }, [])
+  }, [authLoading, user?.id])
 
   const loadAndGenerateRoute = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) {
-        router.push('/auth/signin')
-        return
-      }
-
       // Get DISC profile
       const { data: discData } = await supabase
         .from('user_a1_profiles')
         .select('disc_profile')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .single()
 
       if (!discData?.disc_profile) {
@@ -72,7 +67,7 @@ export default function A2RoutesPage() {
 
       // Save route
       await supabase.from('user_a2_routes').upsert({
-        user_id: user.id,
+        user_id: user?.id,
         route_data: generatedRoute,
         objective,
         skills,

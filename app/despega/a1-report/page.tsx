@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { calculateDiscProfile, interpretDiscProfile, type DiscProfile, type DiscInterpretation } from '@/lib/disc-calculator'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -14,26 +14,21 @@ export default function A1ReportPage() {
   const [interpretation, setInterpretation] = useState<DiscInterpretation | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
   useEffect(() => {
+    if (authLoading || !user?.id) return
     loadReport()
-  }, [])
+  }, [authLoading, user?.id])
 
   const loadReport = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) {
-        router.push('/auth/signin')
-        return
-      }
-
       // Get latest test results from despega_a1_test_results (where UnifiedTestSystem saves)
       const { data: testData, error: testError } = await supabase
         .from('despega_a1_test_results')
         .select('test_data, test_type')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .eq('test_type', 'Despega Cerebral')
         .order('created_at', { ascending: false })
         .limit(1)
@@ -66,7 +61,7 @@ export default function A1ReportPage() {
 
         // Save profile to user_a1_profiles
         await supabase.from('user_a1_profiles').upsert({
-          user_id: user.id,
+          user_id: user?.id,
           disc_profile: calcProfile,
           disc_interpretation: calcInterpretation,
           updated_at: new Date().toISOString()
@@ -112,7 +107,7 @@ export default function A1ReportPage() {
 
       // Save profile to user_a1_profiles
       await supabase.from('user_a1_profiles').upsert({
-        user_id: user.id,
+        user_id: user?.id,
         disc_profile: discProfile,
         disc_interpretation: calcInterpretation,
         updated_at: new Date().toISOString()
