@@ -22,46 +22,36 @@ export default function A4HubPage() {
     const checkAuthAndLoadStats = async () => {
       try {
         // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        const { data: { session }, error: authError } = await supabase.auth.getSession()
         
-        if (authError || !user) {
+        if (authError || !session?.user) {
           console.log('[v0] User not authenticated, redirecting to login')
           router.push('/auth/signin')
           return
         }
 
+        const user = session.user
         setIsAuthenticated(true)
 
-        // Get user DISC profile from A1 test results
-        const { data: a1Results } = await supabase
-          .from('a1_tests_results')
-          .select('result, profile_type')
+        // Get user DISC profile from Despega profile
+        const { data: despegarProfile } = await supabase
+          .from('despega_cerebral_perfil')
+          .select('tipo_perfil')
           .eq('user_id', user.id)
-          .eq('test_name', 'Despega Cerebral')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle()
 
-        if (a1Results) {
-          console.log('[v0] User DISC profile:', a1Results.profile_type || a1Results.result?.dominantProfile)
-          setUserProfile(a1Results)
+        if (despegarProfile) {
+          console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
+          setUserProfile(despegarProfile)
         }
 
-        // Load personalized stats based on DISC profile
-        const profileType = a1Results?.profile_type || a1Results?.result?.dominantProfile
-
-        // Filter news/resources by DISC profile if available
-        let newsQuery = supabase
+        // Load featured news/resources
+        const { count: newsData } = await supabase
           .from('biblioteca')
           .select('*', { count: 'exact', head: true })
           .eq('is_featured', true)
-
-        // Add DISC filter if profile exists
-        if (profileType) {
-          newsQuery = newsQuery.or(`target_profiles.cs.{${profileType}},target_profiles.is.null`)
-        }
-
-        const { count: newsData } = await newsQuery
 
         // Load all resources for user (personalization handled in sub-pages)
         const { count: resourcesData } = await supabase
@@ -133,9 +123,9 @@ export default function A4HubPage() {
               <Card className="border-0 bg-primary/5 backdrop-blur-sm col-span-1 md:col-span-2">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-2">Tu Perfil DISC</p>
+                    <p className="text-sm text-muted-foreground mb-2">Tu Perfil Despega</p>
                     <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-lg font-bold">
-                      {userProfile.profile_type || userProfile.result?.dominantProfile || 'N/A'}
+                      {userProfile.tipo_perfil || 'N/A'}
                     </Badge>
                     <p className="text-xs text-muted-foreground mt-2">Personalizando contenido para ti</p>
                   </div>
