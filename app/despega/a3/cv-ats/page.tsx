@@ -156,7 +156,6 @@ export default function CVATSPage() {
       </div>
     </div>
   )
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
