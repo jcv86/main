@@ -29,36 +29,96 @@ export default function A1ReportPage() {
         return
       }
 
-      // Get latest DISC responses
-      const { data: discData, error: discError } = await supabase
-        .from('canon_disc_responses')
-        .select('responses')
+      // Get latest test results from despega_a1_test_results (where UnifiedTestSystem saves)
+      const { data: testData, error: testError } = await supabase
+        .from('despega_a1_test_results')
+        .select('test_data, test_type')
         .eq('user_id', user.id)
+        .eq('test_type', 'Despega Cerebral')
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      if (discError || !discData) {
-        setError('No se encontraron respuestas DISC. Por favor completa la evaluación.')
+      if (testError || !testData) {
+        console.log('[v0] No test data found, trying canon_disc_responses...')
+        
+        // Fallback: try canon_disc_responses table
+        const { data: discData, error: discError } = await supabase
+          .from('canon_disc_responses')
+          .select('responses')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (discError || !discData) {
+          setError('No se encontraron respuestas DISC. Por favor completa la evaluación.')
+          console.error('[v0] No DISC responses found in either table')
+          return
+        }
+
+        // Calculate from canon_disc_responses format
+        const calcProfile = calculateDiscProfile(discData.responses)
+        const calcInterpretation = interpretDiscProfile(calcProfile)
+
+        setProfile(calcProfile)
+        setInterpretation(calcInterpretation)
+
+        // Save profile to user_a1_profiles
+        await supabase.from('user_a1_profiles').upsert({
+          user_id: user.id,
+          disc_profile: calcProfile,
+          disc_interpretation: calcInterpretation,
+          updated_at: new Date().toISOString()
+        })
+
+        console.log('[v0] A1 Report generated from canon_disc_responses')
         return
       }
 
-      // Calculate profile
-      const calcProfile = calculateDiscProfile(discData.responses)
-      const calcInterpretation = interpretDiscProfile(calcProfile)
+      // Extract test data from despega_a1_test_results format
+      const testDataObj = testData.test_data as any
+      
+      // Map Despega Cerebral scores (energia, enfoque, relaciones, plan_ejecutivo) to DISC format
+      const discProfile: DiscProfile = {
+        D: testDataObj.energia || 0,
+        I: testDataObj.relaciones || 0,
+        S: testDataObj.plan_ejecutivo || 0,
+        C: testDataObj.enfoque || 0,
+        primary: 'D',
+        primaryScore: testDataObj.energia || 0,
+        secondary: 'I',
+        secondaryScore: testDataObj.relaciones || 0
+      }
 
-      setProfile(calcProfile)
+      // Recalculate to determine actual primary/secondary
+      const scores = [
+        { letter: 'D' as const, value: discProfile.D },
+        { letter: 'I' as const, value: discProfile.I },
+        { letter: 'S' as const, value: discProfile.S },
+        { letter: 'C' as const, value: discProfile.C }
+      ]
+      scores.sort((a, b) => b.value - a.value)
+      
+      discProfile.primary = scores[0].letter
+      discProfile.primaryScore = scores[0].value
+      discProfile.secondary = scores[1].letter
+      discProfile.secondaryScore = scores[1].value
+
+      const calcInterpretation = interpretDiscProfile(discProfile)
+
+      setProfile(discProfile)
       setInterpretation(calcInterpretation)
 
       // Save profile to user_a1_profiles
       await supabase.from('user_a1_profiles').upsert({
         user_id: user.id,
-        disc_profile: calcProfile,
+        disc_profile: discProfile,
         disc_interpretation: calcInterpretation,
         updated_at: new Date().toISOString()
       })
 
-      console.log('[v0] A1 Report generated successfully')
+      console.log('[v0] A1 Report generated successfully from despega_a1_test_results')
     } catch (err) {
       console.error('[v0] Error loading A1 report:', err)
       setError('Error al cargar tu reporte. Intenta de nuevo.')
