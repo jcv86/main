@@ -77,113 +77,108 @@ export default function A4HubPage() {
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Hero Section */}
         <div className="mb-16">
-          <div className="text-center max-w-3xl mx-auto mb-8">
+          <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
               <Globe className="w-3 h-3 mr-2" />
-              Fase A4: Contexto & Cultura
+              Fase A4: Radar Estratégico
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-              Entiende el Mundo Real
+              Entiende el Mercado en Tiempo Real
             </h1>
             <p className="text-xl text-muted-foreground text-balance mb-8">
-              Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
+              Análisis estructurado de noticias con 7 capas cognitivas. Entiende qué está pasando realmente en Chile y cómo te afecta.
             </p>
+            <Link href="/despega">
+              <Button variant="outline">Volver a Despega</Button>
+            </Link>
           </div>
         </div>
 
-        {/* Main Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-          {/* Radar Estratégico */}
-          <Link href="/despega/a4/radar" className="group lg:col-span-2">
-            <Card className="h-full border-0 bg-gradient-to-br from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer text-white">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                    <Radar className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs bg-blue-500/20 text-blue-200">Lectura del Día</Badge>
-                </div>
-                <CardTitle className="text-2xl text-slate-50">Radar Estratégico</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-300 mb-6">
-                  Análisis estructurado de noticias con 7 capas cognitivas. Entiende qué está pasando realmente, no solo qué dicen que pasó.
-                </p>
-                <div className="flex items-center text-blue-300 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Ver Radar <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+        {/* Info Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {/* What is A4 */}
+          <Card className="border-0 bg-card/70 backdrop-blur-sm">
+            <CardHeader>
+              <div className="p-3 bg-primary/10 rounded-lg w-fit mb-3">
+                <Radar className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle>¿Qué es el Radar?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-sm text-muted-foreground">
+              <p>Un análisis estructurado de noticias con 7 capas cognitivas:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Qué cambió vs ayer</li>
+                <li>Impacto potencial</li>
+                <li>Narrativa vs realidad</li>
+                <li>Weak signals</li>
+                <li>Tu energía hoy</li>
+                <li>Acción sugerida</li>
+                <li>Watchlist personal</li>
+              </ul>
+            </CardContent>
+          </Card>
 
-          {/* News Feed */}
-          <Link href="/despega/a4/noticias" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <TrendingUp className="w-6 h-6 text-primary" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">En Vivo</Badge>
-                </div>
-                <CardTitle className="text-xl">Noticias del Mercado</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Tendencias laborales, cambios en industrias, oportunidades emergentes y análisis del mercado en tiempo real.
-                </p>
-                <div className="flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Explorar <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+          {/* Why it Matters */}
+          <Card className="border-0 bg-card/70 backdrop-blur-sm">
+            <CardHeader>
+              <div className="p-3 bg-blue-500/10 rounded-lg w-fit mb-3">
+                <Lightbulb className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <CardTitle>Por Qué Importa</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-sm text-muted-foreground">
+              <p>La mayoría de personas consume noticias reactivamente. El Radar te da:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Contexto, no solo titulares</li>
+                <li>Impacto laboral & económico</li>
+                <li>Interpretación estructurada</li>
+                <li>Posibilidades de acción</li>
+                <li>Curación editorial diaria</li>
+              </ul>
+            </CardContent>
+          </Card>
 
-          {/* Learning Modules */}
-          <Link href="/despega/a4/aprender" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                    <Lightbulb className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+          {/* Coming Soon */}
+          <Card className="border-0 bg-card/70 backdrop-blur-sm md:col-span-2">
+            <CardHeader>
+              <div className="p-3 bg-amber-500/10 rounded-lg w-fit mb-3">
+                <TrendingUp className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              </div>
+              <CardTitle>Próximas Funcionalidades</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">Noticias Personalizadas</p>
+                    <p className="text-muted-foreground">Por tu perfil & ruta</p>
                   </div>
-                  <Badge variant="secondary" className="text-xs">10+ Tests</Badge>
                 </div>
-                <CardTitle className="text-xl">Cultura General</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Tests gamificados sobre economía, industrias, trends laborales y cultura profesional. Aprende jugando.
-                </p>
-                <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Comenzar <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {/* Library */}
-          <Link href="/despega/a4/biblioteca" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-amber-500/10 rounded-lg group-hover:bg-amber-500/20 transition-colors">
-                    <BookOpen className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                <div className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">Tests de Cultura General</p>
+                    <p className="text-muted-foreground">Entrenamiento cognitivo</p>
                   </div>
-                  <Badge variant="secondary" className="text-xs">50+ Recursos</Badge>
                 </div>
-                <CardTitle className="text-xl">Biblioteca Curada</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Libros, artículos y recursos seleccionados para tu crecimiento profesional. Con notas, highlights y progreso.
-                </p>
-                <div className="flex items-center text-amber-600 dark:text-amber-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Leer <ArrowRight className="w-4 h-4 ml-2" />
+                <div className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">Biblioteca Curada</p>
+                    <p className="text-muted-foreground">Recursos seleccionados</p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </Link>
+                <div className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">Chile en Números</p>
+                    <p className="text-muted-foreground">Indicadores económicos</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

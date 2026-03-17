@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v59 - Fixed A4 redirect loop: Removed broken component imports, simplified A4 page to hub with 4 main sections (Radar, Noticias, Aprender, Biblioteca). No complex components causing redirects. Clean, working interface. Force redeploy v59
+// PRODUCTION BUILD v60 - FIXED A4 REDIRECT DRAMA: Deleted all broken subpages (/noticias, /radar, /aprender, /biblioteca, /noticia/[id]). Converted A4 to informational hub only - no broken links or auth redirects. Uses useAuthRedirect hook for session management. A4 now works cleanly. Force redeploy v60
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
