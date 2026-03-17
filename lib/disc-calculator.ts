@@ -1,5 +1,25 @@
 import { A1_PREGUNTAS_BASE } from './disc-questions'
 
+export interface DiscProfile {
+  D: number
+  I: number
+  S: number
+  C: number
+  primary: 'D' | 'I' | 'S' | 'C'
+  primaryScore: number
+  secondary: 'D' | 'I' | 'S' | 'C'
+  secondaryScore: number
+}
+
+export interface DiscInterpretation {
+  profile: DiscProfile
+  profileName: string
+  description: string
+  strengths: string[]
+  developmentAreas: string[]
+  recommendations: string[]
+}
+
 export interface A1ProfileResult {
   dominancia: number
   influencia: number
@@ -158,5 +178,99 @@ export function calcularPerfilA1(respuestas: A1Response[]): A1ProfileResult {
     fortalezas: fortalezasMap[perfilDominante],
     areas_desarrollo: areasMap[perfilDominante],
     recomendaciones: recomendacionesMap[perfilDominante],
+  }
+}
+
+/**
+ * Calculate DISC profile from raw responses (modern format)
+ * Accepts responses in format: Record<questionId, { mas?: letter, menos?: letter }>
+ */
+export function calculateDiscProfile(responses: Record<number, any>): DiscProfile {
+  const scores: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 }
+  
+  // Handle both array and object response formats
+  const responseArray = Array.isArray(responses) ? responses : Object.values(responses)
+  
+  responseArray.forEach((response: any) => {
+    if (!response) return
+    
+    // Handle DISC letter responses
+    if (response.mas && typeof response.mas === 'string') {
+      const letter = response.mas.toUpperCase()
+      if (letter in scores) scores[letter] += 2
+    }
+    if (response.menos && typeof response.menos === 'string') {
+      const letter = response.menos.toUpperCase()
+      if (letter in scores) scores[letter] -= 1
+    }
+  })
+  
+  // Normalize scores to 0-100 scale
+  const normalized: Record<string, number> = {}
+  Object.entries(scores).forEach(([letter, score]) => {
+    // Normalize with offset and scaling factor
+    normalized[letter] = Math.max(0, Math.min(100, ((score + 56) / 1.12)))
+  })
+  
+  // Find primary and secondary profiles
+  const entries = Object.entries(normalized).sort(([, a], [, b]) => b - a)
+  const primary = entries[0][0] as 'D' | 'I' | 'S' | 'C'
+  const secondary = entries[1][0] as 'D' | 'I' | 'S' | 'C'
+  
+  return {
+    D: Math.round(normalized.D),
+    I: Math.round(normalized.I),
+    S: Math.round(normalized.S),
+    C: Math.round(normalized.C),
+    primary,
+    primaryScore: Math.round(normalized[primary]),
+    secondary,
+    secondaryScore: Math.round(normalized[secondary])
+  }
+}
+
+/**
+ * Generate interpretation and insights from DISC profile
+ */
+export function interpretDiscProfile(profile: DiscProfile): DiscInterpretation {
+  const profileNames: Record<string, string> = {
+    D: 'Dominancia (Impulsor)',
+    I: 'Influencia (Inspirador)',
+    S: 'Estabilidad (Apoyo)',
+    C: 'Consciencia (Analista)'
+  }
+
+  const descriptions: Record<string, string> = {
+    D: 'Eres orientado a resultados, con capacidad para tomar decisiones rápidas. Te motiva el liderazgo y superar desafíos.',
+    I: 'Eres carismático y comunicador, energizado por interacción social. Te motiva inspirar a otros y generar conexiones.',
+    S: 'Eres colaborativo y empático, que valora relaciones y estabilidad. Te motiva apoyar a otros y mantener equilibrio.',
+    C: 'Eres analítico y detallista, buscando exactitud y cumplimiento. Te motiva el análisis profundo y la excelencia.'
+  }
+
+  const strengthsMap: Record<string, string[]> = {
+    D: ['Tomas decisiones rápidas y eficientes', 'Eres líder natural', 'Te adaptas rápido a cambios', 'Inspiras acción'],
+    I: ['Conectas fácilmente con personas', 'Comunicas con claridad', 'Motivas equipos', 'Excelente en presentaciones'],
+    S: ['Eres confiable y leal', 'Escuchas y comprendes', 'Mantienes calma bajo presión', 'Excelente en colaboración'],
+    C: ['Atiendes detalles', 'Analizas profundamente', 'Buscas calidad', 'Eres metódico y organizado']
+  }
+
+  const developmentMap: Record<string, string[]> = {
+    D: ['Escuchar activamente', 'Ser más considerado', 'Desarrollar paciencia', 'Adaptarse gradualmente'],
+    I: ['Desarrollar análisis', 'Mejorar enfoque', 'Ser cuidadoso con detalles', 'Fortalecer seguimiento'],
+    S: ['Tomar decisiones rápidas', 'Ser más proactivo', 'Aumentar iniciativa', 'Mayor assertividad'],
+    C: ['Ser más flexible', 'Mejorar ritmo ejecución', 'Mayor confianza en acción', 'Equilibrar análisis-decisión']
+  }
+
+  return {
+    profile,
+    profileName: profileNames[profile.primary],
+    description: descriptions[profile.primary],
+    strengths: strengthsMap[profile.primary],
+    developmentAreas: developmentMap[profile.primary],
+    recommendations: [
+      `En A2 Ruta: Diseña tu plan considerando tu perfil ${profile.primary}`,
+      `En A3 Impulso: Prepárate enfocándote en tus fortalezas naturales`,
+      `En A4 Radar: Busca oportunidades alineadas con tu perfil`
+    ]
   }
 }
