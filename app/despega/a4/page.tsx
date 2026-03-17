@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,33 +12,50 @@ import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle 
 
 export default function A4HubPage() {
   const [loading, setLoading] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [newsCount, setNewsCount] = useState(0)
   const [resourcesCount, setResourcesCount] = useState(0)
   const [userProfile, setUserProfile] = useState<any>(null)
+  const { data: session, status } = useSession()
   const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
     const checkAuthAndLoadStats = async () => {
       try {
-        // Check authentication
-        const { data: { session }, error: authError } = await supabase.auth.getSession()
+        // Check NextAuth session
+        if (status === 'loading') {
+          return // Wait for session to load
+        }
         
-        if (authError || !session?.user) {
-          console.log('[v0] User not authenticated, redirecting to login')
+        if (status === 'unauthenticated' || !session?.user?.email) {
+          console.log('[v0] User not authenticated in NextAuth, redirecting to login')
           router.push('/auth/signin')
           return
         }
 
-        const user = session.user
-        setIsAuthenticated(true)
+        console.log('[v0] A4 User authenticated:', session.user.email)
 
-        // Get user DISC profile from Despega profile
+        // Get user from Supabase using email from NextAuth session
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('id')
+          .eq('email', session.user.email)
+          .single()
+
+        if (userError || !userData?.id) {
+          console.error('[v0] Could not find user in Supabase:', userError)
+          // User exists in NextAuth but not in Supabase yet - still allow access to A4
+          setLoading(false)
+          return
+        }
+
+        const userId = userData.id
+
+        // Get user Despega profile
         const { data: despegarProfile } = await supabase
           .from('despega_cerebral_perfil')
           .select('tipo_perfil')
-          .eq('user_id', user.id)
+          .eq('user_id', userId)
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle()
@@ -83,7 +101,7 @@ export default function A4HubPage() {
       )}
 
       {/* Only render if authenticated and loaded */}
-      {!loading && isAuthenticated && (
+      {!loading && status === 'authenticated' && session?.user && (
         <div className="container mx-auto px-4 py-12 max-w-6xl">
           {/* Hero Section */}
           <div className="mb-16">
