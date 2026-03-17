@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v55 - FIXED AUTH REDIRECT LOOP: Updated useAuthRedirect hook to NOT redirect on INITIAL_SESSION event, only on explicit SIGNED_OUT. Fixed A1 Cerebral, A1 Report to handle loading/auth states properly - shows login link instead of auto-redirecting. Only shows content when user confirmed. - force redeploy v55
+// PRODUCTION BUILD v56 - Fixed A1 Cerebral syntax error: Removed unreachable code after function closure, moved helper functions (calculateResults, getDimensionInfo) before renderStage() definition. Proper function structure now. - force redeploy v56
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

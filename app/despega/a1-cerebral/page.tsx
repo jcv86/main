@@ -612,10 +612,7 @@ export default function A1CerebralPage() {
     )
   }
 
-  return null
-}
-
-  // Map questions to DISC-style categories
+  // Helper function to map questions to DISC-style categories
   const calculateResults = () => {
     return calculateDISCScores()
   }
@@ -667,6 +664,7 @@ export default function A1CerebralPage() {
   }
 
   return renderStage()
+}
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
