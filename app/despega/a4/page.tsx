@@ -14,11 +14,29 @@ export default function A4HubPage() {
   const [newsCount, setNewsCount] = useState(0)
   const [resourcesCount, setResourcesCount] = useState(0)
   const [userProfile, setUserProfile] = useState<any>(null)
+  const [waitingForSession, setWaitingForSession] = useState(true)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
+  // Wait a bit longer for session to load from Supabase
   useEffect(() => {
-    if (authLoading || !user?.id) return
+    if (!authLoading) {
+      // Auth check is done
+      if (user) {
+        // User found, proceed with data loading
+        setWaitingForSession(false)
+      } else {
+        // No user after initial auth - wait a bit more in case session is loading
+        const timeout = setTimeout(() => {
+          setWaitingForSession(false)
+        }, 2000)
+        return () => clearTimeout(timeout)
+      }
+    }
+  }, [authLoading, user])
+
+  useEffect(() => {
+    if (waitingForSession || !user?.id) return
     
     const loadData = async () => {
       try {
@@ -59,13 +77,13 @@ export default function A4HubPage() {
     loadData()
   }, [authLoading, user?.id, supabase])
 
-  // Show loading state while checking auth
-  if (authLoading) {
+  // Show loading state while checking auth or waiting for session to load
+  if (authLoading || waitingForSession) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Verificando autenticación...</p>
+          <p className="text-muted-foreground">Cargando A4...</p>
         </div>
       </div>
     )
