@@ -1,14 +1,51 @@
 import { A1_PREGUNTAS_BASE } from './disc-questions'
 
-export interface DiscProfile {
-  D: number
-  I: number
-  S: number
-  C: number
-  primary: 'D' | 'I' | 'S' | 'C'
+/**
+ * Despega Cerebral Assessment Profile
+ * 4 dimensions: Energía, Enfoque, Relaciones, Plan Ejecutivo
+ */
+export interface DespegarProfile {
+  energia: number
+  enfoque: number
+  relaciones: number
+  plan_ejecutivo: number
+  primary: 'energia' | 'enfoque' | 'relaciones' | 'plan_ejecutivo'
   primaryScore: number
-  secondary: 'D' | 'I' | 'S' | 'C'
+  secondary: 'energia' | 'enfoque' | 'relaciones' | 'plan_ejecutivo'
   secondaryScore: number
+}
+
+export interface DespegarInterpretation {
+  profile: DespegarProfile
+  profileName: string
+  description: string
+  strengths: string[]
+  developmentAreas: string[]
+  recommendations: string[]
+}
+
+/**
+ * Backwards compatibility - aliases for legacy code
+ */
+export type DiscProfile = DespegarProfile
+export type DiscInterpretation = DespegarInterpretation
+
+export interface A1ProfileResult {
+  dominancia: number
+  influencia: number
+  estabilidad: number
+  conciencia: number
+  perfil_dominante: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
+  perfil_secundario: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
+  descripción: string
+  fortalezas: string[]
+  areas_desarrollo: string[]
+  recomendaciones: string[]
+}
+
+export interface A1Response {
+  question_id: number
+  respuesta: 'más' | 'menos' | 'como_yo'
 }
 
 export interface DiscInterpretation {
@@ -182,11 +219,16 @@ export function calcularPerfilA1(respuestas: A1Response[]): A1ProfileResult {
 }
 
 /**
- * Calculate DISC profile from raw responses (modern format)
- * Accepts responses in format: Record<questionId, { mas?: letter, menos?: letter }>
+ * Calculate Despega profile from raw responses
+ * Maps assessment categories to Despega dimensions
  */
-export function calculateDiscProfile(responses: Record<number, any>): DiscProfile {
-  const scores: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 }
+export function calculateDespegarProfile(responses: Record<number, any>): DespegarProfile {
+  const scores: Record<string, number> = { 
+    energia: 0, 
+    enfoque: 0, 
+    relaciones: 0, 
+    plan_ejecutivo: 0 
+  }
   
   // Handle both array and object response formats
   const responseArray = Array.isArray(responses) ? responses : Object.values(responses)
@@ -194,34 +236,30 @@ export function calculateDiscProfile(responses: Record<number, any>): DiscProfil
   responseArray.forEach((response: any) => {
     if (!response) return
     
-    // Handle DISC letter responses
-    if (response.mas && typeof response.mas === 'string') {
-      const letter = response.mas.toUpperCase()
-      if (letter in scores) scores[letter] += 2
-    }
-    if (response.menos && typeof response.menos === 'string') {
-      const letter = response.menos.toUpperCase()
-      if (letter in scores) scores[letter] -= 1
-    }
+    // Map DISC categories to Despega dimensions
+    // dominancia → energia, influencia → relaciones, estabilidad → plan_ejecutivo, conciencia → enfoque
+    if (response.dominancia !== undefined) scores.energia += response.dominancia
+    if (response.influencia !== undefined) scores.relaciones += response.influencia
+    if (response.estabilidad !== undefined) scores.plan_ejecutivo += response.estabilidad
+    if (response.conciencia !== undefined) scores.enfoque += response.conciencia
   })
   
   // Normalize scores to 0-100 scale
   const normalized: Record<string, number> = {}
-  Object.entries(scores).forEach(([letter, score]) => {
-    // Normalize with offset and scaling factor
-    normalized[letter] = Math.max(0, Math.min(100, ((score + 56) / 1.12)))
+  Object.entries(scores).forEach(([dimension, score]) => {
+    normalized[dimension] = Math.max(0, Math.min(100, score))
   })
   
-  // Find primary and secondary profiles
+  // Find primary and secondary dimensions
   const entries = Object.entries(normalized).sort(([, a], [, b]) => b - a)
-  const primary = entries[0][0] as 'D' | 'I' | 'S' | 'C'
-  const secondary = entries[1][0] as 'D' | 'I' | 'S' | 'C'
+  const primary = entries[0][0] as 'energia' | 'enfoque' | 'relaciones' | 'plan_ejecutivo'
+  const secondary = entries[1][0] as 'energia' | 'enfoque' | 'relaciones' | 'plan_ejecutivo'
   
   return {
-    D: Math.round(normalized.D),
-    I: Math.round(normalized.I),
-    S: Math.round(normalized.S),
-    C: Math.round(normalized.C),
+    energia: Math.round(normalized.energia),
+    enfoque: Math.round(normalized.enfoque),
+    relaciones: Math.round(normalized.relaciones),
+    plan_ejecutivo: Math.round(normalized.plan_ejecutivo),
     primary,
     primaryScore: Math.round(normalized[primary]),
     secondary,
@@ -230,35 +268,82 @@ export function calculateDiscProfile(responses: Record<number, any>): DiscProfil
 }
 
 /**
- * Generate interpretation and insights from DISC profile
+ * Backwards compatibility - use calculateDespegarProfile instead
  */
-export function interpretDiscProfile(profile: DiscProfile): DiscInterpretation {
+export function calculateDiscProfile(responses: Record<number, any>): DiscProfile {
+  return calculateDespegarProfile(responses)
+}
+
+/**
+ * Generate Despega interpretation and insights from profile
+ */
+export function interpretDespegarProfile(profile: DespegarProfile): DespegarInterpretation {
   const profileNames: Record<string, string> = {
-    D: 'Dominancia (Impulsor)',
-    I: 'Influencia (Inspirador)',
-    S: 'Estabilidad (Apoyo)',
-    C: 'Consciencia (Analista)'
+    energia: 'Energía y Vitalidad',
+    enfoque: 'Enfoque y Productividad',
+    relaciones: 'Relaciones y Conexión',
+    plan_ejecutivo: 'Plan Ejecutivo y Acción'
   }
 
   const descriptions: Record<string, string> = {
-    D: 'Eres orientado a resultados, con capacidad para tomar decisiones rápidas. Te motiva el liderazgo y superar desafíos.',
-    I: 'Eres carismático y comunicador, energizado por interacción social. Te motiva inspirar a otros y generar conexiones.',
-    S: 'Eres colaborativo y empático, que valora relaciones y estabilidad. Te motiva apoyar a otros y mantener equilibrio.',
-    C: 'Eres analítico y detallista, buscando exactitud y cumplimiento. Te motiva el análisis profundo y la excelencia.'
+    energia: 'Tu fortaleza es generar energía, movimiento y vitalidad. Te destaca tu capacidad para impulsar iniciativas y mantener el ritmo. Eres motor de cambio y acción.',
+    enfoque: 'Tu fortaleza es el enfoque y la productividad. Destaca tu capacidad para mantener claridad, establecer prioridades y ejecutar con precisión. Eres orientado a resultados.',
+    relaciones: 'Tu fortaleza es construir relaciones significativas y colaboración. Destaca tu capacidad para conectar con otros, generar confianza y crear equipo. Eres catalizador de conexión.',
+    plan_ejecutivo: 'Tu fortaleza es la planificación y ejecución estratégica. Destaca tu capacidad para diseñar, organizar y llevar a cabo planes complejos. Eres arquitecto de resultados.'
   }
 
   const strengthsMap: Record<string, string[]> = {
-    D: ['Tomas decisiones rápidas y eficientes', 'Eres líder natural', 'Te adaptas rápido a cambios', 'Inspiras acción'],
-    I: ['Conectas fácilmente con personas', 'Comunicas con claridad', 'Motivas equipos', 'Excelente en presentaciones'],
-    S: ['Eres confiable y leal', 'Escuchas y comprendes', 'Mantienes calma bajo presión', 'Excelente en colaboración'],
-    C: ['Atiendes detalles', 'Analizas profundamente', 'Buscas calidad', 'Eres metódico y organizado']
+    energia: [
+      'Generas movimiento y cambio en equipos',
+      'Mantienes ritmo sostenido',
+      'Inspiras acción en otros',
+      'Superas inercia y obstáculos'
+    ],
+    enfoque: [
+      'Estableces prioridades claras',
+      'Ejecutas con precisión',
+      'Mantienes productividad consistente',
+      'Orientado a resultados medibles'
+    ],
+    relaciones: [
+      'Construyes conexiones significativas',
+      'Generas confianza y colaboración',
+      'Escuchas y comprendes perspectivas',
+      'Creas equipos cohesivos'
+    ],
+    plan_ejecutivo: [
+      'Diseñas planes estratégicos',
+      'Organizas complejidad',
+      'Ejecutas proyectos integrales',
+      'Anticipas y mitigas riesgos'
+    ]
   }
 
   const developmentMap: Record<string, string[]> = {
-    D: ['Escuchar activamente', 'Ser más considerado', 'Desarrollar paciencia', 'Adaptarse gradualmente'],
-    I: ['Desarrollar análisis', 'Mejorar enfoque', 'Ser cuidadoso con detalles', 'Fortalecer seguimiento'],
-    S: ['Tomar decisiones rápidas', 'Ser más proactivo', 'Aumentar iniciativa', 'Mayor assertividad'],
-    C: ['Ser más flexible', 'Mejorar ritmo ejecución', 'Mayor confianza en acción', 'Equilibrar análisis-decisión']
+    energia: [
+      'Desarrollar sostenibilidad vs. solo movimiento',
+      'Mejorar escucha y reflexión',
+      'Balancear energía con enfoque',
+      'Cultivar profundidad además de velocidad'
+    ],
+    enfoque: [
+      'Aumentar flexibilidad ante lo imprevisto',
+      'Desarrollar capacidad de pivote rápido',
+      'Mejorar energía y comunicación',
+      'Equilibrar análisis con intuición'
+    ],
+    relaciones: [
+      'Desarrollar capacidad de decisión independiente',
+      'Mejorar enfoque individual',
+      'Aumentar orientación a resultados',
+      'Fortalecer accountability personal'
+    ],
+    plan_ejecutivo: [
+      'Desarrollar agilidad y adaptabilidad',
+      'Mejorar comunicación y conexión',
+      'Aumentar energía y espontaneidad',
+      'Equilibrar control con flexibilidad'
+    ]
   }
 
   return {
@@ -268,9 +353,16 @@ export function interpretDiscProfile(profile: DiscProfile): DiscInterpretation {
     strengths: strengthsMap[profile.primary],
     developmentAreas: developmentMap[profile.primary],
     recommendations: [
-      `En A2 Ruta: Diseña tu plan considerando tu perfil ${profile.primary}`,
-      `En A3 Impulso: Prepárate enfocándote en tus fortalezas naturales`,
-      `En A4 Radar: Busca oportunidades alineadas con tu perfil`
+      `En A2 Ruta: Diseña tu plan aprovechando tu dimensión de ${profile.profileName}`,
+      `En A3 Impulso: Prepárate con acciones que refuercen tu fortaleza natural`,
+      `En A4 Radar: Busca oportunidades alineadas con tu perfil de ${profile.primary}`
     ]
   }
+}
+
+/**
+ * Backwards compatibility - use interpretDespegarProfile instead
+ */
+export function interpretDiscProfile(profile: DiscProfile): DiscInterpretation {
+  return interpretDespegarProfile(profile)
 }

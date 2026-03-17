@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
-import { authConfig } from "@/lib/auth"
+import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v43 - Fixed A1 Report crash: removed references to non-existent properties (profile_type, ideal_role, motivators, etc). Now uses correct DiscInterpretation interface. Rendering works. - force redeploy v43
+// PRODUCTION BUILD v44 - Fixed disc-calculator: Converted all DISC terminology (D, I, S, C) to Despega dimensions (Energía, Enfoque, Relaciones, Plan Ejecutivo). All assessment profiles now use correct terminology. - force redeploy v44
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
