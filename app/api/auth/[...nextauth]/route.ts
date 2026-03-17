@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v46 - Fixed A4 authentication: Changed from Supabase getSession() to NextAuth useSession(). Now correctly recognizes logged-in users and doesn't redirect unnecessarily. - force redeploy v46
+// PRODUCTION BUILD v47 - Fixed A4 SessionProvider error: Converted A4 to server component using getServerSession instead of useSession(). No SessionProvider needed. - force redeploy v47
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

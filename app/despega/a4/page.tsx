@@ -1,108 +1,76 @@
-'use client'
+import { getServerSession } from "next-auth"
+import { authConfig } from "@/lib/auth"
+import { createClient } from "@/lib/supabase/server"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from "lucide-react"
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from 'lucide-react'
+export default async function A4HubPage() {
+  // Get session server-side
+  const session = await getServerSession(authConfig)
+  
+  if (!session?.user?.email) {
+    console.log('[v0] A4: User not authenticated, redirecting to login')
+    redirect("/auth/signin")
+  }
 
-export default function A4HubPage() {
-  const [loading, setLoading] = useState(true)
-  const [newsCount, setNewsCount] = useState(0)
-  const [resourcesCount, setResourcesCount] = useState(0)
-  const [userProfile, setUserProfile] = useState<any>(null)
-  const { data: session, status } = useSession()
-  const supabase = createClient()
-  const router = useRouter()
+  console.log('[v0] A4 User authenticated:', session.user.email)
 
-  useEffect(() => {
-    const checkAuthAndLoadStats = async () => {
-      try {
-        // Check NextAuth session
-        if (status === 'loading') {
-          return // Wait for session to load
-        }
-        
-        if (status === 'unauthenticated' || !session?.user?.email) {
-          console.log('[v0] User not authenticated in NextAuth, redirecting to login')
-          router.push('/auth/signin')
-          return
-        }
+  let newsCount = 0
+  let resourcesCount = 0
+  let userProfile: any = null
 
-        console.log('[v0] A4 User authenticated:', session.user.email)
+  try {
+    const supabase = createClient()
 
-        // Get user from Supabase using email from NextAuth session
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('id')
-          .eq('email', session.user.email)
-          .single()
+    // Get user from database
+    const { data: userData } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", session.user.email)
+      .single()
 
-        if (userError || !userData?.id) {
-          console.error('[v0] Could not find user in Supabase:', userError)
-          // User exists in NextAuth but not in Supabase yet - still allow access to A4
-          setLoading(false)
-          return
-        }
+    if (userData?.id) {
+      const userId = userData.id
 
-        const userId = userData.id
+      // Get user Despega profile
+      const { data: despegarProfile } = await supabase
+        .from("despega_cerebral_perfil")
+        .select("tipo_perfil")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle()
 
-        // Get user Despega profile
-        const { data: despegarProfile } = await supabase
-          .from('despega_cerebral_perfil')
-          .select('tipo_perfil')
-          .eq('user_id', userId)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
-
-        if (despegarProfile) {
-          console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
-          setUserProfile(despegarProfile)
-        }
-
-        // Load featured news/resources
-        const { count: newsData } = await supabase
-          .from('biblioteca')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_featured', true)
-
-        // Load all resources for user (personalization handled in sub-pages)
-        const { count: resourcesData } = await supabase
-          .from('biblioteca')
-          .select('*', { count: 'exact', head: true })
-
-        setNewsCount(newsData || 0)
-        setResourcesCount(resourcesData || 0)
-      } catch (error) {
-        console.error('[v0] Error loading A4 page:', error)
-      } finally {
-        setLoading(false)
+      if (despegarProfile) {
+        console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
+        userProfile = despegarProfile
       }
     }
 
-    checkAuthAndLoadStats()
-  }, [supabase, router])
+    // Load featured news/resources
+    const { count: newsData } = await supabase
+      .from("biblioteca")
+      .select("*", { count: "exact", head: true })
+      .eq("is_featured", true)
+
+    // Load all resources
+    const { count: resourcesData } = await supabase
+      .from("biblioteca")
+      .select("*", { count: "exact", head: true })
+
+    newsCount = newsData || 0
+    resourcesCount = resourcesData || 0
+  } catch (error) {
+    console.error('[v0] Error loading A4 data:', error)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
-      {/* Show loading state */}
-      {loading && (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Cargando A4...</p>
-          </div>
-        </div>
-      )}
-
-      {/* Only render if authenticated and loaded */}
-      {!loading && status === 'authenticated' && session?.user && (
-        <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
           {/* Hero Section */}
           <div className="mb-16">
             <div className="text-center max-w-3xl mx-auto mb-8">
@@ -393,7 +361,7 @@ export default function A4HubPage() {
           </CardContent>
         </Card>
         </div>
-      )}
+      </div>
     </div>
   )
 }
