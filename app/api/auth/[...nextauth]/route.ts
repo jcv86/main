@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
-import { authconfig } from "@/lib/auth"
+import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v44 - Fixed disc-calculator: Converted all DISC terminology (D, I, S, C) to Despega dimensions (Energía, Enfoque, Relaciones, Plan Ejecutivo). All assessment profiles now use correct terminology. - force redeploy v44
+// PRODUCTION BUILD v45 - Fixed NextAuth route import typo: authconfig → authConfig. Build error resolved. - force redeploy v45
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
