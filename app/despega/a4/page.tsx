@@ -1,85 +1,83 @@
-import { getServerSession } from "next-auth"
-import { authConfig } from "@/lib/auth"
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { redirect } from "next/navigation"
-import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle, Loader2 } from "lucide-react"
 
-export default async function A4HubPage() {
-  // Get session - use getServerSession with proper auth config
-  const session = await getServerSession()
-  
-  console.log('[v0] A4 Session check - User:', session?.user?.email, 'Session exists:', !!session)
-  
-  if (!session?.user?.email) {
-    console.log('[v0] A4: No session found, redirecting to login')
-    redirect("/auth/signin")
-  }
+export default function A4HubPage() {
+  const [loading, setLoading] = useState(true)
+  const [newsCount, setNewsCount] = useState(0)
+  const [resourcesCount, setResourcesCount] = useState(0)
+  const [userProfile, setUserProfile] = useState<any>(null)
+  const router = useRouter()
+  const supabase = createClient()
 
-  console.log('[v0] A4 User authenticated:', session.user.email)
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Check authentication via Supabase
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          console.log('[v0] A4: User not authenticated, redirecting to login')
+          router.push("/auth/signin")
+          return
+        }
 
-  let newsCount = 0
-  let resourcesCount = 0
-  let userProfile: any = null
+        console.log('[v0] A4 User authenticated:', user.email)
 
-  try {
-    const supabase = createClient()
+        // Get user Despega profile
+        const { data: despegarProfile } = await supabase
+          .from("despega_cerebral_perfil")
+          .select("tipo_perfil")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle()
 
-    // Get user from database
-    const { data: userData, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("email", session.user.email)
-      .single()
+        if (despegarProfile) {
+          console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
+          setUserProfile(despegarProfile)
+        }
 
-    if (userError) {
-      console.log('[v0] User not found in Supabase (this is okay on first visit):', userError.message)
-    }
+        // Load featured news/resources
+        const { count: newsData } = await supabase
+          .from("biblioteca")
+          .select("*", { count: "exact", head: true })
+          .eq("is_featured", true)
 
-    if (userData?.id) {
-      const userId = userData.id
+        // Load all resources
+        const { count: resourcesData } = await supabase
+          .from("biblioteca")
+          .select("*", { count: "exact", head: true })
 
-      // Get user Despega profile
-      const { data: despegarProfile } = await supabase
-        .from("despega_cerebral_perfil")
-        .select("tipo_perfil")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      if (despegarProfile) {
-        console.log('[v0] User Despega profile:', despegarProfile.tipo_perfil)
-        userProfile = despegarProfile
+        setNewsCount(newsData || 0)
+        setResourcesCount(resourcesData || 0)
+      } catch (error) {
+        console.error('[v0] Error loading A4 data:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
-    // Load featured news/resources
-    const { count: newsData, error: newsError } = await supabase
-      .from("biblioteca")
-      .select("*", { count: "exact", head: true })
-      .eq("is_featured", true)
+    loadData()
+  }, [supabase, router])
 
-    if (newsError) {
-      console.log('[v0] Error loading featured news:', newsError.message)
-    }
-
-    // Load all resources
-    const { count: resourcesData, error: resourcesError } = await supabase
-      .from("biblioteca")
-      .select("*", { count: "exact", head: true })
-
-    if (resourcesError) {
-      console.log('[v0] Error loading all resources:', resourcesError.message)
-    }
-
-    newsCount = newsData || 0
-    resourcesCount = resourcesData || 0
-  } catch (error) {
-    console.error('[v0] Error loading A4 data:', error)
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Cargando A4...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -125,7 +123,7 @@ export default async function A4HubPage() {
                 <div className="text-center">
                   <p className="text-sm text-muted-foreground mb-2">Tu Perfil Despega</p>
                   <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-lg font-bold">
-                    {userProfile.tipo_perfil || 'N/A'}
+                    {userProfile.tipo_perfil || "N/A"}
                   </Badge>
                   <p className="text-xs text-muted-foreground mt-2">Personalizando contenido para ti</p>
                 </div>
@@ -221,7 +219,7 @@ export default async function A4HubPage() {
                   <div className="p-3 bg-amber-500/10 rounded-lg group-hover:bg-amber-500/20 transition-colors">
                     <BookOpen className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                   </div>
-                  <Badge variant="secondary" className="text-xs">{resourcesCount}+ Libros</Badge>
+                  <Badge variant="secondary" className="text-xs">{resourcesCount}+ Recursos</Badge>
                 </div>
                 <CardTitle className="text-xl">Biblioteca Curada</CardTitle>
               </CardHeader>
