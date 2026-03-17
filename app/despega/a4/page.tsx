@@ -71,65 +71,65 @@ export default async function A4HubPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
-          {/* Hero Section */}
-          <div className="mb-16">
-            <div className="text-center max-w-3xl mx-auto mb-8">
-              <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
-                <Globe className="w-3 h-3 mr-2" />
-                Fase A4: Contexto & Cultura
-              </Badge>
-              <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-                Entiende el Mundo Real
-              </h1>
-              <p className="text-xl text-muted-foreground text-balance mb-8">
-                Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
-              </p>
-            </div>
+        {/* Hero Section */}
+        <div className="mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
+              <Globe className="w-3 h-3 mr-2" />
+              Fase A4: Contexto & Cultura
+            </Badge>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
+              Entiende el Mundo Real
+            </h1>
+            <p className="text-xl text-muted-foreground text-balance mb-8">
+              Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
+            </p>
           </div>
+        </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
+          <Card className="border-0 bg-card/50 backdrop-blur-sm">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-primary mb-1">{newsCount}</p>
+                <p className="text-sm text-muted-foreground">Artículos para Ti</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-0 bg-card/50 backdrop-blur-sm">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-primary mb-1">{resourcesCount}</p>
+                <p className="text-sm text-muted-foreground">Recursos Totales</p>
+              </div>
+            </CardContent>
+          </Card>
+          {userProfile && (
+            <Card className="border-0 bg-primary/5 backdrop-blur-sm col-span-1 md:col-span-2">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">{newsCount}</p>
-                  <p className="text-sm text-muted-foreground">Artículos para Ti</p>
+                  <p className="text-sm text-muted-foreground mb-2">Tu Perfil Despega</p>
+                  <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-lg font-bold">
+                    {userProfile.tipo_perfil || 'N/A'}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground mt-2">Personalizando contenido para ti</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">{resourcesCount}</p>
-                  <p className="text-sm text-muted-foreground">Recursos Totales</p>
-                </div>
-              </CardContent>
-            </Card>
-            {userProfile && (
-              <Card className="border-0 bg-primary/5 backdrop-blur-sm col-span-1 md:col-span-2">
-                <CardContent className="pt-6">
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-2">Tu Perfil Despega</p>
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-lg font-bold">
-                      {userProfile.tipo_perfil || 'N/A'}
-                    </Badge>
-                    <p className="text-xs text-muted-foreground mt-2">Personalizando contenido para ti</p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">∞</p>
-                  <p className="text-sm text-muted-foreground">Oportunidades</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          )}
+          <Card className="border-0 bg-card/50 backdrop-blur-sm">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-primary mb-1">∞</p>
+                <p className="text-sm text-muted-foreground">Oportunidades</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          {/* Main Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+        {/* Main Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
           {/* Radar Estratégico - Featured First */}
           <Link href="/despega/a4/radar" className="group lg:col-span-2">
             <Card className="h-full border-0 bg-gradient-to-br from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer text-white">
