@@ -154,8 +154,9 @@ export default function CVATSPage() {
           </p>
         ))}
       </div>
-    </div>
-  )
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
@@ -209,7 +210,7 @@ export default function CVATSPage() {
           <TabsContent value="preview" className="space-y-4">
             <Card className="overflow-hidden">
               <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg">
-                {format === 'ats' ? renderATS Format() : renderStandardFormat()}
+                {format === 'ats' ? renderATSFormat() : renderStandardFormat()}
               </div>
             </Card>
 
