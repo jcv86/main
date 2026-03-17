@@ -6,34 +6,82 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Zap, Target, BookOpen } from "lucide-react"
-
-// Mock data for A1 test results
-const mockA1Results = {
-  d_score: 75,
-  i_score: 60,
-  s_score: 55,
-  c_score: 70,
-  tipo_perfil: "Impulsor",
-}
+import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { type DiscProfile } from "@/lib/disc-calculator"
 
 export default function A2IntroPage() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [a1Results, setA1Results] = useState<DiscProfile | null>(null)
   const router = useRouter()
+  const supabase = createClient()
 
-  // For now, using mock data. Will replace with Supabase data later
-  const a1Results = mockA1Results
+  useEffect(() => {
+    loadA1Profile()
+  }, [])
+
+  const loadA1Profile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.id) {
+        router.push('/auth/signin')
+        return
+      }
+
+      // Get the latest A1 profile
+      const { data: profileData, error: profileError } = await supabase
+        .from('user_a1_profiles')
+        .select('disc_profile')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (profileError || !profileData?.disc_profile) {
+        setError('No se encontró tu perfil A1. Por favor completa la evaluación primero.')
+        return
+      }
+
+      setA1Results(profileData.disc_profile as DiscProfile)
+      console.log('[v0] A1 profile loaded for A2 Intro:', profileData.disc_profile)
+    } catch (err) {
+      console.error('[v0] Error loading A1 profile:', err)
+      setError('Error al cargar tu perfil A1. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900 dark:border-slate-50 mx-auto"></div>
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple-600 dark:text-purple-400" />
           <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu A2...</p>
         </div>
-    </div>
-  )
-}
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
+        <Card className="max-w-md">
+          <CardContent className="pt-6">
+            <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+            <Button onClick={() => router.push('/despega/a1-cerebral')} className="w-full">
+              Volver a A1
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!a1Results) {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
@@ -56,15 +104,35 @@ export default function A2IntroPage() {
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
               <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                Basado en tu resultado A1 como <strong>{a1Results.tipo_perfil}</strong>, 
+                Basado en tu perfil DISC resultado A1 con puntuación dominante de <strong>{a1Results.primary}</strong> ({a1Results.primaryScore}%), 
                 hemos diseñado un plan de 90 días con micro-acciones concretas.
               </p>
               
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
-                  con acciones que realmente importan</strong>, adaptadas a cómo naturalmente actúas.
+                  con acciones que realmente importan</strong>, adaptadas a tu patrón DISC natural.
                 </p>
+              </div>
+
+              {/* DISC Scores Display */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
+                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Dominancia</p>
+                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{a1Results.D}%</p>
+                </div>
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Influencia</p>
+                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{a1Results.I}%</p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Estabilidad</p>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{a1Results.S}%</p>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Consciencia</p>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{a1Results.C}%</p>
+                </div>
               </div>
 
               <div className="space-y-3 pt-4">

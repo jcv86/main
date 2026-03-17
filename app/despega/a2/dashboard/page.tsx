@@ -265,6 +265,42 @@ export default function A2DashboardPage() {
           </Card>
         </div>
 
+        {/* A3 PROGRESSION CTA - PROMINENT */}
+        <Card className="border-2 border-blue-500 dark:border-blue-600 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/50 dark:to-cyan-950/50 shadow-lg">
+          <CardContent className="pt-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex-1">
+                <Badge className="mb-3 bg-blue-600 hover:bg-blue-700">Siguiente Fase</Badge>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+                  ¿Listo para A3: Entrenamientos Especializados?
+                </h3>
+                <p className="text-slate-700 dark:text-slate-300 mb-4">
+                  Una vez que completes tu plan de 90 días en A2, accede a entrenamientos especializados, práctica de entrevistas y feedback de IA para llevar tus habilidades al siguiente nivel.
+                </p>
+                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  <li className="flex gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Entrenamientos personalizados según tu perfil</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Práctica de entrevistas con feedback de IA</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Conexión con oportunidades laborales</span>
+                  </li>
+                </ul>
+              </div>
+              <Link href="/despega/a3" className="flex-shrink-0 w-full md:w-auto">
+                <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-base shadow-lg">
+                  Explorar A3 <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* ADDITIONAL RESOURCES */}
         <Card className="border-0 bg-amber-50 dark:bg-amber-900/20">
           <CardHeader>
