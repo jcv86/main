@@ -49,7 +49,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -199,6 +199,6 @@ export default function ProgressPage() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   )
 }

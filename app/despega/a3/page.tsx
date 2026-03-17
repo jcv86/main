@@ -95,7 +95,7 @@ export default function A3Page() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* WELCOME HERO - A3 VERSION */}
         <div className="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-800 dark:to-amber-800 rounded-lg p-8 text-white shadow-lg">
@@ -491,6 +491,6 @@ export default function A3Page() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   )
 }
