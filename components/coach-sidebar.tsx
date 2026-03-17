@@ -1,15 +1,38 @@
 'use client'
 
+import { useState } from 'react'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Flame, TrendingUp, Smile, MessageCircle } from 'lucide-react'
+import { Flame, TrendingUp, Smile, MessageCircle, X, ChevronUp } from 'lucide-react'
 import Link from 'next/link'
 
 export function CoachSidebar() {
   const { userName, currentProgress, coachMessages, isLoadingCoach } = useCoach()
+  const [isOpen, setIsOpen] = useState(true)
+  const [isMinimized, setIsMinimized] = useState(false)
 
+  // If closed, don't render anything
+  if (!isOpen) {
+    return null
+  }
+
+  // Minimized state - show only floating button
+  if (isMinimized) {
+    return (
+      <button
+        onClick={() => setIsMinimized(false)}
+        className="fixed right-4 bottom-4 z-40 h-12 w-12 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-110"
+        aria-label="Abrir Tu Coach"
+        title="Tu Coach"
+      >
+        <MessageCircle className="w-6 h-6 text-white" />
+      </button>
+    )
+  }
+
+  // Full sidebar view
   return (
     <div className="fixed right-4 bottom-4 w-80 z-40">
       <Card className="shadow-lg border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950 dark:to-slate-900">
@@ -24,9 +47,24 @@ export function CoachSidebar() {
                 {userName || 'Tu transformación'}
               </p>
             </div>
-            <Link href="/despega/a2/coach" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-              <MessageCircle className="w-4 h-4" />
-            </Link>
+            <div className="flex gap-1">
+              <button
+                onClick={() => setIsMinimized(true)}
+                className="p-1 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition-colors"
+                aria-label="Minimizar"
+                title="Minimizar"
+              >
+                <ChevronUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1 hover:bg-red-100 dark:hover:bg-red-900 rounded transition-colors"
+                aria-label="Cerrar"
+                title="Cerrar"
+              >
+                <X className="w-4 h-4 text-red-600 dark:text-red-400" />
+              </button>
+            </div>
           </div>
         </CardHeader>
 
