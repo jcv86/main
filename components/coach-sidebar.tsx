@@ -1,141 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import { useCoach } from '@/contexts/coach-context'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Flame, TrendingUp, Smile, MessageCircle, ChevronUp } from 'lucide-react'
-import Link from 'next/link'
+import { Card } from '@/components/ui/card'
+import { MessageCircle } from 'lucide-react'
 
 export function CoachSidebar() {
-  const { userName, currentProgress, coachMessages, isLoadingCoach } = useCoach()
-  const [isMinimized, setIsMinimized] = useState(false)
-
-  if (isMinimized) {
-    return (
-      <button
-        onClick={() => setIsMinimized(false)}
-        className="fixed right-4 bottom-4 z-40 h-12 w-12 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-110"
-        aria-label="Abrir Tu Coach"
-        title="Tu Coach"
-      >
-        <MessageCircle className="w-6 h-6 text-white" />
-      </button>
-    )
-  }
-
   return (
     <div className="fixed right-4 bottom-4 w-80 z-40">
-      <Card className="shadow-lg border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950 dark:to-slate-900">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex-1">
-              <CardTitle className="text-base flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                Tu Coach
-              </CardTitle>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                {userName || 'Tu transformación'}
-              </p>
-            </div>
-            <button
-              onClick={() => setIsMinimized(true)}
-              className="p-1 hover:bg-blue-100 dark:hover:bg-blue-900 rounded transition-colors"
-              aria-label="Minimizar"
-            >
-              <ChevronUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </button>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-4">
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-3 rounded-lg border border-indigo-200 dark:border-indigo-800">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-indigo-900 dark:text-indigo-100">Progreso General</span>
-              <Badge className="bg-indigo-600 text-white text-xs">50%</Badge>
-            </div>
-            <div className="flex gap-1 items-center text-xs font-medium">
-              <span className="text-green-600 dark:text-green-400">A1 ✓</span>
-              <span className="text-yellow-600 dark:text-yellow-400">A2 ▮</span>
-              <span className="text-slate-400">A3 ○</span>
-              <span className="text-slate-400">A4 ○</span>
-            </div>
-            <Progress value={50} className="h-1.5 mt-2" />
-          </div>
-
-          <div className="bg-white dark:bg-slate-800 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-sm leading-relaxed text-slate-700 dark:text-slate-300 min-h-16">
-            {isLoadingCoach ? (
-              <div className="text-slate-500">Analizando tu progreso...</div>
-            ) : coachMessages.length > 0 ? (
-              coachMessages[0]
-            ) : (
-              'Tu progreso aparecerá aquí'
-            )}
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs font-medium">
-              <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                <Flame className="w-3 h-3 text-orange-500" />
-                Racha
-              </span>
-              <span className="font-bold text-orange-600 dark:text-orange-400">
-                {currentProgress.streak}d
-              </span>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between text-xs font-medium mb-1">
-                <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                  <TrendingUp className="w-3 h-3 text-green-500" />
-                  Tasa de éxito
-                </span>
-                <span className="font-bold text-green-600 dark:text-green-400">
-                  {currentProgress.successRate}%
-                </span>
-              </div>
-              <Progress value={currentProgress.successRate} className="h-1.5" />
-            </div>
-
-            <div className="flex items-center justify-between text-xs font-medium">
-              <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                <Smile className="w-3 h-3 text-yellow-500" />
-                Ánimo hoy
-              </span>
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <span key={i} className={`text-lg ${i <= currentProgress.currentMood ? 'opacity-100' : 'opacity-30'}`}>
-                    {['😞', '😐', '😐', '😊', '🤩'][i - 1]}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between text-xs font-medium mb-1">
-                <span className="text-slate-700 dark:text-slate-300">Sprint</span>
-                <span className="font-bold text-blue-600 dark:text-blue-400">
-                  {currentProgress.sprintProgress}%
-                </span>
-              </div>
-              <Progress value={currentProgress.sprintProgress} className="h-1.5" />
-            </div>
-          </div>
-
-          <Badge variant="outline" className="w-full justify-center">
-            {currentProgress.actionsCompleted} acciones completadas
-          </Badge>
-
-          <div className="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-2">
-            <Link href="/despega/journey-summary" className="block text-center text-xs font-medium text-purple-600 hover:text-purple-700 py-1">
-              📊 Ver Resumen del Viaje
-            </Link>
-            <Link href="/despega/a2/coach" className="block text-center text-xs font-medium text-blue-600 hover:text-blue-700 py-1">
-              💬 Abrir Chat Completo
-            </Link>
-          </div>
-        </CardContent>
+      <Card className="p-4 bg-blue-50">
+        <div className="flex items-center gap-2 mb-4">
+          <MessageCircle className="w-5 h-5 text-blue-600" />
+          <h3 className="font-semibold">Tu Coach</h3>
+        </div>
+        <p className="text-sm text-gray-600">Tu progreso aparecerá aquí</p>
       </Card>
     </div>
   )
