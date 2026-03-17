@@ -12,7 +12,6 @@ export function CoachSidebar() {
   const { userName, currentProgress, coachMessages, isLoadingCoach } = useCoach()
   const [isMinimized, setIsMinimized] = useState(false)
 
-  // Minimized state - show only floating button
   if (isMinimized) {
     return (
       <button
@@ -26,7 +25,6 @@ export function CoachSidebar() {
     )
   }
 
-  // Full sidebar view - always available
   return (
     <div className="fixed right-4 bottom-4 w-80 z-40">
       <Card className="shadow-lg border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-50 to-slate-50 dark:from-blue-950 dark:to-slate-900">
@@ -53,7 +51,6 @@ export function CoachSidebar() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* GLOBAL JOURNEY PROGRESS */}
           <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-3 rounded-lg border border-indigo-200 dark:border-indigo-800">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-indigo-900 dark:text-indigo-100">Progreso General</span>
@@ -68,7 +65,6 @@ export function CoachSidebar() {
             <Progress value={50} className="h-1.5 mt-2 bg-slate-300 dark:bg-slate-700" />
           </div>
 
-          {/* Coach Message */}
           <div className="bg-white dark:bg-slate-800 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-sm leading-relaxed text-slate-700 dark:text-slate-300 min-h-16">
             {isLoadingCoach ? (
               <div className="text-slate-500">Analizando tu progreso...</div>
@@ -79,9 +75,7 @@ export function CoachSidebar() {
             )}
           </div>
 
-          {/* Progress Stats */}
           <div className="space-y-3">
-            {/* Streak */}
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
@@ -94,7 +88,6 @@ export function CoachSidebar() {
               </div>
             </div>
 
-            {/* Success Rate */}
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
@@ -111,7 +104,6 @@ export function CoachSidebar() {
               />
             </div>
 
-            {/* Mood */}
             <div className="flex items-center justify-between text-xs font-medium">
               <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                 <Smile className="w-3 h-3 text-yellow-500" />
@@ -126,7 +118,6 @@ export function CoachSidebar() {
               </div>
             </div>
 
-            {/* Sprint Progress */}
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span className="text-slate-700 dark:text-slate-300">Sprint</span>
@@ -141,12 +132,10 @@ export function CoachSidebar() {
             </div>
           </div>
 
-          {/* Actions Completed Badge */}
           <Badge variant="outline" className="w-full justify-center bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100">
             {currentProgress.actionsCompleted} acciones completadas
           </Badge>
 
-          {/* Quick Links */}
           <div className="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-2">
             <Link href="/despega/journey-summary" className="block text-center text-xs font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 py-1">
               📊 Ver Resumen del Viaje
