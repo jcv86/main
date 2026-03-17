@@ -665,33 +665,6 @@ export default function A1CerebralPage() {
 
   return renderStage()
 }
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold mb-2">¡Test Completado!</h1>
-          <p className="text-lg text-gray-600">Aquí está tu Perfil Despega Cerebral</p>
-        </div>
-
-        {/* Primary Profile - DISC Style */}
-        <Card className={`mb-8 shadow-xl border-4 ${getDimensionInfo(primaryDimension).color}`}>
-          <CardHeader className="text-center pb-6">
-            <div className="text-6xl mb-4">{getDimensionInfo(primaryDimension).emoji}</div>
-            <CardTitle className="text-4xl font-bold mb-2">
-              {getProfileContent(primaryDimension, primaryScore)?.label}
-            </CardTitle>
-            <p className="text-lg text-gray-600">Tu dimensión primaria</p>
-          </CardHeader>
-          <CardContent className="pb-8">
-            <div className="text-center mb-6">
-              <div className="text-5xl font-bold text-blue-600 mb-2">{primaryScore}%</div>
-            </div>
-
-            {/* Natural Behavior */}
-            <div className="mb-6 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-              <h4 className="font-semibold text-blue-900 mb-2">Así es tu forma natural de actuar</h4>
-              <p className="text-gray-700 text-sm">
-                {getProfileContent(primaryDimension, primaryScore)?.naturalBehavior}
               </p>
             </div>
 
