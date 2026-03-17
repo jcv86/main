@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -7,255 +6,78 @@ import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 
 export default function Conozcamonos1Page() {
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, string>>({})
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [authChecked, setAuthChecked] = useState(false)
+  const [idx,setIdx] = useState(0)
+  const [resp,setResp] = useState<Record<number,string>>({})
+  const [loading,setLoading] = useState(false)
+  const [error,setError] = useState('')
+  const [authOk,setAuthOk] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const sb = createClient()
 
-  // Check auth on mount
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/signin')
-        return
-      }
-      setAuthChecked(true)
+    const check = async () => {
+      const { data: { user } } = await sb.auth.getUser()
+      if (!user) { router.push('/auth/signin'); return }
+      setAuthOk(true)
     }
-    checkAuth()
-  }, [supabase, router])
+    check()
+  }, [sb, router])
 
-  if (!authChecked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p className="text-muted-foreground">Verificando autenticación...</p>
-      </div>
-    )
-  }
+  if (!authOk) return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
 
-  const question = CONOZCAMONOS_1_QUESTIONS[currentQuestion]
-  const allAnswered = Object.keys(responses).length === CONOZCAMONOS_1_QUESTIONS.length
-  const isLastQuestion = currentQuestion === CONOZCAMONOS_1_QUESTIONS.length - 1
+  const q = CONOZCAMONOS_1_QUESTIONS[idx]
+  const answered = !!resp[q.id]
+  const isLast = idx === CONOZCAMONOS_1_QUESTIONS.length - 1
 
-  const handleAnswer = (value: string) => {
-    setResponses(prev => ({
-      ...prev,
-      [question.id]: value
-    }))
-    setError('')
-  }
-
-  const handleNext = () => {
-    if (!responses[question.id]) {
-      setError('Por favor responde esta pregunta')
-      return
-    }
-    if (isLastQuestion) {
-      submitResponses()
-    } else {
-      setCurrentQuestion(prev => prev + 1)
-    }
-  }
-
-  const handleBack = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(prev => prev - 1)
-    }
-  }
-
-  const submitResponses = async () => {
-    setLoading(true)
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/signin')
-        return
-      }
-
-      // Save responses to database
-      const { error: dbError } = await supabase
-        .from('canon_conozcamonos_1_responses')
-        .insert({
+  const handleNext = async () => {
+    if (!resp[q.id]) { setError('Responde esta pregunta'); return }
+    if (isLast) {
+      setLoading(true)
+      try {
+        const { data: { user } } = await sb.auth.getUser()
+        if (!user) { router.push('/auth/signin'); return }
+        const { error: e } = await sb.from('canon_conozcamonos_1_responses').insert({
           user_id: user.id,
-          responses: responses,
+          responses: resp,
           completed_at: new Date().toISOString()
         })
-
-      if (dbError) throw dbError
-
-      console.log('[v0] Conozcámonos 1 saved successfully')
-
-      // Redirect to A1 Cerebral Assessment (next step in A1 Origen)
-      router.push('/despega/a1-cerebral')
-    } catch (err) {
-      console.error('[v0] Error saving Conozcámonos 1:', err)
-      setError('Error al guardar tus respuestas. Intenta de nuevo.')
-    } finally {
-      setLoading(false)
+        if (e) throw e
+        router.push('/despega/a1-cerebral')
+      } catch (err) {
+        console.error('[v0] Error:', err)
+        setError('Error al guardar')
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      setIdx(idx + 1)
     }
   }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
-        {/* Progress */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-foreground">Conozcámonos 1</h1>
-            <span className="text-muted-foreground text-sm">
-              Pregunta {currentQuestion + 1} de {CONOZCAMONOS_1_QUESTIONS.length}
-            </span>
+            <h1 className="text-3xl font-bold">Conozcámonos 1</h1>
+            <span className="text-muted-foreground text-sm">{idx + 1}/{CONOZCAMONOS_1_QUESTIONS.length}</span>
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-            <div
-              className="h-full bg-primary transition-all duration-300"
-              style={{ width: `${((currentQuestion + 1) / CONOZCAMONOS_1_QUESTIONS.length) * 100}%` }}
-            />
-          </div>
+          <div className="w-full bg-muted rounded-full h-2"><div className="h-full bg-primary" style={{ width: `${((idx + 1) / CONOZCAMONOS_1_QUESTIONS.length) * 100}%` }} /></div>
         </div>
-
-        {/* Question */}
         <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-          <p className="text-muted-foreground text-sm mb-2">Paso 1: Contexto de Transición</p>
-          <h2 className="text-2xl font-bold text-foreground mb-6">{question.question}</h2>
-
-          {/* Input based on type */}
-          {question.type === 'select' && (
-            <div className="space-y-3">
-              {question.options?.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleAnswer(option)}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    responses[question.id] === option
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-border/80'
-                  }`}
-                >
-                  <span className="text-foreground">{option}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {question.type === 'text' && (
-            <textarea
-              value={responses[question.id] || ''}
-              onChange={(e) => handleAnswer(e.target.value)}
-              placeholder={question.placeholder}
-              maxLength={question.maxLength}
-              className="w-full p-4 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none resize-none"
-              rows={4}
-            />
-          )}
-
-          {error && (
-            <p className="text-destructive text-sm mt-4">{error}</p>
-          )}
-        </div>
-
-        {/* Navigation */}
-        <div className="flex gap-4">
-          <Button
-            onClick={handleBack}
-            variant="outline"
-            disabled={currentQuestion === 0}
-            className="flex-1"
-          >
-            Atrás
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={!responses[question.id] || loading}
-            className="flex-1"
-          >
-            {loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-2xl">
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-foreground">Conozcámonos 1</h1>
-            <span className="text-muted-foreground text-sm">
-              Pregunta {currentQuestion + 1} de {CONOZCAMONOS_1_QUESTIONS.length}
-            </span>
+          <h2 className="text-2xl font-bold mb-6">{q.question}</h2>
+          <div className="space-y-3">
+            {q.options?.map((opt) => (
+              <button key={opt} onClick={() => { setResp(prev => ({ ...prev, [q.id]: opt })); setError('') }} className={`w-full text-left p-4 rounded-lg border-2 transition-all ${resp[q.id] === opt ? 'border-primary bg-primary/10' : 'border-border'}`}>
+                <span className="text-foreground">{opt}</span>
+              </button>
+            ))}
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-            <div
-              className="h-full bg-primary transition-all duration-300"
-              style={{ width: `${((currentQuestion + 1) / CONOZCAMONOS_1_QUESTIONS.length) * 100}%` }}
-            />
-          </div>
+          {error && <p className="text-destructive text-sm mt-4">{error}</p>}
         </div>
-
-        {/* Question */}
-        <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-          <p className="text-muted-foreground text-sm mb-2">Paso 1: Contexto de Transición</p>
-          <h2 className="text-2xl font-bold text-foreground mb-6">{question.question}</h2>
-
-          {/* Input based on type */}
-          {question.type === 'select' && (
-            <div className="space-y-3">
-              {question.options?.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleAnswer(option)}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    responses[question.id] === option
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-border/80'
-                  }`}
-                >
-                  <span className="text-foreground">{option}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {question.type === 'text' && (
-            <textarea
-              value={responses[question.id] || ''}
-              onChange={(e) => handleAnswer(e.target.value)}
-              placeholder={question.placeholder}
-              maxLength={question.maxLength}
-              className="w-full p-4 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none resize-none"
-              rows={4}
-            />
-          )}
-
-          {error && (
-            <p className="text-destructive text-sm mt-4">{error}</p>
-          )}
-        </div>
-
-        {/* Navigation */}
         <div className="flex gap-4">
-          <Button
-            onClick={handleBack}
-            variant="outline"
-            disabled={currentQuestion === 0}
-            className="flex-1"
-          >
-            Atrás
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={!responses[question.id] || loading}
-            className="flex-1"
-          >
-            {loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
-          </Button>
+          <Button onClick={() => idx > 0 && setIdx(idx - 1)} variant="outline" disabled={idx === 0} className="flex-1">Atrás</Button>
+          <Button onClick={handleNext} disabled={!answered || loading} className="flex-1">{loading ? 'Guardando...' : isLast ? 'Continuar' : 'Siguiente'}</Button>
         </div>
       </div>
     </div>
