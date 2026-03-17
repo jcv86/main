@@ -66,7 +66,7 @@ export default function A4HubPage() {
     }
 
     loadData()
-  }, [supabase, router])
+  }, [])
 
   // Show loading state
   if (loading) {

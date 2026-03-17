@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v51 - Completely rebuilt A4 as client component: Now uses "use client" and Supabase auth like rest of Despega (A2). Matches established pattern. Works with logged-in users. - force redeploy v51
+// PRODUCTION BUILD v52 - Fixed A4 infinite redirect loop: Changed useEffect dependency array from [supabase, router] to []. Effect now runs only once on mount, preventing re-authentication checks that trigger false redirects. - force redeploy v52
 const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
