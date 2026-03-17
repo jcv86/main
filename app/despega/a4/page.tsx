@@ -221,145 +221,56 @@ export default async function A4HubPage() {
               </CardContent>
             </Card>
           </Link>
-
-          {/* Noticias Personalizadas */}
-          <Link href="/despega/a4/noticias-personalizadas" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-indigo-500/10 rounded-lg group-hover:bg-indigo-500/20 transition-colors">
-                    <Globe className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">Tu Perfil</Badge>
-                </div>
-                <CardTitle className="text-xl">Noticias Personalizadas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Contenido filtrado según tu perfil DISC, industrias de interés, y ruta de desarrollo profesional.
-                </p>
-                <div className="flex items-center text-indigo-600 dark:text-indigo-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Mis Noticias <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {/* Pruebas & Contexto */}
-          <Link href="/despega/a4/pruebas-contexto" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-rose-500/10 rounded-lg group-hover:bg-rose-500/20 transition-colors">
-                    <Award className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">Gamificado</Badge>
-                </div>
-                <CardTitle className="text-xl">Pruebas de Contexto</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Tests interactivos sobre situaciones reales, preguntas de criterio profesional, y dilemmas empresariales.
-                </p>
-                <div className="flex items-center text-rose-600 dark:text-rose-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Resolver Pruebas <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
         </div>
 
-        {/* Audit & Verification Section */}
-        <div className="mt-16 pt-12 border-t border-border/50">
-          <h2 className="text-2xl font-bold mb-6">Verificación del Sistema</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Audit Status Card */}
-            <a href="https://github.com/jcv86/main/blob/radar-graphic/AUDIT_EXECUTIVE_SUMMARY.md" target="_blank" rel="noopener noreferrer" className="group">
-              <Card className="h-full border-0 bg-green-500/5 hover:bg-green-500/10 backdrop-blur-sm transition-all cursor-pointer">
+        {/* Additional Resources Section */}
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-bold mb-8">Más Recursos de Aprendizaje</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Link href="/despega/a4/noticias-personalizadas" className="group">
+              <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-3">
-                    <div className="p-3 bg-green-500/20 rounded-lg group-hover:bg-green-500/30 transition-colors">
+                    <div className="p-3 bg-indigo-500/10 rounded-lg group-hover:bg-indigo-500/20 transition-colors">
+                      <Globe className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <Badge variant="secondary" className="text-xs">Tu Perfil</Badge>
+                  </div>
+                  <CardTitle className="text-xl">Noticias Personalizadas</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-6">
+                    Contenido filtrado según tu perfil Despega, industrias de interés, y ruta de desarrollo profesional.
+                  </p>
+                  <div className="flex items-center text-indigo-600 dark:text-indigo-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                    Mis Noticias <ArrowRight className="w-4 h-4 ml-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/despega" className="group">
+              <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-3 bg-green-500/10 rounded-lg group-hover:bg-green-500/20 transition-colors">
                       <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
-                    <Badge className="bg-green-600 text-white text-xs">✓ Aprobado</Badge>
+                    <Badge variant="secondary" className="text-xs">Volver</Badge>
                   </div>
-                  <CardTitle className="text-lg">Auditoría Completada</CardTitle>
+                  <CardTitle className="text-xl">Mi Progreso</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    100% funcional. 12 tests simulados exitosos. 0 errores críticos.
+                  <p className="text-muted-foreground mb-6">
+                    Regresa al dashboard principal para ver tu progreso en A1, A2, A3 y A4. Continúa donde dejaste.
                   </p>
-                  <div className="flex items-center text-green-600 dark:text-green-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
-                    Ver Reporte <ArrowRight className="w-3 h-3 ml-2" />
+                  <div className="flex items-center text-green-600 dark:text-green-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                    Ver Dashboard <ArrowRight className="w-4 h-4 ml-2" />
                   </div>
                 </CardContent>
               </Card>
-            </a>
-
-            {/* Technical Validation */}
-            <a href="https://github.com/jcv86/main/blob/radar-graphic/A4_TECHNICAL_VALIDATION.md" target="_blank" rel="noopener noreferrer" className="group">
-              <Card className="h-full border-0 bg-blue-500/5 hover:bg-blue-500/10 backdrop-blur-sm transition-all cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                      <CheckCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <Badge className="bg-blue-600 text-white text-xs">Validado</Badge>
-                  </div>
-                  <CardTitle className="text-lg">Validación Técnica</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Arquitectura verificada. Seguridad RLS 9.2/10. Performance optimizado.
-                  </p>
-                  <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
-                    Detalles <ArrowRight className="w-3 h-3 ml-2" />
-                  </div>
-                </CardContent>
-              </Card>
-            </a>
-
-            {/* Simulation Results */}
-            <a href="https://github.com/jcv86/main/blob/radar-graphic/A4_SIMULATION_MATRIX.md" target="_blank" rel="noopener noreferrer" className="group">
-              <Card className="h-full border-0 bg-purple-500/5 hover:bg-purple-500/10 backdrop-blur-sm transition-all cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="p-3 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
-                      <CheckCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <Badge className="bg-purple-600 text-white text-xs">10/10 OK</Badge>
-                  </div>
-                  <CardTitle className="text-lg">Simulaciones</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    10 escenarios simulados. Crisis markets ok. 1000 users load tested.
-                  </p>
-                  <div className="flex items-center text-purple-600 dark:text-purple-400 font-medium text-xs group-hover:translate-x-1 transition-transform">
-                    Resultados <ArrowRight className="w-3 h-3 ml-2" />
-                  </div>
-                </CardContent>
-              </Card>
-            </a>
+            </Link>
           </div>
-        </div>
-
-        {/* Coach Call-to-Action */}
-        <Card className="border-0 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-sm">
-          <CardContent className="pt-8 pb-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Acompañamiento Personalizado</h3>
-                <p className="text-muted-foreground">Tu Coach te ayuda a contextualizar el mercado y tomar decisiones estratégicas sobre tu carrera.</p>
-              </div>
-              <Link href="/despega/a2/coach">
-                <Button size="lg" className="whitespace-nowrap">
-                  Abrir Coach <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
         </div>
       </div>
     </div>
