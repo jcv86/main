@@ -1,15 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { calculateDiscProfile, interpretDiscProfile, type DiscProfile, type DiscInterpretation } from '@/lib/disc-calculator'
-import { Card } from '@/components/ui/card'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, ArrowRight, Download } from 'lucide-react'
 
 export default function A1ReportPage() {
+  const router = useRouter()
   const [profile, setProfile] = useState<DiscProfile | null>(null)
   const [interpretation, setInterpretation] = useState<DiscInterpretation | null>(null)
   const [loading, setLoading] = useState(true)
@@ -34,26 +36,121 @@ export default function A1ReportPage() {
         .limit(1)
         .single()
 
-      if (testError || !testData) {
-        console.log('[v0] No test data found, trying canon_disc_responses...')
+      if (testData) {
+        console.log('[v0] Found test data in despega_a1_test_results')
+        // Extract test data from despega_a1_test_results format
+        const testDataObj = testData.test_data as any
         
-        // Fallback: try canon_disc_responses table
-        const { data: discData, error: discError } = await supabase
-          .from('canon_disc_responses')
-          .select('responses')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single()
-
-        if (discError || !discData) {
-          setError('No se encontraron respuestas DISC. Por favor completa la evaluación.')
-          console.error('[v0] No DISC responses found in either table')
-          return
+        // Map Despega Cerebral scores (energia, enfoque, relaciones, plan_ejecutivo) to DISC format
+        const discProfile: DiscProfile = {
+          D: testDataObj.energia || 0,
+          I: testDataObj.relaciones || 0,
+          S: testDataObj.plan_ejecutivo || 0,
+          C: testDataObj.enfoque || 0,
+          primary: 'D',
+          primaryScore: testDataObj.energia || 0,
+          secondary: 'I',
+          secondaryScore: testDataObj.relaciones || 0
         }
 
+        // Recalculate to determine actual primary/secondary
+        const scores = [
+          { letter: 'D' as const, value: discProfile.D },
+          { letter: 'I' as const, value: discProfile.I },
+          { letter: 'S' as const, value: discProfile.S },
+          { letter: 'C' as const, value: discProfile.C }
+        ]
+        scores.sort((a, b) => b.value - a.value)
+        
+        discProfile.primary = scores[0].letter
+        discProfile.primaryScore = scores[0].value
+        discProfile.secondary = scores[1].letter
+        discProfile.secondaryScore = scores[1].value
+
+        const calcInterpretation = interpretDiscProfile(discProfile)
+
+        setProfile(discProfile)
+        setInterpretation(calcInterpretation)
+
+        // Save profile to user_a1_profiles
+        await supabase.from('user_a1_profiles').upsert({
+          user_id: user?.id,
+          disc_profile: discProfile,
+          disc_interpretation: calcInterpretation,
+          updated_at: new Date().toISOString()
+        })
+
+        console.log('[v0] A1 Report generated successfully from despega_a1_test_results')
+        setLoading(false)
+        return
+      }
+
+      console.log('[v0] No test data found in despega_a1_test_results, trying a1_disc_assessment...')
+      
+      // Try new a1_disc_assessment table (where A1 cerebral test saves)
+      const { data: discData, error: discError } = await supabase
+        .from('a1_disc_assessment')
+        .select('disc_profile, dominant_pattern, secondary_pattern')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (discData) {
+        console.log('[v0] Found DISC profile in a1_disc_assessment')
+        
+        const discProfile: DiscProfile = discData.disc_profile as DiscProfile
+        
+        // Ensure the profile has all required fields
+        if (!discProfile.primary || !discProfile.primaryScore) {
+          const scores = [
+            { letter: 'D' as const, value: discProfile.D || 0 },
+            { letter: 'I' as const, value: discProfile.I || 0 },
+            { letter: 'S' as const, value: discProfile.S || 0 },
+            { letter: 'C' as const, value: discProfile.C || 0 }
+          ]
+          scores.sort((a, b) => b.value - a.value)
+          
+          discProfile.primary = scores[0].letter
+          discProfile.primaryScore = scores[0].value
+          discProfile.secondary = scores[1].letter
+          discProfile.secondaryScore = scores[1].value
+        }
+
+        const calcInterpretation = interpretDiscProfile(discProfile)
+
+        setProfile(discProfile)
+        setInterpretation(calcInterpretation)
+
+        // Save profile to user_a1_profiles
+        await supabase.from('user_a1_profiles').upsert({
+          user_id: user?.id,
+          disc_profile: discProfile,
+          disc_interpretation: calcInterpretation,
+          updated_at: new Date().toISOString()
+        })
+
+        console.log('[v0] A1 Report generated successfully from a1_disc_assessment')
+        setLoading(false)
+        return
+      }
+
+      console.log('[v0] No test data found in a1_disc_assessment, trying canon_disc_responses...')
+      
+      // Fallback: try canon_disc_responses table
+      const { data: canonData, error: canonError } = await supabase
+        .from('canon_disc_responses')
+        .select('responses')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (canonData) {
+        console.log('[v0] Found responses in canon_disc_responses')
+        
         // Calculate from canon_disc_responses format
-        const calcProfile = calculateDiscProfile(discData.responses)
+        const calcProfile = calculateDiscProfile(canonData.responses)
         const calcInterpretation = interpretDiscProfile(calcProfile)
 
         setProfile(calcProfile)
@@ -68,52 +165,13 @@ export default function A1ReportPage() {
         })
 
         console.log('[v0] A1 Report generated from canon_disc_responses')
+        setLoading(false)
         return
       }
 
-      // Extract test data from despega_a1_test_results format
-      const testDataObj = testData.test_data as any
-      
-      // Map Despega Cerebral scores (energia, enfoque, relaciones, plan_ejecutivo) to DISC format
-      const discProfile: DiscProfile = {
-        D: testDataObj.energia || 0,
-        I: testDataObj.relaciones || 0,
-        S: testDataObj.plan_ejecutivo || 0,
-        C: testDataObj.enfoque || 0,
-        primary: 'D',
-        primaryScore: testDataObj.energia || 0,
-        secondary: 'I',
-        secondaryScore: testDataObj.relaciones || 0
-      }
-
-      // Recalculate to determine actual primary/secondary
-      const scores = [
-        { letter: 'D' as const, value: discProfile.D },
-        { letter: 'I' as const, value: discProfile.I },
-        { letter: 'S' as const, value: discProfile.S },
-        { letter: 'C' as const, value: discProfile.C }
-      ]
-      scores.sort((a, b) => b.value - a.value)
-      
-      discProfile.primary = scores[0].letter
-      discProfile.primaryScore = scores[0].value
-      discProfile.secondary = scores[1].letter
-      discProfile.secondaryScore = scores[1].value
-
-      const calcInterpretation = interpretDiscProfile(discProfile)
-
-      setProfile(discProfile)
-      setInterpretation(calcInterpretation)
-
-      // Save profile to user_a1_profiles
-      await supabase.from('user_a1_profiles').upsert({
-        user_id: user?.id,
-        disc_profile: discProfile,
-        disc_interpretation: calcInterpretation,
-        updated_at: new Date().toISOString()
-      })
-
-      console.log('[v0] A1 Report generated successfully from despega_a1_test_results')
+      // No test data found in any table
+      setError('No se encontraron respuestas DISC. Por favor completa la evaluación.')
+      console.error('[v0] No DISC responses found in any table')
     } catch (err) {
       console.error('[v0] Error loading A1 report:', err)
       setError('Error al cargar tu reporte. Intenta de nuevo.')

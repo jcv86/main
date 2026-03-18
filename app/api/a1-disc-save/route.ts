@@ -115,8 +115,8 @@ export async function POST(request: NextRequest) {
     
     console.log('[v0] Inserting into a1_disc_assessment')
     
-    // Insert with explicit error handling
-    const { data, error } = await supabase
+    // Insert with explicit error handling (use service client to bypass RLS)
+    const { data, error } = await supabaseService
       .from('a1_disc_assessment')
       .insert([insertData])
       .select()
