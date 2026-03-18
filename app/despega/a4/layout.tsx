@@ -1,5 +1,4 @@
 import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
-import { CoachSidebarWrapper } from '@/components/coach-sidebar-wrapper'
 
 export default function A4Layout({
   children,
@@ -11,7 +10,6 @@ export default function A4Layout({
       <div className="min-h-screen">
         {children}
       </div>
-      <CoachSidebarWrapper />
     </CoachProviderWrapper>
   )
 }
