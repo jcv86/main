@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,24 +23,35 @@ export default function SignInPage() {
     setError("")
 
     try {
-      const res = await fetch("/api/auth/email-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      console.log('[v0] Email login - client-side auth starting:', email)
+      
+      // Use client-side Supabase auth directly - this properly manages session
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.message || "Error al iniciar sesión")
+      if (error) {
+        console.log('[v0] Client auth error:', error.message)
+        setError(error.message || "Email o contraseña incorrectos")
+        setLoading(false)
         return
       }
 
+      if (!data.user) {
+        setError("Error al iniciar sesión")
+        setLoading(false)
+        return
+      }
+
+      console.log('[v0] User authenticated via client-side Supabase:', email)
+      
+      // Session is now properly stored in client - redirect to conozcamonos-1
       router.push("/despega/conozcamonos-1")
     } catch (err) {
+      console.error('[v0] Email login error:', err)
       setError("Error de conexión")
-      console.error(err)
-    } finally {
       setLoading(false)
     }
   }

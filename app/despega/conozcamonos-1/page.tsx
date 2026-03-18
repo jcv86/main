@@ -16,9 +16,28 @@ export default function Conozcamonos1Page() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/signin'); return }
-      setAuthChecked(true)
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser()
+        console.log('[v0] conozcamonos-1 auth check - user:', user?.email, 'error:', error?.message)
+        
+        if (error) {
+          console.log('[v0] Auth error in conozcamonos-1:', error.message)
+          router.push('/auth/signin')
+          return
+        }
+        
+        if (!user) {
+          console.log('[v0] No user found in conozcamonos-1, redirecting to signin')
+          router.push('/auth/signin')
+          return
+        }
+        
+        console.log('[v0] User authenticated in conozcamonos-1:', user.email)
+        setAuthChecked(true)
+      } catch (err) {
+        console.error('[v0] Auth check exception:', err)
+        router.push('/auth/signin')
+      }
     }
     checkAuth()
   }, [supabase, router])
