@@ -46,22 +46,50 @@ export default function A1CerebralPage() {
 
   const handleNext = async () => {
     if (!bothAnswered) { setError('Selecciona ambas opciones'); return }
+    
+    // Check if same option selected for both MÁS and MENOS
+    if (more[q.id] === less[q.id]) {
+      setError('No puedes seleccionar la misma opción para MÁS y MENOS')
+      return
+    }
+    
     if (isLast) {
       setLoading(true)
       try {
+        console.log('[v0] Starting test submission, calculating scores...')
         const { data: { user } } = await sb.auth.getUser()
-        if (!user) { router.push('/auth/signin'); return }
+        if (!user) { 
+          console.log('[v0] No user found, redirecting to signin')
+          router.push('/auth/signin'); 
+          return 
+        }
+        
         const scores = calculateScores()
-        const { error: e } = await sb.from('despega_a1_test_results').insert({
+        console.log('[v0] Scores calculated:', scores)
+        console.log('[v0] Attempting to insert into a1_disc_assessment for user:', user.id)
+        
+        const { data, error: e } = await sb.from('a1_disc_assessment').insert({
           user_id: user.id,
-          dimensions: scores,
+          responses: { more, less },
+          questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
+          disc_profile: scores,
           completed_at: new Date().toISOString()
-        })
-        if (e) throw e
+        }).select()
+        
+        if (e) {
+          console.error('[v0] Supabase insert error:', {
+            message: e.message,
+            code: e.code,
+            details: e.details
+          })
+          throw e
+        }
+        
+        console.log('[v0] Successfully inserted test results:', data)
         router.push('/despega/a1-report')
       } catch (err) {
-        console.error('[v0] Error:', err)
-        setError('Error al guardar')
+        console.error('[v0] Test submission error:', err)
+        setError('Error al guardar: ' + (err instanceof Error ? err.message : 'Unknown error'))
       } finally {
         setLoading(false)
       }
@@ -87,7 +115,11 @@ export default function A1CerebralPage() {
               <p className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4 text-center">MÁS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
-                  <button key={`more-${opt.texto}`} onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green-50 dark:bg-green-950' : 'border-border'}`}>
+                  <button 
+                    key={`more-${opt.texto}`} 
+                    onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
+                    disabled={less[q.id] === opt.texto}
+                    className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green-50 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}
@@ -97,7 +129,11 @@ export default function A1CerebralPage() {
               <p className="text-lg font-semibold text-red-700 dark:text-red-400 mb-4 text-center">MENOS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
-                  <button key={`less-${opt.texto}`} onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red-50 dark:bg-red-950' : 'border-border'}`}>
+                  <button 
+                    key={`less-${opt.texto}`} 
+                    onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
+                    disabled={more[q.id] === opt.texto}
+                    className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red-50 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}
