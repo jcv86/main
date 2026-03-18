@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Card } from '@/components/ui/card'
+import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Newspaper, TrendingUp, CheckCircle2 } from 'lucide-react'
+import { Loader2, Newspaper, TrendingUp, CheckCircle2, Zap, Radar, ArrowRight } from 'lucide-react'
 
 export default function A4RadarPage() {
   const [loading, setLoading] = useState(true)
@@ -41,130 +42,210 @@ export default function A4RadarPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-          <p className="text-slate-600 dark:text-slate-400">Activando tu Radar...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+          <p className="text-slate-300">Activando tu Radar...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-            A4: Radar - Acelera tu Oportunidad
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Monitoreo inteligente de oportunidades + sistema de progreso
-          </p>
-        </div>
+    <ASection
+      title="A4: Radar"
+      subtitle="Monitoreo continuo y oportunidades"
+      icon="📡"
+      colorClass="from-teal-500 to-emerald-500"
+    >
+      {/* EXPLICACIÓN */}
+      <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>
+        <p className="text-slate-300 mb-4">
+          En A4: Radar, tu transformación Despega entra en la fase de acción. Aquí monitoreas oportunidades en tiempo real, 
+          recibes alertas sobre posiciones que coinciden con tu perfil, y mantienes un pulso constante del mercado. 
+          Es tu sistema de seguimiento y aceleración para conseguir resultados.
+        </p>
+        <p className="text-slate-400 text-sm">
+          ⏱️ Duración: Indefinido. A4 es tu herramienta permanente mientras buscas.
+        </p>
+      </ASectionPart>
 
-        {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900 dark:text-white">Jobs Monitor</h3>
-              <Newspaper className="w-6 h-6 text-blue-600" />
-            </div>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Monitoreo en tiempo real de ofertas que coinciden con tu perfil
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900 dark:text-white">Progress Tracking</h3>
-              <TrendingUp className="w-6 h-6 text-green-600" />
-            </div>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Sigue tu avance a través de A1-A4 con métricas detalladas
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900 dark:text-white">Readiness Score</h3>
-              <CheckCircle2 className="w-6 h-6 text-purple-600" />
-            </div>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Tu score de candidato competitivo calculado en tiempo real
-            </p>
-          </Card>
-        </div>
-
-        {/* Features */}
-        <Card className="p-8 mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-            Características A4
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+      {/* FLUJO / PROCESO */}
+      <ASectionPart title="Cómo Funciona el Radar" icon={<Radar />}>
+        <div className="space-y-4">
+          <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-lg space-y-3">
+            <div className="flex gap-3 items-start">
+              <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">1</div>
               <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                  News Feed Personalizado
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Noticias sobre empresas e industrias de tu interés
-                </p>
+                <p className="font-semibold text-white">Tu Perfil Se Carga</p>
+                <p className="text-sm text-slate-400">Tus datos de A1-A3 alimentan el sistema de matching</p>
               </div>
             </div>
-            <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start">
+              <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">2</div>
               <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                  Job Matching AI
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Análisis automático de fit entre tu perfil y posiciones
-                </p>
+                <p className="font-semibold text-white">Algoritmo Busca Coincidencias</p>
+                <p className="text-sm text-slate-400">Escaneamos el mercado por ofertas que coincidan</p>
               </div>
             </div>
-            <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start">
+              <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">3</div>
               <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                  Coach IA Transversal
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Asistente inteligente disponible en todos los stages
-                </p>
+                <p className="font-semibold text-white">Recibes Alertas</p>
+                <p className="text-sm text-slate-400">Notificaciones de posiciones que son TU fit</p>
               </div>
             </div>
-            <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="flex gap-3 items-start">
+              <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">4</div>
               <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                  Progress Dashboard
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Visualización completa de tu transformación A1→A4
-                </p>
+                <p className="font-semibold text-white">Tomas Acción</p>
+                <p className="text-sm text-slate-400">Aplicas, entrevishas, y avanzas en tu búsqueda</p>
               </div>
             </div>
           </div>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex gap-4 justify-between">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/despega/a3-dashboard')}
-          >
-            Volver a A3
-          </Button>
-          <Button
-            onClick={() => router.push('/despega')}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Ver Dashboard General
-          </Button>
         </div>
-      </div>
-    </div>
-  )
-}
+      </ASectionPart>
+
+      {/* RESULTADOS */}
+      <ASectionPart title="Componentes del Radar" icon={<CheckCircle2 />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Newspaper className="w-5 h-5 text-teal-400" />
+                News Feed Personalizado
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-slate-400">
+                Noticias y actualizaciones sobre empresas e industrias de tu interés
+              </p>
+              <ul className="space-y-1 text-xs text-slate-400">
+                <li>✓ Hirings en tu industria</li>
+                <li>✓ Funding rounds y crecimiento</li>
+                <li>✓ Cambios en liderazgo</li>
+                <li>✓ Tendencias del mercado</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-emerald-400" />
+                Job Matching IA
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-slate-400">
+                Análisis automático del fit entre tu perfil y posiciones disponibles
+              </p>
+              <ul className="space-space-y-1 text-xs text-slate-400">
+                <li>✓ Análisis de skills match</li>
+                <li>✓ Fit cultural basado en DISC</li>
+                <li>✓ Análisis salarial</li>
+                <li>✓ Ranking de oportunidades</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Radar className="w-5 h-5 text-cyan-400" />
+                Progress Tracking
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-slate-400">
+                Sigue tu avance completo desde A1 hasta oportunidades aplicadas
+              </p>
+              <ul className="space-y-1 text-xs text-slate-400">
+                <li>✓ Readiness score en tiempo real</li>
+                <li>✓ Aplicaciones enviadas</li>
+                <li>✓ Entrevistas coordinadas</li>
+                <li>✓ Ofrecimiento recibidos</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                Coach IA Transversal
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-slate-400">
+                Asistente inteligente disponible en todos los stages
+              </p>
+              <ul className="space-y-1 text-xs text-slate-400">
+                <li>✓ Preguntas sobre estrategia</li>
+                <li>✓ Revisión de documentos</li>
+                <li>✓ Prep de entrevistas</li>
+                <li>✓ Negociación de ofertas</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </ASectionPart>
+
+      {/* DASHBOARD / ACCIONES */}
+      <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+              <CardHeader>
+                <CardTitle className="text-lg">Tu Transformación Está Completa</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-slate-300">
+                  Has pasado por A1 (Origen), A2 (Ruta), A3 (Impulso). Ahora con A4 (Radar), 
+                  tienes todas las herramientas para buscar y asegurar tu próxima oportunidad con confianza.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega')}
+                  className="w-full bg-teal-600 hover:bg-teal-700"
+                  size="sm"
+                >
+                  Ver Dashboard Completo
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+              <CardHeader>
+                <CardTitle className="text-lg">Sigue Monitoreando</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-slate-300">
+                  A4 es permanente. Vuelve regularmente para:
+                </p>
+                <ul className="space-y-1 text-xs text-slate-400">
+                  <li>✓ Ver nuevas oportunidades</li>
+                  <li>✓ Revisar tu readiness score</li>
+                  <li>✓ Hablar con el coach</li>
+                  <li>✓ Trackear aplicaciones</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="p-6 bg-gradient-to-r from-teal-900/30 to-emerald-900/30 border border-teal-500/30 rounded-lg">
+            <p className="text-slate-300 mb-4">
+              <strong>¿Listo para empezar?</strong> Ve al dashboard principal para ver todas las oportunidades 
+              que el Radar ha identificado para ti. Tu search ha comenzado.
+            </p>
+            <Button 
+              onClick={() => router.push('/despega')}
+              className="bg-teal-600 hover:bg-teal-700"
+            >
+              Ir al Dashboard Despega
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </ASectionPart>
+    </ASection>

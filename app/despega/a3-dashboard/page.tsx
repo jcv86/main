@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { Card } from '@/components/ui/card'
+import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock } from 'lucide-react'
+import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock, Zap, Target, ArrowRight } from 'lucide-react'
 
 interface A3Progress {
   interview_0: boolean
@@ -21,6 +23,7 @@ export default function A3DashboardPage() {
   const [error, setError] = useState('')
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     if (authLoading || !user?.id) return
@@ -74,10 +77,10 @@ export default function A3DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-          <p className="text-slate-600 dark:text-slate-400">Cargando tu progreso A3...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
+          <p className="text-slate-300">Cargando tu progreso A3...</p>
         </div>
       </div>
     )
@@ -125,111 +128,145 @@ export default function A3DashboardPage() {
       description: 'Practica con entrenamientos realistas de entrevistas técnicas y conductuales',
       status: progress.simulations_done >= 2 ? 'completed' : 'pending',
       action: `${progress.simulations_done > 0 ? `${progress.simulations_done} completadas` : 'Comenzar'}`,
-      href: '/despega/interview-simulations'
+      href: '/despega/a3/simulations'
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-            A3: Impulso - Preparación Integral
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Domina cada aspecto de tu candidatura y entrevistas
-          </p>
-        </div>
+    <ASection
+      title="A3: Impulso"
+      subtitle="Prepárate para entrevistas y destaca"
+      icon="⚡"
+      colorClass="from-cyan-500 to-teal-500"
+    >
+      {/* EXPLICACIÓN */}
+      <ASectionPart title="¿Qué es A3: Impulso?" icon={<Zap />}>
+        <p className="text-slate-300 mb-4">
+          En A3: Impulso, tienes todo lo que necesitas para ser un candidato excepcional. Desde tu Interview 0 (respuestas personales), 
+          un CV optimizado para ATS, inteligencia del mercado, hasta entrenamientos realistas de entrevista. 
+          Esta es la etapa donde conviertes tu perfil en resultados.
+        </p>
+        <p className="text-slate-400 text-sm">
+          ⏱️ Duración: 30-60 días. Trabaja en estos módulos según tu cronograma.
+        </p>
+      </ASectionPart>
 
-        {/* Progress Overview */}
-        <Card className="p-8 mb-8 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Tu Progreso A3
-            </h2>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-purple-600">{Math.round(completionPercentage)}%</div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">{completedItems} de 4 completados</p>
-            </div>
+      {/* FLUJO / PROCESO */}
+      <ASectionPart title="Tu Progreso en A3" icon={<Target />}>
+        <div className="space-y-4 mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-semibold text-white">Completado</p>
+            <p className="text-2xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
           </div>
-          <div className="h-3 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full transition-all"
+              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
-        </Card>
+          <p className="text-xs text-slate-400">{completedItems} de 4 módulos completados</p>
+        </div>
 
-        {/* Activity Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {activityCards.map((card, i) => {
+            const isCompleted = card.status === 'completed'
+            return (
+              <div key={i} className={`p-3 rounded-lg border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-slate-800/20 border-slate-700'}`}>
+                <div className="flex items-center gap-2 mb-1">
+                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-slate-400" />}
+                  <p className="text-sm font-semibold text-white">{card.title}</p>
+                </div>
+                <p className="text-xs text-slate-400 ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
+              </div>
+            )
+          })}
+        </div>
+      </ASectionPart>
+
+      {/* RESULTADOS */}
+      <ASectionPart title="Tus Módulos de A3" icon={<CheckCircle2 />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {activityCards.map((card, i) => {
             const Icon = card.icon
             const isCompleted = card.status === 'completed'
 
             return (
-              <Card key={i} className={`p-6 hover:shadow-lg transition ${isCompleted ? 'bg-green-50 dark:bg-green-950' : ''}`}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 rounded-lg bg-purple-100 dark:bg-purple-900">
-                    <Icon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  {isCompleted && (
-                    <Badge className="bg-green-600 hover:bg-green-700">
-                      <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Completado
-                    </Badge>
-                  )}
-                </div>
-
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                  {card.title}
-                </h3>
-
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">
-                  {card.description}
-                </p>
-
-                <Button
-                  onClick={() => router.push(card.href)}
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                >
-                  {card.action}
-                </Button>
+              <Card key={i} className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Icon className="w-5 h-5 text-cyan-400" />
+                    {card.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-slate-400">{card.description}</p>
+                  {isCompleted && <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
+                  <Button 
+                    onClick={() => router.push(card.href)}
+                    className={`w-full ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-cyan-600 hover:bg-cyan-700'}`}
+                  >
+                    {card.action}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
               </Card>
             )
           })}
         </div>
+      </ASectionPart>
 
-        {/* Tips */}
-        <Card className="p-6 mb-8 border-l-4 border-blue-500">
-          <h3 className="font-bold text-slate-900 dark:text-white mb-3">
-            Estrategia de A3: Impulso
-          </h3>
-          <ul className="space-y-2 text-slate-700 dark:text-slate-300 text-sm">
-            <li>✓ <strong>Interview 0</strong> - Practica las preguntas que SIEMPRE hacen</li>
-            <li>✓ <strong>CV Optimizado</strong> - Haz que ATS te encuentre, que humans te contraten</li>
-            <li>✓ <strong>Market Intel</strong> - Conoce el mercado mejor que la competencia</li>
-            <li>✓ <strong>Simulaciones</strong> - Practica hasta estar 100% confiado en entrevistas</li>
-          </ul>
-        </Card>
+      {/* DASHBOARD / ACCIONES */}
+      <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
+              <CardHeader>
+                <CardTitle className="text-lg">Estrategia de A3</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="space-y-2 text-sm text-slate-300">
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Interview 0 - Respuestas consistentes</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> CV optimizado para ATS</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Inteligencia del mercado</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Confianza en entrevistas</p>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Navigation */}
-        <div className="flex gap-4 justify-between">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/despega/a2-routes')}
-          >
-            Volver a A2
-          </Button>
-          <Button
-            onClick={() => router.push('/despega/a4-radar')}
-            disabled={completionPercentage < 50}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Continuar a A4: Radar
-          </Button>
+            <Card className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
+              <CardHeader>
+                <CardTitle className="text-lg">Recomendación</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-slate-300">
+                  {completionPercentage < 25 && 'Comienza con Interview 0. Es fundamental para todas las entrevistas.'}
+                  {completionPercentage >= 25 && completionPercentage < 50 && 'Continúa con tu CV. Un CV fuerte te abre puertas.'}
+                  {completionPercentage >= 50 && completionPercentage < 100 && 'Realiza entrenamientos de entrevista. La práctica construye confianza.'}
+                  {completionPercentage === 100 && '¡Excelente! A3 completo. Estás listo para A4: Radar.'}
+                </p>
+                <Button 
+                  onClick={() => router.push(completionPercentage >= 50 ? '/despega/a4-radar' : activityCards.find(c => !c.status)?.href || '/')}
+                  className="w-full bg-cyan-600 hover:bg-cyan-700"
+                  size="sm"
+                >
+                  {completionPercentage >= 50 ? 'Ir a A4: Radar' : 'Continuar'}
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+            <p className="text-slate-300 mb-4">
+              <strong>¿Necesitas ayuda?</strong> Nuestro coach está disponible para revisar tu CV, practicar entrenamientos, 
+              o responder preguntas sobre cualquier módulo de A3.
+            </p>
+            <Button variant="outline" className="border-cyan-500 hover:border-cyan-400 hover:text-cyan-400">
+              Hablar con el Coach
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </ASectionPart>
+    </ASection>
   )
 }
