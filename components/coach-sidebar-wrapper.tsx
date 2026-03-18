@@ -1,1 +1,3 @@
-export function CoachSidebarWrapper(){return null}
+export function CoachSidebarWrapper() {
+  return null
+}
