@@ -121,8 +121,8 @@ export default function A3DashboardPage() {
     },
     {
       icon: Briefcase,
-      title: 'Interview Simulations',
-      description: 'Practica con simulaciones realistas de entrevistas técnicas y conductuales',
+      title: 'Entrenamiento de Entrevista',
+      description: 'Practica con entrenamientos realistas de entrevistas técnicas y conductuales',
       status: progress.simulations_done >= 2 ? 'completed' : 'pending',
       action: `${progress.simulations_done > 0 ? `${progress.simulations_done} completadas` : 'Comenzar'}`,
       href: '/despega/interview-simulations'

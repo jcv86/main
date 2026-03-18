@@ -192,7 +192,7 @@ export default function ComenzarPage() {
             <CardContent className="space-y-2">
               <Link href="/despega/a3/simulations">
                 <Button className="w-full justify-start" variant="ghost">
-                  → Entrenamientos de Entrevistas
+                  → Entrenamientos de Entrevista
                 </Button>
               </Link>
               <Link href="/despega/a3/progress">

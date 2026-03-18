@@ -187,7 +187,7 @@ export default function A3AnalyticsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Progreso en el Tiempo</CardTitle>
-            <CardDescription>Tus mejoras simulaciones de entrevista</CardDescription>
+            <CardDescription>Tus mejoras en entrenamientos de entrevista</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

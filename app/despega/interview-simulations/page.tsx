@@ -43,7 +43,7 @@ export default function InterviewSimulationsPage() {
         <Card className="p-8 text-center">
           <Briefcase className="w-16 h-16 mx-auto text-purple-600 mb-4 opacity-50" />
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-            Interview Simulations
+            Entrenamiento de Entrevista
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mb-6">
             Simula entrevistas realistas y recibe feedback instantáneo

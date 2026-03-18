@@ -95,7 +95,7 @@ export default function SimulationsPage() {
 
         <div className="space-y-4">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-            Simulaciones de Entrevista
+            Entrenamiento de Entrevista
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400">
             4 niveles progresivos para entrenar desde lo básico hasta la maestría total.

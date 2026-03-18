@@ -226,12 +226,12 @@ export default function A3Page() {
             </CardContent>
           </Card>
 
-          {/* Interview Simulations Card */}
+          {/* Interview Training Card */}
           <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Video className="w-5 h-5 text-indigo-600" />
-                Simulaciones de Entrevista
+                Entrenamiento de Entrevista
               </CardTitle>
               <CardDescription>
                 4 tipos progresivos de entrenamientos
@@ -248,7 +248,7 @@ export default function A3Page() {
               </ul>
               <Link href="/despega/a3/simulations" className="block">
                 <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
-                  Ir a Simulaciones <ArrowRight className="ml-2 w-4 h-4" />
+                  Ir a Entrenamientos <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
             </CardContent>
