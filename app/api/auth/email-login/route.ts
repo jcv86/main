@@ -1,11 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
-import { jwtVerify, SignJWT } from 'jose'
-import bcrypt from 'bcrypt'
-
-const secret = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || 'dev-secret-key'
-)
 
 export async function POST(req: Request) {
   try {
@@ -18,72 +11,38 @@ export async function POST(req: Request) {
       )
     }
 
-    // Query user from database
     const supabase = await createClient()
-    console.log('[v0] Email login - querying user:', email)
+    console.log('[v0] Email login - attempting sign in:', email)
     
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('id, email, password_hash')
-      .eq('email', email)
-      .single()
-
-    console.log('[v0] Query result - error:', error?.message, 'user:', user?.email)
-
-    if (error || !user) {
-      console.log('[v0] User not found:', email, 'error:', error)
-      return Response.json(
-        { message: 'Email o contraseña incorrectos' },
-        { status: 401 }
-      )
-    }
-
-    // Verify password
-    if (!user.password_hash) {
-      console.log('[v0] User has no password hash:', email)
-      return Response.json(
-        { message: 'Este usuario no tiene contraseña configurada' },
-        { status: 401 }
-      )
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password_hash)
-    if (!passwordMatch) {
-      console.log('[v0] Password mismatch for user:', email)
-      return Response.json(
-        { message: 'Email o contraseña incorrectos' },
-        { status: 401 }
-      )
-    }
-
-    console.log('[v0] User authenticated:', email)
-
-    // Create JWT token with user data
-    const token = await new SignJWT({
-      sub: user.id,
-      email: user.email,
-    })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('30d')
-      .sign(secret)
-
-    // Set auth cookie
-    const cookieStore = await cookies()
-    cookieStore.set('next-auth.session-token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60,
+    // Use Supabase signInWithPassword to create proper Supabase session
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     })
 
-    console.log('[v0] Session created for user:', email)
+    if (error) {
+      console.log('[v0] Supabase sign in error:', error.message)
+      return Response.json(
+        { message: error.message || 'Email o contraseña incorrectos' },
+        { status: 401 }
+      )
+    }
+
+    if (!data.user) {
+      return Response.json(
+        { message: 'Error al iniciar sesión' },
+        { status: 401 }
+      )
+    }
+
+    console.log('[v0] User authenticated via Supabase:', email)
 
     return Response.json({
       success: true,
       message: 'Sesión iniciada',
       user: {
-        id: user.id,
-        email: user.email,
+        id: data.user.id,
+        email: data.user.email,
       },
     })
   } catch (error) {
