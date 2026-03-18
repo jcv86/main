@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
     // Get Supabase credentials from env
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseAnonKey) {
       console.error('[v0] Missing Supabase credentials')
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create server client with cookies
+    // Create server client with cookies for reading data
     const cookieStore = await cookies()
     const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
@@ -49,8 +50,50 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Create service client for writing user record (bypasses RLS)
+    let supabaseService = supabase
+    if (supabaseServiceKey) {
+      supabaseService = createServerClient(supabaseUrl, supabaseServiceKey, {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              )
+            } catch {
+              // Handle error silently
+            }
+          },
+        },
+      })
+    }
+
     console.log('[v0] User ID from client:', user_id)
     console.log('[v0] DISC Profile:', disc_profile)
+    
+    // Ensure user exists in public users table (create if missing)
+    // This handles users who logged in via client-side auth without going through email-login API
+    const { error: userCheckError } = await supabaseService
+      .from('users')
+      .upsert(
+        {
+          id: user_id,
+          email: '', // Email will be empty if user doesn't exist in public table yet
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'id' }
+      )
+    
+    if (userCheckError) {
+      console.error('[v0] Error ensuring user in public table:', userCheckError)
+      // If this fails, the insert below will also fail with FK constraint, so log it
+    } else {
+      console.log('[v0] User record ensured in public users table')
+    }
     
     // Calculate dominant and secondary patterns from scores
     const sortedDimensions = Object.entries(disc_profile).sort((a, b) => b[1] - a[1])
