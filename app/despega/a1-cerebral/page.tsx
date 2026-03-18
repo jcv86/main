@@ -55,46 +55,34 @@ export default function A1CerebralPage() {
     
     if (isLast) {
       setLoading(true)
+      setError('')
       try {
-        console.log('[v0] Starting test submission, calculating scores...')
-        const { data: { user } } = await sb.auth.getUser()
-        if (!user) { 
-          console.log('[v0] No user found, redirecting to signin')
-          router.push('/auth/signin'); 
-          return 
-        }
+        console.log('[v0] Starting test submission via API...')
         
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
         
-        // Determine dominant and secondary patterns
-        const sortedDimensions = Object.entries(scores).sort((a, b) => b[1] - a[1])
-        const dominant_pattern = sortedDimensions[0]?.[0] || 'D'
-        const secondary_pattern = sortedDimensions[1]?.[0] || 'I'
-        
-        console.log('[v0] Dominant:', dominant_pattern, 'Secondary:', secondary_pattern)
-        console.log('[v0] Attempting to insert into a1_disc_assessment for user:', user.id)
-        
-        const { data, error: e } = await sb.from('a1_disc_assessment').insert({
-          user_id: user.id,
-          responses: { more, less },
-          questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
-          disc_profile: scores,
-          dominant_pattern,
-          secondary_pattern,
-          completed_at: new Date().toISOString()
-        }).select()
-        
-        if (e) {
-          console.error('[v0] Supabase insert error:', {
-            message: e.message,
-            code: e.code,
-            details: e.details
+        // Call API endpoint to save DISC assessment
+        const response = await fetch('/api/a1-disc-save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            responses: { more, less },
+            questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
+            disc_profile: scores
           })
-          throw e
+        })
+        
+        console.log('[v0] API response status:', response.status)
+        
+        const result = await response.json()
+        
+        if (!response.ok) {
+          console.error('[v0] API error:', result)
+          throw new Error(result.error || 'Failed to save test results')
         }
         
-        console.log('[v0] Successfully inserted test results:', data)
+        console.log('[v0] Successfully saved DISC assessment:', result)
         router.push('/despega/a1-report')
       } catch (err) {
         console.error('[v0] Test submission error:', err)
