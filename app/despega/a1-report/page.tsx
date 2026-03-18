@@ -1,4 +1,5 @@
 'use client'
+// Cache clear marker: 2024-03-18-v1.2.4-final
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -171,8 +172,8 @@ export default function A1ReportPage() {
       }
 
       // No test data found in any table
-      setError('No se encontraron respuestas DISC. Por favor completa la evaluación.')
-      console.error('[v0] No DISC responses found in any table')
+          setError('No se encontraron respuestas de tu evaluación Despega Cerebral. Por favor completa la evaluación.')
+          console.error('[v0] No Cerebral test responses found in any table')
     } catch (err) {
       console.error('[v0] Error loading A1 report:', err)
       setError('Error al cargar tu reporte. Intenta de nuevo.')
@@ -196,7 +197,7 @@ export default function A1ReportPage() {
     return (
       <ASection
         title="A1: Origen"
-        subtitle="Descubre tu perfil DISC y potencial único"
+        subtitle="Descubre tu Perfil Cerebral y potencial único"
         icon="🎯"
         colorClass="from-purple-500 to-blue-500"
       >
@@ -206,7 +207,7 @@ export default function A1ReportPage() {
             onClick={() => router.push('/despega/a1-cerebral')}
             className="bg-purple-600 hover:bg-purple-700"
           >
-            Realizar Evaluación DISC
+            Realizar Evaluación Despega Cerebral
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </ASectionPart>
@@ -224,9 +225,9 @@ export default function A1ReportPage() {
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es A1: Origen?" icon={<Zap />}>
         <p className="text-slate-300 mb-4">
-          En esta etapa descubrirás tu perfil DISC, un modelo que clasifica tu comportamiento en 4 dimensiones clave. 
-          Entender tu patrón dominante te permite reconocer tus fortalezas, anticipar desafíos, y comunicarte 
-          de forma más efectiva con otros.
+          En esta etapa descubrirás tu Perfil Cerebral, el resultado de tu evaluación Despega Cerebral que clasifica tu comportamiento 
+          en 4 dimensiones clave: Energía, Enfoque, Relaciones y Plan Ejecutivo. Entender tu patrón dominante te permite reconocer 
+          tus fortalezas, anticipar desafíos, y comunicarte de forma más efectiva con otros.
         </p>
         <p className="text-slate-400 text-sm">
           ⏱️ Tiempo completado: Ya lo hiciste. Tus resultados están listos.
@@ -240,7 +241,7 @@ export default function A1ReportPage() {
             <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
             <div>
               <p className="font-semibold text-emerald-400">Evaluación Completada</p>
-              <p className="text-sm text-slate-400">Tu perfil DISC ha sido calculado</p>
+              <p className="text-sm text-slate-400">Tu Perfil Cerebral ha sido calculado</p>
             </div>
           </div>
           
@@ -258,7 +259,7 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* RESULTADOS */}
-      <ASectionPart title="Tu Perfil DISC" icon={<Target />}>
+      <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Primary Type */}
           <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
@@ -334,7 +335,7 @@ export default function A1ReportPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-sm text-slate-400">
-                Ahora que conoces tu perfil {profile.primary}, entender cómo interactuarás en entrevistas, 
+                Ahora que conoces tu Perfil Cerebral dominante, entender cómo interactuarás en entrevistas, 
                 equipos y situaciones de presión es clave.
               </p>
               <Button variant="outline" className="w-full border-slate-600 hover:border-purple-500" size="sm">
@@ -349,7 +350,7 @@ export default function A1ReportPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-sm text-slate-400">
-                En A2: Ruta, crearemos tu plan personalizado de 90 días basado en tu perfil DISC 
+                En A2: Ruta, crearemos tu plan personalizado de 90 días basado en tu Perfil Cerebral 
                 y tus objetivos de carrera.
               </p>
               <Button 
