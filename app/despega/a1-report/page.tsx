@@ -27,6 +27,7 @@ export default function A1ReportPage() {
 
   const loadReport = async () => {
     try {
+      // Try despega_a1_test_results first
       const { data: testData, error: testError } = await supabase
         .from('despega_a1_test_results')
         .select('test_data, test_type')
@@ -36,7 +37,7 @@ export default function A1ReportPage() {
         .limit(1)
         .single()
 
-      if (testData) {
+      if (testData && testData.test_data) {
         console.log('[v0] Found test data in despega_a1_test_results')
         const testDataObj = testData.test_data as any
         const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
@@ -47,9 +48,9 @@ export default function A1ReportPage() {
           S: normalize(testDataObj.plan_ejecutivo || 0),
           C: normalize(testDataObj.enfoque || 0),
           primary: 'D',
-          primaryScore: normalize(testDataObj.energia || 0),
+          primaryScore: 50,
           secondary: 'I',
-          secondaryScore: normalize(testDataObj.relaciones || 0)
+          secondaryScore: 40
         }
 
         const scores = [
@@ -66,21 +67,15 @@ export default function A1ReportPage() {
         discProfile.secondaryScore = scores[1].value
 
         const calcInterpretation = interpretDiscProfile(discProfile)
+        console.log('[v0] Profile loaded:', { primary: discProfile.primary, secondary: discProfile.secondary })
+        
         setProfile(discProfile)
         setInterpretation(calcInterpretation)
-
-        await supabase.from('user_a1_profiles').upsert({
-          user_id: user?.id,
-          disc_profile: discProfile,
-          disc_interpretation: calcInterpretation,
-          updated_at: new Date().toISOString()
-        })
-
-        console.log('[v0] A1 Report loaded successfully')
         setLoading(false)
         return
       }
 
+      // Fallback: try a1_disc_assessment
       const { data: discData } = await supabase
         .from('a1_disc_assessment')
         .select('disc_profile')
@@ -89,37 +84,20 @@ export default function A1ReportPage() {
         .limit(1)
         .single()
 
-      if (discData) {
-        const discProfile: DiscProfile = discData.disc_profile as DiscProfile
-        const calcInterpretation = interpretDiscProfile(discProfile)
-        setProfile(discProfile)
+      if (discData?.disc_profile) {
+        const profile = discData.disc_profile as DiscProfile
+        const calcInterpretation = interpretDiscProfile(profile)
+        setProfile(profile)
         setInterpretation(calcInterpretation)
         setLoading(false)
         return
       }
 
-      const { data: canonData } = await supabase
-        .from('canon_disc_responses')
-        .select('responses')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      if (canonData) {
-        const calcProfile = calculateDiscProfile(canonData.responses)
-        const calcInterpretation = interpretDiscProfile(calcProfile)
-        setProfile(calcProfile)
-        setInterpretation(calcInterpretation)
-        setLoading(false)
-        return
-      }
-
-      setError('No se encontraron resultados de tu evaluación Despega Cerebral.')
+      setError('No se encontraron respuestas de tu evaluación Despega Cerebral.')
+      setLoading(false)
     } catch (err) {
       console.error('[v0] Error loading A1 report:', err)
-      setError('Error al cargar tu reporte.')
-    } finally {
+      setError('Error al cargar tu perfil. Intenta de nuevo.')
       setLoading(false)
     }
   }
@@ -127,10 +105,7 @@ export default function A1ReportPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-          <p className="text-slate-300">Cargando tu perfil...</p>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
       </div>
     )
   }
@@ -144,18 +119,24 @@ export default function A1ReportPage() {
         colorClass="from-purple-500 to-blue-500"
       >
         <ASectionPart title="Error" icon={<Zap />}>
-          <p className="text-red-400 text-lg mb-4">{error}</p>
-          <Button 
-            onClick={() => router.push('/despega/a1-cerebral')}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Realizar Evaluación Despega Cerebral
+          <p className="text-red-400 mb-4">{error}</p>
+          <Button onClick={() => router.push('/despega/a1-cerebral')} className="bg-purple-600 hover:bg-purple-700">
+            Realizar Evaluación
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </ASectionPart>
       </ASection>
     )
   }
+
+  // Mapeo DISC -> Despega Cerebral
+  const discToDespega: Record<string, string> = { D: 'E', I: 'I', S: 'R', C: 'P' }
+  const despegaLabels: Record<string, string> = { E: 'Energía', I: 'Influencia', R: 'Relaciones', P: 'Plan Ejecutivo' }
+  
+  const primaryLetter = discToDespega[profile.primary] || 'E'
+  const secondaryLetter = discToDespega[profile.secondary] || 'I'
+  const primaryLabel = despegaLabels[primaryLetter] || 'Energía'
+  const secondaryLabel = despegaLabels[secondaryLetter] || 'Influencia'
 
   return (
     <ASection
@@ -186,48 +167,40 @@ export default function A1ReportPage() {
 
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {(() => {
-            const discToDespega = { D: 'E', I: 'I', S: 'R', C: 'P' }
-            const despegaLabels = { E: 'Energía', I: 'Influencia', R: 'Relaciones', P: 'Plan Ejecutivo' }
-            const primaryLetter = discToDespega[profile.primary as keyof typeof discToDespega] as keyof typeof despegaLabels
-            const secondaryLetter = discToDespega[profile.secondary as keyof typeof discToDespega] as keyof typeof despegaLabels
-            
-            return (
-              <>
-                <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
-                  <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
-                  <div className="text-5xl font-black text-purple-400 mb-2">{primaryLetter}</div>
-                  <p className="font-semibold text-white mb-4">{despegaLabels[primaryLetter]}</p>
-                  <p className="text-slate-300 text-sm">{interpretation.description}</p>
-                  <div className="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-purple-500" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
-                  </div>
-                  <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.primaryScore))}%</p>
-                </div>
+          {/* Tipo Dominante */}
+          <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
+            <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
+            <div className="text-5xl font-black text-purple-400 mb-2">{primaryLetter}</div>
+            <p className="font-semibold text-white mb-4">{primaryLabel}</p>
+            <p className="text-slate-300 text-sm mb-4">{interpretation.description}</p>
+            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-full bg-purple-500" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.primaryScore))}%</p>
+          </div>
 
-                <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-6">
-                  <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
-                  <div className="text-5xl font-black text-blue-400 mb-2">{secondaryLetter}</div>
-                  <p className="font-semibold text-white mb-4">{despegaLabels[secondaryLetter]}</p>
-                  <p className="text-slate-300 text-sm">Tu segunda fortaleza principal</p>
-                  <div className="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
-                  </div>
-                  <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
-                </div>
-              </>
-            )
-          })()}
+          {/* Tipo Secundario */}
+          <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-6">
+            <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
+            <div className="text-5xl font-black text-blue-400 mb-2">{secondaryLetter}</div>
+            <p className="font-semibold text-white mb-4">{secondaryLabel}</p>
+            <p className="text-slate-300 text-sm mb-4">Tu segunda fortaleza principal</p>
+            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-full bg-blue-500" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+            </div>
+            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+          </div>
         </div>
 
-        <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8">
+        {/* 4 Dimensiones */}
+        <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
           <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones del Perfil Cerebral</h3>
           <div className="space-y-3">
             {[
-              { letter: 'E', label: 'Energía', score: Math.max(0, profile.D), color: 'from-red-500 to-orange-500' },
-              { letter: 'I', label: 'Influencia', score: Math.max(0, profile.I), color: 'from-yellow-500 to-orange-400' },
-              { letter: 'R', label: 'Relaciones', score: Math.max(0, profile.S), color: 'from-blue-500 to-cyan-500' },
-              { letter: 'P', label: 'Plan Ejecutivo', score: Math.max(0, profile.C), color: 'from-purple-500 to-pink-500' }
+              { letter: 'E', label: 'Energía', score: profile.D },
+              { letter: 'I', label: 'Influencia', score: profile.I },
+              { letter: 'R', label: 'Relaciones', score: profile.S },
+              { letter: 'P', label: 'Plan Ejecutivo', score: profile.C }
             ].map(dim => (
               <div key={dim.letter} className="flex items-center gap-4">
                 <div className="w-24">
@@ -235,7 +208,7 @@ export default function A1ReportPage() {
                   <p className="text-xs text-slate-400">Dimensión {dim.letter}</p>
                 </div>
                 <div className="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden">
-                  <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${Math.max(0, dim.score)}%` }} />
+                  <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500" style={{ width: `${Math.max(0, dim.score)}%` }} />
                 </div>
                 <p className="w-12 text-right font-semibold text-white">{Math.max(0, Math.round(dim.score))}%</p>
               </div>
@@ -245,41 +218,29 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-slate-800/40 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400 mb-4">
-                  Ahora que conoces tu Perfil Cerebral dominante, continúa explorando cómo esto te diferencia.
-                </p>
-                <Button variant="outline" className="w-full" size="sm">
-                  Ver Detalles
-                </Button>
-              </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <Card className="bg-slate-800/40 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-400 mb-4">Ahora que conoces tu Perfil Cerebral, entender cómo interactuarás en entrevistas, equipos y situaciones de presión.</p>
+              <Button variant="outline" className="border-slate-600" size="sm">Ver Detalles</Button>
+            </CardContent>
+          </Card>
 
-            <Card className="bg-slate-800/40 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-lg">Avanzar a A2</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400 mb-4">
-                  En A2: Ruta, crearemos tu plan de 90 días basado en tu Perfil Cerebral.
-                </p>
-                <Button 
-                  onClick={() => router.push('/despega/a2-routes')}
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  size="sm"
-                >
-                  Ir a A2: Ruta
-                  <ArrowRight className="w-3 h-3 ml-1" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="bg-slate-800/40 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-lg">Avanzar a A2</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-400 mb-4">En A2: Ruta, crearemos tu plan de 90 días basado en tu Perfil Cerebral.</p>
+              <Button onClick={() => router.push('/despega/a2-routes')} className="w-full bg-purple-600 hover:bg-purple-700" size="sm">
+                Ir a A2: Ruta
+                <ArrowRight className="w-3 h-3 ml-1" />
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </ASectionPart>
     </ASection>
