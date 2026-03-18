@@ -2,13 +2,19 @@ import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
+// API endpoint to save A1 DISC test results to Supabase
 export async function POST(request: NextRequest) {
   try {
     console.log('[v0] A1 DISC Save API called')
     
     const body = await request.json()
-    const { responses, questions, disc_profile } = body
+    const { responses, questions, disc_profile, user_id } = body
     
+    if (!user_id) {
+      console.error('[v0] No user_id provided')
+      return NextResponse.json({ error: 'User ID required' }, { status: 400 })
+    }
+
     // Get Supabase credentials from env
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -21,7 +27,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create server client with cookies for authentication
+    // Create server client with cookies
     const cookieStore = await cookies()
     const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
@@ -40,22 +46,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    if (!supabase || !supabase.auth) {
-      console.error('[v0] Supabase client initialization failed')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
-    // Get authenticated user from session cookies
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      console.error('[v0] Auth error:', authError)
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    console.log('[v0] User authenticated:', user.id)
+    console.log('[v0] User ID from client:', user_id)
     console.log('[v0] DISC Profile:', disc_profile)
     
     // Calculate dominant and secondary patterns from scores
@@ -67,7 +58,7 @@ export async function POST(request: NextRequest) {
     
     // Prepare insert data
     const insertData = {
-      user_id: user.id,
+      user_id,
       responses,
       questions,
       disc_profile,
@@ -76,7 +67,7 @@ export async function POST(request: NextRequest) {
       completed_at: new Date().toISOString()
     }
     
-    console.log('[v0] Inserting into a1_disc_assessment:', JSON.stringify(insertData, null, 2))
+    console.log('[v0] Inserting into a1_disc_assessment')
     
     // Insert with explicit error handling
     const { data, error } = await supabase
@@ -97,7 +88,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    console.log('[v0] Successfully saved A1 DISC assessment:', data)
+    console.log('[v0] Successfully saved A1 DISC assessment')
     
     return NextResponse.json({
       success: true,

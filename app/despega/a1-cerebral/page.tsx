@@ -59,14 +59,24 @@ export default function A1CerebralPage() {
       try {
         console.log('[v0] Starting test submission via API...')
         
+        // Get user first
+        const { data: { user } } = await sb.auth.getUser()
+        if (!user) {
+          console.log('[v0] No user found, redirecting to signin')
+          router.push('/auth/signin')
+          return
+        }
+        
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
         
-        // Call API endpoint to save DISC assessment
+        // Call API endpoint to save DISC assessment, passing user_id
         const response = await fetch('/api/a1-disc-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
+            user_id: user.id,
             responses: { more, less },
             questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
             disc_profile: scores
