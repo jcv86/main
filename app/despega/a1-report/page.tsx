@@ -1,5 +1,5 @@
 'use client'
-// Cache clear marker: 2024-03-18-v1.2.4-final
+// Cache clear marker: 2024-03-18-final-v1.2.5
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, ArrowRight, Download, Zap, CheckCircle2, Target } from 'lucide-react'
+import { Loader2, ArrowRight, Zap, CheckCircle2, Target } from 'lucide-react'
 
 export default function A1ReportPage() {
   const router = useRouter()
@@ -28,8 +28,8 @@ export default function A1ReportPage() {
 
   const loadReport = async () => {
     try {
-      // Get latest test results from despega_a1_test_results (where UnifiedTestSystem saves)
-      const { data: testData, error: testError } = await supabase
+      // Get latest test results from despega_a1_test_results
+      const { data: testData } = await supabase
         .from('despega_a1_test_results')
         .select('test_data, test_type')
         .eq('user_id', user?.id)
@@ -40,22 +40,22 @@ export default function A1ReportPage() {
 
       if (testData) {
         console.log('[v0] Found test data in despega_a1_test_results')
-        // Extract test data from despega_a1_test_results format
         const testDataObj = testData.test_data as any
         
-        // Map Despega Cerebral scores (energia, enfoque, relaciones, plan_ejecutivo) to DISC format
+        // Normalize Despega Cerebral scores from range [-100, 100] to [0, 100]
+        const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
+        
         const discProfile: DiscProfile = {
-          D: testDataObj.energia || 0,
-          I: testDataObj.relaciones || 0,
-          S: testDataObj.plan_ejecutivo || 0,
-          C: testDataObj.enfoque || 0,
+          D: normalize(testDataObj.energia || 0),
+          I: normalize(testDataObj.relaciones || 0),
+          S: normalize(testDataObj.plan_ejecutivo || 0),
+          C: normalize(testDataObj.enfoque || 0),
           primary: 'D',
-          primaryScore: testDataObj.energia || 0,
+          primaryScore: normalize(testDataObj.energia || 0),
           secondary: 'I',
-          secondaryScore: testDataObj.relaciones || 0
+          secondaryScore: normalize(testDataObj.relaciones || 0)
         }
 
-        // Recalculate to determine actual primary/secondary
         const scores = [
           { letter: 'D' as const, value: discProfile.D },
           { letter: 'I' as const, value: discProfile.I },
@@ -69,12 +69,12 @@ export default function A1ReportPage() {
         discProfile.secondary = scores[1].letter
         discProfile.secondaryScore = scores[1].value
 
-        const calcInterpretation = interpretDiscProfile(discProfile)
+        console.log('[v0] Normalized profile:', { D: discProfile.D, I: discProfile.I, S: discProfile.S, C: discProfile.C })
 
+        const calcInterpretation = interpretDiscProfile(discProfile)
         setProfile(discProfile)
         setInterpretation(calcInterpretation)
 
-        // Save profile to user_a1_profiles
         await supabase.from('user_a1_profiles').upsert({
           user_id: user?.id,
           disc_profile: discProfile,
@@ -82,29 +82,24 @@ export default function A1ReportPage() {
           updated_at: new Date().toISOString()
         })
 
-        console.log('[v0] A1 Report generated successfully from despega_a1_test_results')
         setLoading(false)
         return
       }
 
-      console.log('[v0] No test data found in despega_a1_test_results, trying a1_disc_assessment...')
-      
-      // Try new a1_disc_assessment table (where A1 cerebral test saves)
-      const { data: discData, error: discError } = await supabase
+      // Try a1_disc_assessment table
+      const { data: discData } = await supabase
         .from('a1_disc_assessment')
-        .select('disc_profile, dominant_pattern, secondary_pattern')
+        .select('disc_profile')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      if (discData) {
+      if (discData?.disc_profile) {
         console.log('[v0] Found DISC profile in a1_disc_assessment')
-        
         const discProfile: DiscProfile = discData.disc_profile as DiscProfile
         
-        // Ensure the profile has all required fields
-        if (!discProfile.primary || !discProfile.primaryScore) {
+        if (!discProfile.primary) {
           const scores = [
             { letter: 'D' as const, value: discProfile.D || 0 },
             { letter: 'I' as const, value: discProfile.I || 0 },
@@ -112,7 +107,6 @@ export default function A1ReportPage() {
             { letter: 'C' as const, value: discProfile.C || 0 }
           ]
           scores.sort((a, b) => b.value - a.value)
-          
           discProfile.primary = scores[0].letter
           discProfile.primaryScore = scores[0].value
           discProfile.secondary = scores[1].letter
@@ -120,11 +114,9 @@ export default function A1ReportPage() {
         }
 
         const calcInterpretation = interpretDiscProfile(discProfile)
-
         setProfile(discProfile)
         setInterpretation(calcInterpretation)
 
-        // Save profile to user_a1_profiles
         await supabase.from('user_a1_profiles').upsert({
           user_id: user?.id,
           disc_profile: discProfile,
@@ -132,33 +124,26 @@ export default function A1ReportPage() {
           updated_at: new Date().toISOString()
         })
 
-        console.log('[v0] A1 Report generated successfully from a1_disc_assessment')
         setLoading(false)
         return
       }
 
-      console.log('[v0] No test data found in a1_disc_assessment, trying canon_disc_responses...')
-      
-      // Fallback: try canon_disc_responses table
-      const { data: canonData, error: canonError } = await supabase
+      // Fallback: try canon_disc_responses
+      const { data: canonData } = await supabase
         .from('canon_disc_responses')
         .select('responses')
-        .eq('user_id', user.id)
+        .eq('user_id', user?.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      if (canonData) {
+      if (canonData?.responses) {
         console.log('[v0] Found responses in canon_disc_responses')
-        
-        // Calculate from canon_disc_responses format
         const calcProfile = calculateDiscProfile(canonData.responses)
         const calcInterpretation = interpretDiscProfile(calcProfile)
-
         setProfile(calcProfile)
         setInterpretation(calcInterpretation)
 
-        // Save profile to user_a1_profiles
         await supabase.from('user_a1_profiles').upsert({
           user_id: user?.id,
           disc_profile: calcProfile,
@@ -166,14 +151,11 @@ export default function A1ReportPage() {
           updated_at: new Date().toISOString()
         })
 
-        console.log('[v0] A1 Report generated from canon_disc_responses')
         setLoading(false)
         return
       }
 
-      // No test data found in any table
-          setError('No se encontraron respuestas de tu evaluación Despega Cerebral. Por favor completa la evaluación.')
-          console.error('[v0] No Cerebral test responses found in any table')
+      setError('No se encontraron respuestas de tu evaluación Despega Cerebral. Por favor completa la evaluación.')
     } catch (err) {
       console.error('[v0] Error loading A1 report:', err)
       setError('Error al cargar tu reporte. Intenta de nuevo.')
@@ -218,7 +200,7 @@ export default function A1ReportPage() {
   return (
     <ASection
       title="A1: Origen"
-      subtitle="Descubre tu perfil DISC y potencial único"
+      subtitle="Descubre tu Perfil Cerebral y potencial único"
       icon="🎯"
       colorClass="from-purple-500 to-blue-500"
     >
@@ -226,7 +208,7 @@ export default function A1ReportPage() {
       <ASectionPart title="¿Qué es A1: Origen?" icon={<Zap />}>
         <p className="text-slate-300 mb-4">
           En esta etapa descubrirás tu Perfil Cerebral, el resultado de tu evaluación Despega Cerebral que clasifica tu comportamiento 
-          en 4 dimensiones clave: Energía, Enfoque, Relaciones y Plan Ejecutivo. Entender tu patrón dominante te permite reconocer 
+          en 4 dimensiones clave: Energía, Influencia, Relaciones y Plan Ejecutivo. Entender tu patrón dominante te permite reconocer 
           tus fortalezas, anticipar desafíos, y comunicarte de forma más efectiva con otros.
         </p>
         <p className="text-slate-400 text-sm">
@@ -261,59 +243,57 @@ export default function A1ReportPage() {
       {/* RESULTADOS */}
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Primary Type */}
           <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
             <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
             <div className="text-5xl font-black text-purple-400 mb-2">{profile.primary}</div>
-            <p className="font-semibold text-white mb-4">{interpretation.primary_type}</p>
-            <p className="text-slate-300 text-sm">{interpretation.primary_description}</p>
+            <p className="font-semibold text-white mb-4">{interpretation.profileName}</p>
+            <p className="text-slate-300 text-sm">{interpretation.description}</p>
             <div className="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
               <div 
                 className="h-full bg-purple-500" 
-                style={{ width: `${profile.primaryScore}%` }}
+                style={{ width: `${Math.max(0, profile.primaryScore)}%` }}
               />
             </div>
-            <p className="text-xs text-slate-400 mt-2">{Math.round(profile.primaryScore)}%</p>
+            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.primaryScore))}%</p>
           </div>
 
-          {/* Secondary Type */}
           <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-6">
             <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
             <div className="text-5xl font-black text-blue-400 mb-2">{profile.secondary}</div>
-            <p className="font-semibold text-white mb-4">{interpretation.secondary_type}</p>
-            <p className="text-slate-300 text-sm">{interpretation.secondary_description}</p>
+            <p className="font-semibold text-white mb-4">Dimensión {profile.secondary}</p>
+            <p className="text-slate-300 text-sm">Tu segunda fortaleza principal</p>
             <div className="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
               <div 
                 className="h-full bg-blue-500" 
-                style={{ width: `${profile.secondaryScore}%` }}
+                style={{ width: `${Math.max(0, profile.secondaryScore)}%` }}
               />
             </div>
-            <p className="text-xs text-slate-400 mt-2">{Math.round(profile.secondaryScore)}%</p>
+            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
           </div>
         </div>
 
-        {/* DISC Scores Chart */}
+        {/* Perfil Cerebral - 4 Dimensiones */}
         <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8">
-          <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones</h3>
+          <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones del Perfil Cerebral</h3>
           <div className="space-y-3">
             {[
-              { letter: 'D', label: 'Dominancia', score: profile.D, color: 'from-red-500 to-orange-500' },
-              { letter: 'I', label: 'Influencia', score: profile.I, color: 'from-yellow-500 to-orange-400' },
-              { letter: 'S', label: 'Estabilidad', score: profile.S, color: 'from-blue-500 to-cyan-500' },
-              { letter: 'C', label: 'Conformidad', score: profile.C, color: 'from-purple-500 to-pink-500' }
+              { letter: 'E', label: 'Energía', score: Math.max(0, profile.D), color: 'from-red-500 to-orange-500' },
+              { letter: 'I', label: 'Influencia', score: Math.max(0, profile.I), color: 'from-yellow-500 to-orange-400' },
+              { letter: 'R', label: 'Relaciones', score: Math.max(0, profile.S), color: 'from-blue-500 to-cyan-500' },
+              { letter: 'P', label: 'Plan Ejecutivo', score: Math.max(0, profile.C), color: 'from-purple-500 to-pink-500' }
             ].map(dim => (
               <div key={dim.letter} className="flex items-center gap-4">
-                <div className="w-16">
-                  <p className="font-bold text-white">{dim.letter}</p>
-                  <p className="text-xs text-slate-400">{dim.label}</p>
+                <div className="w-24">
+                  <p className="font-bold text-white">{dim.label}</p>
+                  <p className="text-xs text-slate-400">Dimensión {dim.letter}</p>
                 </div>
                 <div className="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden">
                   <div 
                     className={`h-full bg-gradient-to-r ${dim.color} transition-all`}
-                    style={{ width: `${dim.score}%` }}
+                    style={{ width: `${Math.max(0, dim.score)}%` }}
                   />
                 </div>
-                <p className="w-12 text-right font-semibold text-white">{Math.round(dim.score)}%</p>
+                <p className="w-12 text-right font-semibold text-white">{Math.max(0, Math.round(dim.score))}%</p>
               </div>
             ))}
           </div>
@@ -322,7 +302,7 @@ export default function A1ReportPage() {
         {/* Interpretation */}
         <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-6">
           <h3 className="font-semibold text-cyan-400 mb-3">Interpretación</h3>
-          <p className="text-slate-300 leading-relaxed">{interpretation.overall_summary}</p>
+          <p className="text-slate-300 leading-relaxed">{interpretation.description}</p>
         </div>
       </ASectionPart>
 
