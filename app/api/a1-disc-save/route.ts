@@ -2,7 +2,10 @@ import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-// API endpoint to save A1 DISC test results to Supabase
+/**
+ * API endpoint to save A1 DISC test results to Supabase
+ * Expects user_id, responses, questions, and disc_profile in request body
+ */
 export async function POST(request: NextRequest) {
   try {
     console.log('[v0] A1 DISC Save API called')

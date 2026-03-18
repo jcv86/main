@@ -37,6 +37,25 @@ export async function POST(req: Request) {
 
     console.log('[v0] User authenticated via Supabase:', email)
 
+    // Ensure user exists in public users table (for foreign key constraint)
+    const { error: userError } = await supabase
+      .from('users')
+      .upsert(
+        {
+          id: data.user.id,
+          email: data.user.email,
+          full_name: data.user.user_metadata?.full_name || email.split('@')[0],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'id' }
+      )
+
+    if (userError) {
+      console.error('[v0] Error upserting user to public table:', userError)
+      // Continue anyway - user is authenticated, but might not be able to save data
+    }
+
     return Response.json({
       success: true,
       message: 'Sesión iniciada',
