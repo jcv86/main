@@ -6,11 +6,11 @@ import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 
 export default function Conozcamonos1Page() {
-  const [idx,setIdx] = useState(0)
-  const [resp,setResp] = useState<Record<number,string>>({})
-  const [loading,setLoading] = useState(false)
-  const [error,setError] = useState('')
-  const [authOk,setAuthOk] = useState(false)
+  const [idx, setIdx] = useState(0)
+  const [resp, setResp] = useState<Record<number, string>>({})
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [authOk, setAuthOk] = useState(false)
   const router = useRouter()
   const sb = createClient()
 
