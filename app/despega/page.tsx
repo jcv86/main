@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Loader2, CheckCircle2, Clock, AlertCircle, TrendingUp } from 'lucide-react'
+import { Loader2, CheckCircle2, Clock, AlertCircle, TrendingUp, ArrowRight, Zap } from 'lucide-react'
 
 interface UserProgress {
   a1_completed: boolean
@@ -37,24 +37,20 @@ export default function DespegazoDashboard() {
         return
       }
 
-      // Get user name
       setUserName(user.email?.split('@')[0] || 'User')
 
-      // Check A1
       const { data: a1 } = await supabase
         .from('user_a1_profiles')
         .select('*')
         .eq('user_id', user.id)
         .limit(1)
 
-      // Check A2
       const { data: a2 } = await supabase
         .from('user_a2_routes')
         .select('*')
         .eq('user_id', user.id)
         .limit(1)
 
-      // Check A3
       const { data: interview0 } = await supabase
         .from('user_a3_interview_0')
         .select('id')
@@ -78,7 +74,6 @@ export default function DespegazoDashboard() {
         .select('id')
         .eq('user_id', user.id)
 
-      // Check A4
       const { data: a4 } = await supabase
         .from('user_a4_radar')
         .select('*')
@@ -99,7 +94,6 @@ export default function DespegazoDashboard() {
 
       setProgress(userProgress)
 
-      // Calculate readiness
       const score = calculateReadinessScore(
         userProgress.a1_completed,
         a1?.[0],
@@ -120,10 +114,10 @@ export default function DespegazoDashboard() {
 
   if (loading || !progress || !readiness) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-900">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-          <p className="text-slate-600 dark:text-slate-400">Cargando tu dashboard...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+          <p className="text-slate-300">Cargando tu dashboard...</p>
         </div>
       </div>
     )
@@ -132,193 +126,213 @@ export default function DespegazoDashboard() {
   const stages = [
     {
       name: 'A1: Origen',
-      description: 'Conozcamonos + DISC + Report',
+      description: 'Descubre tu perfil DISC y potencial único',
       completed: progress.a1_completed,
       href: '/despega/a1-report',
-      score: readiness.a1_completeness
+      score: readiness.a1_completeness,
+      icon: '🎯',
+      color: 'from-purple-500 to-blue-500'
     },
     {
       name: 'A2: Ruta',
-      description: '30/60/90 días personalizados',
+      description: 'Tu plan personalizado de 90 días',
       completed: progress.a2_completed,
       href: '/despega/a2-routes',
-      score: readiness.a2_completeness
+      score: readiness.a2_completeness,
+      icon: '🗺️',
+      color: 'from-blue-500 to-cyan-500'
     },
     {
       name: 'A3: Impulso',
-      description: 'Interview + CV + Simulaciones',
+      description: 'Prepárate para entrevistas y destaca',
       completed:
         progress.a3_progress.interview_0 &&
         progress.a3_progress.cv_prepared &&
         progress.a3_progress.market_insights,
       href: '/despega/a3-dashboard',
-      score: readiness.a3_completeness
+      score: readiness.a3_completeness,
+      icon: '⚡',
+      color: 'from-cyan-500 to-teal-500'
     },
     {
       name: 'A4: Radar',
-      description: 'News + Progress + Monitoring',
+      description: 'Monitoreo continuo y oportunidades',
       completed: progress.a4_active,
       href: '/despega/a4-radar',
-      score: readiness.a4_completeness
+      score: readiness.a4_completeness,
+      icon: '📡',
+      color: 'from-teal-500 to-emerald-500'
     }
   ]
 
   const scoreColor =
     readiness.overall_score >= 80
-      ? 'text-green-600 dark:text-green-400'
+      ? 'text-emerald-400'
       : readiness.overall_score >= 60
-      ? 'text-yellow-600 dark:text-yellow-400'
-      : 'text-orange-600 dark:text-orange-400'
+      ? 'text-yellow-400'
+      : 'text-orange-400'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
+    <div className="min-h-screen bg-slate-950 text-white p-4 py-12">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-            Hola {userName}! Tu Transformación Despega
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
-            Sigue tu progreso a través de A1, A2, A3, A4
+        {/* Hero Header */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <Zap className="w-8 h-8 text-purple-500" />
+            <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
+              Tu Transformación <br />
+              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                Despega
+              </span>
+            </h1>
+          </div>
+          <p className="text-lg text-slate-400 max-w-2xl">
+            Sigue tu progreso a través de 4 etapas de desarrollo profesional. 
+            Alcanza el 80+ de readiness para estar completamente listo.
           </p>
         </div>
 
-        {/* Readiness Score */}
-        <Card className="p-8 mb-12 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center">
-              <div className={`text-6xl font-bold ${scoreColor} mb-2`}>
+        {/* Readiness Score - Premium */}
+        <div className="mb-16 bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-purple-500/20 rounded-2xl p-12 backdrop-blur">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="flex flex-col items-center justify-center">
+              <div className={`text-7xl font-black ${scoreColor} mb-2`}>
                 {readiness.overall_score}
               </div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">Readiness Score</p>
+              <p className="text-slate-400 text-sm font-semibold">Readiness Score</p>
+              <div className="mt-4 w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-emerald-500 to-teal-400' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange-500 to-red-400'} transition-all duration-500`}
+                  style={{ width: `${readiness.overall_score}%` }}
+                />
+              </div>
             </div>
 
             <div className="md:col-span-2">
-              <h3 className="font-bold text-slate-900 dark:text-white mb-4">
-                Recomendación:
-              </h3>
-              <div className="space-y-2">
-                {readiness.recommendations.map((rec, i) => (
-                  <div key={i} className="flex gap-2 items-start">
-                    <TrendingUp className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-slate-700 dark:text-slate-300">{rec}</p>
+              <h3 className="text-xl font-bold text-white mb-6">Próximos Pasos</h3>
+              <div className="space-y-3">
+                {readiness.recommendations.slice(0, 3).map((rec, i) => (
+                  <div key={i} className="flex gap-3 items-start">
+                    <Zap className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
+                    <p className="text-slate-200">{rec}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </Card>
+        </div>
 
-        {/* Strengths and Gaps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <Card className="p-6 border-l-4 border-green-500">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
-              Fortalezas
+        {/* Strengths & Gaps */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <div className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 border border-emerald-500/20 rounded-xl p-6">
+            <h3 className="text-lg font-bold text-emerald-400 mb-4 flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5" /> Fortalezas
             </h3>
             <ul className="space-y-2">
               {readiness.strengths.length > 0 ? (
                 readiness.strengths.map((strength, i) => (
-                  <li key={i} className="flex gap-2 text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                    {strength}
-                  </li>
+                  <li key={i} className="text-slate-300 text-sm">{strength}</li>
                 ))
               ) : (
                 <p className="text-slate-500">Completa más etapas</p>
               )}
             </ul>
-          </Card>
+          </div>
 
-          <Card className="p-6 border-l-4 border-orange-500">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
-              Áreas de Mejora
+          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 border border-orange-500/20 rounded-xl p-6">
+            <h3 className="text-lg font-bold text-orange-400 mb-4 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" /> Áreas de Mejora
             </h3>
             <ul className="space-y-2">
               {readiness.gaps.length > 0 ? (
                 readiness.gaps.map((gap, i) => (
-                  <li key={i} className="flex gap-2 text-slate-700 dark:text-slate-300">
-                    <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-                    {gap}
-                  </li>
+                  <li key={i} className="text-slate-300 text-sm">{gap}</li>
                 ))
               ) : (
-                <p className="text-slate-500">¡Excelente, todo completo!</p>
+                <p className="text-emerald-400 font-semibold">¡Excelente, todo completo!</p>
               )}
             </ul>
-          </Card>
+          </div>
         </div>
 
-        {/* Progress by Stage */}
-        <div className="space-y-6 mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Progreso por Etapa
-          </h2>
+        {/* Progress by Stage - Modern Cards */}
+        <div className="space-y-4 mb-16">
+          <h2 className="text-3xl font-bold text-white">Tu Camino de 4 Etapas</h2>
 
           {stages.map((stage, i) => (
-            <Card key={i} className="p-6">
+            <div
+              key={i}
+              onClick={() => router.push(stage.href)}
+              className="group cursor-pointer bg-gradient-to-r from-slate-800/50 to-slate-700/30 border border-slate-700/50 hover:border-slate-600 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+            >
               <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {stage.name}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">
-                    {stage.description}
-                  </p>
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl">{stage.icon}</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">
+                      {stage.name}
+                    </h3>
+                    <p className="text-slate-400 text-sm mt-1">{stage.description}</p>
+                  </div>
                 </div>
-                {stage.completed && (
-                  <Badge className="bg-green-600 hover:bg-green-700">
-                    <CheckCircle2 className="w-3 h-3 mr-1" />
-                    Completo
+                {stage.completed ? (
+                  <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 ml-4">
+                    ✓ Completo
+                  </Badge>
+                ) : (
+                  <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/50 ml-4">
+                    {Math.round(stage.score)}%
                   </Badge>
                 )}
               </div>
 
               <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600 dark:text-slate-400">Progreso</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    {Math.round(stage.score)}%
-                  </span>
-                </div>
-                <Progress value={stage.score} className="h-2" />
+                <Progress value={stage.score} className="h-2 bg-slate-700" />
               </div>
 
               <Button
-                onClick={() => router.push(stage.href)}
-                variant={stage.completed ? 'outline' : 'default'}
-                className={stage.completed ? '' : 'bg-purple-600 hover:bg-purple-700'}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push(stage.href)
+                }}
+                className={`w-full group/btn ${
+                  stage.completed
+                    ? 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                    : `bg-gradient-to-r ${stage.color} hover:shadow-lg text-white font-semibold`
+                }`}
               >
                 {stage.completed ? 'Ver Detalles' : 'Continuar'}
+                <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
-            </Card>
+            </div>
           ))}
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
             variant="outline"
-            className="h-12"
+            className="h-12 border-slate-600 hover:border-purple-500 text-white hover:text-purple-400"
           >
             <Clock className="w-4 h-4 mr-2" />
             Comenzar o Continuar
           </Button>
           <Button
             onClick={() => loadUserProgress()}
-            className="h-12 bg-purple-600 hover:bg-purple-700"
+            className="h-12 bg-purple-600 hover:bg-purple-700 font-semibold"
           >
+            <TrendingUp className="w-4 h-4 mr-2" />
             Actualizar Progreso
           </Button>
         </div>
 
-        {/* Footer */}
-        <Card className="p-6 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
-          <p className="text-blue-900 dark:text-blue-200 text-sm">
-            <strong>Consejo:</strong> Tu Readiness Score se actualiza automáticamente conforme completas cada etapa. 
-            Alcanza 80+ para estar completamente listo para aplicar a oportunidades.
+        {/* Footer Note */}
+        <div className="bg-slate-800/40 border border-slate-700 rounded-lg p-4 text-center">
+          <p className="text-slate-400 text-sm">
+            💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple-400">80+</span> para estar completamente listo.
           </p>
-        </Card>
+        </div>
       </div>
     </div>
   )
