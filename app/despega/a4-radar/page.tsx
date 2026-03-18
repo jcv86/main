@@ -249,3 +249,5 @@ export default function A4RadarPage() {
         </div>
       </ASectionPart>
     </ASection>
+  )
+}

@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target } from 'lucide-react'
-import { ASection, ASectionPart } from '@/components/a-section'
+import { ASection, ASectionPart } from '@/components/a-section-layout'
 
 interface DiscProfile {
   D: number
@@ -20,15 +20,9 @@ interface DiscProfile {
   secondaryScore: number
 }
 
-interface DiscInterpretation {
-  profileName: string
-  description: string
-}
-
 export default function A1ReportPage() {
   const router = useRouter()
   const [profile, setProfile] = useState<DiscProfile | null>(null)
-  const [interpretation, setInterpretation] = useState<DiscInterpretation | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const { user, loading: authLoading } = useAuthRedirect()
@@ -65,10 +59,10 @@ export default function A1ReportPage() {
         }
 
         const scores = [
-          { letter: 'D' as const, value: profile.D },
-          { letter: 'I' as const, value: profile.I },
-          { letter: 'S' as const, value: profile.S },
-          { letter: 'C' as const, value: profile.C }
+          { letter: 'D', value: profile.D },
+          { letter: 'I', value: profile.I },
+          { letter: 'S', value: profile.S },
+          { letter: 'C', value: profile.C }
         ]
         scores.sort((a, b) => b.value - a.value)
 
@@ -78,17 +72,13 @@ export default function A1ReportPage() {
         profile.secondaryScore = scores[1].value
 
         setProfile(profile)
-        setInterpretation({
-          profileName: `Perfil ${profile.primary}${profile.secondary}`,
-          description: 'Tu patrón dominante en el Perfil Cerebral'
-        })
         setLoading(false)
         return
       }
 
-      setError('No se encontraron respuestas de tu evaluación. Por favor completa la evaluación.')
+      setError('No se encontraron respuestas. Por favor completa la evaluación.')
     } catch (err) {
-      setError('Error al cargar tu reporte. Intenta de nuevo.')
+      setError('Error al cargar el reporte.')
     } finally {
       setLoading(false)
     }
@@ -96,38 +86,26 @@ export default function A1ReportPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-          <p className="text-slate-600 dark:text-slate-400">Cargando tu reporte...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <ASection
-        title="A1: Origen"
-        subtitle="Tu Perfil Cerebral"
-        icon="🎯"
-        colorClass="from-purple-500 to-blue-500"
-      >
+      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
         <ASectionPart title="Error" icon={<Zap />}>
-          <p className="text-red-400 text-lg mb-4">{error}</p>
-          <Button 
-            onClick={() => router.push('/despega/a1-cerebral')}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Realizar Evaluación
-            <ArrowRight className="w-4 h-4 ml-2" />
+          <p className="text-red-400">{error}</p>
+          <Button onClick={() => router.push('/despega/a1-cerebral')} className="bg-purple-600 hover:bg-purple-700">
+            Ir a Evaluación
           </Button>
         </ASectionPart>
       </ASection>
     )
   }
 
-  if (!profile || !interpretation) return null
+  if (!profile) return null
 
   const discToDespega = { D: 'E', I: 'I', S: 'R', C: 'P' }
   const despegaLabels = { E: 'Energía', I: 'Influencia', R: 'Relaciones', P: 'Plan Ejecutivo' }
@@ -135,19 +113,13 @@ export default function A1ReportPage() {
   const secondaryLetter = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection
-      title="A1: Origen"
-      subtitle="Descubre tu Perfil Cerebral y potencial único"
-      icon="🎯"
-      colorClass="from-purple-500 to-blue-500"
-    >
+    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
             <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
             <div className="text-5xl font-black text-purple-400 mb-2">{primaryLetter}</div>
             <p className="font-semibold text-white mb-4">{despegaLabels[primaryLetter as keyof typeof despegaLabels]}</p>
-            <p className="text-slate-300 text-sm mb-4">{interpretation.description}</p>
             <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
               <div className="h-full bg-purple-500" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
             </div>
@@ -158,7 +130,6 @@ export default function A1ReportPage() {
             <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
             <div className="text-5xl font-black text-blue-400 mb-2">{secondaryLetter}</div>
             <p className="font-semibold text-white mb-4">{despegaLabels[secondaryLetter as keyof typeof despegaLabels]}</p>
-            <p className="text-slate-300 text-sm mb-4">Tu segunda fortaleza principal</p>
             <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
@@ -167,19 +138,16 @@ export default function A1ReportPage() {
         </div>
 
         <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8">
-          <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones del Perfil Cerebral</h3>
+          <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones</h3>
           <div className="space-y-3">
             {[
-              { letter: 'E', label: 'Energía', score: profile.D },
-              { letter: 'I', label: 'Influencia', score: profile.I },
-              { letter: 'R', label: 'Relaciones', score: profile.S },
-              { letter: 'P', label: 'Plan Ejecutivo', score: profile.C }
-            ].map(dim => (
-              <div key={dim.letter} className="flex items-center gap-4">
-                <div className="w-24">
-                  <p className="font-bold text-white">{dim.label}</p>
-                  <p className="text-xs text-slate-400">Dimensión {dim.letter}</p>
-                </div>
+              { label: 'Energía', score: profile.D },
+              { label: 'Influencia', score: profile.I },
+              { label: 'Relaciones', score: profile.S },
+              { label: 'Plan Ejecutivo', score: profile.C }
+            ].map((dim, idx) => (
+              <div key={idx} className="flex items-center gap-4">
+                <p className="font-bold text-white w-32">{dim.label}</p>
                 <div className="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500" style={{ width: `${Math.max(0, dim.score)}%` }} />
                 </div>
@@ -191,19 +159,14 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card className="bg-slate-800/40 border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-400 mb-4">Ahora que conoces tu Perfil Cerebral, entender cómo interactuarás en entrevistas, equipos y situaciones de presión.</p>
-              <Button 
-                onClick={() => router.push('/despega/a1-patterns')} 
-                variant="outline" 
-                className="border-slate-600" 
-                size="sm"
-              >
+              <p className="text-sm text-slate-400 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
+              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-slate-600" size="sm">
                 Ver Detalles
               </Button>
             </CardContent>
@@ -214,7 +177,7 @@ export default function A1ReportPage() {
               <CardTitle className="text-lg">Avanzar a A2</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-400 mb-4">En A2: Ruta, crearemos tu plan de 90 días basado en tu Perfil Cerebral.</p>
+              <p className="text-sm text-slate-400 mb-4">Crea tu plan de 90 días.</p>
               <Button onClick={() => router.push('/despega/a2-routes')} className="w-full bg-purple-600 hover:bg-purple-700" size="sm">
                 Ir a A2: Ruta
                 <ArrowRight className="w-3 h-3 ml-1" />
