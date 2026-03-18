@@ -66,6 +66,13 @@ export default function A1CerebralPage() {
         
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
+        
+        // Determine dominant and secondary patterns
+        const sortedDimensions = Object.entries(scores).sort((a, b) => b[1] - a[1])
+        const dominant_pattern = sortedDimensions[0]?.[0] || 'D'
+        const secondary_pattern = sortedDimensions[1]?.[0] || 'I'
+        
+        console.log('[v0] Dominant:', dominant_pattern, 'Secondary:', secondary_pattern)
         console.log('[v0] Attempting to insert into a1_disc_assessment for user:', user.id)
         
         const { data, error: e } = await sb.from('a1_disc_assessment').insert({
@@ -73,6 +80,8 @@ export default function A1CerebralPage() {
           responses: { more, less },
           questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
           disc_profile: scores,
+          dominant_pattern,
+          secondary_pattern,
           completed_at: new Date().toISOString()
         }).select()
         
