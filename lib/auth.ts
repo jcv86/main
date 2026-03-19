@@ -59,11 +59,6 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.googleClientId || "",
       clientSecret: envVars.googleClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      // EXPLICITLY set callback URL to prevent double slashes
-      // NextAuth needs the EXACT URL that's configured in Google Console
-      ...(process.env.NEXTAUTH_URL && {
-        callbackUrl: `${process.env.NEXTAUTH_URL.replace(/\/$/, '')}/api/auth/callback/google`,
-      }),
       // Request specific OAuth scopes/permissions
       authorization: {
         params: {
@@ -77,25 +72,11 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      // EXPLICITLY set callback URL to prevent double slashes
-      ...(process.env.NEXTAUTH_URL && {
-        callbackUrl: `${process.env.NEXTAUTH_URL.replace(/\/$/, '')}/api/auth/callback/linkedin`,
-      }),
     }),
   ],
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-  }),
-  // Ensure NEXTAUTH_URL doesn't have trailing slash for proper callback URL construction
-  // NextAuth uses NEXTAUTH_URL_INTERNAL if available, otherwise falls back to NEXTAUTH_URL
-  // We set both to ensure consistency
-  ...(process.env.NEXTAUTH_URL && {
-    url: process.env.NEXTAUTH_URL.replace(/\/$/, ''),
-  }),
-  ...((process.env.NEXTAUTH_URL_INTERNAL || process.env.NEXTAUTH_URL) && {
-    // Force internal URL without trailing slash
-    // This prevents NextAuth from appending / + /api/auth = //api/auth
   }),
   basePath: "/api/auth",
   session: {
@@ -108,6 +89,9 @@ export const authConfig: NextAuthConfig = {
     error: "/auth/error",
   },
   trustHost: true,
+  // USE THE CORRECT NEXTAUTH_URL WITHOUT TRAILING SLASH
+  // This is where NextAuth gets the base URL for callback URLs
+  url: process.env.NEXTAUTH_URL?.replace(/\/$/, '') || 'http://localhost:3000',
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
