@@ -57,6 +57,14 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.googleClientId || "",
       clientSecret: envVars.googleClientSecret || "",
       allowDangerousEmailAccountLinking: true,
+      // Request specific OAuth scopes/permissions
+      authorization: {
+        params: {
+          scope: "openid profile email",
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
     }),
     LinkedIn({
       clientId: envVars.linkedinClientId || "",
@@ -78,6 +86,7 @@ export const authConfig: NextAuthConfig = {
     signOut: "/auth/signout",
     error: "/auth/error",
   },
+  trustHost: true,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
