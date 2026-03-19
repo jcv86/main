@@ -41,13 +41,21 @@ if (!envVars.nextAuthSecret) {
 
 // Debug: Log the exact OAuth URLs being used
 const debugOAuthConfig = () => {
-  // Remove trailing slash from NEXTAUTH_URL - THIS IS CRITICAL
-  const rawUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  // HARDCODED PRODUCTION URL - Override Vercel env var if it has trailing slash
+  // Production: https://www.despegatucarrera.com (NO trailing slash)
+  // Development: http://localhost:3000 (NO trailing slash)
+  const isProduction = process.env.NODE_ENV === 'production'
+  const hardcodedUrl = isProduction ? 'https://www.despegatucarrera.com' : 'http://localhost:3000'
+  
+  const rawUrl = process.env.NEXTAUTH_URL || hardcodedUrl
+  // CRITICAL: Strip trailing slash to prevent double slashes in callbacks
   const baseUrl = rawUrl.replace(/\/$/, '')
   
   console.log("[v0] ===== OAUTH CONFIGURATION CHECKLIST =====")
+  console.log("[v0] Node env:", process.env.NODE_ENV)
   console.log("[v0] Raw NEXTAUTH_URL env:", rawUrl)
   console.log("[v0] Clean baseUrl (trailing slash removed):", baseUrl)
+  console.log("[v0] Hardcoded fallback:", hardcodedUrl)
   console.log("[v0]")
   console.log("[v0] VERIFY THESE MATCH GOOGLE CONSOLE:")
   console.log("[v0] - Authorized JavaScript origins: " + baseUrl)
@@ -62,9 +70,11 @@ const debugOAuthConfig = () => {
   console.log("[v0] - LINKEDIN_CLIENT_ID:", !!process.env.LINKEDIN_CLIENT_ID)
   console.log("[v0] - LINKEDIN_CLIENT_SECRET:", !!process.env.LINKEDIN_CLIENT_SECRET)
   console.log("[v0] ==========================================")
+  
+  return baseUrl
 }
 
-debugOAuthConfig()
+const cleanBaseUrl = debugOAuthConfig()
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -110,9 +120,8 @@ export const authConfig: NextAuthConfig = {
     error: "/auth/error",
   },
   trustHost: true,
-  // USE THE CORRECT NEXTAUTH_URL WITHOUT TRAILING SLASH
-  // This is where NextAuth gets the base URL for callback URLs
-  url: process.env.NEXTAUTH_URL?.replace(/\/$/, '') || 'http://localhost:3000',
+  // HARDCODED CORRECT URL - USE cleanBaseUrl with NO trailing slash
+  url: cleanBaseUrl,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
