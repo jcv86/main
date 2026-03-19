@@ -43,11 +43,12 @@ if (!envVars.nextAuthSecret) {
 const debugOAuthConfig = () => {
   // Remove trailing slash from NEXTAUTH_URL
   const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/$/, '')
-  console.log("[v0] OAuth Configuration (FIXED):")
-  console.log("[v0] Raw NEXTAUTH_URL:", process.env.NEXTAUTH_URL)
-  console.log("[v0] Clean baseUrl:", baseUrl)
-  console.log("[v0] Google Callback URL:", `${baseUrl}/api/auth/callback/google`)
-  console.log("[v0] LinkedIn Callback URL:", `${baseUrl}/api/auth/callback/linkedin`)
+  console.log("[v0] OAuth Configuration - CORRECTED:")
+  console.log("[v0] Raw NEXTAUTH_URL env:", process.env.NEXTAUTH_URL)
+  console.log("[v0] Cleaned baseUrl:", baseUrl)
+  console.log("[v0] Google Callback URL (actual):", `${baseUrl}/api/auth/callback/google`)
+  console.log("[v0] LinkedIn Callback URL (actual):", `${baseUrl}/api/auth/callback/linkedin`)
+  console.log("[v0] These MUST match Google Console and LinkedIn Console redirect URIs")
 }
 
 debugOAuthConfig()
@@ -58,6 +59,11 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.googleClientId || "",
       clientSecret: envVars.googleClientSecret || "",
       allowDangerousEmailAccountLinking: true,
+      // EXPLICITLY set callback URL to prevent double slashes
+      // NextAuth needs the EXACT URL that's configured in Google Console
+      ...(process.env.NEXTAUTH_URL && {
+        callbackUrl: `${process.env.NEXTAUTH_URL.replace(/\/$/, '')}/api/auth/callback/google`,
+      }),
       // Request specific OAuth scopes/permissions
       authorization: {
         params: {
@@ -71,6 +77,10 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
+      // EXPLICITLY set callback URL to prevent double slashes
+      ...(process.env.NEXTAUTH_URL && {
+        callbackUrl: `${process.env.NEXTAUTH_URL.replace(/\/$/, '')}/api/auth/callback/linkedin`,
+      }),
     }),
   ],
   adapter: SupabaseAdapter({
