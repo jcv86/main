@@ -41,12 +41,13 @@ if (!envVars.nextAuthSecret) {
 
 // Debug: Log the exact OAuth URLs being used
 const debugOAuthConfig = () => {
+  // Remove trailing slash from NEXTAUTH_URL
   const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/$/, '')
-  console.log("[v0] OAuth Configuration:")
-  console.log("[v0] NEXTAUTH_URL:", baseUrl)
-  console.log("[v0] Google Callback URL should be:", `${baseUrl}/api/auth/callback/google`)
-  console.log("[v0] LinkedIn Callback URL should be:", `${baseUrl}/api/auth/callback/linkedin`)
-  console.log("[v0] GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + "...")
+  console.log("[v0] OAuth Configuration (FIXED):")
+  console.log("[v0] Raw NEXTAUTH_URL:", process.env.NEXTAUTH_URL)
+  console.log("[v0] Clean baseUrl:", baseUrl)
+  console.log("[v0] Google Callback URL:", `${baseUrl}/api/auth/callback/google`)
+  console.log("[v0] LinkedIn Callback URL:", `${baseUrl}/api/auth/callback/linkedin`)
 }
 
 debugOAuthConfig()
@@ -75,6 +76,10 @@ export const authConfig: NextAuthConfig = {
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  }),
+  // Ensure NEXTAUTH_URL doesn't have trailing slash for proper callback URL construction
+  ...(process.env.NEXTAUTH_URL && {
+    url: process.env.NEXTAUTH_URL.replace(/\/$/, ''),
   }),
   basePath: "/api/auth",
   session: {
