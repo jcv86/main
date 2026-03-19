@@ -39,42 +39,29 @@ if (!envVars.nextAuthSecret) {
   console.error("[v0] Add NEXTAUTH_SECRET to Vercel Environment Variables immediately.")
 }
 
-// Debug: Log the exact OAuth URLs being used
-const debugOAuthConfig = () => {
-  // HARDCODED PRODUCTION URL - Override Vercel env var if it has trailing slash
-  // Production: https://www.despegatucarrera.com (NO trailing slash)
-  // Development: http://localhost:3000 (NO trailing slash)
+// CRITICAL FIX: BYPASS BROKEN NEXTAUTH_URL ENV VAR
+// The Vercel env var keeps getting a trailing slash despite multiple fixes
+// Use process.env directly and HARDCODE production URL to bypass the issue
+const getBaseUrl = (): string => {
   const isProduction = process.env.NODE_ENV === 'production'
-  const hardcodedUrl = isProduction ? 'https://www.despegatucarrera.com' : 'http://localhost:3000'
   
-  const rawUrl = process.env.NEXTAUTH_URL || hardcodedUrl
-  // CRITICAL: Strip trailing slash to prevent double slashes in callbacks
-  const baseUrl = rawUrl.replace(/\/$/, '')
-  
-  console.log("[v0] ===== OAUTH CONFIGURATION CHECKLIST =====")
-  console.log("[v0] Node env:", process.env.NODE_ENV)
-  console.log("[v0] Raw NEXTAUTH_URL env:", rawUrl)
-  console.log("[v0] Clean baseUrl (trailing slash removed):", baseUrl)
-  console.log("[v0] Hardcoded fallback:", hardcodedUrl)
-  console.log("[v0]")
-  console.log("[v0] VERIFY THESE MATCH GOOGLE CONSOLE:")
-  console.log("[v0] - Authorized JavaScript origins: " + baseUrl)
-  console.log("[v0] - Authorized redirect URI: " + baseUrl + "/api/auth/callback/google")
-  console.log("[v0]")
-  console.log("[v0] VERIFY THESE MATCH LINKEDIN CONSOLE:")
-  console.log("[v0] - Authorized redirect URI: " + baseUrl + "/api/auth/callback/linkedin")
-  console.log("[v0]")
-  console.log("[v0] Environment variables loaded:")
-  console.log("[v0] - GOOGLE_CLIENT_ID:", !!process.env.GOOGLE_CLIENT_ID)
-  console.log("[v0] - GOOGLE_CLIENT_SECRET:", !!process.env.GOOGLE_CLIENT_SECRET)
-  console.log("[v0] - LINKEDIN_CLIENT_ID:", !!process.env.LINKEDIN_CLIENT_ID)
-  console.log("[v0] - LINKEDIN_CLIENT_SECRET:", !!process.env.LINKEDIN_CLIENT_SECRET)
-  console.log("[v0] ==========================================")
-  
-  return baseUrl
+  if (isProduction) {
+    // HARDCODED: Production always uses this exact URL
+    return 'https://www.despegatucarrera.com'
+  } else {
+    // Development: use localhost
+    return 'http://localhost:3000'
+  }
 }
 
-const cleanBaseUrl = debugOAuthConfig()
+const baseUrl = getBaseUrl()
+
+// Log the ACTUAL URLs being used
+console.log("[v0] OAuth Configuration:")
+console.log("[v0] NEXTAUTH_URL: " + process.env.NEXTAUTH_URL)
+console.log("[v0] Google Callback URL should be: " + baseUrl + "/api/auth/callback/google")
+console.log("[v0] LinkedIn Callback URL should be: " + baseUrl + "/api/auth/callback/linkedin")
+console.log("[v0] GOOGLE_CLIENT_ID: " + (process.env.GOOGLE_CLIENT_ID?.substring(0, 20) || 'MISSING') + "...")
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -82,7 +69,6 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.googleClientId || "",
       clientSecret: envVars.googleClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      // Request specific OAuth scopes/permissions
       authorization: {
         params: {
           scope: "openid profile email",
@@ -95,7 +81,6 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      // Use LinkedIn OpenID Connect - the modern, recommended approach
       issuer: "https://www.linkedin.com/oauth",
       wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
@@ -120,8 +105,8 @@ export const authConfig: NextAuthConfig = {
     error: "/auth/error",
   },
   trustHost: true,
-  // HARDCODED CORRECT URL - USE cleanBaseUrl with NO trailing slash
-  url: cleanBaseUrl,
+  // USE HARDCODED BASEURL - NOT THE BROKEN ENV VAR
+  url: baseUrl,
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
