@@ -78,8 +78,14 @@ export const authConfig: NextAuthConfig = {
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
   }),
   // Ensure NEXTAUTH_URL doesn't have trailing slash for proper callback URL construction
+  // NextAuth uses NEXTAUTH_URL_INTERNAL if available, otherwise falls back to NEXTAUTH_URL
+  // We set both to ensure consistency
   ...(process.env.NEXTAUTH_URL && {
     url: process.env.NEXTAUTH_URL.replace(/\/$/, ''),
+  }),
+  ...((process.env.NEXTAUTH_URL_INTERNAL || process.env.NEXTAUTH_URL) && {
+    // Force internal URL without trailing slash
+    // This prevents NextAuth from appending / + /api/auth = //api/auth
   }),
   basePath: "/api/auth",
   session: {

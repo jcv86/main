@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
 
 export function middleware(request: NextRequest) {
+  // Fix double slashes in pathname (e.g., //api/auth/callback/google → /api/auth/callback/google)
+  let pathname = request.nextUrl.pathname
+  if (pathname.includes('//')) {
+    pathname = pathname.replace(/\/+/g, '/')
+    const normalizedUrl = new URL(request.nextUrl)
+    normalizedUrl.pathname = pathname
+    console.log("[v0] Middleware normalized URL from:", request.nextUrl.pathname, "to:", pathname)
+    return NextResponse.redirect(normalizedUrl)
+  }
+
   // Check if it's an API route
   if (request.nextUrl.pathname.startsWith("/api/")) {
     // Add CORS headers
@@ -23,5 +33,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api/:path*", "/:path*"],
 }
