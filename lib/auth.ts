@@ -41,14 +41,27 @@ if (!envVars.nextAuthSecret) {
 
 // Debug: Log the exact OAuth URLs being used
 const debugOAuthConfig = () => {
-  // Remove trailing slash from NEXTAUTH_URL
-  const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/$/, '')
-  console.log("[v0] OAuth Configuration - CORRECTED:")
-  console.log("[v0] Raw NEXTAUTH_URL env:", process.env.NEXTAUTH_URL)
-  console.log("[v0] Cleaned baseUrl:", baseUrl)
-  console.log("[v0] Google Callback URL (actual):", `${baseUrl}/api/auth/callback/google`)
-  console.log("[v0] LinkedIn Callback URL (actual):", `${baseUrl}/api/auth/callback/linkedin`)
-  console.log("[v0] These MUST match Google Console and LinkedIn Console redirect URIs")
+  // Remove trailing slash from NEXTAUTH_URL - THIS IS CRITICAL
+  const rawUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const baseUrl = rawUrl.replace(/\/$/, '')
+  
+  console.log("[v0] ===== OAUTH CONFIGURATION CHECKLIST =====")
+  console.log("[v0] Raw NEXTAUTH_URL env:", rawUrl)
+  console.log("[v0] Clean baseUrl (trailing slash removed):", baseUrl)
+  console.log("[v0]")
+  console.log("[v0] VERIFY THESE MATCH GOOGLE CONSOLE:")
+  console.log("[v0] - Authorized JavaScript origins: " + baseUrl)
+  console.log("[v0] - Authorized redirect URI: " + baseUrl + "/api/auth/callback/google")
+  console.log("[v0]")
+  console.log("[v0] VERIFY THESE MATCH LINKEDIN CONSOLE:")
+  console.log("[v0] - Authorized redirect URI: " + baseUrl + "/api/auth/callback/linkedin")
+  console.log("[v0]")
+  console.log("[v0] Environment variables loaded:")
+  console.log("[v0] - GOOGLE_CLIENT_ID:", !!process.env.GOOGLE_CLIENT_ID)
+  console.log("[v0] - GOOGLE_CLIENT_SECRET:", !!process.env.GOOGLE_CLIENT_SECRET)
+  console.log("[v0] - LINKEDIN_CLIENT_ID:", !!process.env.LINKEDIN_CLIENT_ID)
+  console.log("[v0] - LINKEDIN_CLIENT_SECRET:", !!process.env.LINKEDIN_CLIENT_SECRET)
+  console.log("[v0] ==========================================")
 }
 
 debugOAuthConfig()
@@ -72,6 +85,14 @@ export const authConfig: NextAuthConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
+      // Use LinkedIn OpenID Connect - the modern, recommended approach
+      issuer: "https://www.linkedin.com/oauth",
+      wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
+      authorization: {
+        params: {
+          scope: "openid profile email",
+        },
+      },
     }),
   ],
   adapter: SupabaseAdapter({
