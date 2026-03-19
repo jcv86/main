@@ -39,7 +39,17 @@ if (!envVars.nextAuthSecret) {
   console.error("[v0] Add NEXTAUTH_SECRET to Vercel Environment Variables immediately.")
 }
 
-console.log("[v0] NextAuth Config - Secret set:", !!envVars.nextAuthSecret, "Length:", envVars.nextAuthSecret?.length || 0)
+// Debug: Log the exact OAuth URLs being used
+const debugOAuthConfig = () => {
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  console.log("[v0] OAuth Configuration:")
+  console.log("[v0] NEXTAUTH_URL:", baseUrl)
+  console.log("[v0] Google Callback URL should be:", `${baseUrl}/api/auth/callback/google`)
+  console.log("[v0] LinkedIn Callback URL should be:", `${baseUrl}/api/auth/callback/linkedin`)
+  console.log("[v0] GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + "...")
+}
+
+debugOAuthConfig()
 
 export const authConfig: NextAuthConfig = {
   providers: [
