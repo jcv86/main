@@ -41,7 +41,7 @@ if (!envVars.nextAuthSecret) {
 
 // Debug: Log the exact OAuth URLs being used
 const debugOAuthConfig = () => {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/$/, '')
   console.log("[v0] OAuth Configuration:")
   console.log("[v0] NEXTAUTH_URL:", baseUrl)
   console.log("[v0] Google Callback URL should be:", `${baseUrl}/api/auth/callback/google`)
@@ -68,6 +68,7 @@ export const authConfig: NextAuthConfig = {
     url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
   }),
+  basePath: "/api/auth",
   session: {
     strategy: "jwt",
   },
