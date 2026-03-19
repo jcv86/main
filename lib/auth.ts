@@ -3,6 +3,7 @@ import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
 import { createClient } from "@/lib/supabase/server"
+import { enrichProfileFromGoogle, enrichProfileFromLinkedIn } from "@/lib/enrich-profile"
 
 // Validate env vars at startup
 // Force redeploy with new Google OAuth credentials
@@ -71,8 +72,33 @@ export const authConfig: NextAuthConfig = {
       return !!auth
     },
     signIn: async ({ user, account, profile }) => {
-      console.log("[v0] SignIn - provider:", account?.provider, "email:", user?.email)
-      // Allow all sign-ins, don't reject
+      console.log("[v0] SignIn - provider:", account?.provider, "email:", user?.email, "userId:", user?.id)
+      
+      try {
+        // Enrich profile from OAuth provider
+        if (user?.id) {
+          if (account?.provider === 'google' && profile) {
+            console.log("[v0] Enriching Google profile for user:", user.id)
+            await enrichProfileFromGoogle(user.id, {
+              email: profile.email || user.email || '',
+              name: profile.name || user.name || '',
+              image: profile.image || user.image,
+            })
+          } else if (account?.provider === 'linkedin' && profile && account.access_token) {
+            console.log("[v0] Enriching LinkedIn profile for user:", user.id)
+            try {
+              await enrichProfileFromLinkedIn(user.id, profile, account.access_token)
+            } catch (linkedinError) {
+              console.warn("[v0] LinkedIn enrichment failed (non-blocking):", linkedinError)
+              // Don't fail signin if LinkedIn enrichment fails
+            }
+          }
+        }
+      } catch (enrichError) {
+        console.error("[v0] Profile enrichment error:", enrichError)
+        // Don't block signin if enrichment fails
+      }
+      
       return true
     },
     jwt: async ({ token, account, profile, user }) => {
