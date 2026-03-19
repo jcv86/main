@@ -39,29 +39,29 @@ if (!envVars.nextAuthSecret) {
   console.error("[v0] Add NEXTAUTH_SECRET to Vercel Environment Variables immediately.")
 }
 
-// CRITICAL FIX: BYPASS BROKEN NEXTAUTH_URL ENV VAR
-// The Vercel env var keeps getting a trailing slash despite multiple fixes
-// Use process.env directly and HARDCODE production URL to bypass the issue
-const getBaseUrl = (): string => {
-  const isProduction = process.env.NODE_ENV === 'production'
-  
-  if (isProduction) {
-    // HARDCODED: Production always uses this exact URL
-    return 'https://www.despegatucarrera.com'
-  } else {
-    // Development: use localhost
+// FINAL SOLUTION: Do NOT use NEXTAUTH_URL env var in production
+// Let NextAuth auto-detect from request headers instead
+// This completely avoids the Vercel trailing-slash issue
+const getBaseUrl = (): string | undefined => {
+  // In development: use localhost explicitly
+  if (process.env.NODE_ENV !== 'production') {
     return 'http://localhost:3000'
   }
+  
+  // In production: return NOTHING - NextAuth will detect from request Host header
+  // This is the standard NextAuth approach and avoids env var issues
+  return undefined
 }
 
 const baseUrl = getBaseUrl()
 
-// Log the ACTUAL URLs being used
 console.log("[v0] OAuth Configuration:")
-console.log("[v0] NEXTAUTH_URL: " + process.env.NEXTAUTH_URL)
-console.log("[v0] Google Callback URL should be: " + baseUrl + "/api/auth/callback/google")
-console.log("[v0] LinkedIn Callback URL should be: " + baseUrl + "/api/auth/callback/linkedin")
-console.log("[v0] GOOGLE_CLIENT_ID: " + (process.env.GOOGLE_CLIENT_ID?.substring(0, 20) || 'MISSING') + "...")
+console.log("[v0] NODE_ENV:", process.env.NODE_ENV)
+if (baseUrl) {
+  console.log("[v0] Using explicit baseUrl:", baseUrl)
+} else {
+  console.log("[v0] Production mode: NextAuth will auto-detect base URL from request headers")
+}
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -105,8 +105,9 @@ export const authConfig: NextAuthConfig = {
     error: "/auth/error",
   },
   trustHost: true,
-  // USE HARDCODED BASEURL - NOT THE BROKEN ENV VAR
-  url: baseUrl,
+  // Only set url if we have an explicit baseUrl (development)
+  // In production, NextAuth will auto-detect from request headers
+  ...(baseUrl && { url: baseUrl }),
   callbacks: {
     authorized: async ({ auth }) => {
       return !!auth
