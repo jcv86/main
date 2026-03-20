@@ -39,22 +39,34 @@ if (!envVars.nextAuthSecret) {
   console.error("[v0] Add NEXTAUTH_SECRET to Vercel Environment Variables immediately.")
 }
 
-// ABSOLUTE FINAL FIX v3.2.0
-// ===========================
-// DO NOT READ NEXTAUTH_URL env var - it has trailing slash causing double-slash URLs
-// HARDCODE the production URL + use explicit url config to bypass env vars completely
+// DIAGNOSTIC: Log exact OAuth configuration for troubleshooting
+const diagnosticOAuth = () => {
+  console.log("[v0] ========== OAUTH DIAGNOSTIC v3.2.0 ==========")
+  console.log("[v0] Production Domain: https://www.despegatucarrera.com")
+  console.log("[v0] Expected Redirect URIs (MUST match Google/LinkedIn console):")
+  console.log("[v0]   Google: https://www.despegatucarrera.com/api/auth/callback/google")
+  console.log("[v0]   LinkedIn: https://www.despegatucarrera.com/api/auth/callback/linkedin")
+  console.log("[v0]")
+  console.log("[v0] Environment Variables Status:")
+  console.log("[v0]   GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "SET" : "MISSING")
+  console.log("[v0]   GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET ? "SET" : "MISSING")
+  console.log("[v0]   LINKEDIN_CLIENT_ID:", process.env.LINKEDIN_CLIENT_ID ? "SET" : "MISSING")
+  console.log("[v0]   LINKEDIN_CLIENT_SECRET:", process.env.LINKEDIN_CLIENT_SECRET ? "SET" : "MISSING")
+  console.log("[v0]   NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET ? "SET" : "MISSING")
+  console.log("[v0]")
+  console.log("[v0] NOTE: If Google/LinkedIn login fails with 'invalid_client':")
+  console.log("[v0]   1. Check that redirect URIs match EXACTLY in Google/LinkedIn console")
+  console.log("[v0]   2. Verify LinkedIn has 'Sign In with LinkedIn using OpenID Connect' enabled")
+  console.log("[v0]   3. Confirm all env vars are set in Vercel")
+  console.log("[v0] ============================================")
+}
 
+diagnosticOAuth()
+
+// Hardcoded production URL - prevents trailing slash issues from env vars
 const baseUrl = process.env.NODE_ENV === 'production' 
   ? 'https://www.despegatucarrera.com'
   : 'http://localhost:3000'
-
-console.log("[v0] ========== OAUTH CONFIGURATION ==========")
-console.log("[v0] NODE_ENV:", process.env.NODE_ENV)
-console.log("[v0] Base URL (hardcoded, NOT from env var):", baseUrl)
-console.log("[v0] Google Callback:", `${baseUrl}/api/auth/callback/google`)
-console.log("[v0] LinkedIn Callback:", `${baseUrl}/api/auth/callback/linkedin`)
-console.log("[v0] NEXTAUTH_URL env var (IGNORED):", process.env.NEXTAUTH_URL)
-console.log("[v0] ==========================================")
 
 
 export const authConfig: NextAuthConfig = {
