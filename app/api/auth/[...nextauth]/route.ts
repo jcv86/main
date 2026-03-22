@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v89 - Fixed hero button contrast in A2 dashboard. Changed "Ver Guía" button from outline with white text (low contrast on blue background) to bg-white/20 with border-white (high contrast). Now both buttons meet WCAG AA contrast requirements. Primary button stays white with primary text, secondary button is semi-transparent white. - force redeploy v89
+// PRODUCTION BUILD v90 - Fixed coach name in A2 dashboard. Changed hardcoded name "Travis" to generic "Tu Coach de Transformación" to avoid confusion with user name. Coach section now uses generic branding instead of personal name. Improves clarity that coach is the system/AI assistant. - force redeploy v90
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

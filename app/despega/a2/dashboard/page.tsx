@@ -175,7 +175,7 @@ export default function A2DashboardPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-slate-700 dark:text-slate-300">
-                  <strong>Travis</strong> es tu coach de transformación. Está disponible para guiarte, responder preguntas y personalizar tu ruta según tu progreso y resultados.
+                  Tu <strong>Coach de Transformación</strong> está disponible para guiarte, responder preguntas y personalizar tu ruta según tu progreso y resultados. Aquí encontrarás apoyo personalizado en cada paso de tu jornada.
                 </p>
                 <Link href="/despega/a2/coach">
                   <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
