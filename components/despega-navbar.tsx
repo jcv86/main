@@ -44,6 +44,7 @@ const stages = [
       { label: 'Dashboard A3', href: '/despega/a3' },
       { label: 'Diagnosis', href: '/despega/a3/diagnosis' },
       { label: 'Interview 0', href: '/despega/interview-0' },
+      { label: 'Análisis Multimodal', href: '/despega/a3/analisis-multimodal' },
       { label: 'Entrenamiento Guiado', href: '/despega/a3/entrenamiento-guiado' },
       { label: 'Entrenamientos', href: '/despega/a3/simulations' },
       { label: 'CV ATS', href: '/despega/a3/cv-ats' },

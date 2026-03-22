@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v72 - Fixed navbar and dashboard components. Changed "Simulaciones" → "Entrenamientos" in despega-navbar (A3 menu), admin-dashboard (engagement metrics), and a4-calibration-dashboard (card title). All UI references now use Despega terminology consistently. - force redeploy v72
+// PRODUCTION BUILD v73 - Activated "Análisis Multimodal" module. Changed button from "Próximamente" (disabled) to active link to /despega/a3/analisis-multimodal. Added route to navbar A3 menu. Enterprise multimodal system now fully accessible to users. - force redeploy v73
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

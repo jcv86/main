@@ -286,9 +286,11 @@ export default function A3Page() {
                 <li>✓ Análisis de confianza y coherencia</li>
                 <li>✓ Recomendaciones específicas</li>
               </ul>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700" disabled>
-                Próximamente
-              </Button>
+              <Link href="/despega/a3/analisis-multimodal" className="block">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Análisis Multimodal <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 
