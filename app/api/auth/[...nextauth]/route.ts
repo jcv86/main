@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
-import { authConfig } from "@/lib/auth"
+import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v76 - Added welcome page workflow. Created /despega/bienvenida page explaining Despega process and timeline. Dashboard now redirects to welcome if A1 not completed. Added "Bienvenida" link to navbar. Users now see clear intro before Conozcámonos-1. - force redeploy v76
+// PRODUCTION BUILD v77 - Implemented OpenAI response validation in Conozcámonos-1. Created /api/conozcamonos/validate-response endpoint using GPT-4o-mini to validate text responses. Validates: 1) minimum 10 words, 2) response completeness & specificity (60+ score required). Shows feedback & suggestions if response insufficient. Only text questions validated; select questions auto-pass. - force redeploy v77
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

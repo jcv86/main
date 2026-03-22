@@ -11,6 +11,9 @@ export default function Conozcamonos1Page() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authChecked, setAuthChecked] = useState(false)
+  const [validating, setValidating] = useState(false)
+  const [validationError, setValidationError] = useState('')
+  const [validationSuggestions, setValidationSuggestions] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
@@ -54,10 +57,69 @@ export default function Conozcamonos1Page() {
     setError('')
   }
 
-  const handleNext = () => {
-    if (!responses[question.id]) { setError('Responde primero'); return }
-    if (isLastQuestion) { submitResponses() } 
-    else { setCurrentQuestion(prev => prev + 1) }
+  const handleNext = async () => {
+    if (!responses[question.id]) { 
+      setError('Responde primero')
+      return 
+    }
+
+    // Validate response with OpenAI if it's a text question
+    if (question.type === 'text') {
+      setValidating(true)
+      setValidationError('')
+      setValidationSuggestions('')
+      
+      try {
+        const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questionId: question.id,
+            question: question.question,
+            response: responses[question.id],
+            questionType: question.type
+          })
+        })
+
+        const validation = await validationResponse.json()
+        console.log('[v0] Validation result:', validation)
+
+        if (!validation.valid) {
+          setValidationError(validation.message || 'La respuesta no es suficientemente completa')
+          setValidationSuggestions(validation.suggestions || '')
+          setValidating(false)
+          return
+        }
+
+        // If validation passed, continue
+        if (isLastQuestion) { 
+          submitResponses() 
+        } else { 
+          setCurrentQuestion(prev => prev + 1)
+          setValidationError('')
+          setValidationSuggestions('')
+        }
+      } catch (err) {
+        console.error('[v0] Validation error:', err)
+        // On error, allow user to continue anyway
+        if (isLastQuestion) { 
+          submitResponses() 
+        } else { 
+          setCurrentQuestion(prev => prev + 1)
+        }
+      } finally {
+        setValidating(false)
+      }
+    } else {
+      // For select questions, no validation needed
+      if (isLastQuestion) { 
+        submitResponses() 
+      } else { 
+        setCurrentQuestion(prev => prev + 1)
+        setValidationError('')
+        setValidationSuggestions('')
+      }
+    }
   }
 
   const handleBack = () => {
@@ -119,16 +181,28 @@ export default function Conozcamonos1Page() {
               onChange={(e) => handleAnswer(e.target.value)}
               className="w-full p-4 bg-background border border-border rounded-lg text-foreground"
               rows={4}
+              placeholder="Escribe tu respuesta aquí..."
             />
           )}
 
           {error && <p className="text-destructive text-sm mt-4">{error}</p>}
+          
+          {validationError && (
+            <div className="mt-4 p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
+              <p className="text-sm font-medium text-orange-900 dark:text-orange-100">{validationError}</p>
+              {validationSuggestions && (
+                <p className="text-xs text-orange-800 dark:text-orange-200 mt-2">
+                  💡 Sugerencia: {validationSuggestions}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex gap-4">
           <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1">Atrás</Button>
-          <Button onClick={handleNext} disabled={!responses[question.id] || loading} className="flex-1">
-            {loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
+          <Button onClick={handleNext} disabled={!responses[question.id] || loading || validating} className="flex-1">
+            {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
           </Button>
         </div>
       </div>
