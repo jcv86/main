@@ -4,17 +4,16 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { type DiscProfile } from "@/lib/disc-calculator"
-import { DESPEGA_PROFILES } from "@/lib/despega-profiles"
+import type { DiscProfile } from "@/lib/disc-calculator"
 
 export default function A2IntroPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [cerebroProfile, setCerebroProfile] = useState<DiscProfile | null>(null)
+  const [profileName, setProfileName] = useState("")
   const router = useRouter()
   const supabase = createClient()
 
@@ -44,8 +43,19 @@ export default function A2IntroPage() {
         return
       }
 
-      setCerebroProfile(profileData.disc_profile as DiscProfile)
-      console.log('[v0] Despega Cerebral profile loaded for A2 Intro:', profileData.disc_profile)
+      const profile = profileData.disc_profile as DiscProfile
+      setCerebroProfile(profile)
+      
+      // Set profile name based on primary dimension
+      const dimensionNames: Record<string, string> = {
+        'D': 'Directo',
+        'I': 'Inspirador',
+        'S': 'Seguro',
+        'C': 'Consciente'
+      }
+      setProfileName(dimensionNames[profile.primary] || profile.primary)
+      
+      console.log('[v0] Despega Cerebral profile loaded for A2 Intro:', profile)
     } catch (err) {
       console.error('[v0] Error loading Despega Cerebral profile:', err)
       setError('Error al cargar tu perfil. Intenta de nuevo.')
@@ -53,12 +63,6 @@ export default function A2IntroPage() {
       setLoading(false)
     }
   }
-
-  if (!cerebroProfile) {
-    return null
-  }
-
-  const profileData = DESPEGA_PROFILES[cerebroProfile.primary as keyof typeof DESPEGA_PROFILES]
 
   if (loading) {
     return (
@@ -86,7 +90,7 @@ export default function A2IntroPage() {
     )
   }
 
-  if (!a1Results) {
+  if (!cerebroProfile) {
     return null
   }
 
@@ -110,10 +114,10 @@ export default function A2IntroPage() {
         <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
-            <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-              Basado en tu perfil <strong>{profileData?.nombre}</strong> de Despega Cerebral con puntuación dominante de <strong>{cerebroProfile.primaryScore}%</strong>, 
-              hemos diseñado un plan de 90 días con micro-acciones concretas.
-            </p>
+              <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                Basado en tu perfil <strong>{profileName}</strong> de Despega Cerebral con puntuación dominante de <strong>{cerebroProfile.primaryScore}%</strong>, 
+                hemos diseñado un plan de 90 días con micro-acciones concretas.
+              </p>
               
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -122,43 +126,23 @@ export default function A2IntroPage() {
                 </p>
               </div>
 
-              {/* Cerebro Profile Display */}
+              {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
                 <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
+                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Directo</p>
                   <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile.D}%</p>
                 </div>
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Influencia</p>
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Inspirador</p>
                   <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile.I}%</p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Seguro</p>
                   <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile.S}%</p>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Consciente</p>
                   <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile.C}%</p>
-                </div>
-              </div>
-
-              {/* DISC Scores Display */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Dominancia</p>
-                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{a1Results.D}%</p>
-                </div>
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Influencia</p>
-                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{a1Results.I}%</p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Estabilidad</p>
-                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{a1Results.S}%</p>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Consciencia</p>
-                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{a1Results.C}%</p>
                 </div>
               </div>
 
@@ -245,3 +229,4 @@ export default function A2IntroPage() {
     </div>
   )
 }
+
