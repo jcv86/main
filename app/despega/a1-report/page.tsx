@@ -8,8 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target } from 'lucide-react'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
 
-interface DiscProfile {
+interface CerebroProfile {
   D: number
   I: number
   S: number
@@ -22,7 +23,7 @@ interface DiscProfile {
 
 export default function A1ReportPage() {
   const router = useRouter()
-  const [profile, setProfile] = useState<DiscProfile | null>(null)
+  const [profile, setProfile] = useState<CerebroProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const { user, loading: authLoading } = useAuthRedirect()
@@ -47,7 +48,7 @@ export default function A1ReportPage() {
         const testDataObj = testData.test_data as any
         const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
 
-        const profile: DiscProfile = {
+        const profile: CerebroProfile = {
           D: normalize(testDataObj.energia || 0),
           I: normalize(testDataObj.relaciones || 0),
           S: normalize(testDataObj.plan_ejecutivo || 0),

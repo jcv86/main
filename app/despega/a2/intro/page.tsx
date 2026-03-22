@@ -9,25 +9,56 @@ import { useRouter } from "next/navigation"
 import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { type DiscProfile } from "@/lib/disc-calculator"
+import { DESPEGA_PROFILES } from "@/lib/despega-profiles"
 
 export default function A2IntroPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [a1Results, setA1Results] = useState<DiscProfile | null>(null)
+  const [cerebroProfile, setCerebroProfile] = useState<DiscProfile | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    loadA1Profile()
+    loadCerebroProfile()
   }, [])
 
-  const loadA1Profile = async () => {
+  const loadCerebroProfile = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user?.id) {
         router.push('/auth/signin')
         return
       }
+
+      // Get the latest Despega Cerebral profile
+      const { data: profileData, error: profileError } = await supabase
+        .from('user_a1_profiles')
+        .select('disc_profile')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (profileError || !profileData?.disc_profile) {
+        setError('No se encontró tu perfil Despega Cerebral. Por favor completa la evaluación primero.')
+        return
+      }
+
+      setCerebroProfile(profileData.disc_profile as DiscProfile)
+      console.log('[v0] Despega Cerebral profile loaded for A2 Intro:', profileData.disc_profile)
+    } catch (err) {
+      console.error('[v0] Error loading Despega Cerebral profile:', err)
+      setError('Error al cargar tu perfil. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!cerebroProfile) {
+    return null
+  }
+
+  const profileData = DESPEGA_PROFILES[cerebroProfile.primary as keyof typeof DESPEGA_PROFILES]
 
       // Get the latest A1 profile
       const { data: profileData, error: profileError } = await supabase
@@ -103,16 +134,36 @@ export default function A2IntroPage() {
         <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
-              <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                Basado en tu perfil DISC resultado A1 con puntuación dominante de <strong>{a1Results.primary}</strong> ({a1Results.primaryScore}%), 
-                hemos diseñado un plan de 90 días con micro-acciones concretas.
-              </p>
+            <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+              Basado en tu perfil <strong>{profileData?.nombre}</strong> de Despega Cerebral con puntuación dominante de <strong>{cerebroProfile.primaryScore}%</strong>, 
+              hemos diseñado un plan de 90 días con micro-acciones concretas.
+            </p>
               
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
-                  con acciones que realmente importan</strong>, adaptadas a tu patrón DISC natural.
+                  con acciones que realmente importan</strong>, adaptadas a tu patrón natural de comportamiento.
                 </p>
+              </div>
+
+              {/* Cerebro Profile Display */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
+                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
+                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile.D}%</p>
+                </div>
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Influencia</p>
+                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile.I}%</p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile.S}%</p>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile.C}%</p>
+                </div>
               </div>
 
               {/* DISC Scores Display */}

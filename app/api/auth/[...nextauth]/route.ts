@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v67 - Added A4 progression CTA to A3 dashboard. Complete navigation flow from C1→A1→C2→A2→A3→A4 now fully connected with explicit CTAs. All stages accessible and data persisted throughout. Ready for full journey testing. - force redeploy v67
+// PRODUCTION BUILD v68 - Replaced all DISC references with Despega Cerebral nomenclature throughout. A1 Report uses profile names (El Impulsor, El Catalizador, etc). A2 Intro displays Energía/Influencia/Relaciones/Plan Ejecutivo labels. All external branding updated. - force redeploy v68
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

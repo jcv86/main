@@ -126,7 +126,7 @@ export default function A2DashboardPage() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Perfil DISC</h4>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Perfil Despega Cerebral</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Comprende tus fortalezas y áreas de desarrollo. Tu perfil es la base de tu plan.</p>
                 </div>
               </div>
