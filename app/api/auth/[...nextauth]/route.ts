@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v80 - Fixed STT repetition issue. Changed useSpeechRecognition hook: interimResults OFF (was ON), added 2-second silence timeout before auto-stop, only captures FINAL results. VoiceInput now deduplicates with useRef tracking. Users can speak, system waits 2 seconds after silence, then captures full sentence once without repetition. - force redeploy v80
+// PRODUCTION BUILD v81 - Simplified Conozcámonos-1 validation. Changed from strict OpenAI validation (score >= 60) to simple 5-word minimum check. Removed intermediate validation states. User can now continue with short but meaningful answers (e.g., "lo mas desafiante fue subir al everest"). Validation is now lightweight and non-blocking. - force redeploy v81
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
@@ -17,3 +17,4 @@ if (process.env.NEXTAUTH_URL?.endsWith('/')) {
 const handler = NextAuth(authconfig)
 
 export { handler as GET, handler as POST }
+

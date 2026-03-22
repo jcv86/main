@@ -65,62 +65,46 @@ export default function Conozcamonos1Page() {
       return 
     }
 
-    // Validate response with OpenAI if it's a text question
-    if (question.type === 'text') {
-      setValidating(true)
-      setValidationError('')
-      setValidationSuggestions('')
-      
-      try {
-        const validationResponse = await fetch('/api/conozcamonos/validate-response', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            questionId: question.id,
-            question: question.question,
-            response: responses[question.id],
-            questionType: question.type
-          })
+    setValidating(true)
+    setError('')
+    
+    try {
+      const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionId: question.id,
+          question: question.question,
+          response: responses[question.id],
+          questionType: question.type
         })
+      })
 
-        const validation = await validationResponse.json()
-        console.log('[v0] Validation result:', validation)
+      const validation = await validationResponse.json()
 
-        if (!validation.valid) {
-          setValidationError(validation.message || 'La respuesta no es suficientemente completa')
-          setValidationSuggestions(validation.suggestions || '')
-          setValidating(false)
-          return
-        }
-
-        // If validation passed, continue
-        if (isLastQuestion) { 
-          submitResponses() 
-        } else { 
-          setCurrentQuestion(prev => prev + 1)
-          setValidationError('')
-          setValidationSuggestions('')
-        }
-      } catch (err) {
-        console.error('[v0] Validation error:', err)
-        // On error, allow user to continue anyway
-        if (isLastQuestion) { 
-          submitResponses() 
-        } else { 
-          setCurrentQuestion(prev => prev + 1)
-        }
-      } finally {
+      if (!validation.valid) {
+        setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
         setValidating(false)
+        return
       }
-    } else {
-      // For select questions, no validation needed
+
+      // Validation passed - move to next or submit
       if (isLastQuestion) { 
         submitResponses() 
       } else { 
         setCurrentQuestion(prev => prev + 1)
-        setValidationError('')
-        setValidationSuggestions('')
+        setError('')
       }
+    } catch (err) {
+      console.error('[v0] Validation error:', err)
+      // Allow to continue anyway on error
+      if (isLastQuestion) { 
+        submitResponses() 
+      } else { 
+        setCurrentQuestion(prev => prev + 1)
+      }
+    } finally {
+      setValidating(false)
     }
   }
 
@@ -209,7 +193,11 @@ export default function Conozcamonos1Page() {
             </div>
           )}
 
-          {error && <p className="text-destructive text-sm mt-4">{error}</p>}
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
+            </div>
+          )}
           
           {validationError && (
             <div className="mt-4 p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
