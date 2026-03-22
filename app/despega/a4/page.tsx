@@ -1,81 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe, Radar, CheckCircle, ArrowLeft } from "lucide-react"
-import { useAuthRedirect } from "@/lib/hooks/useAuthRedirect"
-import { A4NewsFeed } from "@/components/a4-news-feed"
-import { A4RadarEstrategico } from "@/components/a4-radar-estrategico"
-import { A4GamifiedTests } from "@/components/a4-gamified-tests"
-import { A4Biblioteca } from "@/components/a4-biblioteca"
-import { DISCWidget } from "@/components/disc-widget"
-import { getA4News, getUserTotalPoints, getUserA4Badges, getA4NewsByCategory } from "@/lib/supabase/a4-queries"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 
 export default function A4HubPage() {
-  const router = useRouter()
   const { user, loading } = useAuthRedirect()
   const [activeTab, setActiveTab] = useState("radar")
-  const [newsData, setNewsData] = useState<any[]>([])
-  const [totalPoints, setTotalPoints] = useState(0)
-  const [badges, setBadges] = useState<any[]>([])
-  const [testsData, setTestsData] = useState<any[]>([])
-  const [discProfile, setDiscProfile] = useState<any>(null)
-  const [newsLoading, setNewsLoading] = useState(true)
-  const [testsLoading, setTestsLoading] = useState(true)
-
-  useEffect(() => {
-    if (!user) return
-
-    const loadData = async () => {
-      try {
-        const [news, points, userBadges] = await Promise.all([
-          getA4News(20),
-          getUserTotalPoints(user.id),
-          getUserA4Badges(user.id),
-        ])
-        
-        setNewsData(news)
-        setTotalPoints(points)
-        setBadges(userBadges || [])
-
-        // Fetch DISC profile
-        try {
-          const discRes = await fetch(`/api/despega/user-profile?userId=${user.id}`)
-          if (discRes.ok) {
-            const discData = await discRes.json()
-            setDiscProfile(discData.discProfile || null)
-          }
-        } catch (error) {
-          console.error('[v0] Error loading DISC profile:', error)
-        }
-      } catch (error) {
-        console.error('[v0] Error loading A4 news data:', error)
-      } finally {
-        setNewsLoading(false)
-      }
-    }
-
-    const loadTests = async () => {
-      try {
-        const response = await fetch('/api/despega/a4-tests')
-        if (!response.ok) throw new Error('Failed to fetch tests')
-        const data = await response.json()
-        setTestsData(data.tests || [])
-      } catch (error) {
-        console.error('[v0] Error loading A4 tests:', error)
-      } finally {
-        setTestsLoading(false)
-      }
-    }
-
-    loadData()
-    loadTests()
-  }, [user])
 
   if (loading) {
     return (
@@ -103,14 +39,6 @@ export default function A4HubPage() {
           <div className="text-sm text-muted-foreground">
             Fase <Badge variant="secondary">A4: Radar Estratégico</Badge>
           </div>
-          <div className="text-sm">
-            <Badge variant="outline" className="mr-2">
-              {totalPoints} puntos
-            </Badge>
-            <Badge variant="outline">
-              {badges.length} logros
-            </Badge>
-          </div>
         </div>
 
         {/* Hero Section */}
@@ -128,13 +56,6 @@ export default function A4HubPage() {
             </p>
           </div>
         </div>
-
-        {/* DISC Personalization Widget */}
-        {discProfile && (
-          <div className="mb-8 max-w-2xl mx-auto">
-            <DISCWidget profile={discProfile} userName={user?.user_metadata?.name} />
-          </div>
-        )}
 
         {/* Main Tabs Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -167,20 +88,93 @@ export default function A4HubPage() {
 
           {/* Radar Tab */}
           <TabsContent value="radar" className="space-y-4">
-            <A4RadarEstrategico />
+            <Card className="border-0 bg-card/70 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-primary/10 rounded-lg">
+                    <Radar className="w-6 h-6 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">Radar Estratégico</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Análisis estructurado de noticias con 7 capas cognitivas para entender qué está pasando realmente en el mercado laboral chileno.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">7 Capas de Análisis:</h4>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                      <li>Qué cambió vs ayer</li>
+                      <li>Impacto potencial</li>
+                      <li>Narrativa vs realidad</li>
+                      <li>Weak signals emergentes</li>
+                      <li>Tu energía hoy</li>
+                      <li>Acción sugerida</li>
+                      <li>Watchlist personal</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Indicadores Económicos:</h4>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                      <li>IMACEC - Actividad económica</li>
+                      <li>IPC - Inflación</li>
+                      <li>TPM - Tasas de interés</li>
+                      <li>Desempleo - Mercado laboral</li>
+                      <li>Análisis contextual</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Noticias Tab */}
           <TabsContent value="noticias" className="space-y-4">
-            {newsLoading ? (
-              <Card>
-                <CardContent className="py-12 flex justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </CardContent>
-              </Card>
-            ) : (
-              <A4NewsFeed items={newsData} />
-            )}
+            <Card className="border-0 bg-card/70 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-blue-500/10 rounded-lg">
+                    <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <CardTitle className="text-2xl">Noticias del Mercado</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Tendencias laborales, cambios en industrias, oportunidades emergentes y análisis del mercado en tiempo real.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Categorías</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>✓ Mercado Laboral</li>
+                      <li>✓ Industrias</li>
+                      <li>✓ Economía</li>
+                      <li>✓ Tendencias Globales</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Fuentes</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>Medios principales</li>
+                      <li>Análisis especializados</li>
+                      <li>LinkedIn Pro</li>
+                      <li>Reportes industriales</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Frecuencia</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>Actualización diaria</li>
+                      <li>Análisis semanal</li>
+                      <li>Reportes mensuales</li>
+                      <li>Deep dives temáticos</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Personalizadas Tab */}
@@ -196,79 +190,65 @@ export default function A4HubPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Tu feed se personaliza automáticamente según:
+                  Tu feed se personaliza automáticamente según tu perfil Despega, industrias de interés y ruta de desarrollo.
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-muted/50 rounded-lg space-y-2">
-                    <h4 className="font-medium">Criterios de Personalización</h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                      <li>Tu perfil Despega (DISC)</li>
-                      <li>Ruta de desarrollo actual</li>
-                      <li>Industrias de interés</li>
-                      <li>Patrones de engagement</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-muted/50 rounded-lg space-y-2">
-                    <h4 className="font-medium">Próximamente</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Sistema de IA que aprende de tus preferencias y proporciona noticias 100% relevantes para tu carrera.
-                    </p>
-                  </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <h4 className="font-medium mb-3">Se personaliza según:</h4>
+                  <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+                    <li>Tu perfil DISC (Dominador, Influenciador, Estable, Concienzudo)</li>
+                    <li>Tu ruta de desarrollo actual (A1 → A4)</li>
+                    <li>Industrias y sectores de interés</li>
+                    <li>Temas que guardas y comentas</li>
+                    <li>Patrones de engagement</li>
+                  </ul>
                 </div>
+                <p className="text-sm text-amber-600 bg-amber-500/10 p-3 rounded-lg">
+                  Próximamente: Algoritmo inteligente de personalización basado en IA
+                </p>
               </CardContent>
             </Card>
           </TabsContent>
 
           {/* Cultura General Tab */}
           <TabsContent value="cultura" className="space-y-4">
-            {testsLoading ? (
-              <Card>
-                <CardContent className="py-12 flex justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </CardContent>
-              </Card>
-            ) : testsData.length > 0 ? (
-              <A4GamifiedTests tests={testsData} />
-            ) : (
-              <Card className="border-0 bg-card/70 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-3 bg-green-500/10 rounded-lg">
-                      <Lightbulb className="w-6 h-6 text-green-600 dark:text-green-400" />
-                    </div>
-                    <CardTitle className="text-2xl">Tests de Cultura General</CardTitle>
+            <Card className="border-0 bg-card/70 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-green-500/10 rounded-lg">
+                    <Lightbulb className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Tests gamificados para dominar el contexto del mercado laboral chileno.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium mb-2">Temas de Tests:</h4>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>✓ Economía Básica</li>
-                        <li>✓ Tendencias Industriales</li>
-                        <li>✓ Mercado Laboral 2024-2025</li>
-                        <li>✓ Cultura Organizacional</li>
-                      </ul>
-                    </div>
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <h4 className="font-medium mb-2">Sistema de Gamificación:</h4>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>🎯 +10 puntos por test completado</li>
-                        <li>🏆 Badges por dominar temas</li>
-                        <li>📊 Leaderboard semanal</li>
-                        <li>💡 Explicaciones detalladas</li>
-                      </ul>
-                    </div>
+                  <CardTitle className="text-2xl">Tests de Cultura General</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Tests gamificados para dominar el contexto del mercado laboral chileno y desarrollar visión estratégica.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Temas de Tests:</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>✓ Economía Básica</li>
+                      <li>✓ Tendencias Industriales</li>
+                      <li>✓ Mercado Laboral 2024-2025</li>
+                      <li>✓ Cultura Organizacional</li>
+                    </ul>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    Pronto habrá tests disponibles. ¡Mantente atento!
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Gamificación:</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>🎯 +10 puntos por test completado</li>
+                      <li>🏆 Badges por dominar temas</li>
+                      <li>📊 Leaderboard semanal</li>
+                      <li>💡 Explicaciones detalladas</li>
+                    </ul>
+                  </div>
+                </div>
+                <Button className="w-full" variant="default">
+                  Comenzar Tests →
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Pruebas Tab */}
@@ -284,7 +264,7 @@ export default function A4HubPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Mini pruebas rápidas para evaluar tu comprensión del contexto económico actual.
+                  Mini pruebas rápidas para evaluar tu comprensión del contexto económico actual y desarrollar juicio estratégico.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-muted/50 rounded-lg">
@@ -299,7 +279,7 @@ export default function A4HubPage() {
                   <div className="p-4 bg-muted/50 rounded-lg">
                     <h4 className="font-medium mb-2">Formato:</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>5-10 min por test</li>
+                      <li>5-10 min por prueba</li>
                       <li>Feedback inmediato con IA</li>
                       <li>Explicaciones contextuales</li>
                       <li>Recomendaciones personalizadas</li>
@@ -315,7 +295,53 @@ export default function A4HubPage() {
 
           {/* Biblioteca Tab */}
           <TabsContent value="biblioteca" className="space-y-4">
-            <A4Biblioteca />
+            <Card className="border-0 bg-card/70 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-amber-500/10 rounded-lg">
+                    <BookOpen className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <CardTitle className="text-2xl">Biblioteca Curada</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  100+ libros, artículos, podcasts y recursos seleccionados para tu crecimiento profesional continuo.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Tipos de Recursos:</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>📚 Libros recomendados</li>
+                      <li>📄 Artículos en profundidad</li>
+                      <li>🎧 Podcasts clave</li>
+                      <li>📊 Reportes de investigación</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Características:</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>Resúmenes ejecutivos</li>
+                      <li>Notas destacadas</li>
+                      <li>Progreso de lectura</li>
+                      <li>Colecciones temáticas</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h4 className="font-medium mb-2">Temas Curados:</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>Liderazgo estratégico</li>
+                      <li>Innovación & adaptación</li>
+                      <li>Negociación efectiva</li>
+                      <li>Mentalidad de crecimiento</li>
+                    </ul>
+                  </div>
+                </div>
+                <Button className="w-full" variant="default">
+                  Ver Biblioteca →
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
 
