@@ -168,7 +168,7 @@ export default function ProgressPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 { badge: '🎯 Primer Paso', desc: 'Completa tu diagnosis' },
-                { badge: '✨ Consistencia', desc: '5 simulaciones completadas' },
+                { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
                 { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
                 <Card key={item.badge} className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
@@ -192,7 +192,7 @@ export default function ProgressPage() {
                 <li>✓ Realiza al menos 1 simulación diaria</li>
                 <li>✓ Revisa el feedback del coach en detalle</li>
                 <li>✓ Practica específicamente los gaps identificados</li>
-                <li>✓ Comparte simulaciones con mentores o amigos para feedback externo</li>
+                <li>✓ Comparte entrenamientos con mentores o amigos para feedback externo</li>
                 <li>✓ Documenta lo que aprendes después de cada sesión</li>
               </ul>
             </div>

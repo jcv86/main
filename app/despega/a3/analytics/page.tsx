@@ -91,7 +91,7 @@ export default function A3AnalyticsPage() {
           {[
             {
               icon: Zap,
-              label: 'Simulaciones',
+              label: 'Entrenamientos',
               value: userData?.simulationAttempts,
               total: 10,
               color: 'text-blue-600'
@@ -222,7 +222,7 @@ export default function A3AnalyticsPage() {
             </p>
             <ol className="list-decimal list-inside space-y-2 text-sm">
               <li>Practica la lección "Acción y Resultados" en Guided Training</li>
-              <li>Intenta 3 más simulaciones con enfoque en cuantificación</li>
+                <li>Intenta 3 más entrenamientos con enfoque en cuantificación</li>
               <li>Revisa tus grabaciones para identificar dónde falta claridad</li>
               <li>Ajusta tu CV para destacar logros mensurables</li>
             </ol>

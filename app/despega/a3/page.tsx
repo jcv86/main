@@ -394,7 +394,7 @@ export default function A3Page() {
               <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
                 <li>✓ Puntuación general</li>
                 <li>✓ Gráficos de progreso</li>
-                <li>✓ Comparativa de simulaciones</li>
+                  <li>✓ Comparativa de entrenamientos</li>
               </ul>
               <Link href="/despega/a3/analytics" className="block">
                 <Button className="w-full bg-purple-600 hover:bg-purple-700">
@@ -445,7 +445,7 @@ export default function A3Page() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Visualiza tu evolución a través de todas tus simulaciones y entrenamientos.
+                Visualiza tu evolución a través de todos tus entrenamientos y sesiones prácticas.
               </p>
               <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
                 <li>✓ Comparación antes/después</li>
@@ -525,7 +525,7 @@ export default function A3Page() {
               <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
                 <li>✓ Comienza con diagnosis para entender tu nivel actual</li>
-                <li>✓ Elige simulaciones según tu objetivo (básico → avanzado)</li>
+                <li>✓ Elige entrenamientos según tu objetivo (básico → avanzado)</li>
                 <li>✓ Revisa feedback del coach después de cada sesión</li>
                 <li>✓ Repite el mismo tipo hasta dominar, luego sube dificultad</li>
                 <li>✓ Practica mínimo 3 veces por semana para avance real</li>

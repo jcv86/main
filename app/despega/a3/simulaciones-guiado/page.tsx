@@ -187,7 +187,7 @@ export default function GuidedInterviewPage() {
 
           <div className="flex gap-4">
             <Link href="/despega/a3/simulations" className="flex-1">
-              <Button variant="outline" className="w-full">Volver a Simulaciones</Button>
+              <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
             <Button onClick={() => handleNext()} className="flex-1 bg-blue-600 hover:bg-blue-700">
               Ver Análisis Detallado

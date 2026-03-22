@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v70 - Created next.config.js with proper webpack cache configuration using filesystem cache with 24h TTL for production and in-memory cache for development. This resolves the ENOENT webpack cache corruption issue. Full clean rebuild triggered. - force redeploy v70
+// PRODUCTION BUILD v71 - Replaced all "Simulaciones" references with "Entrenamientos" throughout A3. Updated 9 files: A3 main page, all 4 training difficulty pages, progress, feedback, diagnosis, analytics. All user-facing text now uses Despega terminology (never "simulaciones" on site). - force redeploy v71
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
@@ -14,6 +14,6 @@ if (process.env.NEXTAUTH_URL?.endsWith('/')) {
   console.log("[v0] NEXTAUTH_URL is clean (no trailing slash):", process.env.NEXTAUTH_URL)
 }
 
-const handler = NextAuth(authConfig)
+const handler = NextAuth(authconfig)
 
 export { handler as GET, handler as POST }

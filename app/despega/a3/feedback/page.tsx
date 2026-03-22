@@ -108,7 +108,7 @@ export default function FeedbackPage() {
         {/* Interview Selector */}
         <Card>
           <CardHeader>
-            <CardTitle>Mis Simulaciones</CardTitle>
+            <CardTitle>Mis Entrenamientos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
