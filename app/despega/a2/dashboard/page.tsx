@@ -97,16 +97,16 @@ export default function A2DashboardPage() {
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME HERO - NEW */}
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-800 rounded-lg p-8 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-primary to-primary/80 dark:from-primary/90 dark:to-primary/70 rounded-lg p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-green-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
+            <p className="text-primary-foreground/80 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
             <h1 className="text-4xl font-bold mb-3">Tu plan de transformación de 90 días</h1>
-            <p className="text-lg text-green-50 mb-4">
+            <p className="text-lg text-primary-foreground/90 mb-4">
               Ya conoces tu perfil. Ahora vamos a construir un plan concreto y acciones específicas para tu cambio profesional. 
               Este es tu espacio para planificar, aprender y ejecutar consistentemente.
             </p>
             <div className="flex gap-3">
-              <Button className="bg-white text-green-700 hover:bg-green-50 font-semibold" size="lg">
+              <Button className="bg-white text-primary hover:bg-slate-100 font-semibold" size="lg">
                 Comenzar Ahora
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
@@ -158,7 +158,7 @@ export default function A2DashboardPage() {
         {/* CTA SECTION - SIMPLIFIED */}
         <div className="grid md:grid-cols-2 gap-4">
           <Link href="/despega/a2/sprint-1" className="md:col-span-2">
-            <Button className="w-full h-16 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold shadow-lg" size="lg">
+            <Button className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg" size="lg">
               Comenzar Sprint 1: Fundamentos (Días 1-30) <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </Link>
@@ -178,7 +178,7 @@ export default function A2DashboardPage() {
                   <strong>Travis</strong> es tu coach de transformación. Está disponible para guiarte, responder preguntas y personalizar tu ruta según tu progreso y resultados.
                 </p>
                 <Link href="/despega/a2/coach">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                     Hablar con Coach
                   </Button>
                 </Link>
@@ -237,7 +237,7 @@ export default function A2DashboardPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4 text-center">
-              <Activity className="w-5 h-5 mx-auto mb-2 text-green-600 dark:text-green-400" />
+              <Activity className="w-5 h-5 mx-auto mb-2 text-primary dark:text-primary/80" />
               <div className="text-2xl font-bold">{stats.actionsCompleted}</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Acciones</p>
             </CardContent>
@@ -251,26 +251,45 @@ export default function A2DashboardPage() {
           </Card>
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4 text-center">
-              <TrendingUp className="w-5 h-5 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
+              <TrendingUp className="w-5 h-5 mx-auto mb-2 text-emerald-600 dark:text-emerald-400" />
               <div className="text-2xl font-bold">{stats.successRate}%</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Éxito</p>
             </CardContent>
           </Card>
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4 text-center">
-              <BookOpen className="w-5 h-5 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
+              <BookOpen className="w-5 h-5 mx-auto mb-2 text-primary dark:text-primary/80" />
               <div className="text-2xl font-bold">{stats.sprintProgress}%</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Sprint</p>
             </CardContent>
           </Card>
         </div>
 
+        {/* EMPTY STATE MESSAGE */}
+        {stats.actionsCompleted === 0 && (
+          <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50 mb-2">
+                  Comienza tu transformación
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
+                  Aún no has iniciado acciones. Haz clic en el botón verde arriba para comenzar Sprint 1: Fundamentos.
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-500">
+                  Cada acción completada aparecerá aquí y contribuirá a tu progreso
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* A3 PROGRESSION CTA - PROMINENT */}
-        <Card className="border-2 border-blue-500 dark:border-blue-600 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/50 dark:to-cyan-950/50 shadow-lg">
+        <Card className="border-2 border-primary/30 dark:border-primary/40 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/20 dark:to-primary/10 shadow-lg">
           <CardContent className="pt-8">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="flex-1">
-                <Badge className="mb-3 bg-blue-600 hover:bg-blue-700">Siguiente Fase</Badge>
+                <Badge className="mb-3 bg-primary hover:bg-primary/90">Siguiente Fase</Badge>
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
                   ¿Listo para A3: Entrenamientos Especializados?
                 </h3>
@@ -279,21 +298,21 @@ export default function A2DashboardPage() {
                 </p>
                 <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                   <li className="flex gap-2">
-                    <span className="text-blue-600">✓</span>
+                    <span className="text-primary">✓</span>
                     <span>Entrenamientos personalizados según tu perfil</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-blue-600">✓</span>
+                    <span className="text-primary">✓</span>
                     <span>Práctica de entrevistas con feedback de IA</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-blue-600">✓</span>
+                    <span className="text-primary">✓</span>
                     <span>Conexión con oportunidades laborales</span>
                   </li>
                 </ul>
               </div>
               <Link href="/despega/a3" className="flex-shrink-0 w-full md:w-auto">
-                <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-base shadow-lg">
+                <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base shadow-lg">
                   Explorar A3 <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>

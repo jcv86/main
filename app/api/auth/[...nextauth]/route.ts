@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v87 - Removed all mock data from A2 rutas page. Now fully dynamic: loads real user A1 Cerebral profile and Conozcámonos-2 responses from Supabase. Calls canon-generate-route endpoint to generate personalized routes based on actual user data. Displays real routes with razon_seleccion (why this route for user), real beneficios, perfil scores. Shows loading state and error handling. Routes saved to user_a2_routes table. - force redeploy v87
+// PRODUCTION BUILD v88 - Fixed A2 dashboard contrast and branding. Replaced all hardcoded color buttons (green-600, purple-600, blue-600) with primary design token for consistent brandbook compliance. Fixed icon colors to use primary/secondary palette. Added empty state messaging when stats are 0 to guide users. Hero gradient now uses primary color instead of green. All buttons now use consistent primary/hover states. - force redeploy v88
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
