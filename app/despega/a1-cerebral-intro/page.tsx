@@ -40,40 +40,40 @@ export default function A1CerebralIntroPage() {
             </h1>
           </div>
           <p className="text-lg text-slate-600 dark:text-slate-300">
-            Descubre tu perfil DISC y entiende tu estilo de comunicación
+            Descubre tu perfil de comunicación y estilo de liderazgo
           </p>
         </div>
 
         {/* Main Content */}
         <div className="space-y-8">
-          {/* What is DISC */}
+          {/* What is Cerebral Assessment */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
                 <Zap className="w-6 h-6 text-blue-600" />
-                ¿Qué es el Análisis DISC?
+                ¿Qué es el Análisis Cerebral Despega?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-slate-700 dark:text-slate-300">
-                El test DISC es un análisis de comportamiento que identifica tu estilo de comunicación y trabajo basado en cuatro dimensiones:
+                El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="font-semibold text-red-900 dark:text-red-100 mb-1">D - Dominancia</p>
-                  <p className="text-sm text-red-800 dark:text-red-200">Decisivo, competitivo, orientado a resultados</p>
+                  <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Directo</p>
+                  <p className="text-sm text-red-800 dark:text-red-200">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
                 <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">I - Influencia</p>
+                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Inspirador</p>
                   <p className="text-sm text-yellow-800 dark:text-yellow-200">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
                 <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="font-semibold text-green-900 dark:text-green-100 mb-1">S - Estabilidad</p>
-                  <p className="text-sm text-green-800 dark:text-green-200">Cooperativo, paciente, orientado al equipo</p>
+                  <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Seguro</p>
+                  <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
                 <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">C - Conciencia</p>
-                  <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, orientado a calidad</p>
+                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Consciente</p>
+                  <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
@@ -107,7 +107,7 @@ export default function A1CerebralIntroPage() {
                   <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Análisis automático</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Obtendrás tu perfil DISC personalizado con recomendaciones</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
                   </div>
                 </div>
               </div>
@@ -187,7 +187,7 @@ export default function A1CerebralIntroPage() {
               size="lg"
               className="px-8 text-lg bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Comenzar Test DISC
+              Comenzar Análisis Cerebral
             </Button>
             <Button
               onClick={() => router.push('/despega')}

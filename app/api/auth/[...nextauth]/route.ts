@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v82 - Added A1 Cerebral intro tutorial page. Created /despega/a1-cerebral-intro with comprehensive guide: what is DISC (D-I-S-C dimensions), how test works (20 questions, 2 selections each), example question showing MÁS/MENOS format, benefits of assessment. Conozcámonos-1 now redirects to intro before test. Added link to navbar A1 menu. - force redeploy v82
+// PRODUCTION BUILD v83 - Rebranded A1 Cerebral intro page from "DISC" to "Despega Cerebral". Changed title, subtitle, and section headers to reflect Despega methodology (inspired by DISC but not DISC). Updated dimensions naming: Directo/Inspirador/Seguro/Consciente. Changed CTA button from "Comenzar Test DISC" to "Comenzar Análisis Cerebral". Proper branding throughout. - force redeploy v83
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
