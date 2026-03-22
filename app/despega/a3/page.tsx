@@ -481,12 +481,48 @@ export default function A3Page() {
           </CardContent>
         </Card>
 
+        {/* A4 PROGRESSION CTA - Next Phase */}
+        <Card className="border-2 border-cyan-500 dark:border-cyan-600 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-950/50 dark:to-blue-950/50 shadow-lg">
+          <CardContent className="pt-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex-1">
+                <Badge className="mb-3 bg-cyan-600 hover:bg-cyan-700">Fase Final</Badge>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+                  Domina el Contexto: A4 Radar Estratégico
+                </h3>
+                <p className="text-slate-700 dark:text-slate-300 mb-4">
+                  Una vez domines tus habilidades de entrevista en A3, accede a análisis profundo del mercado laboral, tendencias de industria y oportunidades emergentes con 7 capas de análisis estratégico.
+                </p>
+                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  <li className="flex gap-2">
+                    <span className="text-cyan-600">✓</span>
+                    <span>Noticias curadas del mercado diariamente</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-600">✓</span>
+                    <span>7 capas de análisis para decisiones informadas</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-600">✓</span>
+                    <span>Contexto de industria personalizado a tu perfil</span>
+                  </li>
+                </ul>
+              </div>
+              <Link href="/despega/a4" className="flex-shrink-0 w-full md:w-auto">
+                <Button className="w-full md:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-semibold px-8 py-6 text-base shadow-lg">
+                  Ver A4 Radar <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Tips */}
-        <Card className="border-0 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
-          <CardContent className="pt-6 flex gap-3">
+        <Card className="p-6 mb-8 border-0 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
+          <CardContent className="flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo aprovechar A3</div>
+              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
                 <li>✓ Comienza con diagnosis para entender tu nivel actual</li>
                 <li>✓ Elige simulaciones según tu objetivo (básico → avanzado)</li>

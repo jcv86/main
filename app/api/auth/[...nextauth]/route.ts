@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v66 - GIT CACHE CLEAR: Deleted and completely recreated both coach-sidebar.tsx (143 lines clean) and a1-cerebral/page.tsx (406 lines clean). All orphaned JSX removed. Files end with proper closing braces. Force full rebuild to clear git cache. v66
+// PRODUCTION BUILD v67 - Added A4 progression CTA to A3 dashboard. Complete navigation flow from C1→A1→C2→A2→A3→A4 now fully connected with explicit CTAs. All stages accessible and data persisted throughout. Ready for full journey testing. - force redeploy v67
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
