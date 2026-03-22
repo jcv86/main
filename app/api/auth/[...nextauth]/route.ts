@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v92 - Added AI Assistant, Voice Input (STT), and Response Validation to all A3 simulaciones (guiado, estructurada, desafiante, maestría). All open questions now have: 1) AIAssistant component for IA suggestions, 2) VoiceInput component for speech-to-text dictation, 3) validateResponse function for real-time feedback. Validation triggers onBlur with loading state. Users can now dictate responses, get IA suggestions, and receive validation feedback while practicing interviews. - force redeploy v92
+// PRODUCTION BUILD v93 - Expanded A3 CV-ATS page with 6 professional CV formats. Added: 1) Creative Format with gradient design and visual cards (for creative roles), 2) Modern Format with timeline visualization and minimalist layout (tech companies), 3) LinkedIn Format with LinkedIn blue header and professional social styling, 4) Executive Format with minimalist sophisticated design for C-suite roles. Each format has dynamic info card explaining when to use it. Users can now toggle between ATS, Standard, Creative, Modern, LinkedIn, and Executive formats with download/copy buttons. - force redeploy v93
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
