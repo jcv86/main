@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
+import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 
 export default function Conozcamonos1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -176,13 +177,22 @@ export default function Conozcamonos1Page() {
           )}
 
           {question.type === 'text' && (
-            <textarea
-              value={responses[question.id] || ''}
-              onChange={(e) => handleAnswer(e.target.value)}
-              className="w-full p-4 bg-background border border-border rounded-lg text-foreground"
-              rows={4}
-              placeholder="Escribe tu respuesta aquí..."
-            />
+            <div className="space-y-3">
+              <textarea
+                value={responses[question.id] || ''}
+                onChange={(e) => handleAnswer(e.target.value)}
+                className="w-full p-4 bg-background border border-border rounded-lg text-foreground"
+                rows={4}
+                placeholder="Escribe tu respuesta aquí..."
+              />
+              <AIAssistant
+                question={question.question}
+                currentResponse={responses[question.id] || ''}
+                onUseSuggestion={(suggestion) => {
+                  handleAnswer(suggestion)
+                }}
+              />
+            </div>
           )}
 
           {error && <p className="text-destructive text-sm mt-4">{error}</p>}

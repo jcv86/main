@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v77 - Implemented OpenAI response validation in Conozcámonos-1. Created /api/conozcamonos/validate-response endpoint using GPT-4o-mini to validate text responses. Validates: 1) minimum 10 words, 2) response completeness & specificity (60+ score required). Shows feedback & suggestions if response insufficient. Only text questions validated; select questions auto-pass. - force redeploy v77
+// PRODUCTION BUILD v78 - Added AI Assistant button to Conozcámonos-1. Created /api/conozcamonos/ai-suggestion endpoint using GPT-4o-mini to generate contextual hints & example structures for interview questions. Users can click "Asistencia IA" button to get suggestions, view examples, or use suggestions as starting point for responses. Improves answer quality while maintaining validation. - force redeploy v78
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
