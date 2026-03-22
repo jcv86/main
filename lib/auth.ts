@@ -110,9 +110,13 @@ export const authConfig: NextAuthConfig = {
     signOut: "/auth/signout",
     error: "/auth/error",
   },
-  trustHost: true,
+  // CRITICAL FIX: Set trustHost to false
+  // This ensures NextAuth uses our explicit 'url' config instead of the Host header
+  // When trustHost=true, NextAuth ignores 'url' config and uses Host header
+  // This was causing callback URLs to be generated incorrectly
+  trustHost: false,
   // CRITICAL: ALWAYS use the hardcoded baseUrl
-  // This ensures consistent callback URLs without relying on env vars
+  // This ensures consistent callback URLs without relying on env vars or Host header
   url: baseUrl,
   callbacks: {
     authorized: async ({ auth }) => {
