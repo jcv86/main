@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v85 - Fixed A2 intro page. Removed undefined variables (a1Results, profileData, DESPEGA_PROFILES import). Fixed loading state order (was checking profile after null return). Removed duplicate DISC score grids. Now properly loads user's Cerebral profile and displays single grid with Directo/Inspirador/Seguro/Consciente scores. Page is now fully functional. - force redeploy v85
+// PRODUCTION BUILD v86 - Enhanced Conozcámonos-2 with AI features. Added AIAssistant component to all text questions providing response suggestions. Added VoiceInput (microphone button) with STT for text questions - users can speak to dictate responses. Added simple 5-word validation check for text responses. Added validatingIds state to prevent button spam during validation. Conozcámonos-2 now has full feature parity with Conozcámonos-1. - force redeploy v86
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

@@ -8,12 +8,15 @@ import { Progress } from '@/components/ui/progress'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CONOZCAMONOS_2_QUESTIONS } from '@/lib/conozcamonos-2-questions'
 import { createClient } from '@/lib/supabase/client'
+import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
+import { VoiceInput } from '@/components/conozcamonos/voice-input'
 
 export default function Conozcamonos2Page() {
   const [currentStep, setCurrentStep] = useState<'paso1' | 'paso2'>('paso1')
   const [responses, setResponses] = useState<Record<number, string | string[]>>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
   const router = useRouter()
   const supabase = createClient()
 
@@ -28,6 +31,41 @@ export default function Conozcamonos2Page() {
       [questionId]: value
     }))
     setError('')
+  }
+
+  const validateTextResponse = async (questionId: number, question: string, response: string) => {
+    if (!response.trim()) return
+
+    setValidatingIds(prev => new Set(prev).add(questionId))
+    
+    try {
+      const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionId,
+          question,
+          response,
+          questionType: 'text'
+        })
+      })
+
+      const validation = await validationResponse.json()
+      
+      if (!validation.valid) {
+        setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+      } else {
+        setError('')
+      }
+    } catch (err) {
+      console.error('[v0] Validation error:', err)
+    } finally {
+      setValidatingIds(prev => {
+        const updated = new Set(prev)
+        updated.delete(questionId)
+        return updated
+      })
+    }
   }
 
   const allStepAnswered = stepQuestions.every(q => responses[q.id])
@@ -126,14 +164,36 @@ export default function Conozcamonos2Page() {
               )}
 
               {question.type === 'text' && (
-                <textarea
-                  value={responses[question.id] as string || ''}
-                  onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  placeholder={question.placeholder}
-                  maxLength={question.maxLength}
-                  className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600"
-                  rows={3}
-                />
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <textarea
+                      value={responses[question.id] as string || ''}
+                      onChange={(e) => handleAnswer(question.id, e.target.value)}
+                      placeholder={question.placeholder}
+                      maxLength={question.maxLength}
+                      className="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <VoiceInput
+                      onTranscript={(text) => {
+                        handleAnswer(question.id, (responses[question.id] as string || '') + (responses[question.id] ? ' ' : '') + text)
+                      }}
+                      isDisabled={loading || validatingIds.has(question.id)}
+                    />
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      O habla para dictar tu respuesta
+                    </span>
+                  </div>
+                  <AIAssistant
+                    question={question.question}
+                    currentResponse={responses[question.id] as string || ''}
+                    onUseSuggestion={(suggestion) => {
+                      handleAnswer(question.id, suggestion)
+                    }}
+                  />
+                </div>
               )}
 
               {question.type === 'checkbox' && (
