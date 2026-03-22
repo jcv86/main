@@ -59,38 +59,52 @@ export default function A2RoutasPage() {
 
       console.log('[v0] Loading user profile and responses for route generation...')
 
-      // Get A1 Cerebral profile
-      const { data: a1Data } = await supabase
-        .from('user_a1_profiles')
-        .select('disc_profile')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
-        .limit(1)
-        .single()
+      // Get A1 Cerebral profile - try different possible table names
+      let a1Data = null
+      const possibleA1Tables = ['despega_cerebral_perfil', 'a1_disc_assessment', 'canon_a1_profile']
+      
+      for (const table of possibleA1Tables) {
+        const { data } = await supabase
+          .from(table)
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+        
+        if (data) {
+          a1Data = data
+          break
+        }
+      }
 
-      // Get Conozcámonos-2 responses (Paso 1 - the one that determines the route)
-      const { data: c2Data } = await supabase
+      // Get Conozcámonos-2 responses using the correct table
+      let c2Data = null
+      const { data: c2Response } = await supabase
         .from('canon_conozcamonos_2_responses')
-        .select('responses')
+        .select('*')
         .eq('user_id', user.id)
-        .eq('paso', 1)
+        .eq('step1_completed', true)
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      if (!a1Data?.disc_profile || !c2Data?.responses) {
+      c2Data = c2Response
+
+      if (!a1Data || !c2Data) {
+        console.log('[v0] Missing data - A1:', !!a1Data, 'C2:', !!c2Data)
         setError('No se encontraron tus respuestas. Por favor completa Conozcámonos 1 y 2 primero.')
         setLoading(false)
         return
       }
 
       setUserProfile({
-        profile: a1Data.disc_profile,
-        responses: c2Data.responses
+        profile: a1Data.tipo_perfil || a1Data.disc_profile || a1Data,
+        responses: c2Data.responses || c2Data
       })
 
       // Generate routes using the real data
-      generateRoutes(user.id, a1Data.disc_profile, c2Data.responses)
+      generateRoutes(user.id, a1Data, c2Data)
     } catch (err) {
       console.error('[v0] Error loading user data:', err)
       setError('Error al cargar tus datos. Intenta de nuevo.')
