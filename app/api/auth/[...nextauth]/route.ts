@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v68 - Replaced all DISC references with Despega Cerebral nomenclature throughout. A1 Report uses profile names (El Impulsor, El Catalizador, etc). A2 Intro displays Energía/Influencia/Relaciones/Plan Ejecutivo labels. All external branding updated. - force redeploy v68
+// PRODUCTION BUILD v69 - Fixed A2 Intro syntax error: removed duplicate code block that was causing await outside async function error. File now has clean structure. - force redeploy v69
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

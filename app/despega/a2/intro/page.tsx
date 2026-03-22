@@ -60,30 +60,6 @@ export default function A2IntroPage() {
 
   const profileData = DESPEGA_PROFILES[cerebroProfile.primary as keyof typeof DESPEGA_PROFILES]
 
-      // Get the latest A1 profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('user_a1_profiles')
-        .select('disc_profile')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      if (profileError || !profileData?.disc_profile) {
-        setError('No se encontró tu perfil A1. Por favor completa la evaluación primero.')
-        return
-      }
-
-      setA1Results(profileData.disc_profile as DiscProfile)
-      console.log('[v0] A1 profile loaded for A2 Intro:', profileData.disc_profile)
-    } catch (err) {
-      console.error('[v0] Error loading A1 profile:', err)
-      setError('Error al cargar tu perfil A1. Intenta de nuevo.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
