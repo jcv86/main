@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v81 - Simplified Conozcámonos-1 validation. Changed from strict OpenAI validation (score >= 60) to simple 5-word minimum check. Removed intermediate validation states. User can now continue with short but meaningful answers (e.g., "lo mas desafiante fue subir al everest"). Validation is now lightweight and non-blocking. - force redeploy v81
+// PRODUCTION BUILD v82 - Added A1 Cerebral intro tutorial page. Created /despega/a1-cerebral-intro with comprehensive guide: what is DISC (D-I-S-C dimensions), how test works (20 questions, 2 selections each), example question showing MÁS/MENOS format, benefits of assessment. Conozcámonos-1 now redirects to intro before test. Added link to navbar A1 menu. - force redeploy v82
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
@@ -17,4 +17,5 @@ if (process.env.NEXTAUTH_URL?.endsWith('/')) {
 const handler = NextAuth(authconfig)
 
 export { handler as GET, handler as POST }
+
 

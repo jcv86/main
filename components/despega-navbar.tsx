@@ -31,6 +31,7 @@ const stages = [
     icon: CheckCircle2,
     routes: [
       { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
+      { label: 'A1 Cerebral Intro', href: '/despega/a1-cerebral-intro' },
       { label: 'A1 Cerebral Assessment', href: '/despega/a1-cerebral' },
       { label: 'A1 Report', href: '/despega/a1-report' },
     ]

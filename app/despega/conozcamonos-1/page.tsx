@@ -123,7 +123,7 @@ export default function Conozcamonos1Page() {
         .insert({ user_id: user.id, responses, completed_at: new Date().toISOString() })
 
       if (dbError) throw dbError
-      router.push('/despega/a1-cerebral')
+      router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
       setError('Error al guardar')
