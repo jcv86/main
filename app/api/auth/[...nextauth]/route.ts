@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v73 - Activated "Análisis Multimodal" module. Changed button from "Próximamente" (disabled) to active link to /despega/a3/analisis-multimodal. Added route to navbar A3 menu. Enterprise multimodal system now fully accessible to users. - force redeploy v73
+// PRODUCTION BUILD v74 - Fixed multimodal upload API. Added error handling for Blob uploads, file size validation (500MB max), graceful queue fallback if Redis not configured. Now handles video uploads reliably with detailed error messages for debugging. - force redeploy v74
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

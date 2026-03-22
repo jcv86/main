@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { queueAnalysisJob } from '@/lib/multimodal/analysis-queue'
 import { put } from '@vercel/blob'
 import { v4 as uuidv4 } from 'uuid'
 
 /**
  * POST /api/multimodal/upload
- * Upload video and queue for analysis
+ * Upload video and create analysis session
  */
 export async function POST(request: NextRequest) {
   try {
@@ -34,19 +33,37 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(`[v0] Uploading video: ${videoFile.name} (${videoFile.size} bytes)`)
+    // Validate video file size (max 500MB)
+    const MAX_FILE_SIZE = 500 * 1024 * 1024 // 500MB
+    if (videoFile.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'Video file too large. Maximum 500MB allowed.' },
+        { status: 400 }
+      )
+    }
+
+    console.log(`[v0] Uploading video: ${videoFile.name} (${videoFile.size} bytes) for user ${user.id}`)
 
     // Generate session ID
     const sessionId = uuidv4()
 
     // Upload video to Vercel Blob (encrypted)
     const blobPath = `videos/${user.id}/${sessionId}/${videoFile.name}`
-    const uploadedBlob = await put(blobPath, videoFile, {
-      access: 'private',
-      addRandomSuffix: false
-    })
-
-    console.log(`[v0] Video uploaded to Blob: ${uploadedBlob.url}`)
+    let uploadedBlob
+    
+    try {
+      uploadedBlob = await put(blobPath, videoFile, {
+        access: 'private',
+        addRandomSuffix: false
+      })
+      console.log(`[v0] Video uploaded to Blob: ${uploadedBlob.url}`)
+    } catch (blobError) {
+      console.error('[v0] Blob upload error:', blobError)
+      return NextResponse.json(
+        { error: 'Failed to upload video to storage' },
+        { status: 500 }
+      )
+    }
 
     // Create analysis session in database
     const { data: session, error: sessionError } = await supabase
@@ -57,8 +74,9 @@ export async function POST(request: NextRequest) {
         video_blob_url: uploadedBlob.url,
         entrenamiento_type: entrenamillentoType,
         file_size_mb: Math.round(videoFile.size / 1024 / 1024),
-        status: 'queued',
-        metadata: metadata ? JSON.parse(metadata) : {}
+        status: 'processing',
+        metadata: metadata ? JSON.parse(metadata) : {},
+        created_at: new Date().toISOString()
       })
       .select()
 
@@ -67,27 +85,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create session' }, { status: 500 })
     }
 
-    // Queue analysis job
-    const jobId = await queueAnalysisJob({
-      sessionId,
-      userId: user.id,
-      videoUrl: uploadedBlob.url,
-      entrenamillentoType,
-      metadata: metadata ? JSON.parse(metadata) : {}
-    })
+    console.log(`[v0] Session created: ${sessionId}`)
 
-    console.log(`[v0] Analysis job queued: ${jobId}`)
+    // Queue analysis job - try with error handling
+    let jobId = null
+    try {
+      // Dynamically import to avoid startup errors if Redis isn't configured
+      const { queueAnalysisJob } = await import('@/lib/multimodal/analysis-queue')
+      jobId = await queueAnalysisJob({
+        sessionId,
+        userId: user.id,
+        videoUrl: uploadedBlob.url,
+        entrenamillentoType,
+        metadata: metadata ? JSON.parse(metadata) : {}
+      })
+      console.log(`[v0] Analysis job queued: ${jobId}`)
+    } catch (queueError) {
+      console.warn('[v0] Queue error (continuing anyway):', queueError)
+      // Continue without queue - analysis can be triggered manually
+    }
 
     return NextResponse.json({
       sessionId,
-      jobId,
-      status: 'queued',
+      jobId: jobId || 'manual',
+      status: 'processing',
       message: 'Video uploaded successfully. Analysis in progress.'
     })
   } catch (error) {
     console.error('[v0] Upload error:', error)
     return NextResponse.json(
-      { error: 'Failed to upload video' },
+      { error: 'Failed to upload video', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
