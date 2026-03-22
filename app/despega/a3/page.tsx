@@ -123,7 +123,7 @@ export default function A3Page() {
               <Button className="bg-white text-orange-700 hover:bg-orange-50 font-semibold" size="lg">
                 Comenzar Entrenamientos
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+              <Button className="bg-white/20 text-white border border-white hover:bg-white/30 font-semibold" size="lg">
                 Ver Guía
               </Button>
             </div>
