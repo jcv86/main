@@ -4,20 +4,25 @@ export interface UseSpeechRecognitionOptions {
   language?: string
   continuous?: boolean
   interimResults?: boolean
+  silenceTimeout?: number
 }
 
 export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) {
   const {
     language = 'es-ES',
     continuous = false,
-    interimResults = true
+    interimResults = false,
+    silenceTimeout = 2000
   } = options
 
   const [isListening, setIsListening] = useState(false)
   const [isSupported, setIsSupported] = useState(false)
   const [transcript, setTranscript] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [isFinal, setIsFinal] = useState(false)
   const recognitionRef = useRef<any>(null)
+  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const lastResultRef = useRef<string>('')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -37,16 +42,43 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
 
     recognition.onstart = () => {
       setIsListening(true)
+      setIsFinal(false)
       setError(null)
+      lastResultRef.current = ''
     }
 
     recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results)
-        .map((result: any) => result[0])
-        .map((result) => result.transcript)
-        .join('')
+      let interimTranscript = ''
+      let finalTranscript = ''
 
-      setTranscript(transcript)
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript
+
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + ' '
+        } else {
+          interimTranscript += transcript
+        }
+      }
+
+      // Only update if we have final results
+      if (finalTranscript.trim()) {
+        lastResultRef.current = finalTranscript.trim()
+        setTranscript(finalTranscript.trim())
+        setIsFinal(true)
+
+        // Reset silence timer
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current)
+        }
+
+        // Set new silence timer - stop after 2 seconds of silence
+        silenceTimerRef.current = setTimeout(() => {
+          if (recognitionRef.current && isListening) {
+            recognitionRef.current.stop()
+          }
+        }, silenceTimeout)
+      }
     }
 
     recognition.onerror = (event: any) => {
@@ -57,6 +89,9 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
 
     recognition.onend = () => {
       setIsListening(false)
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current)
+      }
     }
 
     recognitionRef.current = recognition
@@ -65,18 +100,26 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
       if (recognitionRef.current) {
         recognitionRef.current.abort()
       }
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current)
+      }
     }
-  }, [language, continuous, interimResults])
+  }, [language, continuous, interimResults, silenceTimeout])
 
   const startListening = () => {
     if (!recognitionRef.current) return
     setTranscript('')
+    setIsFinal(false)
     setError(null)
+    lastResultRef.current = ''
     recognitionRef.current.start()
   }
 
   const stopListening = () => {
     if (!recognitionRef.current) return
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current)
+    }
     recognitionRef.current.stop()
   }
 
@@ -90,12 +133,15 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
 
   const resetTranscript = () => {
     setTranscript('')
+    setIsFinal(false)
+    lastResultRef.current = ''
   }
 
   return {
     isListening,
     isSupported,
     transcript,
+    isFinal,
     error,
     startListening,
     stopListening,
@@ -103,3 +149,4 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
     resetTranscript
   }
 }
+

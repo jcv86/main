@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v79 - Integrated Speech-to-Text (STT) in Conozcámonos-1. Created reusable useSpeechRecognition hook with Spanish language support (es-ES). Added VoiceInput component with Mic button. Users can now speak to dictate responses in real-time - text appends to textarea. Microphone button shows "Grabando..." while listening. Falls back gracefully if browser doesn't support STT. - force redeploy v79
+// PRODUCTION BUILD v80 - Fixed STT repetition issue. Changed useSpeechRecognition hook: interimResults OFF (was ON), added 2-second silence timeout before auto-stop, only captures FINAL results. VoiceInput now deduplicates with useRef tracking. Users can speak, system waits 2 seconds after silence, then captures full sentence once without repetition. - force redeploy v80
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
