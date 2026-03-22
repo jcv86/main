@@ -117,7 +117,7 @@ export function A4CalibrationDashboard() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-purple-500" />
-              <CardTitle className="text-lg">A3: Simulaciones</CardTitle>
+              <CardTitle className="text-lg">A3: Entrenamientos</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="space-y-3">

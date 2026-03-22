@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v71 - Replaced all "Simulaciones" references with "Entrenamientos" throughout A3. Updated 9 files: A3 main page, all 4 training difficulty pages, progress, feedback, diagnosis, analytics. All user-facing text now uses Despega terminology (never "simulaciones" on site). - force redeploy v71
+// PRODUCTION BUILD v72 - Fixed navbar and dashboard components. Changed "Simulaciones" → "Entrenamientos" in despega-navbar (A3 menu), admin-dashboard (engagement metrics), and a4-calibration-dashboard (card title). All UI references now use Despega terminology consistently. - force redeploy v72
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
