@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v78 - Added AI Assistant button to Conozcámonos-1. Created /api/conozcamonos/ai-suggestion endpoint using GPT-4o-mini to generate contextual hints & example structures for interview questions. Users can click "Asistencia IA" button to get suggestions, view examples, or use suggestions as starting point for responses. Improves answer quality while maintaining validation. - force redeploy v78
+// PRODUCTION BUILD v79 - Integrated Speech-to-Text (STT) in Conozcámonos-1. Created reusable useSpeechRecognition hook with Spanish language support (es-ES). Added VoiceInput component with Mic button. Users can now speak to dictate responses in real-time - text appends to textarea. Microphone button shows "Grabando..." while listening. Falls back gracefully if browser doesn't support STT. - force redeploy v79
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

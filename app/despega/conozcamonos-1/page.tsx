@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
+import { VoiceInput } from '@/components/conozcamonos/voice-input'
 
 export default function Conozcamonos1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -178,13 +179,26 @@ export default function Conozcamonos1Page() {
 
           {question.type === 'text' && (
             <div className="space-y-3">
-              <textarea
-                value={responses[question.id] || ''}
-                onChange={(e) => handleAnswer(e.target.value)}
-                className="w-full p-4 bg-background border border-border rounded-lg text-foreground"
-                rows={4}
-                placeholder="Escribe tu respuesta aquí..."
-              />
+              <div className="flex gap-2">
+                <textarea
+                  value={responses[question.id] || ''}
+                  onChange={(e) => handleAnswer(e.target.value)}
+                  className="flex-1 p-4 bg-background border border-border rounded-lg text-foreground"
+                  rows={4}
+                  placeholder="Escribe tu respuesta aquí o usa el micrófono..."
+                />
+              </div>
+              <div className="flex gap-2 items-center">
+                <VoiceInput
+                  onTranscript={(text) => {
+                    handleAnswer((responses[question.id] || '') + (responses[question.id] ? ' ' : '') + text)
+                  }}
+                  isDisabled={loading || validating}
+                />
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  O habla para dictar tu respuesta
+                </span>
+              </div>
               <AIAssistant
                 question={question.question}
                 currentResponse={responses[question.id] || ''}
