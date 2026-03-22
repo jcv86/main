@@ -10,6 +10,8 @@ import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
+import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
+import { VoiceInput } from '@/components/conozcamonos/voice-input'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -76,6 +78,7 @@ export default function GuidedInterviewPage() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
+  const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
   const router = useRouter()
   const supabase = createClient()
 
@@ -98,6 +101,36 @@ export default function GuidedInterviewPage() {
       ...responses,
       [currentQuestion.id]: text
     })
+  }
+
+  const validateResponse = async (questionId: number, question: string, response: string) => {
+    if (!response.trim() || response.split(/\s+/).filter(w => w).length < 5) return
+
+    setValidatingIds(prev => new Set(prev).add(questionId))
+    
+    try {
+      const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionId,
+          question,
+          response,
+          questionType: 'interview'
+        })
+      })
+
+      const validation = await validationResponse.json()
+      console.log('[v0] Response validated:', validation)
+    } catch (err) {
+      console.error('[v0] Validation error:', err)
+    } finally {
+      setValidatingIds(prev => {
+        const updated = new Set(prev)
+        updated.delete(questionId)
+        return updated
+      })
+    }
   }
 
   const handleNext = () => {
@@ -246,19 +279,52 @@ export default function GuidedInterviewPage() {
             </div>
 
             {/* Response Input */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Tu respuesta:
               </label>
-              <Textarea
-                value={responses[currentQuestion.id] || ''}
-                onChange={(e) => handleResponseChange(e.target.value)}
-                placeholder="Escribe tu respuesta aquí. El coach te orientará con los puntos clave..."
-                className="min-h-40 resize-none"
+              <div className="space-y-2">
+                <Textarea
+                  value={responses[currentQuestion.id] || ''}
+                  onChange={(e) => handleResponseChange(e.target.value)}
+                  onBlur={() => validateResponse(currentQuestion.id, currentQuestion.question, responses[currentQuestion.id] || '')}
+                  placeholder="Escribe tu respuesta aquí. El coach te orientará con los puntos clave..."
+                  className="min-h-40 resize-none"
+                />
+                <div className="flex justify-between items-center">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
+                  </p>
+                  {validatingIds.has(currentQuestion.id) && (
+                    <span className="text-xs text-blue-600 dark:text-blue-400 animate-pulse">
+                      Coach revisando...
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Voice Input */}
+              <div className="flex gap-2 items-center">
+                <VoiceInput
+                  onTranscript={(text) => {
+                    const current = responses[currentQuestion.id] || ''
+                    handleResponseChange(current + (current ? ' ' : '') + text)
+                  }}
+                  isDisabled={loading || validatingIds.has(currentQuestion.id)}
+                />
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  O habla para dictar tu respuesta
+                </span>
+              </div>
+
+              {/* AI Assistant */}
+              <AIAssistant
+                question={currentQuestion.question}
+                currentResponse={responses[currentQuestion.id] || ''}
+                onUseSuggestion={(suggestion) => {
+                  handleResponseChange(suggestion)
+                }}
               />
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
-              </p>
             </div>
 
             {/* Recording Option */}

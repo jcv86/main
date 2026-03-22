@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v91 - Fixed A3 hero button contrast. Changed "Ver Guía" button from outline with white text (low contrast on orange background) to bg-white/20 with border-white (high contrast). Now matches A2 contrast fix pattern for consistency. Both buttons meet WCAG AA standards. - force redeploy v91
+// PRODUCTION BUILD v92 - Added AI Assistant, Voice Input (STT), and Response Validation to all A3 simulaciones (guiado, estructurada, desafiante, maestría). All open questions now have: 1) AIAssistant component for IA suggestions, 2) VoiceInput component for speech-to-text dictation, 3) validateResponse function for real-time feedback. Validation triggers onBlur with loading state. Users can now dictate responses, get IA suggestions, and receive validation feedback while practicing interviews. - force redeploy v92
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
