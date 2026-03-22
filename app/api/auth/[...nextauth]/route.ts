@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v74 - Fixed multimodal upload API. Added error handling for Blob uploads, file size validation (500MB max), graceful queue fallback if Redis not configured. Now handles video uploads reliably with detailed error messages for debugging. - force redeploy v74
+// PRODUCTION BUILD v76 - Added welcome page workflow. Created /despega/bienvenida page explaining Despega process and timeline. Dashboard now redirects to welcome if A1 not completed. Added "Bienvenida" link to navbar. Users now see clear intro before Conozcámonos-1. - force redeploy v76
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

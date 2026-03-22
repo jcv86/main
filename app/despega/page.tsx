@@ -45,6 +45,13 @@ export default function DespegazoDashboard() {
         .eq('user_id', user.id)
         .limit(1)
 
+      // If A1 is not completed, redirect to welcome page
+      if (!a1 || a1.length === 0) {
+        console.log('[v0] A1 not completed, redirecting to welcome')
+        router.push('/despega/bienvenida')
+        return
+      }
+
       const { data: a2 } = await supabase
         .from('user_a2_routes')
         .select('*')

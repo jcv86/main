@@ -7,7 +7,7 @@ import { VideoRecorder } from '@/components/multimodal/video-recorder'
 import { AnalysisResults } from '@/components/multimodal/analysis-results'
 import { MultimodalAnalyticsDashboard } from '@/components/multimodal/analytics-dashboard'
 import { AdvancedAnalyticsReporting } from '@/components/multimodal/advanced-analytics'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Check, Zap } from 'lucide-react'
 
 export default function MultimodalAnalysisPage() {
   const [activeSession, setActiveSession] = useState<string | null>(null)
@@ -15,34 +15,37 @@ export default function MultimodalAnalysisPage() {
   const [entrenamillentoType, setEntrenamillentoType] = useState('entrevista-basica')
 
   const entrenamillentoTypes = [
-    { id: 'entrevista-basica', label: 'Entrevista Básica', desc: 'Respuestas simples y presentación' },
-    { id: 'entrevista-conductual', label: 'Entrevista Conductual', desc: 'Historias STAR' },
-    { id: 'entrevista-tecnica', label: 'Entrevista Técnica', desc: 'Conceptos y problema-solving' },
-    { id: 'presentacion-ejecutiva', label: 'Presentación Ejecutiva', desc: 'Pitch o deck' }
+    { id: 'entrevista-basica', label: 'Básica', desc: 'Presentación' },
+    { id: 'entrevista-conductual', label: 'Conductual', desc: 'STAR' },
+    { id: 'entrevista-tecnica', label: 'Técnica', desc: 'Problem-solving' },
+    { id: 'presentacion-ejecutiva', label: 'Ejecutiva', desc: 'Pitch' }
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-6xl mx-auto space-y-4 pb-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-          Análisis Multimodal
-        </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400">
-          Visual, voz, y lenguaje corporal
-        </p>
+      <div className="flex items-center gap-2 mb-6">
+        <Zap className="w-6 h-6 text-blue-600" />
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Análisis Multimodal
+          </h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Feedback detallado sobre postura, tono de voz, gestos y coherencia emocional
+          </p>
+        </div>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="pt-6 flex gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-red-900">{error}</p>
+        <Card className="border-red-200 bg-red-50 dark:bg-red-950">
+          <CardContent className="pt-4 flex gap-3">
+            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-900 dark:text-red-100">{error}</p>
               <button
                 onClick={() => setError('')}
-                className="text-sm text-red-600 hover:text-red-700 mt-1"
+                className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 mt-1"
               >
                 Descartar
               </button>
@@ -51,52 +54,55 @@ export default function MultimodalAnalysisPage() {
         </Card>
       )}
 
+      {/* Type Selection - Prominent */}
+      <div>
+        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+          Tipo de Entrenamiento
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {entrenamillentoTypes.map(type => (
+            <button
+              key={type.id}
+              onClick={() => setEntrenamillentoType(type.id)}
+              className={`p-3 rounded-lg border-2 transition-all text-left ${
+                entrenamillentoType === type.id
+                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-950 shadow-md'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+              }`}
+            >
+              <div className="flex items-start gap-2">
+                {entrenamillentoType === type.id && (
+                  <Check className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className={`font-semibold text-sm ${entrenamillentoType === type.id ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-slate-100'}`}>
+                    {type.label}
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{type.desc}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content */}
       <Tabs defaultValue="capture" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="capture">Capturar</TabsTrigger>
-          <TabsTrigger value="results" disabled={!activeSession}>
+        <TabsList className="grid w-full grid-cols-4 text-xs h-10">
+          <TabsTrigger value="capture" className="text-xs px-2">Capturar</TabsTrigger>
+          <TabsTrigger value="results" disabled={!activeSession} className="text-xs px-2">
             Resultados
           </TabsTrigger>
-          <TabsTrigger value="analytics">Resumen</TabsTrigger>
-          <TabsTrigger value="advanced">Avanzado</TabsTrigger>
+          <TabsTrigger value="analytics" className="text-xs px-2">Resumen</TabsTrigger>
+          <TabsTrigger value="advanced" className="text-xs px-2">Avanzado</TabsTrigger>
         </TabsList>
 
         {/* Capture Tab */}
-        <TabsContent value="capture" className="space-y-6">
-          {/* Type Selection */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Tipo de Entrenamiento</CardTitle>
-              <CardDescription>
-                Selecciona el tipo de entrevista que vas a practicar
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {entrenamillentoTypes.map(type => (
-                  <button
-                    key={type.id}
-                    onClick={() => setEntrenamillentoType(type.id)}
-                    className={`p-4 rounded-lg border-2 text-left transition-all ${
-                      entrenamillentoType === type.id
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <p className="font-medium text-sm">{type.label}</p>
-                    <p className="text-xs text-gray-600 mt-1">{type.desc}</p>
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Video Recorder */}
+        <TabsContent value="capture" className="mt-4">
           <VideoRecorder
             entrenamillentoType={entrenamillentoType}
             onUploadComplete={sessionId => {
               setActiveSession(sessionId)
-              // Auto-switch to results tab
               setTimeout(() => {
                 document.querySelector('[value="results"]')?.dispatchEvent(new Event('click'))
               }, 100)

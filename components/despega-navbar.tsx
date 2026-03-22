@@ -19,6 +19,14 @@ import {
 
 const stages = [
   {
+    name: 'Información',
+    icon: Home,
+    routes: [
+      { label: 'Bienvenida', href: '/despega/bienvenida' },
+      { label: 'Dashboard', href: '/despega' },
+    ]
+  },
+  {
     name: 'A1: Origen',
     icon: CheckCircle2,
     routes: [

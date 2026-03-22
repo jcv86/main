@@ -97,18 +97,18 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Video className="w-5 h-5" />
-          Video Recorder
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Video className="w-4 h-4" />
+          Grabar
         </CardTitle>
-        <CardDescription>
-          Record your interview practice session. Duration: 2-15 minutes recommended.
+        <CardDescription className="text-xs">
+          2-15 minutos. Ambas cámaras estarán activas.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Video Preview */}
-        <div className="bg-black rounded-lg overflow-hidden">
+      <CardContent className="space-y-3">
+        {/* Video Preview - Compact */}
+        <div className="bg-black rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600">
           <video
             ref={videoRef}
             autoPlay
@@ -117,45 +117,52 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
           />
         </div>
 
+        {/* Recording Status Indicator */}
+        {isRecording && (
+          <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
+            <span className="animate-pulse w-2 h-2 rounded-full bg-red-600"></span>
+            <span className="text-xs font-medium text-red-700 dark:text-red-300">Grabando...</span>
+          </div>
+        )}
+
         {/* Controls */}
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           {!isRecording && !recordedBlob && (
-            <Button onClick={startRecording} className="flex-1 bg-red-600 hover:bg-red-700">
-              <Mic className="w-4 h-4 mr-2" />
-              Start Recording
+            <Button onClick={startRecording} className="flex-1 bg-red-600 hover:bg-red-700 h-9 text-sm">
+              <Mic className="w-4 h-4 mr-1" />
+              Empezar
             </Button>
           )}
 
           {isRecording && (
-            <>
-              <div className="flex-1 flex items-center justify-center bg-red-100 rounded-lg">
-                <span className="animate-pulse text-red-600 font-semibold">Recording...</span>
-              </div>
-              <Button onClick={stopRecording} variant="outline">
-                Stop
-              </Button>
-            </>
+            <Button onClick={stopRecording} className="flex-1 bg-slate-600 hover:bg-slate-700 h-9 text-sm">
+              Detener
+            </Button>
           )}
 
           {recordedBlob && !isRecording && (
             <>
-              <Button onClick={() => setRecordedBlob(null)} variant="outline" className="flex-1">
-                Retake
+              <Button 
+                onClick={() => setRecordedBlob(null)} 
+                variant="outline" 
+                className="flex-1 h-9 text-sm"
+              >
+                Repetir
               </Button>
               <Button
                 onClick={uploadVideo}
                 disabled={isUploading}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 h-9 text-sm"
               >
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Uploading...
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    Subiendo
                   </>
                 ) : (
                   <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload & Analyze
+                    <Upload className="w-3 h-3 mr-1" />
+                    Analizar
                   </>
                 )}
               </Button>
@@ -164,7 +171,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
         </div>
 
         {recordedBlob && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
+          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-2 text-xs text-green-700 dark:text-green-300">
             ✓ Video recorded: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
           </div>
         )}
