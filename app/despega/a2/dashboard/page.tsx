@@ -109,7 +109,7 @@ export default function A2DashboardPage() {
               <Button className="bg-white text-primary hover:bg-slate-100 font-semibold" size="lg">
                 Comenzar Ahora
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+              <Button className="bg-white/20 text-white border border-white hover:bg-white/30 font-semibold" size="lg">
                 Ver Guía
               </Button>
             </div>
