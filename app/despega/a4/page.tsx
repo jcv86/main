@@ -12,6 +12,8 @@ import { useAuthRedirect } from "@/lib/hooks/useAuthRedirect"
 import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4RadarEstrategico } from "@/components/a4-radar-estrategico"
 import { A4GamifiedTests } from "@/components/a4-gamified-tests"
+import { A4Biblioteca } from "@/components/a4-biblioteca"
+import { DISCWidget } from "@/components/disc-widget"
 import { getA4News, getUserTotalPoints, getUserA4Badges, getA4NewsByCategory } from "@/lib/supabase/a4-queries"
 
 export default function A4HubPage() {
@@ -22,6 +24,7 @@ export default function A4HubPage() {
   const [totalPoints, setTotalPoints] = useState(0)
   const [badges, setBadges] = useState<any[]>([])
   const [testsData, setTestsData] = useState<any[]>([])
+  const [discProfile, setDiscProfile] = useState<any>(null)
   const [newsLoading, setNewsLoading] = useState(true)
   const [testsLoading, setTestsLoading] = useState(true)
 
@@ -39,6 +42,17 @@ export default function A4HubPage() {
         setNewsData(news)
         setTotalPoints(points)
         setBadges(userBadges || [])
+
+        // Fetch DISC profile
+        try {
+          const discRes = await fetch(`/api/despega/user-profile?userId=${user.id}`)
+          if (discRes.ok) {
+            const discData = await discRes.json()
+            setDiscProfile(discData.discProfile || null)
+          }
+        } catch (error) {
+          console.error('[v0] Error loading DISC profile:', error)
+        }
       } catch (error) {
         console.error('[v0] Error loading A4 news data:', error)
       } finally {
@@ -114,6 +128,13 @@ export default function A4HubPage() {
             </p>
           </div>
         </div>
+
+        {/* DISC Personalization Widget */}
+        {discProfile && (
+          <div className="mb-8 max-w-2xl mx-auto">
+            <DISCWidget profile={discProfile} userName={user?.user_metadata?.name} />
+          </div>
+        )}
 
         {/* Main Tabs Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -294,53 +315,7 @@ export default function A4HubPage() {
 
           {/* Biblioteca Tab */}
           <TabsContent value="biblioteca" className="space-y-4">
-            <Card className="border-0 bg-card/70 backdrop-blur-sm">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-3 bg-amber-500/10 rounded-lg">
-                    <BookOpen className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <CardTitle className="text-2xl">Biblioteca de Recursos Curados</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  100+ libros, artículos y recursos seleccionados para tu crecimiento profesional continuo.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <h4 className="font-medium mb-2">Tipos de Recursos:</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>📚 Libros recomendados</li>
-                      <li>📄 Artículos en profundidad</li>
-                      <li>🎧 Podcasts clave</li>
-                      <li>📊 Reportes de investigación</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <h4 className="font-medium mb-2">Temas Curados:</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>Liderazgo estratégico</li>
-                      <li>Innovación & adaptación</li>
-                      <li>Negociación efectiva</li>
-                      <li>Mentalidad de crecimiento</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <h4 className="font-medium mb-2">Características:</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>Resúmenes ejecutivos</li>
-                      <li>Notas destacadas</li>
-                      <li>Progreso de lectura</li>
-                      <li>Colecciones temáticas</li>
-                    </ul>
-                  </div>
-                </div>
-                <Button className="w-full" variant="default">
-                  Ver Biblioteca →
-                </Button>
-              </CardContent>
-            </Card>
+            <A4Biblioteca />
           </TabsContent>
         </Tabs>
 
