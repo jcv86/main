@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authconfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v86 - Enhanced Conozcámonos-2 with AI features. Added AIAssistant component to all text questions providing response suggestions. Added VoiceInput (microphone button) with STT for text questions - users can speak to dictate responses. Added simple 5-word validation check for text responses. Added validatingIds state to prevent button spam during validation. Conozcámonos-2 now has full feature parity with Conozcámonos-1. - force redeploy v86
+// PRODUCTION BUILD v87 - Removed all mock data from A2 rutas page. Now fully dynamic: loads real user A1 Cerebral profile and Conozcámonos-2 responses from Supabase. Calls canon-generate-route endpoint to generate personalized routes based on actual user data. Displays real routes with razon_seleccion (why this route for user), real beneficios, perfil scores. Shows loading state and error handling. Routes saved to user_a2_routes table. - force redeploy v87
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it

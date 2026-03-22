@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowRight, ChevronRight, Target, Users, TrendingUp, Zap } from 'lucide-react'
+import { ArrowRight, ChevronRight, Target, Users, TrendingUp, Zap, Loader2, AlertCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 interface Route {
   id: string
@@ -15,88 +16,123 @@ interface Route {
   duracion: number
   enfoque: string
   beneficios: string[]
-  modulos_count: number
-  icon: any
+  razon_seleccion: string
+  icon: React.ReactNode
   color: string
-  perfil_ideal: string
 }
 
-const routes: Route[] = [
-  {
-    id: 'liderazgo-ejecutivo',
-    nombre: 'Liderazgo Ejecutivo',
-    descripcion: 'Desarrolla habilidades de liderazgo estratégico, toma de decisiones y gestión de equipos de alto rendimiento.',
-    duracion: 90,
-    enfoque: 'Decisión & Estrategia',
-    beneficios: ['Decisiones estratégicas', 'Gestión de equipos', 'Visión a largo plazo', 'Influencia organizacional'],
-    modulos_count: 8,
-    icon: Target,
-    color: 'from-blue-500 to-blue-600',
-    perfil_ideal: 'D - Dominante (Decisor)',
-  },
-  {
-    id: 'comunicacion-influencia',
-    nombre: 'Comunicación & Influencia',
-    descripcion: 'Mejora tu capacidad de comunicación, persuasión y construcción de relaciones significativas en el equipo.',
-    duracion: 90,
-    enfoque: 'Relaciones & Conexión',
-    beneficios: ['Comunicación efectiva', 'Influencia social', 'Relaciones significativas', 'Trabajo colaborativo'],
-    modulos_count: 7,
-    icon: Users,
-    color: 'from-emerald-500 to-emerald-600',
-    perfil_ideal: 'I - Influyente (Comunicador)',
-  },
-  {
-    id: 'emprendimiento',
-    nombre: 'Emprendimiento & Innovación',
-    descripcion: 'Crea y escala negocios con metodología Lean Startup, validación de ideas y financiamiento.',
-    duracion: 90,
-    enfoque: 'Innovación & Crecimiento',
-    beneficios: ['Validación de ideas', 'Business model canvas', 'Pitch perfecto', 'Gestión de crecimiento'],
-    modulos_count: 9,
-    icon: Zap,
-    color: 'from-amber-500 to-amber-600',
-    perfil_ideal: 'I - Influyente (Emprendedor)',
-  },
-  {
-    id: 'transformacion-digital',
-    nombre: 'Transformación Digital',
-    descripcion: 'Lidera la transformación digital en tu organización con estrategia, tecnología y gestión del cambio.',
-    duracion: 90,
-    enfoque: 'Sistemas & Optimización',
-    beneficios: ['Estrategia digital', 'Herramientas modernas', 'Cambio organizacional', 'Automatización'],
-    modulos_count: 8,
-    icon: TrendingUp,
-    color: 'from-purple-500 to-purple-600',
-    perfil_ideal: 'C - Concienzudo (Analítico)',
-  },
-]
+const routeIcons: Record<string, any> = {
+  'liderazgo': Target,
+  'comunicacion': Users,
+  'emprendimiento': Zap,
+  'transformacion': TrendingUp,
+}
+
+const routeColors: Record<string, string> = {
+  'liderazgo': 'from-blue-500 to-blue-600',
+  'comunicacion': 'from-emerald-500 to-emerald-600',
+  'emprendimiento': 'from-amber-500 to-amber-600',
+  'transformacion': 'from-purple-500 to-purple-600',
+}
 
 export default function A2RoutasPage() {
   const router = useRouter()
-  const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
+  const supabase = createClient()
+  
+  const [routes, setRoutes] = useState<Route[]>([])
   const [userProfile, setUserProfile] = useState<any>(null)
+  const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadUserProfile()
+    loadUserDataAndGenerateRoutes()
   }, [])
 
-  const loadUserProfile = async () => {
+  const loadUserDataAndGenerateRoutes = async () => {
     try {
-      const cookieStore = await (await import('next/headers')).cookies()
-      const response = await fetch('/rest/coach-context', {
-        headers: { Cookie: cookieStore.toString() },
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.id) {
+        router.push('/auth/signin')
+        return
+      }
+
+      console.log('[v0] Loading user profile and responses for route generation...')
+
+      // Get A1 Cerebral profile
+      const { data: a1Data } = await supabase
+        .from('user_a1_profiles')
+        .select('disc_profile')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      // Get Conozcámonos-2 responses (Paso 1 - the one that determines the route)
+      const { data: c2Data } = await supabase
+        .from('canon_conozcamonos_2_responses')
+        .select('responses')
+        .eq('user_id', user.id)
+        .eq('paso', 1)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (!a1Data?.disc_profile || !c2Data?.responses) {
+        setError('No se encontraron tus respuestas. Por favor completa Conozcámonos 1 y 2 primero.')
+        setLoading(false)
+        return
+      }
+
+      setUserProfile({
+        profile: a1Data.disc_profile,
+        responses: c2Data.responses
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        if (data.context) {
-          setUserProfile(data.context)
-        }
+      // Generate routes using the real data
+      generateRoutes(user.id, a1Data.disc_profile, c2Data.responses)
+    } catch (err) {
+      console.error('[v0] Error loading user data:', err)
+      setError('Error al cargar tus datos. Intenta de nuevo.')
+      setLoading(false)
+    }
+  }
+
+  const generateRoutes = async (userId: string, profile: any, responses: any) => {
+    try {
+      console.log('[v0] Generating personalized routes...')
+      
+      // Call the backend route generator
+      const response = await fetch('/api/despega/canon-generate-route', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate routes')
       }
-    } catch (error) {
-      console.error('[v0] Error loading user profile:', error)
+
+      const generatedRoutes = await response.json()
+      console.log('[v0] Routes generated:', generatedRoutes)
+
+      // Format routes with icons and colors
+      const formattedRoutes: Route[] = (generatedRoutes.routes || []).map((route: any) => ({
+        id: route.id,
+        nombre: route.nombre,
+        descripcion: route.descripcion,
+        duracion: route.duracion || 90,
+        enfoque: route.enfoque,
+        beneficios: route.beneficios || [],
+        razon_seleccion: route.razon_seleccion,
+        icon: routeIcons[route.tipo] || Target,
+        color: routeColors[route.tipo] || 'from-slate-500 to-slate-600'
+      }))
+
+      setRoutes(formattedRoutes)
+    } catch (err) {
+      console.error('[v0] Error generating routes:', err)
+      setError('Error al generar tus rutas personalizadas. Intenta de nuevo.')
     } finally {
       setLoading(false)
     }
@@ -106,22 +142,60 @@ export default function A2RoutasPage() {
     setSelectedRoute(routeId)
     
     try {
-      const response = await fetch('/rest/assign-trainings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          route_id: routeId,
-        }),
-      })
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.id) return
 
-      if (response.ok) {
-        setTimeout(() => {
-          router.push(`/despega/a2/mision-90-dias?route=${routeId}`)
-        }, 500)
-      }
-    } catch (error) {
-      console.error('[v0] Error selecting route:', error)
+      // Save selected route
+      const { error: saveError } = await supabase
+        .from('user_a2_routes')
+        .insert({
+          user_id: user.id,
+          route_id: routeId,
+          selected_at: new Date().toISOString()
+        })
+
+      if (saveError) throw saveError
+
+      setTimeout(() => {
+        router.push(`/despega/a2/mision-90-dias?route=${routeId}`)
+      }, 500)
+    } catch (err) {
+      console.error('[v0] Error selecting route:', err)
+      setError('Error al seleccionar la ruta. Intenta de nuevo.')
+      setSelectedRoute(null)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary mb-4" />
+          <p className="text-lg text-muted-foreground">Generando tus rutas personalizadas...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center p-4">
+        <Card className="max-w-md border-red-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-600">
+              <AlertCircle className="w-5 h-5" />
+              Error
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm">{error}</p>
+            <Button onClick={() => router.push('/despega')} className="w-full">
+              Volver al Dashboard
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -130,97 +204,125 @@ export default function A2RoutasPage() {
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-            Elige Tu Ruta de Transformación
+            Tu Ruta Personalizada
           </h1>
           <p className="text-lg text-muted-foreground mb-6">
-            Cada ruta está diseñada para llevarte desde donde estás hasta donde quieres llegar en 90 días
+            Basadas en tu perfil {userProfile?.profile?.primary} y tus objetivos específicos
           </p>
-          {userProfile?.a1_context?.perfil_dominante && (
-            <Badge variant="secondary" className="text-base py-2 px-4">
-              Tu Perfil: {userProfile.a1_context.perfil_dominante} - {['D', 'I', 'S', 'C'].includes(userProfile.a1_context.perfil_dominante) ? 'Personalización detectada' : 'Genérica'}
-            </Badge>
+          {userProfile?.profile && (
+            <div className="space-y-2">
+              <Badge variant="secondary" className="text-base py-2 px-4">
+                Perfil Dominante: {['D', 'I', 'S', 'C'].includes(userProfile.profile.primary) ? 
+                  ['Directo', 'Inspirador', 'Seguro', 'Consciente'][['D', 'I', 'S', 'C'].indexOf(userProfile.profile.primary)] 
+                  : userProfile.profile.primary}
+              </Badge>
+              <p className="text-sm text-muted-foreground">
+                Puntuación: D={userProfile.profile.D}% I={userProfile.profile.I}% S={userProfile.profile.S}% C={userProfile.profile.C}%
+              </p>
+            </div>
           )}
         </div>
 
         {/* Routes Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {routes.map((route) => (
-            <Card 
-              key={route.id} 
-              className={`group border-2 cursor-pointer transition-all duration-300 ${
-                selectedRoute === route.id
-                  ? 'border-primary bg-primary/5 shadow-lg'
-                  : 'border-border hover:border-primary/50 hover:shadow-md'
-              }`}
-              onClick={() => selectRoute(route.id)}
-            >
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
-                    <route.icon className="w-6 h-6 text-white" />
+        {routes.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {routes.map((route) => (
+              <Card 
+                key={route.id} 
+                className={`group border-2 cursor-pointer transition-all duration-300 ${
+                  selectedRoute === route.id
+                    ? 'border-primary bg-primary/5 shadow-lg'
+                    : 'border-border hover:border-primary/50 hover:shadow-md'
+                }`}
+                onClick={() => selectRoute(route.id)}
+              >
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
+                      {route.icon && typeof route.icon === 'function' ? 
+                        <route.icon className="w-6 h-6 text-white" /> 
+                        : route.icon
+                      }
+                    </div>
                   </div>
-                  <Badge variant="outline">{route.modulos_count} módulos</Badge>
-                </div>
-                <CardTitle className="text-2xl group-hover:text-primary transition-colors">
-                  {route.nombre}
-                </CardTitle>
-                <CardDescription className="text-base mt-2">
-                  {route.descripcion}
-                </CardDescription>
-              </CardHeader>
+                  <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                    {route.nombre}
+                  </CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    {route.descripcion}
+                  </CardDescription>
+                </CardHeader>
 
-              <CardContent className="space-y-4">
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-muted rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-1">Duración</p>
-                    <p className="font-semibold">{route.duracion} días</p>
+                <CardContent className="space-y-4">
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground mb-1">Duración</p>
+                      <p className="font-semibold">{route.duracion} días</p>
+                    </div>
+                    <div className="p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground mb-1">Enfoque</p>
+                      <p className="font-semibold text-sm">{route.enfoque}</p>
+                    </div>
                   </div>
-                  <div className="p-3 bg-muted rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-1">Enfoque</p>
-                    <p className="font-semibold text-sm">{route.enfoque}</p>
+
+                  {/* Why this route */}
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm">
+                      <span className="font-semibold text-blue-900 dark:text-blue-100">Por qué para ti: </span>
+                      <span className="text-blue-800 dark:text-blue-200">{route.razon_seleccion}</span>
+                    </p>
                   </div>
-                </div>
 
-                {/* Benefits */}
-                <div>
-                  <p className="text-sm font-semibold mb-2">Lograrás:</p>
-                  <ul className="space-y-2">
-                    {route.beneficios.map((benefit, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
-                        <ChevronRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                        <span>{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* CTA */}
-                <Button 
-                  className="w-full group mt-4"
-                  disabled={selectedRoute === route.id}
-                >
-                  {selectedRoute === route.id ? (
-                    <>
-                      <span className="animate-spin mr-2">⏳</span>
-                      Iniciando...
-                    </>
-                  ) : (
-                    <>
-                      Elegir esta ruta
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </>
+                  {/* Benefits */}
+                  {route.beneficios.length > 0 && (
+                    <div>
+                      <p className="text-sm font-semibold mb-2">Lograrás:</p>
+                      <ul className="space-y-2">
+                        {route.beneficios.slice(0, 4).map((benefit, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-sm">
+                            <ChevronRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
+                  {/* CTA */}
+                  <Button 
+                    className="w-full group mt-4"
+                    disabled={selectedRoute === route.id}
+                  >
+                    {selectedRoute === route.id ? (
+                      <>
+                        <span className="animate-spin mr-2">⏳</span>
+                        Iniciando...
+                      </>
+                    ) : (
+                      <>
+                        Elegir esta ruta
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-4">No se generaron rutas. Intenta de nuevo.</p>
+            <Button onClick={loadUserDataAndGenerateRoutes}>
+              Reintentar
+            </Button>
+          </div>
+        )}
 
         {/* Info Footer */}
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
-            Puedes cambiar de ruta en cualquier momento desde tu dashboard
+            Cada ruta está diseñada según tu perfil y tus respuestas específicas
           </p>
           <Link href="/despega" className="inline-flex items-center text-primary hover:underline">
             Volver al Dashboard
@@ -231,3 +333,4 @@ export default function A2RoutasPage() {
     </div>
   )
 }
+
