@@ -92,8 +92,8 @@ export default function A1CerebralIntroPage() {
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">20 preguntas</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Responde 20 preguntas simples</p>
+                    <p className="font-semibold text-slate-900 dark:text-white">28 preguntas</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -117,38 +117,72 @@ export default function A1CerebralIntroPage() {
           {/* Example Question */}
           <Card className="border-0 shadow-lg bg-slate-50 dark:bg-slate-800">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl">Ejemplo de Pregunta</CardTitle>
-              <CardDescription>Así verás cada pregunta en el test</CardDescription>
+              <CardTitle className="text-2xl">Ejemplo Real de Pregunta</CardTitle>
+              <CardDescription>Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <p className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-                  En una situación de trabajo, yo soy más...
+              <div className="bg-white dark:bg-slate-700 p-6 rounded-lg">
+                <p className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+                  "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
-                <div className="space-y-3">
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                    <span className="font-semibold">Selecciona lo que MÁS te describe:</span>
-                  </p>
-                  <div className="p-3 border-2 border-blue-600 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                    <p className="text-slate-900 dark:text-white">Directo y decisivo en mis acciones</p>
+                
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">+</span>
+                      Selecciona lo que MÁS te describe:
+                    </p>
+                    <div className="space-y-2">
+                      <button className="w-full p-4 border-2 border-blue-600 bg-blue-50 dark:bg-blue-950 rounded-lg text-left hover:shadow-md transition-all">
+                        <p className="font-medium text-slate-900 dark:text-white">✓ Decidido y directo</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Directo (D)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Optimista e inspirador</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Inspirador (I)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Paciente y considerado</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Seguro (S)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Analítico y preciso</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Consciente (C)</p>
+                      </button>
+                    </div>
                   </div>
-                  <div className="p-3 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-500">
-                    <p className="text-slate-700 dark:text-slate-300">Entusiasta y motivador con otros</p>
+
+                  <div className="border-t border-slate-300 dark:border-slate-600 pt-6">
+                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
+                      <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">−</span>
+                      Selecciona lo que MENOS te describe:
+                    </p>
+                    <div className="space-y-2">
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Decidido y directo</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Directo (D)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Optimista e inspirador</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Inspirador (I)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                        <p className="text-slate-700 dark:text-slate-300">Paciente y considerado</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Seguro (S)</p>
+                      </button>
+                      <button className="w-full p-4 border-2 border-red-600 bg-red-50 dark:bg-red-950 rounded-lg text-left hover:shadow-md transition-all">
+                        <p className="font-medium text-slate-900 dark:text-white">✓ Analítico y preciso</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Consciente (C)</p>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="border-t border-slate-300 dark:border-slate-600 pt-6">
-                <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                    <span className="font-semibold">Selecciona lo que MENOS te describe:</span>
-                  </p>
-                  <div className="p-3 border-2 border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-500">
-                    <p className="text-slate-700 dark:text-slate-300">Paciente y receptivo con las ideas</p>
-                  </div>
-                  <div className="p-3 border-2 border-red-600 bg-red-50 dark:bg-red-950 rounded-lg mt-3">
-                    <p className="text-slate-900 dark:text-white">Analítico y perfeccionista en detalles</p>
-                  </div>
-                </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
+                </p>
               </div>
             </CardContent>
           </Card>
