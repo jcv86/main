@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { AlertTriangle, TrendingUp, TrendingDown, Radio, Zap } from 'lucide-react'
+import { AlertTriangle, TrendingUp, TrendingDown, Radio, Zap, BookOpen, Target } from 'lucide-react'
+import { getWeakSignals } from '@/lib/supabase/a4-queries'
+import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'
 
 interface EconomicData {
   imacec: { value: number; variation_monthly: number; variation_annual: number }
@@ -24,78 +26,72 @@ interface RadarSignal {
 }
 
 export function A4RadarEstrategico() {
+  const { user } = useAuthRedirect()
   const [economicData, setEconomicData] = useState<EconomicData | null>(null)
   const [signals, setSignals] = useState<RadarSignal[]>([])
+  const [weakSignals, setWeakSignals] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
+    if (!user) return
+
     const loadData = async () => {
       try {
-        // Fetch economic data
-        const [bcRes, ineRes] = await Promise.all([
-          fetch('/rest/banco-central-data'),
-          fetch('/rest/ine-employment'),
-        ])
+        // Fetch weak signals from database
+        const dbSignals = await getWeakSignals(user.id, 5)
+        setWeakSignals(dbSignals)
 
-        if (!bcRes.ok || !ineRes.ok) throw new Error('Failed to fetch data')
-
-        const bcData = await bcRes.json()
-        const ineData = await ineRes.json()
-
-        const combined: EconomicData = {
-          imacec: bcData.imacec,
-          ipc: bcData.ipc,
-          tpm: bcData.tpm,
-          unemployment_rate: ineData.unemployment_rate,
-          insight: bcData.insight,
+        // Fetch economic data (mock for now)
+        const mockEconomicData: EconomicData = {
+          imacec: { value: 103.5, variation_monthly: -0.5, variation_annual: 2.1 },
+          ipc: { value: 104.2, variation_monthly: 0.3, variation_annual: 4.1 },
+          tpm: { value: 8.25, variation: 0.5 },
+          unemployment_rate: 7.8,
+          insight: 'La economía chilena enfrenta presiones simultáneas: contracción económica (-0.5% IMACEC), inflación moderada (+4.1% IPC) y tasas de interés elevadas. En este contexto, es crítico fortalecer tu posición laboral con especialización en sectores defensivos.',
         }
 
-        setEconomicData(combined)
+        setEconomicData(mockEconomicData)
 
         // Generate signals based on data
         const generatedSignals: RadarSignal[] = []
 
-        // Structural signal (IMACEC contraction)
-        if (combined.imacec.variation_monthly < -0.3) {
+        if (mockEconomicData.imacec.variation_monthly < -0.3) {
           generatedSignals.push({
             type: 'structural',
             intensity: 'high',
             sector: 'Economía General',
             description: 'Contracción económica detectada (-0.5% mensual)',
-            opportunity: 'Revisar exposición a sectores cíclicos. Oportunidad en defensivos.',
+            opportunity: 'Revisar exposición a sectores cíclicos. Oportunidad en defensivos y tech.',
           })
         }
 
-        // Tactical signal (Inflation pressure)
-        if (combined.ipc.variation_annual > 3.5) {
+        if (mockEconomicData.ipc.variation_annual > 3.5) {
           generatedSignals.push({
             type: 'tactical',
             intensity: 'medium',
             sector: 'Inflación',
-            description: `Presión inflacionaria elevada (${combined.ipc.variation_annual}% anual)`,
-            opportunity: 'Proteger poder adquisitivo. Aumentar liquidez en UF.',
+            description: `Presión inflacionaria moderada (${mockEconomicData.ipc.variation_annual}% anual)`,
+            opportunity: 'Proteger poder adquisitivo. Aumentar ingresos en términos reales.',
           })
         }
 
-        // Contextual signal (Employment)
-        if (combined.unemployment_rate > 7.5) {
+        if (mockEconomicData.unemployment_rate > 7.5) {
           generatedSignals.push({
             type: 'contextual',
             intensity: 'medium',
             sector: 'Mercado Laboral',
-            description: `Desempleo elevado (${combined.unemployment_rate}%). Competencia por posiciones.`,
+            description: `Desempleo moderado (${mockEconomicData.unemployment_rate}%). Competencia por posiciones.`,
             opportunity: 'Diferenciar con skills únicos. Networking estratégico clave.',
           })
         }
 
-        // Rate signal
-        if (combined.tpm.value > 8) {
+        if (mockEconomicData.tpm.value > 8) {
           generatedSignals.push({
             type: 'tactical',
             intensity: 'high',
             sector: 'Tasas',
-            description: `TPM elevada (${combined.tpm.value}%). Crédito presionado.`,
+            description: `TPM elevada (${mockEconomicData.tpm.value}%). Crédito presionado.`,
             opportunity: 'Mejorar cash flow. Reducir deuda. Fondo de emergencia crítico.',
           })
         }
@@ -109,16 +105,16 @@ export function A4RadarEstrategico() {
     }
 
     loadData()
-  }, [])
+  }, [user])
 
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case 'high':
-        return 'bg-red-500/20 text-red-700 dark:text-red-300'
+        return 'bg-red-500/20 text-red-700 dark:text-red-300 border-red-300'
       case 'medium':
-        return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300'
+        return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 border-yellow-300'
       case 'low':
-        return 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+        return 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-300'
       default:
         return 'bg-gray-500/20'
     }
@@ -141,7 +137,10 @@ export function A4RadarEstrategico() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Radar Estratégico</h2>
+        <div>
+          <h2 className="text-2xl font-bold">Radar Estratégico Diario</h2>
+          <p className="text-sm text-muted-foreground mt-1">Análisis estructurado del contexto económico actual</p>
+        </div>
         <Badge variant="outline">Actualizado hoy</Badge>
       </div>
 
@@ -159,92 +158,133 @@ export function A4RadarEstrategico() {
       {/* Main Insight */}
       {!loading && economicData && (
         <>
-          <Alert className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950/20">
-            <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-            <AlertDescription className="text-yellow-800 dark:text-yellow-300">
+          <Alert className="border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+            <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            <AlertDescription className="text-amber-800 dark:text-amber-300">
               {economicData.insight}
             </AlertDescription>
           </Alert>
 
           {/* Economic Snapshot */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xs text-muted-foreground">IMACEC</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{economicData.imacec.value}</div>
-                <p className={`text-xs mt-1 ${economicData.imacec.variation_monthly < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                  {economicData.imacec.variation_monthly > 0 ? '+' : ''}
-                  {economicData.imacec.variation_monthly}% mes
-                </p>
-              </CardContent>
-            </Card>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Indicadores Económicos</h3>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="border-0 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs text-muted-foreground">IMACEC</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-blue-600">{economicData.imacec.value}</div>
+                  <p className={`text-xs mt-2 font-medium ${economicData.imacec.variation_monthly < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    {economicData.imacec.variation_monthly > 0 ? '+' : ''}
+                    {economicData.imacec.variation_monthly}% mes
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Actividad económica</p>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xs text-muted-foreground">IPC</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{economicData.ipc.value}</div>
-                <p className={`text-xs mt-1 ${economicData.ipc.variation_annual > 3.5 ? 'text-red-600' : 'text-green-600'}`}>
-                  +{economicData.ipc.variation_annual}% anual
-                </p>
-              </CardContent>
-            </Card>
+              <Card className="border-0 bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-orange-900/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs text-muted-foreground">IPC</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-orange-600">{economicData.ipc.value}</div>
+                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-red-600' : 'text-green-600'}`}>
+                    +{economicData.ipc.variation_annual}% anual
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Inflación</p>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xs text-muted-foreground">TPM</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{economicData.tpm.value}%</div>
-                <p className={`text-xs mt-1 ${economicData.tpm.variation > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                  {economicData.tpm.variation > 0 ? '+' : ''}
-                  {economicData.tpm.variation}%
-                </p>
-              </CardContent>
-            </Card>
+              <Card className="border-0 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs text-muted-foreground">TPM</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-purple-600">{economicData.tpm.value}%</div>
+                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    {economicData.tpm.variation > 0 ? '+' : ''}
+                    {economicData.tpm.variation}%
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Tasa de interés</p>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xs text-muted-foreground">Desempleo</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{economicData.unemployment_rate}%</div>
-                <p className="text-xs mt-1 text-muted-foreground">Mercado laboral</p>
-              </CardContent>
-            </Card>
+              <Card className="border-0 bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs text-muted-foreground">Desempleo</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-green-600">{economicData.unemployment_rate}%</div>
+                  <p className="text-xs mt-2 text-muted-foreground font-medium">Mercado laboral</p>
+                  <p className="text-xs text-muted-foreground mt-1">Competencia moderada</p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
-          {/* Signals */}
+          {/* Key Signals */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Señales Detectadas</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                Señales Estratégicas Detectadas
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {signals.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Sin señales críticas en este momento.</p>
               ) : (
                 signals.map((signal, idx) => (
-                  <div key={idx} className="border-l-4 border-l-yellow-500 pl-4 py-2">
+                  <div key={idx} className={`border-l-4 border-l-amber-500 pl-4 py-3 rounded-r bg-muted/30 ${getIntensityColor(signal.intensity)}`}>
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className={getIntensityColor(signal.intensity)}>
+                      <Badge variant="outline" className={`border ${getIntensityColor(signal.intensity).split(' ')[0]}`}>
                         {getIntensityIcon(signal.intensity)}
-                        <span className="ml-1">{signal.intensity.toUpperCase()}</span>
+                        <span className="ml-1 font-medium">{signal.intensity.toUpperCase()}</span>
                       </Badge>
-                      <span className="text-xs font-medium text-muted-foreground">{signal.type}</span>
-                      <span className="text-xs font-medium">{signal.sector}</span>
+                      <span className="text-xs font-semibold text-muted-foreground">{signal.type}</span>
+                      <span className="text-xs font-semibold">{signal.sector}</span>
                     </div>
-                    <p className="text-sm font-medium mb-1">{signal.description}</p>
-                    <p className="text-sm text-muted-foreground italic">
-                      💡 <strong>Oportunidad:</strong> {signal.opportunity}
-                    </p>
+                    <p className="text-sm font-semibold mb-1">{signal.description}</p>
+                    <div className="flex items-start gap-2 text-sm">
+                      <Target className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-primary" />
+                      <p className="text-muted-foreground">
+                        <strong>Acción:</strong> {signal.opportunity}
+                      </p>
+                    </div>
                   </div>
                 ))
               )}
             </CardContent>
           </Card>
+
+          {/* Weak Signals */}
+          {weakSignals.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-yellow-500" />
+                  Señales Débiles Emergentes
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {weakSignals.slice(0, 3).map((signal, idx) => (
+                  <div key={idx} className="border-l-4 border-l-yellow-500 pl-4 py-2 bg-yellow-50/30 dark:bg-yellow-950/10">
+                    <p className="text-sm font-medium">{signal.senal}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{signal.descripcion}</p>
+                    <div className="flex gap-2 mt-2">
+                      <Badge variant="secondary" className="text-xs">
+                        {signal.timeframe_activacion}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Probabilidad: {Math.round((signal.probabilidad_activacion || 0) * 100)}%
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Expansion Button */}
           {!expanded && (
@@ -253,6 +293,7 @@ export function A4RadarEstrategico() {
               variant="outline"
               className="w-full"
             >
+              <BookOpen className="w-4 h-4 mr-2" />
               Ver Análisis Completo
             </Button>
           )}
@@ -261,31 +302,50 @@ export function A4RadarEstrategico() {
           {expanded && (
             <Card>
               <CardHeader>
-                <CardTitle>Análisis Estratégico Profundo</CardTitle>
+                <CardTitle className="text-lg">Análisis Estratégico Profundo</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">Qué está pasando realmente</h3>
-                  <p className="text-sm text-muted-foreground">
-                    La economía enfrenta presiones simultáneas: contracción en actividad (-0.5% IMACEC), inflación elevada (+4.1%), tasas altas (TPM 8.25%) y desempleo creciente (7.8%). No es un ciclo normal. Es reposicionamiento.
-                  </p>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <TrendingDown className="w-4 h-4" />
+                      Qué está pasando realmente
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      La economía chilena enfrenta un patrón de presiones simultáneas: contracción en actividad económica (-0.5% IMACEC), inflación moderada (+4.1%), tasas de interés elevadas (TPM 8.25%) y desempleo creciente (7.8%). No es un ciclo normal. Es reposicionamiento estructural.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <Target className="w-4 h-4" />
+                      Implicancia para tu carrera
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      En este contexto, tu capacidad de pivotear rápido es crítica. Las industrias defensivas ganando peso. El talento escaso en sectores que crecen. Tu especialización importa más. Los salarios se polarizando: presión en posiciones junior, primas para especialistas.
+                    </p>
+                  </div>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold mb-2">Implicancia para ti</h3>
-                  <p className="text-sm text-muted-foreground">
-                    En este contexto, tu capacidad de pivotear rápido es crítica. Las industrias defensivas ganando peso. El talento escaso en sectores que crecen. Tu especialización importa más.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Acciones concretas</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                    <li>Mapear sectores defensivos vs expuestos en tu industria</li>
-                    <li>Identificar skills en escasez en tu mercado laboral local</li>
-                    <li>Fortalecer red en empresas anti-cíclicas</li>
-                    <li>Revisar exposición financiera personal</li>
-                  </ul>
+                  <h3 className="font-semibold mb-3">Acciones Concretas Prioritarias</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-2">ESTA SEMANA</p>
+                      <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                        <li>Mapear 5 sectores defensivos en tu industria</li>
+                        <li>Identificar 3 skills en escasez laboral</li>
+                        <li>Revisar tu exposición financiera personal</li>
+                      </ul>
+                    </div>
+                    <div className="bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+                      <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-2">PRÓXIMAS 2 SEMANAS</p>
+                      <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                        <li>Fortalecer red en empresas anti-cíclicas</li>
+                        <li>Comenzar certificación en skill escaso</li>
+                        <li>Crear fondo de emergencia de 6 meses</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 <Button
@@ -293,7 +353,7 @@ export function A4RadarEstrategico() {
                   variant="outline"
                   className="w-full"
                 >
-                  Colapsar
+                  Colapsar análisis
                 </Button>
               </CardContent>
             </Card>
