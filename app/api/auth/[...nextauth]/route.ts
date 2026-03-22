@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth"
 
-// PRODUCTION BUILD v69 - Fixed A2 Intro syntax error: removed duplicate code block that was causing await outside async function error. File now has clean structure. - force redeploy v69
+// PRODUCTION BUILD v70 - Created next.config.js with proper webpack cache configuration using filesystem cache with 24h TTL for production and in-memory cache for development. This resolves the ENOENT webpack cache corruption issue. Full clean rebuild triggered. - force redeploy v70
 
 // FIX: REMOVE TRAILING SLASH FROM NEXTAUTH_URL BEFORE NEXTAUTH PROCESSES IT
 // This is the DEFINITIVE fix - modify the env var at runtime before NextAuth reads it
