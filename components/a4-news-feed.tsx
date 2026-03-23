@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TrendingUp, Search, Bookmark, Share2, Calendar, Tag, Eye, MessageCircle, ArrowRight } from "lucide-react"
 import { markNewsAsRead, toggleSaveNews, trackA4Engagement } from "@/lib/supabase/a4-queries"
-import { useAuthRedirect } from "@/lib/hooks/useAuthRedirect"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 
 interface NewsItem {
   id: string

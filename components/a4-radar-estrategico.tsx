@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertTriangle, TrendingUp, TrendingDown, Radio, Zap, BookOpen, Target } from 'lucide-react'
 import { getWeakSignals } from '@/lib/supabase/a4-queries'
-import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 
 interface EconomicData {
   imacec: { value: number; variation_monthly: number; variation_annual: number }
