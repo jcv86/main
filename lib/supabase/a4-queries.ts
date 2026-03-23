@@ -349,6 +349,8 @@ export async function getRadarNoticias(limit = 5) {
  * WEAK SIGNALS QUERIES
  * =====================
  */
+
+export async function getWeakSignals(userId: string, limit = 10) {
   const supabase = createClient()
   
   const { data, error } = await supabase
