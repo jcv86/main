@@ -343,3 +343,577 @@ export async function getUserModuleProgress(userId: string) {
   
   return data || []
 }
+
+/**
+ * =====================
+ * GAMIFIED TESTS QUERIES
+ * =====================
+ */
+
+export async function getGamifiedTests(limit = 20) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_gamified_tests')
+    .select('*')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error fetching gamified tests:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function getTestById(testId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_gamified_tests')
+    .select('*')
+    .eq('id', testId)
+    .single()
+  
+  if (error) {
+    console.error('[v0] Error fetching test:', error)
+    return null
+  }
+  
+  return data
+}
+
+export async function getUserTestCompletions(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_user_test_completions')
+    .select('*')
+    .eq('user_id', userId)
+    .order('completed_at', { ascending: false })
+  
+  if (error) {
+    console.error('[v0] Error fetching test completions:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function submitTestAnswers(
+  userId: string,
+  testId: string,
+  answers: any,
+  score: number
+) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_user_test_completions')
+    .insert({
+      user_id: userId,
+      test_id: testId,
+      answers: answers,
+      score: score,
+      completed_at: new Date().toISOString(),
+    })
+    .select()
+    .single()
+  
+  if (error) {
+    console.error('[v0] Error submitting test answers:', error)
+    return null
+  }
+  
+  return data
+}
+
+/**
+ * =====================
+ * NOTICIAS QUERIES (Enhanced)
+ * =====================
+ */
+
+export async function getNoticiasPaginated(page = 1, limit = 10, category?: string) {
+  const supabase = createClient()
+  const offset = (page - 1) * limit
+  
+  let query = supabase
+    .from('a4_noticias')
+    .select('*', { count: 'exact' })
+  
+  if (category) {
+    query = query.eq('category', category)
+  }
+  
+  const { data, count, error } = await query
+    .order('published_at', { ascending: false })
+    .range(offset, offset + limit - 1)
+  
+  if (error) {
+    console.error('[v0] Error fetching paginated noticias:', error)
+    return { noticias: [], total: 0 }
+  }
+  
+  return {
+    noticias: data || [],
+    total: count || 0,
+  }
+}
+
+export async function searchNoticias(searchQuery: string, limit = 20) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_noticias')
+    .select('*')
+    .or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`)
+    .order('published_at', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error searching noticias:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function getNoticiasByCategory() {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_noticias')
+    .select('category')
+    .distinct()
+  
+  if (error) {
+    console.error('[v0] Error fetching categories:', error)
+    return []
+  }
+  
+  return (data?.map((item: any) => item.category).filter(Boolean) as string[]) || []
+}
+
+/**
+ * =====================
+ * PERSONALIZATION QUERIES
+ * =====================
+ */
+
+export async function getUserDISCProfile(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a1_disc_assessment')
+    .select('disc_profile, dominant_pattern, secondary_pattern')
+    .eq('user_id', userId)
+    .order('completed_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  
+  if (error) {
+    console.error('[v0] Error fetching DISC profile:', error)
+    return null
+  }
+  
+  return data
+}
+
+export async function getPersonalizedFeedSettings(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_personalized_feeds')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('active', true)
+  
+  if (error) {
+    console.error('[v0] Error fetching personalized feed:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+/**
+ * =====================
+ * BIBLIOTECA QUERIES
+ * =====================
+ */
+
+export async function getBibliotecaResources(limit = 20, category?: string) {
+  const supabase = createClient()
+  
+  let query = supabase
+    .from('biblioteca')
+    .select('*')
+    .eq('is_verified', true)
+  
+  if (category) {
+    query = query.eq('category', category)
+  }
+  
+  const { data, error } = await query
+    .order('relevance_score', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error fetching biblioteca resources:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function getBibliotecaCategories() {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('biblioteca')
+    .select('category')
+    .eq('is_verified', true)
+    .distinct()
+  
+  if (error) {
+    console.error('[v0] Error fetching biblioteca categories:', error)
+    return []
+  }
+  
+  return (data?.map((item: any) => item.category).filter(Boolean) as string[]) || []
+}
+
+export async function saveResource(userId: string, resourceId: string, resourceType: string) {
+  const supabase = createClient()
+  
+  const { error } = await supabase
+    .from('a4_user_saved_resources')
+    .insert({
+      user_id: userId,
+      resource_id: resourceId,
+      resource_type: resourceType,
+      saved_at: new Date().toISOString(),
+    })
+  
+  if (error) {
+    console.error('[v0] Error saving resource:', error)
+    return false
+  }
+  
+  return true
+}
+
+export async function getUserSavedResources(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_user_saved_resources')
+    .select('*')
+    .eq('user_id', userId)
+    .order('saved_at', { ascending: false })
+  
+  if (error) {
+    console.error('[v0] Error fetching saved resources:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+/**
+ * =====================
+ * ENGAGEMENT TRACKING (Enhanced)
+ * =====================
+ */
+
+export async function trackNewsEngagement(
+  userId: string,
+  newsId: string,
+  engagementType: 'view' | 'read' | 'save' | 'share',
+  metadata?: Record<string, any>
+) {
+  const supabase = createClient()
+  
+  let pointsGanados = 0
+  if (engagementType === 'read') pointsGanados = 1
+  if (engagementType === 'share') pointsGanados = 2
+  
+  const { error } = await supabase
+    .from('a4_news_engagement')
+    .upsert({
+      user_id: userId,
+      news_id: newsId,
+      leido: engagementType === 'read' || engagementType === 'view',
+      guardado: engagementType === 'save',
+      leido_at: engagementType === 'read' ? new Date().toISOString() : undefined,
+      guardado_at: engagementType === 'save' ? new Date().toISOString() : undefined,
+      puntos_ganados: pointsGanados,
+    }, {
+      onConflict: 'user_id,news_id'
+    })
+  
+  if (error) {
+    console.error('[v0] Error tracking news engagement:', error)
+    return false
+  }
+  
+  // Award points if earned
+  if (pointsGanados > 0) {
+    await awardPoints(userId, pointsGanados, 'news_engagement', newsId)
+  }
+  
+  return true
+}
+
+/**
+ * =====================
+ * POINTS & BADGES (Helper)
+ * =====================
+ */
+
+export async function awardPoints(
+  userId: string,
+  pointsAmount: number,
+  reason: string,
+  relatedId?: string
+) {
+  const supabase = createClient()
+  
+  // Get current balance
+  const { data: currentData } = await supabase
+    .from('a4_points_history')
+    .select('balance_nuevo')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  
+  const balanceAnterior = currentData?.balance_nuevo || 0
+  const balanceNuevo = balanceAnterior + pointsAmount
+  
+  // Insert points history
+  const { error } = await supabase
+    .from('a4_points_history')
+    .insert({
+      user_id: userId,
+      puntos_ganados: pointsAmount,
+      balance_anterior: balanceAnterior,
+      balance_nuevo: balanceNuevo,
+      razon: reason,
+      relacionado_a: reason,
+      relacionado_id: relatedId || null,
+    })
+  
+  if (error) {
+    console.error('[v0] Error awarding points:', error)
+    return false
+  }
+
+  return true
+}
+
+/**
+ * =====================
+ * BADGES & ACHIEVEMENTS
+ * =====================
+ */
+
+export async function getUserBadges(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_user_badges')
+    .select('*')
+    .eq('user_id', userId)
+    .order('earned_at', { ascending: false })
+  
+  if (error) {
+    console.error('[v0] Error fetching badges:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function awardBadge(userId: string, badgeId: string, badgeName: string, description: string) {
+  const supabase = createClient()
+  
+  // Check if user already has this badge
+  const { data: existing } = await supabase
+    .from('a4_user_badges')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('badge_id', badgeId)
+    .maybeSingle()
+  
+  if (existing) {
+    return false // Already has badge
+  }
+  
+  const { error } = await supabase
+    .from('a4_user_badges')
+    .insert({
+      user_id: userId,
+      badge_id: badgeId,
+      badge_name: badgeName,
+      description: description,
+      earned_at: new Date().toISOString(),
+    })
+  
+  if (error) {
+    console.error('[v0] Error awarding badge:', error)
+    return false
+  }
+  
+  return true
+}
+
+export async function getUserPoints(userId: string) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_points_history')
+    .select('balance_nuevo')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  
+  if (error) {
+    console.error('[v0] Error fetching points:', error)
+    return 0
+  }
+  
+  return data?.balance_nuevo || 0
+}
+
+export async function getPointsHistory(userId: string, limit = 20) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_points_history')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error fetching points history:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+/**
+ * =====================
+ * ENGAGEMENT METRICS
+ * =====================
+ */
+
+export async function getUserEngagementMetrics(userId: string) {
+  const supabase = createClient()
+  
+  // Get articles read
+  const { data: articlesRead } = await supabase
+    .from('a4_news_engagement')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('leido', true)
+    .count('exact')
+  
+  // Get articles shared
+  const { data: articlesShared } = await supabase
+    .from('a4_news_engagement')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('guardado', true)
+    .count('exact')
+  
+  // Get tests completed
+  const { data: testsCompleted } = await supabase
+    .from('a4_user_test_completions')
+    .select('score')
+    .eq('user_id', userId)
+  
+  // Get resources saved
+  const { data: resourcesSaved } = await supabase
+    .from('a4_user_saved_resources')
+    .select('id')
+    .eq('user_id', userId)
+    .count('exact')
+  
+  const testScores = testsCompleted?.map(t => t.score) || []
+  const averageTestScore = testScores.length > 0 
+    ? testScores.reduce((a, b) => a + b, 0) / testScores.length 
+    : 0
+  
+  return {
+    articles_read: articlesRead?.count || 0,
+    articles_shared: articlesShared?.count || 0,
+    tests_completed: testsCompleted?.length || 0,
+    average_test_score: averageTestScore,
+    resources_saved: resourcesSaved?.count || 0,
+    reading_streak: 0, // This would be calculated from consecutive days
+    social_reach: (articlesShared?.count || 0) * 5, // Estimate
+    libraries_accessed: 0, // Track library visits separately
+  }
+}
+
+/**
+ * =====================
+ * LEADERBOARD & RANKINGS
+ * =====================
+ */
+
+export async function getGlobalLeaderboard(limit = 10) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_points_history')
+    .select('user_id, balance_nuevo, created_at')
+    .order('balance_nuevo', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error fetching leaderboard:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+export async function getUserRank(userId: string) {
+  const supabase = createClient()
+  
+  const { data: userData } = await supabase
+    .from('a4_points_history')
+    .select('balance_nuevo')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  
+  if (!userData) {
+    return { rank: 0, totalPlayers: 0, points: 0 }
+  }
+  
+  const { count, error } = await supabase
+    .from('a4_points_history')
+    .select('id', { count: 'exact' })
+    .gt('balance_nuevo', userData.balance_nuevo)
+  
+  if (error) {
+    console.error('[v0] Error fetching rank:', error)
+    return { rank: 0, totalPlayers: 0, points: userData.balance_nuevo }
+  }
+  
+  return {
+    rank: (count || 0) + 1,
+    points: userData.balance_nuevo,
+    totalPlayers: 0, // This would need a separate count query
+  }
+}
