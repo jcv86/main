@@ -9,11 +9,11 @@ interface InterviewResponse {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params
     const supabase = await createClient()
-    const { userId } = params
     const body = await request.json()
 
     // Verify user
