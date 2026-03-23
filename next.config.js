@@ -1,13 +1,15 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   webpack: (config, { dev, isServer }) => {
-    // Configure webpack cache with fallback strategy
+    // Configure webpack cache with absolute path
     if (!dev && !isServer) {
       config.cache = {
         type: 'filesystem',
-        cacheDirectory: '.next/cache/webpack',
+        cacheDirectory: path.join(process.cwd(), '.next/cache/webpack'),
         buildDependencies: {
           config: [__filename],
         },
