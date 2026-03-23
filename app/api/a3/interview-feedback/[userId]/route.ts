@@ -225,11 +225,11 @@ Be specific and constructive. Consider the candidate's DISC profile (${userProfi
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params
     const supabase = await createClient()
-    const { userId } = params
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
 

@@ -304,9 +304,51 @@ export async function getUserTotalPoints(userId: string): Promise<number> {
 }
 
 /**
- * Get weak signals
+ * =====================
+ * RADAR ESTRATÉGICO QUERIES
+ * =====================
  */
-export async function getWeakSignals(userId: string, limit = 10) {
+
+export async function getRadarTesisDelDia() {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_noticias')
+    .select('*')
+    .order('published_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  
+  if (error) {
+    console.error('[v0] Error fetching radar tesis:', error)
+    return null
+  }
+  
+  return data
+}
+
+export async function getRadarNoticias(limit = 5) {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('a4_noticias')
+    .select('*')
+    .order('published_at', { ascending: false })
+    .limit(limit)
+  
+  if (error) {
+    console.error('[v0] Error fetching radar noticias:', error)
+    return []
+  }
+  
+  return data || []
+}
+
+/**
+ * =====================
+ * WEAK SIGNALS QUERIES
+ * =====================
+ */
   const supabase = createClient()
   
   const { data, error } = await supabase
