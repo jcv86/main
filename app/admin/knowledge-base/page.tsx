@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Plus, Search, Edit, Trash2, BookOpen, TrendingUp, Users, BarChart3 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -44,6 +45,7 @@ export default function AdminKnowledgeBasePage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editingBook, setEditingBook] = useState<KnowledgeBook | null>(null)
   const { toast } = useToast()
+  const supabase = createClient()
 
   const [formData, setFormData] = useState({
     title: "",
