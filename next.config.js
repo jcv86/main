@@ -3,7 +3,6 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   webpack: (config, { dev, isServer }) => {
     // Configure webpack cache with absolute path
     if (!dev && !isServer) {
