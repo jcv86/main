@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { userId: string; notificationId: string } }
+  { params }: { params: Promise<{ userId: string; notificationId: string }> }
 ) {
   try {
+    const { userId, notificationId } = await params
     const supabase = await createClient()
-    const { userId, notificationId } = params
     const body = await request.json()
 
     // Verify user
@@ -54,11 +54,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string; notificationId: string } }
+  { params }: { params: Promise<{ userId: string; notificationId: string }> }
 ) {
   try {
+    const { userId, notificationId } = await params
     const supabase = await createClient()
-    const { userId, notificationId } = params
 
     // Verify user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
