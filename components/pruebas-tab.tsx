@@ -4,8 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { BookMarked, ArrowRight, Users, TrendingUp, AlertCircle, CheckCircle } from "lucide-react"
+import { BookMarked, ArrowRight, AlertCircle, CheckCircle, TrendingUp } from "lucide-react"
 
 interface CaseStudy {
   id: string
@@ -20,7 +19,6 @@ interface CaseStudy {
   results: string
   keyLearnings: string[]
   relevantTesis?: string
-  completed?: boolean
 }
 
 const caseStudies: CaseStudy[] = [
@@ -115,7 +113,6 @@ export function PruebasTab() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* The Challenge */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-red-500" />
@@ -124,7 +121,6 @@ export function PruebasTab() {
             <p className="text-muted-foreground">{selectedCase.challenge}</p>
           </div>
 
-          {/* The Strategy */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <ArrowRight className="w-5 h-5 text-blue-500" />
@@ -133,7 +129,6 @@ export function PruebasTab() {
             <p className="text-muted-foreground">{selectedCase.strategy}</p>
           </div>
 
-          {/* The Results */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-green-500" />
@@ -142,7 +137,6 @@ export function PruebasTab() {
             <p className="text-muted-foreground">{selectedCase.results}</p>
           </div>
 
-          {/* Key Learnings */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-purple-500" />
@@ -158,7 +152,6 @@ export function PruebasTab() {
             </ul>
           </div>
 
-          {/* Related Thesis */}
           {selectedCase.relevantTesis && (
             <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
               <p className="text-sm text-muted-foreground mb-1">Tesis relacionada:</p>
@@ -166,7 +159,6 @@ export function PruebasTab() {
             </div>
           )}
 
-          {/* Mark Complete Button */}
           <Button
             className="w-full"
             variant={completed.has(selectedCase.id) ? "default" : "outline"}
