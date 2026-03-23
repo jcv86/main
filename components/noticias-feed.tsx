@@ -10,12 +10,9 @@ import {
   getNoticiasPaginated,
   getNoticiasByCategory,
   searchNoticias,
-  trackNewsEngagement,
 } from "@/lib/supabase/a4-queries"
-import { useSession } from "next-auth/react"
 
 export function NoticiasFeed() {
-  const { data: session } = useSession()
   const [noticias, setNoticias] = useState<any[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("")
@@ -66,9 +63,7 @@ export function NoticiasFeed() {
     }
   }
 
-  const handleSave = async (newsId: string) => {
-    if (!session?.user?.id) return
-
+  const handleSave = (newsId: string) => {
     const newSaved = new Set(saved)
     if (newSaved.has(newsId)) {
       newSaved.delete(newsId)
@@ -76,26 +71,15 @@ export function NoticiasFeed() {
       newSaved.add(newsId)
     }
     setSaved(newSaved)
-
-    await trackNewsEngagement(session.user.id, newsId, "save")
   }
 
-  const handleShare = async (newsId: string, title: string) => {
-    if (!session?.user?.id) return
-
-    await trackNewsEngagement(session.user.id, newsId, "share", { title })
-
+  const handleShare = (newsId: string, title: string) => {
     if (navigator.share) {
       navigator.share({
         title: "Despega A4",
         text: title,
       })
     }
-  }
-
-  const handleRead = async (newsId: string) => {
-    if (!session?.user?.id) return
-    await trackNewsEngagement(session.user.id, newsId, "read")
   }
 
   const totalPages = Math.ceil(total / itemsPerPage)
@@ -204,7 +188,6 @@ export function NoticiasFeed() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleRead(noticia.id)}
                     className="text-xs"
                   >
                     <TrendingUp className="w-3 h-3 mr-1" />
