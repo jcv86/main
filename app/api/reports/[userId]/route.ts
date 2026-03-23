@@ -5,11 +5,11 @@ import PDFDocument from '../../components/PDFDocument'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params
     const supabase = await createClient()
-    const { userId } = params
     const { searchParams } = new URL(request.url)
     const format = searchParams.get('format') || 'pdf'
 
