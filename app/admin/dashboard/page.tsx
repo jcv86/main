@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AdminDashboard } from '@/components/admin-dashboard'
@@ -12,6 +12,7 @@ import { ArrowLeft } from 'lucide-react'
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function AdminPage() {
       if (!user) {
         setIsAdmin(false)
         setLoading(false)
+        router.push('/despega')
         return
       }
 
@@ -35,10 +37,16 @@ export default function AdminPage() {
         .eq('id', user.id)
         .single()
 
+      if (!data?.is_admin) {
+        router.push('/despega')
+        return
+      }
+
       setIsAdmin(data?.is_admin || false)
     } catch (error) {
       console.error('Error checking admin status:', error)
       setIsAdmin(false)
+      router.push('/despega')
     } finally {
       setLoading(false)
     }
@@ -46,10 +54,6 @@ export default function AdminPage() {
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen">Cargando...</div>
-  }
-
-  if (!isAdmin) {
-    return <Redirect to="/despega" />
   }
 
   return (
