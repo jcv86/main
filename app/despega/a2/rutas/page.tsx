@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowRight, ChevronRight, Target, Users, TrendingUp, Zap, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { createElement } from 'react'
 
 interface Route {
   id: string
@@ -17,7 +18,7 @@ interface Route {
   enfoque: string
   beneficios: string[]
   razon_seleccion: string
-  icon: React.ReactNode
+  icon: React.ComponentType<{ className: string }>
   color: string
 }
 
@@ -253,9 +254,7 @@ export default function A2RoutasPage() {
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
-                      {route.icon && typeof route.icon === 'function' && 
-                        route.icon({ className: 'w-6 h-6 text-white' })
-                      }
+                      {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>
                   <CardTitle className="text-2xl group-hover:text-primary transition-colors">
