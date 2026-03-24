@@ -18,8 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
 
-    // Generate cache key
-    const queryHash = generateQueryHash(message, { userId })
+    const supabase = await createClient()
 
     // Check cache first
     const cachedResponse = await getCachedResponse(queryHash)

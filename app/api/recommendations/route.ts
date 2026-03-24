@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 10000))
 
     const generationPromise = (async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
 
       const { data: existingProfile } = await supabase
         .from("user_profiles")

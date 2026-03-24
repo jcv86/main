@@ -11,7 +11,7 @@ import html2canvas from 'html2canvas'
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const {
       data: { user }

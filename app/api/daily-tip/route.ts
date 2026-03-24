@@ -6,7 +6,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const careerStage = searchParams.get("stage") || "all"
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get a random tip for the user's career stage
     const { data: tips, error } = await supabase
