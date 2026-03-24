@@ -54,9 +54,9 @@ export async function POST(request: NextRequest) {
 
     // Key Metrics Section
     pdf.setFontSize(14)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Métricas Clave', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(11)
     yPosition += 10
 
@@ -75,9 +75,9 @@ export async function POST(request: NextRequest) {
 
     // Benchmark Comparison
     pdf.setFontSize(14)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Comparación con Benchmark', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(10)
     yPosition += 10
 
@@ -92,9 +92,9 @@ export async function POST(request: NextRequest) {
 
     // Achievements
     pdf.setFontSize(14)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Logros Desbloqueados', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(10)
     yPosition += 10
 
@@ -112,9 +112,9 @@ export async function POST(request: NextRequest) {
     yPosition = 20
 
     pdf.setFontSize(14)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('AI-Generated Insights', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(11)
     yPosition += 10
 
@@ -130,9 +130,9 @@ export async function POST(request: NextRequest) {
 
     // Recommendations
     pdf.setFontSize(12)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Recomendaciones para Mejorar', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(10)
     yPosition += 10
 
