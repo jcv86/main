@@ -22,13 +22,16 @@ export async function GET(request: NextRequest) {
         query = query.eq("test_type", testType)
       }
 
+      query = query.order("completed_at", { ascending: false })
+
+      let result
       if (latest === "true") {
-        query = query.order("completed_at", { ascending: false }).limit(1).single()
+        result = await query.limit(1).single()
       } else {
-        query = query.order("completed_at", { ascending: false })
+        result = await query
       }
 
-      const { data, error } = await query
+      const { data, error } = result
 
       if (!error && data) {
         return NextResponse.json(data)
