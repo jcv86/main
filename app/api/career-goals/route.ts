@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User ID and title required" }, { status: 400 })
     }
 
-    const adminClient = createAdminClient()
+    const adminClient = await createClient()
 
     if (userEmail) {
       console.log("[v0] Upserting user to ensure they exist...")

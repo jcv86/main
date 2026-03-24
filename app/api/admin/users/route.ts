@@ -146,7 +146,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: false, error: "User ID is required" }, { status: 400 })
     }
 
-    const adminClient = createAdminClient()
+    const adminClient = await createClient()
 
     // Update user
     const { data: updatedUser, error } = await adminClient
@@ -190,7 +190,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ success: false, error: "User ID is required" }, { status: 400 })
     }
 
-    const adminClient = createAdminClient()
+    const adminClient = await createClient()
 
     // Delete user
     const { error } = await adminClient.from("users").delete().eq("id", id)
