@@ -63,10 +63,12 @@ export async function GET(request: NextRequest) {
       return recommendations
     })()
 
-    const recommendations = await Promise.race([generationPromise, timeoutPromise]).catch((error) => {
+    let recommendations: any = getDemoRecommendations()
+    try {
+      recommendations = await Promise.race([generationPromise, timeoutPromise])
+    } catch (error) {
       console.log("[v0] Generation timeout or error, using demo recommendations")
-      return getDemoRecommendations()
-    })
+    }
 
     console.log("[v0] Returning", Array.isArray(recommendations) ? recommendations.length : 0, "recommendations")
 

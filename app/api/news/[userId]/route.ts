@@ -72,11 +72,13 @@ export async function GET(
         relevance_score: calculateRelevance(article, userProfile)
       }))
 
-      await supabase
-        .from('despega_news_cache')
-        .insert(cachesToSave)
-        .then()
-        .catch((err) => console.log('[v0] News already cached:', err.message))
+      try {
+        await supabase
+          .from('despega_news_cache')
+          .insert(cachesToSave)
+      } catch (cacheErr) {
+        console.log('[v0] News already cached:', (cacheErr as Error).message)
+      }
     }
 
     // Log engagement
