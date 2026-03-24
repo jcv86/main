@@ -21,16 +21,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Quick analysis with GPT-4o
-    const response = await openai.messages.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 400,
       messages: [
         {
           role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: `Analiza rápidamente esta captura de entrevista y proporciona 1-2 feedback puntuales INMEDIATOS.
+          content: `Analiza rápidamente esta captura de entrevista y proporciona 1-2 feedback puntuales INMEDIATOS.
 
 Enfócate en lo MÁS IMPORTANTE para mejorar AHORA MISMO:
 - ¿La postura es profesional?
@@ -49,22 +46,11 @@ Responde SOLO con JSON, máximo 2 feedback items:
     }
   ]
 }`
-            },
-            {
-              type: 'image',
-              source: {
-                type: 'base64',
-                media_type: 'image/jpeg',
-                data: frameData
-              }
-            }
-          ]
         }
       ]
     })
 
-    const analysisText =
-      response.content[0].type === 'text' ? response.content[0].text : '{}'
+    const analysisText = response.choices[0].message.content || '{}'
 
     try {
       const feedback = JSON.parse(analysisText)
