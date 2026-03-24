@@ -56,8 +56,14 @@ export async function GET(request: Request) {
 
     if (error) throw error
 
+    if (!Array.isArray(recommendations)) {
+      return NextResponse.json({
+        recommendations: [],
+      })
+    }
+
     return NextResponse.json({
-      recommendations: recommendations?.map((book: {
+      recommendations: recommendations.map((book: {
         id: string | number
         title: string
         author: string
@@ -68,7 +74,7 @@ export async function GET(request: Request) {
         ...book,
         match_score: 100 - (index * 5), // Score decreciente
         reason: index === 0 ? "Recomendado para tu nivel" : "Basado en tus intereses",
-      })) || [],
+      })),
     })
   } catch (error) {
     console.error("[v0] Recommendations error:", error)
