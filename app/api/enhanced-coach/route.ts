@@ -50,15 +50,30 @@ INSTRUCCIONES:
       },
       body: JSON.stringify({
         model: "gpt-4-turbo",
-        system: systemPrompt,
         messages: [
+          { role: "system", content: systemPrompt },
           ...conversationHistory.map((m: any) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user" as const, content: message },
-      ],
+            role: m.role as "user" | "assistant",
+            content: m.content,
+          })),
+          { role: "user" as const, content: message },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+      }),
     })
+
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(`OpenAI API error: ${error}`)
+    }
+
+    const data = await response.json()
+    const text = data.choices?.[0]?.message?.content || ""
+
+    if (!text) {
+      throw new Error("No response content from OpenAI")
+    }
 
     // Analizar respuesta para extraer información
     const analysis = analyzeResponse(message, text, currentStage)
