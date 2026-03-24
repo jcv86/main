@@ -674,6 +674,19 @@ export default function DespegaOnboarding() {
     const c1Progress = ((c1CurrentQuestion + 1) / c1Questions.length) * 100
 
     const handleC1Next = () => {
+      // Validar que si es texto, no esté vacío
+      if (currentC1Q.type === "text") {
+        const response = (c1Responses[currentC1Q.id] || "").trim()
+        if (!response) {
+          alert("Por favor, escribe una respuesta")
+          return
+        }
+        if (response.length < 5) {
+          alert("La respuesta es muy corta. Por favor, proporciona más detalles")
+          return
+        }
+      }
+
       if (c1CurrentQuestion < c1Questions.length - 1) {
         setC1CurrentQuestion(c1CurrentQuestion + 1)
       } else {
@@ -769,9 +782,13 @@ export default function DespegaOnboarding() {
                   <Button 
                     onClick={handleC1Next}
                     className="w-full"
+                    disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5}
                   >
                     Siguiente
                   </Button>
+                  {c1Responses[currentC1Q.id] && (c1Responses[currentC1Q.id] || "").trim().length < 5 && (
+                    <p className="text-sm text-red-500">La respuesta debe tener al menos 5 caracteres</p>
+                  )}
                 </div>
               )}
             </div>
