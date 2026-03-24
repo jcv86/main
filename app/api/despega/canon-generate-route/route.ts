@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { CanonRulesEngine } from '@/lib/canon-rules-engine'
 import { generateRoute30Days } from '@/lib/canon-routes-generator'
@@ -55,13 +56,13 @@ const validateResponses = (responses: any): { valid: boolean; errors: string[]; 
   return { valid: errors.length === 0, errors, adjusted }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { user_id } = body
 
     if (!user_id) {
-      return Response.json({ error: 'user_id required' }, { status: 400 })
+      return NextResponse.json({ error: 'user_id required' }, { status: 400 })
     }
 
     const supabase = await createClient()
@@ -155,7 +156,7 @@ export async function POST(request: Request) {
 
       if (updateError) {
         console.error('[v0] Error updating route:', updateError)
-        return Response.json({ error: 'Failed to update route' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to update route' }, { status: 500 })
       }
 
       routeId = updated.id
@@ -174,7 +175,7 @@ export async function POST(request: Request) {
 
       if (insertError) {
         console.error('[v0] Error inserting route:', insertError)
-        return Response.json({ error: 'Failed to insert route' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to insert route' }, { status: 500 })
       }
 
       routeId = inserted.id
@@ -204,7 +205,7 @@ export async function POST(request: Request) {
 
     console.log('[v0] Route generated successfully for user', user_id)
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       route_id: routeId,
       actions_count: actions.length,
@@ -212,6 +213,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('[v0] Error in canon-generate-route:', error)
-    return Response.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
