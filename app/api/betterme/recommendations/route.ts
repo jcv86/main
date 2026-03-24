@@ -57,7 +57,15 @@ export async function GET(request: Request) {
     if (error) throw error
 
     return NextResponse.json({
-      recommendations: recommendations?.map((book, index) => ({
+      recommendations: recommendations?.map((book: {
+        id: string | number
+        title: string
+        author: string
+        category: string
+        difficulty_level: string
+        estimated_read_time: number | null
+        content_length: number | null
+      }, index: number) => ({
         ...book,
         match_score: 100 - (index * 5), // Score decreciente
         reason: index === 0 ? "Recomendado para tu nivel" : "Basado en tus intereses",
