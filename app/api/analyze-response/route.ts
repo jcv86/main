@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,7 +31,7 @@ Formato de respuesta:
 `
 
     const { text } = await generateText({
-      model: "openai/gpt-4o",
+      model: openai("gpt-4o"),
       prompt,
       temperature: 0.7,
     })
