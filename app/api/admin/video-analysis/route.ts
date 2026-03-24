@@ -72,15 +72,46 @@ Respond with this exact structure:
 
     const content: (TextPart | ImagePart)[] = [textPart, ...imageParts]
 
-    const { text } = await generateText({
-      model: openai("gpt-4o"),
-      messages: [
-        {
-          role: "user",
-          content,
-        },
-      ],
+    // Call OpenAI API directly with vision capabilities
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: content.map((part) => {
+              if (part.type === "text") {
+                return { type: "text", text: part.text }
+              } else {
+                return {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${part.mimeType};base64,${part.image}`,
+                  },
+                }
+              }
+            }),
+          },
+        ],
+        max_tokens: 2000,
+      }),
     })
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    const text = data.choices?.[0]?.message?.content || ""
+
+    if (!text) {
+      throw new Error("No response from OpenAI")
+    }
 
     console.log("[v0] GPT-4o Response:", text.substring(0, 300))
 
