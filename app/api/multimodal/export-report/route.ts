@@ -74,9 +74,9 @@ export async function POST(request: NextRequest) {
 
     // Visual Analysis
     pdf.setFontSize(12)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Análisis Visual', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     yPosition += 8
     pdf.text(`Postura: ${analysis.visual_analysis.posture_quality}/100`, 30, yPosition)
     yPosition += 6
@@ -84,9 +84,9 @@ export async function POST(request: NextRequest) {
     yPosition += 12
 
     // Audio Analysis
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Análisis de Audio', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     yPosition += 8
     pdf.text(`Tono: ${analysis.audio_analysis.tone_quality}/100`, 30, yPosition)
     yPosition += 6
@@ -100,9 +100,9 @@ export async function POST(request: NextRequest) {
     yPosition = 20
 
     pdf.setFontSize(14)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Feedback Detallado', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(11)
     yPosition += 10
 
@@ -113,9 +113,9 @@ export async function POST(request: NextRequest) {
 
     // Recommendations
     pdf.setFontSize(12)
-    pdf.setFont(undefined, 'bold')
+    pdf.setFont('Helvetica', 'bold')
     pdf.text('Recomendaciones', 20, yPosition)
-    pdf.setFont(undefined, 'normal')
+    pdf.setFont('Helvetica', 'normal')
     pdf.setFontSize(10)
     yPosition += 8
 
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     // Upload to Blob storage
     const reportPath = `reports/${user.id}/${sessionId}/analysis-report.pdf`
     const uploadedBlob = await put(reportPath, pdfBlob, {
-      access: 'private',
+      access: 'public',
       addRandomSuffix: false
     })
 

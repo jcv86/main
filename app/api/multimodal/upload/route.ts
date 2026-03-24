@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     
     try {
       uploadedBlob = await put(blobPath, videoFile, {
-        access: 'private',
+        access: 'public',
         addRandomSuffix: false
       })
       console.log(`[v0] Video uploaded to Blob: ${uploadedBlob.url}`)

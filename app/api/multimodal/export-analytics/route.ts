@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
     // Upload to Blob storage
     const reportPath = `analytics-reports/${user.id}/${Date.now()}/analytics-${timeRange}.pdf`
     const uploadedBlob = await put(reportPath, pdfBlob, {
-      access: 'private',
+      access: 'public',
       addRandomSuffix: false
     })
 
