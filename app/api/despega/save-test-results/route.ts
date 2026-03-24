@@ -13,39 +13,6 @@ export async function POST(request: NextRequest) {
     } = body
 
     const supabase = await createClient()
-      console.error("[v0] Missing Supabase credentials")
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      )
-    }
-
-    // Create server client with cookies
-    const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
-
-    if (!supabase || !supabase.auth) {
-      console.error("[v0] Supabase client initialization failed")
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      )
-    }
 
     // Get authenticated user
     const {

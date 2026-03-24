@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { advancedBrain } from "@/lib/advanced-brain-engine"
 import { createClient } from "@/lib/supabase"
-import {
-  generateQueryHash,
+
+export const maxDuration = 30
   getCachedResponse,
   cacheResponse,
   trackAPIUsage,

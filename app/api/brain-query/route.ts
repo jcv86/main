@@ -1,15 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { callOpenAI } from "@/lib/openai-wrapper"
-import {
-  selectPersonality,
-  COACH_PERSONALITIES,
-  type CoachPersonality,
-  generateStructuredResponse,
-} from "@/lib/sofia-dani-prompts"
-import { detectIntention, getPromptForIntention, getCategoryInfo, trackEngagement } from "@/lib/intention-detector"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 // GET - Retrieve conversation history
 export async function GET(request: NextRequest) {

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { processWeeklyCoachingMemory } from "@/lib/coaching-memory-extractor"
 
-export const runtime = "nodejs"
+export const maxDuration = 300
 
 export async function GET(request: NextRequest) {
   try {

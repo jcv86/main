@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { semanticSearch, isOpenAIConfigured } from "@/lib/embeddings"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 export async function POST(request: NextRequest) {
   try {

@@ -21,65 +21,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User ID required' }, { status: 400 })
     }
 
-    // Get Supabase credentials from env
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[v0] Missing Supabase credentials')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
-    // Create server client with cookies for reading data
-    const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error silently
-          }
-        },
-      },
-    })
-
-    // Create service client for writing user record (bypasses RLS)
-    let supabaseService = supabase
-    if (supabaseServiceKey) {
-      supabaseService = createServerClient(supabaseUrl, supabaseServiceKey, {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              )
-            } catch {
-              // Handle error silently
-            }
-          },
-        },
-      })
-    }
-
+    // All Supabase operations use the authenticated client
     console.log('[v0] User ID from client:', user_id)
     console.log('[v0] DISC Profile:', disc_profile)
     
     // Ensure user exists in public users table (create if missing)
     // This handles users who logged in via client-side auth without going through email-login API
-    const { error: userCheckError } = await supabaseService
+    const { error: userCheckError } = await supabase
       .from('users')
       .upsert(
         {
@@ -118,8 +66,8 @@ export async function POST(request: NextRequest) {
     
     console.log('[v0] Inserting into a1_disc_assessment')
     
-    // Insert with explicit error handling (use service client to bypass RLS)
-    const { data, error } = await supabaseService
+    // Insert with explicit error handling
+    const { data, error } = await supabase
       .from('a1_disc_assessment')
       .insert([insertData])
       .select()

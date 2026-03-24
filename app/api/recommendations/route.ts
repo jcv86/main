@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY
 const NEWSAPI_URL = 'https://newsapi.org/v2/everything'
@@ -34,28 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'user_id required' }, { status: 400 })
     }
 
-    // Get server cookies
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              )
-            } catch {
-              // Handle error
-            }
-          },
-        },
-      }
-    )
+    const supabase = await createClient()
 
     // Get user profile (DISC)
     const { data: profile } = await supabase

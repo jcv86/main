@@ -3,7 +3,7 @@ import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
 import { callOpenAI } from "@/lib/openai-wrapper"
 
-export const runtime = "nodejs"
+export const maxDuration = 60
 
 export async function POST(request: NextRequest) {
   try {

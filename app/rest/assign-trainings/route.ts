@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * POST /api/despega/assign-trainings
@@ -19,15 +18,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[v0] Missing Supabase credentials')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
+    const supabase = await createClient()
       )
     }
 
