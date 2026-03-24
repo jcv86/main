@@ -340,17 +340,7 @@ Usuario: ${message}`
     }
 
     // Generate follow-up suggestions based on the conversation
-    const suggestedQuestions = []
-    if (intentionResult.intention === "career_advice") {
-      suggestedQuestions.push("¿Cuáles son mis próximos pasos de desarrollo?")
-      suggestedQuestions.push("¿Cómo puedo mejorar mis habilidades?")
-    } else if (intentionResult.intention === "personal_growth") {
-      suggestedQuestions.push("¿Cuál es mi próximo reto de crecimiento?")
-      suggestedQuestions.push("¿Cómo puedo aplicar esto en mi vida?")
-    } else {
-      suggestedQuestions.push("¿Necesitas más detalles sobre esto?")
-      suggestedQuestions.push("¿Cómo puedo ayudarte más?")
-    }
+    const suggestedQuestions = generateFollowUpSuggestions(message, enhancedResponse, intentionResult.intention, userContext || {})
 
     console.log("[v0] About to return response with suggestions count:", suggestedQuestions.length)
 
