@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
 export async function POST(req: Request) {
@@ -5,7 +6,7 @@ export async function POST(req: Request) {
     const { email, password } = await req.json()
 
     if (!email || !password) {
-      return Response.json(
+      return NextResponse.json(
         { message: 'Email y contraseña requeridos' },
         { status: 400 }
       )
@@ -22,14 +23,14 @@ export async function POST(req: Request) {
 
     if (error) {
       console.log('[v0] Supabase sign in error:', error.message)
-      return Response.json(
+      return NextResponse.json(
         { message: error.message || 'Email o contraseña incorrectos' },
         { status: 401 }
       )
     }
 
     if (!data.user) {
-      return Response.json(
+      return NextResponse.json(
         { message: 'Error al iniciar sesión' },
         { status: 401 }
       )
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
       // Continue anyway - user is authenticated, but might not be able to save data
     }
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       message: 'Sesión iniciada',
       user: {
@@ -66,7 +67,7 @@ export async function POST(req: Request) {
     })
   } catch (error) {
     console.error('[v0] Email login error:', error)
-    return Response.json(
+    return NextResponse.json(
       { message: 'Error al procesar solicitud' },
       { status: 500 }
     )
