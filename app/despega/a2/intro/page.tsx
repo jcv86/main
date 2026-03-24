@@ -129,20 +129,20 @@ export default function A2IntroPage() {
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
                 <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Directo</p>
-                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile.D}%</p>
+                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
+                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile?.energia}%</p>
                 </div>
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Inspirador</p>
-                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile.I}%</p>
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Enfoque</p>
+                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile?.enfoque}%</p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Seguro</p>
-                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile.S}%</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile?.relaciones}%</p>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Consciente</p>
-                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile.C}%</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile?.plan_ejecutivo}%</p>
                 </div>
               </div>
 
