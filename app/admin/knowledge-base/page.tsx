@@ -80,7 +80,7 @@ export default function AdminKnowledgeBasePage() {
 
       if (categoriesError) throw categoriesError
 
-      const uniqueCategories = [...new Set(categoriesData?.map((c: { category: string }) => c.category) || [])]
+      const uniqueCategories: string[] = [...new Set(categoriesData?.map((c: { category: string }) => c.category) || [])]
 
       setBooks(booksData || [])
       setCategories(uniqueCategories)
