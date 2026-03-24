@@ -17,7 +17,7 @@ export default function A3Page() {
   const [userDiscProfile, setUserDiscProfile] = useState<string | null>(null)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
-  const { progress } = useCoach()
+  const { currentProgress, coachMessages } = useCoach()
 
   useEffect(() => {
     if (authLoading || !user?.id) return
