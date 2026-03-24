@@ -1,10 +1,7 @@
-import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
 import { createClient } from '@/lib/supabase/server'
 import { buildCoachSystemPrompt, type CoachContext } from '@/lib/coach-ia'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
@@ -41,22 +38,45 @@ export async function POST(req: NextRequest) {
     // Build system prompt
     const systemPrompt = buildCoachSystemPrompt(coachContext)
 
-    // Stream response from AI
-    const result = await streamText({
-      model: openai('gpt-4-turbo'),
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: message
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 500
+    // Stream response from OpenAI API
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt,
+          },
+          {
+            role: 'user',
+            content: message,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+        stream: true,
+      }),
     })
 
-    // Return streaming response
-    return result.toTextStreamResponse()
+    if (!openaiResponse.ok) {
+      const error = await openaiResponse.text()
+      console.error('[v0] OpenAI API error:', error)
+      return new Response('AI service error', { status: 500 })
+    }
+
+    // Return the streaming response directly
+    return new Response(openaiResponse.body, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    })
   } catch (error) {
     console.error('[v0] Coach IA error:', error)
     return new Response('Internal server error', { status: 500 })
