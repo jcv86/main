@@ -116,22 +116,22 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate by category
-    const categories = [...new Set(metrics.map((m) => m.conversation_category))]
-    const byCategory = categories.map((category) => {
-      const categoryMetrics = metrics.filter((m) => m.conversation_category === category)
+    const categories = [...new Set(metrics.map((m: { conversation_category?: string }) => m.conversation_category))]
+    const byCategory = categories.map((category: string | undefined) => {
+      const categoryMetrics = metrics.filter((m: { conversation_category?: string }) => m.conversation_category === category)
       return {
         category,
         sessions: categoryMetrics.length,
         avgSatisfaction:
-          categoryMetrics.reduce((sum, m) => sum + (m.satisfaction_rating || 0), 0) / categoryMetrics.length,
-        avgEngagement: categoryMetrics.reduce((sum, m) => sum + (m.message_count || 0), 0) / categoryMetrics.length,
-        completionRate: (categoryMetrics.filter((m) => m.action_completed).length / categoryMetrics.length) * 100,
+          categoryMetrics.reduce((sum: number, m: { satisfaction_rating?: number }) => sum + (m.satisfaction_rating || 0), 0) / categoryMetrics.length,
+        avgEngagement: categoryMetrics.reduce((sum: number, m: { message_count?: number }) => sum + (m.message_count || 0), 0) / categoryMetrics.length,
+        completionRate: (categoryMetrics.filter((m: { action_completed?: boolean }) => m.action_completed).length / categoryMetrics.length) * 100,
       }
     })
 
     // Identify critical prompts (satisfaction < 4.3, action < 60%, engagement < 70%)
     const criticalPrompts = byCategory
-      .map((cat) => {
+      .map((cat: { avgSatisfaction: number; completionRate: number; avgEngagement: number; category?: string }) => {
         const issues = []
         if (cat.avgSatisfaction < 4.3) issues.push(`Satisfacción baja: ${cat.avgSatisfaction.toFixed(1)}★ (meta: 4.3+)`)
         if (cat.completionRate < 60)
@@ -165,11 +165,11 @@ export async function GET(request: NextRequest) {
       trendMap.get(date).push(m)
     })
 
-    const trends = Array.from(trendMap.entries()).map(([date, dayMetrics]) => ({
+    const trends = Array.from(trendMap.entries()).map(([date, dayMetrics]: [string, unknown[]]) => ({
       date,
-      satisfaction: dayMetrics.reduce((sum, m) => sum + (m.satisfaction_rating || 0), 0) / dayMetrics.length,
-      engagement: dayMetrics.reduce((sum, m) => sum + (m.message_count || 0), 0) / dayMetrics.length,
-      completionRate: (dayMetrics.filter((m) => m.action_completed).length / dayMetrics.length) * 100,
+      satisfaction: (dayMetrics as Array<{ satisfaction_rating?: number }>).reduce((sum: number, m) => sum + (m.satisfaction_rating || 0), 0) / dayMetrics.length,
+      engagement: (dayMetrics as Array<{ message_count?: number }>).reduce((sum: number, m) => sum + (m.message_count || 0), 0) / dayMetrics.length,
+      completionRate: ((dayMetrics as Array<{ action_completed?: boolean }>).filter((m) => m.action_completed).length / dayMetrics.length) * 100,
     }))
 
     return NextResponse.json({

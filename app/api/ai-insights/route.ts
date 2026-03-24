@@ -829,8 +829,8 @@ function getCareerMatchesByHollandCode(code: string, avgScore: number): any[] {
   return matches[code as keyof typeof matches] || matches["IEA"]
 }
 
-function getProfileDescription(testResults: any[], avgScore: number): string {
-  const testTypes = testResults.map((r) => r.test_type)
+function getProfileDescription(testResults: Array<{ test_type?: string }>, avgScore: number): string {
+  const testTypes = testResults.map((r: { test_type?: string }) => r.test_type)
 
   if (testTypes.includes("riasec") && testTypes.includes("disc")) {
     return "Tu combinación de evaluaciones RIASEC y DISC revela un perfil de liderazgo con intereses vocacionales claros y habilidades de comunicación desarrolladas."
