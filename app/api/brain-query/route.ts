@@ -182,9 +182,15 @@ export async function POST(request: NextRequest) {
     }
 
     const personality: CoachPersonality = selectPersonality(message, userContext, intentionResult.intention)
-    const coachConfig = COACH_PERSONALITIES[personality]
+    
+    // Map "auto" to a default personality or based on context
+    const selectedPersonality: "sofia" | "dani" = personality === "auto" 
+      ? (intentionResult.intention === "career_planning" ? "sofia" : "dani")
+      : personality
+    
+    const coachConfig = COACH_PERSONALITIES[selectedPersonality]
 
-    console.log("[v0] Selected coach:", personality, "for intention:", intentionResult.intention)
+    console.log("[v0] Selected coach:", selectedPersonality, "for intention:", intentionResult.intention)
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
@@ -194,7 +200,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date(),
       eventType: "message_sent",
       intention: intentionResult.intention,
-      coachPersonality: personality,
+      coachPersonality: selectedPersonality,
       metadata: {
         messageLength: message.length,
         confidence: intentionResult.confidence,
