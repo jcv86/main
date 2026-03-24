@@ -276,7 +276,14 @@ Instrucciones:
 
     const answer = completion.choices[0].message.content || "No pude generar una respuesta."
 
-    const avgSimilarity = contextChunks.reduce((sum, chunk) => sum + chunk.similarity, 0) / contextChunks.length
+    const avgSimilarity = contextChunks.reduce((sum: number, chunk: {
+      title: string
+      author: string
+      category: string
+      similarity: number
+      excerpt: string
+      sourceType: string
+    }) => sum + chunk.similarity, 0) / contextChunks.length
     const confidence = Math.round(avgSimilarity * 100)
 
     return NextResponse.json({
