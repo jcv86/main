@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { detectIntention, getPromptForIntention, getCategoryInfo } from "@/lib/intention-detector"
-import { type CoachPersonality, selectPersonality, COACH_PERSONALITIES } from "@/lib/sofia-dani-prompts"
+import { type CoachPersonality, selectPersonality, COACH_PERSONALITIES, generateStructuredResponse } from "@/lib/sofia-dani-prompts"
 
 export const maxDuration = 30
 
