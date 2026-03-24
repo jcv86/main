@@ -3,12 +3,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { A1_COACH_PROMPT, validateA1Response } from "@/lib/a1-coach-prompts"
 import { detectRedFlags, detectMedicalBoundaryViolation } from "@/lib/brandie-coherence-test"
 
-const A1CoachResponseSchema = z.object({
-  response: z.string().describe("The coaching response in Spanish"),
-  type: z.enum(["pattern_explanation", "normalization", "contextualization", "question"]).describe("Type of coaching response"),
-  patternIdentified: z.string().optional().describe("The pattern explained"),
-})
-
 // Rubric-based evaluation scores
 async function evaluateResponseRubric(response: string, pillar: string): Promise<{
   explainSystem: number  // 0-10: Does it explain context/invisibles vs personality?
