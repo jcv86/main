@@ -265,14 +265,42 @@ Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. U
 
 Usuario: ${message}`
 
-      console.log("[v0] Calling OpenAI with simplified pattern")
+      console.log("[v0] Calling OpenAI with direct API")
 
-      const { text: responseText } = await generateText({
-        model: "openai/gpt-4o-mini",
-        prompt,
-        maxOutputTokens: 800,
-        temperature: 0.7,
+      const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: coachConfig.systemPrompt,
+            },
+            {
+              role: "user",
+              content: `Contexto del usuario: ${contextDescription}\n\nResponde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.\n\nUsuario: ${message}`,
+            },
+          ],
+          max_tokens: 800,
+          temperature: 0.7,
+        }),
       })
+
+      if (!openaiResponse.ok) {
+        const error = await openaiResponse.text()
+        throw new Error(`OpenAI API error: ${error}`)
+      }
+
+      const data = await openaiResponse.json()
+      const responseText = data.choices?.[0]?.message?.content
+
+      if (!responseText) {
+        throw new Error("No response content from OpenAI")
+      }
 
       text = responseText
       console.log("[v0] OpenAI response received, length:", text.length)
