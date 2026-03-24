@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     // Lógica de recomendaciones según nivel
     let query = supabase
       .from("knowledge_base")
-      .select("id, title, author, category, difficulty_level, estimated_read_time, LENGTH(content) as content_length")
+      .select("id, title, author, category, difficulty_level, estimated_read_time")
       .not("id", "in", `(${completedIds.join(",") || "null"})`)
 
     // Filtrar por nivel
@@ -64,7 +64,6 @@ export async function GET(request: Request) {
         category: string
         difficulty_level: string
         estimated_read_time: number | null
-        content_length: number | null
       }, index: number) => ({
         ...book,
         match_score: 100 - (index * 5), // Score decreciente
