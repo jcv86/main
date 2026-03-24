@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId") || "demo-user"
     const conversationId = searchParams.get("conversationId")
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     if (conversationId) {
       // Get specific conversation
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     console.log("[v0] POST /api/brain-query - message:", message.substring(0, 50))
     console.log("[v0] userEmail:", userEmail)
 
-    const supabase = createClient()
+    const supabase = await createClient()
     if (userEmail) {
       await supabase.from("brain_analytics_events").insert({
         event_type: "query_received",
@@ -400,7 +400,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const { conversationId, action, rating, userId = "demo-user" } = await request.json()
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     if (action === "rate") {
       const { error } = await supabase
