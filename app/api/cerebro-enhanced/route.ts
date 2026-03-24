@@ -181,9 +181,9 @@ ${context}
 Respond thoughtfully, showing your reasoning when appropriate, and provide actionable guidance.`
 
   const text = await callOpenAI(
-    "Generate personalized professional guidance",
+    systemPrompt,
     query,
-    { temperature: 0.7, systemPrompt }
+    { temperature: 0.7 }
   )
 
   // Simulate reasoning extraction (in production, use structured output)
