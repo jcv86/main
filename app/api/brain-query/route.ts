@@ -318,7 +318,7 @@ Usuario: ${message}`
       timestamp: new Date(),
       eventType: "response_received",
       intention: intentionResult.intention,
-      coachPersonality: personality,
+      coachPersonality: selectedPersonality,
       metadata: {
         responseLength: text.length,
         usedFallback,
@@ -333,7 +333,7 @@ Usuario: ${message}`
         user_email: userEmail,
         session_id: conversationId || sessionId,
         event_data: {
-          coach: personality,
+          coach: selectedPersonality,
           used_fallback: usedFallback,
           response_length: text.length,
         },
