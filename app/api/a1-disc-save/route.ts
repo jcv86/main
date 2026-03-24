@@ -10,7 +10,12 @@ export async function POST(request: NextRequest) {
   try {
     console.log('[v0] A1 DISC Save API called')
     
-    const body = await request.json()
+    const body = await request.json() as {
+      user_id: string
+      responses: unknown
+      questions: unknown
+      disc_profile: Record<string, number>
+    }
     const { responses, questions, disc_profile, user_id } = body
     
     if (!user_id) {
