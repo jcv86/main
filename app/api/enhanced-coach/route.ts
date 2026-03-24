@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,11 +42,17 @@ INSTRUCCIONES:
 7. Responde en español, de forma conversacional pero profesional
 8. Máximo 150 palabras por respuesta`
 
-    const { text } = await generateText({
-      model: "anthropic/claude-sonnet-4-20250514",
-      system: systemPrompt,
-      messages: [
-        ...conversationHistory.map((m: any) => ({
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        system: systemPrompt,
+        messages: [
+          ...conversationHistory.map((m: any) => ({
           role: m.role as "user" | "assistant",
           content: m.content,
         })),

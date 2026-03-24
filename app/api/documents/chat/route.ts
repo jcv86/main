@@ -1,6 +1,5 @@
 import type { NextRequest } from "next/server"
 import { createAdminClient } from "@/lib/supabase-server"
-import { streamText } from "ai"
 
 export async function POST(request: NextRequest) {
   try {

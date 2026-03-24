@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         break
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Fetch all metrics within date range
     const { data: metrics, error } = await supabase

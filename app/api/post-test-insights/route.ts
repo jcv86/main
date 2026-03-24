@@ -1,9 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateObject } from "ai"
 import { z } from "zod"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
 
 export const runtime = "nodejs"
 

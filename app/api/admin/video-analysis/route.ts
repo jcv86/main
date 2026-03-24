@@ -1,6 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { ANALYSIS_TYPES, type AnalysisType } from "@/app/admin/video-analysis/config"
 import fs from "fs"
 import path from "path"
