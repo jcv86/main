@@ -14,9 +14,10 @@ interface DiscAssessmentData {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const body: DiscAssessmentData = await request.json()
+    const body = (await request.json()) as Record<string, unknown>
 
-    const { userId, disc_profile } = body
+    const userId = body.userId as string
+    const disc_profile = body.disc_profile as Record<string, number>
 
     if (!userId || !disc_profile || typeof disc_profile !== "object") {
       return NextResponse.json(
@@ -25,11 +26,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Type guard: ensure disc_profile is a valid object with string keys and number values
-    const typedDiscProfile = disc_profile as Record<string, number>
-
     // Calculate dominant and secondary patterns from scores
-    const sortedDimensions = Object.entries(typedDiscProfile)
+    const sortedDimensions = Object.entries(disc_profile as Record<string, number>)
       .sort((a, b) => (b[1] || 0) - (a[1] || 0))
 
     const dominant_pattern = String(sortedDimensions[0]?.[0] || "D")
@@ -41,10 +39,10 @@ export async function POST(request: NextRequest) {
       .upsert(
         {
           user_id: userId,
-          disc_d: typedDiscProfile.D || 0,
-          disc_i: typedDiscProfile.I || 0,
-          disc_s: typedDiscProfile.S || 0,
-          disc_c: typedDiscProfile.C || 0,
+          disc_d: disc_profile.D || 0,
+          disc_i: disc_profile.I || 0,
+          disc_s: disc_profile.S || 0,
+          disc_c: disc_profile.C || 0,
           dominant_pattern,
           secondary_pattern,
           assessment_date: new Date().toISOString(),
@@ -65,7 +63,7 @@ export async function POST(request: NextRequest) {
         userId,
         dominant_pattern,
         secondary_pattern,
-        disc_profile: typedDiscProfile,
+        disc_profile,
       },
     })
   } catch (error) {
