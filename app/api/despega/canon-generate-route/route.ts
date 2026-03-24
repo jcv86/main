@@ -180,21 +180,20 @@ export async function POST(request: NextRequest) {
       routeId = inserted.id
     }
 
-    // 5. Create trazability entries for the milestones
-    // Extract actions from the generated route milestones
-    const allMilestones = [
-      ...(route30.mision_30?.acciones || []),
-      ...(route30.mision_60?.acciones || []),
-      ...(route30.mision_90?.acciones || [])
+    // 5. Create trazability entries for the key tasks from milestones
+    const allTareas = [
+      ...(route30.mision_30?.tareas_clave || []),
+      ...(route30.mision_60?.tareas_clave || []),
+      ...(route30.mision_90?.tareas_clave || [])
     ]
 
-    const trazabilityEntries = allMilestones.map((action: any) => ({
+    const trazabilityEntries = allTareas.map((tarea: string, index: number) => ({
       user_id,
       route_id: routeId,
-      action_id: action.id,
-      action_title: action.title,
-      source_response_ids: action.trazability_source_response_ids || [],
-      source_response_text: JSON.stringify(action.trazability_source_response_ids?.map((id: number) => c2Paso1Responses.responses?.[id] || 'N/A') || []),
+      action_id: `tarea_${index}`,
+      action_title: tarea,
+      source_response_ids: [],
+      source_response_text: JSON.stringify({ milestone_task: tarea }),
       created_at: new Date().toISOString(),
     }))
 
@@ -214,7 +213,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       route_id: routeId,
-      actions_count: allMilestones.length,
+      actions_count: allTareas.length,
       route: route30,
     })
   } catch (error) {
