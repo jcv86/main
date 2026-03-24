@@ -9,7 +9,7 @@ export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     
     // Get authenticated user
     const { data: { user } } = await supabase.auth.getUser()
