@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
+import { callOpenAI } from "@/lib/openai-wrapper"
 import {
   selectPersonality,
   COACH_PERSONALITIES,
