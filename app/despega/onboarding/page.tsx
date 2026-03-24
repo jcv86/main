@@ -15,6 +15,11 @@ import { ConozcamonosDosComponent } from "@/components/conozcamonos-dos-componen
 
 type Step = "intro" | "instructions" | "conozcamonos1" | "camino" | "test" | "results" | "conozcamonos2" | "conozcamonos2-paso1" | "conozcamonos2-paso2" | "route-generated"
 
+type QuestionResponse = {
+  mas?: string
+  menos?: string
+}
+
 export default function DespegaOnboarding() {
   const router = useRouter()
   const [step, setStep] = useState<Step>("intro")
@@ -24,7 +29,7 @@ export default function DespegaOnboarding() {
   const [c2Paso1Question, setC2Paso1Question] = useState(0)
   const [c2Paso2Question, setC2Paso2Question] = useState(0)
   const [c2Paso1Loading, setC2Paso1Loading] = useState(false)
-  const [responses, setResponses] = useState<Record<number, string>>({})
+  const [responses, setResponses] = useState<Record<number, QuestionResponse>>({})
   const [results, setResults] = useState<any>(null)
   const [onboardingAlreadyCompleted, setOnboardingAlreadyCompleted] = useState(false)
   const [isFirstCompletion, setIsFirstCompletion] = useState(true)
@@ -353,7 +358,7 @@ export default function DespegaOnboarding() {
               <span>⏱️ 3 minutos</span>
               <span>•</span>
               <span>📊 Resultados inmediatos</span>
-              <span>•</span>
+              <span>��</span>
               <span>🎯 100% Preciso</span>
             </div>
 
