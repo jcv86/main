@@ -253,9 +253,8 @@ export default function A2RoutasPage() {
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
-                      {route.icon && typeof route.icon === 'function' ? 
-                        <route.icon className="w-6 h-6 text-white" /> 
-                        : route.icon
+                      {route.icon && typeof route.icon === 'function' && 
+                        route.icon({ className: 'w-6 h-6 text-white' })
                       }
                     </div>
                   </div>
