@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const adminClient = createAdminClient()
+    const adminClient = await createClient()
 
     const { data: existingUser } = await adminClient.from("users").select("id").eq("email", email).maybeSingle()
 
