@@ -118,17 +118,16 @@ export async function POST(request: NextRequest) {
       console.log('[v0] Nivel 4 validations found issues:', errors)
     }
 
-    // 2. Execute rules to get actions
-    const rulesEngine = new CanonRulesEngine(profileType)
-    const actions = rulesEngine.generateActionsFromResponses(
-      c1Responses?.responses || {},
-      adjusted,
-      c2Paso2Responses?.responses || {}
+    // 2. Execute rules to get actions using static method
+    const generatedRoute = CanonRulesEngine.generateRoute(
+      c2Paso1Responses.responses || {},
+      profileType,
+      c1Responses?.responses || {}
     )
-    console.log('[v0] Executed rules, got', actions.length, 'actions')
+    console.log('[v0] Executed rules, got generated route:', generatedRoute)
 
-    // 3. Generate 30-day route
-    const route30 = generateRoute30Days(actions, c2Paso1Responses.responses || {})
+    // 3. Store the generated route and related data
+    const route30 = generatedRoute
 
     // 4. Check if route already exists for this user+cycle
     const { data: existingRoute } = await supabase
@@ -181,14 +180,21 @@ export async function POST(request: NextRequest) {
       routeId = inserted.id
     }
 
-    // 5. Create trazability entries for each action
-    const trazabilityEntries = actions.flatMap((action) => ({
+    // 5. Create trazability entries for the milestones
+    // Extract actions from the generated route milestones
+    const allMilestones = [
+      ...(route30.mision_30?.acciones || []),
+      ...(route30.mision_60?.acciones || []),
+      ...(route30.mision_90?.acciones || [])
+    ]
+
+    const trazabilityEntries = allMilestones.map((action: any) => ({
       user_id,
       route_id: routeId,
       action_id: action.id,
       action_title: action.title,
-      source_response_ids: action.trazability_source_response_ids,
-      source_response_text: JSON.stringify(action.trazability_source_response_ids.map(id => c2Paso1Responses.responses?.[id] || 'N/A')),
+      source_response_ids: action.trazability_source_response_ids || [],
+      source_response_text: JSON.stringify(action.trazability_source_response_ids?.map((id: number) => c2Paso1Responses.responses?.[id] || 'N/A') || []),
       created_at: new Date().toISOString(),
     }))
 
@@ -208,7 +214,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       route_id: routeId,
-      actions_count: actions.length,
+      actions_count: allMilestones.length,
       route: route30,
     })
   } catch (error) {
