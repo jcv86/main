@@ -347,7 +347,21 @@ function generateCareerMatches(testResults: any[], hasRiasec: boolean, avgScore:
 }
 
 function generateDevelopmentPlan(testResults: any[], avgScore: number, completedTests: number) {
-  const plan = {
+  type Phase = {
+    phase: number
+    title: string
+    duration: string
+    objectives: string[]
+    activities: Array<{ week: string; tasks: string[] }>
+    expectedOutcomes: string[]
+  }
+
+  const plan: {
+    title: string
+    currentLevel: string
+    targetLevel: string
+    phases: Phase[]
+  } = {
     title: "Plan de Desarrollo Profesional 90 Días",
     currentLevel: getProfileLevel(avgScore),
     targetLevel: getNextLevel(avgScore),
@@ -384,13 +398,13 @@ function generateDevelopmentPlan(testResults: any[], avgScore: number, completed
           "Establecer métricas de progreso",
         ],
       },
-    ],
+    ] as Array<{ week: string; tasks: string[] }>,
     expectedOutcomes: [
       "Claridad completa sobre perfil profesional",
       "Objetivos específicos definidos",
       "Plan de acción detallado",
     ],
-  })
+  } satisfies Phase)
 
   // Phase 2: Skill Development (Days 31-60)
   plan.phases.push({
@@ -419,13 +433,13 @@ function generateDevelopmentPlan(testResults: any[], avgScore: number, completed
           "Ajustar enfoque basado en resultados",
         ],
       },
-    ],
+    ] as Array<{ week: string; tasks: string[] }>,
     expectedOutcomes: [
       "Mejora medible en habilidades objetivo",
       "Aplicación práctica exitosa",
       "Red de apoyo establecida",
     ],
-  })
+  } satisfies Phase)
 
   // Phase 3: Integration and Growth (Days 61-90)
   plan.phases.push({
@@ -454,13 +468,13 @@ function generateDevelopmentPlan(testResults: any[], avgScore: number, completed
           "Actualizar perfil profesional",
         ],
       },
-    ],
+    ] as Array<{ week: string; tasks: string[] }>,
     expectedOutcomes: [
       "Habilidades integradas en trabajo diario",
       "Reconocimiento por crecimiento",
       "Plan para próximo trimestre",
     ],
-  })
+  } satisfies Phase)
 
   return plan
 }
