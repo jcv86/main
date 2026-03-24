@@ -240,7 +240,14 @@ export async function POST(request: NextRequest) {
     })
 
     const context = contextChunks
-      .map((chunk, idx) => `Fuente ${idx + 1} (${chunk.title} por ${chunk.author}):\n${chunk.excerpt}\n`)
+      .map((chunk: {
+        title: string
+        author: string
+        category: string
+        similarity: number
+        excerpt: string
+        sourceType: string
+      }, idx: number) => `Fuente ${idx + 1} (${chunk.title} por ${chunk.author}):\n${chunk.excerpt}\n`)
       .join("\n\n")
 
     const completion = await openai.chat.completions.create({
