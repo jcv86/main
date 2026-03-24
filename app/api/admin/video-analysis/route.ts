@@ -1,9 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { ANALYSIS_TYPES, type AnalysisType } from "@/app/admin/video-analysis/config"
 import fs from "fs"
 import path from "path"
+
+type ImagePart = {
+  type: "image"
+  image: string
+  mimeType: string
+}
+
+type TextPart = {
+  type: "text"
+  text: string
+}
 
 async function extractFramesFromVideo(videoPath: string, maxFrames = 12): Promise<string[]> {
   // In production, use ffmpeg to extract actual frames
@@ -37,19 +47,17 @@ async function analyzeVideoWithGPT4o(
   const config = ANALYSIS_TYPES[analysisType]
 
   try {
-    const videoBase64 = videoBuffer.toString("base64")
+    const frames = await extractFramesFromVideo(videoPath)
 
-    const mimeType = videoPath.endsWith(".mov") ? "video/quicktime" : "video/mp4"
+    const imageParts: ImagePart[] = frames.map((frame) => ({
+      type: "image",
+      image: frame,
+      mimeType: "image/png",
+    }))
 
-    const { text } = await generateText({
-      model: openai("gpt-4o"),
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: `${config.prompt}
+    const textPart: TextPart = {
+      type: "text",
+      text: `${config.prompt}
 
 IMPORTANT: You MUST respond with ONLY valid JSON, no markdown, no code blocks, no extra text.
 
@@ -61,13 +69,16 @@ Respond with this exact structure:
   "questions": ["question1", "question2"],
   "answers": ["answer1", "answer2"]
 }`,
-            },
-            {
-              type: "video",
-              video: videoBase64,
-              mimeType: mimeType,
-            },
-          ],
+    }
+
+    const content: (TextPart | ImagePart)[] = [textPart, ...imageParts]
+
+    const { text } = await generateText({
+      model: "openai/gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content,
         },
       ],
     })
