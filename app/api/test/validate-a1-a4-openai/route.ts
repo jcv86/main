@@ -15,7 +15,12 @@ export async function POST(request: NextRequest) {
       a3_insights: null,
       a4_insights: null,
       brain_chain: null,
-      timestamps: {},
+      timestamps: {
+        a1: 0,
+        a2: 0,
+        a3: 0,
+        a4: 0,
+      },
     }
 
     // PHASE A1: Despega Cerebral Discovery Insights
