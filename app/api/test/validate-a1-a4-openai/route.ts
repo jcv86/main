@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
         a2: 0,
         a3: 0,
         a4: 0,
+        brain: 0,
       },
     }
 
