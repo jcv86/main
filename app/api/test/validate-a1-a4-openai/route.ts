@@ -9,7 +9,20 @@ export async function POST(request: NextRequest) {
       throw new Error("OPENAI_API_KEY environment variable is not set")
     }
 
-    const results = {
+    const results: {
+      a1_insights: string | null
+      a2_insights: string | null
+      a3_insights: string | null
+      a4_insights: string | null
+      brain_chain: string | null
+      timestamps: {
+        a1: number
+        a2: number
+        a3: number
+        a4: number
+        brain: number
+      }
+    } = {
       a1_insights: null,
       a2_insights: null,
       a3_insights: null,
