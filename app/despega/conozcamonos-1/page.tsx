@@ -204,13 +204,36 @@ export default function Conozcamonos1Page() {
                     
                     {/* Show text input for "Otro" option */}
                     {option === 'Otro' && isSelected && (
-                      <textarea
-                        value={customResponses[question.id] || ''}
-                        onChange={(e) => handleCustomText(e.target.value)}
-                        placeholder="Especifica tu respuesta..."
-                        className="w-full p-3 bg-background border border-border rounded-lg text-foreground text-sm"
-                        rows={3}
-                      />
+                      <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <textarea
+                          value={customResponses[question.id] || ''}
+                          onChange={(e) => handleCustomText(e.target.value)}
+                          placeholder="Especifica tu respuesta..."
+                          className="w-full p-3 bg-background border border-border rounded-lg text-foreground text-sm"
+                          rows={3}
+                        />
+                        
+                        <div className="flex gap-2 items-center flex-wrap">
+                          <VoiceInput
+                            onTranscript={(text) => {
+                              const current = customResponses[question.id] || ''
+                              handleCustomText(current + (current ? ' ' : '') + text)
+                            }}
+                            isDisabled={loading || validating}
+                          />
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            O habla para dictar
+                          </span>
+                        </div>
+                        
+                        <AIAssistant
+                          question={question.question}
+                          currentResponse={customResponses[question.id] || ''}
+                          onUseSuggestion={(suggestion) => {
+                            handleCustomText(suggestion)
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
                 )
