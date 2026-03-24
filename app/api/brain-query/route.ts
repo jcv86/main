@@ -190,17 +190,21 @@ export async function POST(request: NextRequest) {
 
     // Log engagement event to database
     if (userEmail) {
-      await supabase.from("brain_analytics_events").insert({
-        event_type: "message_processed",
-        event_category: "coaching",
-        user_email: userEmail,
-        session_id: sessionId,
-        event_data: {
-          intention: intentionResult.intention,
-          coachPersonality: selectedPersonality,
-          confidence: intentionResult.confidence,
-        },
-      }).catch(err => console.error("[v0] Analytics insert error:", err))
+      try {
+        await supabase.from("brain_analytics_events").insert({
+          event_type: "message_processed",
+          event_category: "coaching",
+          user_email: userEmail,
+          session_id: sessionId,
+          event_data: {
+            intention: intentionResult.intention,
+            coachPersonality: selectedPersonality,
+            confidence: intentionResult.confidence,
+          },
+        })
+      } catch (err) {
+        console.error("[v0] Analytics insert error:", err)
+      }
     }
 
     const relevantKnowledge: any[] = []
@@ -306,32 +310,23 @@ Usuario: ${message}`
       console.log("[v0] Using fallback response")
     }
 
-    await trackEngagement({
-      userId: actualUserId,
-      sessionId,
-      timestamp: new Date(),
-      eventType: "response_received",
-      intention: intentionResult.intention,
-      coachPersonality: selectedPersonality,
-      metadata: {
-        responseLength: text.length,
-        usedFallback,
-        sourcesFound: relevantKnowledge.length,
-      },
-    })
-
+    // Log response sent event to database
     if (userEmail) {
-      await supabase.from("brain_analytics_events").insert({
-        event_type: "response_sent",
-        event_category: "coaching",
-        user_email: userEmail,
-        session_id: conversationId || sessionId,
-        event_data: {
-          coach: selectedPersonality,
-          used_fallback: usedFallback,
-          response_length: text.length,
-        },
-      })
+      try {
+        await supabase.from("brain_analytics_events").insert({
+          event_type: "response_sent",
+          event_category: "coaching",
+          user_email: userEmail,
+          session_id: conversationId || sessionId,
+          event_data: {
+            coach: selectedPersonality,
+            used_fallback: usedFallback,
+            response_length: text.length,
+          },
+        })
+      } catch (err) {
+        console.error("[v0] Analytics insert error:", err)
+      }
     }
 
     let enhancedResponse = text
@@ -344,7 +339,18 @@ Usuario: ${message}`
       })
     }
 
-    const suggestedQuestions = generateFollowUpSuggestions(message, text, intentionResult.intention, userContext)
+    // Generate follow-up suggestions based on the conversation
+    const suggestedQuestions = []
+    if (intentionResult.intention === "career_advice") {
+      suggestedQuestions.push("¿Cuáles son mis próximos pasos de desarrollo?")
+      suggestedQuestions.push("¿Cómo puedo mejorar mis habilidades?")
+    } else if (intentionResult.intention === "personal_growth") {
+      suggestedQuestions.push("¿Cuál es mi próximo reto de crecimiento?")
+      suggestedQuestions.push("¿Cómo puedo aplicar esto en mi vida?")
+    } else {
+      suggestedQuestions.push("¿Necesitas más detalles sobre esto?")
+      suggestedQuestions.push("¿Cómo puedo ayudarte más?")
+    }
 
     console.log("[v0] About to return response with suggestions count:", suggestedQuestions.length)
 
