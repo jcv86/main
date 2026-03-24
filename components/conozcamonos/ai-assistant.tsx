@@ -6,9 +6,17 @@ interface AIAssistantProps {
   question: string
   currentResponse: string
   onUseSuggestion?: (suggestion: string) => void
+  buttonLabel?: string
+  title?: string
 }
 
-export function AIAssistant({ question, currentResponse, onUseSuggestion }: AIAssistantProps) {
+export function AIAssistant({ 
+  question, 
+  currentResponse, 
+  onUseSuggestion,
+  buttonLabel = 'Asistencia IA',
+  title = 'Asistencia IA'
+}: AIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [suggestion, setSuggestion] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -65,7 +73,7 @@ export function AIAssistant({ question, currentResponse, onUseSuggestion }: AIAs
         <div className="flex items-start gap-2">
           <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-blue-900 dark:text-blue-100">Asistencia IA</p>
+            <p className="font-semibold text-blue-900 dark:text-blue-100">{title}</p>
             <p className="text-sm text-blue-800 dark:text-blue-200 mt-0.5">
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>

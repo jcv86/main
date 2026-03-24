@@ -232,6 +232,8 @@ export default function Conozcamonos1Page() {
                           onUseSuggestion={(suggestion) => {
                             handleCustomText(suggestion)
                           }}
+                          buttonLabel="Asistencia Tu Coach"
+                          title="Tu Coach IA"
                         />
                       </div>
                     )}
@@ -270,6 +272,8 @@ export default function Conozcamonos1Page() {
                 onUseSuggestion={(suggestion) => {
                   handleAnswer(suggestion)
                 }}
+                buttonLabel="Asistencia Tu Coach"
+                title="Tu Coach IA"
               />
             </div>
           )}
