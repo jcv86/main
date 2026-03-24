@@ -19,6 +19,7 @@ export default function A4Page() {
   const [loading, setLoading] = useState(true)
   const [newsItems, setNewsItems] = useState<any[]>([])
   const [modules, setModules] = useState<any[]>([])
+  const [resources, setResources] = useState<any[]>([])
   const [savedResources, setSavedResources] = useState<Set<string>>(new Set())
   const [activeTab, setActiveTab] = useState("dashboard")
   const [userStats, setUserStats] = useState({
@@ -98,6 +99,26 @@ export default function A4Page() {
 
   const handleCompleteModule = async (moduleId: string, responses: string[]) => {
     console.log("Module completed:", moduleId, responses)
+  }
+
+  const handleSaveResource = (resourceId: string) => {
+    setSavedResources(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(resourceId)) {
+        newSet.delete(resourceId)
+      } else {
+        newSet.add(resourceId)
+      }
+      return newSet
+    })
+  }
+
+  const handleRemoveResource = (resourceId: string) => {
+    setSavedResources(prev => {
+      const newSet = new Set(prev)
+      newSet.delete(resourceId)
+      return newSet
+    })
   }
 
   if (loading) {
@@ -396,7 +417,7 @@ export default function A4Page() {
         </TabsContent>
 
         <TabsContent value="biblioteca" className="space-y-6">
-          <A4ResourceLibrary />
+          <A4ResourceLibrary resources={resources} onSaveResource={handleSaveResource} onRemoveResource={handleRemoveResource} />
         </TabsContent>
       </Tabs>
 
