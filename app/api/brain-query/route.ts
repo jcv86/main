@@ -185,7 +185,7 @@ export async function POST(request: NextRequest) {
     
     // Map "auto" to a default personality or based on context
     const selectedPersonality: "sofia" | "dani" = personality === "auto" 
-      ? (intentionResult.intention === "career_planning" ? "sofia" : "dani")
+      ? (intentionResult.intention === "career_exploration" ? "sofia" : "dani")
       : personality
     
     const coachConfig = COACH_PERSONALITIES[selectedPersonality]
