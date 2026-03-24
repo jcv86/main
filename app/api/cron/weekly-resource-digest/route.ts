@@ -1,7 +1,7 @@
-import { createServerClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 
-export const runtime = "nodejs"
+export const maxDuration = 60
 
 export async function GET(request: NextRequest) {
   // Verify cron secret
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const supabase = await createServerClient()
+    const supabase = await createClient()
 
     // Get all active users
     const { data: users } = await supabase.from("auth.users").select("id").limit(100)
