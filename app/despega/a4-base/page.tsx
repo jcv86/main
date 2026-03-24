@@ -28,7 +28,7 @@ export default function A4Page() {
     streak: 0,
     badges: [],
   })
-  const { progress } = useCoach()
+  const { currentProgress, coachMessages } = useCoach()
   const supabase = createClient()
 
   useEffect(() => {
