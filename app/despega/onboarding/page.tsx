@@ -118,11 +118,16 @@ export default function DespegaOnboarding() {
     setLoading(true)
     
     const scores = { D: 0, I: 0, S: 0, C: 0 }
+    const discKeys: (keyof typeof scores)[] = ["D", "I", "S", "C"]
 
     DISC_TEST_QUESTIONS.forEach((q) => {
       const response = responses[q.id]
-      if (response?.mas) scores[response.mas] += 2
-      if (response?.menos) scores[response.menos] -= 1
+      if (response?.mas && discKeys.includes(response.mas as keyof typeof scores)) {
+        scores[response.mas as keyof typeof scores] += 2
+      }
+      if (response?.menos && discKeys.includes(response.menos as keyof typeof scores)) {
+        scores[response.menos as keyof typeof scores] -= 1
+      }
     })
 
     const normalizedScores = {
