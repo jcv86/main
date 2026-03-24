@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authConfig } from "@/lib/auth"
+import { createClient } from "@/lib/supabase/server"
 import { enrichProfileFromGoogle, enrichProfileFromLinkedIn } from "@/lib/enrich-profile"
 
 /**
@@ -11,9 +10,10 @@ export async function POST(request: NextRequest) {
   try {
     console.log("[v0] Auth Callback: Starting profile enrichment...")
 
-    const session = await getServerSession(authConfig)
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (!session?.user) {
+    if (authError || !user) {
       console.error("[v0] No session found")
       return NextResponse.json(
         { success: false, error: "No session" },
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const userId = session.user.id || session.user.email
+    const userId = user.id
 
     if (!userId) {
       console.error("[v0] No user ID in session")
