@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     if (c2Error || !c2Paso1Responses) {
       console.error('[v0] Error fetching C2 responses:', c2Error)
-      return Response.json({ error: 'C2 responses not found' }, { status: 404 })
+      return NextResponse.json({ error: 'C2 responses not found' }, { status: 404 })
     }
 
     // 3. Get C2-Paso2 responses (if any)
