@@ -388,7 +388,7 @@ export default function A4Page() {
         </TabsContent>
 
         <TabsContent value="noticias" className="space-y-6">
-          <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
+          <A4NewsFeed items={newsItems} />
         </TabsContent>
 
         <TabsContent value="modulos" className="space-y-6">
