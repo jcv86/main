@@ -1,21 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase/server"
 
 // GET - List all users
 export async function GET() {
   try {
-    console.log("[v0] Admin Users API - GET request received")
-
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      console.error("[v0] Missing Supabase environment variables")
+    if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
-        { success: false, error: "Server configuration error: Missing Supabase credentials" },
+        { success: false, error: "Server configuration error: Missing API credentials" },
         { status: 500 },
       )
     }
 
-    const adminClient = createAdminClient()
-    console.log("[v0] Admin client created successfully")
+    const adminClient = await createClient()
 
     const { data: users, error } = await adminClient.from("users").select("*").order("created_at", { ascending: false })
 

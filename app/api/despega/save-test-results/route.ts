@@ -1,6 +1,5 @@
-import { createServerClient } from "@supabase/ssr"
+import { createClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,11 +12,7 @@ export async function POST(request: NextRequest) {
       caminoProfesional,
     } = body
 
-    // Get Supabase credentials from env
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
+    const supabase = await createClient()
       console.error("[v0] Missing Supabase credentials")
       return NextResponse.json(
         { error: "Server configuration error" },

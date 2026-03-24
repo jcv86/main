@@ -1,4 +1,3 @@
-import { embed } from "ai"
 import { createClient } from "@supabase/supabase-js"
 
 // Only use server-side API key
@@ -49,10 +48,24 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
       return null
     }
 
-    const { embedding } = await embed({
-      model: "openai/text-embedding-3-small",
-      value: text.trim(),
+    const response = await fetch("https://api.openai.com/v1/embeddings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "text-embedding-3-small",
+        input: text.trim(),
+      }),
     })
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    const embedding = data.data?.[0]?.embedding
 
     if (!embedding || !Array.isArray(embedding)) {
       return null

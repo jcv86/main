@@ -1,6 +1,5 @@
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 /**
  * API endpoint to save A1 DISC test results to Supabase
@@ -8,8 +7,6 @@ import { cookies } from 'next/headers'
  */
 export async function POST(request: NextRequest) {
   try {
-    console.log('[v0] A1 DISC Save API called')
-    
     const body = await request.json() as {
       user_id: string
       responses: unknown
@@ -17,7 +14,8 @@ export async function POST(request: NextRequest) {
       disc_profile: Record<string, number>
     }
     const { responses, questions, disc_profile, user_id } = body
-    
+
+    const supabase = await createClient()
     if (!user_id) {
       console.error('[v0] No user_id provided')
       return NextResponse.json({ error: 'User ID required' }, { status: 400 })

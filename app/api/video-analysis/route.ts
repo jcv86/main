@@ -1,18 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createServerClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase/server"
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "500mb",
-    },
-  },
-  maxDuration: 300, // 5 minutes timeout for long videos
-}
+export const maxDuration = 300 // 5 minutes timeout for long videos
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createServerClient()
+    const supabase = await createClient()
 
     // Check authentication
     const {
