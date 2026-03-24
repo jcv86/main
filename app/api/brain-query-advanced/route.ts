@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { advancedBrain } from "@/lib/advanced-brain-engine"
 import { createClient } from "@/lib/supabase"
 import {
+  generateQueryHash,
   getCachedResponse,
   cacheResponse,
   trackAPIUsage,
