@@ -77,7 +77,8 @@ ${message}`
 
     // Post-generation validation
     const validation = validateA2Response(parsedResponse.response)
-    const redFlags = detectRedFlags(parsedResponse.response, "a2")
+    // A2 uses A1 pillar rules for red flags detection since A2 deepens A1 patterns
+    const redFlags = detectRedFlags(parsedResponse.response, "a1")
 
     // Log any violations
     if (!validation.valid || redFlags.length > 0) {
