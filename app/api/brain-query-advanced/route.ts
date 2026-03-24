@@ -1,15 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { advancedBrain } from "@/lib/advanced-brain-engine"
 import { createClient } from "@/lib/supabase"
-
-export const maxDuration = 30
+import {
   getCachedResponse,
   cacheResponse,
   trackAPIUsage,
   trackAnalyticsEvent,
 } from "@/lib/performance-optimizer"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()

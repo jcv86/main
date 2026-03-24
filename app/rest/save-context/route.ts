@@ -19,16 +19,6 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = await createClient()
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
 
     console.log(`[v0] Saving coach context snapshot for user ${user_id}`)
 

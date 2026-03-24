@@ -6,16 +6,6 @@ export const maxDuration = 30
 export async function POST(req: NextRequest) {
   try {
     const supabase = await createClient()
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      },
-    )
 
     const {
       data: { user },
