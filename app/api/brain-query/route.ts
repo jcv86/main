@@ -188,20 +188,20 @@ export async function POST(request: NextRequest) {
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
-    await trackEngagement({
-      userId: actualUserId,
-      sessionId,
-      timestamp: new Date(),
-      eventType: "message_sent",
-      intention: intentionResult.intention,
-      coachPersonality: selectedPersonality,
-      metadata: {
-        messageLength: message.length,
-        confidence: intentionResult.confidence,
-        promptId: promptInfo?.id,
-        matchedKeywords: intentionResult.matchedKeywords,
-      },
-    })
+    // Log engagement event to database
+    if (userEmail) {
+      await supabase.from("brain_analytics_events").insert({
+        event_type: "message_processed",
+        event_category: "coaching",
+        user_email: userEmail,
+        session_id: sessionId,
+        event_data: {
+          intention: intentionResult.intention,
+          coachPersonality: selectedPersonality,
+          confidence: intentionResult.confidence,
+        },
+      }).catch(err => console.error("[v0] Analytics insert error:", err))
+    }
 
     const relevantKnowledge: any[] = []
 
