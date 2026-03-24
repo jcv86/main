@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
 
     // Identify critical prompts (satisfaction < 4.3, action < 60%, engagement < 70%)
     const criticalPrompts = byCategory
-      .map((cat: { avgSatisfaction: number; completionRate: number; avgEngagement: number; category?: string }) => {
+      .map((cat: { sessions: number; avgSatisfaction: number; completionRate: number; avgEngagement: number; category?: string }) => {
         const issues = []
         if (cat.avgSatisfaction < 4.3) issues.push(`Satisfacción baja: ${cat.avgSatisfaction.toFixed(1)}★ (meta: 4.3+)`)
         if (cat.completionRate < 60)
