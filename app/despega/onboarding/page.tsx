@@ -174,8 +174,6 @@ export default function DespegaOnboarding() {
           dominantProfile: finalResults.dominantProfile,
           secondaryProfile: finalResults.secondaryProfile,
           scores: normalizedScores,
-          caminoPersona: "",
-          caminoProfesional: "",
         }),
       })
 
@@ -891,49 +889,14 @@ export default function DespegaOnboarding() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div 
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  caminoPersona ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-                }`}
-                onClick={() => setCaminoPersona(!caminoPersona)}
+              <Button 
+                onClick={() => setStep("test")} 
+                className="w-full" 
+                size="lg"
               >
-                <div className="flex items-start gap-3">
-                  <Checkbox checked={caminoPersona} />
-                  <div>
-                    <h3 className="font-semibold text-lg">Transición Personal</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Autoconocimiento, hábitos y relaciones significativas.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div 
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  caminoProfesional ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-                }`}
-                onClick={() => setCaminoProfesional(!caminoProfesional)}
-              >
-                <div className="flex items-start gap-3">
-                  <Checkbox checked={caminoProfesional} />
-                  <div>
-                    <h3 className="font-semibold text-lg">Transición Profesional</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Carrera, enfoque y excelencia profesional.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                Continuar al Test
+              </Button>
             </div>
-
-            <Button 
-              onClick={() => setStep("test")} 
-              className="w-full" 
-              size="lg"
-              disabled={!caminoPersona && !caminoProfesional}
-            >
-              Continuar al Test
-            </Button>
           </CardContent>
         </Card>
       </div>
@@ -1097,8 +1060,6 @@ export default function DespegaOnboarding() {
     return (
       <DiscResultsPage
         results={results}
-        caminoPersona={caminoPersona}
-        caminoProfesional={caminoProfesional}
         c1Context={c1Responses}
         onContinue={() => {
           setC1CurrentQuestion(0)
@@ -1273,7 +1234,7 @@ export default function DespegaOnboarding() {
     )
   }
 
-  // STEP 6: Conozcámonos 2 - Paso 2
+  // STEP 6: Conozc��monos 2 - Paso 2
   if (step === "conozcamonos2-paso2") {
     const C2_PASO2_QUESTIONS = [
       { id: 1, q: "Tu meta prioritaria en 30 días", type: "text" },
