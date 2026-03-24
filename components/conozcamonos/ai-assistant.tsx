@@ -14,8 +14,8 @@ export function AIAssistant({
   question, 
   currentResponse, 
   onUseSuggestion,
-  buttonLabel = 'Asistencia IA',
-  title = 'Asistencia IA'
+  buttonLabel = 'Asistencia Tu Coach',
+  title = 'Tu Coach IA'
 }: AIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [suggestion, setSuggestion] = useState<string | null>(null)
@@ -62,7 +62,7 @@ export function AIAssistant({
         className="gap-2 text-blue-600 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-950"
       >
         <Lightbulb className="w-4 h-4" />
-        Asistencia IA
+        {buttonLabel}
       </Button>
     )
   }
