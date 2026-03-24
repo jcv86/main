@@ -20,6 +20,9 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
+    // Generate cache key
+    const queryHash = generateQueryHash(message, { userId, conversationId })
+
     // Check cache first
     const cachedResponse = await getCachedResponse(queryHash)
     if (cachedResponse) {
@@ -114,7 +117,6 @@ export async function POST(request: NextRequest) {
     const responseTimeMs = Date.now() - startTime
 
     // Save to database
-    const supabase = createClient()
     const finalConversationId = conversationId || `conv_${Date.now()}`
 
     try {
