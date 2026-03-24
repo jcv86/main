@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 import { ANALYSIS_TYPES, type AnalysisType } from "@/app/admin/video-analysis/config"
 import fs from "fs"
 import path from "path"
@@ -74,7 +75,7 @@ Respond with this exact structure:
     const content: (TextPart | ImagePart)[] = [textPart, ...imageParts]
 
     const { text } = await generateText({
-      model: "openai/gpt-4o",
+      model: openai("gpt-4o"),
       messages: [
         {
           role: "user",
