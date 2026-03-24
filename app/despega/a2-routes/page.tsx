@@ -8,7 +8,7 @@ import { calculateDiscProfile } from '@/lib/disc-calculator'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Calendar, Target, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react'
 
 export default function A2RoutesPage() {
   const [route, setRoute] = useState<PersonalizedRoute | null>(null)
@@ -97,23 +97,26 @@ export default function A2RoutesPage() {
 
   if (error || !route) {
     return (
-      <ASection
-        title="A2: Ruta"
-        subtitle="Tu plan personalizado de 90 días"
-        icon="🗺️"
-        colorClass="from-blue-500 to-cyan-500"
-      >
-        <ASectionPart title="Error" icon={<AlertCircle />}>
-          <p className="text-red-400 text-lg mb-4">{error}</p>
-          <Button 
-            onClick={() => loadAndGenerateRoute()}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            Reintentar
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </ASectionPart>
-      </ASection>
+      <div className="min-h-screen bg-slate-950 p-8">
+        <div className="max-w-2xl mx-auto">
+          <Card className="bg-slate-900 border-red-500/50 p-8">
+            <div className="flex items-start gap-4">
+              <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-white mb-2">Error en A2: Ruta</h2>
+                <p className="text-red-400 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
+                <Button 
+                  onClick={() => loadAndGenerateRoute()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Reintentar
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
     )
   }
 
