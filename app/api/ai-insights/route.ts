@@ -23,7 +23,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data to match AIInsight interface
-    const insights = data.map((insight) => ({
+    const insights = data.map((insight: {
+      id: string | number
+      type: string
+      title: string
+      description: string
+      priority: string
+      progress?: number | null
+      actionable: boolean
+      category: string
+      created_at: string
+      updated_at: string
+    }) => ({
       id: insight.id.toString(),
       type: insight.type,
       title: insight.title,
@@ -667,7 +678,7 @@ function getFallbackInsights() {
         description:
           "Una vez que completes las evaluaciones, podremos sugerir carreras específicas basadas en tu perfil.",
         requirements: ["Completar evaluaciones psicométricas"],
-        growthPath: "Evaluación → Análisis → Recomendaciones personalizadas",
+        growthPath: "Evaluaci��n → Análisis → Recomendaciones personalizadas",
       },
     ],
     strengthsAnalysis: {
