@@ -76,13 +76,15 @@ export default function AdminKnowledgeBasePage() {
       const { data: categoriesData, error: categoriesError } = await supabase
         .from("knowledge_base")
         .select("category")
-        .order("category")
+        .order("category") as { data: Array<{ category: string }> | null; error: any }
 
       if (categoriesError) throw categoriesError
 
-      const uniqueCategories: string[] = [...new Set(categoriesData?.map((c: { category: string }) => c.category) || [])]
+      const uniqueCategories: string[] = Array.from(
+        new Set((categoriesData ?? []).map((item) => item.category))
+      )
 
-      setBooks(booksData || [])
+      setBooks((booksData as KnowledgeBook[]) || [])
       setCategories(uniqueCategories)
     } catch (error) {
       console.error("Error loading books:", error)
