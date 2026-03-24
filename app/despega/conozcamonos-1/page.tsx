@@ -7,9 +7,12 @@ import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 
+type ResponseValue = string | string[]
+
 export default function Conozcamonos1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, string>>({})
+  const [responses, setResponses] = useState<Record<number, ResponseValue>>({})
+  const [customResponses, setCustomResponses] = useState<Record<number, string>>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authChecked, setAuthChecked] = useState(false)
@@ -55,56 +58,92 @@ export default function Conozcamonos1Page() {
   const isLastQuestion = currentQuestion === CONOZCAMONOS_1_QUESTIONS.length - 1
 
   const handleAnswer = (value: string) => {
-    setResponses(prev => ({ ...prev, [question.id]: value }))
+    if (question.type === 'select') {
+      // For select: allow multiple selections
+      const current = Array.isArray(responses[question.id]) 
+        ? responses[question.id] as string[]
+        : []
+      
+      if (current.includes(value)) {
+        // Remove if already selected
+        setResponses(prev => ({ 
+          ...prev, 
+          [question.id]: current.filter(v => v !== value)
+        }))
+      } else {
+        // Add to selection
+        setResponses(prev => ({ 
+          ...prev, 
+          [question.id]: [...current, value]
+        }))
+      }
+    } else {
+      // For text: single value
+      setResponses(prev => ({ ...prev, [question.id]: value }))
+    }
     setError('')
   }
 
+  const handleCustomText = (value: string) => {
+    setCustomResponses(prev => ({ ...prev, [question.id]: value }))
+  }
+
+  const isAnswered = () => {
+    const response = responses[question.id]
+    if (question.type === 'select') {
+      return Array.isArray(response) && response.length > 0
+    }
+    return Boolean(response && String(response).trim())
+  }
+
+  const shouldShowError = () => {
+    // Only show validation errors for text fields, not for select
+    return question.type === 'text' && error
+  }
+
   const handleNext = async () => {
-    if (!responses[question.id]) { 
+    if (!isAnswered()) { 
       setError('Responde primero')
       return 
     }
 
-    setValidating(true)
-    setError('')
-    
-    try {
-      const validationResponse = await fetch('/api/conozcamonos/validate-response', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          questionId: question.id,
-          question: question.question,
-          response: responses[question.id],
-          questionType: question.type
+    // Only validate text fields
+    if (question.type === 'text') {
+      setValidating(true)
+      setError('')
+      
+      try {
+        const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questionId: question.id,
+            question: question.question,
+            response: responses[question.id],
+            questionType: question.type
+          })
         })
-      })
 
-      const validation = await validationResponse.json()
+        const validation = await validationResponse.json()
 
-      if (!validation.valid) {
-        setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+        if (!validation.valid) {
+          setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+          setValidating(false)
+          return
+        }
+      } catch (err) {
+        console.error('[v0] Validation error:', err)
+      } finally {
         setValidating(false)
-        return
       }
+    }
 
-      // Validation passed - move to next or submit
-      if (isLastQuestion) { 
-        submitResponses() 
-      } else { 
-        setCurrentQuestion(prev => prev + 1)
-        setError('')
-      }
-    } catch (err) {
-      console.error('[v0] Validation error:', err)
-      // Allow to continue anyway on error
-      if (isLastQuestion) { 
-        submitResponses() 
-      } else { 
-        setCurrentQuestion(prev => prev + 1)
-      }
-    } finally {
-      setValidating(false)
+    // Move to next or submit
+    if (isLastQuestion) { 
+      submitResponses() 
+    } else { 
+      setCurrentQuestion(prev => prev + 1)
+      setError('')
     }
   }
 
@@ -145,19 +184,38 @@ export default function Conozcamonos1Page() {
 
           {question.type === 'select' && (
             <div className="space-y-3">
-              {question.options?.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleAnswer(option)}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    responses[question.id] === option
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-border/80'
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+              {question.options?.map((option) => {
+                const isSelected = Array.isArray(responses[question.id]) 
+                  ? (responses[question.id] as string[]).includes(option)
+                  : false
+                  
+                return (
+                  <div key={option} className="space-y-2">
+                    <button
+                      onClick={() => handleAnswer(option)}
+                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                        isSelected
+                          ? 'border-primary bg-primary/10'
+                          : 'border-border hover:border-border/80'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                    
+                    {/* Show text input for "Otro" option */}
+                    {option === 'Otro' && isSelected && (
+                      <textarea
+                        value={customResponses[question.id] || ''}
+                        onChange={(e) => handleCustomText(e.target.value)}
+                        placeholder="Especifica tu respuesta..."
+                        className="w-full p-3 bg-background border border-border rounded-lg text-foreground text-sm"
+                        rows={3}
+                      />
+                    )}
+                  </div>
+                )
+              })}
+              <p className="text-xs text-muted-foreground mt-2">Puedes seleccionar múltiples opciones</p>
             </div>
           )}
 
@@ -198,22 +256,11 @@ export default function Conozcamonos1Page() {
               <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
             </div>
           )}
-          
-          {validationError && (
-            <div className="mt-4 p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
-              <p className="text-sm font-medium text-orange-900 dark:text-orange-100">{validationError}</p>
-              {validationSuggestions && (
-                <p className="text-xs text-orange-800 dark:text-orange-200 mt-2">
-                  💡 Sugerencia: {validationSuggestions}
-                </p>
-              )}
-            </div>
-          )}
         </div>
 
         <div className="flex gap-4">
           <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1">Atrás</Button>
-          <Button onClick={handleNext} disabled={!responses[question.id] || loading || validating} className="flex-1">
+          <Button onClick={handleNext} disabled={!isAnswered() || loading || validating} className="flex-1">
             {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
           </Button>
         </div>
