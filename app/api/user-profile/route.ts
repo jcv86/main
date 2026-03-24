@@ -86,7 +86,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from("user_profiles")
       .update({
