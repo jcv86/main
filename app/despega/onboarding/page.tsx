@@ -310,6 +310,72 @@ export default function DespegaOnboarding() {
             </CardContent>
           </Card>
 
+          {/* Example Question Preview */}
+          <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-slate-900">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span>Así se ve una pregunta</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Evaluación DISC Despega</span>
+                <span className="text-slate-500 dark:text-slate-400">1/28</span>
+              </div>
+              <div className="h-1 bg-blue-200 dark:bg-blue-900 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-600 dark:bg-blue-500 rounded-full" style={{ width: '4%' }}></div>
+              </div>
+              
+              <div className="space-y-4">
+                <h4 className="text-center font-semibold text-slate-900 dark:text-slate-100">
+                  Cuando enfrento un desafío importante, tiendo a ser más:
+                </h4>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-green-600 dark:text-green-400">MÁS como yo</p>
+                    <div className="space-y-2">
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Decidido y directo
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Optimista e inspirador
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Paciente y considerado
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Analítico y preciso
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-red-600 dark:text-red-400">MENOS como yo</p>
+                    <div className="space-y-2">
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Decidido y directo
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Optimista e inspirador
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Paciente y considerado
+                      </button>
+                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                        Analítico y preciso
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center italic">
+                Selecciona una opción de cada lado para responder
+              </p>
+            </CardContent>
+          </Card>
+
           {/* CTA */}
           <div className="space-y-3">
             {onboardingAlreadyCompleted && !isFirstCompletion ? (
