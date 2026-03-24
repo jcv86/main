@@ -174,8 +174,8 @@ export default function DespegaOnboarding() {
           dominantProfile: finalResults.dominantProfile,
           secondaryProfile: finalResults.secondaryProfile,
           scores: normalizedScores,
-          caminoPersona,
-          caminoProfesional,
+          caminoPersona: "",
+          caminoProfesional: "",
         }),
       })
 
