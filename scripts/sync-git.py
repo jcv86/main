@@ -3,13 +3,14 @@ import subprocess
 import os
 import sys
 
-# Change to project directory
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+# Change to project directory - use current working directory
+cwd = os.getcwd()
+print(f"[v0] Working directory: {cwd}")
 
 try:
     # Add all changes
     print("[v0] Adding all changes to git...")
-    subprocess.run(["git", "add", "-A"], check=True, cwd=".")
+    subprocess.run(["git", "add", "-A"], check=True)
     
     # Check git status
     print("[v0] Checking git status...")
@@ -20,11 +21,11 @@ try:
     # Commit changes
     print("[v0] Committing changes...")
     commit_msg = "fix: resolve all TypeScript compilation errors - Supabase client initialization, missing awaits, type annotations, component props, and error handling"
-    subprocess.run(["git", "commit", "-m", commit_msg], check=True, cwd=".")
+    subprocess.run(["git", "commit", "-m", commit_msg], check=True)
     
     # Push changes
     print("[v0] Pushing changes to remote repository...")
-    subprocess.run(["git", "push", "origin", "HEAD"], check=True, cwd=".")
+    subprocess.run(["git", "push", "origin", "HEAD"], check=True)
     
     print("[v0] ✓ All changes synced to Git successfully!")
     sys.exit(0)
