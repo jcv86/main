@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useSession } from "@/components/session-wrapper"
 import { createClient } from "@supabase/supabase-js"
+import { getErrorMessage } from "@/types/errors"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -249,11 +250,11 @@ export default function MBTIResultsPage() {
           setMbtiResult(data.result as MBTIResult)
         }
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching MBTI results:", error)
       toast({
         title: "Error",
-        description: "No se pudieron cargar los resultados",
+        description: getErrorMessage(error) || "No se pudieron cargar los resultados",
         variant: "destructive",
       })
     } finally {

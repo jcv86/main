@@ -21,6 +21,15 @@ interface CerebroProfile {
   secondaryScore: number
 }
 
+interface TestDataRecord {
+  test_data?: {
+    energia?: number
+    relaciones?: number
+    plan_ejecutivo?: number
+    enfoque?: number
+  }
+}
+
 export default function A1ReportPage() {
   const router = useRouter()
   const [profile, setProfile] = useState<CerebroProfile | null>(null)
@@ -45,7 +54,7 @@ export default function A1ReportPage() {
         .single()
 
       if (testData) {
-        const testDataObj = testData.test_data as any
+        const testDataObj = (testData as TestDataRecord).test_data || {}
         const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
 
         const profile: CerebroProfile = {
