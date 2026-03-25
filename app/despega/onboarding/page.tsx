@@ -22,6 +22,7 @@ type QuestionResponse = {
 
 export default function DespegaOnboarding() {
   const router = useRouter()
+  const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(0)
