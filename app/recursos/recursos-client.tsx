@@ -673,7 +673,7 @@ export default function RecursosClient() {
 
                 <TabsContent value="challenges">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {resources.challenges.map((challenge) => {
+                    {resources.challenges.map((challenge: any) => {
                       const isCompleted = completedChallenges.includes(challenge.id)
                       return (
                         <Card
