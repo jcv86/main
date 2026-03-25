@@ -459,6 +459,18 @@ export default function MetasSMARTClient() {
                     </Button>
                   </DialogFooter>
                 </div>
+              </DialogContent>
+            </Dialog>
+            </div>
+          </div>
+
+        {/* Tabs */}
+        <Tabs defaultValue="progreso" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800">
+            <TabsTrigger value="progreso">Mi Progreso</TabsTrigger>
+            <TabsTrigger value="metas">Todas las Metas</TabsTrigger>
+            <TabsTrigger value="plantillas">Plantillas</TabsTrigger>
+          </TabsList>
 
           {/* Tab: Mi Progreso */}
           <TabsContent value="progreso" className="space-y-6">
