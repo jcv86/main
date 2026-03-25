@@ -461,8 +461,8 @@ export default function MetasSMARTClient() {
                 </div>
               </DialogContent>
             </Dialog>
-            </div>
           </div>
+        </div>
 
         {/* Tabs */}
         <Tabs defaultValue="progreso" className="space-y-6">
