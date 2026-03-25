@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button"
 import { LearningPathCard } from "@/components/learning-path-card"
 import { SkillGapAnalysis } from "@/components/skill-gap-analysis"
 import { Sparkles, Search, TrendingUp, Target, BookOpen, Filter, Award } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
 
 export default function LearningPathsPage() {
+  const supabase = createClient()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTab, setSelectedTab] = useState("recommended")
   const [userEmail, setUserEmail] = useState("")
