@@ -1186,7 +1186,7 @@ export default function DespegaOnboarding() {
                     min={currentC2Q.min}
                     max={currentC2Q.max}
                     defaultValue={c2Step1Responses[currentC2Q.id] || 5}
-                    onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: parseInt(e.target.value) })}
+                    onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: e.target.value })}
                     className="w-full"
                   />
                   <div className="text-center text-lg font-semibold">
