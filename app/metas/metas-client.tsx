@@ -414,18 +414,51 @@ export default function MetasSMARTClient() {
 
                 <div className="space-y-6 py-4">
                   {/* Información básica */}
-                      variant="outline"
-                      className="w-full mt-2 bg-transparent text-indigo-600 dark:text-indigo-400 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-                      onClick={() => router.push(`/test/${test.toLowerCase().replace(" ", "-")}`)}
+                  <div className="space-y-2">
+                    <Label htmlFor="nombre">Nombre de la Meta</Label>
+                    <Input
+                      id="nombre"
+                      value={nuevaMeta.nombre}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, nombre: e.target.value })}
+                      placeholder="Ej: Mejorar liderazgo en equipo"
+                      className="dark:bg-slate-700 dark:border-slate-600"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tipo">Tipo de Meta</Label>
+                    <select
+                      id="tipo"
+                      value={nuevaMeta.tipo}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, tipo: e.target.value as any })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
                     >
-                      Ver mi perfil {test}
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      <option value="laboral">Laboral</option>
+                      <option value="personal">Personal</option>
+                      <option value="mixto">Mixto</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="motivoProfundo">Motivación Profunda</Label>
+                    <textarea
+                      id="motivoProfundo"
+                      value={nuevaMeta.motivoProfundo}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, motivoProfundo: e.target.value })}
+                      placeholder="¿Por qué es importante esta meta para ti?"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white min-h-20"
+                    />
+                  </div>
+
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                      Cancelar
                     </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
+                    <Button onClick={handleGuardarMeta} className="bg-indigo-600 hover:bg-indigo-700">
+                      {metaEditando ? "Actualizar" : "Crear"} Meta
+                    </Button>
+                  </DialogFooter>
+                </div>
 
           {/* Tab: Mi Progreso */}
           <TabsContent value="progreso" className="space-y-6">
