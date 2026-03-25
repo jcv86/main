@@ -414,44 +414,6 @@ export default function MetasSMARTClient() {
 
                 <div className="space-y-6 py-4">
                   {/* Información básica */}
-            <div className="space-y-4">
-              {Object.entries(plantillasMetas).map(([test, plantillas]) => (
-                <Card key={test} className="dark:bg-slate-800 dark:border-slate-700">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-lg">
-                      <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                      {test}
-                    </CardTitle>
-                    <CardDescription className="text-slate-600 dark:text-slate-400">
-                      Metas sugeridas basadas en tu perfil
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {(plantillas as any[]).map((plantilla, i) => (
-                      <div
-                        key={i}
-                        className="p-3 bg-slate-50 rounded-lg hover:bg-indigo-50 dark:bg-slate-700 dark:hover:bg-indigo-900 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setNuevaMeta({
-                            ...nuevaMeta,
-                            nombre: plantilla.nombre,
-                            tipo: plantilla.tipo,
-                            origen: test,
-                            motivoProfundo: plantilla.motivoProfundo,
-                          })
-                          setDialogOpen(true)
-                        }}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          {getIconoTipo(plantilla.tipo)}
-                          <span className="font-medium text-sm text-slate-800 dark:text-slate-200">
-                            {plantilla.nombre}
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{plantilla.motivoProfundo}</p>
-                      </div>
-                    ))}
-                    <Button
                       variant="outline"
                       className="w-full mt-2 bg-transparent text-indigo-600 dark:text-indigo-400 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950"
                       onClick={() => router.push(`/test/${test.toLowerCase().replace(" ", "-")}`)}
