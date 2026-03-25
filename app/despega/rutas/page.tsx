@@ -164,6 +164,30 @@ export default function RutasPage() {
     setSelectedScenario(null)
   }
 
+  // Check if ruta is available based on user's selected camino
+  const isRutaAvailable = (rutaCamino: string): boolean => {
+    if (!userProfile) return true
+    
+    // If camino is "ambos", it's always available
+    if (rutaCamino === "ambos") return true
+    
+    // Check if user's disc_profile matches the ruta's camino requirement
+    const userCamino = userProfile.disc_profile || ""
+    
+    // Map disc profiles to camino paths
+    const discToCamino: Record<string, string[]> = {
+      persona: ["D", "I", "S"],  // Personal development profiles
+      profesional: ["C", "D"],     // Professional profiles
+    }
+    
+    // If ruta requires a specific camino, check if user matches
+    if (rutaCamino === "persona") return discToCamino.persona.includes(userCamino)
+    if (rutaCamino === "profesional") return discToCamino.profesional.includes(userCamino)
+    
+    return true
+  }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
