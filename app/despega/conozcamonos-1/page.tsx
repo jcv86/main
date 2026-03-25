@@ -268,7 +268,7 @@ export default function Conozcamonos1Page() {
               </div>
               <AIAssistant
                 question={question.question}
-                currentResponse={typeof responses[question.id] === 'string' ? responses[question.id] || '' : ''}
+                currentResponse={(typeof responses[question.id] === 'string' ? (responses[question.id] as string) : '') || ''}
                 onUseSuggestion={(suggestion) => {
                   handleAnswer(suggestion)
                 }}
