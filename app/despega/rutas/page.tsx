@@ -186,7 +186,6 @@ export default function RutasPage() {
     
     return true
   }
-  }
 
   if (loading) {
     return (
