@@ -298,6 +298,7 @@ export default function BigFiveTest() {
 
     return (
       <TestCompletionScreen
+        testType="big-five"
         testName="5 Dimensiones Despega"
         quickSummary={`Tu puntuación general es ${completionData.overallScore}%. Tu dimensión más desarrollada es ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} con ${highestDimension[1]}%.`}
         keyInsight={`Tu perfil de personalidad muestra una combinación única de rasgos. Tu alta ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} te permite destacar en situaciones que requieren estas características, mientras que las otras dimensiones complementan tu forma de ser en diferentes contextos.`}
