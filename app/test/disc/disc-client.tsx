@@ -366,7 +366,7 @@ export default function DISCTestClient() {
               </RadioGroup>
             )}
 
-            {(question.type === "open_ended" || question.type === "scenario") && (
+            {('type' in question && ((question as any).type === "open_ended" || (question as any).type === "scenario")) && (
               <div className="space-y-2">
                 <Textarea
                   placeholder="Write your detailed response here..."
