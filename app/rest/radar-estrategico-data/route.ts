@@ -1,5 +1,6 @@
 'use server'
 
+import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -33,13 +34,13 @@ export async function GET(request: Request) {
       console.error('[v0] Error fetching noticias:', noticiasError)
     }
 
-    return Response.json({
+    return NextResponse.json({
       tesisDia: tesisDia || null,
       noticias: noticias || [],
     })
   } catch (error) {
     console.error('[v0] API error:', error)
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to fetch radar data' },
       { status: 500 }
     )
