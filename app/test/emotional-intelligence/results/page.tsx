@@ -516,7 +516,7 @@ export default function EmotionalIntelligenceResults() {
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-purple-800 mb-2">1. Autoconciencia Emocional</h4>
                         <p className="text-gray-700">
-                          {testResults.competencies.find((c) => c.name === "Autoconciencia")?.score >= 70
+                          {testResults?.competencies?.find((c) => c.name === "Autoconciencia")?.score >= 70
                             ? "Tienes una excelente capacidad para identificar tus emociones en tiempo real y entender sus causas."
                             : "Estás desarrollando tu habilidad para reconocer tus emociones. Practicar el registro emocional diario te ayudará."}
                         </p>
@@ -526,7 +526,7 @@ export default function EmotionalIntelligenceResults() {
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-pink-800 mb-2">2. Regulación Emocional</h4>
                         <p className="text-gray-700">
-                          {testResults.competencies.find((c) => c.name === "Autorregulación")?.score >= 70
+                          {testResults?.competencies?.find((c) => c.name === "Autorregulación")?.score >= 70
                             ? "Manejas bien tus emociones intensas y sabes calmarte cuando es necesario."
                             : "Fortalecer tu capacidad de regulación emocional te ayudará en momentos de estrés. Técnicas de respiración son ideales."}
                         </p>
@@ -536,7 +536,7 @@ export default function EmotionalIntelligenceResults() {
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-blue-800 mb-2">3. Empatía y Conexión</h4>
                         <p className="text-gray-700">
-                          {testResults.competencies.find((c) => c.name === "Empatía")?.score >= 70
+                          {testResults?.competencies?.find((c) => c.name === "Empatía")?.score >= 70
                             ? "Tu capacidad empática te permite conectar profundamente con otros y entender sus perspectivas."
                             : "Desarrollar tu empatía fortalecerá tus relaciones. Practica la escucha activa sin juzgar."}
                         </p>
