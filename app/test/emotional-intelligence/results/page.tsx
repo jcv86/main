@@ -1939,7 +1939,7 @@ export default function EmotionalIntelligenceResults() {
                 motivation: ieResult?.motivation,
                 empathy: ieResult?.empathy,
                 social_skills: ieResult?.social_skills,
-                total_score: ieResult?.overall_score,
+                total_score: ieResult?.total_score,
               }}
               userEmail={user?.email || ""}
             />
