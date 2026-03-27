@@ -441,7 +441,7 @@ export default function DISCTestClient() {
           </CardContent>
         </Card>
 
-        <TestNavigationFlow testType="disc" />
+        <TestNavigationFlow />
       </div>
     </div>
   )
