@@ -118,7 +118,7 @@ export default function BigFiveTestClient() {
     }
   }
 
-  if (showCompletion) return <TestCompletionScreen testType="big_five" onClose={() => router.push("/despega/journey")} />
+  if (showCompletion) return <TestCompletionScreen testType="big-five" onClose={() => router.push("/despega/journey")} />
   if (showIntro) {
     return (
       <TestIntroScreen
