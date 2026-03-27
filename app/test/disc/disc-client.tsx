@@ -337,19 +337,20 @@ export default function DISCTestClient() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <Badge variant="outline">
-                {question.type === "multiple_choice" && "Multiple Choice"}
-                {question.type === "open_ended" && "Open Response"}
-                {question.type === "scenario" && "Scenario"}
+                {'type' in question && (question as any).type === "multiple_choice" && "Multiple Choice"}
+                {'type' in question && (question as any).type === "open_ended" && "Open Response"}
+                {'type' in question && (question as any).type === "scenario" && "Scenario"}
+                {'type' in question === false && "DISC Question"}
               </Badge>
               <Badge variant="secondary">Question {currentQuestion + 1}</Badge>
             </div>
-            <CardTitle className="text-xl">{question.question}</CardTitle>
+            <CardTitle className="text-xl">{question.text || (question as any).question}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {question.type === "multiple_choice" && question.options && (
+            {'type' in question && (question as any).type === "multiple_choice" && (question as any).options && (
               <RadioGroup value={currentAnswer || ""} onValueChange={handleAnswer}>
                 <div className="space-y-3">
-                  {question.options.map((option, index) => (
+                  {(question as any).options.map((option: string, index: number) => (
                     <div
                       key={index}
                       className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors"
