@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
       .select('*')
       .eq('user_id', user_id)
       .eq('tema', a2_theme)
-      .single()
       .maybeSingle()
 
     console.log(`[v0] Assigning trainings for user ${user_id} with theme: ${a2_theme}`)
