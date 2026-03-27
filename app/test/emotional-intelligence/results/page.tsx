@@ -1932,15 +1932,16 @@ export default function EmotionalIntelligenceResults() {
 
           <TabsContent value="coach" className="space-y-6">
             <EnhancedCoachFlow
-              testType="Inteligencia Emocional"
+              testType="ei"
               testResults={{
                 self_awareness: ieResult?.self_awareness,
                 self_regulation: ieResult?.self_regulation,
                 motivation: ieResult?.motivation,
                 empathy: ieResult?.empathy,
                 social_skills: ieResult?.social_skills,
-                total_score: ieResult?.overall_score, // Assuming total_score should map to overall_score
+                total_score: ieResult?.overall_score,
               }}
+              userEmail={user?.email || ""}
             />
           </TabsContent>
 

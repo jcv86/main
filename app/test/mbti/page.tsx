@@ -388,7 +388,7 @@ export default function MBTITest() {
       console.log("[v0] Submitting MBTI test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "Despega Resonancia",
+        "MBTI",
         results,
         duration,
       )
@@ -488,6 +488,7 @@ export default function MBTITest() {
 
     return (
       <TestCompletionScreen
+        testType="mbti"
         testName="Despega Resonancia"
         completionMessage="Has completado exitosamente tu Despega Resonancia"
         quickSummary={`Tu tipo de personalidad es ${type}`}

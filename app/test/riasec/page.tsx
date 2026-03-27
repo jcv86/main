@@ -200,7 +200,7 @@ export default function RIASECTest() {
       console.log("[v0] Submitting RIASEC test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "Despega Rumbo",
+        "RIASEC",
         results,
         duration,
       )

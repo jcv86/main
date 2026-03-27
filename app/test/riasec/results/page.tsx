@@ -553,7 +553,7 @@ export default function RIASECResults() {
                 <div className="text-xs space-y-1">
                   <p>• Orientaciones complementarias</p>
                   <p>• Carreras multidimensionales</p>
-                  <p>• Roles más integrados</p>
+                  <p>• Roles m��s integrados</p>
                 </div>
               </div>
               <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
@@ -1505,7 +1505,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="RIASEC" testResults={results} />
+            <EnhancedCoachFlow testType="riasec" testResults={results} userEmail={user?.email || ""} />
           </TabsContent>
 
           {/* Career Tab */}

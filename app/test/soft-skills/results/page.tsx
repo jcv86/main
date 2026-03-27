@@ -1972,7 +1972,7 @@ export default function SoftSkillsResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="Soft Skills" testResults={results} />
+            <EnhancedCoachFlow testType="soft-skills" testResults={results} userEmail={user?.email || ""} />
           </TabsContent>
         </Tabs>
 

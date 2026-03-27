@@ -410,6 +410,7 @@ export default function EmotionalIntelligenceTest() {
 
     return (
       <TestCompletionScreen
+        testType="ei"
         testName="Despega Empatía"
         score={completionResults.overall_score}
         level={completionResults.level}
