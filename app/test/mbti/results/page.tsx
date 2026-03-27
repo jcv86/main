@@ -1691,7 +1691,7 @@ export default function MBTIResultsPage() {
               </CardHeader>
               <CardContent>
                 <EnhancedCoachFlow
-                  testType="mbti"
+                  testType="MBTI"
                   testResults={{
                     type: mbtiResult.type,
                     e_score: mbtiResult.e_score,
@@ -1704,8 +1704,6 @@ export default function MBTIResultsPage() {
                     p_score: mbtiResult.p_score,
                   }}
                   userEmail={user?.email || ""}
-                />
-                  userName={user?.email?.split("@")[0] || "Usuario"}
                 />
               </CardContent>
             </Card>

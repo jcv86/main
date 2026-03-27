@@ -1505,7 +1505,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="riasec" testResults={results} userEmail={user?.email || ""} />
+            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={session?.user?.email || ""} />
           </TabsContent>
 
           {/* Career Tab */}

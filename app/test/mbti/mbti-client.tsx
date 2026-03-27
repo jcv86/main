@@ -124,7 +124,7 @@ export default function MBTITestClient() {
     }
   }
 
-  if (showCompletion) return <TestCompletionScreen testType="mbti" onClose={() => router.push("/despega/journey")} />
+  if (showCompletion) return <TestCompletionScreen testType="mbti" testName="Despega Resonancia" onClose={() => router.push("/despega/journey")} />
   if (showIntro) {
     return (
       <TestIntroScreen

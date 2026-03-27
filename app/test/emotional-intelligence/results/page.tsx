@@ -1932,7 +1932,7 @@ export default function EmotionalIntelligenceResults() {
 
           <TabsContent value="coach" className="space-y-6">
             <EnhancedCoachFlow
-              testType="ei"
+              testType="Emotional Intelligence"
               testResults={{
                 self_awareness: ieResult?.self_awareness,
                 self_regulation: ieResult?.self_regulation,

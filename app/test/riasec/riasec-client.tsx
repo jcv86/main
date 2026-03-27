@@ -115,7 +115,7 @@ export default function RIASECTestClient() {
     }
   }
 
-  if (showCompletion) return <TestCompletionScreen testType="riasec" onClose={() => router.push("/despega/journey")} />
+  if (showCompletion) return <TestCompletionScreen testType="riasec" testName="Despega Rumbo" onClose={() => router.push("/despega/journey")} />
   if (showIntro) {
     return (
       <TestIntroScreen
