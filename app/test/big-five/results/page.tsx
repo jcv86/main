@@ -124,7 +124,7 @@ export default function BigFiveResults() {
       const result = await UnifiedTestSystem.loadTestResult(email, "Big Five")
 
       if (result.success && result.data) {
-        setTestResult(result.data)
+        setTestResult(result.data as TestResult)
 
         const { data: aiData, error: aiError } = await supabase
           .from("ai_interpretations")
