@@ -289,7 +289,7 @@ export default function ComprehensiveGestureTestPage() {
     const finalStatus = allSuccessful ? "completed" : "failed"
 
     setGestureTests((prev) =>
-      prev.map((test) => (test.id === testId ? { ...test, status: finalStatus as const, results } : test)),
+      prev.map((test) => (test.id === testId ? { ...test, status: finalStatus, results } : test)),
     )
 
     setCurrentTest(null)
