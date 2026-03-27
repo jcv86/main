@@ -96,16 +96,16 @@ export default function DISCTestClient() {
     discQuestions.forEach((question) => {
       const answer = answers[question.id]
       if (answer) {
-        // Check if question has options (multiple choice)
-        if (question.options && Array.isArray(question.options)) {
-          const answerIndex = question.options.indexOf(answer)
+        // Check if question has options property using type guard
+        if ('options' in question && Array.isArray((question as any).options)) {
+          const answerIndex = (question as any).options.indexOf(answer)
           if (answerIndex === 0) scores.D += 3
           else if (answerIndex === 1) scores.I += 3
           else if (answerIndex === 2) scores.S += 3
           else if (answerIndex === 3) scores.C += 3
         } else {
           // For open-ended or scenario questions, use dimension
-          const dimension = (question.dimension || question.category) as "D" | "I" | "S" | "C"
+          const dimension = (question.dimension || (question as any).category) as "D" | "I" | "S" | "C"
           if (dimension) {
             scores[dimension] += 2
           }
