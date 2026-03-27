@@ -27,10 +27,12 @@ const breadcrumbItems = [
 
 interface Question {
   id: number
-  type: "multiple_choice" | "open_ended" | "scenario"
-  question: string
+  text?: string
+  question?: string
+  type?: "multiple_choice" | "open_ended" | "scenario"
   options?: string[]
-  category: "D" | "I" | "S" | "C"
+  dimension?: "D" | "I" | "S" | "C"
+  category?: "D" | "I" | "S" | "C"
 }
 
 export default function DISCTestClient() {
@@ -95,7 +97,7 @@ export default function DISCTestClient() {
       const answer = answers[question.id]
       if (answer) {
         // Check if question has options (multiple choice)
-        if (question.options) {
+        if (question.options && Array.isArray(question.options)) {
           const answerIndex = question.options.indexOf(answer)
           if (answerIndex === 0) scores.D += 3
           else if (answerIndex === 1) scores.I += 3
@@ -103,8 +105,10 @@ export default function DISCTestClient() {
           else if (answerIndex === 3) scores.C += 3
         } else {
           // For open-ended or scenario questions, use dimension
-          const dimension = question.dimension as "D" | "I" | "S" | "C"
-          scores[dimension] += 2
+          const dimension = (question.dimension || question.category) as "D" | "I" | "S" | "C"
+          if (dimension) {
+            scores[dimension] += 2
+          }
         }
       }
     })
