@@ -6,24 +6,31 @@ import { Badge } from "@/components/ui/badge"
 import { Clock, CheckCircle2, Target, Lightbulb } from "lucide-react"
 
 interface TestIntroScreenProps {
-  testName: string
-  testDescription: string
-  whatItMeasures: string[]
-  whyRelevant: string
-  estimatedTime: number // in minutes
-  totalQuestions: number
+  testName?: string
+  testDescription?: string
+  title?: string
+  description?: string
+  whatItMeasures?: string[]
+  whyRelevant?: string
+  estimatedTime?: number // in minutes
+  totalQuestions?: number
   onStart: () => void
 }
 
 export function TestIntroScreen({
-  testName,
-  testDescription,
-  whatItMeasures,
-  whyRelevant,
-  estimatedTime,
-  totalQuestions,
+  testName = "Test",
+  testDescription = "Assessment",
+  title,
+  description,
+  whatItMeasures = [],
+  whyRelevant = "",
+  estimatedTime = 10,
+  totalQuestions = 50,
   onStart,
 }: TestIntroScreenProps) {
+  // Use title/description if provided, otherwise use testName/testDescription
+  const displayName = title || testName
+  const displayDescription = description || testDescription
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
       <Card className="max-w-3xl w-full">
@@ -35,9 +42,9 @@ export function TestIntroScreen({
             </Badge>
           </div>
           <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            {testName}
+            {displayName}
           </CardTitle>
-          <CardDescription className="text-lg">{testDescription}</CardDescription>
+          <CardDescription className="text-lg">{displayDescription}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-8">
