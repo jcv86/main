@@ -35,8 +35,11 @@ interface DevelopmentPlan {
 
 interface AiInsightsPanelProps {
   testType: string
-  results: any
-  responses: any
+  results?: any
+  responses?: any
+  testResults?: any
+  aiInterpretation?: string
+  userEmail?: string
 }
 
 export function AiInsightsPanel({ testType, results, responses }: AiInsightsPanelProps) {
