@@ -8,19 +8,21 @@ import confetti from "canvas-confetti"
 import { useEffect } from "react"
 
 interface TestCompletionScreenProps {
-  testName: string
-  quickSummary: string
-  highlightedInsight: string
-  resultsPath: string
+  testName?: string
+  quickSummary?: string
+  highlightedInsight?: string
+  resultsPath?: string
   testType: "disc" | "ei" | "mbti" | "big-five" | "riasec" | "soft-skills"
+  onClose?: () => void
 }
 
 export function TestCompletionScreen({
-  testName,
-  quickSummary,
-  highlightedInsight,
-  resultsPath,
+  testName = "Test Completed",
+  quickSummary = "Great job! You've completed the assessment.",
+  highlightedInsight = "You're making progress on your personal development journey.",
+  resultsPath = "/results",
   testType,
+  onClose,
 }: TestCompletionScreenProps) {
   const router = useRouter()
 
@@ -86,6 +88,12 @@ export function TestCompletionScreen({
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Hablar con tu Coach IA
               </Button>
+
+              {onClose && (
+                <Button onClick={onClose} variant="ghost" size="lg" className="w-full text-lg">
+                  Volver al Inicio
+                </Button>
+              )}
             </div>
           </div>
 
