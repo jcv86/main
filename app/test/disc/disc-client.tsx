@@ -94,14 +94,17 @@ export default function DISCTestClient() {
     discQuestions.forEach((question) => {
       const answer = answers[question.id]
       if (answer) {
-        if (question.type === "multiple_choice" && question.options) {
+        // Check if question has options (multiple choice)
+        if (question.options) {
           const answerIndex = question.options.indexOf(answer)
           if (answerIndex === 0) scores.D += 3
           else if (answerIndex === 1) scores.I += 3
           else if (answerIndex === 2) scores.S += 3
           else if (answerIndex === 3) scores.C += 3
-        } else if (question.type === "open_ended" || question.type === "scenario") {
-          scores[question.category] += 2
+        } else {
+          // For open-ended or scenario questions, use dimension
+          const dimension = question.dimension as "D" | "I" | "S" | "C"
+          scores[dimension] += 2
         }
       }
     })
