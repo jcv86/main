@@ -103,7 +103,6 @@ export default function BigFiveResults() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("summary")
 
-  const { session } = useSession()
   const { toast } = useToast()
   const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
