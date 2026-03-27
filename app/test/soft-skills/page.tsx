@@ -447,7 +447,7 @@ export default function SoftSkillsTest() {
         ]}
         whyRelevant="Las competencias blandas son el factor diferenciador en tu desarrollo profesional y personal, determinando tu capacidad de liderar, colaborar y crear impacto real en cualquier contexto."
         duration="20-25 minutos"
-        questionCount={30}
+        totalQuestions={30}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />

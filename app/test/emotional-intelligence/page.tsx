@@ -390,7 +390,7 @@ export default function EmotionalIntelligenceTest() {
         ]}
         whyRelevant="La inteligencia emocional es el predictor #1 de éxito profesional y personal. Desarrollarla te permite tomar mejores decisiones, construir relaciones más fuertes y liderar con efectividad."
         estimatedTime={5}
-        questionCount={20}
+        totalQuestions={20}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
