@@ -159,14 +159,14 @@ export default function DISCTestClient() {
         touch_enabled: touchSupport,
       }
 
-      console.log("[v0] Saving Despega Cerebral test results with unified system...")
+      console.log("[v0] Saving DISC Assessment test results with unified system...")
 
-      const result = await UnifiedTestSystem.saveTestResult({
-        userEmail: user.email!,
-        testType: "Despega Cerebral",
+      const result = await UnifiedTestSystem.saveTestResult(
+        user.email!,
+        "DISC Assessment",
         testResults,
-        durationMinutes: duration,
-      })
+        duration
+      )
 
       if (!result.savedToDatabase) {
         toast({
