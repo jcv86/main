@@ -201,14 +201,14 @@ export default function BigFiveTest() {
     }
 
     try {
-    console.log("[v0] Submitting Despega Brújula test results to database...")
-    const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Despega Brújula", results, duration)
+    console.log("[v0] Submitting Big Five test results to database...")
+    const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Big Five", results, duration)
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
       }
 
-      console.log("[v0] Despega Brújula test results saved successfully to database")
+      console.log("[v0] Big Five test results saved successfully to database")
       setCompletionData({
         scores,
         overallScore,
