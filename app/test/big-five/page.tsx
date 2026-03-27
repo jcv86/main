@@ -253,7 +253,7 @@ export default function BigFiveTest() {
       <TestIntroScreen
         testName="5 Dimensiones Despega"
         testDescription="Descubre tu perfil de personalidad completo"
-        whatItMeasures="Este test evalúa cinco dimensiones fundamentales de tu personalidad:"
+        whatItMeasures={["Este test evalúa cinco dimensiones fundamentales de tu personalidad:"]}
         dimensions={[
           {
             name: "Apertura a la Experiencia",
