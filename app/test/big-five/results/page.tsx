@@ -790,7 +790,7 @@ export default function BigFiveResults() {
           </TabsContent>
 
           <TabsContent value="coach">
-            <EnhancedCoachFlow testType="Big Five" testResults={results} />
+            <EnhancedCoachFlow testType="Big Five" testResults={results} userEmail={userEmail} />
           </TabsContent>
 
           <TabsContent value="career" className="space-y-6">
