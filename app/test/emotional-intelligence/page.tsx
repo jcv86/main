@@ -412,9 +412,8 @@ export default function EmotionalIntelligenceTest() {
       <TestCompletionScreen
         testType="ei"
         testName="Despega Empatía"
-        score={completionResults.overall_score}
-        level={completionResults.level}
-        insight={getInsight(completionResults.overall_score)}
+        quickSummary={`Tu puntuación de inteligencia emocional es ${completionResults.overall_score}% (${completionResults.level})`}
+        keyInsight={getInsight(completionResults.overall_score)}
         onViewFullReport={() => router.push("/test/emotional-intelligence/results")}
         onTalkToCoach={() => router.push("/coach")}
       />
