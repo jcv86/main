@@ -121,7 +121,7 @@ export default function BigFiveResults() {
     setLoading(true)
     try {
       const email = user.email
-      const result = await UnifiedTestSystem.loadTestResult(email, "Despega Brújula")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Big Five")
 
       if (result.success && result.data) {
         setTestResult(result.data)
@@ -130,7 +130,7 @@ export default function BigFiveResults() {
           .from("ai_interpretations")
           .select("*")
           .eq("user_email", email)
-          .eq("test_name", "Despega Brújula")
+          .eq("test_name", "Big Five")
           .order("generated_at", { ascending: false })
           .limit(1)
 
