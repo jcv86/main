@@ -11,18 +11,24 @@ interface TestCompletionScreenProps {
   testName?: string
   quickSummary?: string
   highlightedInsight?: string
+  keyInsight?: string
   resultsPath?: string
   testType: "disc" | "ei" | "mbti" | "big-five" | "riasec" | "soft-skills"
   onClose?: () => void
+  onViewFullReport?: () => void
+  onTalkToCoach?: () => void
 }
 
 export function TestCompletionScreen({
   testName = "Test Completed",
   quickSummary = "Great job! You've completed the assessment.",
   highlightedInsight = "You're making progress on your personal development journey.",
+  keyInsight,
   resultsPath = "/results",
   testType,
   onClose,
+  onViewFullReport,
+  onTalkToCoach,
 }: TestCompletionScreenProps) {
   const router = useRouter()
 
@@ -35,14 +41,14 @@ export function TestCompletionScreen({
     })
   }, [])
 
-  const handleViewFullReport = () => {
+  const handleViewFullReport = onViewFullReport || (() => {
     router.push(resultsPath)
-  }
+  })
 
-  const handleTalkToCoach = () => {
+  const handleTalkToCoach = onTalkToCoach || (() => {
     // Navigate to coach with context
     router.push(`/coach?context=test-completed&test=${testType}`)
-  }
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
@@ -71,7 +77,7 @@ export function TestCompletionScreen({
 
           {/* Highlighted Insight */}
           <div className="border-l-4 border-primary pl-4 py-2">
-            <p className="font-medium text-lg">💡 {highlightedInsight}</p>
+            <p className="font-medium text-lg">💡 {keyInsight || highlightedInsight}</p>
           </div>
 
           {/* Next steps */}
