@@ -92,7 +92,7 @@ export default function SoftSkillsResults() {
   const [openResponses, setOpenResponses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
-  const { session } = useSession()
+  const { data: session } = useSession()
   const { toast } = useToast()
   const router = useRouter()
   const user = session?.user
