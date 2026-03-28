@@ -83,7 +83,7 @@ export default function RIASECResults() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get("demo") === "true"
-  const { data: session } = useSession()
+  const { user } = useSession()
   const { toast } = useToast()
 
   const [results, setResults] = useState<RIASECResults | null>(null)
