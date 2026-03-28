@@ -274,10 +274,10 @@ export default function RIASECTest() {
   if (showCompletion && completionData) {
     return (
       <TestCompletionScreen
+        testType="riasec"
         testName="Despega Rumbo"
-        summary={completionData.summary}
-        keyInsight={completionData.keyInsight}
-        completionTime={completionData.duration}
+        quickSummary={completionData.summary}
+        highlightedInsight={completionData.keyInsight}
         onViewFullReport={() => router.push("/test/riasec/results")}
         onTalkToCoach={() => router.push("/coach")}
       />
