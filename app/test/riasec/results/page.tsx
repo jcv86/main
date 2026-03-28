@@ -96,7 +96,7 @@ export default function RIASECResults() {
 
   const loadResults = async () => {
     try {
-      const email = session?.user?.email
+      const email = user?.email
       if (!email) {
         toast({
           title: "No autenticado",
@@ -1505,7 +1505,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={session?.user?.email || ""} />
+            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={user?.email || ""} />
           </TabsContent>
 
           {/* Career Tab */}
