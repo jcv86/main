@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/despega/get-coach-context?user_id=xxx
@@ -19,35 +18,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[v0] Missing Supabase credentials')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
-    const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
+    const supabase = await createClient()
 
     console.log(`[v0] Getting coach context for user ${user_id}`)
 
@@ -69,12 +40,65 @@ export async function GET(request: NextRequest) {
     }
 
     if (!contextSnapshot) {
-      // This is expected for new users - silently return null context
-      console.log('[v0] Coach context not found for new user:', user_id)
+      // Create initial context for new users
+      console.log('[v0] Creating initial coach context for new user:', user_id)
+      
+      const newContextSnapshot = {
+        user_id,
+        a1_perfil_disc: 'Pending',
+        a1_score_total: 0,
+        a1_principales_caracteristicas: {},
+        a1_fortalezas: {},
+        a1_areas_mejora: {},
+        a1_recomendaciones: {},
+        a1_insights: {},
+        a2_route_id: null,
+        a2_route_nombre: null,
+        a2_mission_id: null,
+        a2_sprint_numero: 0,
+        a2_sprint_desafio: null,
+        a2_progreso_porcentaje: 0,
+        a2_ultima_bitacora_entrada: {},
+        a2_progress: {},
+        a3_entrenamiento_actual: null,
+        a3_entrenamiento_titulo: null,
+        a3_progreso_entrenamientos: 0,
+        a3_competencias_focos: {},
+        a3_feedback: {},
+        a4_ultimo_engagement: {},
+        a4_badges_desbloqueados: {},
+        a4_puntos_acumulados: 0,
+        a4_noticias_personalizadas: {},
+        a4_intel: {},
+        coaching_history: [],
+        linkedin_context: {},
+        snapshot_version: 1,
+      }
+
+      const { data: createdContext, error: createError } = await supabase
+        .from('coach_context_snapshots')
+        .insert(newContextSnapshot)
+        .select()
+        .single()
+
+      if (createError || !createdContext) {
+        console.error('[v0] Error creating initial coach context:', createError)
+        // Return empty context gracefully even if creation fails
+        return NextResponse.json({
+          success: true,
+          context: newContextSnapshot,
+          message: 'New user context (created)',
+          isNewUser: true,
+        })
+      }
+
+      console.log('[v0] Created initial coach context for new user:', user_id)
+      
       return NextResponse.json({
         success: true,
-        context: null,
-        message: 'No context available yet - user is likely new',
+        context: createdContext,
+        message: 'New user context (created)',
+        isNewUser: true,
       })
     }
 

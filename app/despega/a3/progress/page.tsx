@@ -49,7 +49,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -168,7 +168,7 @@ export default function ProgressPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 { badge: '🎯 Primer Paso', desc: 'Completa tu diagnosis' },
-                { badge: '✨ Consistencia', desc: '5 simulaciones completadas' },
+                { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
                 { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
                 <Card key={item.badge} className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
@@ -192,13 +192,13 @@ export default function ProgressPage() {
                 <li>✓ Realiza al menos 1 simulación diaria</li>
                 <li>✓ Revisa el feedback del coach en detalle</li>
                 <li>✓ Practica específicamente los gaps identificados</li>
-                <li>✓ Comparte simulaciones con mentores o amigos para feedback externo</li>
+                <li>✓ Comparte entrenamientos con mentores o amigos para feedback externo</li>
                 <li>✓ Documenta lo que aprendes después de cada sesión</li>
               </ul>
             </div>
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   )
 }

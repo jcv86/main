@@ -201,14 +201,14 @@ export default function BigFiveTest() {
     }
 
     try {
-      console.log("[v0] Submitting 5 Dimensiones Despega test results to database...")
-      const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "5 Dimensiones Despega", results, duration)
+    console.log("[v0] Submitting Big Five test results to database...")
+    const saveResult = await UnifiedTestSystem.saveTestResult(user.email, "Big Five", results, duration)
 
       if (!saveResult.success) {
         throw new Error(saveResult.error || "Failed to save results")
       }
 
-      console.log("[v0] 5 Dimensiones Despega test results saved successfully to database")
+      console.log("[v0] Big Five test results saved successfully to database")
       setCompletionData({
         scores,
         overallScore,
@@ -232,7 +232,7 @@ export default function BigFiveTest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading 5 Dimensiones Despega...</p>
+          <p className="text-gray-600">Loading Despega Brújula...</p>
         </div>
       </div>
     )
@@ -253,7 +253,7 @@ export default function BigFiveTest() {
       <TestIntroScreen
         testName="5 Dimensiones Despega"
         testDescription="Descubre tu perfil de personalidad completo"
-        whatItMeasures="Este test evalúa cinco dimensiones fundamentales de tu personalidad:"
+        whatItMeasures={["Este test evalúa cinco dimensiones fundamentales de tu personalidad:"]}
         dimensions={[
           {
             name: "Apertura a la Experiencia",
@@ -277,7 +277,7 @@ export default function BigFiveTest() {
           },
         ]}
         whyRelevant="Entender tus rasgos de personalidad te ayuda a identificar tus fortalezas naturales, áreas de desarrollo, y cómo te relacionas con otros en diferentes contextos personales y profesionales."
-        estimatedTime="20 minutos"
+        estimatedTime={20}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
@@ -298,6 +298,7 @@ export default function BigFiveTest() {
 
     return (
       <TestCompletionScreen
+        testType="big-five"
         testName="5 Dimensiones Despega"
         quickSummary={`Tu puntuación general es ${completionData.overallScore}%. Tu dimensión más desarrollada es ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} con ${highestDimension[1]}%.`}
         keyInsight={`Tu perfil de personalidad muestra una combinación única de rasgos. Tu alta ${dimensionNames[highestDimension[0] as keyof typeof dimensionNames]} te permite destacar en situaciones que requieren estas características, mientras que las otras dimensiones complementan tu forma de ser en diferentes contextos.`}
@@ -321,7 +322,7 @@ export default function BigFiveTest() {
             Back to Tests
           </Button>
           <Badge variant="secondary" className="text-sm">
-            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
+              <Brain className="h-4 w-4 mr-1" />Despega Brújula
           </Badge>
         </div>
 
@@ -330,7 +331,7 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">5 Dimensiones Despega</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Despega Brújula</h2>
                 <p className="text-gray-600">
                   Question {currentQuestion + 1} of {bigFiveQuestions.length}
                 </p>

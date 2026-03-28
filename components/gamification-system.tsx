@@ -61,8 +61,6 @@ export default function GamificationSystem() {
   const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
 
-  const userEmail = "demo@example.com"
-
   useEffect(() => {
     loadGamificationData()
   }, [])
@@ -71,11 +69,19 @@ export default function GamificationSystem() {
     try {
       setLoading(true)
 
-      // Load achievements
+      // Get authenticated user
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      if (authError || !user) {
+        console.error('[v0] User not authenticated')
+        setLoading(false)
+        return
+      }
+
+      // Load achievements using user ID
       const { data: achievementsData, error: achievementsError } = await supabase
         .from("reading_achievements")
         .select("*")
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
         .order("earned_at", { ascending: false })
 
       if (achievementsError) throw achievementsError
@@ -84,7 +90,7 @@ export default function GamificationSystem() {
       const { data: progressData, error: progressError } = await supabase
         .from("user_reading_progress")
         .select("*")
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
 
       if (progressError) throw progressError
 
@@ -111,7 +117,7 @@ export default function GamificationSystem() {
       const recentSessions = await supabase
         .from("reading_sessions")
         .select("session_start")
-        .eq("user_email", userEmail)
+        .eq("user_id", user.id)
         .order("session_start", { ascending: false })
         .limit(30)
 

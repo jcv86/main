@@ -1,22 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
-import { generateObject } from "ai"
-import { openai } from "@ai-sdk/openai"
-import { z } from "zod"
 import { getA3SystemPrompt, validateA3Response } from "@/lib/a3-coach-prompts"
 import { detectRedFlags } from "@/lib/brandie-coherence-test"
-
-const A3CoachResponseSchema = z.object({
-  response: z.string().describe("The coaching response in Spanish for A3 simulation context"),
-  type: z.enum(["scenario_intro", "pause_explain", "micro_experiment", "closure", "invitation", "reflection"])
-    .describe("Type of A3 coach response"),
-  includes_pause: z.boolean().describe("Whether this response pauses to explain a pattern"),
-  micro_experiment_proposed: z.boolean().describe("Whether a micro-experiment is proposed"),
-  coherenceCheck: z.object({
-    redFlagsDetected: z.array(z.string()),
-    pillarCompliant: z.boolean(),
-  }).optional(),
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -74,22 +59,56 @@ Resume lo aprendido, destaca patrones, deja abierta la aplicación.
 No impongas conclusiones.`
     }
 
-    const result = await generateObject({
-      model: openai("gpt-4-turbo"),
-      schema: A3CoachResponseSchema,
-      system: contextualPrompt,
-      prompt: message,
+    // Call OpenAI API directly
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: [
+          { role: "system", content: contextualPrompt },
+          { role: "user", content: message },
+        ],
+        temperature: 0.7,
+      }),
     })
 
+    if (!openaiResponse.ok) {
+      throw new Error(`OpenAI API error: ${openaiResponse.statusText}`)
+    }
+
+    const data = await openaiResponse.json()
+    const responseText = data.choices?.[0]?.message?.content || ""
+
+    if (!responseText) {
+      throw new Error("No response from OpenAI")
+    }
+
+    // Parse structured response
+    let result: any
+    try {
+      result = JSON.parse(responseText)
+    } catch {
+      result = {
+        response: responseText,
+        type: "scenario_intro",
+        includes_pause: false,
+        micro_experiment_proposed: false,
+      }
+    }
+
     // Post-generation validation
-    const internalValidation = validateA3Response(result.object.response)
-    const redFlags = detectRedFlags(result.object.response, "a3")
+    const internalValidation = validateA3Response(result.response)
+    const redFlags = detectRedFlags(result.response, "a3")
 
     return NextResponse.json({
-      response: result.object.response,
-      type: result.object.type,
-      includes_pause: result.object.includes_pause,
-      micro_experiment_proposed: result.object.micro_experiment_proposed,
+      response: result.response,
+      type: result.type || "scenario_intro",
+      includes_pause: result.includes_pause || false,
+      micro_experiment_proposed: result.micro_experiment_proposed || false,
       coherenceCheck: {
         redFlagsDetected: redFlags,
         pillarCompliant: redFlags.length === 0 && internalValidation.valid,

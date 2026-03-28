@@ -1,21 +1,16 @@
 import { NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   try {
-    console.log("[v0] [Admin Check] Starting admin check...")
-
     const { searchParams } = new URL(request.url)
     const email = searchParams.get("email")
 
-    console.log("[v0] [Admin Check] Email from query:", email)
-
     if (!email) {
-      console.log("[v0] [Admin Check] No email provided, returning false")
       return NextResponse.json({ isAdmin: false }, { status: 400 })
     }
 
-    const adminClient = createAdminClient()
+    const adminClient = await createClient()
 
     // Check if user is in admin_emails table
     console.log("[v0] [Admin Check] Checking admin_emails table for:", email)

@@ -13,7 +13,7 @@ export default function BitacoraPage() {
   const { entries, loading, error, addEntry, getStats } = useBitacora()
   const [isCreating, setIsCreating] = useState(false)
   const [newEntry, setNewEntry] = useState({
-    type: 'daily' as const,
+    type: 'daily' as 'daily' | 'weekly',
     title: '',
     reflection: '',
     insights: '',

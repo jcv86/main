@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * POST /api/despega/assign-trainings
@@ -19,35 +18,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const supabase = await createClient()
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[v0] Missing Supabase credentials')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
-    const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
+    const { data: existingTheme, error: themeError } = await supabase
+      .from('a2_themes')
+      .select('*')
+      .eq('user_id', user_id)
+      .eq('tema', a2_theme)
+      .maybeSingle()
 
     console.log(`[v0] Assigning trainings for user ${user_id} with theme: ${a2_theme}`)
 

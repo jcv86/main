@@ -1,15 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
-import { createClient } from "@/lib/supabase"
-import {
-  selectPersonality,
-  COACH_PERSONALITIES,
-  type CoachPersonality,
-  generateStructuredResponse,
-} from "@/lib/sofia-dani-prompts"
-import { detectIntention, getPromptForIntention, getCategoryInfo, trackEngagement } from "@/lib/intention-detector"
+import { createClient } from "@/lib/supabase/server"
+import { detectIntention, getPromptForIntention, getCategoryInfo } from "@/lib/intention-detector"
+import { type CoachPersonality, selectPersonality, COACH_PERSONALITIES, generateStructuredResponse } from "@/lib/sofia-dani-prompts"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 // GET - Retrieve conversation history
 export async function GET(request: NextRequest) {
@@ -18,7 +12,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId") || "demo-user"
     const conversationId = searchParams.get("conversationId")
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     if (conversationId) {
       // Get specific conversation
@@ -80,7 +74,7 @@ export async function POST(request: NextRequest) {
     console.log("[v0] POST /api/brain-query - message:", message.substring(0, 50))
     console.log("[v0] userEmail:", userEmail)
 
-    const supabase = createClient()
+    const supabase = await createClient()
     if (userEmail) {
       await supabase.from("brain_analytics_events").insert({
         event_type: "query_received",
@@ -147,6 +141,19 @@ export async function POST(request: NextRequest) {
 
         personality = personalityData?.[0] || null
         console.log("[v0] Personality data:", !!personality)
+        
+        // Fetch A4 Strategic Score for enriched context
+        const { data: a4ScoreData } = await supabase
+          .from("a4_strategic_scores")
+          .select("score, trend, level")
+          .eq("user_id", actualUserId)
+          .order("created_at", { ascending: false })
+          .limit(1)
+        
+        if (a4ScoreData?.[0]) {
+          userContext.a4_strategic_score = a4ScoreData[0]
+          console.log("[v0] A4 Strategic Score:", a4ScoreData[0].score)
+        }
       } else {
         console.log("[v0] Skipping personality query - no valid user UUID")
       }
@@ -169,26 +176,36 @@ export async function POST(request: NextRequest) {
     }
 
     const personality: CoachPersonality = selectPersonality(message, userContext, intentionResult.intention)
-    const coachConfig = COACH_PERSONALITIES[personality]
+    
+    // Map "auto" to a default personality or based on context
+    const selectedPersonality: "sofia" | "dani" = personality === "auto" 
+      ? (intentionResult.intention === "career_exploration" ? "sofia" : "dani")
+      : personality
+    
+    const coachConfig = COACH_PERSONALITIES[selectedPersonality]
 
-    console.log("[v0] Selected coach:", personality, "for intention:", intentionResult.intention)
+    console.log("[v0] Selected coach:", selectedPersonality, "for intention:", intentionResult.intention)
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
-    await trackEngagement({
-      userId: actualUserId,
-      sessionId,
-      timestamp: new Date(),
-      eventType: "message_sent",
-      intention: intentionResult.intention,
-      coachPersonality: personality,
-      metadata: {
-        messageLength: message.length,
-        confidence: intentionResult.confidence,
-        promptId: promptInfo?.id,
-        matchedKeywords: intentionResult.matchedKeywords,
-      },
-    })
+    // Log engagement event to database
+    if (userEmail) {
+      try {
+        await supabase.from("brain_analytics_events").insert({
+          event_type: "message_processed",
+          event_category: "coaching",
+          user_email: userEmail,
+          session_id: sessionId,
+          event_data: {
+            intention: intentionResult.intention,
+            coachPersonality: selectedPersonality,
+            confidence: intentionResult.confidence,
+          },
+        })
+      } catch (err) {
+        console.error("[v0] Analytics insert error:", err)
+      }
+    }
 
     const relevantKnowledge: any[] = []
 
@@ -215,6 +232,15 @@ export async function POST(request: NextRequest) {
         })
       }
 
+      // Add A4 Strategic Context if available
+      if (userContext.a4_strategic_score) {
+        contextDescription += `\n\nContexto Estratégico A4:`
+        contextDescription += `\n- Puntaje Estratégico: ${userContext.a4_strategic_score.score}/100`
+        contextDescription += `\n- Nivel: ${userContext.a4_strategic_score.level}`
+        contextDescription += `\n- Tendencia: ${userContext.a4_strategic_score.trend}`
+        contextDescription += "\n\nEl usuario está en fase de análisis estratégico del mercado y su contexto profesional."
+      }
+
       if (userContext.hasPersonalityData) {
         const p = userContext.personality
         contextDescription += "\n\nPerfil de personalidad:"
@@ -237,14 +263,42 @@ Responde siguiendo tu estructura obligatoria y mantén tu personalidad única. U
 
 Usuario: ${message}`
 
-      console.log("[v0] Calling OpenAI with simplified pattern")
+      console.log("[v0] Calling OpenAI with direct API")
 
-      const { text: responseText } = await generateText({
-        model: "openai/gpt-4o-mini",
-        prompt,
-        maxOutputTokens: 800,
-        temperature: 0.7,
+      const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: coachConfig.systemPrompt,
+            },
+            {
+              role: "user",
+              content: `Contexto del usuario: ${contextDescription}\n\nResponde siguiendo tu estructura obligatoria y mantén tu personalidad única. Usa el contexto del usuario para dar respuestas personalizadas y relevantes.\n\nUsuario: ${message}`,
+            },
+          ],
+          max_tokens: 800,
+          temperature: 0.7,
+        }),
       })
+
+      if (!openaiResponse.ok) {
+        const error = await openaiResponse.text()
+        throw new Error(`OpenAI API error: ${error}`)
+      }
+
+      const data = await openaiResponse.json()
+      const responseText = data.choices?.[0]?.message?.content
+
+      if (!responseText) {
+        throw new Error("No response content from OpenAI")
+      }
 
       text = responseText
       console.log("[v0] OpenAI response received, length:", text.length)
@@ -256,32 +310,23 @@ Usuario: ${message}`
       console.log("[v0] Using fallback response")
     }
 
-    await trackEngagement({
-      userId: actualUserId,
-      sessionId,
-      timestamp: new Date(),
-      eventType: "response_received",
-      intention: intentionResult.intention,
-      coachPersonality: personality,
-      metadata: {
-        responseLength: text.length,
-        usedFallback,
-        sourcesFound: relevantKnowledge.length,
-      },
-    })
-
+    // Log response sent event to database
     if (userEmail) {
-      await supabase.from("brain_analytics_events").insert({
-        event_type: "response_sent",
-        event_category: "coaching",
-        user_email: userEmail,
-        session_id: conversationId || sessionId,
-        event_data: {
-          coach: personality,
-          used_fallback: usedFallback,
-          response_length: text.length,
-        },
-      })
+      try {
+        await supabase.from("brain_analytics_events").insert({
+          event_type: "response_sent",
+          event_category: "coaching",
+          user_email: userEmail,
+          session_id: conversationId || sessionId,
+          event_data: {
+            coach: selectedPersonality,
+            used_fallback: usedFallback,
+            response_length: text.length,
+          },
+        })
+      } catch (err) {
+        console.error("[v0] Analytics insert error:", err)
+      }
     }
 
     let enhancedResponse = text
@@ -294,7 +339,8 @@ Usuario: ${message}`
       })
     }
 
-    const suggestedQuestions = generateFollowUpSuggestions(message, text, intentionResult.intention, userContext)
+    // Generate follow-up suggestions based on the conversation
+    const suggestedQuestions = generateFollowUpSuggestions(message, enhancedResponse, intentionResult.intention, userContext || {})
 
     console.log("[v0] About to return response with suggestions count:", suggestedQuestions.length)
 
@@ -344,7 +390,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const { conversationId, action, rating, userId = "demo-user" } = await request.json()
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     if (action === "rate") {
       const { error } = await supabase

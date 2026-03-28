@@ -76,7 +76,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
         {/* Hero Section */}
         <DashboardHero 
@@ -88,7 +88,7 @@ export default function DashboardPage() {
 
         {/* Metrics */}
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Tu Progreso
           </h2>
           <DashboardMetrics 
@@ -145,15 +145,15 @@ export default function DashboardPage() {
 
         {/* Pillars Grid */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
-            Los 4 Pilares de Tu Transformación
+          <h2 className="text-2xl font-bold text-foreground">
+            Los 3 Pilares de Tu Transformación
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <PillarCard
               pillar="A1"
               title="El Ritual"
               status="completed"
-              description="Completaste tu test DISC y descubriste tu patrón"
+              description="Completaste tu Evaluación de Liderazgo y descubriste tu patrón"
               nextStep="-"
               href="/despega/onboarding/result"
               icon={<Zap className="w-6 h-6" />}

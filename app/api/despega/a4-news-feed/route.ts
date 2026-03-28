@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY
 const NEWSAPI_ENDPOINT = "https://newsapi.org/v2/everything"

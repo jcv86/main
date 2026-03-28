@@ -7,17 +7,18 @@ import {
 } from "@/lib/web-resources"
 
 // GET - Obtener recurso específico
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = Number.parseInt(params.id)
-    const resource = await getWebResourceById(id)
+    const { id } = await params
+    const resourceId = Number.parseInt(id)
+    const resource = await getWebResourceById(resourceId)
 
     if (!resource) {
       return NextResponse.json({ error: "Resource not found" }, { status: 404 })
     }
 
     // Incrementar contador de acceso
-    await incrementWebResourceAccess(id)
+    await incrementWebResourceAccess(resourceId)
 
     return NextResponse.json({ resource })
   } catch (error) {
@@ -27,12 +28,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PATCH - Actualizar recurso
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = Number.parseInt(params.id)
+    const { id } = await params
+    const resourceId = Number.parseInt(id)
     const updates = await request.json()
 
-    const resource = await updateWebResource(id, updates)
+    const resource = await updateWebResource(resourceId, updates)
 
     if (!resource) {
       return NextResponse.json({ error: "Resource not found" }, { status: 404 })
@@ -49,10 +51,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Eliminar recurso
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = Number.parseInt(params.id)
-    const success = await deleteWebResource(id)
+    const { id } = await params
+    const resourceId = Number.parseInt(id)
+    const success = await deleteWebResource(resourceId)
 
     if (!success) {
       return NextResponse.json({ error: "Resource not found" }, { status: 404 })

@@ -388,7 +388,7 @@ export default function MBTITest() {
       console.log("[v0] Submitting MBTI test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "Mapa de Personalidad Despega",
+        "MBTI",
         results,
         duration,
       )
@@ -457,7 +457,7 @@ export default function MBTITest() {
         ]}
         whyRelevant="Tu tipo MBTI te ayuda a entender tus fortalezas naturales, preferencias de comunicación, y cómo trabajas mejor. Es fundamental para el autoconocimiento y desarrollo personal integral."
         estimatedTime={18}
-        questionsCount={mbtiQuestions.length}
+        totalQuestions={mbtiQuestions.length}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
@@ -488,12 +488,11 @@ export default function MBTITest() {
 
     return (
       <TestCompletionScreen
-        testName="Mapa de Personalidad Despega"
-        completionMessage="Has completado exitosamente tu Mapa de Personalidad Despega"
+        testType="mbti"
+        testName="Despega Resonancia"
         quickSummary={`Tu tipo de personalidad es ${type}`}
+        highlightedInsight="Has completado exitosamente tu Despega Resonancia"
         keyInsight={typeInsights[type] || "Tu personalidad única es tu mayor fortaleza"}
-        score={overallScore}
-        duration={duration}
         onViewFullReport={() => router.push("/test/mbti/results")}
         onTalkToCoach={() => router.push("/test/mbti/results#coach")}
       />
@@ -520,7 +519,7 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Mapa de Personalidad Despega</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Despega Resonancia</h2>
                 <p className="text-gray-600">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>

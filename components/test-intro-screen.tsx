@@ -6,24 +6,35 @@ import { Badge } from "@/components/ui/badge"
 import { Clock, CheckCircle2, Target, Lightbulb } from "lucide-react"
 
 interface TestIntroScreenProps {
-  testName: string
-  testDescription: string
-  whatItMeasures: string[]
-  whyRelevant: string
-  estimatedTime: number // in minutes
-  totalQuestions: number
+  testName?: string
+  testDescription?: string
+  title?: string
+  description?: string
+  whatItMeasures?: string[]
+  dimensions?: Array<{ name: string; description: string }>
+  whyRelevant?: string
+  estimatedTime?: number // in minutes
+  totalQuestions?: number
   onStart: () => void
+  onBack?: () => void
 }
 
 export function TestIntroScreen({
-  testName,
-  testDescription,
-  whatItMeasures,
-  whyRelevant,
-  estimatedTime,
-  totalQuestions,
+  testName = "Test",
+  testDescription = "Assessment",
+  title,
+  description,
+  whatItMeasures = [],
+  dimensions = [],
+  whyRelevant = "",
+  estimatedTime = 10,
+  totalQuestions = 50,
   onStart,
+  onBack,
 }: TestIntroScreenProps) {
+  // Use title/description if provided, otherwise use testName/testDescription
+  const displayName = title || testName
+  const displayDescription = description || testDescription
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
       <Card className="max-w-3xl w-full">
@@ -35,9 +46,9 @@ export function TestIntroScreen({
             </Badge>
           </div>
           <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            {testName}
+            {displayName}
           </CardTitle>
-          <CardDescription className="text-lg">{testDescription}</CardDescription>
+          <CardDescription className="text-lg">{displayDescription}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-8">
@@ -66,6 +77,21 @@ export function TestIntroScreen({
             <p className="text-muted-foreground ml-7">{whyRelevant}</p>
           </div>
 
+          {/* Dimensions */}
+          {dimensions.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="font-semibold text-lg">Dimensiones que se evalúan:</h3>
+              <div className="grid gap-3 ml-7">
+                {dimensions.map((dimension, index) => (
+                  <div key={index} className="p-3 bg-secondary/50 rounded-lg">
+                    <p className="font-medium text-sm">{dimension.name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{dimension.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Test info */}
           <div className="flex items-center justify-center gap-8 py-4 border-y">
             <div className="flex items-center gap-2">
@@ -90,6 +116,11 @@ export function TestIntroScreen({
             <Button onClick={onStart} size="lg" className="w-full max-w-md text-lg">
               Comenzar Evaluación
             </Button>
+            {onBack && (
+              <Button onClick={onBack} variant="ghost" size="sm">
+                Volver atrás
+              </Button>
+            )}
             <p className="text-sm text-muted-foreground text-center">Tus respuestas serán guardadas automáticamente</p>
           </div>
         </CardContent>

@@ -13,11 +13,13 @@ import { A4NewsFeed } from "@/components/a4-news-feed"
 import { A4LearningModules } from "@/components/a4-learning-modules"
 import { A4GamifiedTests } from "@/components/a4-gamified-tests"
 import { A4ResourceLibrary } from "@/components/a4-resource-library"
+import { A4RadarEstrategico } from "@/components/a4-radar-estrategico"
 
 export default function A4Page() {
   const [loading, setLoading] = useState(true)
   const [newsItems, setNewsItems] = useState<any[]>([])
   const [modules, setModules] = useState<any[]>([])
+  const [resources, setResources] = useState<any[]>([])
   const [savedResources, setSavedResources] = useState<Set<string>>(new Set())
   const [activeTab, setActiveTab] = useState("dashboard")
   const [userStats, setUserStats] = useState({
@@ -27,7 +29,7 @@ export default function A4Page() {
     streak: 0,
     badges: [],
   })
-  const { progress } = useCoach()
+  const { currentProgress, coachMessages } = useCoach()
   const supabase = createClient()
 
   useEffect(() => {
@@ -84,7 +86,6 @@ export default function A4Page() {
   }
 
   const handleSaveNews = async (itemId: string) => {
-    // TODO: Save to database
     setSavedResources(prev => {
       const newSet = new Set(prev)
       if (newSet.has(itemId)) {
@@ -97,8 +98,27 @@ export default function A4Page() {
   }
 
   const handleCompleteModule = async (moduleId: string, responses: string[]) => {
-    // TODO: Save module completion to database
     console.log("Module completed:", moduleId, responses)
+  }
+
+  const handleSaveResource = (resourceId: string) => {
+    setSavedResources(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(resourceId)) {
+        newSet.delete(resourceId)
+      } else {
+        newSet.add(resourceId)
+      }
+      return newSet
+    })
+  }
+
+  const handleRemoveResource = (resourceId: string) => {
+    setSavedResources(prev => {
+      const newSet = new Set(prev)
+      newSet.delete(resourceId)
+      return newSet
+    })
   }
 
   if (loading) {
@@ -111,25 +131,79 @@ export default function A4Page() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            Volver al Dashboard
-          </Link>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
-              🌍
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">La Realidad - Dónde Vive Tu Identidad</h1>
-              <p className="text-muted-foreground">A4: El mercado, las oportunidades, tu contexto profesional + coaching personalizado</p>
+      <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
+        
+        {/* WELCOME HERO - A4 VERSION */}
+        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-lg p-8 text-white shadow-lg">
+          <div className="max-w-3xl">
+            <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
+            <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
+            <p className="text-lg text-cyan-50 mb-4">
+              A4 es tu conexión con la realidad: datos económicos, tendencias del mercado, oportunidades ocultas y contexto cultural. 
+              No estás transformándote en el vacío. Estás transformándote para un mercado específico, con desafíos específicos, 
+              en un momento específico. A4 te da esa inteligencia.
+            </p>
+            <div className="flex gap-3">
+              <Button className="bg-white text-cyan-700 hover:bg-cyan-50 font-semibold" size="lg">
+                Explorar Radar Estratégico
+              </Button>
+              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+                Ver Guía A4
+              </Button>
             </div>
           </div>
-          <Badge className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300">
-            Fase A4: Tu identidad en el mundo real
-          </Badge>
+        </div>
+
+        {/* QUICK START GUIDE - A4 VERSION */}
+        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
+          <CardHeader>
+            <CardTitle className="text-xl">Primeros Pasos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">1</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Radar Estratégico</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Detecta señales estructurales, tácticas y contextuales en tu industria. El Radar te muestra qué está pasando antes de que sea obvio.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">2</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Lee Noticias Personalizadas</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Accede a noticias filtradas por tu perfil. No es ruido. Es context específico para tu transformación.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">3</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Estudia Módulos de Contexto</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Entiende la cultura corporativa, dinámicas de industria, y como posicionarte estratégicamente.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">4</div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Guarda Recursos y Crea tu Biblioteca</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye tu base de conocimiento. A4 es para referencia continua durante tu transformación.</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Original Header - Simplified */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white">
+              A4
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold">Dashboard de Contexto Estratégico</h2>
+              <p className="text-muted-foreground">Radar, Noticias, Módulos y Recursos</p>
+            </div>
+          </div>
         </div>
 
         {/* Quick Stats */}
@@ -164,8 +238,12 @@ export default function A4Page() {
         </div>
 
         {/* Enhanced Tab Triggers */}
-        <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="radar" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="radar" className="flex items-center gap-2">
+            <Brain className="w-4 h-4" />
+            Radar
+          </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Dashboard
@@ -183,6 +261,11 @@ export default function A4Page() {
             Biblioteca
           </TabsTrigger>
         </TabsList>
+
+        {/* Radar Estratégico Tab */}
+        <TabsContent value="radar" className="space-y-6">
+          <A4RadarEstrategico />
+        </TabsContent>
 
         {/* Dashboard Tab */}
         <TabsContent value="dashboard" className="space-y-6">
@@ -326,7 +409,7 @@ export default function A4Page() {
         </TabsContent>
 
         <TabsContent value="noticias" className="space-y-6">
-          <A4NewsFeed items={newsItems} onSave={handleSaveNews} />
+          <A4NewsFeed items={newsItems} />
         </TabsContent>
 
         <TabsContent value="modulos" className="space-y-6">
@@ -334,7 +417,7 @@ export default function A4Page() {
         </TabsContent>
 
         <TabsContent value="biblioteca" className="space-y-6">
-          <A4ResourceLibrary />
+          <A4ResourceLibrary resources={resources} onSaveResource={handleSaveResource} onRemoveResource={handleRemoveResource} />
         </TabsContent>
       </Tabs>
 

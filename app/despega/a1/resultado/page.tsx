@@ -61,6 +61,7 @@ export default function A1ResultadoPage() {
   const [testData, setTestData] = useState<any>(null)
   const [scores, setScores] = useState<DiscScores | null>(null)
   const [dominantProfile, setDominantProfile] = useState<string>('')
+  const [c1Context, setC1Context] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -68,42 +69,68 @@ export default function A1ResultadoPage() {
       try {
         const supabase = createClient()
         if (!supabase) {
-          router.push('/despega/onboarding')
+          setLoading(false)
           return
         }
 
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-          router.push('/despega/onboarding')
+          setLoading(false)
           return
         }
 
-        // Get latest test results
+        // Get latest test results from a1_tests_results
         const { data: testResults } = await supabase
-          .from('despega_test_results')
+          .from('a1_tests_results')
           .select('*')
           .eq('user_id', user.id)
+          .eq('test_name', 'Despega Cerebral')
           .order('created_at', { ascending: false })
           .limit(1)
           .single()
 
         if (testResults) {
+          console.log("[v0] Found test results:", testResults)
           setTestData(testResults)
-          const parsedScores = testResults.scores as DiscScores
+          
+          // Parse scores from responses object
+          let parsedScores: DiscScores = { D: 0, I: 0, S: 0, C: 0 }
+          
+          // Try to get scores from responses.d_score, i_score, s_score, c_score
+          if (testResults.responses) {
+            parsedScores = {
+              D: testResults.responses.d_score || 0,
+              I: testResults.responses.i_score || 0,
+              S: testResults.responses.s_score || 0,
+              C: testResults.responses.c_score || 0,
+            }
+          }
+          
           setScores(parsedScores)
-
+          
           // Find dominant profile
-          const maxScore = Math.max(parsedScores.D, parsedScores.I, parsedScores.S, parsedScores.C)
-          const dominant = Object.keys(parsedScores).find(
-            key => parsedScores[key as keyof DiscScores] === maxScore
-          ) as string
-          setDominantProfile(dominant)
+          const dominantProf = testResults.responses?.dominant_profile || testResults.profile_type || 'D'
+          setDominantProfile(dominantProf)
+          console.log("[v0] Set dominant profile:", dominantProf)
+
+          // Load C1 context for informe personalization
+          const { data: c1Data } = await supabase
+            .from('canon_conozcamonos_1_responses')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single()
+
+          if (c1Data) {
+            console.log("[v0] Found C1 context:", c1Data)
+            setC1Context(c1Data.responses)
+          }
         } else {
-          router.push('/despega/onboarding')
+          console.log("[v0] No test results found")
         }
       } catch (error) {
         console.error('[v0] Error loading test results:', error)
-        router.push('/despega/onboarding')
       } finally {
         setLoading(false)
       }
@@ -143,7 +170,7 @@ export default function A1ResultadoPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-20 space-y-12">
-        {/* Main DISC Profile Card */}
+        {/* Perfil Principal */}
         <div className={`rounded-2xl p-8 md:p-12 bg-gradient-to-br ${profile.color} shadow-2xl border border-white/10`}>
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="text-6xl md:text-7xl">{profile.icon}</div>
@@ -166,7 +193,7 @@ export default function A1ResultadoPage() {
           </div>
         </div>
 
-        {/* DISC Score Bars */}
+        {/* Puntuaciones de Dimensiones */}
         <div className="grid md:grid-cols-2 gap-6">
           {(['D', 'I', 'S', 'C'] as const).map((letter) => {
             const score = scores[letter]
@@ -208,7 +235,37 @@ export default function A1ResultadoPage() {
                     <p className="text-slate-400 text-sm mt-2">
                       Especialmente diseñada para tu perfil {profile.name}
                     </p>
-                  </div>
+        </div>
+
+        {/* Contexto C1 Personalizado - WOW #1 */}
+        {c1Context && (
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 border border-slate-600 rounded-2xl p-8 md:p-12">
+            <h3 className="text-2xl font-bold text-white mb-6">Tu Contexto Personalizado</h3>
+            <div className="space-y-4">
+              {c1Context[3] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-blue-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu desafío actual:</p>
+                  <p className="text-white font-semibold">{c1Context[3]}</p>
+                </div>
+              )}
+              {c1Context[4] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-emerald-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu objetivo para 90 días:</p>
+                  <p className="text-white font-semibold">{c1Context[4]}</p>
+                </div>
+              )}
+              {c1Context[1] && (
+                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-purple-400">
+                  <p className="text-sm text-slate-400 mb-2">Tu situación actual:</p>
+                  <p className="text-white font-semibold">{c1Context[1]}</p>
+                </div>
+              )}
+            </div>
+            <p className="text-sm text-slate-400 mt-6 italic">
+              Este perfil ha sido personalizado según tus respuestas. No podría escribirse sin el contexto que compartiste.
+            </p>
+          </div>
+        )}
                 </div>
               </div>
             ))}

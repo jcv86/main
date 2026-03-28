@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     // Lógica de recomendaciones según nivel
     let query = supabase
       .from("knowledge_base")
-      .select("id, title, author, category, difficulty_level, estimated_read_time, LENGTH(content) as content_length")
+      .select("id, title, author, category, difficulty_level, estimated_read_time")
       .not("id", "in", `(${completedIds.join(",") || "null"})`)
 
     // Filtrar por nivel
@@ -56,12 +56,25 @@ export async function GET(request: Request) {
 
     if (error) throw error
 
+    if (!Array.isArray(recommendations)) {
+      return NextResponse.json({
+        recommendations: [],
+      })
+    }
+
     return NextResponse.json({
-      recommendations: recommendations?.map((book, index) => ({
+      recommendations: recommendations.map((book: {
+        id: string | number
+        title: string
+        author: string
+        category: string
+        difficulty_level: string
+        estimated_read_time: number | null
+      }, index: number) => ({
         ...book,
         match_score: 100 - (index * 5), // Score decreciente
         reason: index === 0 ? "Recomendado para tu nivel" : "Basado en tus intereses",
-      })) || [],
+      })),
     })
   } catch (error) {
     console.error("[v0] Recommendations error:", error)

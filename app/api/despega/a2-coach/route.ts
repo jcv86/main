@@ -1,8 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
-import { generateObject } from "ai"
-import { openai } from "@ai-sdk/openai"
-import { A2_COACH_PROMPT, validateA2Response, A2CoachResponseSchema } from "@/lib/a2-coach-prompts"
+import { A2_COACH_PROMPT, validateA2Response } from "@/lib/a2-coach-prompts"
 import { detectRedFlags } from "@/lib/brandie-coherence-test"
 
 export async function POST(request: NextRequest) {
@@ -35,16 +33,52 @@ ${context.internalTensions?.join("\n") || "Ninguna reportada"}
 Mensaje del usuario:
 ${message}`
 
-    const result = await generateObject({
-      model: openai("gpt-4-turbo"),
-      schema: A2CoachResponseSchema,
-      system: A2_COACH_PROMPT.systemPrompt,
-      prompt: contextualPrompt,
+    // Call OpenAI API directly
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: [
+          { role: "system", content: A2_COACH_PROMPT.systemPrompt },
+          { role: "user", content: contextualPrompt },
+        ],
+        temperature: 0.7,
+      }),
     })
 
+    if (!openaiResponse.ok) {
+      throw new Error(`OpenAI API error: ${openaiResponse.statusText}`)
+    }
+
+    const data = await openaiResponse.json()
+    const responseText = data.choices?.[0]?.message?.content || ""
+
+    if (!responseText) {
+      throw new Error("No response from OpenAI")
+    }
+
+    // Parse structured response - expect JSON with response, type, patternExplored, contextIntroduced
+    let parsedResponse: any
+    try {
+      parsedResponse = JSON.parse(responseText)
+    } catch {
+      // If not JSON, wrap as text response
+      parsedResponse = {
+        response: responseText,
+        type: "pattern_exploration",
+        patternExplored: undefined,
+        contextIntroduced: undefined,
+      }
+    }
+
     // Post-generation validation
-    const validation = validateA2Response(result.object.response)
-    const redFlags = detectRedFlags(result.object.response, "a2")
+    const validation = validateA2Response(parsedResponse.response)
+    // A2 uses A1 pillar rules for red flags detection since A2 deepens A1 patterns
+    const redFlags = detectRedFlags(parsedResponse.response, "a1")
 
     // Log any violations
     if (!validation.valid || redFlags.length > 0) {
@@ -55,10 +89,10 @@ ${message}`
     }
 
     return NextResponse.json({
-      response: result.object.response,
-      type: result.object.type,
-      patternExplored: result.object.patternExplored,
-      contextIntroduced: result.object.contextIntroduced,
+      response: parsedResponse.response,
+      type: parsedResponse.type,
+      patternExplored: parsedResponse.patternExplored,
+      contextIntroduced: parsedResponse.contextIntroduced,
       coherenceCheck: {
         isValid: validation.valid && redFlags.length === 0,
         violations: validation.violations,

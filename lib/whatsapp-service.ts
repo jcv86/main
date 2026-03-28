@@ -40,23 +40,29 @@ export class WhatsAppService {
     })
   }
 
-  sendReminder(activity: any, userPhone: string): void {
-    const message =
-      `🔔 *Recordatorio de Actividad*\n\n` +
-      `📋 *${activity.title}*\n` +
-      `📅 ${new Date(activity.start_time).toLocaleString("es-CL", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })}\n` +
-      `⏱️ Duración: ${this.calculateDuration(activity.start_time, activity.end_time)}\n` +
-      `${activity.description ? `\n📝 ${activity.description}\n` : ""}` +
-      `\n✨ ¡Prepárate para dar lo mejor de ti!`
+  sendReminder(activity: any, userPhone: string): boolean {
+    try {
+      const message =
+        `🔔 *Recordatorio de Actividad*\n\n` +
+        `📋 *${activity.title}*\n` +
+        `📅 ${new Date(activity.start_time).toLocaleString("es-CL", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}\n` +
+        `⏱️ Duración: ${this.calculateDuration(activity.start_time, activity.end_time)}\n` +
+        `${activity.description ? `\n📝 ${activity.description}\n` : ""}` +
+        `\n✨ ¡Prepárate para dar lo mejor de ti!`
 
-    this.openWhatsApp(userPhone, message)
+      this.openWhatsApp(userPhone, message)
+      return true
+    } catch (error) {
+      console.error("[v0] Error sending WhatsApp reminder:", error)
+      return false
+    }
   }
 
   private calculateDuration(start: string, end: string): string {

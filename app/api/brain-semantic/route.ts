@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import OpenAI from "openai"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 export const dynamic = "force-dynamic"
 
 function extractKeywords(query: string): string[] {
@@ -240,7 +240,14 @@ export async function POST(request: NextRequest) {
     })
 
     const context = contextChunks
-      .map((chunk, idx) => `Fuente ${idx + 1} (${chunk.title} por ${chunk.author}):\n${chunk.excerpt}\n`)
+      .map((chunk: {
+        title: string
+        author: string
+        category: string
+        similarity: number
+        excerpt: string
+        sourceType: string
+      }, idx: number) => `Fuente ${idx + 1} (${chunk.title} por ${chunk.author}):\n${chunk.excerpt}\n`)
       .join("\n\n")
 
     const completion = await openai.chat.completions.create({
@@ -269,7 +276,14 @@ Instrucciones:
 
     const answer = completion.choices[0].message.content || "No pude generar una respuesta."
 
-    const avgSimilarity = contextChunks.reduce((sum, chunk) => sum + chunk.similarity, 0) / contextChunks.length
+    const avgSimilarity = contextChunks.reduce((sum: number, chunk: {
+      title: string
+      author: string
+      category: string
+      similarity: number
+      excerpt: string
+      sourceType: string
+    }) => sum + chunk.similarity, 0) / contextChunks.length
     const confidence = Math.round(avgSimilarity * 100)
 
     return NextResponse.json({

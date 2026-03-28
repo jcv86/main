@@ -1,173 +1,190 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
-import { ArrowRight, TrendingUp, BookOpen, Lightbulb, Globe } from 'lucide-react'
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+import { ArrowLeft, Radar, TrendingUp, Globe, Lightbulb, CheckCircle, BookOpen } from "lucide-react"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
+import { RadarEstrategico } from "@/components/radar-estrategico"
+import { NoticiasFeed } from "@/components/noticias-feed"
+import { GamifiedTests } from "@/components/gamified-tests"
+import { PruebasTab } from "@/components/pruebas-tab"
+import { Biblioteca } from "@/components/biblioteca"
+import { EngagementDashboard } from "@/components/engagement-dashboard"
+import { PersonalizationProfile } from "@/components/personalization-profile"
+import { PointsBadgesSystem } from "@/components/points-badges-system"
 
 export default function A4HubPage() {
-  const [loading, setLoading] = useState(true)
-  const [newsCount, setNewsCount] = useState(0)
-  const [resourcesCount, setResourcesCount] = useState(0)
-  const supabase = createClient()
+  const { user, loading } = useAuthRedirect()
+  const [activeTab, setActiveTab] = useState("radar")
 
-  useEffect(() => {
-    loadStats()
-  }, [])
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
-  const loadStats = async () => {
-    const { count: newsData } = await supabase
-      .from('biblioteca')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_featured', true)
-
-    const { count: resourcesData } = await supabase
-      .from('biblioteca')
-      .select('*', { count: 'exact', head: true })
-
-    setNewsCount(newsData || 0)
-    setResourcesCount(resourcesData || 0)
-    setLoading(false)
+  if (!user) {
+    return null
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Navigation Header */}
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/despega">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver a Despega
+            </Button>
+          </Link>
+          <div className="text-sm text-muted-foreground">
+            Fase <Badge variant="secondary">A4: Radar Estratégico</Badge>
+          </div>
+        </div>
+
         {/* Hero Section */}
-        <div className="mb-16">
-          <div className="text-center max-w-3xl mx-auto mb-8">
+        <div className="mb-12">
+          <div className="text-center max-w-3xl mx-auto">
             <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
-              <Globe className="w-3 h-3 mr-2" />
-              Fase A4: Contexto & Cultura
+              <Radar className="w-3 h-3 mr-2" />
+              Centro de Inteligencia de Mercado
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-              Entiende el Mundo Real
+              Tu Radar Estratégico
             </h1>
             <p className="text-xl text-muted-foreground text-balance mb-8">
-              Noticias del mercado laboral, insights sobre industrias, y cultura general profesional. Tu brújula para tomar decisiones informadas.
+              Análisis profundo del mercado laboral chileno con 7 capas cognitivas de interpretación. Entiende qué está pasando realmente y cómo aprovechar oportunidades.
             </p>
           </div>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto mb-12">
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">{newsCount}</p>
-                  <p className="text-sm text-muted-foreground">Artículos Destacados</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">{resourcesCount}</p>
-                  <p className="text-sm text-muted-foreground">Recursos Curados</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary mb-1">∞</p>
-                  <p className="text-sm text-muted-foreground">Oportunidades</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
-        {/* Main Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {/* News Feed */}
-          <Link href="/despega/a4/noticias" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <TrendingUp className="w-6 h-6 text-primary" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">En Vivo</Badge>
-                </div>
-                <CardTitle className="text-xl">Noticias del Mercado</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Tendencias laborales, cambios en industrias, oportunidades emergentes y análisis del mercado en tiempo real.
-                </p>
-                <div className="flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Explorar <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+        {/* Main Tabs Content */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-8 gap-1 bg-background/50 backdrop-blur-sm border border-border">
+            <TabsTrigger value="radar" className="text-xs sm:text-sm">
+              <Radar className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Radar</span>
+            </TabsTrigger>
+            <TabsTrigger value="noticias" className="text-xs sm:text-sm">
+              <TrendingUp className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Noticias</span>
+            </TabsTrigger>
+            <TabsTrigger value="personalizadas" className="text-xs sm:text-sm">
+              <Globe className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Personalizadas</span>
+            </TabsTrigger>
+            <TabsTrigger value="tests" className="text-xs sm:text-sm">
+              <Lightbulb className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Tests</span>
+            </TabsTrigger>
+            <TabsTrigger value="casos" className="text-xs sm:text-sm">
+              <CheckCircle className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Casos</span>
+            </TabsTrigger>
+            <TabsTrigger value="biblioteca" className="text-xs sm:text-sm">
+              <BookOpen className="w-3 h-3 sm:mr-1" />
+              <span className="hidden sm:inline">Biblioteca</span>
+            </TabsTrigger>
+            <TabsTrigger value="badges" className="text-xs sm:text-sm">
+              <span>🏆</span>
+              <span className="hidden sm:inline ml-1">Insignias</span>
+            </TabsTrigger>
+          </TabsList>
 
-          {/* Learning Modules */}
-          <Link href="/despega/a4/aprender" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                    <Lightbulb className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">10+ Tests</Badge>
-                </div>
-                <CardTitle className="text-xl">Cultura General</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Tests gamificados sobre economía, industrias, trends laborales y cultura profesional. Aprende jugando.
-                </p>
-                <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Comenzar <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {/* Library */}
-          <Link href="/despega/a4/biblioteca" className="group">
-            <Card className="h-full border-0 bg-card/70 hover:bg-card backdrop-blur-sm transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-3 bg-amber-500/10 rounded-lg group-hover:bg-amber-500/20 transition-colors">
-                    <BookOpen className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">{resourcesCount}+ Libros</Badge>
-                </div>
-                <CardTitle className="text-xl">Biblioteca Curada</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Libros, artículos y recursos seleccionados para tu crecimiento profesional. Con notas, highlights y progreso.
-                </p>
-                <div className="flex items-center text-amber-600 dark:text-amber-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                  Leer <ArrowRight className="w-4 h-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-
-        {/* Coach Call-to-Action */}
-        <Card className="border-0 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-sm">
-          <CardContent className="pt-8 pb-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Acompañamiento Personalizado</h3>
-                <p className="text-muted-foreground">Tu Coach te ayuda a contextualizar el mercado y tomar decisiones estratégicas sobre tu carrera.</p>
-              </div>
-              <Link href="/despega/a2/coach">
-                <Button size="lg" className="whitespace-nowrap">
-                  Abrir Coach <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
+          {/* Radar Tab */}
+          <TabsContent value="radar" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Radar Estratégico</h2>
+              <p className="text-muted-foreground">
+                Análisis profundo con 7 capas cognitivas de las tendencias del mercado laboral chileno
+              </p>
             </div>
-          </CardContent>
-        </Card>
+            <RadarEstrategico />
+          </TabsContent>
+
+          {/* Noticias Tab */}
+          <TabsContent value="noticias" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Noticias del Mercado</h2>
+              <p className="text-muted-foreground">
+                Tendencias laborales, cambios en industrias y oportunidades emergentes
+              </p>
+            </div>
+            <NoticiasFeed />
+          </TabsContent>
+
+          {/* Personalizadas Tab */}
+          <TabsContent value="personalizadas" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Noticias Personalizadas</h2>
+              <p className="text-muted-foreground">
+                Contenido adaptado según tu perfil DISC y preferencias de desarrollo
+              </p>
+            </div>
+            <PersonalizationProfile />
+          </TabsContent>
+
+          {/* Tests Tab */}
+          <TabsContent value="tests" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Pruebas Gamificadas</h2>
+              <p className="text-muted-foreground">
+                Completa pruebas interactivas para reforzar tu aprendizaje y ganar puntos
+              </p>
+            </div>
+            <GamifiedTests />
+          </TabsContent>
+
+          {/* Casos Tab */}
+          <TabsContent value="casos" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Casos de Estudio</h2>
+              <p className="text-muted-foreground">
+                Aprende de casos reales: desafíos, estrategias y resultados de empresas exitosas
+              </p>
+            </div>
+            <PruebasTab />
+          </TabsContent>
+
+          {/* Biblioteca Tab */}
+          <TabsContent value="biblioteca" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Biblioteca Curada</h2>
+              <p className="text-muted-foreground">
+                100+ libros, artículos, podcasts y recursos seleccionados para tu crecimiento profesional
+              </p>
+            </div>
+            <Biblioteca />
+          </TabsContent>
+
+          {/* Insignias Tab */}
+          <TabsContent value="badges" className="space-y-4">
+            <div className="space-y-2 mb-6">
+              <h2 className="text-2xl font-bold">Insignias y Puntos</h2>
+              <p className="text-muted-foreground">
+                Desbloquea insignias, gana puntos y compite en el ranking global
+              </p>
+            </div>
+            <PointsBadgesSystem />
+          </TabsContent>
+        </Tabs>
+
+        {/* Footer Navigation */}
+        <div className="mt-16 text-center space-y-4 border-t pt-8">
+          <p className="text-muted-foreground">
+            A4 es tu centro de aprendizaje continuo sobre el mercado, la economía y las oportunidades laborales en Chile.
+          </p>
+          <p className="text-xs text-muted-foreground/70">
+            Datos actualizados en tiempo real • Análisis estructurado con 7 capas cognitivas • 100+ recursos curados
+          </p>
+        </div>
       </div>
     </div>
   )

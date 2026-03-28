@@ -107,7 +107,7 @@ export default function RIASECResults() {
         return
       }
 
-      const result = await UnifiedTestSystem.loadTestResult(email, "Brújula Vocacional Despega")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Despega Rumbo")
 
       if (result.success && result.data) {
         // Ensure the data structure matches the updated interface
@@ -473,7 +473,7 @@ export default function RIASECResults() {
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-              <span>Cargando resultados Brújula Vocacional Despega...</span>
+              <span>Cargando resultados Despega Rumbo...</span>
             </div>
           </CardContent>
         </Card>
@@ -488,8 +488,8 @@ export default function RIASECResults() {
           <CardContent className="p-6 text-center">
             <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-600 mb-4">Parece que aún no has completado el test Brújula Vocacional Despega.</p>
-            <Button onClick={() => router.push("/test/riasec")}>Realizar Test Brújula Vocacional Despega</Button>
+      <p className="text-gray-600 mb-4">Parece que aún no has completado el test Despega Rumbo.</p>
+      <Button onClick={() => router.push("/test/riasec")}>Realizar Test Despega Rumbo</Button>
           </CardContent>
         </Card>
       </div>
@@ -509,7 +509,7 @@ export default function RIASECResults() {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-3xl font-bold text-blue-900 mb-2">
-                  Resultados Brújula Vocacional Despega
+                  Resultados Despega Rumbo
                   <Badge className="ml-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
                     Código Holland: {results.holland_code}
                   </Badge>
@@ -553,7 +553,7 @@ export default function RIASECResults() {
                 <div className="text-xs space-y-1">
                   <p>• Orientaciones complementarias</p>
                   <p>• Carreras multidimensionales</p>
-                  <p>• Roles más integrados</p>
+                  <p>• Roles m��s integrados</p>
                 </div>
               </div>
               <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
@@ -1505,7 +1505,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="RIASEC" testResults={results} />
+            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={session?.user?.email || ""} />
           </TabsContent>
 
           {/* Career Tab */}

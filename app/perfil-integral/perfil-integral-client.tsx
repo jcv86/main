@@ -367,9 +367,9 @@ export function PerfilIntegralClient() {
                     <h3 className="font-semibold text-lg mb-3">Puntaje General: {ieResult.score}%</h3>
                     <Progress value={ieResult.score || 50} className="mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      {ieResult.score > 75
+                      {(ieResult.score || 50) > 75
                         ? "Tienes una alta inteligencia emocional. Reconoces y gestionas bien tus emociones."
-                        : ieResult.score > 50
+                        : (ieResult.score || 50) > 50
                           ? "Tu inteligencia emocional está en desarrollo. Con práctica puedes fortalecerla."
                           : "Hay oportunidades significativas para desarrollar tu inteligencia emocional."}
                     </p>

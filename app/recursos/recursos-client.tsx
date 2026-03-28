@@ -648,7 +648,7 @@ export default function RecursosClient() {
 
                 <TabsContent value="books">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {resources.books.map((book) => (
+                    {resources.books.map((book: any) => (
                       <Card key={book.id} className="hover:shadow-lg transition-shadow">
                         <CardHeader className="pb-3">
                           <div className="flex justify-between items-start mb-2">
@@ -673,7 +673,7 @@ export default function RecursosClient() {
 
                 <TabsContent value="challenges">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {resources.challenges.map((challenge) => {
+                    {resources.challenges.map((challenge: any) => {
                       const isCompleted = completedChallenges.includes(challenge.id)
                       return (
                         <Card

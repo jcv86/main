@@ -1,12 +1,9 @@
 import type { NextRequest } from "next/server"
-import { createAdminClient } from "@/lib/supabase-server"
-import { streamText } from "ai"
+import { createClient } from "@/lib/supabase/server"
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("[v0] [Document Chat API] Starting chat request...")
-
-    const supabase = createAdminClient()
+    const supabase = await createClient()
 
     const { message, documentIds = [], bookIds = [] } = await request.json()
 
@@ -85,19 +82,35 @@ Reglas importantes:
 Contexto de las fuentes:
 ${context}`
 
-    console.log("[v0] Generating AI response...")
-
-    const result = await streamText({
-      model: "openai/gpt-4-turbo",
-      system: systemPrompt,
-      messages: [{ role: "user", content: message }],
+    // Call OpenAI API directly for streaming
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message },
+        ],
+        temperature: 0.7,
+        stream: true,
+      }),
     })
 
-    const stream = result.toAIStream()
+    if (!openaiResponse.ok) {
+      const error = await openaiResponse.text()
+      console.error("[v0] OpenAI API error:", error)
+      return new Response(JSON.stringify({ error: "AI service error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      })
+    }
 
-    console.log("[v0] Streaming response to client")
-
-    return new Response(stream, {
+    // Return the streaming response directly
+    return new Response(openaiResponse.body, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 10000))
 
     const generationPromise = (async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
 
       const { data: existingProfile } = await supabase
         .from("user_profiles")
@@ -63,10 +63,12 @@ export async function GET(request: NextRequest) {
       return recommendations
     })()
 
-    const recommendations = await Promise.race([generationPromise, timeoutPromise]).catch((error) => {
+    let recommendations: any = getDemoRecommendations()
+    try {
+      recommendations = await Promise.race([generationPromise, timeoutPromise])
+    } catch (error) {
       console.log("[v0] Generation timeout or error, using demo recommendations")
-      return getDemoRecommendations()
-    })
+    }
 
     console.log("[v0] Returning", Array.isArray(recommendations) ? recommendations.length : 0, "recommendations")
 

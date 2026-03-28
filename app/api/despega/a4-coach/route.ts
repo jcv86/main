@@ -1,18 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
-import { generateObject } from "ai"
-import { openai } from "@ai-sdk/openai"
-import { z } from "zod"
 import { detectRedFlags, getPillarContext } from "@/lib/brandie-coherence-test"
-
-const A4CoachResponseSchema = z.object({
-  response: z.string().describe("The coaching response in Spanish"),
-  type: z.enum(["contexto", "traduccion", "conexion", "insight"]).describe("Type of response"),
-  coherenceCheck: z.object({
-    redFlagsDetected: z.array(z.string()),
-    pillarCompliant: z.boolean(),
-  }).optional(),
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -116,20 +104,52 @@ RED FLAGS (Una sola invalida):
 
 MÁXIMO 200 PALABRAS. LENGUAJE CHILENO NATURAL.`
 
-    const result = await generateObject({
-      model: openai("gpt-4-turbo"),
-      schema: A4CoachResponseSchema,
-      system: systemPrompt,
-      prompt: message,
+    // Call OpenAI API directly
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message },
+        ],
+        temperature: 0.7,
+      }),
     })
 
+    if (!openaiResponse.ok) {
+      throw new Error(`OpenAI API error: ${openaiResponse.statusText}`)
+    }
+
+    const data = await openaiResponse.json()
+    const responseText = data.choices?.[0]?.message?.content || ""
+
+    if (!responseText) {
+      throw new Error("No response from OpenAI")
+    }
+
+    // Parse structured response
+    let result: any
+    try {
+      result = JSON.parse(responseText)
+    } catch {
+      result = {
+        response: responseText,
+        type: "contexto",
+      }
+    }
+
     // Post-generation coherence check
-    const redFlags = detectRedFlags(result.object.response, "a4")
+    const redFlags = detectRedFlags(result.response, "a4")
     const pillarRules = getPillarContext("a4")
 
     return NextResponse.json({
-      response: result.object.response,
-      type: result.object.type,
+      response: result.response,
+      type: result.type || "contexto",
       coherenceCheck: {
         redFlagsDetected: redFlags,
         pillarCompliant: redFlags.length === 0,

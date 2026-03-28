@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog"
 import {
   Target,
@@ -414,564 +415,63 @@ export default function MetasSMARTClient() {
 
                 <div className="space-y-6 py-4">
                   {/* Información básica */}
-                  <div className="space-y-4">
-                    <div>
-                      <Label>Nombre de la meta</Label>
-                      <Input
-                        placeholder="Ej: Mejorar comunicación asertiva"
-                        value={nuevaMeta.nombre}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, nombre: e.target.value })}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Tipo de meta</Label>
-                        <Select
-                          value={nuevaMeta.tipo}
-                          onValueChange={(value) =>
-                            setNuevaMeta({ ...nuevaMeta, tipo: value as "personal" | "laboral" | "mixto" })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="personal">
-                              <span className="flex items-center gap-2">
-                                <Heart className="h-4 w-4" /> Personal
-                              </span>
-                            </SelectItem>
-                            <SelectItem value="laboral">
-                              <span className="flex items-center gap-2">
-                                <Briefcase className="h-4 w-4" /> Laboral
-                              </span>
-                            </SelectItem>
-                            <SelectItem value="mixto">
-                              <span className="flex items-center gap-2">
-                                <Sparkles className="h-4 w-4" /> Mixto
-                              </span>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <Label>Origen (Test relacionado)</Label>
-                        <Select
-                          value={nuevaMeta.origen}
-                          onValueChange={(value) => setNuevaMeta({ ...nuevaMeta, origen: value })}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona el test" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="DISC">DISC</SelectItem>
-                            <SelectItem value="MBTI">MBTI</SelectItem>
-                            <SelectItem value="Big Five">Big Five</SelectItem>
-                            <SelectItem value="IE">Inteligencia Emocional</SelectItem>
-                            <SelectItem value="RIASEC">RIASEC</SelectItem>
-                            <SelectItem value="Soft Skills">Soft Skills</SelectItem>
-                            <SelectItem value="Personal">Iniciativa Personal</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label>Motivo profundo (¿Para qué?)</Label>
-                      <Textarea
-                        placeholder="¿Por qué es importante esta meta para ti? ¿Qué impacto tendrá en tu vida?"
-                        value={nuevaMeta.motivoProfundo}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, motivoProfundo: e.target.value })}
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nombre">Nombre de la Meta</Label>
+                    <Input
+                      id="nombre"
+                      value={nuevaMeta.nombre}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, nombre: e.target.value })}
+                      placeholder="Ej: Mejorar liderazgo en equipo"
+                      className="dark:bg-slate-700 dark:border-slate-600"
+                    />
                   </div>
 
-                  {/* Marco SMART */}
-                  <div className="space-y-4 border-t pt-4">
-                    <h3 className="font-semibold text-lg flex items-center gap-2">
-                      <Lightbulb className="h-5 w-5 text-yellow-500" />
-                      Marco SMART
-                    </h3>
-
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-xs font-bold">S</span>
-                        Específica
-                      </Label>
-                      <Textarea
-                        placeholder="¿Qué exactamente quieres lograr? Sé lo más concreto posible"
-                        value={nuevaMeta.especifica}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, especifica: e.target.value })}
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-xs font-bold">M</span>
-                        Medible
-                      </Label>
-                      <Textarea
-                        placeholder="¿Cómo sabrás que lo lograste? Define números o indicadores claros"
-                        value={nuevaMeta.medible}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, medible: e.target.value })}
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-xs font-bold">A</span>
-                        Alcanzable
-                      </Label>
-                      <Textarea
-                        placeholder="¿Es realista dado tu contexto actual? ¿Qué recursos necesitas?"
-                        value={nuevaMeta.alcanzable}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, alcanzable: e.target.value })}
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-xs font-bold">R</span>
-                        Relevante
-                      </Label>
-                      <Textarea
-                        placeholder="¿Por qué es importante ahora? ¿Cómo se conecta con tu perfil de tests?"
-                        value={nuevaMeta.relevante}
-                        onChange={(e) => setNuevaMeta({ ...nuevaMeta, relevante: e.target.value })}
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="flex items-center gap-2">
-                        <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-xs font-bold">T</span>
-                        Temporal
-                      </Label>
-                      <Select
-                        value={nuevaMeta.temporal}
-                        onValueChange={(value) => setNuevaMeta({ ...nuevaMeta, temporal: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="30 días">30 días</SelectItem>
-                          <SelectItem value="60 días">60 días</SelectItem>
-                          <SelectItem value="90 días">90 días</SelectItem>
-                          <SelectItem value="6 meses">6 meses</SelectItem>
-                          <SelectItem value="1 año">1 año</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tipo">Tipo de Meta</Label>
+                    <select
+                      id="tipo"
+                      value={nuevaMeta.tipo}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, tipo: e.target.value as any })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+                    >
+                      <option value="laboral">Laboral</option>
+                      <option value="personal">Personal</option>
+                      <option value="mixto">Mixto</option>
+                    </select>
                   </div>
 
-                  {/* Indicadores por período */}
-                  <div className="space-y-4 border-t pt-4">
-                    <h3 className="font-semibold text-lg flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-blue-500" />
-                      Indicadores de Progreso
-                    </h3>
-
-                    <div>
-                      <Label className="text-sm font-medium">Indicadores a 30 días</Label>
-                      {nuevaMeta.indicadores30?.map((ind, i) => (
-                        <Input
-                          key={i}
-                          className="mt-2"
-                          placeholder={`Indicador ${i + 1}`}
-                          value={ind}
-                          onChange={(e) => {
-                            const nuevos = [...(nuevaMeta.indicadores30 || [])]
-                            nuevos[i] = e.target.value
-                            setNuevaMeta({ ...nuevaMeta, indicadores30: nuevos })
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    <div>
-                      <Label className="text-sm font-medium">Indicadores a 60 días</Label>
-                      {nuevaMeta.indicadores60?.map((ind, i) => (
-                        <Input
-                          key={i}
-                          className="mt-2"
-                          placeholder={`Indicador ${i + 1}`}
-                          value={ind}
-                          onChange={(e) => {
-                            const nuevos = [...(nuevaMeta.indicadores60 || [])]
-                            nuevos[i] = e.target.value
-                            setNuevaMeta({ ...nuevaMeta, indicadores60: nuevos })
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    <div>
-                      <Label className="text-sm font-medium">Indicadores a 90 días</Label>
-                      {nuevaMeta.indicadores90?.map((ind, i) => (
-                        <Input
-                          key={i}
-                          className="mt-2"
-                          placeholder={`Indicador ${i + 1}`}
-                          value={ind}
-                          onChange={(e) => {
-                            const nuevos = [...(nuevaMeta.indicadores90 || [])]
-                            nuevos[i] = e.target.value
-                            setNuevaMeta({ ...nuevaMeta, indicadores90: nuevos })
-                          }}
-                        />
-                      ))}
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="motivoProfundo">Motivación Profunda</Label>
+                    <textarea
+                      id="motivoProfundo"
+                      value={nuevaMeta.motivoProfundo}
+                      onChange={(e) => setNuevaMeta({ ...nuevaMeta, motivoProfundo: e.target.value })}
+                      placeholder="¿Por qué es importante esta meta para ti?"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white min-h-20"
+                    />
                   </div>
 
-                  {/* Hábitos y Recursos */}
-                  <div className="space-y-4 border-t pt-4">
-                    <div>
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <Clock className="h-4 w-4" /> Hábitos semanales
-                      </Label>
-                      {nuevaMeta.habitos?.map((hab, i) => (
-                        <Input
-                          key={i}
-                          className="mt-2"
-                          placeholder={`Hábito ${i + 1}`}
-                          value={hab}
-                          onChange={(e) => {
-                            const nuevos = [...(nuevaMeta.habitos || [])]
-                            nuevos[i] = e.target.value
-                            setNuevaMeta({ ...nuevaMeta, habitos: nuevos })
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    <div>
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <BookOpen className="h-4 w-4" /> Recursos recomendados
-                      </Label>
-                      {nuevaMeta.recursos?.map((rec, i) => (
-                        <Input
-                          key={i}
-                          className="mt-2"
-                          placeholder={`Recurso ${i + 1} (libro, test, coach...)`}
-                          value={rec}
-                          onChange={(e) => {
-                            const nuevos = [...(nuevaMeta.recursos || [])]
-                            nuevos[i] = e.target.value
-                            setNuevaMeta({ ...nuevaMeta, recursos: nuevos })
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button onClick={handleGuardarMeta} className="w-full bg-indigo-600 hover:bg-indigo-700">
-                    {metaEditando ? "Guardar Cambios" : "Crear Meta SMART"}
-                  </Button>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button onClick={handleGuardarMeta} className="bg-indigo-600 hover:bg-indigo-700">
+                      {metaEditando ? "Actualizar" : "Crear"} Meta
+                    </Button>
+                  </DialogFooter>
                 </div>
               </DialogContent>
             </Dialog>
           </div>
-
-          {/* Estadísticas rápidas */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900 dark:to-slate-800 border-indigo-100 dark:border-indigo-700">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-indigo-600 dark:text-indigo-300 font-medium">Total Metas</p>
-                    <p className="text-3xl font-bold text-indigo-900 dark:text-indigo-100">{estadisticas.total}</p>
-                  </div>
-                  <Target className="h-10 w-10 text-indigo-300 dark:text-indigo-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-green-50 to-white dark:from-green-900 dark:to-slate-800 border-green-100 dark:border-green-700">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-green-600 dark:text-green-300 font-medium">Activas</p>
-                    <p className="text-3xl font-bold text-green-900 dark:text-green-100">{estadisticas.activas}</p>
-                  </div>
-                  <TrendingUp className="h-10 w-10 text-green-300 dark:text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-900 dark:to-slate-800 border-blue-100 dark:border-blue-700">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-blue-600 dark:text-blue-300 font-medium">Completadas</p>
-                    <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{estadisticas.completadas}</p>
-                  </div>
-                  <CheckCircle2 className="h-10 w-10 text-blue-300 dark:text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-amber-50 to-white dark:from-amber-900 dark:to-slate-800 border-amber-100 dark:border-amber-700">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-amber-600 dark:text-amber-300 font-medium">Progreso Promedio</p>
-                    <p className="text-3xl font-bold text-amber-900 dark:text-amber-100">
-                      {estadisticas.promedioProgreso}%
-                    </p>
-                  </div>
-                  <BarChart3 className="h-10 w-10 text-amber-300 dark:text-amber-500" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
-        {/* Tabs principales */}
-        <Tabs defaultValue="mis-metas" className="space-y-6">
-          <TabsList className="bg-white dark:bg-slate-800 border dark:border-slate-700">
-            <TabsTrigger
-              value="mis-metas"
-              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
-            >
-              <Target className="h-4 w-4 mr-2" />
-              Mis Metas
-            </TabsTrigger>
-            <TabsTrigger
-              value="plantillas"
-              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
-            >
-              <Lightbulb className="h-4 w-4 mr-2" />
-              Plantillas por Test
-            </TabsTrigger>
-            <TabsTrigger
-              value="progreso"
-              className="data-[state=active]:bg-indigo-100 dark:data-[state=active]:bg-indigo-900"
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Mi Progreso
-            </TabsTrigger>
+        {/* Tabs */}
+        <Tabs defaultValue="progreso" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800">
+            <TabsTrigger value="progreso">Mi Progreso</TabsTrigger>
+            <TabsTrigger value="metas">Todas las Metas</TabsTrigger>
+            <TabsTrigger value="plantillas">Plantillas</TabsTrigger>
           </TabsList>
-
-          {/* Tab: Mis Metas */}
-          <TabsContent value="mis-metas" className="space-y-6">
-            {/* Filtros */}
-            <div className="flex gap-4 flex-wrap">
-              <Select value={filtroTipo} onValueChange={setFiltroTipo}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todas">Todos los tipos</SelectItem>
-                  <SelectItem value="personal">Personal</SelectItem>
-                  <SelectItem value="laboral">Laboral</SelectItem>
-                  <SelectItem value="mixto">Mixto</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={filtroEstado} onValueChange={setFiltroEstado}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todas">Todos los estados</SelectItem>
-                  <SelectItem value="activa">Activas</SelectItem>
-                  <SelectItem value="completada">Completadas</SelectItem>
-                  <SelectItem value="pausada">Pausadas</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Lista de metas */}
-            <div className="grid gap-6">
-              {metasFiltradas.map((meta) => (
-                <Card
-                  key={meta.id}
-                  className="border-l-4 border-l-indigo-500 hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border-indigo-700"
-                >
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        {getIconoTipo(meta.tipo)}
-                        <div>
-                          <CardTitle className="text-lg text-slate-900 dark:text-white">{meta.nombre}</CardTitle>
-                          <CardDescription className="flex items-center gap-2 mt-1">
-                            <Badge
-                              variant="outline"
-                              className="text-xs text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-600"
-                            >
-                              {meta.origen}
-                            </Badge>
-                            <Badge className={getColorEstado(meta.estado)}>{meta.estado}</Badge>
-                          </CardDescription>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setMetaEditando(meta)
-                            setNuevaMeta(meta)
-                            setDialogOpen(true)
-                          }}
-                        >
-                          <Edit className="h-4 w-4 text-slate-600 dark:text-slate-300" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 italic">"{meta.motivoProfundo}"</p>
-
-                    {/* Barra de progreso */}
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-slate-600 dark:text-slate-300">Progreso general</span>
-                        <span className="font-medium text-indigo-600 dark:text-indigo-400">{meta.progreso}%</span>
-                      </div>
-                      <Progress value={meta.progreso} className="h-2" />
-                    </div>
-
-                    {/* Indicadores actuales */}
-                    <div className="grid md:grid-cols-3 gap-4 mb-4">
-                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">30 días</h4>
-                        <ul className="space-y-1">
-                          {meta.indicadores30.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
-                              <CheckCircle2 className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
-                              {ind}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">60 días</h4>
-                        <ul className="space-y-1">
-                          {meta.indicadores60.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
-                              <Clock className="h-3 w-3 text-amber-500 mt-0.5 flex-shrink-0" />
-                              {ind}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">90 días</h4>
-                        <ul className="space-y-1">
-                          {meta.indicadores90.slice(0, 2).map((ind, i) => (
-                            <li key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1">
-                              <Star className="h-3 w-3 text-indigo-500 mt-0.5 flex-shrink-0" />
-                              {ind}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Hábitos */}
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {meta.habitos.map((habito, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className="text-xs bg-green-50 border-green-200 dark:bg-green-900 dark:border-green-800"
-                        >
-                          <Clock className="h-3 w-3 mr-1" />
-                          {habito}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Recursos */}
-                    <div className="flex flex-wrap gap-2">
-                      {meta.recursos.map((recurso, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className="text-xs bg-blue-50 border-blue-200 dark:bg-blue-900 dark:border-blue-800"
-                        >
-                          <BookOpen className="h-3 w-3 mr-1" />
-                          {recurso}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Notas */}
-                    {meta.notas && (
-                      <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-100 dark:bg-amber-900 dark:border-amber-800">
-                        <p className="text-xs text-amber-800 dark:text-amber-200">
-                          <AlertCircle className="h-3 w-3 inline mr-1" />
-                          <strong>Última nota:</strong> {meta.notas}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Fechas */}
-                    <div className="flex justify-between text-xs text-slate-400 mt-4 pt-3 border-t dark:border-slate-700">
-                      <span>Creada: {meta.fechaCreacion}</span>
-                      <span>Próxima revisión: {meta.fechaRevision}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Tab: Plantillas por Test */}
-          <TabsContent value="plantillas" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(plantillasMetas).map(([test, plantillas]) => (
-                <Card key={test} className="hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border-slate-700">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
-                      <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                      {test}
-                    </CardTitle>
-                    <CardDescription className="text-slate-600 dark:text-slate-400">
-                      Metas sugeridas basadas en tu perfil
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {plantillas.map((plantilla, i) => (
-                      <div
-                        key={i}
-                        className="p-3 bg-slate-50 rounded-lg hover:bg-indigo-50 dark:bg-slate-700 dark:hover:bg-indigo-900 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setNuevaMeta({
-                            ...nuevaMeta,
-                            nombre: plantilla.nombre,
-                            tipo: plantilla.tipo,
-                            origen: test,
-                            motivoProfundo: plantilla.motivoProfundo,
-                          })
-                          setDialogOpen(true)
-                        }}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          {getIconoTipo(plantilla.tipo)}
-                          <span className="font-medium text-sm text-slate-800 dark:text-slate-200">
-                            {plantilla.nombre}
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{plantilla.motivoProfundo}</p>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      className="w-full mt-2 bg-transparent text-indigo-600 dark:text-indigo-400 border-indigo-300 dark:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-                      onClick={() => router.push(`/test/${test.toLowerCase().replace(" ", "-")}`)}
-                    >
-                      Ver mi perfil {test}
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
 
           {/* Tab: Mi Progreso */}
           <TabsContent value="progreso" className="space-y-6">

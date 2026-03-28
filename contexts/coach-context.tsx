@@ -148,19 +148,30 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
       setCoachMessages([message])
 
       // COACH OMNIPRESENTE: Obtener contexto completo de A1+A2+A3+A4
+      // Non-blocking fetch with timeout to prevent hanging
       console.log('[v0] Loading omnipresent coach context...')
       try {
-        const contextResponse = await fetch(`/rest/coach-context?user_id=${uid}`)
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3000) // 3 second timeout
+        
+        const contextResponse = await fetch(`/rest/coach-context?user_id=${uid}`, {
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
+        
         if (contextResponse.ok) {
           const contextData = await contextResponse.json()
           if (contextData.context && contextData.context.contexto_completo) {
             console.log('[v0] Coach context loaded:', contextData.context.contexto_completo)
-            // El Coach ahora tiene acceso a contexto completo para sus mensajes personalizados
-            // contexto_completo contiene: Perfil DISC + Misión A2 + Entrenamiento A3 + Foco A4
           }
         }
       } catch (error) {
-        console.warn('[v0] Could not load coach context (non-critical):', error)
+        // Non-critical, just log and continue
+        if (error instanceof Error && error.name === 'AbortError') {
+          console.log('[v0] Coach context fetch timeout (non-critical)')
+        } else {
+          console.warn('[v0] Could not load coach context (non-critical):', error)
+        }
       }
 
       console.log('[v0] Coach progress loaded:', {

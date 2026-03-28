@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
+import { callOpenAI } from "@/lib/openai-wrapper"
 
-export const runtime = "nodejs"
+export const maxDuration = 60
 
 export async function POST(request: NextRequest) {
   try {
@@ -180,13 +180,11 @@ ${context}
 
 Respond thoughtfully, showing your reasoning when appropriate, and provide actionable guidance.`
 
-  const { text } = await generateText({
-    model: "openai/gpt-4o",
-    system: systemPrompt,
-    prompt: query,
-    temperature: 0.7,
-    maxTokens: 800,
-  })
+  const text = await callOpenAI(
+    systemPrompt,
+    query,
+    { temperature: 0.7 }
+  )
 
   // Simulate reasoning extraction (in production, use structured output)
   const reasoning = {

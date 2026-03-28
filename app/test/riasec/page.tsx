@@ -200,7 +200,7 @@ export default function RIASECTest() {
       console.log("[v0] Submitting RIASEC test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "Brújula Vocacional Despega",
+        "RIASEC",
         results,
         duration,
       )
@@ -234,7 +234,7 @@ export default function RIASECTest() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando Brújula Vocacional Despega...</p>
+          <p className="text-gray-600">Cargando Despega Rumbo...</p>
         </div>
       </div>
     )
@@ -253,7 +253,7 @@ export default function RIASECTest() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        testName="Brújula Vocacional Despega"
+        testName="Despega Rumbo"
         description="Descubre tus intereses vocacionales basados en el modelo RIASEC de Holland"
         whatItMeasures={[
           "Realista: Trabajo práctico con herramientas y maquinaria",
@@ -274,10 +274,10 @@ export default function RIASECTest() {
   if (showCompletion && completionData) {
     return (
       <TestCompletionScreen
-        testName="Brújula Vocacional Despega"
-        summary={completionData.summary}
-        keyInsight={completionData.keyInsight}
-        completionTime={completionData.duration}
+        testType="riasec"
+        testName="Despega Rumbo"
+        quickSummary={completionData.summary}
+        highlightedInsight={completionData.keyInsight}
         onViewFullReport={() => router.push("/test/riasec/results")}
         onTalkToCoach={() => router.push("/coach")}
       />
@@ -300,7 +300,7 @@ export default function RIASECTest() {
           </Button>
           <Badge variant="secondary" className="text-sm">
             <Palette className="h-4 w-4 mr-1" />
-            Brújula Vocacional Despega
+            Despega Rumbo
           </Badge>
         </div>
 
@@ -309,7 +309,7 @@ export default function RIASECTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Brújula Vocacional Despega</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Despega Rumbo</h2>
                 <p className="text-gray-600">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>

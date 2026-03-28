@@ -383,7 +383,7 @@ export default function SoftSkillsTest() {
       console.log("[v0] Submitting Soft Skills test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "Competencias Blandas Despega",
+        "soft-skills",
         results,
         duration,
       )
@@ -447,7 +447,7 @@ export default function SoftSkillsTest() {
         ]}
         whyRelevant="Las competencias blandas son el factor diferenciador en tu desarrollo profesional y personal, determinando tu capacidad de liderar, colaborar y crear impacto real en cualquier contexto."
         duration="20-25 minutos"
-        questionCount={30}
+        totalQuestions={30}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />

@@ -379,7 +379,7 @@ export default function EmotionalIntelligenceTest() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        testName="Inteligencia Emocional Despega"
+        testName="Despega Empatía"
         testDescription="Mide tu capacidad para reconocer, comprender y gestionar emociones propias y ajenas."
         whatItMeasures={[
           "Autoconciencia emocional",
@@ -390,7 +390,7 @@ export default function EmotionalIntelligenceTest() {
         ]}
         whyRelevant="La inteligencia emocional es el predictor #1 de éxito profesional y personal. Desarrollarla te permite tomar mejores decisiones, construir relaciones más fuertes y liderar con efectividad."
         estimatedTime={5}
-        questionCount={20}
+        totalQuestions={20}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
@@ -410,10 +410,10 @@ export default function EmotionalIntelligenceTest() {
 
     return (
       <TestCompletionScreen
-        testName="Inteligencia Emocional Despega"
-        score={completionResults.overall_score}
-        level={completionResults.level}
-        insight={getInsight(completionResults.overall_score)}
+        testType="ei"
+        testName="Despega Empatía"
+        quickSummary={`Tu puntuación de inteligencia emocional es ${completionResults.overall_score}% (${completionResults.level})`}
+        keyInsight={getInsight(completionResults.overall_score)}
         onViewFullReport={() => router.push("/test/emotional-intelligence/results")}
         onTalkToCoach={() => router.push("/coach")}
       />
@@ -459,7 +459,7 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Inteligencia Emocional Despega</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Despega Empatía</h1>
               <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
                 <Heart className="h-4 w-4" />
                 <span>Reconocer, comprender y gestionar emociones</span>

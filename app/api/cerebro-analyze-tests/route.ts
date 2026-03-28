@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { enhancedTestAnalyzer } from "@/lib/enhanced-test-analyzer"
 
-export const runtime = "nodejs"
+export const maxDuration = 60
 
 /**
  * Analyze all user tests together for comprehensive insights

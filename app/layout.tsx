@@ -3,11 +3,17 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionWrapper } from "@/components/session-wrapper"
+import { CoachStrategicProvider } from "@/components/coach-strategic-provider"
 import { Toaster } from "@/components/ui/toaster"
-// import { AdminNavbar } from "@/components/admin-navbar" // TODO: Re-enable when template issue resolved
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { validateEnvironment } from "@/lib/env-validation"
+
+// Validate environment on startup
+if (typeof window === "undefined") {
+  validateEnvironment()
+}
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -120,10 +126,12 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
-          <SessionWrapper>
-            {children}
-            <Toaster />
-          </SessionWrapper>
+          <CoachStrategicProvider>
+            <SessionWrapper>
+              {children}
+              <Toaster />
+            </SessionWrapper>
+          </CoachStrategicProvider>
         </ThemeProvider>
 
         <Analytics />

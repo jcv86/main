@@ -15,6 +15,7 @@ export interface TestResult {
   results: any
   completed_at: string
   duration_minutes?: number
+  attempt_number?: number
   user_context?: {
     current_situation: string
     personal_goals: string

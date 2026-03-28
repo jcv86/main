@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     const userData = {
       sessions: sessionsResult.data || [],
       metrics: metricsResult.data || [],
-      testResults: this.parseTestResults(testsResult.data || []),
-      avgEngagement: this.calculateAvgEngagement(metricsResult.data || []),
+      testResults: parseTestResults(testsResult.data || []),
+      avgEngagement: calculateAvgEngagement(metricsResult.data || []),
       completedActions: metricsResult.data?.filter((m) => m.action_completed).length || 0,
       lastActive: sessionsResult.data?.[0]?.created_at || new Date(),
     }

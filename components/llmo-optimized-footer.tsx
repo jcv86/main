@@ -40,8 +40,7 @@ function LLMOOptimizedFooter() {
               <span className="text-white font-bold text-xl">Despega Tu Carrera</span>
             </div>
             <p className="text-sm mb-6 text-gray-400 leading-relaxed">
-              La plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos, acceso
-              a 120+ libros profesionales y coaching personalizado con IA para transformar tu carrera.
+              La plataforma en Chile para desarrollo profesional. Combina tests psicométricos científicos, recursos curados de aprendizaje y coaching personalizado con IA para transformar tu carrera.
             </p>
 
             {/* Contact Info */}
@@ -167,30 +166,9 @@ function LLMOOptimizedFooter() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/learning-paths"
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
-                >
+                <Link href="/faq" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                  Rutas de Aprendizaje
-                </Link>
-              </li>
-              <li>
-                <Link href="/careers" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                  Oportunidades
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/webinars" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                  Webinars
+                  Preguntas Frecuentes
                 </Link>
               </li>
             </ul>
@@ -198,32 +176,8 @@ function LLMOOptimizedFooter() {
 
           {/* Company Column */}
           <div>
-            <h3 className="text-white font-semibold mb-4 text-lg">Empresa</h3>
+            <h3 className="text-white font-semibold mb-4 text-lg">Legal</h3>
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/about" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                  Sobre Nosotros
-                </Link>
-              </li>
-              <li>
-                <Link href="/empresas" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                  Para Empresas
-                </Link>
-              </li>
-              <li>
-                <Link href="/instituciones" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                  Instituciones
-                </Link>
-              </li>
-              <li>
-                <Link href="/partners" className="hover:text-purple-400 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                  Partners
-                </Link>
-              </li>
               <li>
                 <Link href="/privacy" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
@@ -233,8 +187,17 @@ function LLMOOptimizedFooter() {
               <li>
                 <Link href="/terms" className="hover:text-purple-400 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                  Términos
+                  Términos de Servicio
                 </Link>
+              </li>
+              <li>
+                <a 
+                  href="mailto:contacto@despegatucarrera.cl" 
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  Contacto
+                </a>
               </li>
             </ul>
           </div>
@@ -276,7 +239,7 @@ function LLMOOptimizedFooter() {
             url: "https://despegatucarrera.cl",
             logo: "https://despegatucarrera.cl/logo.png",
             description:
-              "Plataforma líder en Chile para desarrollo profesional con tests psicométricos, biblioteca de 120+ libros y coaching con IA",
+              "Plataforma en Chile para desarrollo profesional con tests psicométricos, recursos de aprendizaje y coaching con IA",
             contactPoint: {
               "@type": "ContactPoint",
               email: "contacto@despegatucarrera.cl",

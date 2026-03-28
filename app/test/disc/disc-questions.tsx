@@ -120,6 +120,26 @@ export const discQuestions = [
     text: "Evito cometer errores",
     dimension: "C",
   },
+  {
+    id: 25,
+    text: "Busco alcanzar resultados de alto impacto",
+    dimension: "D",
+  },
+  {
+    id: 26,
+    text: "Disfruto motivar y energizar a otros",
+    dimension: "I",
+  },
+  {
+    id: 27,
+    text: "Valoro la armonía y las relaciones cordiales",
+    dimension: "S",
+  },
+  {
+    id: 28,
+    text: "Me gusta trabajar con datos e información exacta",
+    dimension: "C",
+  },
 ]
 
 export default discQuestions

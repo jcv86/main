@@ -27,10 +27,12 @@ const breadcrumbItems = [
 
 interface Question {
   id: number
-  type: "multiple_choice" | "open_ended" | "scenario"
-  question: string
+  text?: string
+  question?: string
+  type?: "multiple_choice" | "open_ended" | "scenario"
   options?: string[]
-  category: "D" | "I" | "S" | "C"
+  dimension?: "D" | "I" | "S" | "C"
+  category?: "D" | "I" | "S" | "C"
 }
 
 export default function DISCTestClient() {
@@ -94,14 +96,19 @@ export default function DISCTestClient() {
     discQuestions.forEach((question) => {
       const answer = answers[question.id]
       if (answer) {
-        if (question.type === "multiple_choice" && question.options) {
-          const answerIndex = question.options.indexOf(answer)
+        // Check if question has options property using type guard
+        if ('options' in question && Array.isArray((question as any).options)) {
+          const answerIndex = (question as any).options.indexOf(answer)
           if (answerIndex === 0) scores.D += 3
           else if (answerIndex === 1) scores.I += 3
           else if (answerIndex === 2) scores.S += 3
           else if (answerIndex === 3) scores.C += 3
-        } else if (question.type === "open_ended" || question.type === "scenario") {
-          scores[question.category] += 2
+        } else {
+          // For open-ended or scenario questions, use dimension
+          const dimension = (question.dimension || (question as any).category) as "D" | "I" | "S" | "C"
+          if (dimension) {
+            scores[dimension] += 2
+          }
         }
       }
     })
@@ -152,14 +159,14 @@ export default function DISCTestClient() {
         touch_enabled: touchSupport,
       }
 
-      console.log("[v0] Saving Despega Cerebral test results with unified system...")
+      console.log("[v0] Saving DISC Assessment test results with unified system...")
 
-      const result = await UnifiedTestSystem.saveTestResult({
-        userEmail: user.email!,
-        testType: "Despega Cerebral",
+      const result = await UnifiedTestSystem.saveTestResult(
+        user.email!,
+        "DISC Assessment",
         testResults,
-        durationMinutes: duration,
-      })
+        duration
+      )
 
       if (!result.savedToDatabase) {
         toast({
@@ -330,19 +337,20 @@ export default function DISCTestClient() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <Badge variant="outline">
-                {question.type === "multiple_choice" && "Multiple Choice"}
-                {question.type === "open_ended" && "Open Response"}
-                {question.type === "scenario" && "Scenario"}
+                {'type' in question && (question as any).type === "multiple_choice" && "Multiple Choice"}
+                {'type' in question && (question as any).type === "open_ended" && "Open Response"}
+                {'type' in question && (question as any).type === "scenario" && "Scenario"}
+                {'type' in question === false && "DISC Question"}
               </Badge>
               <Badge variant="secondary">Question {currentQuestion + 1}</Badge>
             </div>
-            <CardTitle className="text-xl">{question.question}</CardTitle>
+            <CardTitle className="text-xl">{question.text || (question as any).question}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {question.type === "multiple_choice" && question.options && (
+            {'type' in question && (question as any).type === "multiple_choice" && (question as any).options && (
               <RadioGroup value={currentAnswer || ""} onValueChange={handleAnswer}>
                 <div className="space-y-3">
-                  {question.options.map((option, index) => (
+                  {(question as any).options.map((option: string, index: number) => (
                     <div
                       key={index}
                       className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors"
@@ -358,7 +366,7 @@ export default function DISCTestClient() {
               </RadioGroup>
             )}
 
-            {(question.type === "open_ended" || question.type === "scenario") && (
+            {('type' in question && ((question as any).type === "open_ended" || (question as any).type === "scenario")) && (
               <div className="space-y-2">
                 <Textarea
                   placeholder="Write your detailed response here..."
@@ -433,7 +441,7 @@ export default function DISCTestClient() {
           </CardContent>
         </Card>
 
-        <TestNavigationFlow testType="disc" />
+        <TestNavigationFlow />
       </div>
     </div>
   )

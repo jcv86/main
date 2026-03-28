@@ -1,9 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateText } from "ai"
 
 export async function POST(request: NextRequest) {
   try {
     const { response, category, question } = await request.json()
+
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "OPENAI_API_KEY is not configured" },
+        { status: 500 }
+      )
+    }
 
     const prompt = `
 Analiza la siguiente respuesta a una pregunta de evaluación de habilidades blandas:
@@ -29,11 +36,41 @@ Formato de respuesta:
 }
 `
 
-    const { text } = await generateText({
-      model: "openai/gpt-4o",
-      prompt,
-      temperature: 0.7,
+    const response_api = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 1000,
+      }),
     })
+
+    if (!response_api.ok) {
+      console.error("OpenAI API error:", response_api.statusText)
+      return NextResponse.json(
+        {
+          analysis: "Gracias por tu respuesta. Continúa trabajando en el desarrollo de esta competencia.",
+          strengths: ["Participación activa", "Disposición al aprendizaje"],
+          improvements: ["Desarrollo continuo"],
+          suggestions: ["Práctica regular", "Autoevaluación constante"],
+          score: 6,
+        },
+        { status: 200 }
+      )
+    }
+
+    const data = await response_api.json()
+    const text = data.choices[0].message.content
 
     // Try to parse as JSON, fallback if needed
     let analysis
@@ -54,12 +91,15 @@ Formato de respuesta:
   } catch (error) {
     console.error("Error analyzing response:", error)
 
-    return NextResponse.json({
-      analysis: "Gracias por tu respuesta. Continúa trabajando en el desarrollo de esta competencia.",
-      strengths: ["Participación activa", "Disposición al aprendizaje"],
-      improvements: ["Desarrollo continuo"],
-      suggestions: ["Práctica regular", "Autoevaluación constante"],
-      score: 6,
-    })
+    return NextResponse.json(
+      {
+        analysis: "Gracias por tu respuesta. Continúa trabajando en el desarrollo de esta competencia.",
+        strengths: ["Participación activa", "Disposición al aprendizaje"],
+        improvements: ["Desarrollo continuo"],
+        suggestions: ["Práctica regular", "Autoevaluación constante"],
+        score: 6,
+      },
+      { status: 200 }
+    )
   }
 }

@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from("ai_conversations")
       .select("*")
@@ -25,7 +25,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data to match Message interface
-    const messages = data.map((conv) => ({
+    const messages = data.map((conv: {
+      id: string | number
+      type: string
+      content: string
+      created_at: string
+      category?: string | null
+      suggested_actions?: unknown[] | null
+      metadata?: Record<string, unknown> | null
+    }) => ({
       id: conv.id.toString(),
       type: conv.type,
       content: conv.content,
@@ -52,7 +60,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from("ai_conversations")
       .insert({
@@ -87,7 +95,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { error } = await supabase.from("ai_conversations").delete().eq("user_email", email)
 
     if (error) {

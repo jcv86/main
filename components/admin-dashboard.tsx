@@ -88,7 +88,7 @@ export function AdminDashboard() {
         contentEngagement: [
           { name: 'A1 Cerebral', users: (totalCount || 0) * 0.9, completion: 85 },
           { name: 'A2 Rutas', users: (totalCount || 0) * 0.45, completion: 62 },
-          { name: 'A3 Simulaciones', users: (totalCount || 0) * 0.25, completion: 45 },
+          { name: 'A3 Entrenamientos', users: (totalCount || 0) * 0.25, completion: 45 },
           { name: 'A4 Base', users: (totalCount || 0) * 0.15, completion: 30 }
         ],
         pillarProgress: pillarStats

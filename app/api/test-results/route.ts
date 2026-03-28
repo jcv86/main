@@ -15,9 +15,6 @@ export async function GET(request: NextRequest) {
     const latest = searchParams.get("latest")
     const userEmail = user.email
 
-    console.log("[v0] Fetching test results for user:", userEmail)
-
-    // Try database first
     try {
       let query = supabase.from("test_results").select("*").eq("user_email", userEmail)
 
@@ -25,19 +22,22 @@ export async function GET(request: NextRequest) {
         query = query.eq("test_type", testType)
       }
 
+      query = query.order("completed_at", { ascending: false })
+
+      let result
       if (latest === "true") {
-        query = query.order("completed_at", { ascending: false }).limit(1).single()
+        result = await query.limit(1).single()
       } else {
-        query = query.order("completed_at", { ascending: false })
+        result = await query
       }
 
-      const { data, error } = await query
+      const { data, error } = result
 
       if (!error && data) {
         return NextResponse.json(data)
       }
     } catch (dbError) {
-      console.log("Database not available, using demo data")
+      console.error("Database error:", dbError instanceof Error ? dbError.message : String(dbError))
     }
 
     if (testType === "emotional-intelligence" && latest === "true") {
@@ -45,14 +45,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         ...mockResult,
         is_demo: true,
-        demo_warning:
-          "⚠️ RESULTADOS DE DEMOSTRACIÓN - Estos son resultados de ejemplo para previsualizar el formato del test. Para obtener resultados reales basados en tu perfil, completa el test de Inteligencia Emocional.",
       })
     }
 
     return NextResponse.json({ error: "No results found" }, { status: 404 })
   } catch (error) {
-    console.error("Error fetching test results:", error)
+    console.error("Test results fetch error:", error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
@@ -70,9 +68,13 @@ export async function POST(request: NextRequest) {
     const { testType, testName, results, answers, duration } = body
     const userEmail = user.email
 
-    console.log("[v0] Saving test results for user:", userEmail)
+    if (!testType || !testName || !results) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      )
+    }
 
-    // Calculate overall score
     const overallScore = results.overall_score || 0
 
     const testResult = {
@@ -90,7 +92,6 @@ export async function POST(request: NextRequest) {
       completed_at: new Date().toISOString(),
     }
 
-    // Try to save to database
     try {
       const { data, error } = await supabase.from("test_results").insert(testResult).select().single()
 
@@ -98,16 +99,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(data)
       }
     } catch (dbError) {
-      console.log("Database not available, returning mock response")
+      console.error("Database insert error:", dbError instanceof Error ? dbError.message : String(dbError))
     }
 
-    // Return mock response
-    return NextResponse.json({
-      id: Date.now(),
-      ...testResult,
-    })
+    return NextResponse.json({ error: "Failed to save results" }, { status: 500 })
   } catch (error) {
-    console.error("Error saving test results:", error)
+    console.error("Test results POST error:", error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

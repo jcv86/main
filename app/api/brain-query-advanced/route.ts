@@ -9,7 +9,7 @@ import {
   trackAnalyticsEvent,
 } from "@/lib/performance-optimizer"
 
-export const runtime = "nodejs"
+export const maxDuration = 30
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
@@ -18,8 +18,10 @@ export async function POST(request: NextRequest) {
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
 
+    const supabase = await createClient()
+
     // Generate cache key
-    const queryHash = generateQueryHash(message, { userId })
+    const queryHash = generateQueryHash(message, { userId, conversationId })
 
     // Check cache first
     const cachedResponse = await getCachedResponse(queryHash)
@@ -115,7 +117,6 @@ export async function POST(request: NextRequest) {
     const responseTimeMs = Date.now() - startTime
 
     // Save to database
-    const supabase = createClient()
     const finalConversationId = conversationId || `conv_${Date.now()}`
 
     try {

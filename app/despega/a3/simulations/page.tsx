@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, Play, Clock, Users, TrendingUp } from 'lucide-react'
 
-const SIMULATION_TYPES = [
+const ENTRENAMIENTO_TYPES = [
   {
     id: 'guided',
     name: 'Entrevista Guiada',
@@ -83,7 +83,7 @@ const SIMULATION_TYPES = [
 
 export default function SimulationsPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -95,30 +95,45 @@ export default function SimulationsPage() {
 
         <div className="space-y-4">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-            Simulaciones de Entrevista
+            Entrenamiento de Entrevista
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400">
             4 niveles progresivos para entrenar desde lo básico hasta la maestría total.
           </p>
         </div>
 
-        {/* Simulation Types Grid */}
+        {/* Entrenamiento Types Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {SIMULATION_TYPES.map((sim) => {
-            const IconComponent = sim.icon
+          {ENTRENAMIENTO_TYPES.map((ent) => {
+            const IconComponent = ent.icon
+            const getRouteLink = () => {
+              switch(ent.id) {
+                case 'guided':
+                  return '/despega/a3/simulaciones-guiado'
+                case 'structured':
+                  return '/despega/a3/simulaciones-estructurada'
+                case 'challenging':
+                  return '/despega/a3/simulaciones-desafiante'
+                case 'high-pressure':
+                  return '/despega/a3/simulaciones-maestria'
+                default:
+                  return '#'
+              }
+            }
+            
             return (
-              <Card key={sim.id} className="border-2 hover:shadow-lg transition flex flex-col">
+              <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <IconComponent className="w-6 h-6 text-slate-400" />
-                    <Badge className={sim.difficultyColor}>{sim.difficulty}</Badge>
+                    <Badge className={ent.difficultyColor}>{ent.difficulty}</Badge>
                   </div>
-                  <CardTitle>{sim.name}</CardTitle>
-                  <CardDescription className="text-base">{sim.subtitle}</CardDescription>
+                  <CardTitle>{ent.name}</CardTitle>
+                  <CardDescription className="text-base">{ent.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {sim.description}
+                    {ent.description}
                   </p>
 
                   <div className="space-y-2">
@@ -126,7 +141,7 @@ export default function SimulationsPage() {
                       Incluye:
                     </div>
                     <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                      {sim.features.map((feature, idx) => (
+                      {ent.features.map((feature, idx) => (
                         <li key={idx}>✓ {feature}</li>
                       ))}
                     </ul>
@@ -134,12 +149,14 @@ export default function SimulationsPage() {
 
                   <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
                     <Clock className="w-4 h-4" />
-                    Duración: {sim.duration}
+                    Duración: {ent.duration}
                   </div>
 
-                  <Button className="w-full mt-4" disabled>
-                    {sim.action} (Próximamente)
-                  </Button>
+                  <Link href={getRouteLink()}>
+                    <Button className="w-full mt-4">
+                      {ent.action} →
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             )
@@ -151,18 +168,18 @@ export default function SimulationsPage() {
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en simulaciones</div>
+              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
                 <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
-                <li>✓ Revisa el feedback del coach después de cada simulación</li>
+                <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
                 <li>✓ Identifica patrones en tus fortalezas y debilidades</li>
-                <li>✓ Practica 3-4 simulaciones por semana para avance real</li>
-                <li>✓ Repite la misma simulación si necesitas reforzar un aspecto específico</li>
+                <li>✓ Practica 3-4 entrenamientos por semana para avance real</li>
+                <li>✓ Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
               </ul>
             </div>
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   )
 }

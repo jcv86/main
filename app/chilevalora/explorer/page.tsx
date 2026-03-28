@@ -57,7 +57,6 @@ export default async function ChileValoraPage() {
           userCompetencies={userCompetencies}
           onProfileSelect={(profile) => {
             console.log('Profile selected:', profile.nombre)
-            // TODO: Show detail modal or navigate to profile page
           }}
         />
       </div>

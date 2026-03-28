@@ -103,7 +103,6 @@ export default function BigFiveResults() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("summary")
 
-  const { session } = useSession()
   const { toast } = useToast()
   const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
@@ -122,16 +121,16 @@ export default function BigFiveResults() {
     setLoading(true)
     try {
       const email = user.email
-      const result = await UnifiedTestSystem.loadTestResult(email, "5 Dimensiones Despega")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Big Five")
 
       if (result.success && result.data) {
-        setTestResult(result.data)
+        setTestResult(result.data as TestResult)
 
         const { data: aiData, error: aiError } = await supabase
           .from("ai_interpretations")
           .select("*")
           .eq("user_email", email)
-          .eq("test_name", "5 Dimensiones Despega")
+          .eq("test_name", "Big Five")
           .order("generated_at", { ascending: false })
           .limit(1)
 
@@ -225,11 +224,11 @@ export default function BigFiveResults() {
             Back to Tests
           </Button>
           <Badge variant="secondary">
-            <Brain className="h-4 w-4 mr-1" />5 Dimensiones Despega
+                  <Brain className="h-4 w-4 mr-1" />Despega Brújula
           </Badge>
         </div>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: 5 Dimensiones Despega</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Despega Brújula</h1>
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}
@@ -698,7 +697,7 @@ export default function BigFiveResults() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                       outerRadius={120}
                       fill="#8884d8"
                       dataKey="value"
@@ -791,7 +790,7 @@ export default function BigFiveResults() {
           </TabsContent>
 
           <TabsContent value="coach">
-            <EnhancedCoachFlow testType="Big Five" testResults={results} />
+            <EnhancedCoachFlow testType="Big Five" testResults={results} userEmail={userEmail} />
           </TabsContent>
 
           <TabsContent value="career" className="space-y-6">

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Briefcase, Video, MessageSquare, TrendingUp, Play, CheckCircle2 } from "lucide-react"
 
-interface Simulation {
+interface EntrenamientoEntrevista {
   id: string
   nombre: string
   tipo: "entrevista" | "conversacion" | "presentacion"
@@ -19,7 +19,7 @@ interface Simulation {
   feedback?: string
 }
 
-const simulacionesDisponibles: Simulation[] = [
+const entrenamientosDisponibles: EntrenamientoEntrevista[] = [
   {
     id: "1",
     nombre: "Entrevista de Selección Técnica",
@@ -49,14 +49,14 @@ const simulacionesDisponibles: Simulation[] = [
   },
 ]
 
-export default function SimulacionesClient() {
-  const [simulaciones, setSimulaciones] = useState<Simulation[]>(simulacionesDisponibles)
+export default function EntrenamientoEntrevistasClient() {
+  const [entrenamientos, setEntrenamientos] = useState<EntrenamientoEntrevista[]>(entrenamientosDisponibles)
   const [filtroTipo, setFiltroTipo] = useState<string>("todas")
   const [filtroDificultad, setFiltroDificultad] = useState<string>("todas")
 
-  const simulacionesFiltradas = simulaciones.filter((sim) => {
-    const pasaTipo = filtroTipo === "todas" || sim.tipo === filtroTipo
-    const pasaDificultad = filtroDificultad === "todas" || sim.dificultad === filtroDificultad
+  const entrenamientosFiltrados = entrenamientos.filter((ent) => {
+    const pasaTipo = filtroTipo === "todas" || ent.tipo === filtroTipo
+    const pasaDificultad = filtroDificultad === "todas" || ent.dificultad === filtroDificultad
     return pasaTipo && pasaDificultad
   })
 
@@ -86,9 +86,8 @@ export default function SimulacionesClient() {
     }
   }
 
-  const handleIniciarSimulacion = (id: string) => {
-    console.log("Iniciando simulación:", id)
-    // TODO: Implementar lógica de simulación
+  const handleIniciarEntrenamiento = (id: string) => {
+    console.log("Iniciando entrenamiento de entrevista:", id)
   }
 
   return (
@@ -96,9 +95,9 @@ export default function SimulacionesClient() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-            <Play className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            Simulaciones de Práctica
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            <Play className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+            Entrenamiento de Entrevistas
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
             Practica entrevistas, conversaciones y presentaciones con feedback IA
@@ -136,55 +135,55 @@ export default function SimulacionesClient() {
           </div>
         </div>
 
-        {/* Grid de simulaciones */}
+        {/* Grid de entrenamientos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {simulacionesFiltradas.map((simulacion) => (
-            <Card key={simulacion.id} className="hover:shadow-lg transition-shadow">
+          {entrenamientosFiltrados.map((entrenamiento) => (
+            <Card key={entrenamiento.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    {getIconoTipo(simulacion.tipo)}
-                    <CardTitle className="text-lg">{simulacion.nombre}</CardTitle>
+                    {getIconoTipo(entrenamiento.tipo)}
+                    <CardTitle className="text-lg">{entrenamiento.nombre}</CardTitle>
                   </div>
-                  {simulacion.completada && <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                  {entrenamiento.completada && <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />}
                 </div>
-                <Badge className={getColorDificultad(simulacion.dificultad)}>{simulacion.dificultad}</Badge>
+                <Badge className={getColorDificultad(entrenamiento.dificultad)}>{entrenamiento.dificultad}</Badge>
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <CardDescription>{simulacion.descripcion}</CardDescription>
+                <CardDescription>{entrenamiento.descripcion}</CardDescription>
 
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                   <TrendingUp className="h-4 w-4" />
-                  Duración estimada: {simulacion.duracion} min
+                  Duración estimada: {entrenamiento.duracion} min
                 </div>
 
-                {simulacion.completada && simulacion.puntuacion && (
+                {entrenamiento.completada && entrenamiento.puntuacion && (
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Puntuación:</span>
-                      <span className="font-bold">{simulacion.puntuacion}/100</span>
+                      <span className="font-bold">{entrenamiento.puntuacion}/100</span>
                     </div>
-                    <Progress value={simulacion.puntuacion} />
+                    <Progress value={entrenamiento.puntuacion} />
                   </div>
                 )}
 
                 <Button
-                  onClick={() => handleIniciarSimulacion(simulacion.id)}
+                  onClick={() => handleIniciarEntrenamiento(entrenamiento.id)}
                   className="w-full"
-                  variant={simulacion.completada ? "outline" : "default"}
+                  variant={entrenamiento.completada ? "outline" : "default"}
                 >
-                  {simulacion.completada ? "Reintentar" : "Iniciar Simulación"}
+                  {entrenamiento.completada ? "Reintentar" : "Iniciar Entrenamiento"}
                 </Button>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {simulacionesFiltradas.length === 0 && (
+        {entrenamientosFiltrados.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-500 dark:text-slate-400">
-              No hay simulaciones disponibles con los filtros seleccionados
+              No hay entrenamientos disponibles con los filtros seleccionados
             </p>
           </div>
         )}

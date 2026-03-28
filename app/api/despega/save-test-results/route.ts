@@ -1,6 +1,5 @@
-import { createServerClient } from "@supabase/ssr"
+import { createClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,44 +12,7 @@ export async function POST(request: NextRequest) {
       caminoProfesional,
     } = body
 
-    // Get Supabase credentials from env
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error("[v0] Missing Supabase credentials")
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      )
-    }
-
-    // Create server client with cookies
-    const cookieStore = await cookies()
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // Handle error
-          }
-        },
-      },
-    })
-
-    if (!supabase || !supabase.auth) {
-      console.error("[v0] Supabase client initialization failed")
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      )
-    }
+    const supabase = await createClient()
 
     // Get authenticated user
     const {
@@ -64,6 +26,56 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[v0] User ID:", user.id, "Email:", user.email)
+
+    // First, ensure despega_user_profiles exists and update onboarding_cerebral_completed
+    const { data: existingProfile, error: profileFetchError } = await supabase
+      .from("despega_user_profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle()
+
+    console.log("[v0] Existing profile:", existingProfile, "Error:", profileFetchError)
+
+    let profileData
+    if (!existingProfile) {
+      // Create new profile if it doesn't exist
+      const { data: newProfile, error: createError } = await supabase
+        .from("despega_user_profiles")
+        .insert({
+          user_id: user.id,
+          onboarding_cerebral_completed: true,
+          onboarding_cerebral_completed_at: new Date().toISOString(),
+          a1_test_completed: true,
+          a1_test_completed_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
+
+      if (createError) {
+        console.error("[v0] Error creating profile:", createError)
+      } else {
+        profileData = newProfile
+        console.log("[v0] Profile created successfully:", profileData)
+      }
+    } else {
+      // Update existing profile
+      const { data: updatedProfile, error: updateError } = await supabase
+        .from("despega_user_profiles")
+        .update({
+          onboarding_cerebral_completed: true,
+          onboarding_cerebral_completed_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id)
+        .select()
+        .single()
+
+      if (updateError) {
+        console.error("[v0] Error updating profile:", updateError)
+      } else {
+        profileData = updatedProfile
+        console.log("[v0] Profile updated successfully:", profileData)
+      }
+    }
 
     // Save to unified_test_results
     const { data: testData, error: testError } = await supabase
@@ -93,6 +105,34 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[v0] Test results saved successfully:", testData)
+
+    // Also save to a1_tests_results with test_name for onboarding check
+    const { error: a1TestError } = await supabase
+      .from("a1_tests_results")
+      .insert({
+        user_id: user.id,
+        test_name: "Despega Cerebral",
+        test_type: "personality",
+        score: Math.round((scores.D + scores.I + scores.S + scores.C) / 4),
+        profile_type: dominantProfile,
+        responses: {
+          d_score: Math.round(scores.D),
+          i_score: Math.round(scores.I),
+          s_score: Math.round(scores.S),
+          c_score: Math.round(scores.C),
+          dominant_profile: dominantProfile,
+          secondary_profile: secondaryProfile,
+          camino_persona: caminoPersona,
+          camino_profesional: caminoProfesional,
+        },
+        completed_at: new Date().toISOString(),
+      })
+
+    if (a1TestError) {
+      console.warn("[v0] Warning: Could not save to a1_tests_results:", a1TestError)
+    } else {
+      console.log("[v0] Saved to a1_tests_results successfully")
+    }
 
     // Get or create a1_progress record
     const { data: progressData, error: fetchError } = await supabase

@@ -3,9 +3,9 @@ import { createClient } from "@supabase/supabase-js"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-export async function GET(request: NextRequest, { params }: { params: { applicationId: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ applicationId: string }> }) {
   try {
-    const { applicationId } = params
+    const { applicationId } = await params
 
     const { data, error } = await supabase
       .from("job_applications")
@@ -47,9 +47,9 @@ export async function GET(request: NextRequest, { params }: { params: { applicat
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { applicationId: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ applicationId: string }> }) {
   try {
-    const { applicationId } = params
+    const { applicationId } = await params
     const body = await request.json()
 
     const { status, notes, changed_by } = body
@@ -92,9 +92,9 @@ export async function PUT(request: NextRequest, { params }: { params: { applicat
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { applicationId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ applicationId: string }> }) {
   try {
-    const { applicationId } = params
+    const { applicationId } = await params
 
     const { error } = await supabase.from("job_applications").delete().eq("application_id", applicationId)
 

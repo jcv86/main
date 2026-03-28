@@ -2275,6 +2275,7 @@ export default function DISCResultsPage() {
                 s_score: discResult.s_score,
                 c_score: discResult.c_score,
               }}
+              userEmail={user?.email || ""}
             />
           </TabsContent>
         </Tabs>
