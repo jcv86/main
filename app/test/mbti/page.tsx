@@ -457,7 +457,7 @@ export default function MBTITest() {
         ]}
         whyRelevant="Tu tipo MBTI te ayuda a entender tus fortalezas naturales, preferencias de comunicación, y cómo trabajas mejor. Es fundamental para el autoconocimiento y desarrollo personal integral."
         estimatedTime={18}
-        questionsCount={mbtiQuestions.length}
+        totalQuestions={mbtiQuestions.length}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
