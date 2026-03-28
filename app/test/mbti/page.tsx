@@ -490,11 +490,9 @@ export default function MBTITest() {
       <TestCompletionScreen
         testType="mbti"
         testName="Despega Resonancia"
-        completionMessage="Has completado exitosamente tu Despega Resonancia"
         quickSummary={`Tu tipo de personalidad es ${type}`}
+        highlightedInsight="Has completado exitosamente tu Despega Resonancia"
         keyInsight={typeInsights[type] || "Tu personalidad única es tu mayor fortaleza"}
-        score={overallScore}
-        duration={duration}
         onViewFullReport={() => router.push("/test/mbti/results")}
         onTalkToCoach={() => router.push("/test/mbti/results#coach")}
       />
