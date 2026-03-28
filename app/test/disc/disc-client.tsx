@@ -230,11 +230,11 @@ export default function DISCTestClient() {
 
     return (
       <TestCompletionScreen
+        testType="disc"
         testName="Despega Cerebral"
         quickSummary={`Tu estilo principal es ${styleLabels[completionData.primaryStyle] || completionData.primaryStyle}. Este perfil refleja tu forma natural de actuar en entornos profesionales.`}
         highlightedInsight={`Puntaje ${styleLabels[completionData.primaryStyle]}: ${completionData.scores[completionData.primaryStyle.charAt(0)]}%`}
-        resultsPath="/test/disc/results"
-        testType="disc"
+        onViewFullReport={() => router.push("/test/disc/results")}
       />
     )
   }

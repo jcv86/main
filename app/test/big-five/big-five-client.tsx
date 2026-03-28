@@ -118,12 +118,12 @@ export default function BigFiveTestClient() {
     }
   }
 
-  if (showCompletion) return <TestCompletionScreen testType="big-five" onClose={() => router.push("/despega/journey")} />
+  if (showCompletion) return <TestCompletionScreen testType="big-five" testName="5 Factores de Personalidad" onClose={() => router.push("/despega/journey")} />
   if (showIntro) {
     return (
       <TestIntroScreen
-        title="Test Big Five"
-        description="5 Factores de Personalidad - Comprende tus rasgos principales"
+        testName="Test Big Five"
+        testDescription="5 Factores de Personalidad - Comprende tus rasgos principales"
         onStart={() => setShowIntro(false)}
       />
     )

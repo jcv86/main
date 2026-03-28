@@ -254,7 +254,7 @@ export default function RIASECTest() {
     return (
       <TestIntroScreen
         testName="Despega Rumbo"
-        description="Descubre tus intereses vocacionales basados en el modelo RIASEC de Holland"
+        testDescription="Descubre tus intereses vocacionales basados en el modelo RIASEC de Holland"
         whatItMeasures={[
           "Realista: Trabajo práctico con herramientas y maquinaria",
           "Investigativo: Investigación, análisis y resolución de problemas",
@@ -265,6 +265,7 @@ export default function RIASECTest() {
         ]}
         whyRelevant="Identificar tus intereses vocacionales te ayuda a tomar decisiones informadas sobre tu carrera profesional y encontrar trabajos que realmente disfrutes."
         estimatedTime={15}
+        totalQuestions={riasecQuestions.length}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />

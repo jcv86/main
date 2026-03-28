@@ -278,6 +278,7 @@ export default function BigFiveTest() {
         ]}
         whyRelevant="Entender tus rasgos de personalidad te ayuda a identificar tus fortalezas naturales, áreas de desarrollo, y cómo te relacionas con otros en diferentes contextos personales y profesionales."
         estimatedTime={20}
+        totalQuestions={bigFiveQuestions.length}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
