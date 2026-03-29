@@ -25,6 +25,7 @@ import {
   Volume2,
 } from "lucide-react"
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 interface ReadingInsight {
   id: string
@@ -143,7 +144,7 @@ export default function AIReadingCompanion() {
 
     try {
       const { text } = await generateText({
-        model: "openai/gpt-4o",
+        model: openai("gpt-4o"),
         system: `Eres un compañero de lectura inteligente especializado en desarrollo profesional y personal. 
         Ayudas a los usuarios a:
         - Comprender conceptos complejos de libros
