@@ -76,7 +76,20 @@ export function FloatingCoachWidget() {
           {/* Content */}
           <div className="flex-1 overflow-hidden">
             {!selectedCoach ? (
-              <CoachSelector onSelect={setSelectedCoach} />
+              <CoachSelector 
+                onSelect={(categoryId) => {
+                  // Map category to coach
+                  const coachMap: Record<string, "sofia" | "dani"> = {
+                    "autoconocimiento_proposito": "sofia",
+                    "cv_linkedin_marca": "dani",
+                    "entrevistas_comunicacion": "sofia",
+                    "crecimiento_salarial": "dani",
+                    "reinvencion_transicion": "sofia",
+                  }
+                  const coach = coachMap[categoryId] || "sofia"
+                  setSelectedCoach(coach)
+                }} 
+              />
             ) : (
               <FloatingCoachChat coach={selectedCoach} userEmail={user.email} />
             )}
