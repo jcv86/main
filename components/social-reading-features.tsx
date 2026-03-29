@@ -90,7 +90,7 @@ export default function SocialReadingFeatures() {
 
       // Set user info
       setUserEmail(user.email)
-      setUserName(user.user_metadata?.full_name || "User")
+      setUserName(user.name || "User")
 
       // Fetch social data via API
       const response = await fetch(`/api/social-reading?userEmail=${encodeURIComponent(user.email)}`)
