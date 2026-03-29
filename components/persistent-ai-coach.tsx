@@ -941,8 +941,8 @@ export function PersistentAICoach() {
         onOpenChange={setShowFeedbackDialog}
         sessionId={sessionId}
         messageCount={messageCount}
-        coachType={selectedCoach || "hybrid"}
-        conversationCategory={selectedCategory || "autoconocimiento"}
+        coachType="hybrid"
+        conversationCategory="autoconocimiento"
       />
     </div>
   )
