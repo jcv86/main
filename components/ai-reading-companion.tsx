@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -70,8 +71,9 @@ export default function AIReadingCompanion() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [selectedBook, setSelectedBook] = useState<string>("")
   const [loading, setLoading] = useState(true)
-
   const [userEmail, setUserEmail] = useState("")
+  
+  const { user } = useSession()
 
   useEffect(() => {
     loadAICompanionData()
@@ -81,41 +83,36 @@ export default function AIReadingCompanion() {
     try {
       setLoading(true)
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
+      // Get current user email
+      if (user?.email) {
+        setUserEmail(user.email)
+      } else {
+        setLoading(false)
+        return
       }
 
-      const { data: insightsData } = await supabase
-        .from("reading_insights")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("created_at", { ascending: false })
-        .limit(10)
+      const { data: insightsData } = await fetch("/api/reading-insights", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (insightsData) {
         setInsights(insightsData)
       }
 
-      const { data: plansData } = await supabase
-        .from("study_plans")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("created_at", { ascending: false })
+      const { data: plansData } = await fetch("/api/study-plans", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (plansData) {
         setStudyPlans(plansData)
       }
 
-      const { data: recsData } = await supabase
-        .from("book_recommendations")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("match_score", { ascending: false })
-        .limit(10)
+      const { data: recsData } = await fetch("/api/book-recommendations", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (recsData) {
         setRecommendations(recsData)
