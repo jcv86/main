@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "@/hooks/use-user"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -73,7 +73,7 @@ export default function AIReadingCompanion() {
   const [loading, setLoading] = useState(true)
   const [userEmail, setUserEmail] = useState("")
   
-  const { user } = useSession()
+  const { user } = useUser()
 
   useEffect(() => {
     loadAICompanionData()
