@@ -737,11 +737,11 @@ export default function SoftSkillsResults() {
                           {CategoryIcon && <CategoryIcon className="h-6 w-6" style={{ color }} />}
                           <CardTitle className="text-lg">{categoryName}</CardTitle>
                         </div>
-                        <Badge className={`font-bold ${getScoreBadgeColor(Number(score))}`}>{score}%</Badge>
+                        <Badge className={`font-bold ${getScoreBadgeColor(Number(score))}`}>{String(score)}%</Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <Progress value={score} className="h-3" />
+                      <Progress value={Number(score)} className="h-3" />
 
                       <div className="text-sm">
                         <div className="font-medium mb-2 flex items-center gap-2">
