@@ -96,58 +96,6 @@ export default function GamificationSystem() {
   if (loading) {
     return <div className="flex items-center justify-center p-8">Cargando datos de gamificación...</div>
   }
-      const dailyChallenges: Challenge[] = [
-        {
-          id: "daily_reading",
-          name: "Lectura Diaria",
-          description: "Lee durante al menos 30 minutos hoy",
-          target: 30,
-          current: Math.min(30, totalReadingTime % 30),
-          reward_xp: 25,
-          deadline: new Date().toISOString(),
-          type: "daily",
-          completed: totalReadingTime % 30 >= 30,
-        },
-      ]
-
-      const weeklyChallenges: Challenge[] = [
-        {
-          id: "weekly_books",
-          name: "Meta Semanal",
-          description: "Completa 2 libros esta semana",
-          target: 2,
-          current: Math.min(2, completedBooks % 2),
-          reward_xp: 100,
-          deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          type: "weekly",
-          completed: completedBooks % 2 >= 2,
-        },
-      ]
-
-      const monthlyChallenges: Challenge[] = [
-        {
-          id: "monthly_streak",
-          name: "Racha Mensual",
-          description: "Mantén una racha de lectura de 15 días",
-          target: 15,
-          current: Math.min(15, currentStreak),
-          reward_xp: 200,
-          deadline: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString(),
-          type: "monthly",
-          completed: currentStreak >= 15,
-        },
-      ]
-
-      setAchievements(achievementsData || [])
-      setUserLevel({ level, xp, xp_to_next: xpToNext, title })
-      setChallenges([...dailyChallenges, ...weeklyChallenges, ...monthlyChallenges])
-      setStreak(currentStreak)
-    } catch (error) {
-      console.error("Error loading gamification data:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const claimChallenge = async (challengeId: string) => {
     // In a real app, this would update the database and award XP
@@ -194,17 +142,6 @@ export default function GamificationSystem() {
       default:
         return <Zap className="h-5 w-5 text-foreground" />
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <Trophy className="h-12 w-12 animate-pulse mx-auto mb-4 text-yellow-600" />
-          <p>Cargando sistema de logros...</p>
-        </div>
-      </div>
-    )
   }
 
   return (
