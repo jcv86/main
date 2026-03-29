@@ -43,7 +43,7 @@ export function Biblioteca() {
     if (!session?.user?.email) return
     try {
       const savedRes = await getUserSavedResources(session.user.email)
-      const savedIds = new Set(savedRes.map((r) => r.resource_id))
+      const savedIds: Set<string> = new Set(savedRes.map((r) => r.resource_id as string))
       setSaved(savedIds)
     } catch (error) {
       console.error("[v0] Error loading saved resources:", error)
