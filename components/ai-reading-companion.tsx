@@ -181,14 +181,19 @@ export default function AIReadingCompanion() {
         application: `Sugiere una aplicación práctica específica de los conceptos de "${selectedBook}" que se pueda implementar inmediatamente.`,
       }
 
-      const { text } = await generateText({
-        model: "openai/gpt-4o",
-        system:
-          "Eres un experto en desarrollo profesional y personal que ayuda a los lectores a obtener insights profundos de sus libros.",
-        prompt: prompts[type as keyof typeof prompts],
-        temperature: 0.7,
-        maxTokens: 200,
+      const response = await fetch("/api/ai/reading-insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type,
+          selectedBook,
+          prompts,
+        }),
       })
+
+      if (!response.ok) throw new Error("Failed to generate insight")
+
+      const { text } = await response.json()
 
       const newInsight: ReadingInsight = {
         id: Date.now().toString(),
