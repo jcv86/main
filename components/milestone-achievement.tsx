@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Confetti } from '@/components/confetti'
 import { Trophy, Zap, Star } from 'lucide-react'
 
 interface MilestoneAchievementProps {
