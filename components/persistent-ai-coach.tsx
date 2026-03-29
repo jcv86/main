@@ -460,7 +460,7 @@ export function PersistentAICoach() {
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
-          sender: "assistant",
+          sender: "ai",
           timestamp: new Date(),
           coach: data.coach,
         }
