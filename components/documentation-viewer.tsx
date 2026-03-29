@@ -281,8 +281,9 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
             <div className="prose prose-slate dark:prose-invert max-w-none prose-pre:my-4 prose-pre:bg-slate-950 prose-pre:text-slate-50 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:border prose-pre:border-slate-800">
               <ReactMarkdown
                 components={{
-                  code({ node, inline, className, children, ...props }) {
-                    if (inline) {
+                  code({ node, className, children, ...props }: any) {
+                    const isInline = !className
+                    if (isInline) {
                       return (
                         <code
                           className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono"
