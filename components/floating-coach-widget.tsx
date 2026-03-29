@@ -99,15 +99,6 @@ export function FloatingCoachWidget() {
               </button>
             </div>
           )}
-              <button
-                onClick={() => setSelectedCategory(null)}
-                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                Cambiar coach
-              </button>
-            </div>
-          )}
         </div>
       )}
     </>
