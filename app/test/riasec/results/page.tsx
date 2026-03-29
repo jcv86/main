@@ -656,7 +656,7 @@ export default function RIASECResults() {
                       <span className="font-semibold text-blue-800">Interés dominante:</span>
                       <p className="text-gray-700">
                         {getCategoryName(results.holland_code[0])} (
-                        {results[results.holland_code[0] as keyof typeof results]}/100)
+                        {String(results[results.holland_code[0] as keyof typeof results] || 0)}/100)
                       </p>
                     </div>
                     <div>
