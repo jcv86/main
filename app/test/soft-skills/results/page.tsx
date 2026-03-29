@@ -115,7 +115,7 @@ export default function SoftSkillsResults() {
         return
       }
 
-      const result = await UnifiedTestSystem.loadTestResult(email, "Competencias Blandas Despega")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Soft Skills")
 
       if (result.success && result.data) {
         setTestResult(result.data)

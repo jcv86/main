@@ -107,7 +107,7 @@ export default function RIASECResults() {
         return
       }
 
-      const result = await UnifiedTestSystem.loadTestResult(email, "Despega Rumbo")
+      const result = await UnifiedTestSystem.loadTestResult(email, "RIASEC")
 
       if (result.success && result.data) {
         // Ensure the data structure matches the updated interface
