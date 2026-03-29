@@ -60,7 +60,7 @@ export function NoticiasFeed() {
           total: searchResults.length,
         }
       } else {
-        result = await getNoticiasPaginated(page, itemsPerPage, selectedCategory || undefined)
+        result = await getNoticiasPaginated(page, itemsPerPage)
       }
       setNoticias(result.noticias)
       setTotal(result.total)
