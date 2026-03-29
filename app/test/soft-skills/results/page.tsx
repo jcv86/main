@@ -745,7 +745,7 @@ export default function SoftSkillsResults() {
 
                       <div className="text-sm">
                         <div className="font-medium mb-2 flex items-center gap-2">
-                          <span className={getScoreColor(score)}>{getScoreLabel(score)}</span>
+                          <span className={getScoreColor(Number(score))}>{getScoreLabel(Number(score))}</span>
                         </div>
 
                         {analysis && (
