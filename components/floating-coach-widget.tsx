@@ -5,12 +5,13 @@ import { MessageCircle, Sparkles, X, ArrowLeft, Minimize2 } from "lucide-react"
 import { CoachSelector } from "./coach-selector"
 import { FloatingCoachChat } from "./floating-coach-chat"
 import { useSession } from "@/components/session-wrapper"
+import type { PromptCategoryId } from "@/lib/ai/prompt-categories"
 
 export function FloatingCoachWidget() {
   const { user, isLoading } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
-  const [selectedCoach, setSelectedCoach] = useState<"sofia" | "dani" | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<PromptCategoryId | null>(null)
   const [hasUnread, setHasUnread] = useState(false)
 
   if (isLoading || !user?.email) {
@@ -45,11 +46,7 @@ export function FloatingCoachWidget() {
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple-600" />
               <h3 className="font-semibold text-sm">
-                {selectedCoach === "sofia"
-                  ? "Sofía - Autoconocimiento"
-                  : selectedCoach === "dani"
-                    ? "Dani - Desarrollo"
-                    : "Elige tu Coach"}
+                {selectedCategory ? "Chat con Coach" : "Elige tu Coach"}
               </h3>
             </div>
             <div className="flex items-center gap-1">
@@ -63,7 +60,7 @@ export function FloatingCoachWidget() {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  setSelectedCoach(null)
+                  setSelectedCategory(null)
                 }}
                 className="h-8 w-8 rounded-md hover:bg-muted flex items-center justify-center transition-colors"
                 aria-label="Cerrar chat"
@@ -75,29 +72,33 @@ export function FloatingCoachWidget() {
 
           {/* Content */}
           <div className="flex-1 overflow-hidden">
-            {!selectedCoach ? (
+            {!selectedCategory ? (
               <CoachSelector 
                 onSelect={(categoryId) => {
-                  // Map category to coach
-                  const coachMap: Record<string, "sofia" | "dani"> = {
-                    "autoconocimiento_proposito": "sofia",
-                    "cv_linkedin_marca": "dani",
-                    "entrevistas_comunicacion": "sofia",
-                    "crecimiento_salarial": "dani",
-                    "reinvencion_transicion": "sofia",
-                  }
-                  const coach = coachMap[categoryId] || "sofia"
-                  setSelectedCoach(coach)
+                  setSelectedCategory(categoryId)
                 }} 
               />
             ) : (
-              <FloatingCoachChat coach={selectedCoach} userEmail={user.email} />
+              <FloatingCoachChat 
+                categoryId={selectedCategory}
+                userEmail={user.email}
+                onBack={() => setSelectedCategory(null)}
+              />
             )}
           </div>
 
           {/* Footer */}
-          {selectedCoach && (
+          {selectedCategory && (
             <div className="p-2 border-t bg-muted/30">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="w-full flex items-center gap-2 justify-center px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-muted-foreground"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Volver
+              </button>
+            </div>
+          )}
               <button
                 onClick={() => setSelectedCoach(null)}
                 className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
