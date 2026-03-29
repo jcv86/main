@@ -40,9 +40,9 @@ export function Biblioteca() {
   }
 
   const loadSavedResources = async () => {
-    if (!session?.user?.id) return
+    if (!session?.user?.email) return
     try {
-      const savedRes = await getUserSavedResources(session.user.id)
+      const savedRes = await getUserSavedResources(session.user.email)
       const savedIds = new Set(savedRes.map((r) => r.resource_id))
       setSaved(savedIds)
     } catch (error) {
@@ -63,14 +63,14 @@ export function Biblioteca() {
   }
 
   const handleSave = async (resourceId: string, resourceType: string) => {
-    if (!session?.user?.id) return
+    if (!session?.user?.email) return
 
     const newSaved = new Set(saved)
     if (newSaved.has(resourceId)) {
       newSaved.delete(resourceId)
     } else {
       newSaved.add(resourceId)
-      await saveResource(session.user.id, resourceId, resourceType)
+      await saveResource(session.user.email, resourceId, resourceType)
     }
     setSaved(newSaved)
   }
