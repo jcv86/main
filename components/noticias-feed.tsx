@@ -34,8 +34,16 @@ export function NoticiasFeed() {
 
   const loadCategories = async () => {
     try {
-      const cats = await getNoticiasByCategory()
-      setCategories(cats)
+      // Set default categories
+      const defaultCategories = [
+        "Tecnología",
+        "Negocios",
+        "Innovación",
+        "Desarrollo",
+        "Educación",
+        "Emprendimiento",
+      ]
+      setCategories(defaultCategories)
     } catch (error) {
       console.error("[v0] Error loading categories:", error)
     }
