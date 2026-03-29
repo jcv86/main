@@ -1,4 +1,4 @@
-# Vercel cache invalidation - force clean build 2026-02-20T12:00:00Z
+# Vercel cache invalidation - force clean build 2026-03-29T21:45:00Z
 *.log
 .next/cache
 .turbo
