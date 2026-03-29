@@ -383,7 +383,7 @@ export default function SoftSkillsTest() {
       console.log("[v0] Submitting Soft Skills test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "soft-skills",
+        "Soft Skills",
         results,
         duration,
       )
