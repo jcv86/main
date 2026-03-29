@@ -24,8 +24,6 @@ import {
   Mic,
   Volume2,
 } from "lucide-react"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 
 interface ReadingInsight {
   id: string
@@ -143,21 +141,18 @@ export default function AIReadingCompanion() {
     setIsGenerating(true)
 
     try {
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        system: `Eres un compañero de lectura inteligente especializado en desarrollo profesional y personal. 
-        Ayudas a los usuarios a:
-        - Comprender conceptos complejos de libros
-        - Generar resúmenes y insights
-        - Crear conexiones entre diferentes libros
-        - Sugerir aplicaciones prácticas
-        - Responder preguntas sobre el contenido
-        
-        Mantén un tono amigable, profesional y educativo. Proporciona respuestas específicas y accionables.`,
-        prompt: userMessage,
-        temperature: 0.7,
-        maxTokens: 500,
+      const response = await fetch("/api/ai/reading-companion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userMessage,
+          userEmail,
+        }),
       })
+
+      if (!response.ok) throw new Error("Failed to get response")
+
+      const { text } = await response.json()
 
       setChatMessages((prev) => [...prev, { role: "assistant", content: text }])
     } catch (error) {
