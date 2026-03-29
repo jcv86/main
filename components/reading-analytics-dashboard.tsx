@@ -92,11 +92,6 @@ export default function ReadingAnalyticsDashboard() {
       setLoading(false)
     }
   }
-      console.error("Error loading analytics:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const updateMonthlyGoal = async () => {
     // In a real app, you'd save this to the database
