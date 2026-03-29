@@ -940,12 +940,9 @@ export function PersistentAICoach() {
         open={showFeedbackDialog}
         onOpenChange={setShowFeedbackDialog}
         sessionId={sessionId}
-        userEmail={userEmail}
         messageCount={messageCount}
-        conversationSummary={messages
-          .slice(-4)
-          .map((m) => `${m.sender === "user" ? "Usuario" : "Coach"}: ${m.content.substring(0, 100)}...`)
-          .join("\n")}
+        coachType={selectedCoach || "hybrid"}
+        conversationCategory={selectedCategory || "autoconocimiento"}
       />
     </div>
   )
