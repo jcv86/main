@@ -1,7 +1,5 @@
 // Coach IA - Asistente inteligente que proporciona contexto personalizado
 
-import { Skill } from '@vercel/ai/skills'
-
 export interface CoachContext {
   user_id: string
   current_stage: 'a1' | 'a2' | 'a3' | 'a4'
