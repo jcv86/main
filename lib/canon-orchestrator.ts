@@ -35,33 +35,36 @@ export async function orchestrateCanon(
 
     // Paso 1: Ejecutar Motor de Reglas
     console.log('[v0] Step 1: Executing Rules Engine...')
-    const rulesEngine = new CanonRulesEngine(request.a1ProfileType)
-    const actions = rulesEngine.generateActionsFromResponses(
-      request.conozcamonos1Responses,
-      request.conozcamonos2Paso1Responses,
-      request.conozczamonos2Paso2Responses || {}
+    const c2Responses: any = {
+      ...request.conozcamonos2Paso1Responses,
+      ...request.conozcamonos2Paso2Responses
+    }
+    const route = CanonRulesEngine.generateRoute(
+      c2Responses,
+      request.a1ProfileType,
+      request.conozcamonos1Responses
     )
-    console.log('[v0] Generated', actions.length, 'actions from rules')
+    console.log('[v0] Generated route from rules')
 
-    // Paso 2: Acciones validadas por motor de reglas
-    console.log('[v0] Step 2: Actions generated from rules...')
+    // Paso 2: Route generated from rules
+    console.log('[v0] Step 2: Route generated from rules...')
 
     // Paso 3: Generar Rutas
     console.log('[v0] Step 3: Generating routes...')
     const route30Days = generateRoute30Days(
-      actions,
+      route.mision_30,
       request.conozcamonos2Paso1Responses
     )
 
     let route60Days, route90Days
 
-    if (request.conozcamonos2Paso2Responses && Object.keys(request.conozczamonos2Paso2Responses).length > 0) {
+    if (request.conozcamonos2Paso2Responses && Object.keys(request.conozcamonos2Paso2Responses).length > 0) {
       route60Days = generateRoute60Days(
-        actions,
+        route.mision_60,
         request.conozcamonos2Paso2Responses
       )
       route90Days = generateRoute90Days(
-        actions,
+        route.mision_90,
         {
           ...request.conozcamonos1Responses,
           ...request.conozcamonos2Paso1Responses,
@@ -70,7 +73,7 @@ export async function orchestrateCanon(
       )
     }
 
-    // Paso 4: Guardar en BD
+    // Paso 4: Save to database
     console.log('[v0] Step 4: Saving to database...')
     await saveRoute(request.userId, route30Days, supabase)
 
@@ -81,14 +84,15 @@ export async function orchestrateCanon(
       await saveRoute(request.userId, route90Days, supabase)
     }
 
-    // Paso 5: Guardar orquestación log para debugging/auditoria
+    // Paso 5: Save orchestration log for debugging/audit
     const { error: logError } = await supabase
       .from('canon_orchestration_logs')
       .insert({
         user_id: request.userId,
         step: 'complete',
-        actions_generated: actions.length,
-        validation_issues: validation.issues,
+        contradicciones: route.contradicciones_detectadas,
+        factores_riesgo: route.factores_riesgo,
+        factores_exito: route.factores_exito,
         routes_created: [route30Days.phase, route60Days?.phase, route90Days?.phase].filter(Boolean),
         completed_at: new Date().toISOString()
       })
