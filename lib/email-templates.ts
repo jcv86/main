@@ -206,7 +206,7 @@ export async function sendTransitionEmail(
     return false
   }
 
-  const content = template.template(...(Object.values(params) as any[]))
+  const content = (template.template as any).apply(null, Object.values(params))
 
   // Implementar con tu proveedor de emails
   // Ejemplo: await sendgrid.send({ to: email, subject: template.subject, html: content })
