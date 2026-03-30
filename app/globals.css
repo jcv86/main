@@ -68,6 +68,19 @@
   }
 }
 
+/* WCAG AA Contrast Fix - Override muted-foreground for better contrast */
+.text-muted-foreground {
+  @apply text-slate-700 dark:text-slate-400;
+}
+
+.text-slate-300 {
+  @apply text-slate-700 dark:text-slate-300;
+}
+
+.text-slate-400 {
+  @apply text-slate-600 dark:text-slate-400;
+}
+
 /* Smooth scrollbar styling for both light and dark modes */
 ::-webkit-scrollbar {
   width: 8px;
