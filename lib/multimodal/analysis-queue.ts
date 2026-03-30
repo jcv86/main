@@ -16,9 +16,13 @@ class MockQueue {
 
   async add(data: any, options?: any) {
     const id = options?.jobId || `job-${++this.jobCounter}`
-    const job = { id, data, progress: 0 }
+    const job = { id, data, progress: 0, state: 'pending' }
     this.jobs.set(id, job)
     return job
+  }
+
+  async getJob(jobId: string) {
+    return this.jobs.get(jobId) || null
   }
 
   process(handler: Function) {
