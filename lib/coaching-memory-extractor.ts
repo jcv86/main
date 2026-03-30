@@ -189,8 +189,8 @@ export async function processWeeklyCoachingMemory() {
     console.log(`[v0] Processing weekly memory for ${uniqueUsers.length} users`)
 
     for (const userId of uniqueUsers) {
+      const userIdString = userId as string
       try {
-        const userIdString = userId as string
         // Fetch user's performance context
         const { data: performanceData } = await supabase
           .from("user_performance_context")
