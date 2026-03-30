@@ -159,7 +159,7 @@ analysisQueue.process(async (job) => {
  */
 export async function getAnalysisResults(analysisId: string) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from('multimodal_analyses')
       .select('*')
