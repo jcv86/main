@@ -65,6 +65,7 @@ export async function queueAnalysisJob(jobData: AnalysisJobData): Promise<string
 analysisQueue.process(async (job) => {
   const jobData = job.data as AnalysisJobData
   const supabase = await createClient()
+  const startTime = Date.now()
 
   try {
     console.log(`[v0] Processing analysis job: ${job.id}`)
@@ -108,7 +109,7 @@ analysisQueue.process(async (job) => {
         recommendations: analysisResult.personalized_recommendations,
         feedback: analysisResult.detailed_feedback,
         status: 'completed',
-        processing_time_ms: Date.now() - job.progress
+        processing_time_ms: Date.now() - startTime
       })
       .select()
 
