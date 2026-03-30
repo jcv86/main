@@ -22,7 +22,7 @@ function LLMOOptimizedFooter() {
                 placeholder="tu@email.com"
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white"
               />
-              <Button className="bg-white text-purple-600 hover:bg-gray-100 font-semibold whitespace-nowrap">
+              <Button className="bg-white text-purple-800 hover:bg-gray-100 font-semibold whitespace-nowrap">
                 Suscribirse
               </Button>
             </div>

@@ -406,7 +406,7 @@ export default function LandingPageOptimized() {
                 <Link href="/auth">
                   <Button
                     size="lg"
-                    className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-6 w-full sm:w-auto shadow-xl"
+                    className="bg-white text-purple-800 hover:bg-gray-100 text-lg px-8 py-6 w-full sm:w-auto shadow-xl font-semibold"
                   >
                     Empieza Tu Transición
                     <ArrowRight className="ml-2 h-5 w-5" />
