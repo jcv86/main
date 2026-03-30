@@ -1,9 +1,11 @@
-import type NextAuthConfig from "next-auth"
+import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
 import { createClient } from "@/lib/supabase/server"
 import { enrichProfileFromGoogle, enrichProfileFromLinkedIn } from "@/lib/enrich-profile"
+
+type NextAuthConfig = typeof NextAuth.config
 
 // Validate env vars at startup
 // Force redeploy with new Google OAuth credentials
