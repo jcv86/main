@@ -326,7 +326,7 @@ export function interpretDespegarProfile(profile: DespegarProfile): DespegarInte
     strengths: strengthsMap[profile.primary],
     developmentAreas: developmentMap[profile.primary],
     recommendations: [
-      `En A2 Ruta: Diseña tu plan aprovechando tu dimensión de ${profile.profileName}`,
+      `En A2 Ruta: Diseña tu plan aprovechando tu dimensión de ${profile.primary}`,
       `En A3 Impulso: Prepárate con acciones que refuercen tu fortaleza natural`,
       `En A4 Radar: Busca oportunidades alineadas con tu perfil de ${profile.primary}`
     ]
