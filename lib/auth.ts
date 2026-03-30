@@ -1,11 +1,9 @@
-import NextAuth from "next-auth"
+import NextAuth, { type AuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
 import { createClient } from "@/lib/supabase/server"
 import { enrichProfileFromGoogle, enrichProfileFromLinkedIn } from "@/lib/enrich-profile"
-
-type NextAuthConfig = typeof NextAuth.config
 
 // Validate env vars at startup
 // Force redeploy with new Google OAuth credentials
@@ -71,7 +69,7 @@ const baseUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:3000'
 
 
-export const authConfig: NextAuthConfig = {
+export const authConfig: AuthConfig = {
   providers: [
     Google({
       clientId: envVars.googleClientId || "",
