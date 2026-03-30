@@ -46,10 +46,10 @@ export default function A1ReportPage() {
   const loadReport = async () => {
     try {
       const { data: testDataArray, error: queryError } = await supabase
-        .from('despega_a1_test_results')
-        .select('test_data')
+        .from('a1_disc_assessment')
+        .select('disc_profile')
         .eq('user_id', user?.id)
-        .order('created_at', { ascending: false })
+        .order('completed_at', { ascending: false })
         .limit(1)
 
       if (queryError) throw queryError
@@ -61,18 +61,17 @@ export default function A1ReportPage() {
       }
 
       const testData = testDataArray[0]
-      const testDataObj = (testData as TestDataRecord).test_data || {}
-      const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
+      const disc_profile = testData.disc_profile as Record<string, number> || {}
 
       const profile: CerebroProfile = {
-        D: normalize(testDataObj.energia || 0),
-        I: normalize(testDataObj.relaciones || 0),
-        S: normalize(testDataObj.plan_ejecutivo || 0),
-        C: normalize(testDataObj.enfoque || 0),
+        D: disc_profile.D || 0,
+        I: disc_profile.I || 0,
+        S: disc_profile.S || 0,
+        C: disc_profile.C || 0,
         primary: 'D',
-        primaryScore: normalize(testDataObj.energia || 0),
+        primaryScore: disc_profile.D || 0,
         secondary: 'I',
-        secondaryScore: normalize(testDataObj.relaciones || 0)
+        secondaryScore: disc_profile.I || 0
       }
 
       const scores = [
@@ -88,6 +87,7 @@ export default function A1ReportPage() {
       profile.secondary = scores[1].letter
       profile.secondaryScore = scores[1].value
 
+      console.log('[v0] Loaded profile from a1_disc_assessment:', profile)
       setProfile(profile)
       setLoading(false)
     } catch (err) {
