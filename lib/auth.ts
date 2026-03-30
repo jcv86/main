@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
-import Credentials from "next-auth/providers/credentials"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
 import { createClient } from "@/lib/supabase/server"
 import { enrichProfileFromGoogle, enrichProfileFromLinkedIn } from "@/lib/enrich-profile"
@@ -88,52 +87,12 @@ export const authConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      issuer: "https://www.linkedin.com",
-      wellKnown: "https://www.linkedin.com/.well-known/openid-configuration",
+      issuer: "https://www.linkedin.com/oauth",
+      wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
         params: {
           scope: "openid profile email",
         },
-      },
-    }),
-    Credentials({
-      name: "Email & Password",
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "tu@email.com" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email y contraseña requeridos")
-        }
-
-        try {
-          const supabase = await createClient()
-          
-          // Sign in with Supabase auth
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: credentials.email,
-            password: credentials.password,
-          })
-
-          if (error || !data.user) {
-            console.error("[v0] Credentials auth failed:", error?.message)
-            throw new Error("Email o contraseña incorrectos")
-          }
-
-          console.log("[v0] Credentials auth successful:", credentials.email)
-          
-          // Return user object for NextAuth
-          return {
-            id: data.user.id,
-            email: data.user.email || "",
-            name: data.user.user_metadata?.full_name || data.user.email,
-            image: data.user.user_metadata?.avatar_url,
-          }
-        } catch (error) {
-          console.error("[v0] Credentials provider error:", error)
-          throw error
-        }
       },
     }),
   ],
