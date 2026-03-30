@@ -94,20 +94,6 @@ export const authConfig = {
           scope: "openid profile email",
         },
       },
-      profile: async (profile) => {
-        console.log("[v0] LinkedIn profile received:", {
-          id: profile.sub,
-          email: profile.email,
-          name: profile.name,
-          picture: profile.picture,
-        })
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-        }
-      },
     }),
   ],
   adapter: SupabaseAdapter({
@@ -231,6 +217,3 @@ export const authConfig = {
     },
   },
 }
-
-// Export NextAuth handlers for the API route
-export const handlers = NextAuth(authConfig)
