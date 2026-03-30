@@ -86,7 +86,7 @@ Responde SOLO con JSON válido, sin markdown:
 }`
             },
             ...frameData.map(frame => ({
-              type: 'image' as const,
+              type: 'image_url' as const,
               image_url: {
                 url: `data:image/jpeg;base64,${frame}`
               }
@@ -96,7 +96,7 @@ Responde SOLO con JSON válido, sin markdown:
       ]
     })
 
-    const analysisText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const analysisText = response.choices[0].message.content
     const analysis = JSON.parse(analysisText)
 
     return {
