@@ -341,7 +341,7 @@ export async function getUserBookmarks(userEmail: string): Promise<BookWithProgr
     // Combinar datos
     const result: BookWithProgress[] =
       data?.map((item) => {
-        const book = item.knowledge_base as Book
+        const book = item.knowledge_base as unknown as Book
         const progress = progressData?.find((p) => p.book_id === item.book_id)
 
         return {
