@@ -8,6 +8,9 @@ import { AdminUsersOverview } from "@/components/admin/admin-users-overview"
 import { AdminAnalytics } from "@/components/admin/admin-analytics"
 import { ProtectedAdminRoute } from "@/components/admin/protected-admin-route"
 
+// Mark page as dynamic since it uses useSession() which requires runtime rendering
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Admin Dashboard - A4 Despega",
   description: "Panel de administración para gestionar contenido de A4",
