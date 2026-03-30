@@ -48,33 +48,6 @@ export interface A1Response {
   respuesta: 'más' | 'menos' | 'como_yo'
 }
 
-export interface DiscInterpretation {
-  profile: DiscProfile
-  profileName: string
-  description: string
-  strengths: string[]
-  developmentAreas: string[]
-  recommendations: string[]
-}
-
-export interface A1ProfileResult {
-  dominancia: number
-  influencia: number
-  estabilidad: number
-  conciencia: number
-  perfil_dominante: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
-  perfil_secundario: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
-  descripción: string
-  fortalezas: string[]
-  areas_desarrollo: string[]
-  recomendaciones: string[]
-}
-
-export interface A1Response {
-  question_id: number
-  respuesta: 'más' | 'menos' | 'como_yo'
-}
-
 export function calcularPerfilA1(respuestas: A1Response[]): A1ProfileResult {
   // Inicializar contadores por categoría
   const scores: Record<string, number> = {
