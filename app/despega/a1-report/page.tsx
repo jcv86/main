@@ -45,51 +45,54 @@ export default function A1ReportPage() {
 
   const loadReport = async () => {
     try {
-      const { data: testData } = await supabase
+      const { data: testDataArray, error: queryError } = await supabase
         .from('despega_a1_test_results')
         .select('test_data')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
 
-      if (testData) {
-        const testDataObj = (testData as TestDataRecord).test_data || {}
-        const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
+      if (queryError) throw queryError
 
-        const profile: CerebroProfile = {
-          D: normalize(testDataObj.energia || 0),
-          I: normalize(testDataObj.relaciones || 0),
-          S: normalize(testDataObj.plan_ejecutivo || 0),
-          C: normalize(testDataObj.enfoque || 0),
-          primary: 'D',
-          primaryScore: normalize(testDataObj.energia || 0),
-          secondary: 'I',
-          secondaryScore: normalize(testDataObj.relaciones || 0)
-        }
-
-        const scores = [
-          { letter: 'D', value: profile.D },
-          { letter: 'I', value: profile.I },
-          { letter: 'S', value: profile.S },
-          { letter: 'C', value: profile.C }
-        ]
-        scores.sort((a, b) => b.value - a.value)
-
-        profile.primary = scores[0].letter
-        profile.primaryScore = scores[0].value
-        profile.secondary = scores[1].letter
-        profile.secondaryScore = scores[1].value
-
-        setProfile(profile)
+      if (!testDataArray || testDataArray.length === 0) {
+        setError('No se encontraron respuestas. Por favor completa la evaluación.')
         setLoading(false)
         return
       }
 
-      setError('No se encontraron respuestas. Por favor completa la evaluación.')
+      const testData = testDataArray[0]
+      const testDataObj = (testData as TestDataRecord).test_data || {}
+      const normalize = (value: number) => Math.max(0, Math.min(100, (value + 100) / 2))
+
+      const profile: CerebroProfile = {
+        D: normalize(testDataObj.energia || 0),
+        I: normalize(testDataObj.relaciones || 0),
+        S: normalize(testDataObj.plan_ejecutivo || 0),
+        C: normalize(testDataObj.enfoque || 0),
+        primary: 'D',
+        primaryScore: normalize(testDataObj.energia || 0),
+        secondary: 'I',
+        secondaryScore: normalize(testDataObj.relaciones || 0)
+      }
+
+      const scores = [
+        { letter: 'D', value: profile.D },
+        { letter: 'I', value: profile.I },
+        { letter: 'S', value: profile.S },
+        { letter: 'C', value: profile.C }
+      ]
+      scores.sort((a, b) => b.value - a.value)
+
+      profile.primary = scores[0].letter
+      profile.primaryScore = scores[0].value
+      profile.secondary = scores[1].letter
+      profile.secondaryScore = scores[1].value
+
+      setProfile(profile)
+      setLoading(false)
     } catch (err) {
+      console.error('[v0] Error loading cerebral report:', err)
       setError('Error al cargar el reporte.')
-    } finally {
       setLoading(false)
     }
   }
@@ -105,11 +108,30 @@ export default function A1ReportPage() {
   if (error) {
     return (
       <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
-        <ASectionPart title="Error" icon={<Zap />}>
-          <p className="text-red-400">{error}</p>
-          <Button onClick={() => router.push('/despega/a1-cerebral')} className="bg-purple-600 hover:bg-purple-700">
-            Ir a Evaluación
-          </Button>
+        <ASectionPart title="Completar Evaluación" icon={<Zap />}>
+          <div className="space-y-4">
+            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
+              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
+              <p className="text-red-600 dark:text-red-400 text-sm mt-2">
+                Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
+              </p>
+            </div>
+            <Button 
+              onClick={() => router.push('/despega/a1-cerebral')} 
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-lg"
+            >
+              <Target className="w-5 h-5 mr-2" />
+              Comenzar Evaluación de Perfil Cerebral
+            </Button>
+            <Button 
+              onClick={() => router.push('/despega')} 
+              variant="outline"
+              className="w-full"
+            >
+              <ArrowRight className="w-5 h-5 mr-2" />
+              Volver al Dashboard
+            </Button>
+          </div>
         </ASectionPart>
       </ASection>
     )
