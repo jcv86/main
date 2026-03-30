@@ -151,6 +151,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <PillarCard
               pillar="A1"
+              pillarName="El Ritual"
               title="El Ritual"
               status="completed"
               description="Completaste tu Evaluación de Liderazgo y descubriste tu patrón"
@@ -161,6 +162,7 @@ export default function DashboardPage() {
             />
             <PillarCard
               pillar="A2"
+              pillarName="Exploración"
               title="Rutas"
               status={userData.a2_mission ? 'active' : 'active'}
               description="Elige tu camino y crea tu misión de 90 días personalizada"
@@ -171,6 +173,7 @@ export default function DashboardPage() {
             />
             <PillarCard
               pillar="A3"
+              pillarName="Entrenamiento"
               title="Entrenamientos"
               status="pending"
               description="Entrenamientos prácticos adaptados a tu tema de sprint"
@@ -181,6 +184,7 @@ export default function DashboardPage() {
             />
             <PillarCard
               pillar="A4"
+              pillarName="La Realidad"
               title="La Realidad"
               status="pending"
               description="Noticias y contexto personalizado para tu transformación"
