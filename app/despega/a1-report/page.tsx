@@ -63,15 +63,32 @@ export default function A1ReportPage() {
       const testData = testDataArray[0]
       const disc_profile = testData.disc_profile as Record<string, number> || {}
 
-      const profile: CerebroProfile = {
+      // Normalize scores to 0-100 scale
+      const rawScores = {
         D: disc_profile.D || 0,
         I: disc_profile.I || 0,
         S: disc_profile.S || 0,
-        C: disc_profile.C || 0,
+        C: disc_profile.C || 0
+      }
+
+      // Calculate total to normalize
+      const total = rawScores.D + rawScores.I + rawScores.S + rawScores.C || 1
+      const normalizedScores = {
+        D: (rawScores.D / total) * 100,
+        I: (rawScores.I / total) * 100,
+        S: (rawScores.S / total) * 100,
+        C: (rawScores.C / total) * 100
+      }
+
+      const profile: CerebroProfile = {
+        D: normalizedScores.D,
+        I: normalizedScores.I,
+        S: normalizedScores.S,
+        C: normalizedScores.C,
         primary: 'D',
-        primaryScore: disc_profile.D || 0,
+        primaryScore: normalizedScores.D,
         secondary: 'I',
-        secondaryScore: disc_profile.I || 0
+        secondaryScore: normalizedScores.I
       }
 
       const scores = [
@@ -87,6 +104,8 @@ export default function A1ReportPage() {
       profile.secondary = scores[1].letter
       profile.secondaryScore = scores[1].value
 
+      console.log('[v0] Raw scores:', rawScores)
+      console.log('[v0] Normalized scores:', normalizedScores)
       console.log('[v0] Loaded profile from a1_cerebral_assessment:', profile)
       setProfile(profile)
       setLoading(false)
@@ -148,42 +167,48 @@ export default function A1ReportPage() {
     <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
-            <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
-            <div className="text-3xl font-black text-purple-400 mb-2">{primaryLabel}</div>
-            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-              <div className="h-full bg-purple-500" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
+          {/* Primary Profile Card */}
+          <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple-300">
+            <p className="text-purple-100 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
+            <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
+            <p className="font-semibold text-purple-50 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
+            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
+              <div className="h-full bg-gradient-to-r from-yellow-300 to-white" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
             </div>
-            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.primaryScore))}%</p>
+            <p className="text-xs text-purple-100 font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-6">
-            <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
-            <div className="text-3xl font-black text-blue-400 mb-2">{secondaryLabel}</div>
-            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-              <div className="h-full bg-blue-500" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+          {/* Secondary Profile Card */}
+          <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 rounded-xl p-6 shadow-lg border-2 border-blue-300">
+            <p className="text-blue-100 text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
+            <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
+            <p className="font-semibold text-blue-50 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
+            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
+              <div className="h-full bg-gradient-to-r from-cyan-300 to-white" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
-            <p className="text-xs text-slate-400 mt-2">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+            <p className="text-xs text-blue-100 font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
           </div>
         </div>
 
-        <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8">
-          <h3 className="font-semibold text-white mb-4">Tus 4 Perfiles Despega Cerebral</h3>
-          <div className="space-y-3">
+        {/* All 4 Profiles Breakdown */}
+        <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 mb-8 border-2 border-purple-500/30 shadow-lg">
+          <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
+          <div className="space-y-4">
             {[
-              { label: 'Impulsor', score: profile.D },
-              { label: 'Catalizador', score: profile.I },
-              { label: 'Estabilizador', score: profile.S },
-              { label: 'Arquitecto', score: profile.C }
+              { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange-500', icon: '⚡' },
+              { label: 'Catalizador', score: profile.I, color: 'from-yellow-500 to-orange-400', icon: '🔥' },
+              { label: 'Estabilizador', score: profile.S, color: 'from-green-500 to-teal-500', icon: '🛡️' },
+              { label: 'Arquitecto', score: profile.C, color: 'from-blue-500 to-purple-500', icon: '🏗️' }
             ].map((dim, idx) => (
-              <div key={idx} className="flex items-center gap-4">
-                <p className="font-bold text-white w-40">{dim.label}</p>
-                <div className="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500" style={{ width: `${Math.max(0, dim.score)}%` }} />
+              <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors">
+                <span className="text-2xl">{dim.icon}</span>
+                <p className="font-bold text-white w-32">{dim.label}</p>
+                <div className="flex-1 h-4 bg-slate-600 rounded-full overflow-hidden border border-slate-500">
+                  <div className={`h-full bg-gradient-to-r ${dim.color} shadow-lg`} style={{ width: `${Math.max(0, dim.score)}%` }} />
                 </div>
-                <p className="w-12 text-right font-semibold text-white">{Math.max(0, Math.round(dim.score))}%</p>
+                <div className="flex items-center gap-2">
+                  <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
+                </div>
               </div>
             ))}
           </div>
