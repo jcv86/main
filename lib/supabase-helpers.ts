@@ -49,7 +49,7 @@ export async function querySupabase<T extends SupabaseRow>(
       return { data: [], error: null }
     }
 
-    return { data: data as T[], error: null }
+    return { data: (data as unknown) as T[], error: null }
   } catch (error) {
     return {
       data: null,
