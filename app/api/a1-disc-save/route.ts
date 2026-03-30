@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
     const { responses, questions, disc_profile, user_id } = body
 
     const supabase = await createClient()
+    const supabaseAdmin = createAdminClient()
+    
     if (!user_id) {
       console.error('[v0] No user_id provided')
       return NextResponse.json({ error: 'User ID required' }, { status: 400 })
@@ -25,23 +27,30 @@ export async function POST(request: NextRequest) {
     console.log('[v0] User ID from client:', user_id)
     console.log('[v0] DISC Profile:', disc_profile)
     
+    // First, try to get user email from auth.users (using admin client)
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(user_id)
+    const userEmail = authUser?.user?.email || ''
+    console.log('[v0] User email from auth:', userEmail)
+    
     // Ensure user exists in public users table (create if missing)
-    // This handles users who logged in via client-side auth without going through email-login API
-    const { error: userCheckError } = await supabase
+    // Use admin client to bypass RLS - this handles OAuth users who don't have a public.users record
+    const { error: userCheckError } = await supabaseAdmin
       .from('users')
       .upsert(
         {
           id: user_id,
-          email: '', // Email will be empty if user doesn't exist in public table yet
+          email: userEmail,
+          full_name: authUser?.user?.user_metadata?.full_name || authUser?.user?.user_metadata?.name || '',
+          avatar_url: authUser?.user?.user_metadata?.avatar_url || authUser?.user?.user_metadata?.picture || '',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
-        { onConflict: 'id' }
+        { onConflict: 'id', ignoreDuplicates: false }
       )
     
     if (userCheckError) {
       console.error('[v0] Error ensuring user in public table:', userCheckError)
-      // If this fails, the insert below will also fail with FK constraint, so log it
+      return NextResponse.json({ error: 'Failed to create user record: ' + userCheckError.message }, { status: 400 })
     } else {
       console.log('[v0] User record ensured in public users table')
     }
