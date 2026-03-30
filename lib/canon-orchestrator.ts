@@ -134,6 +134,7 @@ export async function orchestrateCanon(
     return {
       success: false,
       route30Days: null,
+      generatedAt: new Date().toISOString(),
       error: error instanceof Error ? error.message : 'Unknown error'
     }
   }
