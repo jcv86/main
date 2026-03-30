@@ -29,18 +29,20 @@ export default function A1CerebralIntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Header */}
+        {/* Header with brandbook gradient */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-8 h-8 text-purple-600" />
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-              El Ritual - Descubre Tu Perfil
-            </h1>
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
+              <Brain className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <p className="text-lg text-slate-600 dark:text-slate-300">
-            Análisis profundo de tu estilo de comunicación y liderazgo
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+            El Ritual - Descubre Tu Perfil
+          </h1>
+          <p className="text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto">
+            Un análisis profundo de tu estilo de comunicación, liderazgo y potencial único
           </p>
         </div>
 

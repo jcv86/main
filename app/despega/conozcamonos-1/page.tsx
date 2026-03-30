@@ -172,15 +172,20 @@ export default function Conozcamonos1Page() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Conozcámonos 1</h1>
-          <p className="text-sm text-muted-foreground">Pregunta {currentQuestion + 1} de {CONOZCAMONOS_1_QUESTIONS.length}</p>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">El Ritual: Paso 1</p>
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+            Conozcámonos 1
+          </h1>
+          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">Pregunta {currentQuestion + 1} de {CONOZCAMONOS_1_QUESTIONS.length}</p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-6">{question.question}</h2>
+        <div className="bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">

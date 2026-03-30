@@ -122,21 +122,24 @@ export default function Conozcamonos2Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 py-8">
       <div className="max-w-3xl mx-auto">
-        {/* Header */}
+        {/* Header with brandbook styling */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-            Conozcamonos 2: Diseña Tu Ruta
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Conozcámonos 2: Tu Ruta</p>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-2">
+            Diseña Tu Ruta de 90 Días
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-slate-700 dark:text-slate-300 mb-4">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo específico y estrategia'
               : 'Paso 2: Personaliza tu plan de acción'}
           </p>
-          <Progress value={progress} className="h-2" />
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-            {completedCount} de {totalQuestions} preguntas completadas
+          <Progress value={progress} className="h-2 bg-slate-200 dark:bg-slate-700" />
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 font-medium">
+            Progreso: {completedCount} de {totalQuestions} preguntas
           </p>
         </div>
 

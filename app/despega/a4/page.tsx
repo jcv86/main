@@ -34,32 +34,32 @@ export default function A4HubPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Navigation Header */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/despega">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="hover:bg-slate-200 dark:hover:bg-slate-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver a Despega
             </Button>
           </Link>
-          <div className="text-sm text-muted-foreground">
-            Fase <Badge variant="secondary">A4: Radar Estratégico</Badge>
+          <div className="text-sm text-slate-700 dark:text-slate-300 font-medium">
+            Fase <Badge className="bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200 ml-2">A4: La Realidad</Badge>
           </div>
         </div>
 
         {/* Hero Section */}
         <div className="mb-12">
           <div className="text-center max-w-3xl mx-auto">
-            <Badge variant="outline" className="mb-4 px-4 py-1.5 text-sm">
+            <Badge className="mb-4 px-4 py-1.5 text-sm bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200">
               <Radar className="w-3 h-3 mr-2" />
               Centro de Inteligencia de Mercado
             </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
               Tu Radar Estratégico
             </h1>
-            <p className="text-xl text-muted-foreground text-balance mb-8">
+            <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-8 font-medium">
               Análisis profundo del mercado laboral chileno con 7 capas cognitivas de interpretación. Entiende qué está pasando realmente y cómo aprovechar oportunidades.
             </p>
           </div>

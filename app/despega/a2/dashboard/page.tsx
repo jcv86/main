@@ -93,11 +93,11 @@ export default function A2DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 overflow-y-auto">
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME HERO - NEW */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 dark:from-primary/90 dark:to-primary/70 rounded-lg p-8 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 dark:from-blue-600 dark:via-cyan-600 dark:to-teal-600 rounded-lg p-8 text-white shadow-xl">
           <div className="max-w-3xl">
             <p className="text-primary-foreground/80 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
             <h1 className="text-4xl font-bold mb-3">Tu plan de transformación de 90 días</h1>
