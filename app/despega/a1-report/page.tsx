@@ -117,10 +117,10 @@ export default function A1ReportPage() {
 
   if (!profile) return null
 
-  const discToDespega = { D: 'E', I: 'I', S: 'R', C: 'P' }
-  const despegaLabels = { E: 'Energía', I: 'Influencia', R: 'Relaciones', P: 'Plan Ejecutivo' }
-  const primaryLetter = discToDespega[profile.primary as keyof typeof discToDespega]
-  const secondaryLetter = discToDespega[profile.secondary as keyof typeof discToDespega]
+  const discToDespega = { D: 'Impulsor', I: 'Catalizador', S: 'Estabilizador', C: 'Arquitecto' }
+  const despegaLabels = { Impulsor: 'Impulsor - Orientado a Resultados', Catalizador: 'Catalizador - Influyente', Estabilizador: 'Estabilizador - Constante', Arquitecto: 'Arquitecto - Analítico' }
+  const primaryLabel = discToDespega[profile.primary as keyof typeof discToDespega]
+  const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
     <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
@@ -128,8 +128,8 @@ export default function A1ReportPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-6">
             <p className="text-slate-400 text-sm mb-2">Tipo Dominante</p>
-            <div className="text-5xl font-black text-purple-400 mb-2">{primaryLetter}</div>
-            <p className="font-semibold text-white mb-4">{despegaLabels[primaryLetter as keyof typeof despegaLabels]}</p>
+            <div className="text-3xl font-black text-purple-400 mb-2">{primaryLabel}</div>
+            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
               <div className="h-full bg-purple-500" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
             </div>
@@ -138,8 +138,8 @@ export default function A1ReportPage() {
 
           <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-6">
             <p className="text-slate-400 text-sm mb-2">Tipo Secundario</p>
-            <div className="text-5xl font-black text-blue-400 mb-2">{secondaryLetter}</div>
-            <p className="font-semibold text-white mb-4">{despegaLabels[secondaryLetter as keyof typeof despegaLabels]}</p>
+            <div className="text-3xl font-black text-blue-400 mb-2">{secondaryLabel}</div>
+            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
@@ -148,16 +148,16 @@ export default function A1ReportPage() {
         </div>
 
         <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8">
-          <h3 className="font-semibold text-white mb-4">Tus 4 Dimensiones</h3>
+          <h3 className="font-semibold text-white mb-4">Tus 4 Perfiles Despega Cerebral</h3>
           <div className="space-y-3">
             {[
-              { label: 'Energía', score: profile.D },
-              { label: 'Influencia', score: profile.I },
-              { label: 'Relaciones', score: profile.S },
-              { label: 'Plan Ejecutivo', score: profile.C }
+              { label: 'Impulsor', score: profile.D },
+              { label: 'Catalizador', score: profile.I },
+              { label: 'Estabilizador', score: profile.S },
+              { label: 'Arquitecto', score: profile.C }
             ].map((dim, idx) => (
               <div key={idx} className="flex items-center gap-4">
-                <p className="font-bold text-white w-32">{dim.label}</p>
+                <p className="font-bold text-white w-40">{dim.label}</p>
                 <div className="flex-1 h-3 bg-slate-700 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500" style={{ width: `${Math.max(0, dim.score)}%` }} />
                 </div>
