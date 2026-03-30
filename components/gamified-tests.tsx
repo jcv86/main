@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -23,13 +24,18 @@ export function GamifiedTests() {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(0)
 
+  const { user } = useUser()
+
   useEffect(() => {
-    loadData()
-  }, [])
+    if (user?.id) {
+      loadData()
+    }
+  }, [user?.id])
 
   const loadData = async () => {
+    if (!user?.id) return
     try {
-      const testsData = await getGamifiedTests(10)
+      const testsData = await getGamifiedTests(user.id, 10)
       setTests(testsData)
     } catch (error) {
       console.error("[v0] Error loading tests:", error)

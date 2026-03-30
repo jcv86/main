@@ -53,11 +53,7 @@ Cierre empático y CTA (¿Quieres que te muestre cómo hacerlo?)`
   const categoryGuidance = `
 Categoría Actual: ${category.name}
 
-Objetivo: ${category.description}
-
-${category.promptBase ? `Ejemplo de prompt base: "${category.promptBase}"` : ""}
-
-${category.exampleResponse ? `Ejemplo de respuesta: "${category.exampleResponse}"` : ""}`
+Objetivo: ${category.description}`
 
   // Combine based on coach type
   if (coach === "sofia") {

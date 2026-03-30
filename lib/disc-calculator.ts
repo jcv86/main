@@ -48,33 +48,6 @@ export interface A1Response {
   respuesta: 'más' | 'menos' | 'como_yo'
 }
 
-export interface DiscInterpretation {
-  profile: DiscProfile
-  profileName: string
-  description: string
-  strengths: string[]
-  developmentAreas: string[]
-  recommendations: string[]
-}
-
-export interface A1ProfileResult {
-  dominancia: number
-  influencia: number
-  estabilidad: number
-  conciencia: number
-  perfil_dominante: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
-  perfil_secundario: 'dominancia' | 'influencia' | 'estabilidad' | 'conciencia'
-  descripción: string
-  fortalezas: string[]
-  areas_desarrollo: string[]
-  recomendaciones: string[]
-}
-
-export interface A1Response {
-  question_id: number
-  respuesta: 'más' | 'menos' | 'como_yo'
-}
-
 export function calcularPerfilA1(respuestas: A1Response[]): A1ProfileResult {
   // Inicializar contadores por categoría
   const scores: Record<string, number> = {
@@ -353,7 +326,7 @@ export function interpretDespegarProfile(profile: DespegarProfile): DespegarInte
     strengths: strengthsMap[profile.primary],
     developmentAreas: developmentMap[profile.primary],
     recommendations: [
-      `En A2 Ruta: Diseña tu plan aprovechando tu dimensión de ${profile.profileName}`,
+      `En A2 Ruta: Diseña tu plan aprovechando tu dimensión de ${profile.primary}`,
       `En A3 Impulso: Prepárate con acciones que refuercen tu fortaleza natural`,
       `En A4 Radar: Busca oportunidades alineadas con tu perfil de ${profile.primary}`
     ]

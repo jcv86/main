@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase"
 import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
-import { generateObject } from "ai"
 import { z } from "zod"
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 export interface TestResult {
   testType: string
@@ -227,12 +228,95 @@ Enfócate en:
 - Pasos accionables y realistas
 - Timeframes concretos`
 
-    const { object } = await generateObject({
-      model: "openai/gpt-4o",
-      schema: CrossTestAnalysisSchema,
-      prompt,
-      temperature: 0.7,
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 0.7,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "CrossTestAnalysis",
+            description: "Cross-test analysis combining multiple assessment results",
+            schema: {
+              type: "object",
+              properties: {
+                profileSummary: { type: "string" },
+                dominantTraits: {
+                  type: "array",
+                  items: { type: "string" },
+                },
+                careerAlignment: {
+                  type: "object",
+                  properties: {
+                    topMatches: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          career: { type: "string" },
+                          matchScore: { type: "number" },
+                          reasoning: { type: "string" },
+                          chileanMarketFit: { type: "string" },
+                        },
+                      },
+                    },
+                  },
+                },
+                skillGaps: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      skill: { type: "string" },
+                      importance: { type: "string" },
+                      developmentPath: { type: "string" },
+                    },
+                  },
+                },
+                developmentPriorities: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      area: { type: "string" },
+                      priority: { type: "string" },
+                      timeframe: { type: "string" },
+                      actionSteps: {
+                        type: "array",
+                        items: { type: "string" },
+                      },
+                    },
+                  },
+                },
+                marketInsights: { type: "string" },
+              },
+              required: [
+                "profileSummary",
+                "dominantTraits",
+                "careerAlignment",
+                "skillGaps",
+                "developmentPriorities",
+                "marketInsights",
+              ],
+            },
+          },
+        },
+      }),
     })
+
+    const data = await response.json()
+    const object = JSON.parse(data.choices[0]?.message?.content || "{}")
 
     return object
   }
@@ -332,7 +416,7 @@ Enfócate en:
       dominantTraits: data.combined_profile.traits,
       careerAlignment: {
         topMatches: data.top_career_matches,
-        industries: [...new Set(data.top_career_matches.map((m: any) => m.industry))],
+        industries: Array.from(new Set(data.top_career_matches.map((m: any) => m.industry as string))),
       },
       skillGaps: data.skill_gaps,
       developmentPriorities: data.development_priorities,

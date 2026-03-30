@@ -1,4 +1,4 @@
-import { supabase } from "./supabase"
+import { createClient } from "./supabase"
 
 export interface AIInsight {
   id: string
@@ -18,6 +18,11 @@ export interface ChatMessage {
 class AICoachService {
   async generateInsights(userEmail: string): Promise<AIInsight[]> {
     try {
+      const supabase = createClient()
+      if (!supabase) {
+        throw new Error("Supabase client not initialized")
+      }
+
       // Get user's test results
       const { data: testResults, error } = await supabase
         .from("test_results")
@@ -99,6 +104,11 @@ class AICoachService {
 
   async getExistingInsights(userEmail: string): Promise<AIInsight[]> {
     try {
+      const supabase = createClient()
+      if (!supabase) {
+        throw new Error("Supabase client not initialized")
+      }
+
       const { data, error } = await supabase
         .from("ai_insights")
         .select("*")
@@ -130,6 +140,11 @@ class AICoachService {
     conversationHistory: ChatMessage[],
   ): Promise<{ message: string }> {
     try {
+      const supabase = createClient()
+      if (!supabase) {
+        throw new Error("Supabase client not initialized")
+      }
+
       // Get user's test results for context
       const { data: testResults } = await supabase
         .from("test_results")

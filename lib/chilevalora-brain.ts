@@ -197,7 +197,7 @@ export class ChileValoraBrain {
   static async getSectors(): Promise<string[]> {
     const { data, error } = await supabase
       .from('chilevalora_profiles')
-      .select('sector', { distinct: true })
+      .select('sector')
       .eq('estado', 'activo')
 
     if (error) {
@@ -205,7 +205,9 @@ export class ChileValoraBrain {
       return []
     }
 
-    return data?.map(d => d.sector).filter(Boolean) || []
+    // Get unique sectors
+    const sectors = data?.map(d => d.sector).filter(Boolean) || []
+    return [...new Set(sectors)]
   }
 
   /**

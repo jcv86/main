@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -13,13 +14,17 @@ export function RadarEstrategico() {
   const [signals, setSignals] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
+  const { user } = useUser()
+
   useEffect(() => {
+    if (!user?.id) return
+
     const loadData = async () => {
       try {
         const [tesisData, noticiasData, signalsData] = await Promise.all([
           getRadarTesisDelDia(),
           getRadarNoticias(5),
-          getWeakSignals(5),
+          getWeakSignals(user.id, 5),
         ])
 
         setTesis(tesisData)
@@ -33,7 +38,7 @@ export function RadarEstrategico() {
     }
 
     loadData()
-  }, [])
+  }, [user?.id])
 
   if (loading) {
     return (

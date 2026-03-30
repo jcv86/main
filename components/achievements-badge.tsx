@@ -63,7 +63,7 @@ const achievements: Achievement[] = [
 ]
 
 export function AchievementsBadge() {
-  const unlockedCount = achievements.filter(a => a.unlockedPoints).length
+  const unlockedCount = achievements.filter(a => a.unlocked).length
   const totalPoints = achievements.reduce((sum, a) => sum + (a.unlocked ? a.points : 0), 0)
 
   return (

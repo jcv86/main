@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -66,6 +67,9 @@ export default function EnhancedAICoach({ testType, testResults, userProfile, cl
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
+
+  const { user } = useUser()
+  const userEmail = user?.email || ""
 
   useEffect(() => {
     initializeChat()

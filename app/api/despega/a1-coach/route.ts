@@ -108,8 +108,13 @@ Mensaje del usuario: ${message}`
     const data = await openaiResponse.json()
     const responseText = data.choices?.[0]?.message?.content || ""
     
-    if (!responseText) {
-      throw new Error("No response from OpenAI")
+    if (!responseText || responseText.trim() === "") {
+      console.warn("[A1 Coach] Empty response from OpenAI")
+      return NextResponse.json({
+        response: "No pude procesar tu mensaje en este momento. Por favor intenta de nuevo.",
+        type: "error",
+        patternIdentified: undefined,
+      })
     }
 
     // Parse structured response - expect JSON with response, type, patternIdentified

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -23,7 +24,6 @@ import {
   Mic,
   Volume2,
 } from "lucide-react"
-import { generateText } from "ai"
 
 interface ReadingInsight {
   id: string
@@ -70,8 +70,9 @@ export default function AIReadingCompanion() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [selectedBook, setSelectedBook] = useState<string>("")
   const [loading, setLoading] = useState(true)
-
   const [userEmail, setUserEmail] = useState("")
+  
+  const { user } = useUser()
 
   useEffect(() => {
     loadAICompanionData()
@@ -81,41 +82,36 @@ export default function AIReadingCompanion() {
     try {
       setLoading(true)
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
+      // Get current user email
+      if (user?.email) {
+        setUserEmail(user.email)
+      } else {
+        setLoading(false)
+        return
       }
 
-      const { data: insightsData } = await supabase
-        .from("reading_insights")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("created_at", { ascending: false })
-        .limit(10)
+      const { data: insightsData } = await fetch("/api/reading-insights", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (insightsData) {
         setInsights(insightsData)
       }
 
-      const { data: plansData } = await supabase
-        .from("study_plans")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("created_at", { ascending: false })
+      const { data: plansData } = await fetch("/api/study-plans", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (plansData) {
         setStudyPlans(plansData)
       }
 
-      const { data: recsData } = await supabase
-        .from("book_recommendations")
-        .select("*")
-        .eq("user_email", user?.email)
-        .order("match_score", { ascending: false })
-        .limit(10)
+      const { data: recsData } = await fetch("/api/book-recommendations", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json())
 
       if (recsData) {
         setRecommendations(recsData)
@@ -145,21 +141,18 @@ export default function AIReadingCompanion() {
     setIsGenerating(true)
 
     try {
-      const { text } = await generateText({
-        model: "openai/gpt-4o",
-        system: `Eres un compañero de lectura inteligente especializado en desarrollo profesional y personal. 
-        Ayudas a los usuarios a:
-        - Comprender conceptos complejos de libros
-        - Generar resúmenes y insights
-        - Crear conexiones entre diferentes libros
-        - Sugerir aplicaciones prácticas
-        - Responder preguntas sobre el contenido
-        
-        Mantén un tono amigable, profesional y educativo. Proporciona respuestas específicas y accionables.`,
-        prompt: userMessage,
-        temperature: 0.7,
-        maxTokens: 500,
+      const response = await fetch("/api/ai/reading-companion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userMessage,
+          userEmail,
+        }),
       })
+
+      if (!response.ok) throw new Error("Failed to get response")
+
+      const { text } = await response.json()
 
       setChatMessages((prev) => [...prev, { role: "assistant", content: text }])
     } catch (error) {
@@ -188,14 +181,19 @@ export default function AIReadingCompanion() {
         application: `Sugiere una aplicación práctica específica de los conceptos de "${selectedBook}" que se pueda implementar inmediatamente.`,
       }
 
-      const { text } = await generateText({
-        model: "openai/gpt-4o",
-        system:
-          "Eres un experto en desarrollo profesional y personal que ayuda a los lectores a obtener insights profundos de sus libros.",
-        prompt: prompts[type as keyof typeof prompts],
-        temperature: 0.7,
-        maxTokens: 200,
+      const response = await fetch("/api/ai/reading-insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type,
+          selectedBook,
+          prompts,
+        }),
       })
+
+      if (!response.ok) throw new Error("Failed to generate insight")
+
+      const { text } = await response.json()
 
       const newInsight: ReadingInsight = {
         id: Date.now().toString(),

@@ -460,7 +460,7 @@ export function PersistentAICoach() {
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
-          sender: "assistant",
+          sender: "ai",
           timestamp: new Date(),
           coach: data.coach,
         }
@@ -786,18 +786,18 @@ export function PersistentAICoach() {
                   <div className="mt-4 pt-4 border-t border-border">
                     <p className="text-xs text-mutedForeground font-medium mb-3">💡 Preguntas sugeridas:</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {(suggestions.length > 0 ? suggestions.slice(0, 4) : quickStartQuestions).map(
+                      {(suggestions.length > 0 ? suggestions : quickStartQuestions.map((q) => ({ text: q }))).map(
                         (suggestion, index) => (
                           <button
                             key={index}
                             onClick={() => {
-                              setInputMessage(suggestion.text || suggestion)
+                              setInputMessage((suggestion as any).text || suggestion)
                               setActiveTab("chat")
                             }}
                             className="text-left p-3 rounded-lg border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
                           >
                             <p className="line-clamp-2 group-hover:text-foreground font-medium">
-                              {suggestion.text || suggestion}
+                              {(suggestion as any).text || suggestion}
                             </p>
                           </button>
                         ),
@@ -940,12 +940,9 @@ export function PersistentAICoach() {
         open={showFeedbackDialog}
         onOpenChange={setShowFeedbackDialog}
         sessionId={sessionId}
-        userEmail={userEmail}
         messageCount={messageCount}
-        conversationSummary={messages
-          .slice(-4)
-          .map((m) => `${m.sender === "user" ? "Usuario" : "Coach"}: ${m.content.substring(0, 100)}...`)
-          .join("\n")}
+        coachType="hybrid"
+        conversationCategory="autoconocimiento"
       />
     </div>
   )

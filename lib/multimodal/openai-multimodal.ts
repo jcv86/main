@@ -58,7 +58,7 @@ export async function analyzeVisualFrames(frames: string[]): Promise<VisualAnaly
       return imageBuffer.toString('base64')
     })
 
-    const response = await openai.messages.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 1000,
       messages: [
@@ -86,11 +86,9 @@ Responde SOLO con JSON válido, sin markdown:
 }`
             },
             ...frameData.map(frame => ({
-              type: 'image' as const,
-              source: {
-                type: 'base64' as const,
-                media_type: 'image/jpeg' as const,
-                data: frame
+              type: 'image_url' as const,
+              image_url: {
+                url: `data:image/jpeg;base64,${frame}`
               }
             }))
           ]
@@ -98,7 +96,7 @@ Responde SOLO con JSON válido, sin markdown:
       ]
     })
 
-    const analysisText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const analysisText = response.choices[0].message.content
     const analysis = JSON.parse(analysisText)
 
     return {
@@ -131,7 +129,7 @@ export async function analyzeAudio(audioPath: string): Promise<AudioAnalysisResu
     const transcript = transcriptionResponse.text
 
     // Analyze with GPT-4o
-    const response = await openai.messages.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 800,
       messages: [
@@ -162,7 +160,7 @@ Responde SOLO con JSON:
       ]
     })
 
-    const analysisText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const analysisText = response.choices[0].message.content
     const analysis = JSON.parse(analysisText)
 
     return {
@@ -189,7 +187,7 @@ export async function analyzeCoherence(
   transcript: string
 ): Promise<CoherenceAnalysisResult> {
   try {
-    const response = await openai.messages.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 1200,
       messages: [
@@ -229,7 +227,7 @@ Responde SOLO con JSON:
       ]
     })
 
-    const analysisText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const analysisText = response.choices[0].message.content
     const analysis = JSON.parse(analysisText)
 
     return {
@@ -258,7 +256,7 @@ export async function generateRecommendations(
   detailed_feedback: string
 }> {
   try {
-    const response = await openai.messages.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 1500,
       messages: [
@@ -294,7 +292,7 @@ Responde SOLO con JSON válido:
       ]
     })
 
-    const analysisText = response.content[0].type === 'text' ? response.content[0].text : ''
+    const analysisText = response.choices[0].message.content
     return JSON.parse(analysisText)
   } catch (error) {
     console.error('[v0] Recommendations generation error:', error)

@@ -1,5 +1,6 @@
-import { generateText } from "ai"
 import { createClient } from "@/lib/supabase"
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 interface CoachingConversation {
   id: string
@@ -47,12 +48,35 @@ Extrae en formato JSON EXACTAMENTE estos tipos de información encontrada:
 
 Solo retorna el JSON, sin explicaciones. Si no hay información relevante, retorna [].`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4-mini",
-      prompt,
-      maxTokens: 1000,
-      temperature: 0.5,
-    })
+    const { text } = await (async () => {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4-mini",
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            temperature: 0.5,
+            max_tokens: 1000,
+          }),
+        })
+
+        const data = await response.json()
+        const text = data.choices[0]?.message?.content || "[]"
+        return { text }
+      } catch (error) {
+        console.error("[v0] Error calling OpenAI API:", error)
+        return { text: "[]" }
+      }
+    })()
 
     try {
       const parsed = JSON.parse(text)
@@ -101,12 +125,35 @@ Genera EXACTAMENTE 3-5 insights en formato JSON:
 
 Solo retorna el JSON, sin explicaciones.`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4-mini",
-      prompt,
-      maxTokens: 1500,
-      temperature: 0.6,
-    })
+    const { text } = await (async () => {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4-mini",
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            temperature: 0.6,
+            max_tokens: 1500,
+          }),
+        })
+
+        const data = await response.json()
+        const text = data.choices[0]?.message?.content || "[]"
+        return { text }
+      } catch (error) {
+        console.error("[v0] Error calling OpenAI API:", error)
+        return { text: "[]" }
+      }
+    })()
 
     try {
       const parsed = JSON.parse(text)
@@ -142,31 +189,32 @@ export async function processWeeklyCoachingMemory() {
     console.log(`[v0] Processing weekly memory for ${uniqueUsers.length} users`)
 
     for (const userId of uniqueUsers) {
+      const userIdString = userId as string
       try {
         // Fetch user's performance context
         const { data: performanceData } = await supabase
           .from("user_performance_context")
           .select("*")
-          .eq("user_id", userId)
+          .eq("user_id", userIdString)
           .single()
 
         // Fetch user's recent memories
         const { data: memories } = await supabase
           .from("user_coaching_memory")
           .select("*")
-          .eq("user_id", userId)
+          .eq("user_id", userIdString)
           .eq("action_status", "pending")
           .order("created_at", { ascending: false })
           .limit(20)
 
         // Generate insights only if there are recent memories
         if (memories && memories.length > 0) {
-          const insights = await generateInsightsFromMemory(userId, memories, performanceData)
+          const insights = await generateInsightsFromMemory(userIdString, memories, performanceData)
 
           // Save generated insights
           for (const insight of insights) {
             const { error: insertError } = await supabase.from("ai_insights_from_coaching").insert({
-              user_id: userId,
+              user_id: userIdString,
               insight_type: insight.insight_type,
               title: insight.title,
               content: insight.content,
@@ -177,14 +225,14 @@ export async function processWeeklyCoachingMemory() {
             })
 
             if (insertError) {
-              console.error(`[v0] Error saving insight for user ${userId}:`, insertError)
+              console.error(`[v0] Error saving insight for user ${userIdString}:`, insertError)
             }
           }
 
-          console.log(`[v0] Generated ${insights.length} insights for user ${userId}`)
+          console.log(`[v0] Generated ${insights.length} insights for user ${userIdString}`)
         }
       } catch (userError) {
-        console.error(`[v0] Error processing user ${userId}:`, userError)
+        console.error(`[v0] Error processing user ${userIdString}:`, userError)
       }
     }
 

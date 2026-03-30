@@ -45,16 +45,16 @@ export function RecommendationEngine() {
       // Interest matching (60%)
       if (userInterests.includes(book.category)) score += 60
 
-      return { ...book, matchScore: score } as Book & { matchScore: number }
+      return {
+        ...book,
+        matchScore: score,
+        reason: generateReason(book, userLevel, userInterests),
+      }
     })
 
     const recommended = scored
       .sort((a, b) => b.matchScore - a.matchScore)
       .slice(0, 5)
-      .map(book => ({
-        ...book,
-        reason: generateReason(book, userLevel, userInterests),
-      }))
 
     setRecommendations(recommended)
   }

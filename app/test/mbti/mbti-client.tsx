@@ -128,8 +128,8 @@ export default function MBTITestClient() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        title="Test MBTI"
-        description="Myers-Briggs Type Indicator - Descubre tu tipo de personalidad"
+        testName="Test MBTI"
+        testDescription="Myers-Briggs Type Indicator - Descubre tu tipo de personalidad"
         onStart={() => setShowIntro(false)}
       />
     )

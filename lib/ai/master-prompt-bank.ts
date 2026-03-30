@@ -1,8 +1,8 @@
-import type { PromptCategory } from "./prompt-categories"
+import type { PromptCategoryId } from "./prompt-categories"
 
 export interface MasterPrompt {
   prompt_id: string
-  categoria: PromptCategory
+  categoria: PromptCategoryId
   nivel: "basico" | "intermedio" | "avanzado"
   tono: "sofia" | "dani" | "hibrido"
   entrada_usuario: string
@@ -183,7 +183,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   // === CRECIMIENTO PROFESIONAL Y AUMENTO SALARIAL ===
   {
     prompt_id: "crecimiento_001",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "dani",
     entrada_usuario: "Quiero pedir un aumento de sueldo pero me da miedo",
@@ -198,7 +198,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_002",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "basico",
     tono: "sofia",
     entrada_usuario: "¿Cómo sé si estoy listo para un ascenso?",
@@ -213,7 +213,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_003",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "avanzado",
     tono: "dani",
     entrada_usuario: "¿Cómo negocio mi salario en una oferta de trabajo?",
@@ -378,7 +378,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
     tono: "sofia",
     entrada_usuario: "¿Cómo manejo los nervios en una entrevista?",
     respuesta_sofia:
-      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversación, no un interrogatorio. ¿Quieres practicar?",
+      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversaci����n, no un interrogatorio. ¿Quieres practicar?",
     metricas_esperadas: {
       engagement_rate: 80,
       satisfaccion_promedio: 4.7,
@@ -420,7 +420,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   // Crecimiento adicionales
   {
     prompt_id: "crecimiento_004",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "basico",
     tono: "dani",
     entrada_usuario: "¿Cómo pido feedback a mi jefe?",
@@ -435,7 +435,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_005",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "sofia",
     entrada_usuario: "¿Cómo desarrollo habilidades de liderazgo?",
@@ -450,7 +450,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_006",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "avanzado",
     tono: "dani",
     entrada_usuario: "¿Cómo construyo un plan de desarrollo profesional?",
@@ -529,7 +529,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "seguimiento_002",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "dani",
     entrada_usuario: "¿Cuándo es el mejor momento para pedir un aumento?",
@@ -560,7 +560,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
 ]
 
 // Función para buscar prompts por categoría
-export function getPromptsByCategory(category: PromptCategory): MasterPrompt[] {
+export function getPromptsByCategory(category: PromptCategoryId): MasterPrompt[] {
   return MASTER_PROMPT_BANK.filter((p) => p.categoria === category)
 }
 
@@ -590,7 +590,7 @@ export function getPromptBankStats() {
       autoconocimiento: getPromptsByCategory("autoconocimiento_proposito").length,
       cv_linkedin: getPromptsByCategory("cv_linkedin_marca").length,
       entrevistas: getPromptsByCategory("entrevistas_comunicacion").length,
-      crecimiento: getPromptsByCategory("crecimiento_aumento_salarial").length,
+      crecimiento: getPromptsByCategory("crecimiento_salarial").length,
       transicion: getPromptsByCategory("reinvencion_transicion").length,
     },
     byLevel: {

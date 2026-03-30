@@ -29,11 +29,11 @@ export function generatePersonalizedRoute(
   skills: string[],
   timePerWeek: number
 ): PersonalizedRoute {
-  // Adapt route based on DISC profile
-  const isD = discProfile.primary === 'D'
-  const isI = discProfile.primary === 'I'
-  const isS = discProfile.primary === 'S'
-  const isC = discProfile.primary === 'C'
+  // Adapt route based on Despega profile
+  const isEnergia = discProfile.primary === 'energia'
+  const isEnfoque = discProfile.primary === 'enfoque'
+  const isRelaciones = discProfile.primary === 'relaciones'
+  const isPlanEjecutivo = discProfile.primary === 'plan_ejecutivo'
 
   const route_30days: RouteActionItem[] = [
     // Week 1: Foundation
@@ -63,8 +63,8 @@ export function generatePersonalizedRoute(
     },
     {
       day: 7,
-      title: `Sesión 1: ${isD ? 'Estrategia Agresiva' : isI ? 'Conexiones Clave' : isS ? 'Mentoría' : 'Análisis Profundo'}`,
-      description: isD ? 'Identificar puntos de influencia' : isI ? 'Conectar con líderes en el área' : isS ? 'Buscar mentor o coach' : 'Deep dive en la teoría',
+      title: `Sesión 1: ${isEnergia ? 'Acción Rápida' : isEnfoque ? 'Análisis Estratégico' : isRelaciones ? 'Networking Activo' : 'Planificación Detallada'}`,
+      description: isEnergia ? 'Iniciar acciones concretas' : isEnfoque ? 'Profundizar en análisis' : isRelaciones ? 'Conectar con líderes clave' : 'Estructurar plan detallado',
       type: 'networking',
       timeEstimate: 60
     },

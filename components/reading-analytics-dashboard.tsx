@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { BookOpen, Clock, Target, TrendingUp, Calendar, Star, Award, BarChart3, PieChart, Activity } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -53,148 +54,40 @@ export default function ReadingAnalyticsDashboard() {
   const [monthlyGoal, setMonthlyGoal] = useState(5)
   const [loading, setLoading] = useState(true)
 
+  const { user } = useUser()
+
   useEffect(() => {
-    loadAnalytics()
-  }, [])
+    if (user?.email) {
+      loadAnalytics()
+    }
+  }, [user?.email])
 
   const loadAnalytics = async () => {
+    if (!user?.email) return
+    
     try {
       setLoading(true)
 
-      // Get authenticated user
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
-      if (authError || !user) {
-        console.error('[v0] User not authenticated')
-        setLoading(false)
-        return
-      }
+      // Fetch analytics data via API
+      const response = await fetch(`/api/reading-analytics?userEmail=${encodeURIComponent(user.email)}`)
+      if (!response.ok) throw new Error("Failed to load analytics")
 
-      // Load reading progress data using user ID (not email)
-      const { data: progressData, error: progressError } = await supabase
-        .from("user_reading_progress")
-        .select(`
-          *,
-          knowledge_base (
-            title,
-            author,
-            category
-          )
-        `)
-        .eq("user_id", user.id)
+      const { stats: statsData, books: booksData, categories: categoriesData } = await response.json()
 
-      if (progressError) throw progressError
-
-      // Load book reviews for ratings
-      const { data: reviewsData, error: reviewsError } = await supabase
-        .from("book_reviews")
-        .select("*")
-        .eq("user_id", user.id)
-
-      if (reviewsError) throw reviewsError
-
-      // Load reading sessions
-      const { data: sessionsData, error: sessionsError } = await supabase
-        .from("reading_sessions")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("session_start", { ascending: false })
-
-      if (sessionsError) throw sessionsError
-
-      // Calculate statistics
-      const completedBooks = progressData?.filter((book) => book.progress_percentage === 100) || []
-      const inProgressBooks =
-        progressData?.filter((book) => book.progress_percentage > 0 && book.progress_percentage < 100) || []
-
-      const totalReadingTime = progressData?.reduce((sum, book) => sum + (book.reading_time_minutes || 0), 0) || 0
-      const averageProgress = progressData?.length
-        ? Math.round(progressData.reduce((sum, book) => sum + book.progress_percentage, 0) / progressData.length)
-        : 0
-
-      // Calculate category statistics
-      const categoryMap = new Map<string, { books: number; time: number; ratings: number[] }>()
-
-      progressData?.forEach((book) => {
-        const category = book.knowledge_base?.category || "Sin categoría"
-        const existing = categoryMap.get(category) || { books: 0, time: 0, ratings: [] }
-
-        existing.books += book.progress_percentage === 100 ? 1 : 0
-        existing.time += book.reading_time_minutes || 0
-
-        const review = reviewsData?.find((r) => r.book_id === book.book_id)
-        if (review?.rating) {
-          existing.ratings.push(review.rating)
-        }
-
-        categoryMap.set(category, existing)
+      setStats(statsData || {
+        totalBooksRead: 0,
+        totalReadingTime: 0,
+        averageProgress: 0,
+        currentStreak: 0,
+        booksInProgress: 0,
+        favoriteCategory: "",
+        monthlyGoal: 5,
+        monthlyProgress: 0,
       })
-
-      const categoryStatsArray = Array.from(categoryMap.entries()).map(([category, data]) => ({
-        category,
-        books_read: data.books,
-        total_time: data.time,
-        average_rating: data.ratings.length ? data.ratings.reduce((a, b) => a + b, 0) / data.ratings.length : 0,
-      }))
-
-      const favoriteCategory =
-        categoryStatsArray.reduce((prev, current) => (prev.books_read > current.books_read ? prev : current))
-          ?.category || ""
-
-      // Calculate current month progress
-      const currentMonth = new Date().getMonth()
-      const currentYear = new Date().getFullYear()
-      const monthlyCompletedBooks = completedBooks.filter((book) => {
-        const completedDate = new Date(book.last_read_at)
-        return completedDate.getMonth() === currentMonth && completedDate.getFullYear() === currentYear
-      }).length
-
-      // Calculate reading streak (simplified - consecutive days with reading activity)
-      const recentSessions = sessionsData?.slice(0, 30) || []
-      let currentStreak = 0
-      const today = new Date()
-
-      for (let i = 0; i < 30; i++) {
-        const checkDate = new Date(today)
-        checkDate.setDate(today.getDate() - i)
-
-        const hasActivity = recentSessions.some((session) => {
-          const sessionDate = new Date(session.session_start)
-          return sessionDate.toDateString() === checkDate.toDateString()
-        })
-
-        if (hasActivity) {
-          currentStreak++
-        } else if (i > 0) {
-          break
-        }
-      }
-
-      setStats({
-        totalBooksRead: completedBooks.length,
-        totalReadingTime,
-        averageProgress,
-        currentStreak,
-        booksInProgress: inProgressBooks.length,
-        favoriteCategory,
-        monthlyGoal,
-        monthlyProgress: monthlyCompletedBooks,
-      })
-
-      setBooksInProgress(
-        inProgressBooks.map((book) => ({
-          id: book.book_id,
-          title: book.knowledge_base?.title || "Título desconocido",
-          author: book.knowledge_base?.author || "Autor desconocido",
-          category: book.knowledge_base?.category || "Sin categoría",
-          progress_percentage: book.progress_percentage,
-          reading_time_minutes: book.reading_time_minutes || 0,
-          last_read_at: book.last_read_at,
-        })),
-      )
-
-      setCategoryStats(categoryStatsArray.sort((a, b) => b.books_read - a.books_read))
+      setBooksInProgress(booksData || [])
+      setCategoryStats(categoriesData || [])
     } catch (error) {
-      console.error("Error loading analytics:", error)
+      console.error("[v0] Error loading analytics:", error)
     } finally {
       setLoading(false)
     }

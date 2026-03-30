@@ -50,7 +50,6 @@ export function CompetencyRadarChart({
                 fill: "#6b7280",
                 fontSize: 12,
               }}
-              angle={90}
               orientation="outer"
             />
             <PolarRadiusAxis

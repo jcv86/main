@@ -40,10 +40,10 @@ export function Biblioteca() {
   }
 
   const loadSavedResources = async () => {
-    if (!session?.user?.id) return
+    if (!session?.user?.email) return
     try {
-      const savedRes = await getUserSavedResources(session.user.id)
-      const savedIds = new Set(savedRes.map((r) => r.resource_id))
+      const savedRes = await getUserSavedResources(session.user.email)
+      const savedIds: Set<string> = new Set(savedRes.map((r) => r.resource_id as string))
       setSaved(savedIds)
     } catch (error) {
       console.error("[v0] Error loading saved resources:", error)
@@ -53,7 +53,7 @@ export function Biblioteca() {
   const loadResources = async () => {
     setLoading(true)
     try {
-      const res = await getBibliotecaResources(50, selectedCategory || undefined)
+      const res = await getBibliotecaResources(selectedCategory || undefined, 50)
       setResources(res)
     } catch (error) {
       console.error("[v0] Error loading resources:", error)
@@ -63,14 +63,14 @@ export function Biblioteca() {
   }
 
   const handleSave = async (resourceId: string, resourceType: string) => {
-    if (!session?.user?.id) return
+    if (!session?.user?.email) return
 
     const newSaved = new Set(saved)
     if (newSaved.has(resourceId)) {
       newSaved.delete(resourceId)
     } else {
       newSaved.add(resourceId)
-      await saveResource(session.user.id, resourceId, resourceType)
+      await saveResource(session.user.email, resourceId, resourceType)
     }
     setSaved(newSaved)
   }

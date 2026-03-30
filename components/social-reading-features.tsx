@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +29,9 @@ import {
   Globe,
   Lock,
   Send,
+  Target,
+  TrendingUp,
+  Award,
 } from "lucide-react"
 
 interface BookClub {
@@ -74,47 +78,32 @@ export default function SocialReadingFeatures() {
   const [userEmail, setUserEmail] = useState("")
   const [userName, setUserName] = useState("")
 
+  const { user } = useUser()
+
   useEffect(() => {
-    loadSocialData()
-  }, [])
+    if (user?.email) {
+      loadSocialData()
+    }
+  }, [user?.email])
 
   const loadSocialData = async () => {
+    if (!user?.email) return
     try {
       setLoading(true)
 
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user) {
-        setUserEmail(user.email || "")
-        setUserName(user.user_metadata?.full_name || "User")
-      }
+      // Set user info
+      setUserEmail(user.email)
+      setUserName(user.name || "User")
 
-      const { data: clubs } = await supabase.from("book_clubs").select("*").order("created_at", { ascending: false })
+      // Fetch social data via API
+      const response = await fetch(`/api/social-reading?userEmail=${encodeURIComponent(user.email)}`)
+      if (!response.ok) throw new Error("Failed to load social data")
 
-      if (clubs) {
-        setBookClubs(clubs)
-      }
+      const { clubs, discussions: discussionsData, groups } = await response.json()
 
-      const { data: discussionsData } = await supabase
-        .from("book_discussions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(20)
-
-      if (discussionsData) {
-        setDiscussions(discussionsData)
-      }
-
-      const { data: groups } = await supabase
-        .from("reading_groups")
-        .select("*")
-        .order("created_at", { ascending: false })
-
-      if (groups) {
-        setReadingGroups(groups)
-      }
+      setBookClubs(clubs || [])
+      setDiscussions(discussionsData || [])
+      setReadingGroups(groups || [])
     } catch (error) {
       console.error("Error loading social data:", error)
     } finally {

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -61,138 +62,39 @@ export default function GamificationSystem() {
   const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  const { user } = useUser()
+
   useEffect(() => {
-    loadGamificationData()
-  }, [])
+    if (user?.email) {
+      loadGamificationData()
+    }
+  }, [user?.email])
 
   const loadGamificationData = async () => {
+    if (!user?.email) return
+    
     try {
       setLoading(true)
 
-      // Get authenticated user
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
-      if (authError || !user) {
-        console.error('[v0] User not authenticated')
-        setLoading(false)
-        return
-      }
+      // Fetch gamification data via API
+      const response = await fetch(`/api/gamification?userEmail=${encodeURIComponent(user.email)}`)
+      if (!response.ok) throw new Error("Failed to load gamification data")
 
-      // Load achievements using user ID
-      const { data: achievementsData, error: achievementsError } = await supabase
-        .from("reading_achievements")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("earned_at", { ascending: false })
-
-      if (achievementsError) throw achievementsError
-
-      // Load reading progress for level calculation
-      const { data: progressData, error: progressError } = await supabase
-        .from("user_reading_progress")
-        .select("*")
-        .eq("user_id", user.id)
-
-      if (progressError) throw progressError
-
-      // Calculate user level and XP
-      const completedBooks = progressData?.filter((book) => book.progress_percentage === 100).length || 0
-      const totalReadingTime = progressData?.reduce((sum, book) => sum + (book.reading_time_minutes || 0), 0) || 0
-
-      const xp = completedBooks * 100 + Math.floor(totalReadingTime / 10) // 100 XP per book, 1 XP per 10 minutes
-      const level = Math.floor(xp / 100) + 1
-      const xpToNext = level * 100 - xp
-
-      const titles = [
-        "Lector Novato",
-        "Explorador de Libros",
-        "Bibliófilo",
-        "Maestro Lector",
-        "Sabio de las Letras",
-        "Gurú del Conocimiento",
-        "Leyenda Literaria",
-      ]
-      const title = titles[Math.min(level - 1, titles.length - 1)]
-
-      // Calculate reading streak
-      const recentSessions = await supabase
-        .from("reading_sessions")
-        .select("session_start")
-        .eq("user_id", user.id)
-        .order("session_start", { ascending: false })
-        .limit(30)
-
-      let currentStreak = 0
-      if (recentSessions.data) {
-        const today = new Date()
-        for (let i = 0; i < 30; i++) {
-          const checkDate = new Date(today)
-          checkDate.setDate(today.getDate() - i)
-
-          const hasActivity = recentSessions.data.some((session) => {
-            const sessionDate = new Date(session.session_start)
-            return sessionDate.toDateString() === checkDate.toDateString()
-          })
-
-          if (hasActivity) {
-            currentStreak++
-          } else if (i > 0) {
-            break
-          }
-        }
-      }
-
-      // Generate challenges
-      const dailyChallenges: Challenge[] = [
-        {
-          id: "daily_reading",
-          name: "Lectura Diaria",
-          description: "Lee durante al menos 30 minutos hoy",
-          target: 30,
-          current: Math.min(30, totalReadingTime % 30),
-          reward_xp: 25,
-          deadline: new Date().toISOString(),
-          type: "daily",
-          completed: totalReadingTime % 30 >= 30,
-        },
-      ]
-
-      const weeklyChallenges: Challenge[] = [
-        {
-          id: "weekly_books",
-          name: "Meta Semanal",
-          description: "Completa 2 libros esta semana",
-          target: 2,
-          current: Math.min(2, completedBooks % 2),
-          reward_xp: 100,
-          deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          type: "weekly",
-          completed: completedBooks % 2 >= 2,
-        },
-      ]
-
-      const monthlyChallenges: Challenge[] = [
-        {
-          id: "monthly_streak",
-          name: "Racha Mensual",
-          description: "Mantén una racha de lectura de 15 días",
-          target: 15,
-          current: Math.min(15, currentStreak),
-          reward_xp: 200,
-          deadline: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString(),
-          type: "monthly",
-          completed: currentStreak >= 15,
-        },
-      ]
+      const { achievements: achievementsData, userLevel: levelData, challenges: challengesData, streak: streakData } = await response.json()
 
       setAchievements(achievementsData || [])
-      setUserLevel({ level, xp, xp_to_next: xpToNext, title })
-      setChallenges([...dailyChallenges, ...weeklyChallenges, ...monthlyChallenges])
-      setStreak(currentStreak)
+      setUserLevel(levelData || { level: 1, xp: 0, xp_to_next: 100, title: "Lector Novato" })
+      setChallenges(challengesData || [])
+      setStreak(streakData || 0)
     } catch (error) {
-      console.error("Error loading gamification data:", error)
+      console.error("[v0] Error loading gamification data:", error)
     } finally {
       setLoading(false)
     }
+  }
+
+  if (loading) {
+    return <div className="flex items-center justify-center p-8">Cargando datos de gamificación...</div>
   }
 
   const claimChallenge = async (challengeId: string) => {
@@ -240,17 +142,6 @@ export default function GamificationSystem() {
       default:
         return <Zap className="h-5 w-5 text-foreground" />
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <Trophy className="h-12 w-12 animate-pulse mx-auto mb-4 text-yellow-600" />
-          <p>Cargando sistema de logros...</p>
-        </div>
-      </div>
-    )
   }
 
   return (

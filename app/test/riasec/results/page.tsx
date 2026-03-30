@@ -83,7 +83,7 @@ export default function RIASECResults() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get("demo") === "true"
-  const { session } = useSession()
+  const { user } = useSession()
   const { toast } = useToast()
 
   const [results, setResults] = useState<RIASECResults | null>(null)
@@ -96,7 +96,7 @@ export default function RIASECResults() {
 
   const loadResults = async () => {
     try {
-      const email = session?.user?.email
+      const email = user?.email
       if (!email) {
         toast({
           title: "No autenticado",
@@ -107,7 +107,7 @@ export default function RIASECResults() {
         return
       }
 
-      const result = await UnifiedTestSystem.loadTestResult(email, "Despega Rumbo")
+      const result = await UnifiedTestSystem.loadTestResult(email, "RIASEC")
 
       if (result.success && result.data) {
         // Ensure the data structure matches the updated interface
@@ -656,7 +656,7 @@ export default function RIASECResults() {
                       <span className="font-semibold text-blue-800">Interés dominante:</span>
                       <p className="text-gray-700">
                         {getCategoryName(results.holland_code[0])} (
-                        {results[results.holland_code[0] as keyof typeof results]}/100)
+                        {String(results[results.holland_code[0] as keyof typeof results] || 0)}/100)
                       </p>
                     </div>
                     <div>
@@ -1505,7 +1505,7 @@ export default function RIASECResults() {
           </TabsContent>
 
           <TabsContent value="coach" className="space-y-6">
-            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={session?.user?.email || ""} />
+            <EnhancedCoachFlow testType="RIASEC" testResults={results} userEmail={user?.email || ""} />
           </TabsContent>
 
           {/* Career Tab */}

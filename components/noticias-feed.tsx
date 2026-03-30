@@ -34,8 +34,16 @@ export function NoticiasFeed() {
 
   const loadCategories = async () => {
     try {
-      const cats = await getNoticiasByCategory()
-      setCategories(cats)
+      // Set default categories
+      const defaultCategories = [
+        "Tecnología",
+        "Negocios",
+        "Innovación",
+        "Desarrollo",
+        "Educación",
+        "Emprendimiento",
+      ]
+      setCategories(defaultCategories)
     } catch (error) {
       console.error("[v0] Error loading categories:", error)
     }
@@ -52,7 +60,7 @@ export function NoticiasFeed() {
           total: searchResults.length,
         }
       } else {
-        result = await getNoticiasPaginated(page, itemsPerPage, selectedCategory || undefined)
+        result = await getNoticiasPaginated(page, itemsPerPage)
       }
       setNoticias(result.noticias)
       setTotal(result.total)

@@ -92,10 +92,9 @@ export default function SoftSkillsResults() {
   const [openResponses, setOpenResponses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
-  const { session } = useSession()
+  const { user } = useSession()
   const { toast } = useToast()
   const router = useRouter()
-  const user = session?.user
 
   useEffect(() => {
     loadResults()
@@ -116,7 +115,7 @@ export default function SoftSkillsResults() {
         return
       }
 
-      const result = await UnifiedTestSystem.loadTestResult(email, "Competencias Blandas Despega")
+      const result = await UnifiedTestSystem.loadTestResult(email, "Soft Skills")
 
       if (result.success && result.data) {
         setTestResult(result.data)
@@ -738,15 +737,15 @@ export default function SoftSkillsResults() {
                           {CategoryIcon && <CategoryIcon className="h-6 w-6" style={{ color }} />}
                           <CardTitle className="text-lg">{categoryName}</CardTitle>
                         </div>
-                        <Badge className={`font-bold ${getScoreBadgeColor(score)}`}>{score}%</Badge>
+                        <Badge className={`font-bold ${getScoreBadgeColor(Number(score))}`}>{String(score)}%</Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <Progress value={score} className="h-3" />
+                      <Progress value={Number(score)} className="h-3" />
 
                       <div className="text-sm">
                         <div className="font-medium mb-2 flex items-center gap-2">
-                          <span className={getScoreColor(score)}>{getScoreLabel(score)}</span>
+                          <span className={getScoreColor(Number(score))}>{getScoreLabel(Number(score))}</span>
                         </div>
 
                         {analysis && (

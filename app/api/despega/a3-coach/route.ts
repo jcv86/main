@@ -83,8 +83,18 @@ No impongas conclusiones.`
     const data = await openaiResponse.json()
     const responseText = data.choices?.[0]?.message?.content || ""
 
-    if (!responseText) {
-      throw new Error("No response from OpenAI")
+    if (!responseText || responseText.trim() === "") {
+      console.warn("[A3 Coach] Empty response from OpenAI")
+      return NextResponse.json({
+        response: "No pude procesar tu escenario en este momento. Por favor intenta de nuevo.",
+        type: "scenario_intro",
+        includes_pause: false,
+        micro_experiment_proposed: false,
+        coherenceCheck: {
+          redFlagsDetected: [],
+          pillarCompliant: false,
+        },
+      })
     }
 
     // Parse structured response

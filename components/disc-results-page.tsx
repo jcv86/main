@@ -234,7 +234,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                 <CardContent className="pt-0 pb-4">
                   {Array.isArray(section.content[profile]) ? (
                     <ul className="space-y-2">
-                      {section.content[profile].map((item: string, idx: number) => (
+                      {(section.content[profile] as string[]).map((item: string, idx: number) => (
                         <li key={idx} className="flex gap-3 text-slate-200">
                           <span className="text-emerald-500 font-bold flex-shrink-0">✓</span>
                           <span>{item}</span>
@@ -242,7 +242,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-slate-200 leading-relaxed">{section.content[profile]}</p>
+                    <p className="text-slate-200 leading-relaxed">{String(section.content[profile])}</p>
                   )}
                 </CardContent>
               )}

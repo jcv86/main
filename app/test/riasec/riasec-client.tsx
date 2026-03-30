@@ -119,8 +119,8 @@ export default function RIASECTestClient() {
   if (showIntro) {
     return (
       <TestIntroScreen
-        title="Test RIASEC"
-        description="Intereses Vocacionales - Descubre tu tipo de carrera ideal"
+        testName="Test RIASEC"
+        testDescription="Intereses Vocacionales - Descubre tu tipo de carrera ideal"
         onStart={() => setShowIntro(false)}
       />
     )

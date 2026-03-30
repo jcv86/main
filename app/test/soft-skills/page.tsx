@@ -383,7 +383,7 @@ export default function SoftSkillsTest() {
       console.log("[v0] Submitting Soft Skills test results to database...")
       const saveResult = await UnifiedTestSystem.saveTestResult(
         user.email,
-        "soft-skills",
+        "Soft Skills",
         results,
         duration,
       )
@@ -434,7 +434,7 @@ export default function SoftSkillsTest() {
     return (
       <TestIntroScreen
         testName="Competencias Blandas Despega"
-        description="Evalúa tus habilidades interpersonales y profesionales clave para el éxito en cualquier entorno."
+        testDescription="Evalúa tus habilidades interpersonales y profesionales clave para el éxito en cualquier entorno."
         whatItMeasures={[
           "Comunicación efectiva y escucha activa",
           "Liderazgo y capacidad de motivar equipos",
@@ -446,8 +446,8 @@ export default function SoftSkillsTest() {
           "Creatividad e innovación",
         ]}
         whyRelevant="Las competencias blandas son el factor diferenciador en tu desarrollo profesional y personal, determinando tu capacidad de liderar, colaborar y crear impacto real en cualquier contexto."
-        duration="20-25 minutos"
-        totalQuestions={30}
+        estimatedTime={22}
+        totalQuestions={softSkillsQuestions.length}
         onStart={() => setShowIntro(false)}
         onBack={() => router.push("/test")}
       />
@@ -457,8 +457,9 @@ export default function SoftSkillsTest() {
   if (showCompletion && completionData) {
     return (
       <TestCompletionScreen
+        testType="soft-skills"
         testName="Competencias Blandas Despega"
-        summary={`Has completado el test evaluando ${completionData.skillCount} competencias clave para tu desarrollo integral.`}
+        quickSummary={`Has completado el test evaluando ${completionData.skillCount} competencias clave para tu desarrollo integral.`}
         highlightedInsight={`Tu competencia más desarrollada es ${completionData.topSkill}, con una puntuación de ${completionData.overallScore}%.`}
         onViewFullReport={() => router.push("/test/soft-skills/results")}
         onTalkToCoach={() => router.push("/coach?context=soft-skills")}

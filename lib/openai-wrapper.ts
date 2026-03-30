@@ -82,10 +82,18 @@ export async function callOpenAIJSON<T = unknown>(
 ): Promise<T> {
   const response = await callOpenAI(systemPrompt, userMessage, options)
   
+  if (!response || response.trim() === "") {
+    console.error("[v0] Empty response from OpenAI")
+    throw new Error("Empty response from AI - no content to parse")
+  }
+
   try {
     return JSON.parse(response) as T
   } catch (error) {
-    console.error("[v0] Failed to parse JSON response:", response)
-    throw new Error("Failed to parse AI response as JSON")
+    console.error("[v0] Failed to parse JSON response:", {
+      response: response.substring(0, 200),
+      error: (error as Error).message,
+    })
+    throw new Error(`Failed to parse AI response as JSON: ${(error as Error).message}`)
   }
 }

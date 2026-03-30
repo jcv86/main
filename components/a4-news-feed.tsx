@@ -100,13 +100,13 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
     })
     
     await toggleSaveNews(user.id, itemId, newState)
-    await trackA4Engagement(user.id, "save_news", "noticias", { completed: true, metadata: { news_id: itemId } })
+    await trackA4Engagement(user.id, "save_news", { completed: true, metadata: { news_id: itemId } })
   }
 
   const handleNewsClick = async (itemId: string) => {
     if (!user) return
     await markNewsAsRead(user.id, itemId)
-    await trackA4Engagement(user.id, "view_news", "noticias", { completed: true, metadata: { news_id: itemId } })
+    await trackA4Engagement(user.id, "view_news", { completed: true, metadata: { news_id: itemId } })
   }
 
   const relevanceBadge = (score: number) => getRelevanceBadge(score)

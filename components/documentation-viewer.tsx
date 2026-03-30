@@ -278,27 +278,28 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
         {/* Content */}
         <ScrollArea className="flex-1 p-8">
           <div className="max-w-4xl mx-auto">
-            <ReactMarkdown
-              className="prose prose-slate dark:prose-invert max-w-none prose-pre:my-4 prose-pre:bg-slate-950 prose-pre:text-slate-50 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:border prose-pre:border-slate-800"
-              components={{
-                code({ node, inline, className, children, ...props }) {
-                  if (inline) {
+            <div className="prose prose-slate dark:prose-invert max-w-none prose-pre:my-4 prose-pre:bg-slate-950 prose-pre:text-slate-50 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:border prose-pre:border-slate-800">
+              <ReactMarkdown
+                components={{
+                  code({ node, className, children, ...props }: any) {
+                    const isInline = !className
+                    if (isInline) {
+                      return (
+                        <code
+                          className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono"
+                          {...props}
+                        >
+                          {children}
+                        </code>
+                      )
+                    }
+
                     return (
-                      <code
-                        className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono"
-                        {...props}
-                      >
+                      <code className={className} {...props}>
                         {children}
                       </code>
                     )
-                  }
-
-                  return (
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  )
-                },
+                  },
                 h1: ({ node, ...props }) => (
                   <h1 id={generateId(props.children?.toString() || "")} className="scroll-mt-20" {...props} />
                 ),
@@ -326,6 +327,7 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
             >
               {filteredContent}
             </ReactMarkdown>
+            </div>
           </div>
         </ScrollArea>
       </div>

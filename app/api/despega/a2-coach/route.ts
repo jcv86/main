@@ -57,8 +57,19 @@ ${message}`
     const data = await openaiResponse.json()
     const responseText = data.choices?.[0]?.message?.content || ""
 
-    if (!responseText) {
-      throw new Error("No response from OpenAI")
+    if (!responseText || responseText.trim() === "") {
+      console.warn("[A2 Coach] Empty response from OpenAI")
+      return NextResponse.json({
+        response: "No pude procesar tu exploración en este momento. Por favor intenta de nuevo.",
+        type: "pattern_exploration",
+        patternExplored: undefined,
+        contextIntroduced: undefined,
+        coherenceCheck: {
+          isValid: false,
+          violations: ["Empty response from AI"],
+          redFlags: [],
+        },
+      })
     }
 
     // Parse structured response - expect JSON with response, type, patternExplored, contextIntroduced
