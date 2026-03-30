@@ -378,7 +378,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
     tono: "sofia",
     entrada_usuario: "¿Cómo manejo los nervios en una entrevista?",
     respuesta_sofia:
-      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversación, no un interrogatorio. ¿Quieres practicar?",
+      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversaci��n, no un interrogatorio. ¿Quieres practicar?",
     metricas_esperadas: {
       engagement_rate: 80,
       satisfaccion_promedio: 4.7,
@@ -560,7 +560,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
 ]
 
 // Función para buscar prompts por categoría
-export function getPromptsByCategory(category: PromptCategory): MasterPrompt[] {
+export function getPromptsByCategory(category: PromptCategoryId): MasterPrompt[] {
   return MASTER_PROMPT_BANK.filter((p) => p.categoria === category)
 }
 
