@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 
-interface DiscProfile {
+interface CerebralProfile {
   D?: number
   I?: number
   S?: number
@@ -9,13 +9,13 @@ interface DiscProfile {
   [key: string]: number | undefined
 }
 
-interface DiscAssessmentData {
+interface CerebralAssessmentData {
   userId: string
-  disc_profile: DiscProfile
+  disc_profile: CerebralProfile
 }
 
-// Helper function to safely extract DISC scores
-function extractDiscScores(profile: DiscProfile): {
+// Helper function to safely extract Cerebral scores
+function extractCerebralScores(profile: CerebralProfile): {
   d: number
   i: number
   s: number
@@ -31,7 +31,7 @@ function extractDiscScores(profile: DiscProfile): {
 
 // Helper function to calculate dominant and secondary patterns
 function calculatePatterns(
-  profile: DiscProfile
+  profile: CerebralProfile
 ): {
   dominant: string
   secondary: string
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { userId, disc_profile } = body as DiscAssessmentData
+    const { userId, disc_profile } = body as CerebralAssessmentData
 
     if (typeof userId !== "string") {
       return NextResponse.json(
@@ -89,13 +89,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Extract and validate DISC scores
-    const scores = extractDiscScores(disc_profile as DiscProfile)
-    const patterns = calculatePatterns(disc_profile as DiscProfile)
+    // Extract and validate Cerebral scores
+    const scores = extractCerebralScores(disc_profile as CerebralProfile)
+    const patterns = calculatePatterns(disc_profile as CerebralProfile)
 
     // Save to database
     const { data, error } = await supabase
-      .from("a1_disc_assessment")
+      .from("a1_cerebral_assessment")
       .upsert(
         {
           user_id: userId,
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("Error saving DISC assessment:", error)
+    console.error("Error saving Cerebral assessment:", error)
     return NextResponse.json(
       {
         error:
