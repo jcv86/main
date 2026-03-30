@@ -24,11 +24,31 @@ export function DashboardHero({
   dominantProfile,
   progressPercent = 0 
 }: DashboardHeroProps) {
-  const profileDescriptions: { [key: string]: { color: string; bg: string; description: string } } = {
-    D: { color: 'text-red-600', bg: 'bg-red-50', description: 'Directo, decidido y orientado a resultados' },
-    I: { color: 'text-blue-600', bg: 'bg-blue-50', description: 'Inspirador, influyente y orientado a personas' },
-    S: { color: 'text-green-600', bg: 'bg-green-50', description: 'Estable, de apoyo y orientado al equipo' },
-    C: { color: 'text-purple-600', bg: 'bg-purple-50', description: 'Cuidadoso, cauteloso y orientado a la calidad' },
+  const profileDescriptions: { [key: string]: { color: string; bg: string; description: string; name: string } } = {
+    D: { 
+      color: 'text-red-600 dark:text-red-400', 
+      bg: 'bg-red-50 dark:bg-red-950/10', 
+      description: 'Impulsor - Directo, decidido y orientado a resultados',
+      name: 'Impulsor'
+    },
+    I: { 
+      color: 'text-yellow-600 dark:text-yellow-400', 
+      bg: 'bg-yellow-50 dark:bg-yellow-950/10', 
+      description: 'Catalizador - Inspirador, influyente y orientado a personas',
+      name: 'Catalizador'
+    },
+    S: { 
+      color: 'text-green-600 dark:text-green-400', 
+      bg: 'bg-green-50 dark:bg-green-950/10', 
+      description: 'Estabilizador - Estable, de apoyo y orientado al equipo',
+      name: 'Estabilizador'
+    },
+    C: { 
+      color: 'text-blue-600 dark:text-blue-400', 
+      bg: 'bg-blue-50 dark:bg-blue-950/10', 
+      description: 'Arquitecto - Cuidadoso, cauteloso y orientado a la calidad',
+      name: 'Arquitecto'
+    },
   }
 
   const profile = profileDescriptions[dominantProfile] || profileDescriptions.I
@@ -51,7 +71,7 @@ export function DashboardHero({
           <div className="space-y-4">
             <div className="space-y-2">
               <h2 className={`text-2xl font-bold ${profile.color}`}>
-                Eres {dominantProfile === 'D' ? 'Rojo' : dominantProfile === 'I' ? 'Azul' : dominantProfile === 'S' ? 'Verde' : 'Púrpura'}
+                {profile.name}
               </h2>
               <p className="text-slate-700 dark:text-slate-300 font-medium">
                 {profile.description}
