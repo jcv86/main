@@ -44,20 +44,23 @@ export default function LeaderboardPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Trophy className="h-8 w-8 text-yellow-500" />
-            <h1 className="text-4xl font-bold">Ranking de Lectores</h1>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-yellow-100 dark:from-purple-900/30 dark:to-yellow-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">Compite y Crece</p>
           </div>
-          <p className="text-lg text-muted-foreground">
+          <div className="flex items-center gap-3 mb-4">
+            <Trophy className="h-10 w-10 text-yellow-500" />
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-yellow-500 bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-yellow-400">Ranking de Lectores</h1>
+          </div>
+          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">
             Compite con otros usuarios y sube en el ranking
           </p>
           {stats && (
-            <p className="text-sm text-muted-foreground mt-2">
-              {stats.totalParticipants} usuarios participando
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-medium">
+              {stats.totalParticipants} usuarios participando en la comunidad
             </p>
           )}
         </div>

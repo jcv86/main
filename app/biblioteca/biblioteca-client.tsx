@@ -201,16 +201,24 @@ export default function BibliotecaPage() {
   const filteredBooks = getFilteredBooks()
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Biblioteca de Desarrollo Profesional</h1>
-        <p className="text-gray-600">
-          {user
-            ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
-            : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+              <BookOpen className="h-8 w-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
+              <p className="text-slate-700 dark:text-slate-300 font-medium">
+                {user
+                  ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
+                  : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
+              </p>
+            </div>
+          </div>
+        </div>
 
       {/* Personalized Recommendations Section */}
       {user && (
