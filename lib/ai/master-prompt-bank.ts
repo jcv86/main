@@ -183,7 +183,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   // === CRECIMIENTO PROFESIONAL Y AUMENTO SALARIAL ===
   {
     prompt_id: "crecimiento_001",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "dani",
     entrada_usuario: "Quiero pedir un aumento de sueldo pero me da miedo",
