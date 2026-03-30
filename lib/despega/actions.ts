@@ -216,3 +216,39 @@ export async function saveA1TestResults(
     throw error
   }
 }
+
+// Helper functions for score calculation
+function normalizeAnswersTo110(rawAnswers: Record<string, any[]>): Record<string, number[]> {
+  const normalized: Record<string, number[]> = {}
+  
+  for (const [key, values] of Object.entries(rawAnswers)) {
+    normalized[key] = values.map((val) => {
+      const num = typeof val === 'number' ? val : parseInt(val) || 0
+      return Math.max(1, Math.min(10, num))
+    })
+  }
+  
+  return normalized
+}
+
+function calculateDimensionScore(answers: number[], weights?: number[]): number {
+  if (!answers || answers.length === 0) return 0
+  
+  const totalWeight = weights ? weights.reduce((a, b) => a + b, 0) : answers.length
+  let weightedSum = 0
+  
+  answers.forEach((answer, index) => {
+    const weight = weights ? weights[index] || 1 : 1
+    weightedSum += answer * weight
+  })
+  
+  return Math.round(weightedSum / totalWeight)
+}
+
+function calculateOverallScore(scores: Record<string, number>): number {
+  const values = Object.values(scores)
+  if (values.length === 0) return 0
+  
+  const sum = values.reduce((a, b) => a + b, 0)
+  return Math.round(sum / values.length)
+}
