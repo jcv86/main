@@ -203,10 +203,6 @@ export async function saveA1TestResults(
   if (!user) throw new Error("Unauthorized")
 
   try {
-    // Import normalization functions
-    const { normalizeAnswersTo110 } = await import("@/lib/a1-question-mapping")
-    const { calculateDimensionScore, calculateOverallScore } = await import("@/lib/a1-scoring-normalization")
-
     // Normalize all answers to 1-10 scale
     const normalizedAnswers = normalizeAnswersTo110(rawAnswers)
 
