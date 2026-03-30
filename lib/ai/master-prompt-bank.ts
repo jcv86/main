@@ -378,7 +378,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
     tono: "sofia",
     entrada_usuario: "¿Cómo manejo los nervios en una entrevista?",
     respuesta_sofia:
-      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversaci��n, no un interrogatorio. ¿Quieres practicar?",
+      "Los nervios son normales. Técnicas: 1) Respiración profunda antes de entrar, 2) Prepara respuestas a preguntas comunes, 3) Recuerda que es una conversaci����n, no un interrogatorio. ¿Quieres practicar?",
     metricas_esperadas: {
       engagement_rate: 80,
       satisfaccion_promedio: 4.7,
@@ -590,7 +590,7 @@ export function getPromptBankStats() {
       autoconocimiento: getPromptsByCategory("autoconocimiento_proposito").length,
       cv_linkedin: getPromptsByCategory("cv_linkedin_marca").length,
       entrevistas: getPromptsByCategory("entrevistas_comunicacion").length,
-      crecimiento: getPromptsByCategory("crecimiento_aumento_salarial").length,
+      crecimiento: getPromptsByCategory("crecimiento_salarial").length,
       transicion: getPromptsByCategory("reinvencion_transicion").length,
     },
     byLevel: {
