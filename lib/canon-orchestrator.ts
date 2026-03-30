@@ -46,13 +46,32 @@ export async function orchestrateCanon(
     )
     console.log('[v0] Generated route from rules')
 
-    // Paso 2: Route generated from rules
-    console.log('[v0] Step 2: Route generated from rules...')
+    // Paso 2: Convertir Milestones a Acciones
+    console.log('[v0] Step 2: Converting milestones to actions...')
+    const convertMilestoneToActions = (milestone: any, phase: 30 | 60 | 90): any[] => {
+      return (milestone?.tareas_clave || []).map((tarea: string, idx: number) => ({
+        id: `action-${phase}-${idx}`,
+        type: 'mission' as const,
+        title: tarea,
+        description: milestone.objetivo_principal,
+        duration: 30,
+        frequency: 'weekly' as const,
+        phase,
+        tags: milestone.formato_recomendado ? [milestone.formato_recomendado] : [],
+        trazability_source_response_ids: [],
+        difficulty: milestone.intensidad === 'suave' ? 'easy' : milestone.intensidad === 'moderada' ? 'medium' : 'hard',
+        success_metric: milestone.metricas?.[0] || 'Completar tarea'
+      }))
+    }
+
+    const actions30 = convertMilestoneToActions(route.mision_30, 30)
+    const actions60 = convertMilestoneToActions(route.mision_60, 60)
+    const actions90 = convertMilestoneToActions(route.mision_90, 90)
 
     // Paso 3: Generar Rutas
     console.log('[v0] Step 3: Generating routes...')
     const route30Days = generateRoute30Days(
-      route.mision_30,
+      actions30,
       request.conozcamonos2Paso1Responses
     )
 
@@ -60,11 +79,11 @@ export async function orchestrateCanon(
 
     if (request.conozcamonos2Paso2Responses && Object.keys(request.conozcamonos2Paso2Responses).length > 0) {
       route60Days = generateRoute60Days(
-        route.mision_60,
+        actions60,
         request.conozcamonos2Paso2Responses
       )
       route90Days = generateRoute90Days(
-        route.mision_90,
+        actions90,
         {
           ...request.conozcamonos1Responses,
           ...request.conozcamonos2Paso1Responses,
