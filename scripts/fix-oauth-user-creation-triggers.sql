@@ -3,11 +3,13 @@
 -- by ensuring all triggers that run on auth.users INSERT have proper error handling
 
 -- ======================
--- STEP 1: Drop existing problematic triggers
+-- STEP 1: Drop ALL existing triggers on auth.users
 -- ======================
 
 DROP TRIGGER IF EXISTS trigger_initialize_user_on_signup ON auth.users;
 DROP TRIGGER IF EXISTS on_auth_user_oauth ON auth.users;
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP TRIGGER IF EXISTS handle_new_user_trigger ON auth.users;
 
 -- ======================
 -- STEP 2: Create a robust unified trigger function
