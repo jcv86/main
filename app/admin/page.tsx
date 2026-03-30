@@ -1,13 +1,17 @@
 'use client'
 
+import { Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AdminTesisManager } from "@/components/admin/admin-tesis-manager"
-import { AdminNoticiasManager } from "@/components/admin/admin-noticias-manager"
-import { AdminTestsManager } from "@/components/admin/admin-tests-manager"
-import { AdminBibliotecaManager } from "@/components/admin/admin-biblioteca-manager"
-import { AdminUsersOverview } from "@/components/admin/admin-users-overview"
-import { AdminAnalytics } from "@/components/admin/admin-analytics"
-import { ProtectedAdminRoute } from "@/components/admin/protected-admin-route"
+
+// Dynamically import admin components to prevent build-time evaluation
+const AdminTesisManager = dynamic(() => import('@/components/admin/admin-tesis-manager').then(mod => ({ default: mod.AdminTesisManager })), { ssr: false })
+const AdminNoticiasManager = dynamic(() => import('@/components/admin/admin-noticias-manager').then(mod => ({ default: mod.AdminNoticiasManager })), { ssr: false })
+const AdminTestsManager = dynamic(() => import('@/components/admin/admin-tests-manager').then(mod => ({ default: mod.AdminTestsManager })), { ssr: false })
+const AdminBibliotecaManager = dynamic(() => import('@/components/admin/admin-biblioteca-manager').then(mod => ({ default: mod.AdminBibliotecaManager })), { ssr: false })
+const AdminUsersOverview = dynamic(() => import('@/components/admin/admin-users-overview').then(mod => ({ default: mod.AdminUsersOverview })), { ssr: false })
+const AdminAnalytics = dynamic(() => import('@/components/admin/admin-analytics').then(mod => ({ default: mod.AdminAnalytics })), { ssr: false })
+const ProtectedAdminRoute = dynamic(() => import('@/components/admin/protected-admin-route').then(mod => ({ default: mod.ProtectedAdminRoute })), { ssr: false })
 
 export default function AdminDashboardPage() {
   return (
