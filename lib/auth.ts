@@ -198,36 +198,17 @@ export const authConfig = {
     redirect: async ({ url, baseUrl }) => {
       console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
       
-      try {
-        // Si viene un URL válido con callbackUrl, respétalo
-        if (url.includes('callbackUrl')) {
-          try {
-            const callbackUrl = new URL(url, baseUrl).searchParams.get('callbackUrl')
-            if (callbackUrl) {
-              console.log("[v0] Using callbackUrl from request:", callbackUrl)
-              // Asegurar que el callbackUrl es relativo a nuestro dominio (seguridad)
-              if (callbackUrl.startsWith('/')) {
-                const finalUrl = `${baseUrl}${callbackUrl}`
-                console.log("[v0] Redirecting to callbackUrl:", finalUrl)
-                return finalUrl
-              } else if (callbackUrl.startsWith(baseUrl)) {
-                console.log("[v0] Redirecting to callbackUrl:", callbackUrl)
-                return callbackUrl
-              }
-            }
-          } catch (e) {
-            console.warn("[v0] Could not parse callbackUrl, using default:", e)
-          }
-        }
-        
-        // Si no hay callbackUrl válido, usar default
-        const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
-        console.log("[v0] Redirecting to default:", redirectUrl)
-        return redirectUrl
-      } catch (error) {
-        console.error("[v0] Redirect error:", error)
-        return `${baseUrl}/despega/conozcamonos-1`
+      // NextAuth maneja automaticamente los OAuth callbacks
+      // Solo redirigir al default si viene de un signin completo
+      if (url.startsWith(baseUrl)) {
+        console.log("[v0] Redirecting to:", url)
+        return url
       }
+      
+      // Default redirect after successful OAuth
+      const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
+      console.log("[v0] Redirecting to default:", redirectUrl)
+      return redirectUrl
     },
   },
 }
