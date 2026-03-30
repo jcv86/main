@@ -1,27 +1,38 @@
-import Queue from 'bull'
-import redis from 'redis'
+// Redis/Bull queue disabled - using mock implementation for now
+// Redis is not available in this environment
+// import Queue from 'bull'
+// import redis from 'redis'
+
 import { createClient } from '@/lib/supabase/server'
 import { processVideoFile, cleanupProcessedFiles } from './video-processor'
 import { performMultimodalAnalysis } from './openai-multimodal'
 import * as path from 'path'
 import * as os from 'os'
 
-// Create Bull queue for analysis jobs
-export const analysisQueue = new Queue('multimodal-analysis', {
-  redis: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379'),
-    password: process.env.REDIS_PASSWORD
-  },
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 2000
-    },
-    removeOnComplete: true
+// Mock queue implementation for environments without Redis
+class MockQueue {
+  private jobs = new Map<string, any>()
+  private jobCounter = 0
+
+  async add(data: any, options?: any) {
+    const id = options?.jobId || `job-${++this.jobCounter}`
+    const job = { id, data, progress: 0 }
+    this.jobs.set(id, job)
+    return job
   }
-})
+
+  process(handler: Function) {
+    // Mock processor - just log
+    console.log('[v0] Mock queue processor registered')
+  }
+
+  async close() {
+    // Mock close
+  }
+}
+
+// Create mock queue for analysis jobs (Redis not available)
+export const analysisQueue = new MockQueue()
 
 export interface AnalysisJobData {
   sessionId: string

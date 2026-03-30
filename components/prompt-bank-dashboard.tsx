@@ -44,7 +44,7 @@ export function PromptBankDashboard() {
     autoconocimiento_proposito: Brain,
     cv_linkedin_marca: Briefcase,
     entrevistas_comunicacion: MessageSquare,
-    crecimiento_aumento_salarial: DollarSign,
+    crecimiento_salarial: DollarSign,
     reinvencion_transicion: Repeat,
   }
 
@@ -52,7 +52,7 @@ export function PromptBankDashboard() {
     autoconocimiento_proposito: "bg-purple-500/10 text-purple-700 dark:text-purple-300",
     cv_linkedin_marca: "bg-blue-500/10 text-blue-700 dark:text-blue-300",
     entrevistas_comunicacion: "bg-green-500/10 text-green-700 dark:text-green-300",
-    crecimiento_aumento_salarial: "bg-orange-500/10 text-orange-700 dark:text-orange-300",
+    crecimiento_salarial: "bg-orange-500/10 text-orange-700 dark:text-orange-300",
     reinvencion_transicion: "bg-pink-500/10 text-pink-700 dark:text-pink-300",
   }
 
@@ -156,9 +156,9 @@ export function PromptBankDashboard() {
               Entrevistas
             </Button>
             <Button
-              variant={selectedCategory === "crecimiento_aumento_salarial" ? "default" : "outline"}
+              variant={selectedCategory === "crecimiento_salarial" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory("crecimiento_aumento_salarial")}
+              onClick={() => setSelectedCategory("crecimiento_salarial")}
             >
               Crecimiento
             </Button>
