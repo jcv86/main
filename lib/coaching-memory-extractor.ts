@@ -1,5 +1,6 @@
-import { generateText } from "ai"
 import { createClient } from "@/lib/supabase"
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 interface CoachingConversation {
   id: string
@@ -47,12 +48,35 @@ Extrae en formato JSON EXACTAMENTE estos tipos de información encontrada:
 
 Solo retorna el JSON, sin explicaciones. Si no hay información relevante, retorna [].`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4-mini",
-      prompt,
-      maxTokens: 1000,
-      temperature: 0.5,
-    })
+    const { text } = await (async () => {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4-mini",
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            temperature: 0.5,
+            max_tokens: 1000,
+          }),
+        })
+
+        const data = await response.json()
+        const text = data.choices[0]?.message?.content || "[]"
+        return { text }
+      } catch (error) {
+        console.error("[v0] Error calling OpenAI API:", error)
+        return { text: "[]" }
+      }
+    })()
 
     try {
       const parsed = JSON.parse(text)
@@ -101,12 +125,35 @@ Genera EXACTAMENTE 3-5 insights en formato JSON:
 
 Solo retorna el JSON, sin explicaciones.`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4-mini",
-      prompt,
-      maxTokens: 1500,
-      temperature: 0.6,
-    })
+    const { text } = await (async () => {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4-mini",
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            temperature: 0.6,
+            max_tokens: 1500,
+          }),
+        })
+
+        const data = await response.json()
+        const text = data.choices[0]?.message?.content || "[]"
+        return { text }
+      } catch (error) {
+        console.error("[v0] Error calling OpenAI API:", error)
+        return { text: "[]" }
+      }
+    })()
 
     try {
       const parsed = JSON.parse(text)
