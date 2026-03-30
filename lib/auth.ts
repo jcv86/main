@@ -1,4 +1,4 @@
-import type { NextAuthConfig } from "next-auth"
+import type NextAuthConfig from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
