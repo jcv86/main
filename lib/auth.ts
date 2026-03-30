@@ -63,6 +63,11 @@ const diagnosticOAuth = () => {
 
 diagnosticOAuth()
 
+// Hardcoded production URL - prevents trailing slash issues from env vars
+const baseUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://www.despegatucarrera.com'
+  : 'http://localhost:3000'
+
 // Log the final configuration being used
 console.log("[v0] ========== FINAL AUTH CONFIG ==========")
 console.log("[v0] baseUrl:", baseUrl)
@@ -71,12 +76,6 @@ console.log("[v0] NEXTAUTH_URL:", process.env.NEXTAUTH_URL)
 console.log("[v0] NEXT_PUBLIC_SITE_URL:", process.env.NEXT_PUBLIC_SITE_URL)
 console.log("[v0] trustHost:", false)
 console.log("[v0] =========================================")
-
-
-// Hardcoded production URL - prevents trailing slash issues from env vars
-const baseUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://www.despegatucarrera.com'
-  : 'http://localhost:3000'
 
 
 export const authConfig = {
