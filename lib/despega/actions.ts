@@ -231,14 +231,14 @@ function normalizeAnswersTo110(rawAnswers: Record<string, any[]>): Record<string
   return normalized
 }
 
-function calculateDimensionScore(answers: number[], weights?: number[]): number {
+function calculateDimensionScore(answers: number[], weights: number[] = []): number {
   if (!answers || answers.length === 0) return 0
   
-  const totalWeight = weights ? weights.reduce((a, b) => a + b, 0) : answers.length
+  const totalWeight = weights && weights.length > 0 ? weights.reduce((a, b) => a + b, 0) : answers.length
   let weightedSum = 0
   
   answers.forEach((answer, index) => {
-    const weight = weights ? weights[index] || 1 : 1
+    const weight = weights && weights.length > 0 ? weights[index] || 1 : 1
     weightedSum += answer * weight
   })
   
