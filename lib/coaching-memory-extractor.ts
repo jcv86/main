@@ -190,30 +190,31 @@ export async function processWeeklyCoachingMemory() {
 
     for (const userId of uniqueUsers) {
       try {
+        const userIdString = userId as string
         // Fetch user's performance context
         const { data: performanceData } = await supabase
           .from("user_performance_context")
           .select("*")
-          .eq("user_id", userId)
+          .eq("user_id", userIdString)
           .single()
 
         // Fetch user's recent memories
         const { data: memories } = await supabase
           .from("user_coaching_memory")
           .select("*")
-          .eq("user_id", userId)
+          .eq("user_id", userIdString)
           .eq("action_status", "pending")
           .order("created_at", { ascending: false })
           .limit(20)
 
         // Generate insights only if there are recent memories
         if (memories && memories.length > 0) {
-          const insights = await generateInsightsFromMemory(userId, memories, performanceData)
+          const insights = await generateInsightsFromMemory(userIdString, memories, performanceData)
 
           // Save generated insights
           for (const insight of insights) {
             const { error: insertError } = await supabase.from("ai_insights_from_coaching").insert({
-              user_id: userId,
+              user_id: userIdString,
               insight_type: insight.insight_type,
               title: insight.title,
               content: insight.content,
@@ -224,14 +225,14 @@ export async function processWeeklyCoachingMemory() {
             })
 
             if (insertError) {
-              console.error(`[v0] Error saving insight for user ${userId}:`, insertError)
+              console.error(`[v0] Error saving insight for user ${userIdString}:`, insertError)
             }
           }
 
-          console.log(`[v0] Generated ${insights.length} insights for user ${userId}`)
+          console.log(`[v0] Generated ${insights.length} insights for user ${userIdString}`)
         }
       } catch (userError) {
-        console.error(`[v0] Error processing user ${userId}:`, userError)
+        console.error(`[v0] Error processing user ${userIdString}:`, userError)
       }
     }
 
