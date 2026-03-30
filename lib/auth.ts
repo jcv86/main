@@ -68,15 +68,6 @@ const baseUrl = process.env.NODE_ENV === 'production'
   ? 'https://www.despegatucarrera.com'
   : 'http://localhost:3000'
 
-// Log the final configuration being used
-console.log("[v0] ========== FINAL AUTH CONFIG ==========")
-console.log("[v0] baseUrl:", baseUrl)
-console.log("[v0] NODE_ENV:", process.env.NODE_ENV)
-console.log("[v0] NEXTAUTH_URL:", process.env.NEXTAUTH_URL)
-console.log("[v0] NEXT_PUBLIC_SITE_URL:", process.env.NEXT_PUBLIC_SITE_URL)
-console.log("[v0] trustHost:", false)
-console.log("[v0] =========================================")
-
 
 export const authConfig = {
   providers: [
