@@ -30,6 +30,8 @@ import {
   Lock,
   Send,
   Target,
+  TrendingUp,
+  Award,
 } from "lucide-react"
 
 interface BookClub {
