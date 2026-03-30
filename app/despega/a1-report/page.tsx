@@ -191,7 +191,7 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-slate-800/40 border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
@@ -200,6 +200,23 @@ export default function A1ReportPage() {
               <p className="text-sm text-slate-400 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
               <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-slate-600" size="sm">
                 Ver Detalles
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
+            <CardHeader>
+              <CardTitle className="text-lg text-cyan-300">Practica con Simulación</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-300 mb-4">Vive una entrevista simulada basada en tu perfil {primaryLabel}.</p>
+              <Button 
+                onClick={() => router.push(`/despega/a1-simulation?profile=${profile.primary}`)} 
+                className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
+                size="sm"
+              >
+                <Zap className="w-3 h-3 mr-1" />
+                Comenzar Simulación
               </Button>
             </CardContent>
           </Card>
