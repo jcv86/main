@@ -29,6 +29,7 @@ import {
   Globe,
   Lock,
   Send,
+  Target,
 } from "lucide-react"
 
 interface BookClub {
