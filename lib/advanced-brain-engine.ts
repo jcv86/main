@@ -487,13 +487,34 @@ Proporciona una respuesta altamente personalizada y accionable que:
     const systemPrompt = this.generatePersonalizedPrompt(query, queryIntent, userContext, sources)
 
     // Step 5: Generate AI response
-    const { text } = await generateText({
-      model: "openai/gpt-4o",
-      system: systemPrompt,
-      prompt: query,
-      temperature: 0.7,
-      maxTokens: 800,
-    })
+    let text = ""
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o",
+          system: systemPrompt,
+          messages: [
+            {
+              role: "user",
+              content: query,
+            },
+          ],
+          temperature: 0.7,
+          max_tokens: 800,
+        }),
+      })
+
+      const data = await response.json()
+      text = data.choices[0]?.message?.content || "No se pudo generar una respuesta"
+    } catch (error) {
+      console.error("Error generating AI response:", error)
+      text = "Error al generar respuesta. Por favor, intenta de nuevo."
+    }
 
     // Step 6: Generate follow-up questions
     const followUpQuestions = this.generateFollowUpQuestions(query, queryIntent, sources, userContext)
