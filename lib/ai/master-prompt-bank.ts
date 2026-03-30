@@ -198,7 +198,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_002",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "basico",
     tono: "sofia",
     entrada_usuario: "¿Cómo sé si estoy listo para un ascenso?",
@@ -213,7 +213,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_003",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "avanzado",
     tono: "dani",
     entrada_usuario: "¿Cómo negocio mi salario en una oferta de trabajo?",
@@ -420,7 +420,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   // Crecimiento adicionales
   {
     prompt_id: "crecimiento_004",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "basico",
     tono: "dani",
     entrada_usuario: "¿Cómo pido feedback a mi jefe?",
@@ -435,7 +435,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_005",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "sofia",
     entrada_usuario: "¿Cómo desarrollo habilidades de liderazgo?",
@@ -450,7 +450,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "crecimiento_006",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "avanzado",
     tono: "dani",
     entrada_usuario: "¿Cómo construyo un plan de desarrollo profesional?",
@@ -529,7 +529,7 @@ export const MASTER_PROMPT_BANK: MasterPrompt[] = [
   },
   {
     prompt_id: "seguimiento_002",
-    categoria: "crecimiento_aumento_salarial",
+    categoria: "crecimiento_salarial",
     nivel: "intermedio",
     tono: "dani",
     entrada_usuario: "¿Cuándo es el mejor momento para pedir un aumento?",
