@@ -96,41 +96,40 @@ export function getPersonalizedNewsRanking(
   return scoredItems.sort((a, b) => b.personalizedScore - a.personalizedScore)
 }
 
+const DEFAULT_RECOMMENDATIONS: string[] = [
+  'Explora diferentes tipos de roles y empresas',
+  'Desarrolla una red profesional diversa',
+  'Invierte en educación continua',
+  'Busca mentores que te guíen',
+]
+
+const RECOMMENDATIONS_MAP: Record<Exclude<DISCProfile, null>, string[]> = {
+  D: [
+    'Enfócate en oportunidades con impacto inmediato',
+    'Busca roles de liderazgo con autonomía',
+    'Prioriza empresas en crecimiento acelerado',
+    'Negocia agresivamente tu compensación',
+  ],
+  I: [
+    'Desarrolla tu red de contactos estratégicamente',
+    'Busca roles con interacción humana directa',
+    'Participa en eventos y conferencias de tu industria',
+    'Cultiva mentores y mentees',
+  ],
+  S: [
+    'Busca estabilidad y beneficios en el largo plazo',
+    'Prioriza cultura organizacional sana',
+    'Desarrolla especialización en tu área actual',
+    'Crea relaciones profundas en tu equipo',
+  ],
+  C: [
+    'Domina las métricas y datos de tu industria',
+    'Busca roles que demanden precisión y análisis',
+    'Invierte en certificaciones relevantes',
+    'Desarrolla expertise reconocida en tu campo',
+  ],
+}
+
 export function getPersonalizedRecommendations(profile: DISCProfile): string[] {
-  const config = getDISCPersonalization(profile)
-  
-  const recommendations: Record<DISCProfile, string[]> = {
-    D: [
-      'Enfócate en oportunidades con impacto inmediato',
-      'Busca roles de liderazgo con autonomía',
-      'Prioriza empresas en crecimiento acelerado',
-      'Negocia agresivamente tu compensación',
-    ],
-    I: [
-      'Desarrolla tu red de contactos estratégicamente',
-      'Busca roles con interacción humana directa',
-      'Participa en eventos y conferencias de tu industria',
-      'Cultiva mentores y mentees',
-    ],
-    S: [
-      'Busca estabilidad y beneficios en el largo plazo',
-      'Prioriza cultura organizacional sana',
-      'Desarrolla especialización en tu área actual',
-      'Crea relaciones profundas en tu equipo',
-    ],
-    C: [
-      'Domina las métricas y datos de tu industria',
-      'Busca roles que demanden precisión y análisis',
-      'Invierte en certificaciones relevantes',
-      'Desarrolla expertise reconocida en tu campo',
-    ],
-    null: [
-      'Explora diferentes tipos de roles y empresas',
-      'Desarrolla una red profesional diversa',
-      'Invierte en educación continua',
-      'Busca mentores que te guíen',
-    ],
-  }
-  
-  return recommendations[profile || 'null']
+  return profile ? RECOMMENDATIONS_MAP[profile] : DEFAULT_RECOMMENDATIONS
 }
