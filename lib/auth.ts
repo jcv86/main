@@ -123,33 +123,39 @@ export const authConfig = {
       return !!auth
     },
     signIn: async ({ user, account, profile }) => {
-      console.log("[v0] SignIn - provider:", account?.provider, "email:", user?.email, "userId:", user?.id)
+      console.log("[v0] SignIn callback - provider:", account?.provider, "email:", user?.email, "userId:", user?.id)
       
       try {
         // Enrich profile from OAuth provider
         if (user?.id) {
           if (account?.provider === 'google' && profile) {
             console.log("[v0] Enriching Google profile for user:", user.id)
-            await enrichProfileFromGoogle(user.id, {
-              email: profile.email || user.email || '',
-              name: profile.name || user.name || '',
-              image: profile.image || user.image,
-            })
+            try {
+              await enrichProfileFromGoogle(user.id, {
+                email: profile.email || user.email || '',
+                name: profile.name || user.name || '',
+                image: profile.image || user.image,
+              })
+            } catch (enrichError) {
+              console.warn("[v0] Google enrichment failed (non-blocking):", enrichError)
+            }
           } else if (account?.provider === 'linkedin' && profile && account.access_token) {
             console.log("[v0] Enriching LinkedIn profile for user:", user.id)
             try {
               await enrichProfileFromLinkedIn(user.id, profile, account.access_token)
+              console.log("[v0] LinkedIn enrichment completed successfully")
             } catch (linkedinError) {
               console.warn("[v0] LinkedIn enrichment failed (non-blocking):", linkedinError)
-              // Don't fail signin if LinkedIn enrichment fails
+              // Don't fail signin if LinkedIn enrichment fails - continue anyway
             }
           }
         }
       } catch (enrichError) {
-        console.error("[v0] Profile enrichment error:", enrichError)
-        // Don't block signin if enrichment fails
+        console.error("[v0] Profile enrichment error (non-blocking):", enrichError)
+        // Don't block signin if enrichment fails - user should still be able to login
       }
       
+      console.log("[v0] SignIn callback returning true - user will be logged in")
       return true
     },
     jwt: async ({ token, account, profile, user }) => {
@@ -193,8 +199,30 @@ export const authConfig = {
       console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
       
       try {
+        // Si viene un URL válido con callbackUrl, respétalo
+        if (url.includes('callbackUrl')) {
+          try {
+            const callbackUrl = new URL(url, baseUrl).searchParams.get('callbackUrl')
+            if (callbackUrl) {
+              console.log("[v0] Using callbackUrl from request:", callbackUrl)
+              // Asegurar que el callbackUrl es relativo a nuestro dominio (seguridad)
+              if (callbackUrl.startsWith('/')) {
+                const finalUrl = `${baseUrl}${callbackUrl}`
+                console.log("[v0] Redirecting to callbackUrl:", finalUrl)
+                return finalUrl
+              } else if (callbackUrl.startsWith(baseUrl)) {
+                console.log("[v0] Redirecting to callbackUrl:", callbackUrl)
+                return callbackUrl
+              }
+            }
+          } catch (e) {
+            console.warn("[v0] Could not parse callbackUrl, using default:", e)
+          }
+        }
+        
+        // Si no hay callbackUrl válido, usar default
         const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
-        console.log("[v0] Redirecting to:", redirectUrl)
+        console.log("[v0] Redirecting to default:", redirectUrl)
         return redirectUrl
       } catch (error) {
         console.error("[v0] Redirect error:", error)
