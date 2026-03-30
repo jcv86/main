@@ -70,28 +70,44 @@
 
 /* WCAG AA Contrast Fix - Override muted-foreground for better contrast */
 .text-muted-foreground {
-  color: hsl(215.4 16.3% 30%);
+  color: hsl(215.4 16.3% 25%);
 }
 
 .dark .text-muted-foreground {
-  color: hsl(215 20.2% 65.1%);
+  color: hsl(215 20.2% 70%);
 }
 
 /* Fix text-slate colors to improve contrast in light mode */
 .text-slate-300 {
-  color: hsl(215.4 16.3% 35%);
-}
-
-.dark .text-slate-300 {
-  color: hsl(210 13.8% 83.9%);
+  color: hsl(215.4 16.3% 40%) !important;
 }
 
 .text-slate-400 {
-  color: hsl(215.4 16.3% 45%);
+  color: hsl(215.4 16.3% 50%) !important;
+}
+
+.text-slate-500 {
+  color: hsl(215.4 16.3% 55%) !important;
+}
+
+.text-slate-600 {
+  color: hsl(215.4 16.3% 30%) !important;
+}
+
+.dark .text-slate-300 {
+  color: hsl(210 13.8% 85%) !important;
 }
 
 .dark .text-slate-400 {
-  color: hsl(215 20.2% 65.1%);
+  color: hsl(215 20.2% 70%) !important;
+}
+
+.dark .text-slate-500 {
+  color: hsl(215 20.2% 65%) !important;
+}
+
+.dark .text-slate-600 {
+  color: hsl(215 20.2% 60%) !important;
 }
 
 /* Smooth scrollbar styling for both light and dark modes */
