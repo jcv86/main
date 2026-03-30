@@ -13,6 +13,7 @@ import * as os from 'os'
 class MockQueue {
   private jobs = new Map<string, any>()
   private jobCounter = 0
+  private listeners = new Map<string, Function[]>()
 
   async add(data: any, options?: any) {
     const id = options?.jobId || `job-${++this.jobCounter}`
@@ -28,6 +29,13 @@ class MockQueue {
   process(handler: Function) {
     // Mock processor - just log
     console.log('[v0] Mock queue processor registered')
+  }
+
+  on(event: string, handler: Function) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, [])
+    }
+    this.listeners.get(event)!.push(handler)
   }
 
   async close() {
