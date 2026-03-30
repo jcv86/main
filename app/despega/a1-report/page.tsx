@@ -46,7 +46,7 @@ export default function A1ReportPage() {
   const loadReport = async () => {
     try {
       const { data: testDataArray, error: queryError } = await supabase
-        .from('a1_disc_assessment')
+        .from('a1_cerebral_assessment')
         .select('disc_profile')
         .eq('user_id', user?.id)
         .order('completed_at', { ascending: false })
@@ -87,7 +87,7 @@ export default function A1ReportPage() {
       profile.secondary = scores[1].letter
       profile.secondaryScore = scores[1].value
 
-      console.log('[v0] Loaded profile from a1_disc_assessment:', profile)
+      console.log('[v0] Loaded profile from a1_cerebral_assessment:', profile)
       setProfile(profile)
       setLoading(false)
     } catch (err) {
