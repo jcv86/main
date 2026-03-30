@@ -1,8 +1,8 @@
 'use client'
 
-import { createContext, useContext, ReactNode } from 'react'
-import { useSession as useNextAuthSession } from 'next-auth/react'
-import type { Session } from 'next-auth'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import type { User as SupabaseUser, Session } from '@supabase/supabase-js'
 
 interface User {
   id: string
@@ -15,6 +15,7 @@ interface SessionContextType {
   user: User | null
   isLoading: boolean
   session: Session | null
+  signOut: () => Promise<void>
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined)
@@ -24,21 +25,55 @@ interface SessionWrapperProps {
 }
 
 export function SessionWrapper({ children }: SessionWrapperProps) {
-  const { data: session, status } = useNextAuthSession()
-  const isLoading = status === 'loading'
+  const [session, setSession] = useState<Session | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
 
-  // Transform NextAuth session to our User interface
+  useEffect(() => {
+    // Get initial session
+    const getInitialSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        setSession(session)
+      } catch (error) {
+        console.error('Error getting session:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    getInitialSession()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setSession(session)
+        setIsLoading(false)
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [supabase.auth])
+
+  // Transform Supabase session to our User interface
   const user: User | null = session?.user
     ? {
-        id: session.user.id || '',
+        id: session.user.id,
         email: session.user.email || '',
-        name: session.user.name || undefined,
-        image: session.user.image || undefined,
+        name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || undefined,
+        image: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
       }
     : null
 
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    setSession(null)
+  }
+
   return (
-    <SessionContext.Provider value={{ user, isLoading, session }}>
+    <SessionContext.Provider value={{ user, isLoading, session, signOut }}>
       {children}
     </SessionContext.Provider>
   )

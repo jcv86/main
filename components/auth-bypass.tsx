@@ -1,10 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,6 +17,7 @@ export default function AuthBypass() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,20 +25,19 @@ export default function AuthBypass() {
     setIsLoading(true)
 
     try {
-      const result = await signIn("credentials", {
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
-        redirect: false,
       })
 
-      if (result?.error) {
-        console.log("[v0] SignIn error:", result.error)
+      if (error) {
         setError("Credenciales inválidas. Intenta con uno de los usuarios de prueba.")
-      } else if (result?.ok) {
+      } else {
         router.push("/dashboard")
+        router.refresh()
       }
     } catch (err) {
-      console.error("[v0] SignIn error:", err)
+      console.error("SignIn error:", err)
       setError("Error al iniciar sesión. Por favor intenta nuevamente.")
     } finally {
       setIsLoading(false)
@@ -50,26 +49,24 @@ export default function AuthBypass() {
     setError("")
 
     try {
-      const result = await signIn("credentials", {
+      const { error } = await supabase.auth.signInWithPassword({
         email: testEmail,
         password: testPassword,
-        redirect: false,
       })
 
-      if (result?.error) {
-        console.log("[v0] Quick login error:", result.error)
+      if (error) {
         setError("Error al iniciar sesión con usuario de prueba.")
-      } else if (result?.ok) {
+      } else {
         router.push("/dashboard")
+        router.refresh()
       }
     } catch (err) {
-      console.error("[v0] Quick login error:", err)
+      console.error("Quick login error:", err)
       setError("Error al iniciar sesión. Por favor intenta nuevamente.")
     } finally {
       setIsLoading(false)
     }
   }
-
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -106,7 +103,7 @@ export default function AuthBypass() {
             <Input
               id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -186,10 +183,10 @@ export default function AuthBypass() {
         <div className="text-center text-sm text-muted-foreground">
           <p>Usuarios de prueba disponibles:</p>
           <p className="text-xs mt-1">
-            • Travis: Senior Developer
-            <br />• Ana: Marketing Analyst
-            <br />• Carlos: Project Coordinator
-            <br />• María: Platform Administrator
+            Travis: Senior Developer
+            <br />Ana: Marketing Analyst
+            <br />Carlos: Project Coordinator
+            <br />María: Platform Administrator
           </p>
         </div>
       </CardContent>

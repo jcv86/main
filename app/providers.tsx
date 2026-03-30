@@ -1,7 +1,6 @@
 'use client'
 
 import type React from 'react'
-import { SessionProvider } from 'next-auth/react'
 import { SessionWrapper } from '@/components/session-wrapper'
 import { CoachStrategicProvider } from '@/components/coach-strategic-provider'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -14,14 +13,12 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
-      <SessionProvider>
+      <SessionWrapper>
         <CoachStrategicProvider>
-          <SessionWrapper>
-            {children}
-            <Toaster />
-          </SessionWrapper>
+          {children}
+          <Toaster />
         </CoachStrategicProvider>
-      </SessionProvider>
+      </SessionWrapper>
     </ThemeProvider>
   )
 }

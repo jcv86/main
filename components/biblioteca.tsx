@@ -11,10 +11,10 @@ import {
   saveResource,
   getUserSavedResources,
 } from "@/lib/supabase/a4-queries"
-import { useSession } from "next-auth/react"
+import { useSession } from "@/components/session-wrapper"
 
 export function Biblioteca() {
-  const { data: session } = useSession()
+  const { user } = useSession()
   const [resources, setResources] = useState<any[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>("")
@@ -40,9 +40,9 @@ export function Biblioteca() {
   }
 
   const loadSavedResources = async () => {
-    if (!session?.user?.email) return
+    if (!user?.email) return
     try {
-      const savedRes = await getUserSavedResources(session.user.email)
+      const savedRes = await getUserSavedResources(user.email)
       const savedIds: Set<string> = new Set(savedRes.map((r) => r.resource_id as string))
       setSaved(savedIds)
     } catch (error) {
@@ -63,14 +63,14 @@ export function Biblioteca() {
   }
 
   const handleSave = async (resourceId: string, resourceType: string) => {
-    if (!session?.user?.email) return
+    if (!user?.email) return
 
     const newSaved = new Set(saved)
     if (newSaved.has(resourceId)) {
       newSaved.delete(resourceId)
     } else {
       newSaved.add(resourceId)
-      await saveResource(session.user.email, resourceId, resourceType)
+      await saveResource(user.email, resourceId, resourceType)
     }
     setSaved(newSaved)
   }
