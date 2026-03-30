@@ -1,4 +1,4 @@
-import { generateText } from "ai"
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 interface PerformanceContext {
   c1_score: number
@@ -68,12 +68,27 @@ export async function generateContextualSuggestions(
     contextString += `4. Se retornen en formato JSON con estructura: [{"title": "string", "question": "string", "context": "string", "linked_axis": "c1|c2|c3|c4|null"}]\n`
     contextString += `Solo retorna el JSON, sin explicaciones adicionales.`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4-mini",
-      prompt: contextString,
-      temperature: 0.7,
-      maxTokens: 800,
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-mini",
+        messages: [
+          {
+            role: "user",
+            content: contextString,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 800,
+      }),
     })
+
+    const data = await response.json()
+    const text = data.choices[0]?.message?.content || "[]"
 
     // Parse response
     const parsed = JSON.parse(text)
