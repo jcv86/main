@@ -95,7 +95,7 @@ export async function storeEncryptedMetadata(
   metadata: Record<string, any>
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('multimodal_encryption_keys')
@@ -127,7 +127,7 @@ export async function storeEncryptedMetadata(
  */
 export async function retrieveEncryptedMetadata(userId: string, videoId: string) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('multimodal_encryption_keys')
@@ -158,7 +158,7 @@ export async function retrieveEncryptedMetadata(userId: string, videoId: string)
  */
 export async function secureDeleteVideo(userId: string, videoId: string) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Delete from encryption metadata
     const { error: metaError } = await supabase
@@ -200,7 +200,7 @@ export async function secureDeleteVideo(userId: string, videoId: string) {
  */
 export async function setVideoExpiration(userId: string, videoId: string, expirationDays: number = 30) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const expirationDate = new Date()
     expirationDate.setDate(expirationDate.getDate() + expirationDays)
 
@@ -227,7 +227,7 @@ export async function setVideoExpiration(userId: string, videoId: string, expira
  */
 export async function logAccessAudit(userId: string, action: string, videoId: string, details?: any) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { error } = await supabase.from('multimodal_audit_logs').insert({
       user_id: userId,
