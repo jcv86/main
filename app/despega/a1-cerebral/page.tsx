@@ -110,7 +110,7 @@ export default function A1CerebralPage() {
       <div className="container mx-auto px-4 py-12 max-w-3xl">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">Evaluación DISC Despega</h1>
+            <h1 className="text-3xl font-bold">Evaluación Despega Cerebral</h1>
             <span className="text-muted-foreground text-sm">{idx + 1}/{DISC_TEST_QUESTIONS.length}</span>
           </div>
           <div className="w-full bg-muted rounded-full h-2"><div className="h-full bg-primary" style={{ width: `${((idx + 1) / DISC_TEST_QUESTIONS.length) * 100}%` }} /></div>
