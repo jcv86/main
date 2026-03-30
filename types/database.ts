@@ -1,3 +1,4 @@
-import type { Database as SupabaseDatabase } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-export type Database = SupabaseDatabase
+// Generic database type for Supabase client
+export type Database = SupabaseClient['__types']
