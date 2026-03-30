@@ -416,7 +416,7 @@ Enfócate en:
       dominantTraits: data.combined_profile.traits,
       careerAlignment: {
         topMatches: data.top_career_matches,
-        industries: [...new Set(data.top_career_matches.map((m: any) => m.industry))],
+        industries: [...new Set(data.top_career_matches.map((m: any) => m.industry))] as string[],
       },
       skillGaps: data.skill_gaps,
       developmentPriorities: data.development_priorities,
