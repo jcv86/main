@@ -10,7 +10,16 @@ export interface DISCPersonalizationConfig {
   recommendedReadingTime: number // minutos
 }
 
-const DISC_PERSONALIZATION_MAP: Record<DISCProfile, DISCPersonalizationConfig> = {
+const DEFAULT_PERSONALIZATION: DISCPersonalizationConfig = {
+  contentDepth: 'intermedio',
+  interactionStyle: 'colaborativa',
+  contentFormat: 'historias',
+  pace: 'moderado',
+  preferredTopics: [],
+  recommendedReadingTime: 10,
+}
+
+const DISC_PERSONALIZATION_MAP: Record<Exclude<DISCProfile, null>, DISCPersonalizationConfig> = {
   D: {
     // Dominador: Directo, orientado a resultados, rápido
     contentDepth: 'superficial',
@@ -47,18 +56,10 @@ const DISC_PERSONALIZATION_MAP: Record<DISCProfile, DISCPersonalizationConfig> =
     preferredTopics: ['Análisis profundo', 'Datos', 'Precisión', 'Mejora continua'],
     recommendedReadingTime: 15,
   },
-  null: {
-    contentDepth: 'intermedio',
-    interactionStyle: 'colaborativa',
-    contentFormat: 'historias',
-    pace: 'moderado',
-    preferredTopics: [],
-    recommendedReadingTime: 10,
-  },
 }
 
 export function getDISCPersonalization(profile: DISCProfile): DISCPersonalizationConfig {
-  return DISC_PERSONALIZATION_MAP[profile || 'null']
+  return profile ? DISC_PERSONALIZATION_MAP[profile] : DEFAULT_PERSONALIZATION
 }
 
 export function getPersonalizedNewsRanking(
