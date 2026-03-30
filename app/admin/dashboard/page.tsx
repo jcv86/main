@@ -57,16 +57,16 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
+          <Link href="/despega" className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 mb-4 font-medium">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
           </Link>
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground mt-2">Monitor de rendimiento y gestión de usuarios</p>
+          <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
+          <p className="text-slate-400 mt-2">Monitor de rendimiento y gestión de usuarios</p>
         </div>
 
         {/* Tabs */}

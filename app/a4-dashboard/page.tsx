@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 export default function A4DashboardPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+    <main className="min-h-screen bg-gradient-to-br from-teal-950 via-slate-950 to-emerald-950">
       <div className="container max-w-6xl py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 space-y-2">
-          <h1 className="text-4xl font-bold text-balance">Centro de Aprendizaje A4</h1>
-          <p className="text-lg text-muted-foreground">
+          <h1 className="text-5xl font-bold text-balance text-white">Centro de Aprendizaje A4</h1>
+          <p className="text-lg text-slate-300">
             Análisis estratégico, noticias curadas, pruebas interactivas y recursos verificados
           </p>
         </div>
