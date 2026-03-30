@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "@/components/session-wrapper"
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,7 +17,6 @@ export default function AuthBypass() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { login } = useSession()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,13 +25,20 @@ export default function AuthBypass() {
     setIsLoading(true)
 
     try {
-      const success = await login(email, password)
-      if (success) {
-        router.push("/dashboard")
-      } else {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        console.log("[v0] SignIn error:", result.error)
         setError("Credenciales inválidas. Intenta con uno de los usuarios de prueba.")
+      } else if (result?.ok) {
+        router.push("/dashboard")
       }
     } catch (err) {
+      console.error("[v0] SignIn error:", err)
       setError("Error al iniciar sesión. Por favor intenta nuevamente.")
     } finally {
       setIsLoading(false)
@@ -44,18 +50,26 @@ export default function AuthBypass() {
     setError("")
 
     try {
-      const success = await login(testEmail, testPassword)
-      if (success) {
-        router.push("/dashboard")
-      } else {
+      const result = await signIn("credentials", {
+        email: testEmail,
+        password: testPassword,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        console.log("[v0] Quick login error:", result.error)
         setError("Error al iniciar sesión con usuario de prueba.")
+      } else if (result?.ok) {
+        router.push("/dashboard")
       }
     } catch (err) {
+      console.error("[v0] Quick login error:", err)
       setError("Error al iniciar sesión. Por favor intenta nuevamente.")
     } finally {
       setIsLoading(false)
     }
   }
+
 
   return (
     <Card className="w-full max-w-md mx-auto">
