@@ -1,8 +1,8 @@
 import { createClient } from "@supabase/supabase-js"
 import { semanticSearch } from "./embeddings"
-import { generateText } from "ai"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
 export interface UserContext {
   userId: string
@@ -61,9 +61,19 @@ export class AdvancedBrainEngine {
     emotionalTone: string
     urgencyLevel: "low" | "medium" | "high"
   }> {
-    const { text } = await generateText({
-      model: "openai/gpt-4o",
-      prompt: `Analiza esta consulta del usuario y extrae:
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "user",
+              content: `Analiza esta consulta del usuario y extrae:
 1. Intención principal (por ejemplo: "buscar consejos", "resolver problema", "aprender habilidad")
 2. Temas clave (máximo 5)
 3. Tono emocional (positivo/neutral/negativo/urgente)
@@ -78,14 +88,29 @@ Responde en formato JSON:
   "emotionalTone": "tono",
   "urgencyLevel": "nivel"
 }`,
-      temperature: 0.3,
-      maxTokens: 200,
-    })
+            },
+          ],
+          temperature: 0.3,
+          max_tokens: 200,
+        }),
+      })
 
-    try {
-      const analysis = JSON.parse(text)
-      return analysis
-    } catch {
+      const data = await response.json()
+      const text = data.choices[0]?.message?.content || ""
+
+      try {
+        const analysis = JSON.parse(text)
+        return analysis
+      } catch {
+        return {
+          intent: "general inquiry",
+          keyTopics: [query.split(" ")[0]],
+          emotionalTone: "neutral",
+          urgencyLevel: "medium",
+        }
+      }
+    } catch (error) {
+      console.error("Error analyzing query intent:", error)
       return {
         intent: "general inquiry",
         keyTopics: [query.split(" ")[0]],
