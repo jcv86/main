@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 
 export interface ResourceMatch {
   resourceId: string
@@ -16,7 +16,7 @@ export async function matchResourcesToContext(
   performanceData?: any,
 ): Promise<ResourceMatch[]> {
   try {
-    const supabase = await createServerClient()
+    const supabase = await createClient()
 
     // Get all Chilean public resources
     const { data: resources } = await supabase
