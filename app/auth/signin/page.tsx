@@ -177,16 +177,16 @@ export default function SignInPage() {
             {/* Trust indicators */}
             <div className="grid grid-cols-3 gap-3 py-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">6</div>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Tests</p>
+                <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">6</div>
+                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Tests</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">120+</div>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Recursos</p>
+                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">120+</div>
+                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Recursos</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">24/7</div>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Coach IA</p>
+                <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-400">24/7</div>
+                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Coach IA</p>
               </div>
             </div>
 
