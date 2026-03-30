@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 import useSWR, { mutate } from 'swr'
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase'
 
 interface ProgressUpdate {
   userId: string
