@@ -6,7 +6,7 @@ import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, CheckCircle2, Zap, Target } from 'lucide-react'
+import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone } from 'lucide-react'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
 
@@ -206,17 +206,17 @@ export default function A1ReportPage() {
 
           <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
             <CardHeader>
-              <CardTitle className="text-lg text-cyan-300">Practica con Simulación</CardTitle>
+              <CardTitle className="text-lg text-cyan-300">📞 Call Entrena</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-300 mb-4">Vive una entrevista simulada basada en tu perfil {primaryLabel}.</p>
+              <p className="text-sm text-slate-300 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
               <Button 
-                onClick={() => router.push(`/despega/a1-simulation?profile=${profile.primary}`)} 
+                onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
                 className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
                 size="sm"
               >
-                <Zap className="w-3 h-3 mr-1" />
-                Comenzar Simulación
+                <Phone className="w-3 h-3 mr-1" />
+                Comenzar Call Entrena
               </Button>
             </CardContent>
           </Card>
