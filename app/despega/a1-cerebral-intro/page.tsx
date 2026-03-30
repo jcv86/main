@@ -34,13 +34,13 @@ export default function A1CerebralIntroPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-8 h-8 text-blue-600" />
+            <Brain className="w-8 h-8 text-purple-600" />
             <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-              Análisis Cerebral - A1
+              El Ritual - Descubre Tu Perfil
             </h1>
           </div>
           <p className="text-lg text-slate-600 dark:text-slate-300">
-            Descubre tu perfil de comunicación y estilo de liderazgo
+            Análisis profundo de tu estilo de comunicación y liderazgo
           </p>
         </div>
 
@@ -50,8 +50,8 @@ export default function A1CerebralIntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-blue-600" />
-                ¿Qué es el Análisis Cerebral Despega?
+                <Zap className="w-6 h-6 text-purple-600" />
+                ¿Qué es El Ritual de Despega?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
