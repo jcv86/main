@@ -64,7 +64,7 @@ export async function queueAnalysisJob(jobData: AnalysisJobData): Promise<string
  */
 analysisQueue.process(async (job) => {
   const jobData = job.data as AnalysisJobData
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     console.log(`[v0] Processing analysis job: ${job.id}`)
