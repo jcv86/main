@@ -1,8 +1,8 @@
-import type { PromptCategory } from "./prompt-categories"
+import type { PromptCategoryId } from "./prompt-categories"
 
 export interface MasterPrompt {
   prompt_id: string
-  categoria: PromptCategory
+  categoria: PromptCategoryId
   nivel: "basico" | "intermedio" | "avanzado"
   tono: "sofia" | "dani" | "hibrido"
   entrada_usuario: string
