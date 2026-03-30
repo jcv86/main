@@ -246,7 +246,7 @@ export const CoherenceEvaluationSchema = z.object({
   tono: z.enum(["cumple", "parcial", "no_cumple"]).describe("Evaluación eje Tono"),
   valor: z.enum(["cumple", "parcial", "no_cumple"]).describe("Evaluación eje Valor"),
   
-  observaciones: z.record(z.string()).describe("Observaciones por eje"),
+  observaciones: z.record(z.string(), z.string()).describe("Observaciones por eje"),
   redFlags: z.array(z.string()).describe("Red flags detectadas"),
   pillarCompliance: z.enum(["cumple", "parcial", "no_cumple"]).describe("Cumplimiento de reglas del pilar"),
   
