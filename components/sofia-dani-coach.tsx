@@ -327,18 +327,9 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
         open={showFeedbackDialog}
         onOpenChange={setShowFeedbackDialog}
         sessionId={sessionId}
-        userEmail={userEmail}
         messageCount={messageCount}
         coachType={conversationCategory === "autoconocimiento" ? "sofia" : "dani"}
         conversationCategory={conversationCategory}
-        suggestedAction={`Completa el test ${testType} para conocer tu estilo de ${conversationCategory === "autoconocimiento" ? "personalidad" : "trabajo"}`}
-        conversationSummary={messages
-          .slice(-4)
-          .map(
-            (m) =>
-              `${m.sender === "user" ? "Usuario" : m.coach === "sofia" ? "Sofía" : "Dani"}: ${m.content.substring(0, 100)}...`,
-          )
-          .join("\n")}
       />
     </div>
   )
