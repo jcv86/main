@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { validateEnvironment } from "@/lib/env-validation"
+import { SessionProvider } from "next-auth/react"
 
 // Validate environment on startup
 if (typeof window === "undefined") {
@@ -126,12 +127,14 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
-          <CoachStrategicProvider>
-            <SessionWrapper>
-              {children}
-              <Toaster />
-            </SessionWrapper>
-          </CoachStrategicProvider>
+          <SessionProvider>
+            <CoachStrategicProvider>
+              <SessionWrapper>
+                {children}
+                <Toaster />
+              </SessionWrapper>
+            </CoachStrategicProvider>
+          </SessionProvider>
         </ThemeProvider>
 
         <Analytics />
