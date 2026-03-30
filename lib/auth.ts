@@ -202,4 +202,4 @@ export const authConfig = {
       }
     },
   },
-} satisfies NextAuthConfig
+}
