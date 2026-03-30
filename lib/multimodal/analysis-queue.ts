@@ -141,8 +141,8 @@ analysisQueue.process(async (job) => {
     console.error(`[v0] Analysis job failed: ${error}`)
 
     // Save error to database
-    const supabase = createClient()
-    await supabase.from('multimodal_analyses').insert({
+    const supabaseError = await createClient()
+    await supabaseError.from('multimodal_analyses').insert({
       session_id: jobData.sessionId,
       user_id: jobData.userId,
       entrenamiento_type: jobData.entrenamillentoType,
