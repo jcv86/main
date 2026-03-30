@@ -231,3 +231,6 @@ export const authConfig = {
     },
   },
 }
+
+// Export NextAuth handlers for the API route
+export const handlers = NextAuth(authConfig)
