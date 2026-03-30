@@ -1,4 +1,4 @@
-import NextAuth, { type AuthConfig } from "next-auth"
+import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import LinkedIn from "next-auth/providers/linkedin"
 import { SupabaseAdapter } from "@auth/supabase-adapter"
@@ -69,7 +69,7 @@ const baseUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:3000'
 
 
-export const authConfig: AuthConfig = {
+export const authConfig = {
   providers: [
     Google({
       clientId: envVars.googleClientId || "",
