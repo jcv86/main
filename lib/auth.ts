@@ -102,7 +102,7 @@ export const authConfig = {
   }),
   basePath: "/api/auth",
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
   },
   secret: envVars.nextAuthSecret,
   pages: {
