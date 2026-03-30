@@ -198,17 +198,14 @@ export const authConfig = {
     redirect: async ({ url, baseUrl }) => {
       console.log("[v0] Redirect callback - url:", url, "baseUrl:", baseUrl)
       
-      // NextAuth maneja automaticamente los OAuth callbacks
-      // Solo redirigir al default si viene de un signin completo
-      if (url.startsWith(baseUrl)) {
-        console.log("[v0] Redirecting to:", url)
-        return url
+      try {
+        const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
+        console.log("[v0] Redirecting to:", redirectUrl)
+        return redirectUrl
+      } catch (error) {
+        console.error("[v0] Redirect error:", error)
+        return `${baseUrl}/despega/conozcamonos-1`
       }
-      
-      // Default redirect after successful OAuth
-      const redirectUrl = `${baseUrl}/despega/conozcamonos-1`
-      console.log("[v0] Redirecting to default:", redirectUrl)
-      return redirectUrl
     },
   },
 }
