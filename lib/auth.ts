@@ -87,12 +87,27 @@ export const authConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      issuer: "https://www.linkedin.com/oauth",
-      wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
+      issuer: "https://www.linkedin.com",
+      wellKnown: "https://www.linkedin.com/.well-known/openid-configuration",
       authorization: {
         params: {
           scope: "openid profile email",
         },
+      },
+      // Add explicit profile mapping for LinkedIn
+      profile: async (profile) => {
+        console.log("[v0] LinkedIn profile raw data:", {
+          sub: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          picture: profile.picture,
+        })
+        return {
+          id: profile.sub,
+          name: profile.name || "",
+          email: profile.email || "",
+          image: profile.picture || "",
+        }
       },
     }),
   ],
