@@ -31,11 +31,12 @@ class MockQueue {
     console.log('[v0] Mock queue processor registered')
   }
 
-  on(event: string, handler: Function) {
+  on(event: string, handler: Function): MockQueue {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, [])
     }
     this.listeners.get(event)!.push(handler)
+    return this
   }
 
   async close() {
