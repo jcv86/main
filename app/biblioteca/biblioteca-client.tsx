@@ -229,7 +229,7 @@ export default function BibliotecaPage() {
                 <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <div>
                   <CardTitle className="text-xl text-foreground">
-                    {userProfile ? "Recomendados para Tu Perfil DISC" : "Comienza Tu Viaje Profesional"}
+                    {userProfile ? "Recomendados para Tu Perfil" : "Comienza Tu Viaje Profesional"}
                   </CardTitle>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     {userProfile
@@ -237,7 +237,7 @@ export default function BibliotecaPage() {
                           .reduce((a: any, b: any) => (a[1] > b[1] ? a : b))[0]
                           .toString()
                           .toUpperCase()}, estos libros te ayudarán a potenciar tus fortalezas`
-                      : "Libros esenciales para comenzar tu desarrollo. Completa el Test DISC para recomendaciones personalizadas."}
+                      : "Libros esenciales para comenzar tu desarrollo. Completa el Test de Perfil Cerebral para recomendaciones personalizadas."}
                   </p>
                 </div>
               </div>
@@ -573,6 +573,7 @@ export default function BibliotecaPage() {
           })}
         </div>
       )}
+      </div>
     </div>
   )
 }

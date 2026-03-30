@@ -507,6 +507,7 @@ export default function GamificationClient() {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   )
 }

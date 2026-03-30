@@ -262,6 +262,7 @@ export default function LearningPathsPage() {
           </div>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   )
 }
