@@ -52,7 +52,7 @@ export async function queueAnalysisJob(jobData: AnalysisJobData): Promise<string
     })
 
     console.log(`[v0] Analysis job queued: ${job.id}`)
-    return job.id
+    return String(job.id)
   } catch (error) {
     console.error('[v0] Error queueing analysis job:', error)
     throw error
