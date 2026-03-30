@@ -63,6 +63,16 @@ const diagnosticOAuth = () => {
 
 diagnosticOAuth()
 
+// Log the final configuration being used
+console.log("[v0] ========== FINAL AUTH CONFIG ==========")
+console.log("[v0] baseUrl:", baseUrl)
+console.log("[v0] NODE_ENV:", process.env.NODE_ENV)
+console.log("[v0] NEXTAUTH_URL:", process.env.NEXTAUTH_URL)
+console.log("[v0] NEXT_PUBLIC_SITE_URL:", process.env.NEXT_PUBLIC_SITE_URL)
+console.log("[v0] trustHost:", false)
+console.log("[v0] =========================================")
+
+
 // Hardcoded production URL - prevents trailing slash issues from env vars
 const baseUrl = process.env.NODE_ENV === 'production' 
   ? 'https://www.despegatucarrera.com'
@@ -87,12 +97,26 @@ export const authConfig = {
       clientId: envVars.linkedinClientId || "",
       clientSecret: envVars.linkedinClientSecret || "",
       allowDangerousEmailAccountLinking: true,
-      issuer: "https://www.linkedin.com/oauth",
-      wellKnown: "https://www.linkedin.com/oauth/.well-known/openid-configuration",
+      issuer: "https://www.linkedin.com",
+      wellKnown: "https://www.linkedin.com/.well-known/openid-configuration",
       authorization: {
         params: {
           scope: "openid profile email",
         },
+      },
+      profile: async (profile) => {
+        console.log("[v0] LinkedIn profile received:", {
+          id: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          picture: profile.picture,
+        })
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
       },
     }),
   ],
@@ -123,7 +147,15 @@ export const authConfig = {
       return !!auth
     },
     signIn: async ({ user, account, profile }) => {
-      console.log("[v0] SignIn callback - provider:", account?.provider, "email:", user?.email, "userId:", user?.id)
+      console.log("[v0] ========== SIGNIN CALLBACK ==========")
+      console.log("[v0] Provider:", account?.provider)
+      console.log("[v0] User ID:", user?.id)
+      console.log("[v0] User Email:", user?.email)
+      console.log("[v0] User Name:", user?.name)
+      console.log("[v0] Profile:", profile ? JSON.stringify(profile, null, 2) : "null")
+      console.log("[v0] Account Type:", account?.type)
+      console.log("[v0] Account Provider ID:", account?.providerAccountId)
+      console.log("[v0] =====================================")
       
       try {
         // Enrich profile from OAuth provider
