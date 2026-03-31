@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone, MessageCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import NewsletterSignup from "./newsletter-signup"
 
 function LLMOOptimizedFooter() {
   return (
@@ -16,16 +15,7 @@ function LLMOOptimizedFooter() {
             <p className="text-purple-100 mb-6">
               Recibe tips de desarrollo profesional, nuevos libros y recursos exclusivos cada semana
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <Input
-                type="email"
-                placeholder="tu@email.com"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white"
-              />
-              <Button className="bg-white text-purple-800 hover:bg-gray-100 font-semibold whitespace-nowrap">
-                Suscribirse
-              </Button>
-            </div>
+            <NewsletterSignup />
           </div>
         </div>
 
