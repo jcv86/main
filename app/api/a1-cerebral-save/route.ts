@@ -23,36 +23,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User ID required' }, { status: 400 })
     }
 
-    // All Supabase operations use the authenticated client
-    console.log('[v0] User ID from client:', user_id)
-    console.log('[v0] Cerebral Profile:', disc_profile)
-    
-    // First, try to get user email from auth.users (using admin client)
+    // Fetch auth user details
     const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(user_id)
     const userEmail = authUser?.user?.email || ''
     console.log('[v0] User email from auth:', userEmail)
     
     // Ensure user exists in public users table (create if missing)
     // Use admin client to bypass RLS - this handles OAuth users who don't have a public.users record
-    const { error: userCheckError } = await supabaseAdmin
-      .from('users')
-      .upsert(
-        {
-          id: user_id,
-          email: userEmail,
-          full_name: authUser?.user?.user_metadata?.full_name || authUser?.user?.user_metadata?.name || '',
-          avatar_url: authUser?.user?.user_metadata?.avatar_url || authUser?.user?.user_metadata?.picture || '',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id', ignoreDuplicates: false }
-      )
-    
-    if (userCheckError) {
-      console.error('[v0] Error ensuring user in public table:', userCheckError)
-      return NextResponse.json({ error: 'Failed to create user record: ' + userCheckError.message }, { status: 400 })
-    } else {
-      console.log('[v0] User record ensured in public users table')
+    try {
+      const { error: userCheckError } = await supabaseAdmin
+        .from('users')
+        .upsert(
+          {
+            id: user_id,
+            email: userEmail,
+            full_name: authUser?.user?.user_metadata?.full_name || authUser?.user?.user_metadata?.name || '',
+            avatar_url: authUser?.user?.user_metadata?.avatar_url || authUser?.user?.user_metadata?.picture || '',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'id', ignoreDuplicates: true }
+        )
+      
+      if (userCheckError) {
+        console.error('[v0] Error ensuring user in public table:', userCheckError)
+        // Don't fail - user creation is secondary to test data persistence
+        console.log('[v0] Continuing with test save despite user creation error')
+      } else {
+        console.log('[v0] User record ensured in public users table')
+      }
+    } catch (err) {
+      console.error('[v0] Exception during user creation:', err)
+      // Continue - user record is optional for test data
     }
     
     // Calculate dominant and secondary patterns from scores
