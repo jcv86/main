@@ -219,8 +219,8 @@ export default function LandingPageOptimized() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">01</span>
+              <div className="w-16 h-16 bg-purple-600 dark:bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                <span className="text-2xl font-bold text-white">01</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
@@ -229,8 +229,8 @@ export default function LandingPageOptimized() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">02</span>
+              <div className="w-16 h-16 bg-blue-600 dark:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                <span className="text-2xl font-bold text-white">02</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Ordenas tu camino</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
@@ -239,8 +239,8 @@ export default function LandingPageOptimized() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">03</span>
+              <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                <span className="text-2xl font-bold text-white">03</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
