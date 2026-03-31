@@ -219,7 +219,7 @@ export default function LandingPageOptimized() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-600 dark:bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              <div className="w-16 h-16 bg-purple-700 dark:bg-purple-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#8B5CF6' }}>
                 <span className="text-2xl font-bold text-white">01</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
