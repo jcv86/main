@@ -1,32 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 import {
   Brain,
   Target,
-  Award,
-  MessageSquare,
-  Trophy,
   Lightbulb,
-  Sparkles,
-  TrendingUp,
-  Calendar,
-  Shield,
-  Gamepad2,
-  RefreshCw,
-  ChevronRight,
-  Flame,
-  CircleDot,
   Zap,
   ArrowRight,
-  Users,
-  Clock,
-  CheckCircle2,
-  Globe,
+  ChevronRight,
 } from "lucide-react"
-import Link from "next/link"
 
 export default function LandingPageOptimized() {
   return (
@@ -37,12 +20,10 @@ export default function LandingPageOptimized() {
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
             Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
           </h1>
-
-          <p className="text-xl md:text-2xl text-foreground/80 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Tu transformación comienza con autoconocimiento real. DTC te ayuda a entenderte, trazar una ruta clara de 90 días y entrenar las habilidades que necesitas.
+          <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
+            DTC te ayuda a descubrir quién eres realmente, a ordenar tus tensiones internas y a construir una ruta clara de 90 días con coaching IA personalizado.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
@@ -69,7 +50,7 @@ export default function LandingPageOptimized() {
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
           <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
@@ -106,17 +87,17 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* PROBLEM SECTION */}
-      <section className="container mx-auto px-4 py-20 bg-slate-50 dark:bg-slate-900/50 rounded-3xl">
+      {/* THE PROBLEM SECTION */}
+      <section className="container mx-auto px-4 py-20">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            ¿Te reconoces aquí?
+            El Problema
           </h2>
-          <p className="text-xl text-center text-foreground/75 mb-12 max-w-2xl mx-auto">
-            Muchos no están atrapados por falta de talento. Están atrapados por falta de claridad, estructura y autoconocimiento.
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            Si tienes talento pero te sientes estancado, desorganizado o sin dirección clara, reconocerás algunos de estos puntos.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          <div className="grid grid-cols-1 gap-4">
             <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-red-200 dark:border-red-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
@@ -192,40 +173,40 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* HOW IT WORKS - 60 SECONDS */}
-      <section className="container mx-auto px-4 py-16" id="how-it-works">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+      {/* HOW IT WORKS 60 SECONDS */}
+      <section className="container mx-auto px-4 py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900/50 dark:to-slate-900/20 rounded-3xl my-16">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
             Cómo funciona en 60 segundos
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
-                1
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">01</span>
               </div>
-              <h3 className="font-bold text-xl mb-2">Te entiendes</h3>
-              <p className="text-foreground/75 text-sm">
+              <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
+              <p className="text-foreground/75 text-center text-sm leading-relaxed">
                 Diagnóstico profundo de quién eres, qué haces bien y tus patrones. El autoconocimiento es el primer paso.
               </p>
             </div>
 
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
-                2
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">02</span>
               </div>
-              <h3 className="font-bold text-xl mb-2">Ordenas tu avance</h3>
-              <p className="text-foreground/75 text-sm">
-                Ruta personalizada en 90 días con metas claras, sprints y puntos de control. Avanzar con dirección.
+              <h3 className="font-bold text-xl mb-2 text-center">Ordenas tu camino</h3>
+              <p className="text-foreground/75 text-center text-sm leading-relaxed">
+                Ruta personalizada de 90 días. De la claridad emerge la dirección. Sabes exactamente hacia dónde ir.
               </p>
             </div>
 
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-cyan-600 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
-                3
+            <div className="text-center">
+              <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">03</span>
               </div>
-              <h3 className="font-bold text-xl mb-2">Practicas y mejoras</h3>
-              <p className="text-foreground/75 text-sm">
+              <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
+              <p className="text-foreground/75 text-center text-sm leading-relaxed">
                 Entrenamiento guiado en habilidades clave con feedback real. Crecer practicando de manera efectiva.
               </p>
             </div>
@@ -233,7 +214,7 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* DIFFERENTIATORS */}
+      {/* DIFERENCIADORES */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -331,7 +312,7 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* FOR YOU IF */}
+      {/* PARA TI SI */}
       <section className="container mx-auto px-4 py-20 bg-slate-50 dark:bg-slate-900/50 rounded-3xl">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -342,43 +323,61 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-purple-500">
-              <h3 className="font-bold text-lg mb-3">✓ Te sientes estancado</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-purple-600 dark:text-purple-400 text-xl">✓</span>
+                Te sientes estancado
+              </h3>
               <p className="text-foreground/70 text-sm">
                 Hace tiempo que no avanzas de verdad. Hay talento pero sin dirección clara. Necesitas un impulso estructurado.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-blue-500">
-              <h3 className="font-bold text-lg mb-3">✓ Estás en transición</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-blue-600 dark:text-blue-400 text-xl">✓</span>
+                Estás en transición
+              </h3>
               <p className="text-foreground/70 text-sm">
                 Cambio de área, empresa o carrera. Necesitas entender si el nuevo camino es el correcto.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-green-500">
-              <h3 className="font-bold text-lg mb-3">✓ Quieres reenfocarte</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-green-600 dark:text-green-400 text-xl">✓</span>
+                Quieres reenfocarte
+              </h3>
               <p className="text-foreground/70 text-sm">
                 Ya tienes experiencia pero sientes que no estás en el lugar correcto. Buscas realinearte.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-cyan-500">
-              <h3 className="font-bold text-lg mb-3">✓ Necesitas estructura</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-cyan-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-cyan-600 dark:text-cyan-400 text-xl">✓</span>
+                Necesitas estructura
+              </h3>
               <p className="text-foreground/70 text-sm">
                 Tienes ideas pero no sabes por dónde empezar. Necesitas un plan claro y guía.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-orange-500">
-              <h3 className="font-bold text-lg mb-3">✓ Quieres entrenar entrevistas</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-orange-600 dark:text-orange-400 text-xl">✓</span>
+                Quieres entrenar entrevistas
+              </h3>
               <p className="text-foreground/70 text-sm">
                 Buscas trabajo o quieres estar mejor preparado. Necesitas práctica con feedback real.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-pink-500">
-              <h3 className="font-bold text-lg mb-3">✓ Buscas avanzar con criterio</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-pink-600 dark:text-pink-400 text-xl">✓</span>
+                Buscas avanzar con criterio
+              </h3>
               <p className="text-foreground/70 text-sm">
                 No solo quieres crecer, quieres hacerlo de forma consciente y alineada con quién eres.
               </p>
@@ -393,8 +392,82 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* FAQ ESTRATÉGICO */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Preguntas frecuentes
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            Resolvemos las dudas más comunes para que tomes la mejor decisión.
+          </p>
+
+          <div className="space-y-4">
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es DTC un test cualquiera o algo más?</span>
+                <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm space-y-2">
+                <p>No es un test cualquiera. DTC es un sistema integral que combina diagnóstico profundo, ruta personalizada, entrenamiento práctico y contexto laboral.</p>
+                <p>Mientras otros tests solo dan números o descripciones, DTC interpreta esos datos, construye una ruta, te entrena en habilidades reales y te mantiene conectado al mercado laboral.</p>
+                <p>Es más parecido a tener un coach personal con IA que a completar un cuestionario.</p>
+              </div>
+            </details>
+
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
+                <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm space-y-2">
+                <p>La mayoría de personas estancadas no lo están por falta de talento, sino por falta de claridad, dirección y estructura.</p>
+                <p>DTC funciona precisamente para eso: te ayuda a entender qué te está frenando realmente, crea una ruta clara de 90 días con hitos medibles, y te entrena en habilidades específicas donde te bloqueas.</p>
+                <p>El cambio ocurre cuando el desorden se convierte en dirección, y la comprensión en práctica.</p>
+              </div>
+            </details>
+
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
+                <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm space-y-2">
+                <p>Es para ambas cosas. DTC trabaja tanto la búsqueda de oportunidades laborales como tu desarrollo integral como persona.</p>
+                <p>El diagnóstico te ayuda a entender cómo funcionas realmente. La ruta personalizada puede enfocarse en búsqueda activa o en crecimiento interno. El entrenamiento incluye tanto habilidades de mercado como liderazgo personal.</p>
+                <p>Tú eliges el foco, pero el sistema está diseñado para que ambos aspectos mejoren.</p>
+              </div>
+            </details>
+
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Cómo me diferencio realmente en el mercado?</span>
+                <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm space-y-2">
+                <p>La diferenciación viene de dos cosas: entender dónde realmente eres bueno (y dónde no) y saber comunicarlo con claridad.</p>
+                <p>DTC te ayuda a identificar tus tensiones internas, patrones reales de avance, y fortalezas que otros no ven. Luego, el entrenamiento en entrevistas y comunicación te da las herramientas para comunicar esa diferencia de forma natural y creíble.</p>
+                <p>La diferenciación auténtica viene de autoconocimiento + práctica. Eso es DTC.</p>
+              </div>
+            </details>
+
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es útil si ya tengo experiencia o es solo para junior?</span>
+                <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm space-y-2">
+                <p>Es especialmente útil para gente con experiencia. A veces después de años en el mercado, la claridad puede nublarse.</p>
+                <p>Personas con experiencia se benefician de reenfocarse, entender qué quieren realmente, identificar si están en el rol correcto, y desarrollar criterio más profundo sobre su carrera. DTC es perfecto para eso.</p>
+                <p>Si tienes experiencia pero sientes que hay algo desordenado o desalineado, este es tu momento.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
-      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-600/5 dark:to-blue-600/5 rounded-3xl">
+      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-600/5 dark:to-blue-600/5 rounded-3xl my-16">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             ¿Listo para entenderte mejor?
