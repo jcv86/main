@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
