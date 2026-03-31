@@ -6,7 +6,7 @@ import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone } from 'lucide-react'
+import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
 
@@ -21,6 +21,13 @@ interface CerebroProfile {
   secondaryScore: number
 }
 
+interface AIInsights {
+  fortalezas: string
+  areasDesarrollo: string
+  entrevistas: string
+  equipoTrabajo: string
+}
+
 interface TestDataRecord {
   test_data?: {
     energia?: number
@@ -33,7 +40,9 @@ interface TestDataRecord {
 export default function A1ReportPage() {
   const router = useRouter()
   const [profile, setProfile] = useState<CerebroProfile | null>(null)
+  const [insights, setInsights] = useState<AIInsights | null>(null)
   const [loading, setLoading] = useState(true)
+  const [insightsLoading, setInsightsLoading] = useState(false)
   const [error, setError] = useState('')
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
@@ -42,6 +51,35 @@ export default function A1ReportPage() {
     if (authLoading || !user?.id) return
     loadReport()
   }, [authLoading, user?.id])
+
+  useEffect(() => {
+    if (profile && !insights) {
+      loadAIInsights()
+    }
+  }, [profile])
+
+  const loadAIInsights = async () => {
+    try {
+      setInsightsLoading(true)
+      const response = await fetch('/api/a1-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profile,
+          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0]
+        })
+      })
+
+      if (!response.ok) throw new Error('Failed to generate insights')
+      const data = await response.json()
+      setInsights(data.insights)
+    } catch (err) {
+      console.error('[v0] Error loading AI insights:', err)
+      // Silently fail - insights are optional
+    } finally {
+      setInsightsLoading(false)
+    }
+  }
 
   const loadReport = async () => {
     try {
@@ -150,8 +188,74 @@ export default function A1ReportPage() {
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard
             </Button>
+        </div>
+      </ASectionPart>
+
+      {/* AI-Generated Insights Section */}
+      <ASectionPart title="Insights Generados con IA" icon={<Sparkles />}>
+        {insightsLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-purple-600 mr-2" />
+            <p className="text-slate-400">Generando insights personalizados...</p>
           </div>
-        </ASectionPart>
+        ) : insights ? (
+          <div className="space-y-6">
+            {/* Fortalezas */}
+            <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border-2 border-emerald-600/30 rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-emerald-600 rounded-lg flex-shrink-0">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-lg mb-2">Tus Fortalezas Profesionales</h4>
+                  <p className="text-slate-300 leading-relaxed">{insights.fortalezas}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Áreas de Desarrollo */}
+            <div className="bg-gradient-to-br from-blue-900/30 to-cyan-900/20 border-2 border-blue-600/30 rounded-xl p-6 hover:border-blue-500/50 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-blue-600 rounded-lg flex-shrink-0">
+                  <Target className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-lg mb-2">Áreas de Desarrollo</h4>
+                  <p className="text-slate-300 leading-relaxed">{insights.areasDesarrollo}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Recomendaciones para Entrevistas */}
+            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-2 border-purple-600/30 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-purple-600 rounded-lg flex-shrink-0">
+                  <Phone className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-lg mb-2">Consejos para Entrevistas</h4>
+                  <p className="text-slate-300 leading-relaxed">{insights.entrevistas}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Trabajo en Equipo */}
+            <div className="bg-gradient-to-br from-amber-900/30 to-orange-900/20 border-2 border-amber-600/30 rounded-xl p-6 hover:border-amber-500/50 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-amber-600 rounded-lg flex-shrink-0">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-lg mb-2">Trabajo en Equipo</h4>
+                  <p className="text-slate-300 leading-relaxed">{insights.equipoTrabajo}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-slate-400">Los insights no pudieron ser generados en este momento.</p>
+        )}
+      </ASectionPart>
       </ASection>
     )
   }
