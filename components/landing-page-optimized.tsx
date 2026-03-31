@@ -44,9 +44,10 @@ export default function LandingPageOptimized() {
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M12 8v4M12 15v1" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="white" strokeWidth="2"/>
+                  <circle cx="12" cy="9" r="1.5" fill="white"/>
+                  <path d="M12 13 Q10 15 14 15" stroke="white" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">El Ritual - Quién Eres Ahora</h3>
