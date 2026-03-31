@@ -295,7 +295,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            {{/* 6. Estructura - Balance/Flexibility icon */}
+            {/* 6. Estructura - Balance/Flexibility icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-blue-600 dark:bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
