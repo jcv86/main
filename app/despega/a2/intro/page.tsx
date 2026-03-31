@@ -9,10 +9,10 @@ import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 interface CerebroProfile {
-  D: number
-  I: number
-  S: number
-  C: number
+  energia: number
+  enfoque: number
+  relaciones: number
+  plan_ejecutivo: number
   primary: string
   primaryScore: number
   secondary: string
@@ -55,39 +55,40 @@ export default function A2IntroPage() {
 
       const rawScores = profileData.disc_profile as Record<string, number> || {}
       
-      // Normalize scores to 0-100 scale that sums to 100%
-      const absScores = {
-        D: Math.abs(rawScores.D || 0),
-        I: Math.abs(rawScores.I || 0),
-        S: Math.abs(rawScores.S || 0),
-        C: Math.abs(rawScores.C || 0)
+      // Map DISC to Despega Cerebral nomenclature
+      // D = Energía, I = Plan Ejecutivo, S = Relaciones, C = Enfoque
+      const despegaScores = {
+        energia: Math.abs(rawScores.D || 0),
+        plan_ejecutivo: Math.abs(rawScores.I || 0),
+        relaciones: Math.abs(rawScores.S || 0),
+        enfoque: Math.abs(rawScores.C || 0)
       }
 
-      const total = absScores.D + absScores.I + absScores.S + absScores.C || 1
+      const total = despegaScores.energia + despegaScores.plan_ejecutivo + despegaScores.relaciones + despegaScores.enfoque || 1
       const normalized = {
-        D: (absScores.D / total) * 100,
-        I: (absScores.I / total) * 100,
-        S: (absScores.S / total) * 100,
-        C: (absScores.C / total) * 100
+        energia: (despegaScores.energia / total) * 100,
+        plan_ejecutivo: (despegaScores.plan_ejecutivo / total) * 100,
+        relaciones: (despegaScores.relaciones / total) * 100,
+        enfoque: (despegaScores.enfoque / total) * 100
       }
       
       // Find dominant dimension
       const scores = [
-        { letter: 'D', value: normalized.D },
-        { letter: 'I', value: normalized.I },
-        { letter: 'S', value: normalized.S },
-        { letter: 'C', value: normalized.C }
+        { name: 'energia', value: normalized.energia },
+        { name: 'plan_ejecutivo', value: normalized.plan_ejecutivo },
+        { name: 'relaciones', value: normalized.relaciones },
+        { name: 'enfoque', value: normalized.enfoque }
       ]
       scores.sort((a, b) => b.value - a.value)
       
       const profile: CerebroProfile = {
-        D: normalized.D,
-        I: normalized.I,
-        S: normalized.S,
-        C: normalized.C,
-        primary: scores[0].letter,
+        energia: normalized.energia,
+        plan_ejecutivo: normalized.plan_ejecutivo,
+        relaciones: normalized.relaciones,
+        enfoque: normalized.enfoque,
+        primary: scores[0].name,
         primaryScore: scores[0].value,
-        secondary: scores[1].letter,
+        secondary: scores[1].name,
         secondaryScore: scores[1].value
       }
       
@@ -95,10 +96,10 @@ export default function A2IntroPage() {
       
       // Set profile name based on primary dimension
       const dimensionNames: Record<string, string> = {
-        'D': 'Directo',
-        'I': 'Inspirador',
-        'S': 'Seguro',
-        'C': 'Consciente'
+        'energia': 'Energía',
+        'plan_ejecutivo': 'Plan Ejecutivo',
+        'relaciones': 'Relaciones',
+        'enfoque': 'Enfoque'
       }
       setProfileName(dimensionNames[profile.primary] || profile.primary)
       
