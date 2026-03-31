@@ -1,27 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { sendViaGmail } from '@/lib/emails/gmail-service'
 
 interface SubscribeRequest {
   email: string
 }
-
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Email list - in production, store in database/Supabase
 const subscribers = new Set<string>()
 
 export async function POST(req: NextRequest) {
   try {
-    // Validate API key exists
-    if (!process.env.RESEND_API_KEY) {
-      console.error('[v0] RESEND_API_KEY not configured')
-      return NextResponse.json(
-        { message: 'Error de configuración del servidor' },
-        { status: 500 }
-      )
-    }
-
     const { email } = (await req.json()) as SubscribeRequest
 
     console.log('[v0] Newsletter subscription request for:', email)
@@ -46,7 +34,7 @@ export async function POST(req: NextRequest) {
     subscribers.add(email)
     console.log('[v0] Newsletter subscriber added:', email)
 
-    // Send welcome email via Resend
+    // Send welcome email via Gmail
     const htmlContent = `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px 20px; min-height: 100vh;">
         <div style="background: white; border-radius: 12px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
@@ -89,7 +77,7 @@ export async function POST(req: NextRequest) {
           <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
             <p style="color: #0f172a; margin: 0 0 10px 0; font-weight: 600;">¿Preguntas o Sugerencias?</p>
             <p style="color: #475569; margin: 0 0 10px 0; font-size: 14px;">
-              📧 <a href="mailto:info@despegatucarrera.com" style="color: #7c3aed; text-decoration: none;">info@despegatucarrera.com</a>
+              📧 <a href="mailto:juan@despegatucarrera.com" style="color: #7c3aed; text-decoration: none;">juan@despegatucarrera.com</a>
             </p>
             <p style="color: #475569; margin: 0; font-size: 14px;">
               💬 <a href="https://wa.me/56963160187" style="color: #7c3aed; text-decoration: none;">+56 9 6316 0187 (WhatsApp)</a>
@@ -114,7 +102,7 @@ Gracias por suscribirte a nuestro newsletter. Recibirás:
 - Oportunidades de networking
 
 ¿Preguntas? Contáctanos:
-📧 info@despegatucarrera.com
+📧 juan@despegatucarrera.com
 💬 +56 9 6316 0187 (WhatsApp)
 
 Explora nuestra plataforma en: https://despegatucarrera.com
@@ -122,23 +110,22 @@ Explora nuestra plataforma en: https://despegatucarrera.com
 © 2026 Despega Tu Carrera
     `
 
-    console.log('[v0] Attempting to send email via Resend to:', email)
+    console.log('[v0] Attempting to send email via Gmail SMTP...')
 
-    // Send email via Resend
-    const data = await resend.emails.send({
-      from: 'info@despegatucarrera.com',
+    // Send email via Gmail
+    await sendViaGmail({
       to: email,
       subject: '¡Bienvenido a Despega Tu Carrera! 🚀',
       html: htmlContent,
       text: textContent,
+      replyTo: 'juan@despegatucarrera.com',
     })
 
-    console.log('[v0] Email sent successfully:', data.id)
+    console.log('[v0] Email sent successfully to:', email)
 
     return NextResponse.json({
       success: true,
       message: '¡Suscripción exitosa! Revisa tu email para confirmación.',
-      messageId: data.id,
     })
   } catch (error) {
     console.error('[v0] Newsletter subscription error:', error)
