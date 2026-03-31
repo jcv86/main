@@ -40,7 +40,7 @@ export default function DespegazoDashboard() {
       setUserName(user.email?.split('@')[0] || 'User')
 
       const { data: a1 } = await supabase
-        .from('user_a1_profiles')
+        .from('a1_cerebral_assessment')
         .select('*')
         .eq('user_id', user.id)
         .limit(1)
