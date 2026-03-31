@@ -429,7 +429,7 @@ export default function A2DashboardPage() {
               </div>
             </CardContent>
           </Card>
-        )}
+        </div>
 
         {/* A3 PROGRESSION CTA - PROMINENT */}
         <Card className="border-2 border-primary/30 dark:border-primary/40 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/20 dark:to-primary/10 shadow-lg">
