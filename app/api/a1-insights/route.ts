@@ -1,5 +1,3 @@
-import { generateText } from 'ai'
-import { openai } from '@ai-sdk/openai'
 import { NextRequest, NextResponse } from 'next/server'
 
 interface CerebroProfile {
@@ -41,33 +39,19 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      console.error('[v0] OPENAI_API_KEY not configured')
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' },
+        { status: 500 }
+      )
+    }
+
     const primaryProfileName = profileDescriptions[profile.primary] || profile.primary
     const secondaryProfileName = profileDescriptions[profile.secondary] || profile.secondary
     const primaryTraits = profileTraits[profile.primary] || ''
     const secondaryTraits = profileTraits[profile.secondary] || ''
-
-    const jsonSchema = {
-      type: 'object',
-      properties: {
-        fortalezas: {
-          type: 'string',
-          description: 'Las fortalezas profesionales del usuario'
-        },
-        areasDesarrollo: {
-          type: 'string',
-          description: 'Las áreas de desarrollo recomendadas'
-        },
-        entrevistas: {
-          type: 'string',
-          description: 'Recomendaciones para entrevistas'
-        },
-        equipoTrabajo: {
-          type: 'string',
-          description: 'Consejos para trabajar en equipo'
-        }
-      },
-      required: ['fortalezas', 'areasDesarrollo', 'entrevistas', 'equipoTrabajo']
-    }
 
     const prompt = `Eres un experto en desarrollo profesional y perfiles conductuales (Despega Cerebral). 
 
@@ -79,22 +63,49 @@ Características: ${primaryTraits}
 PERFIL SECUNDARIO: ${secondaryProfileName} (${Math.round(profile.secondaryScore)}%)
 Características: ${secondaryTraits}
 
-Proporciona insights profesionales personalizados en JSON con estas claves:
-- fortalezas: Las fortalezas profesionales (2-3 oraciones)
-- areasDesarrollo: Áreas de desarrollo recomendadas (2-3 oraciones)
-- entrevistas: Recomendaciones para entrevistas (2-3 oraciones)
-- equipoTrabajo: Consejos para trabajar en equipo (2-3 oraciones)
+Proporciona insights profesionales personalizados en JSON VÁLIDO con estas claves exactas:
+{
+  "fortalezas": "Las fortalezas profesionales en 2-3 oraciones",
+  "areasDesarrollo": "Las áreas de desarrollo recomendadas en 2-3 oraciones",
+  "entrevistas": "Recomendaciones para entrevistas en 2-3 oraciones",
+  "equipoTrabajo": "Consejos para trabajar en equipo en 2-3 oraciones"
+}
 
 Sé específico, práctico y motivador. Usa un tono profesional pero amable.
 
-Responde SOLO con JSON válido, sin explicaciones adicionales.`
+IMPORTANTE: Responde SOLO con el JSON, sin explicaciones adicionales, sin markdown, sin bloques de código.`
 
-    const result = await generateText({
-      model: openai('gpt-4-turbo'),
-      prompt,
-      temperature: 0.7,
-      maxTokens: 1000
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4-turbo',
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 800
+      })
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('[v0] OpenAI API error:', error)
+      return NextResponse.json(
+        { error: 'OpenAI API error', details: error },
+        { status: response.status }
+      )
+    }
+
+    const data = (await response.json()) as {
+      choices: Array<{ message: { content: string } }>
+    }
 
     let insights = {
       fortalezas: '',
@@ -103,16 +114,24 @@ Responde SOLO con JSON válido, sin explicaciones adicionales.`
       equipoTrabajo: ''
     }
 
+    const content = data.choices[0]?.message?.content || ''
+    
     try {
-      insights = JSON.parse(result.text)
-    } catch {
-      console.error('[v0] Failed to parse AI response:', result.text)
+      // Try to parse JSON from the response
+      const jsonMatch = content.match(/\{[\s\S]*\}/)
+      if (jsonMatch) {
+        insights = JSON.parse(jsonMatch[0])
+      } else {
+        throw new Error('No JSON found in response')
+      }
+    } catch (parseError) {
+      console.error('[v0] Failed to parse OpenAI response:', content)
       // Fallback to default insights
       insights = {
-        fortalezas: 'Tu perfil combina características que te hacen efectivo en el ámbito profesional. Continúa desarrollando tus fortalezas naturales.',
-        areasDesarrollo: 'Considera explorar nuevas perspectivas y desarrollar habilidades complementarias para un crecimiento integral.',
-        entrevistas: 'En entrevistas, enfatiza ejemplos concretos de tus logros y cómo tu perfil te ayudó a alcanzarlos.',
-        equipoTrabajo: 'Trabaja en entender las perspectivas diferentes y busca el equilibrio entre tus fortalezas y las del equipo.'
+        fortalezas: 'Tu perfil combina características que te hacen efectivo en el ámbito profesional. Continúa desarrollando tus fortalezas naturales y busca oportunidades donde puedas aplicarlas plenamente.',
+        areasDesarrollo: 'Considera explorar nuevas perspectivas y desarrollar habilidades complementarias para un crecimiento integral. Busca retroalimentación de mentores para fortalecer áreas de desarrollo.',
+        entrevistas: 'En entrevistas, enfatiza ejemplos concretos de tus logros y cómo tu perfil te ayudó a alcanzarlos. Prepara historias que muestren tu adaptabilidad y capacidad de trabajo en equipo.',
+        equipoTrabajo: 'Trabaja en entender las perspectivas diferentes y busca el equilibrio entre tus fortalezas y las del equipo. Valoriza las contribuciones de cada miembro y colabora en la construcción de objetivos comunes.'
       }
     }
 
