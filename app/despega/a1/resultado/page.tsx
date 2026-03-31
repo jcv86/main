@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, ArrowRight, Brain, Sparkles } from 'lucide-react'
+import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 export default function A1ResultadoPage() {
   const [loading, setLoading] = useState(true)
@@ -13,10 +14,12 @@ export default function A1ResultadoPage() {
   const [error, setError] = useState('')
   const router = useRouter()
   const supabase = createClient()
+  const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
+    trackEvent('a1_resultado_viewed')
     loadResults()
-  }, [])
+  }, [trackEvent])
 
   const loadResults = async () => {
     try {
@@ -42,8 +45,10 @@ export default function A1ResultadoPage() {
 
       setProfile(assessment)
       console.log('[v0] [CANONICAL] A1 resultado loaded for user')
+      trackEvent('a1_resultado_loaded', { hasProfile: true })
     } catch (err) {
       console.error('[v0] Error loading results:', err)
+      trackEvent('a1_error_load', { errorType: err instanceof Error ? err.message : 'unknown' })
       setError('Error al cargar tus resultados')
     } finally {
       setLoading(false)
@@ -255,7 +260,10 @@ export default function A1ResultadoPage() {
               Ya entiendes cómo funcionas. Los próximos 90 días son la prueba real.
             </p>
             <Button 
-              onClick={() => router.push('/despega/a2/intro')} 
+              onClick={() => {
+                trackEvent('a1_cta_clicked', { destination: 'a2_intro' })
+                router.push('/despega/a2/intro')
+              }} 
               className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
               size="lg"
             >

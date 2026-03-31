@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle } from 'lucide-react'
+import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 export default function A3Page() {
   const [loading, setLoading] = useState(true)
@@ -21,11 +22,13 @@ export default function A3Page() {
   const router = useRouter()
   const supabase = createClient()
   const { currentProgress, coachMessages } = useCoach()
+  const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
     if (authLoading || !user?.id) return
+    trackEvent('a3_page_viewed')
     loadData()
-  }, [authLoading, user?.id])
+  }, [authLoading, user?.id, trackEvent])
 
   const loadData = async () => {
     try {
@@ -35,6 +38,7 @@ export default function A3Page() {
       const nextPage = await getNextRequiredPage(user?.id)
       if (!nextPage.includes('/a3')) {
         console.log('[v0] User not ready for A3, redirecting to:', nextPage)
+        trackEvent('a3_prerequisite_check_failed', { redirectTo: nextPage })
         router.push(nextPage)
         return
       }
@@ -62,6 +66,7 @@ export default function A3Page() {
         const discProfile = a1Results.profile_type || a1Results.result?.dominantProfile
         console.log('[v0] User DISC profile for A3 personalization:', discProfile)
         setUserDiscProfile(discProfile)
+        trackEvent('a3_disc_profile_loaded', { profile: discProfile })
       }
 
       // Load A3 progress if exists

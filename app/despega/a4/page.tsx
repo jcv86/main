@@ -18,15 +18,18 @@ import { Biblioteca } from "@/components/biblioteca"
 import { EngagementDashboard } from "@/components/engagement-dashboard"
 import { PersonalizationProfile } from "@/components/personalization-profile"
 import { PointsBadgesSystem } from "@/components/points-badges-system"
+import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
 
 export default function A4HubPage() {
   const { user, loading } = useAuthRedirect()
   const [activeTab, setActiveTab] = useState("radar")
   const [isCheckingPrerequisites, setIsCheckingPrerequisites] = useState(true)
   const router = useRouter()
+  const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
     if (loading || !user?.id) return
+    trackEvent('a4_page_viewed')
 
     const checkPrerequisites = async () => {
       try {
@@ -34,6 +37,7 @@ export default function A4HubPage() {
         const nextPage = await getNextRequiredPage(user.id)
         if (!nextPage.includes('/a4')) {
           console.log('[v0] User not ready for A4, redirecting to:', nextPage)
+          trackEvent('a4_prerequisite_check_failed', { redirectTo: nextPage })
           router.push(nextPage)
           return
         }
@@ -41,12 +45,13 @@ export default function A4HubPage() {
         setIsCheckingPrerequisites(false)
       } catch (error) {
         console.error('[v0] Error checking A4 prerequisites:', error)
+        trackEvent('a4_error_prerequisites', { errorType: error instanceof Error ? error.message : 'unknown' })
         setIsCheckingPrerequisites(false)
       }
     }
 
     checkPrerequisites()
-  }, [user?.id, loading, router])
+  }, [user?.id, loading, router, trackEvent])
 
   if (loading || isCheckingPrerequisites) {
     return (
@@ -63,6 +68,11 @@ export default function A4HubPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Tab Change Handler */}
+        {activeTab && (
+          <script>{`console.log('[v0] A4 tab changed to:', '${activeTab}')`}</script>
+        )}
+        
         {/* Navigation Header */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/despega">

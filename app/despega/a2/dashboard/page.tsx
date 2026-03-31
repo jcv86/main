@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Activity, BookOpen, Zap, TrendingUp } from "lucide-react"
+import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
 
 export default function A2DashboardPage() {
   const [loading, setLoading] = useState(true)
@@ -25,8 +26,10 @@ export default function A2DashboardPage() {
   })
   const router = useRouter()
   const supabase = createClient()
+  const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
+    trackEvent('a2_dashboard_viewed')
     const loadData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -40,6 +43,7 @@ export default function A2DashboardPage() {
         const nextPage = await getNextRequiredPage(user.id)
         if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
           console.log('[v0] [CANONICAL] User not ready for A2 dashboard, redirecting to:', nextPage)
+          trackEvent('a2_prerequisite_check_failed', { redirectTo: nextPage })
           router.push(nextPage)
           return
         }
@@ -68,6 +72,7 @@ export default function A2DashboardPage() {
 
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)
+          trackEvent('a2_mission_loaded', { hasMission: true })
 
           // Load mission
           const { data: missionData } = await supabase
