@@ -71,7 +71,7 @@ export default function LandingPageOptimized() {
           <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
                 <Brain className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
@@ -79,7 +79,7 @@ export default function LandingPageOptimized() {
               <p className="text-xs text-foreground/70">Diagnóstico de tu perfil con tensiones internas, patrones y lectura del mercado.</p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
                 <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
@@ -87,7 +87,7 @@ export default function LandingPageOptimized() {
               <p className="text-xs text-foreground/70">90 días estructurados en sprints, checkpoints y revisiones semanales guiadas.</p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
                 <Lightbulb className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
@@ -95,7 +95,7 @@ export default function LandingPageOptimized() {
               <p className="text-xs text-foreground/70">Habilidades clave como entrevistas, comunicación y negociación con feedback real.</p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mb-4">
                 <Zap className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
               </div>
@@ -117,7 +117,7 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-red-200 dark:border-red-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-red-200 dark:border-red-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-xl font-bold text-red-600 dark:text-red-400">01</span>
@@ -129,7 +129,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-amber-200 dark:border-amber-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-amber-200 dark:border-amber-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-xl font-bold text-amber-600 dark:text-amber-400">02</span>
@@ -141,7 +141,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-orange-200 dark:border-orange-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-xl font-bold text-orange-600 dark:text-orange-400">03</span>
@@ -153,7 +153,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-blue-200 dark:border-blue-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-xl font-bold text-blue-600 dark:text-blue-400">04</span>
@@ -165,10 +165,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-violet-200 dark:border-violet-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-purple-600 dark:text-purple-400">05</span>
+                <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-violet-600 dark:text-violet-400">05</span>
                 </div>
               </div>
               <div>
@@ -177,7 +177,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-cyan-200 dark:border-cyan-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-lg font-bold text-cyan-600 dark:text-cyan-400">→</span>
