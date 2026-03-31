@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
-import { ArrowLeft, Radar, TrendingUp, Globe, Lightbulb, CheckCircle, BookOpen, BarChart3 } from "lucide-react"
+import { ArrowLeft, Radar, TrendingUp, Globe, Lightbulb, CheckCircle, BookOpen, TrendingDown } from "lucide-react"
 import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { RadarEstrategico } from "@/components/radar-estrategico"
@@ -274,7 +274,7 @@ export default function A4HubPage() {
               <Card className="border-2 border-red-200 dark:border-red-800">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-red-600" />
+                    <TrendingDown className="w-5 h-5 text-red-600" />
                     Competencias Ahora Críticas
                   </CardTitle>
                 </CardHeader>
