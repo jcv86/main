@@ -6,29 +6,22 @@ import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Activity, BookOpen, Zap, TrendingUp } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
 
 export default function A2DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [mission, setMission] = useState<any>(null)
-  const [stats, setStats] = useState({
-    actionsCompleted: 0,
-    streak: 0,
-    totalActions: 0,
-    successRate: 0,
-    sprintProgress: 0,
-  })
   const router = useRouter()
   const supabase = createClient()
   const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
     trackEvent('a2_dashboard_viewed')
+    
     const loadData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -40,7 +33,6 @@ export default function A2DashboardPage() {
 
         const nextPage = await getNextRequiredPage(user.id)
         if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
-          console.log('[v0] User not ready for A2 dashboard, redirecting to:', nextPage)
           trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
           router.push(nextPage)
           return
@@ -74,7 +66,9 @@ export default function A2DashboardPage() {
             .eq("id", profileData.a2_mission_id)
             .single()
 
-          setMission(missionData)
+          if (missionData) {
+            setMission(missionData)
+          }
         }
       } catch (error) {
         console.error('[v0] Error loading A2 dashboard:', error)
@@ -90,7 +84,7 @@ export default function A2DashboardPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
           <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu dashboard...</p>
         </div>
       </div>
@@ -98,7 +92,7 @@ export default function A2DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4">
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME SECTION */}
@@ -127,7 +121,7 @@ export default function A2DashboardPage() {
                   <p className="text-sm text-slate-600 dark:text-slate-400">Sprints</p>
                 </div>
                 <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-teal-600">{stats.sprintProgress}%</p>
+                  <p className="text-3xl font-bold text-teal-600">0%</p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Progreso</p>
                 </div>
               </div>
@@ -163,7 +157,7 @@ export default function A2DashboardPage() {
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-                  ¿Listo para A3: Entrenamientos Especializados?
+                  Listo para A3: Entrenamientos Especializados?
                 </h3>
                 <p className="text-slate-700 dark:text-slate-300 mb-4">
                   Accede a entrenamientos especializados, práctica de entrevistas y feedback de IA.
