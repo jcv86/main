@@ -12,10 +12,6 @@ const FAQSection = dynamic(() => import("@/components/seo-optimized-content"), {
   ssr: true,
   loading: () => <div className="min-h-screen" />
 })
-const LLMOOptimizedFooter = dynamic(() => import("@/components/llmo-optimized-footer"), { 
-  ssr: true,
-  loading: () => <div className="h-64" />
-})
 
 // Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {
@@ -162,10 +158,6 @@ export default function Home() {
 
       <Suspense fallback={null}>
         <FAQSection faqs={transitionFaqs} title="¿Por Qué Este Es Tu Momento?" />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <LLMOOptimizedFooter />
       </Suspense>
     </main>
   )
