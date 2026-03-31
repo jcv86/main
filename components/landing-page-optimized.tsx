@@ -8,7 +8,6 @@ import {
   Brain,
   Target,
   Award,
-  BarChart3,
   MessageSquare,
   Trophy,
   Lightbulb,
