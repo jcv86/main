@@ -125,6 +125,99 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* SECTION 2 — El Problema / Identificación */}
+      <section className="container mx-auto px-4 py-20 bg-slate-50 dark:bg-slate-900/50 rounded-3xl">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+            ¿Te reconoces aquí?
+          </h2>
+          <p className="text-xl text-center text-foreground/75 mb-12 max-w-2xl mx-auto">
+            Muchos no están frenados por falta de talento, sino por falta de claridad, estructura y autointerpretación real
+          </p>
+
+          {/* Pain Points Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {/* Pain Point 1 */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-red-200 dark:border-red-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-red-600 dark:text-red-400">01</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Desorden Interno</h3>
+                <p className="text-foreground/75">No sabés qué onda con vos. Sabés que hay potencial, pero todo se siente desordenado y sin dirección clara.</p>
+              </div>
+            </div>
+
+            {/* Pain Point 2 */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-amber-200 dark:border-amber-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-amber-600 dark:text-amber-400">02</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Falta de Claridad</h3>
+                <p className="text-foreground/75">¿En qué soy realmente bueno? ¿Qué camino es para mí? Sentís que avanzás sin brújula, casi por inercia.</p>
+              </div>
+            </div>
+
+            {/* Pain Point 3 */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-orange-600 dark:text-orange-400">03</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Falta de Dirección</h3>
+                <p className="text-foreground/75">Te preguntás: ¿Para dónde voy? ¿Es este el camino correcto? Estás estancado más de lo que creés.</p>
+              </div>
+            </div>
+
+            {/* Pain Point 4 */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">04</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Falta de Práctica Guiada</h3>
+                <p className="text-foreground/75">Sabés que necesitas entrenar habilidades (entrevistas, comunicación), pero no sabés cómo o por dónde comenzar.</p>
+              </div>
+            </div>
+
+            {/* Pain Point 5 */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-purple-600 dark:text-purple-400">05</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Falta de Lectura Realista</h3>
+                <p className="text-foreground/75">No ves el contexto laboral real ni entiendes cómo tu perfil se traduce en oportunidades concretas del mercado.</p>
+              </div>
+            </div>
+
+            {/* Summary */}
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-lg font-bold text-cyan-600 dark:text-cyan-400">→</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">El Resultado</h3>
+                <p className="text-foreground/75 font-medium">Sentís que tienes potencial pero no avanzás. Necesitás estructura, foco y una ruta real. DTC está diseñado para eso.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
