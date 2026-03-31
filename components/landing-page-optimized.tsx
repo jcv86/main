@@ -218,6 +218,68 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* SECTION 3 — Cómo funciona en 60 segundos */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            Cómo funciona en 60 segundos
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="relative">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
+                  1
+                </div>
+                <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
+                <p className="text-foreground/75 text-center text-sm leading-relaxed">
+                  Diagnóstico profundo de tu perfil, patrones y fortalezas reales. Saber quién eres es el primer paso.
+                </p>
+              </div>
+              {/* Arrow to next step */}
+              <div className="hidden md:block absolute top-8 -right-6 w-12 h-12">
+                <svg className="w-full h-full text-purple-300 dark:text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
+                  2
+                </div>
+                <h3 className="font-bold text-xl mb-2 text-center">Ordenas tu avance</h3>
+                <p className="text-foreground/75 text-center text-sm leading-relaxed">
+                  Ruta personalizada en 90 días con metas claras, sprints y checkpoints. Avanzar con dirección.
+                </p>
+              </div>
+              {/* Arrow to next step */}
+              <div className="hidden md:block absolute top-8 -right-6 w-12 h-12">
+                <svg className="w-full h-full text-cyan-300 dark:text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-cyan-600 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4">
+                  3
+                </div>
+                <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
+                <p className="text-foreground/75 text-center text-sm leading-relaxed">
+                  Entrenamiento guiado en habilidades críticas con feedback real. Crecer practicando.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
