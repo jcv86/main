@@ -119,8 +119,146 @@ export default function LandingPageOptimized() {
               <CardContent className="pt-6 text-center">
                 <p className="text-4xl font-bold text-purple-700 dark:text-purple-400 mb-2">24/7</p>
                 <p className="text-sm font-medium text-foreground">Coach con IA</p>
-              </CardContent>
-            </Card>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* SECTION 7 — Para ti si... (Público específico) */}
+      <section className="container mx-auto px-4 py-20 bg-slate-50 dark:bg-slate-900/50 rounded-3xl">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            DTC es para ti si...
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            Reconoce tu situación y descubre si este es tu camino.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Situación 1 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-purple-600 dark:text-purple-400 text-xl">✓</span>
+                Te sientes estancado
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                Hace tiempo que no avanzas de verdad. Hay talento pero sin dirección clara. Necesitas un impulso estructurado.
+              </p>
+            </div>
+
+            {/* Situación 2 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-blue-600 dark:text-blue-400 text-xl">✓</span>
+                Estás en transición
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                Cambio de área, empresa o carrera. Necesitas entender si el nuevo camino es el correcto.
+              </p>
+            </div>
+
+            {/* Situación 3 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-green-600 dark:text-green-400 text-xl">✓</span>
+                Quieres reenfocarte
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                Ya tienes experiencia pero sientes que no estás en el lugar correcto. Buscas realinearte.
+              </p>
+            </div>
+
+            {/* Situación 4 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-cyan-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-cyan-600 dark:text-cyan-400 text-xl">✓</span>
+                Necesitas estructura
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                Tienes ideas pero no sabes por dónde empezar. Necesitas un plan claro y guía.
+              </p>
+            </div>
+
+            {/* Situación 5 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-orange-600 dark:text-orange-400 text-xl">✓</span>
+                Quieres entrenar entrevistas
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                Buscas trabajo o quieres estar mejor preparado. Necesitas práctica con feedback real.
+              </p>
+            </div>
+
+            {/* Situación 6 */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                <span className="text-pink-600 dark:text-pink-400 text-xl">✓</span>
+                Buscas avanzar con criterio
+              </h3>
+              <p className="text-foreground/70 text-sm">
+                No solo quieres crecer, quieres hacerlo de forma consciente y alineada con quién eres.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-center text-foreground text-lg">
+              Si alguna de estas situaciones es tuya, <span className="font-bold">DTC está diseñado para ti</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 1.5 — Mini banda de Social Proof / Credibilidad */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {/* Reporte */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-sm mb-2">Reporte Profundo</h3>
+              <p className="text-xs text-foreground/70">Diagnóstico de tu perfil con tensiones internas, patrones y lectura del mercado.</p>
+            </div>
+
+            {/* Ruta */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-sm mb-2">Ruta Personalizada</h3>
+              <p className="text-xs text-foreground/70">90 días estructurados en sprints, checkpoints y revisiones semanales guiadas.</p>
+            </div>
+
+            {/* Entrenamiento */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-sm mb-2">Entrenamiento Práctico</h3>
+              <p className="text-xs text-foreground/70">Habilidades clave como entrevistas, comunicación y negociación con feedback real.</p>
+            </div>
+
+            {/* IA aplicada */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-sm mb-2">Coach con IA</h3>
+              <p className="text-xs text-foreground/70">Retroalimentación continua, disponibilidad 24/7 y adaptación a tu ritmo.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -273,6 +411,110 @@ export default function LandingPageOptimized() {
                 <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
                 <p className="text-foreground/75 text-center text-sm leading-relaxed">
                   Entrenamiento guiado en habilidades clave con feedback real. Crecer practicando de manera efectiva.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — Diferenciadores de Marca */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            ¿Por qué DTC es diferente?
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            No somos un test cualquiera ni una plataforma genérica. Somos un sistema de interpretación y acompañamiento.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Diferenciador 1 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-purple-600 dark:text-purple-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Interpretamos, no solo medimos</h3>
+                <p className="text-foreground/70 text-sm">
+                  Los tests dan números. DTC interpreta qué significan realmente tus patrones y tensiones en tu contexto.
+                </p>
+              </div>
+            </div>
+
+            {/* Diferenciador 2 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Personalizamos, no estandarizamos</h3>
+                <p className="text-foreground/70 text-sm">
+                  Tu ruta, entrenamiento y asesoría se adaptan a tu perfil. No hay rutas genéricas para todos.
+                </p>
+              </div>
+            </div>
+
+            {/* Diferenciador 3 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-green-600 dark:text-green-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Entrenamos, no solo informamos</h3>
+                <p className="text-foreground/70 text-sm">
+                  Practicas habilidades reales con feedback de verdad. Aprendes haciendo, no leyendo.
+                </p>
+              </div>
+            </div>
+
+            {/* Diferenciador 4 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-cyan-600 dark:text-cyan-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Acompañamos, no solo entregamos</h3>
+                <p className="text-foreground/70 text-sm">
+                  Coach con IA disponible 24/7. Tu progreso se monitorea, ajusta y celebra en el camino.
+                </p>
+              </div>
+            </div>
+
+            {/* Diferenciador 5 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-orange-600 dark:text-orange-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Conectamos desarrollo con contexto real</h3>
+                <p className="text-foreground/70 text-sm">
+                  No es autoconocimiento por autoconocimiento. Todo se traduce en oportunidades y direcciones reales del mercado.
+                </p>
+              </div>
+            </div>
+
+            {/* Diferenciador 6 */}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-pink-600 dark:text-pink-400">✓</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-2">Estructura con flexibilidad</h3>
+                <p className="text-foreground/70 text-sm">
+                  90 días bien planificados pero que se ajustan. Progreso medible sin ser rígido.
                 </p>
               </div>
             </div>
