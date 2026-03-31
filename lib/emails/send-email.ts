@@ -1,6 +1,6 @@
 'use server'
 
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 interface SendEmailParams {
   to: string | string[]
@@ -15,26 +15,38 @@ export async function sendEmail({
   subject,
   html,
   text,
-  from = 'onboarding@resend.dev', // Change to your verified domain
+  from = 'juan@despegatucarrera.com',
 }: SendEmailParams) {
   try {
-    // Initialize Resend inside the function, not at module level
-    const resend = new Resend(process.env.RESEND_API_KEY)
+    // Validate environment variables
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      throw new Error('Gmail credentials not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD.')
+    }
 
     console.log('[v0] Sending email to:', to)
     console.log('[v0] From:', from)
-    console.log('[v0] API Key present:', !!process.env.RESEND_API_KEY)
 
-    const data = await resend.emails.send({
-      from,
+    // Create Gmail transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER, // juan@n3uralia.com
+        pass: process.env.GMAIL_APP_PASSWORD, // App password
+      },
+    })
+
+    // Send email
+    const info = await transporter.sendMail({
+      from, // juan@despegatucarrera.com (must be added as alias in Gmail settings)
       to,
       subject,
       html,
       text: text || html,
+      replyTo: from,
     })
 
-    console.log('[v0] Email sent:', data)
-    return { success: true, messageId: data.id }
+    console.log('[v0] Email sent successfully. Message ID:', info.messageId)
+    return { success: true, messageId: info.messageId }
   } catch (error) {
     console.error('[v0] Error sending email:', error)
     throw new Error(
@@ -69,5 +81,6 @@ export async function sendWelcomeEmail(userEmail: string, userName: string) {
     subject: '¡Bienvenido a Despega Tu Carrera!',
     html: htmlContent,
     text: `¡Bienvenido ${userName}! Tu cuenta ha sido creada exitosamente.`,
+    from: 'juan@despegatucarrera.com',
   })
 }
