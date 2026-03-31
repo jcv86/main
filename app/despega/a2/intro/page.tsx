@@ -7,12 +7,22 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import type { DiscProfile } from "@/lib/disc-calculator"
+
+interface CerebroProfile {
+  D: number
+  I: number
+  S: number
+  C: number
+  primary: string
+  primaryScore: number
+  secondary: string
+  secondaryScore: number
+}
 
 export default function A2IntroPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [cerebroProfile, setCerebroProfile] = useState<DiscProfile | null>(null)
+  const [cerebroProfile, setCerebroProfile] = useState<CerebroProfile | null>(null)
   const [profileName, setProfileName] = useState("")
   const router = useRouter()
   const supabase = createClient()
@@ -70,7 +80,7 @@ export default function A2IntroPage() {
       ]
       scores.sort((a, b) => b.value - a.value)
       
-      const profile: DiscProfile = {
+      const profile: CerebroProfile = {
         D: normalized.D,
         I: normalized.I,
         S: normalized.S,
