@@ -1,28 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { testGmailConnection, sendViaGmail } from '@/lib/emails/gmail-service'
+import { sendEmail } from '@/lib/emails/send-email'
 
 export async function GET(req: NextRequest) {
   try {
-    console.log('[v0] Testing Gmail SMTP connection...')
-
-    // Test connection
-    const connectionTest = await testGmailConnection()
-
-    if (!connectionTest.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Gmail SMTP connection failed',
-          error: connectionTest.message,
-        },
-        { status: 500 }
-      )
-    }
-
-    console.log('[v0] Gmail connection successful, sending test email...')
+    console.log('[v0] Testing Gmail SMTP via sendEmail function...')
 
     // Send test email
-    await sendViaGmail({
+    await sendEmail({
       to: process.env.GMAIL_USER || 'test@example.com',
       subject: 'Test Email from Despega Tu Carrera',
       html: `
@@ -42,6 +26,7 @@ export async function GET(req: NextRequest) {
         </div>
       `,
       text: 'Test email from Despega Tu Carrera. If you received this, Gmail SMTP is working correctly.',
+      from: 'juan@despegatucarrera.com',
     })
 
     return NextResponse.json({
@@ -49,7 +34,7 @@ export async function GET(req: NextRequest) {
       message: 'Gmail SMTP test successful! Check your email inbox.',
       details: {
         gmailUser: process.env.GMAIL_USER,
-        fromEmail: process.env.GMAIL_FROM_EMAIL,
+        fromEmail: 'juan@despegatucarrera.com',
       },
     })
   } catch (error) {
@@ -64,3 +49,4 @@ export async function GET(req: NextRequest) {
     )
   }
 }
+
