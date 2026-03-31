@@ -480,6 +480,38 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* SECTION 5 — CTA de Cierre */}
+      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-600/5 dark:to-blue-600/5 rounded-3xl my-16">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            ¿Listo para entenderte mejor?
+          </h2>
+          <p className="text-xl text-foreground/75 mb-8 max-w-2xl mx-auto">
+            Tu diagnóstico te espera. Descubre quién eres realmente, ordena tu camino y comienza tu transformación hoy.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/auth/signin" prefetch={true}>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
+              >
+                Quiero empezar mi proceso
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link href="#how-it-works" prefetch={true}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                Despejar dudas primero
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section - HIDDEN (Duplicate of Features Section) */}
       {/* 
       <section className="container mx-auto px-4 py-20 bg-card rounded-3xl my-16 border border-border">
