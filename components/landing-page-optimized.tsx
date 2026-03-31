@@ -165,7 +165,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-purple-200 dark:border-purple-900/30">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
                   <span className="text-xl font-bold text-purple-600 dark:text-purple-400">05</span>
