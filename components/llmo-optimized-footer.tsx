@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone } from "lucide-react"
+import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -47,13 +47,20 @@ function LLMOOptimizedFooter() {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="h-4 w-4 text-purple-400" />
-                <a href="mailto:contacto@despegatucarrera.cl" className="hover:text-purple-400 transition-colors">
-                  contacto@despegatucarrera.cl
+                <a href="mailto:info@despegatucarrera.com" className="hover:text-purple-400 transition-colors">
+                  info@despegatucarrera.com
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Phone className="h-4 w-4 text-purple-400" />
-                <span>+56 9 1234 5678</span>
+                <MessageCircle className="h-4 w-4 text-green-400" />
+                <a 
+                  href="https://wa.me/56963160187?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20Despega%20Tu%20Carrera" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  +56 9 6316 0187
+                </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <MapPin className="h-4 w-4 text-purple-400" />
@@ -192,7 +199,7 @@ function LLMOOptimizedFooter() {
               </li>
               <li>
                 <a 
-                  href="mailto:contacto@despegatucarrera.cl" 
+                  href="mailto:info@despegatucarrera.com" 
                   className="hover:text-purple-400 transition-colors flex items-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
@@ -242,8 +249,8 @@ function LLMOOptimizedFooter() {
               "Plataforma en Chile para desarrollo profesional con tests psicométricos, recursos de aprendizaje y coaching con IA",
             contactPoint: {
               "@type": "ContactPoint",
-              email: "contacto@despegatucarrera.cl",
-              telephone: "+56-9-1234-5678",
+              email: "info@despegatucarrera.com",
+              telephone: "+56-9-6316-0187",
               contactType: "Customer Service",
               areaServed: "CL",
               availableLanguage: ["Spanish"],
