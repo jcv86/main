@@ -43,45 +43,61 @@ export async function POST(req: NextRequest) {
         <meta charset="UTF-8">
         <title>Nueva Consulta - Despega Tu Carrera</title>
       </head>
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9fafb;">
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb;">
         <div style="max-width: 600px; margin: 0 auto; background: white;">
           
           <!-- Header -->
-          <div style="background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); padding: 30px; text-align: center; color: white;">
-            <h1 style="margin: 0; font-size: 24px; font-weight: 700;">📬 Nueva Consulta Recibida</h1>
+          <div style="background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); padding: 50px 30px; text-align: center; color: white;">
+            <div style="font-size: 48px; margin-bottom: 15px;">📬</div>
+            <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px;">Nueva Consulta</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; font-weight: 300;">Mensaje desde el sitio web</p>
           </div>
 
-          <!-- Content -->
-          <div style="padding: 30px; color: #0f172a;">
-            <p style="margin: 0 0 20px 0; font-size: 16px; color: #475569;">
-              Se ha recibido una nueva consulta desde el sitio web:
+          <!-- Main Content -->
+          <div style="padding: 40px 30px; color: #0f172a;">
+            
+            <!-- Greeting -->
+            <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">Se ha recibido una nueva consulta</h2>
+            
+            <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.7; color: #475569;">
+              Un usuario ha enviado una consulta desde el formulario de contacto. Revisa los detalles a continuación:
             </p>
 
-            <div style="background: #f8fafc; border-left: 4px solid #7c3aed; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p style="margin: 0 0 15px 0; font-size: 14px;">
-                <strong style="color: #0f172a;">Nombre:</strong> ${sanitizedName}
-              </p>
+            <!-- Consulta Details -->
+            <div style="background: linear-gradient(135deg, #f0f4ff 0%, #f5f3ff 100%); border-left: 4px solid #7c3aed; padding: 24px; border-radius: 8px; margin: 32px 0; border: 1px solid rgba(124, 58, 237, 0.1);">
+              <div style="margin-bottom: 16px;">
+                <p style="margin: 0 0 8px 0; font-weight: 600; color: #0f172a; font-size: 14px;">👤 Nombre:</p>
+                <p style="margin: 0; font-size: 14px; color: #475569;">${sanitizedName}</p>
+              </div>
               ${sanitizedWhatsapp ? `
-              <p style="margin: 0 0 15px 0; font-size: 14px;">
-                <strong style="color: #0f172a;">WhatsApp:</strong> <a href="https://wa.me/${sanitizedWhatsapp.replace(/\\s+/g, '')}" style="color: #7c3aed; text-decoration: none;">${sanitizedWhatsapp}</a>
-              </p>
+              <div style="margin-bottom: 16px;">
+                <p style="margin: 0 0 8px 0; font-weight: 600; color: #0f172a; font-size: 14px;">📱 WhatsApp:</p>
+                <p style="margin: 0; font-size: 14px;"><a href="https://wa.me/${sanitizedWhatsapp.replace(/\\s+/g, '')}" style="color: #7c3aed; text-decoration: none; font-weight: 500;">${sanitizedWhatsapp}</a></p>
+              </div>
               ` : ''}
-              <p style="margin: 0; font-size: 14px;">
-                <strong style="color: #0f172a;">Consulta:</strong>
-              </p>
-              <p style="margin: 10px 0 0 0; font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #475569;">
-                ${sanitizedMessage}
-              </p>
+              <div>
+                <p style="margin: 0 0 8px 0; font-weight: 600; color: #0f172a; font-size: 14px;">💬 Mensaje:</p>
+                <p style="margin: 0; font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #475569;">${sanitizedMessage}</p>
+              </div>
             </div>
 
-            <p style="margin: 20px 0 0 0; font-size: 12px; color: #94a3b8;">
-              Por favor responde a esta consulta lo antes posible.
+            <!-- CTA -->
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="https://despegatucarrera.com/admin/messages" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);">
+                Responder Consulta
+              </a>
+            </div>
+
+            <p style="margin: 0; font-size: 13px; color: #94a3b8; text-align: center;">
+              Por favor revisa y responde esta consulta lo antes posible
             </p>
+
           </div>
 
           <!-- Footer -->
-          <div style="background: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px;">
-            <p style="margin: 0;">© 2026 Despega Tu Carrera</p>
+          <div style="background: #f9fafb; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px; line-height: 1.6;">
+            <p style="margin: 0 0 8px 0;">© 2026 Despega Tu Carrera. Todos los derechos reservados.</p>
+            <p style="margin: 0;"><a href="https://despegatucarrera.com" style="color: #7c3aed; text-decoration: none;">despegatucarrera.com</a></p>
           </div>
 
         </div>
@@ -98,65 +114,102 @@ export async function POST(req: NextRequest) {
       from: 'info@despegatucarrera.com',
     })
 
-    // Email to user
+    // Email to user - confirmation
     const userEmailContent = `
       <!DOCTYPE html>
       <html lang="es">
       <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hemos recibido tu consulta - Despega Tu Carrera</title>
       </head>
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9fafb;">
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb;">
         <div style="max-width: 600px; margin: 0 auto; background: white;">
           
           <!-- Header -->
-          <div style="background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); padding: 40px 30px; text-align: center; color: white;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: 700;">✓ Consulta Recibida</h1>
-            <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Te responderemos pronto</p>
+          <div style="background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); padding: 50px 30px; text-align: center; color: white;">
+            <div style="font-size: 56px; margin-bottom: 20px;">✓</div>
+            <h1 style="margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -1px;">Hemos recibido tu consulta</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9; font-weight: 300;">Te responderemos pronto</p>
           </div>
 
-          <!-- Content -->
+          <!-- Main Content -->
           <div style="padding: 40px 30px; color: #0f172a;">
-            <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6;">
-              Hola <strong>${sanitizedName}</strong>,
+            
+            <!-- Greeting -->
+            <h2 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">¡Hola ${sanitizedName}! 👋</h2>
+            
+            <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.7; color: #475569;">
+              Gracias por contactarnos. Hemos recibido tu consulta y la hemos marcado como prioritaria en nuestro sistema.
             </p>
 
-            <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #475569;">
-              Gracias por tu consulta. Hemos recibido tu mensaje y lo hemos marcado como prioritario.
-            </p>
-
-            <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #475569;">
-              Nuestro equipo revisará tu solicitud y nos pondremos en contacto dentro de las próximas 24 horas.
-            </p>
-
-            <div style="background: linear-gradient(135deg, #f0f4ff 0%, #f5f3ff 100%); border-left: 4px solid #7c3aed; padding: 20px; border-radius: 8px; margin: 30px 0; border: 1px solid rgba(124, 58, 237, 0.1);">
-              <p style="margin: 0 0 10px 0; font-weight: 600; color: #0f172a;">¿Necesitas ayuda urgente?</p>
-              <p style="margin: 0; font-size: 14px; color: #475569;">
-                También puedes contactarnos directamente:<br>
-                📧 info@despegatucarrera.com<br>
-                💬 <a href="https://wa.me/56963160187" style="color: #7c3aed; text-decoration: none;">WhatsApp: +56 9 6316 0187</a>
+            <!-- Info Section -->
+            <div style="background: linear-gradient(135deg, #f0f4ff 0%, #f5f3ff 100%); border-left: 4px solid #7c3aed; padding: 24px; border-radius: 8px; margin: 32px 0; border: 1px solid rgba(124, 58, 237, 0.1);">
+              <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #0f172a;">⏱️ ¿Cuánto tiempo nos tomaremos?</h3>
+              <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #475569;">
+                Nuestro equipo revisará tu consulta y se pondrá en contacto dentro de las próximas <strong>24 horas</strong> a través del email o WhatsApp que proporcionaste.
               </p>
             </div>
 
-            <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.6; color: #475569;">
-              En Despega Tu Carrera nos comprometemos a acompañarte en tu transformación profesional. Tu éxito es nuestro éxito.
-            </p>
-          </div>
+            <!-- What Happens Next -->
+            <div style="margin: 32px 0;">
+              <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #0f172a;">¿Qué sucede ahora?</h3>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="flex-shrink: 0; width: 24px; height: 24px; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600; margin-top: 2px;">1</span>
+                  <div>
+                    <strong style="color: #0f172a; font-size: 14px;">Revisión de tu consulta</strong>
+                    <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">Nuestro equipo especializado analiza tu solicitud</p>
+                  </div>
+                </li>
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="flex-shrink: 0; width: 24px; height: 24px; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600; margin-top: 2px;">2</span>
+                  <div>
+                    <strong style="color: #0f172a; font-size: 14px;">Respuesta personalizada</strong>
+                    <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">Recibirás una respuesta detallada adaptada a tu necesidad</p>
+                  </div>
+                </li>
+                <li style="display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="flex-shrink: 0; width: 24px; height: 24px; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600; margin-top: 2px;">3</span>
+                  <div>
+                    <strong style="color: #0f172a; font-size: 14px;">Seguimiento continuo</strong>
+                    <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">Te apoyaremos hasta resolver tu consulta</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
 
-          <!-- CTA -->
-          <div style="text-align: center; padding: 0 30px 30px;">
-            <a href="https://despegatucarrera.com" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
-              Explorar la Plataforma
-            </a>
+            <!-- Need Help Now? -->
+            <div style="background: linear-gradient(135deg, #fef3f2 0%, #fef8f7 100%); border-radius: 8px; padding: 24px; margin: 32px 0; text-align: center; border: 1px solid rgba(239, 68, 68, 0.1);">
+              <p style="margin: 0 0 12px 0; font-weight: 600; color: #0f172a; font-size: 14px;">¿Necesitas ayuda urgente?</p>
+              <p style="margin: 0 0 12px 0; font-size: 14px; color: #475569;">Contáctanos directamente:</p>
+              <p style="margin: 8px 0; font-size: 14px;">
+                <a href="mailto:info@despegatucarrera.com" style="color: #7c3aed; text-decoration: none; font-weight: 500;">📧 info@despegatucarrera.com</a>
+              </p>
+              <p style="margin: 8px 0; font-size: 14px;">
+                <a href="https://wa.me/56963160187" style="color: #7c3aed; text-decoration: none; font-weight: 500;">💬 WhatsApp: +56 9 6316 0187</a>
+              </p>
+            </div>
+
+            <!-- CTA -->
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="https://despegatucarrera.com" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35); transition: all 0.3s ease;">
+                Explorar la Plataforma
+              </a>
+              <p style="margin: 12px 0 0 0; color: #94a3b8; font-size: 13px;">Mientras esperas, descubre lo que Despega Tu Carrera ofrece</p>
+            </div>
+
+            <!-- Closing -->
+            <p style="margin: 32px 0 0 0; font-size: 14px; line-height: 1.6; color: #475569; text-align: center;">
+              En Despega Tu Carrera nos comprometemos a acompañarte en tu transformación profesional. <strong>Tu éxito es nuestro éxito.</strong>
+            </p>
+
           </div>
 
           <!-- Footer -->
-          <div style="background: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px;">
-            <p style="margin: 0;">© 2026 Despega Tu Carrera. Todos los derechos reservados.</p>
-            <p style="margin: 8px 0 0 0;">
-              <a href="https://despegatucarrera.com/privacy" style="color: #7c3aed; text-decoration: none;">Privacidad</a> | 
-              <a href="https://despegatucarrera.com/terms" style="color: #7c3aed; text-decoration: none;">Términos</a>
-            </p>
+          <div style="background: #f9fafb; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px; line-height: 1.6;">
+            <p style="margin: 0 0 8px 0;">© 2026 Despega Tu Carrera. Todos los derechos reservados.</p>
+            <p style="margin: 0;"><a href="https://despegatucarrera.com" style="color: #7c3aed; text-decoration: none;">despegatucarrera.com</a></p>
           </div>
 
         </div>
@@ -167,7 +220,9 @@ export async function POST(req: NextRequest) {
     // Send confirmation email to user
     console.log('[v0] Sending confirmation email to user...')
     
-    // For now, we'll just send to admin. In production, you might want to get user email
+    // We need to get the user's email from the form. For now, we'll use a placeholder
+    // In a real implementation, add an email field to the contact form
+    // For now, let's send it only to the admin
     // await sendEmail({
     //   to: userEmail,
     //   subject: 'Hemos recibido tu consulta - Despega Tu Carrera',
