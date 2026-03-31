@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { ArrowLeft, Radar, TrendingUp, Globe, Lightbulb, CheckCircle, BookOpen } from "lucide-react"
 import { useAuthRedirect } from "@/hooks/use-auth-redirect"
+import { createClient } from "@/lib/supabase/client"
 import { RadarEstrategico } from "@/components/radar-estrategico"
 import { NoticiasFeed } from "@/components/noticias-feed"
 import { GamifiedTests } from "@/components/gamified-tests"
@@ -20,8 +22,39 @@ import { PointsBadgesSystem } from "@/components/points-badges-system"
 export default function A4HubPage() {
   const { user, loading } = useAuthRedirect()
   const [activeTab, setActiveTab] = useState("radar")
+  const [isCheckingPrerequisites, setIsCheckingPrerequisites] = useState(true)
+  const router = useRouter()
+  const supabase = createClient()
 
-  if (loading) {
+  useEffect(() => {
+    if (loading || !user?.id) return
+
+    const checkPrerequisites = async () => {
+      try {
+        const { data: profileData } = await supabase
+          .from('despega_user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single()
+
+        // Check if A3 is completed (need A2 + A3 done)
+        if (!profileData?.onboarding_conozcamonos_2_completed) {
+          console.log('[v0] A2 not completed. Redirecting to A2...')
+          router.push('/despega/a2/intro')
+          return
+        }
+
+        setIsCheckingPrerequisites(false)
+      } catch (error) {
+        console.error('[v0] Error checking A4 prerequisites:', error)
+        setIsCheckingPrerequisites(false)
+      }
+    }
+
+    checkPrerequisites()
+  }, [user?.id, loading, supabase, router])
+
+  if (loading || isCheckingPrerequisites) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

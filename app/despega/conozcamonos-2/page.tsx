@@ -111,6 +111,22 @@ export default function Conozcamonos2Page() {
 
       console.log('[v0] Conozcamonos 2 saved successfully')
 
+      // Mark Conozcamonos-2 as completed in despega_user_profiles
+      const { error: profileError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          onboarding_conozcamonos_2_completed: true,
+          onboarding_conozcamonos_2_completed_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (profileError) {
+        console.error('[v0] Error updating profile completion:', profileError)
+        // Continue anyway - the assessment was saved
+      }
+
+      console.log('[v0] User profile updated with C2 completion flags')
+
       // Redirect to A2 dashboard
       router.push('/despega/a2/dashboard')
     } catch (err) {

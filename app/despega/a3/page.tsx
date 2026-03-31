@@ -28,24 +28,21 @@ export default function A3Page() {
     try {
       setLoading(true)
       
-      // Load user profile with timeout to prevent hanging
-      const profilePromise = supabase
+      // First check prerequisites - must have completed A2
+      const { data: profileData, error: profileError } = await supabase
         .from('despega_user_profiles')
         .select('*')
         .eq('user_id', user?.id)
         .maybeSingle()
-
-      // Add 5 second timeout
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile load timeout')), 5000)
-      )
-
-      try {
-        const { data: profile } = await Promise.race([profilePromise, timeoutPromise]) as any
-        setUserProfile(profile)
-      } catch (err) {
-        console.log('[v0] Skipping profile load (timeout or error)')
+      
+      if (!profileData?.onboarding_conozcamonos_2_completed) {
+        console.log('[v0] A2 Conozcamonos-2 not completed. Redirecting to A2...')
+        // Redirect to A2 intro
+        window.location.href = '/despega/a2/intro'
+        return
       }
+
+      setUserProfile(profileData)
 
       // Get user DISC profile from A1 test results
       const { data: a1Results } = await supabase

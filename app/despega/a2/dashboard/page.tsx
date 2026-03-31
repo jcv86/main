@@ -42,6 +42,13 @@ export default function A2DashboardPage() {
           .eq("user_id", user.id)
           .single()
 
+        // Check if Conozcamonos-2 is completed
+        if (!profileData?.onboarding_conozcamonos_2_completed) {
+          console.log('[v0] Conozcamonos-2 not completed, redirecting...')
+          router.push("/despega/conozcamonos-2")
+          return
+        }
+
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)
 
