@@ -38,6 +38,11 @@ export async function sendEmail({
       replyTo: from,
     })
 
+    // Check if the response has an error
+    if (data.error) {
+      throw new Error(`Resend API error: ${data.error.message}`)
+    }
+
     console.log('[v0] Email sent successfully. Message ID:', data.id)
     return { success: true, messageId: data.id }
   } catch (error) {
