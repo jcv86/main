@@ -143,22 +143,6 @@ Explora nuestra plataforma en: https://despegatucarrera.com
   }
 }
 
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px 20px; min-height: 100vh;">
-        <div style="background: white; border-radius: 12px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-          
-          {/* Header */}
-          <div style="text-align: center; margin-bottom: 30px;">
-            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-              <span style="font-size: 28px; font-weight: bold; color: white;">🚀</span>
-            </div>
-            <h1 style="color: #0f172a; font-size: 28px; margin: 0; font-weight: bold;">¡Bienvenido a Despega Tu Carrera!</h1>
-          </div>
-
-          {/* Main Content */}
-          <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            Hola,
-          </p>
-
           <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
             ¡Gracias por suscribirte a nuestro newsletter! Nos complace saber que estás interesado en transformar tu carrera profesional.
           </p>
