@@ -162,6 +162,20 @@ export default function Conozcamonos1Page() {
         .insert({ user_id: user.id, responses, completed_at: new Date().toISOString() })
 
       if (dbError) throw dbError
+      
+      // Mark Conozcamonos-1 as completed in despega_user_profiles
+      const { error: profileError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          onboarding_completed: true
+        }, { onConflict: 'user_id' })
+      
+      if (profileError) {
+        console.error('[v0] Error updating profile completion:', profileError)
+        // Continue anyway - the assessment was saved
+      }
+      
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)

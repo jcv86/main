@@ -29,12 +29,12 @@ export default function A2IntroPage() {
         return
       }
 
-      // Get the latest Despega Cerebral profile
+      // Get the latest Cerebral assessment (DISC profile)
       const { data: profileData, error: profileError } = await supabase
-        .from('user_a1_profiles')
+        .from('a1_cerebral_assessment')
         .select('disc_profile')
         .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
+        .order('completed_at', { ascending: false })
         .limit(1)
         .single()
 
@@ -43,7 +43,44 @@ export default function A2IntroPage() {
         return
       }
 
-      const profile = profileData.disc_profile as DiscProfile
+      const rawScores = profileData.disc_profile as Record<string, number> || {}
+      
+      // Normalize scores to 0-100 scale that sums to 100%
+      const absScores = {
+        D: Math.abs(rawScores.D || 0),
+        I: Math.abs(rawScores.I || 0),
+        S: Math.abs(rawScores.S || 0),
+        C: Math.abs(rawScores.C || 0)
+      }
+
+      const total = absScores.D + absScores.I + absScores.S + absScores.C || 1
+      const normalized = {
+        D: (absScores.D / total) * 100,
+        I: (absScores.I / total) * 100,
+        S: (absScores.S / total) * 100,
+        C: (absScores.C / total) * 100
+      }
+      
+      // Find dominant dimension
+      const scores = [
+        { letter: 'D', value: normalized.D },
+        { letter: 'I', value: normalized.I },
+        { letter: 'S', value: normalized.S },
+        { letter: 'C', value: normalized.C }
+      ]
+      scores.sort((a, b) => b.value - a.value)
+      
+      const profile: DiscProfile = {
+        D: normalized.D,
+        I: normalized.I,
+        S: normalized.S,
+        C: normalized.C,
+        primary: scores[0].letter,
+        primaryScore: scores[0].value,
+        secondary: scores[1].letter,
+        secondaryScore: scores[1].value
+      }
+      
       setCerebroProfile(profile)
       
       // Set profile name based on primary dimension

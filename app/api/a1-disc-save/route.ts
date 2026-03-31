@@ -73,11 +73,11 @@ export async function POST(request: NextRequest) {
       completed_at: new Date().toISOString()
     }
     
-    console.log('[v0] Inserting into a1_disc_assessment')
+    console.log('[v0] Inserting into a1_cerebral_assessment (formerly a1_disc_assessment)')
     
     // Insert with explicit error handling
     const { data, error } = await supabase
-      .from('a1_disc_assessment')
+      .from('a1_cerebral_assessment')
       .insert([insertData])
       .select()
     
@@ -94,7 +94,30 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    console.log('[v0] Successfully saved A1 DISC assessment')
+    console.log('[v0] Successfully saved A1 Cerebral assessment')
+    
+    // Update despega_user_profiles to mark A1 test as completed
+    console.log('[v0] Updating despega_user_profiles for user:', user_id)
+    
+    const { error: profileError } = await supabaseAdmin
+      .from('despega_user_profiles')
+      .upsert({
+        user_id,
+        onboarding_cerebral_completed: true,
+        onboarding_cerebral_completed_at: new Date().toISOString(),
+        a1_test_completed: true,
+        a1_test_completed_at: new Date().toISOString()
+      }, { onConflict: 'user_id' })
+    
+    if (profileError) {
+      console.error('[v0] Error updating user profile:', profileError)
+      return NextResponse.json(
+        { error: 'Test saved but failed to update profile: ' + profileError.message },
+        { status: 400 }
+      )
+    }
+    
+    console.log('[v0] User profile updated with completion flags')
     
     return NextResponse.json({
       success: true,
