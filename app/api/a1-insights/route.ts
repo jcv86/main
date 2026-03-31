@@ -1,7 +1,6 @@
-import { generateText, Output } from 'ai'
+import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
 import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
 
 interface CerebroProfile {
   D: number
@@ -47,7 +46,30 @@ export async function POST(req: NextRequest) {
     const primaryTraits = profileTraits[profile.primary] || ''
     const secondaryTraits = profileTraits[profile.secondary] || ''
 
-    const prompt = `Eres un experto en desarrollo profesional y perfiles conductuales DISC (Despega Cerebral). 
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        fortalezas: {
+          type: 'string',
+          description: 'Las fortalezas profesionales del usuario'
+        },
+        areasDesarrollo: {
+          type: 'string',
+          description: 'Las áreas de desarrollo recomendadas'
+        },
+        entrevistas: {
+          type: 'string',
+          description: 'Recomendaciones para entrevistas'
+        },
+        equipoTrabajo: {
+          type: 'string',
+          description: 'Consejos para trabajar en equipo'
+        }
+      },
+      required: ['fortalezas', 'areasDesarrollo', 'entrevistas', 'equipoTrabajo']
+    }
+
+    const prompt = `Eres un experto en desarrollo profesional y perfiles conductuales (Despega Cerebral). 
 
 El usuario ${userName ? `(${userName})` : ''} ha completado una evaluación de Perfil Cerebral con los siguientes resultados:
 
@@ -57,39 +79,46 @@ Características: ${primaryTraits}
 PERFIL SECUNDARIO: ${secondaryProfileName} (${Math.round(profile.secondaryScore)}%)
 Características: ${secondaryTraits}
 
-Proporciona insights profesionales personalizados sobre:
-1. Fortalezas profesionales (2-3 oraciones)
-2. Áreas de desarrollo (2-3 oraciones)
-3. Recomendaciones para entrevistas (2-3 oraciones)
-4. Consejos para trabajar en equipo (2-3 oraciones)
+Proporciona insights profesionales personalizados en JSON con estas claves:
+- fortalezas: Las fortalezas profesionales (2-3 oraciones)
+- areasDesarrollo: Áreas de desarrollo recomendadas (2-3 oraciones)
+- entrevistas: Recomendaciones para entrevistas (2-3 oraciones)
+- equipoTrabajo: Consejos para trabajar en equipo (2-3 oraciones)
 
-Sé específico, práctico y motivador. Usa un tono profesional pero amable.`
+Sé específico, práctico y motivador. Usa un tono profesional pero amable.
 
-    const insightSchema = z.object({
-      fortalezas: z.string().describe('Las fortalezas profesionales del usuario'),
-      areasDesarrollo: z.string().describe('Las áreas de desarrollo recomendadas'),
-      entrevistas: z.string().describe('Recomendaciones para entrevistas'),
-      equipoTrabajo: z.string().describe('Consejos para trabajar en equipo')
-    })
+Responde SOLO con JSON válido, sin explicaciones adicionales.`
 
     const result = await generateText({
       model: openai('gpt-4-turbo'),
       prompt,
-      output: Output.object({ schema: insightSchema }),
       temperature: 0.7,
       maxTokens: 1000
     })
 
-    const insights = JSON.parse(result.text)
+    let insights = {
+      fortalezas: '',
+      areasDesarrollo: '',
+      entrevistas: '',
+      equipoTrabajo: ''
+    }
+
+    try {
+      insights = JSON.parse(result.text)
+    } catch {
+      console.error('[v0] Failed to parse AI response:', result.text)
+      // Fallback to default insights
+      insights = {
+        fortalezas: 'Tu perfil combina características que te hacen efectivo en el ámbito profesional. Continúa desarrollando tus fortalezas naturales.',
+        areasDesarrollo: 'Considera explorar nuevas perspectivas y desarrollar habilidades complementarias para un crecimiento integral.',
+        entrevistas: 'En entrevistas, enfatiza ejemplos concretos de tus logros y cómo tu perfil te ayudó a alcanzarlos.',
+        equipoTrabajo: 'Trabaja en entender las perspectivas diferentes y busca el equilibrio entre tus fortalezas y las del equipo.'
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      insights: {
-        fortalezas: insights.fortalezas,
-        areasDesarrollo: insights.areasDesarrollo,
-        entrevistas: insights.entrevistas,
-        equipoTrabajo: insights.equipoTrabajo
-      }
+      insights
     })
   } catch (error) {
     console.error('[v0] Error generating insights:', error)
