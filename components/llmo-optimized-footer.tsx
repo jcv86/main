@@ -1,12 +1,18 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone, MessageCircle } from "lucide-react"
 import NewsletterSignup from "./newsletter-signup"
+import { ContactFormModal } from "./contact-form-modal"
 
 function LLMOOptimizedFooter() {
+  const [contactOpen, setContactOpen] = useState(false)
+
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
+    <>
+      <ContactFormModal open={contactOpen} onOpenChange={setContactOpen} />
+      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
       <div className="container mx-auto px-4 py-16">
         {/* Newsletter Section */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
@@ -37,9 +43,12 @@ function LLMOOptimizedFooter() {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="h-4 w-4 text-purple-400" />
-                <a href="mailto:info@despegatucarrera.com" className="hover:text-purple-400 transition-colors">
+                <button 
+                  onClick={() => setContactOpen(true)}
+                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                >
                   info@despegatucarrera.com
-                </a>
+                </button>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <MessageCircle className="h-4 w-4 text-green-400" />
@@ -188,13 +197,13 @@ function LLMOOptimizedFooter() {
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:info@despegatucarrera.com" 
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                <button 
+                  onClick={() => setContactOpen(true)}
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Contacto
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -260,7 +269,8 @@ function LLMOOptimizedFooter() {
           }),
         }}
       />
-    </footer>
+      </footer>
+    </>
   )
 }
 
