@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -35,19 +36,20 @@ export default function A2DashboardPage() {
           return
         }
 
+        // Check if user has completed all prerequisites using centralized logic
+        const nextPage = await getNextRequiredPage(user.id)
+        if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
+          console.log('[v0] User not ready for A2 dashboard, redirecting to:', nextPage)
+          router.push(nextPage)
+          return
+        }
+
         // Load user profile
         const { data: profileData } = await supabase
           .from("despega_user_profiles")
           .select("*")
           .eq("user_id", user.id)
           .single()
-
-        // Check if Conozcamonos-2 is completed
-        if (!profileData?.onboarding_conozcamonos_2_completed) {
-          console.log('[v0] Conozcamonos-2 not completed, redirecting...')
-          router.push("/despega/conozcamonos-2")
-          return
-        }
 
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)

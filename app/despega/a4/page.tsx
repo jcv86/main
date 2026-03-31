@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { ArrowLeft, Radar, TrendingUp, Globe, Lightbulb, CheckCircle, BookOpen } from "lucide-react"
 import { useAuthRedirect } from "@/hooks/use-auth-redirect"
-import { createClient } from "@/lib/supabase/client"
+import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { RadarEstrategico } from "@/components/radar-estrategico"
 import { NoticiasFeed } from "@/components/noticias-feed"
 import { GamifiedTests } from "@/components/gamified-tests"
@@ -24,23 +24,17 @@ export default function A4HubPage() {
   const [activeTab, setActiveTab] = useState("radar")
   const [isCheckingPrerequisites, setIsCheckingPrerequisites] = useState(true)
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
     if (loading || !user?.id) return
 
     const checkPrerequisites = async () => {
       try {
-        const { data: profileData } = await supabase
-          .from('despega_user_profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .single()
-
-        // Check if A3 is completed (need A2 + A3 done)
-        if (!profileData?.onboarding_conozcamonos_2_completed) {
-          console.log('[v0] A2 not completed. Redirecting to A2...')
-          router.push('/despega/a2/intro')
+        // Check prerequisites using centralized logic
+        const nextPage = await getNextRequiredPage(user.id)
+        if (!nextPage.includes('/a4')) {
+          console.log('[v0] User not ready for A4, redirecting to:', nextPage)
+          router.push(nextPage)
           return
         }
 
@@ -52,7 +46,7 @@ export default function A4HubPage() {
     }
 
     checkPrerequisites()
-  }, [user?.id, loading, supabase, router])
+  }, [user?.id, loading, router])
 
   if (loading || isCheckingPrerequisites) {
     return (

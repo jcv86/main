@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { getNextRequiredPage } from '@/lib/redirect-logic'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -16,6 +18,7 @@ export default function A3Page() {
   const [a3Progress, setA3Progress] = useState<any>(null)
   const [userDiscProfile, setUserDiscProfile] = useState<string | null>(null)
   const { user, loading: authLoading } = useAuthRedirect()
+  const router = useRouter()
   const supabase = createClient()
   const { currentProgress, coachMessages } = useCoach()
 
@@ -28,19 +31,20 @@ export default function A3Page() {
     try {
       setLoading(true)
       
-      // First check prerequisites - must have completed A2
-      const { data: profileData, error: profileError } = await supabase
+      // Check prerequisites using centralized logic
+      const nextPage = await getNextRequiredPage(user?.id)
+      if (!nextPage.includes('/a3')) {
+        console.log('[v0] User not ready for A3, redirecting to:', nextPage)
+        router.push(nextPage)
+        return
+      }
+
+      // Load user profile
+      const { data: profileData } = await supabase
         .from('despega_user_profiles')
         .select('*')
         .eq('user_id', user?.id)
         .maybeSingle()
-      
-      if (!profileData?.onboarding_conozcamonos_2_completed) {
-        console.log('[v0] A2 Conozcamonos-2 not completed. Redirecting to A2...')
-        // Redirect to A2 intro
-        window.location.href = '/despega/a2/intro'
-        return
-      }
 
       setUserProfile(profileData)
 
