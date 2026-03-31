@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { validateEnvironment } from "@/lib/env-validation"
+import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 
 // Validate environment on startup
 if (typeof window === "undefined") {
@@ -125,6 +126,7 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <Providers>
           {children}
+          <LLMOOptimizedFooter />
         </Providers>
         <Analytics />
         <SpeedInsights />
