@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
-const LandingPageOptimized = dynamic(() => import("@/components/landing-page-optimized"), { 
+const LandingPageOptimized = dynamic(() => import("@/components/landing-page"), { 
   ssr: true,
   loading: () => <div className="min-h-screen" />
 })
