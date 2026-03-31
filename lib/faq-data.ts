@@ -109,4 +109,50 @@ export const FAQ_DATA: FAQItem[] = [
     keywords: ["empezar", "comenzar", "inicio", "primeros pasos", "tutorial"],
     relatedIds: ["es-gratis", "tiempo-tests"],
   },
+  // Strategic FAQ Section - Added from Landing Page
+  {
+    id: "dtc-vs-test-cualquiera",
+    question: "¿Es DTC un test cualquiera o algo más?",
+    answer:
+      "No es un test cualquiera. DTC es un sistema integral que combina diagnóstico profundo, ruta personalizada, entrenamiento práctico y contexto laboral. Mientras otros tests solo dan números o descripciones, DTC interpreta esos datos, construye una ruta, te entrena en habilidades reales y te mantiene conectado al mercado laboral. Es más parecido a tener un coach personal con IA que a completar un cuestionario.",
+    category: "general",
+    keywords: ["test", "diferencia", "sistema", "integral", "interpretación"],
+    relatedIds: ["que-es-dtc", "coach-ia-funciona"],
+  },
+  {
+    id: "estancado-ayuda-dtc",
+    question: "¿Qué pasa si estoy estancado? ¿Realmente ayuda DTC?",
+    answer:
+      "La mayoría de personas estancadas no lo están por falta de talento, sino por falta de claridad, dirección y estructura. DTC funciona precisamente para eso: te ayuda a entender qué te está frenando realmente, crea una ruta clara de 90 días con hitos medibles, y te entrena en habilidades específicas donde te bloqueas. El cambio ocurre cuando el desorden se convierte en dirección, y la comprensión en práctica.",
+    category: "general",
+    keywords: ["estancado", "ayuda", "progreso", "avance", "bloqueo"],
+    relatedIds: ["que-es-dtc", "tiempo-tests"],
+  },
+  {
+    id: "dtc-laboral-o-integral",
+    question: "¿Es solo para buscar trabajo o también para crecimiento integral?",
+    answer:
+      "Es para ambas cosas. DTC trabaja tanto la búsqueda de oportunidades laborales como tu desarrollo integral como persona. El diagnóstico te ayuda a entender cómo funcionas realmente. La ruta personalizada puede enfocarse en búsqueda activa o en crecimiento interno. El entrenamiento incluye tanto habilidades de mercado como liderazgo personal. Tú eliges el foco, pero el sistema está diseñado para que ambos aspectos mejoren.",
+    category: "general",
+    keywords: ["trabajo", "integral", "carrera", "personal", "desarrollo"],
+    relatedIds: ["coach-ia-funciona", "biblioteca-incluye"],
+  },
+  {
+    id: "diferenciacion-mercado",
+    question: "¿Cómo me diferencio realmente en el mercado?",
+    answer:
+      "La diferenciación viene de dos cosas: entender dónde realmente eres bueno (y dónde no) y saber comunicarlo con claridad. DTC te ayuda a identificar tus tensiones internas, patrones reales de avance, y fortalezas que otros no ven. Luego, el entrenamiento en entrevistas y comunicación te da las herramientas para comunicar esa diferencia de forma natural y creíble. La diferenciación auténtica viene de autoconocimiento + práctica. Eso es DTC.",
+    category: "general",
+    keywords: ["diferenciación", "mercado", "competencia", "ventaja", "único"],
+    relatedIds: ["tests-confiables", "coach-ia-funciona"],
+  },
+  {
+    id: "dtc-con-experiencia",
+    question: "¿Es útil DTC si ya tengo experiencia o es solo para junior?",
+    answer:
+      "Es especialmente útil para gente con experiencia. A veces después de años en el mercado, la claridad puede nublarse. Personas con experiencia se benefician de reenfocarse, entender qué quieren realmente, identificar si están en el rol correcto, y desarrollar criterio más profundo sobre su carrera. DTC es perfecto para eso. Si tienes experiencia pero sientes que hay algo desordenado o desalineado, este es tu momento.",
+    category: "general",
+    keywords: ["experiencia", "senior", "junior", "reenfoque", "carrera"],
+    relatedIds: ["que-es-dtc", "para-empresas"],
+  },
 ]
