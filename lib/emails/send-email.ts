@@ -1,6 +1,6 @@
 'use server'
 
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 interface SendEmailParams {
   to: string | string[]
@@ -15,25 +15,21 @@ export async function sendEmail({
   subject,
   html,
   text,
-  from = 'juan@despegatucarrera.com',
+  from = 'info@despegatucarrera.com',
 }: SendEmailParams) {
   try {
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      throw new Error('Gmail credentials not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD in environment variables.')
+    // Initialize Resend INSIDE the function, not at module level
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY is not configured in environment variables')
     }
+
+    const resend = new Resend(apiKey)
 
     console.log('[v0] Sending email to:', to)
     console.log('[v0] From:', from)
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    })
-
-    const info = await transporter.sendMail({
+    const data = await resend.emails.send({
       from,
       to,
       subject,
@@ -42,8 +38,8 @@ export async function sendEmail({
       replyTo: from,
     })
 
-    console.log('[v0] Email sent successfully. Message ID:', info.messageId)
-    return { success: true, messageId: info.messageId }
+    console.log('[v0] Email sent successfully. Message ID:', data.id)
+    return { success: true, messageId: data.id }
   } catch (error) {
     console.error('[v0] Error sending email:', error)
     throw new Error(error instanceof Error ? error.message : 'Failed to send email')
@@ -71,6 +67,6 @@ export async function sendWelcomeEmail(userEmail: string, userName: string) {
     subject: '¡Bienvenido a Despega Tu Carrera!',
     html: htmlContent,
     text: `¡Bienvenido ${userName}! Tu cuenta ha sido creada exitosamente.`,
-    from: 'juan@despegatucarrera.com',
+    from: 'info@despegatucarrera.com',
   })
 }
