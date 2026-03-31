@@ -105,7 +105,7 @@ export const metadata: Metadata = {
   },
   category: "education",
   classification: "Professional Development Platform",
-    generator: 'v0.app'
+  generator: 'v0.app'
 }
 
 export default function RootLayout({
