@@ -9,7 +9,6 @@ import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle } from 'lucide-react'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
@@ -567,14 +566,18 @@ export default function A3Page() {
                     <span className="font-semibold text-slate-900 dark:text-slate-100">Entrevista 0 - Diagnóstico</span>
                     <span className="text-sm text-emerald-600 font-semibold">✓ Completado</span>
                   </div>
-                  <Progress value={100} className="h-2" />
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '100%' }}></div>
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 1: Guiada</span>
                     <span className="text-sm text-slate-600 dark:text-slate-400">2/5 sesiones</span>
                   </div>
-                  <Progress value={40} className="h-2" />
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '40%' }}></div>
+                  </div>
                   <div className="grid grid-cols-5 gap-1 mt-2">
                     <div className="h-6 bg-emerald-500 rounded text-xs flex items-center justify-center text-white font-bold">✓</div>
                     <div className="h-6 bg-emerald-500 rounded text-xs flex items-center justify-center text-white font-bold">✓</div>
@@ -588,21 +591,27 @@ export default function A3Page() {
                     <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 2: Estructurada</span>
                     <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
                   </div>
-                  <Progress value={0} className="h-2" />
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-slate-400 h-2 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 3: Desafiante</span>
                     <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
                   </div>
-                  <Progress value={0} className="h-2" />
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-slate-400 h-2 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 4: Maestría</span>
                     <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
                   </div>
-                  <Progress value={0} className="h-2" />
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-slate-400 h-2 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
               </div>
               <div className="mt-6 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded">
