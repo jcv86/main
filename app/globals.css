@@ -73,10 +73,6 @@
   color: hsl(215.4 16.3% 25%);
 }
 
-.dark .text-muted-foreground {
-  color: hsl(215 20.2% 70%);
-}
-
 /* Fix text-slate colors to improve contrast in light mode */
 .text-slate-300 {
   color: hsl(215.4 16.3% 40%) !important;
