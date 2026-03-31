@@ -84,10 +84,10 @@ export default function A4HubPage() {
               Tu Radar Estratégico Integral
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
-              A4: Visión del Mercado Laboral
+              A4: Radar Estratégico
             </h1>
             <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-4 font-medium">
-              No es solo inteligencia de mercado. Es contexto país, cultura empresarial, noticias, tests, biblioteca y criterio.
+              No es solo mercado laboral. Es contexto país, cultura empresarial, noticias, tests, biblioteca y criterio.
             </p>
             <p className="text-lg text-slate-600 dark:text-slate-400 text-balance">
               7 herramientas integradas para que entiendas el panorama laboral chileno, veas las oportunidades reales y tomes decisiones estratégicas.
