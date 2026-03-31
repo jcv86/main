@@ -3,10 +3,6 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
-  Brain,
-  Target,
-  Lightbulb,
-  Zap,
   ArrowRight,
   ChevronRight,
 } from "lucide-react"
