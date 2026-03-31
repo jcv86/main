@@ -42,79 +42,67 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF BAND */}
+      {/* SOCIAL PROOF BAND - THE 4 PILLARS */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
+          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Los 4 Pilares de Tu Transformación</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Reporte Profundo - Simplified smiley face for identity/self-discovery */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="2"/>
-                  <circle cx="9" cy="10" r="1.5" fill="currentColor"/>
-                  <circle cx="15" cy="10" r="1.5" fill="currentColor"/>
-                  <path d="M9 15 Q12 17 15 15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
+            {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round"/>
                 </svg>
               </div>
-              <h3 className="font-semibold text-sm font-bold mb-2">Reporte Profundo</h3>
-              <p className="text-xs text-foreground/70">Diagnóstico integral de quién eres: tu perfil, tensiones internas, patrones reales y cómo el mercado te ve.</p>
+              <h3 className="font-bold text-lg mb-2">El Ritual - Quién Eres Ahora</h3>
+              <p className="text-sm text-foreground/70">Descubre tu verdadero perfil sin filtros con evaluaciones científicas. El autoconocimiento es el primer paso.</p>
             </div>
 
-            {/* Ruta Personalizada - Winding path with waypoints */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  {/* Winding path */}
-                  <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round" />
-                  <path d="M21 6c0 2 -1 3 -2 4c-2 1 -3 2 -3 5c0 3 1 4 3 5c1 1 2 2 2 4" strokeLinecap="round" opacity="0.4" />
-                  {/* Waypoints */}
-                  <circle cx="4" cy="6" r="1.5" fill="currentColor" />
-                  <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                  <circle cx="4" cy="18" r="1.5" fill="currentColor" />
+            {/* Pilar 2: Exploración - Aprende Nuevas Formas (Blue) */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-blue-600 dark:bg-blue-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round"/>
+                  <path d="M21 6c0 2 -1 3 -2 4c-2 1 -3 2 -3 5c0 3 1 4 3 5c1 1 2 2 2 4" strokeLinecap="round" opacity="0.4"/>
+                  <circle cx="4" cy="6" r="1.5" fill="currentColor"/>
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                  <circle cx="4" cy="18" r="1.5" fill="currentColor"/>
                 </svg>
               </div>
-              <h3 className="font-semibold text-sm font-bold mb-2">Ruta Personalizada</h3>
-              <p className="text-xs text-foreground/70">90 días estructurados con sprints semanales, checkpoints medibles y ajustes basados en tu progreso real.</p>
+              <h3 className="font-bold text-lg mb-2">Exploración - Aprende Nuevas Formas</h3>
+              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días con 120+ recursos, libros y estrategias reales.</p>
             </div>
 
-            {/* Entrenamiento Práctico - Hands building/creating */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  {/* Two hands building/practicing */}
-                  <path d="M6 10l-2 6c0 1 1 2 2 2l2-2 1 2h4l1-2 2 2c1 0 2-1 2-2l-2-6" />
-                  <path d="M10 6l1-3h2l1 3" strokeLinecap="round" />
-                  <path d="M6 10l-1-2M18 10l1-2" strokeLinecap="round" />
-                  {/* Blocks/Building blocks */}
-                  <rect x="8" y="14" width="8" height="4" opacity="0.6" />
+            {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-orange-600 dark:bg-orange-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M10 9h4V5h4l-7-7-7 7h4v4zm-1 2H3v8h16v-8h-6v4h-4v-4zm7-2h4v8h-4v-4z"/>
                 </svg>
               </div>
-              <h3 className="font-semibold text-sm font-bold mb-2">Entrenamiento Práctico</h3>
-              <p className="text-xs text-foreground/70">Simula entrevistas, practica comunicación, negocia en escenarios reales. Feedback inmediato, no teoría.</p>
+              <h3 className="font-bold text-lg mb-2">Entrenamiento - Practica Siendo</h3>
+              <p className="text-sm text-foreground/70">Entrenamientos de entrevistas con escenarios realistas y feedback personalizado en tiempo real.</p>
             </div>
 
-            {/* Coach con IA - Neural network/connection nodes */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-cyan-600 dark:text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  {/* Central node (You) */}
-                  <circle cx="12" cy="12" r="2.5" fill="currentColor" />
-                  {/* AI nodes around */}
-                  <circle cx="6" cy="6" r="1.5" />
-                  <circle cx="18" cy="6" r="1.5" />
-                  <circle cx="6" cy="18" r="1.5" />
-                  <circle cx="18" cy="18" r="1.5" />
-                  {/* Connection lines */}
-                  <line x1="12" y1="12" x2="6" y2="6" opacity="0.5" strokeLinecap="round" />
-                  <line x1="12" y1="12" x2="18" y2="6" opacity="0.5" strokeLinecap="round" />
-                  <line x1="12" y1="12" x2="6" y2="18" opacity="0.5" strokeLinecap="round" />
-                  <line x1="12" y1="12" x2="18" y2="18" opacity="0.5" strokeLinecap="round" />
+            {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Turquoise) */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-cyan-600 dark:bg-cyan-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="2"/>
+                  <circle cx="6" cy="9" r="2"/>
+                  <circle cx="18" cy="9" r="2"/>
+                  <circle cx="6" cy="15" r="2"/>
+                  <circle cx="18" cy="15" r="2"/>
+                  <line x1="12" y1="14" x2="6" y2="17" stroke="white" strokeWidth="2"/>
+                  <line x1="12" y1="14" x2="18" y2="17" stroke="white" strokeWidth="2"/>
+                  <line x1="12" y1="10" x2="6" y2="7" stroke="white" strokeWidth="2"/>
+                  <line x1="12" y1="10" x2="18" y2="7" stroke="white" strokeWidth="2"/>
                 </svg>
               </div>
-              <h3 className="font-semibold text-sm font-bold mb-2">Coach con IA</h3>
-              <p className="text-xs text-foreground/70">Disponible 24/7. Retroalimentación personalizada, ajustes a tu ritmo, y acompañamiento en momentos clave.</p>
+              <h3 className="font-bold text-lg mb-2">La Realidad - Vive Tu Nueva Identidad</h3>
+              <p className="text-sm text-foreground/70">Coaching IA 24/7, noticias del mercado y plan de acción para materializar tu transformación.</p>
             </div>
           </div>
         </div>
@@ -206,41 +194,44 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* HOW IT WORKS 60 SECONDS */}
+      {/* HOW IT WORKS 60 SECONDS - PILLARS */}
       <section className="container mx-auto px-4 py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900/50 dark:to-slate-900/20 rounded-3xl my-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
-            Cómo funciona en 60 segundos
+            Tu Transformación en 3 Momentos
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {/* Pilar 1: El Ritual */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-700 dark:bg-purple-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#8B5CF6' }}>
+              <div className="w-16 h-16 bg-purple-600 dark:bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#A855F7' }}>
                 <span className="text-2xl font-bold text-white">01</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">El Ritual - Quién Eres Ahora</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Diagnóstico profundo de quién eres, qué haces bien y tus patrones. El autoconocimiento es el primer paso.
+                Descubre tu verdadero perfil sin filtros a través de evaluaciones científicas basadas en liderazgo.
               </p>
             </div>
 
+            {/* Pilar 2: Exploración */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 dark:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              <div className="w-16 h-16 bg-blue-600 dark:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#3B82F6' }}>
                 <span className="text-2xl font-bold text-white">02</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">Ordenas tu camino</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">Exploración - Aprende Nuevas Formas</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Ruta personalizada de 90 días. De la claridad emerge la dirección. Sabes exactamente hacia dónde ir.
+                Construye tu ruta personalizada de 30/60/90 días con 120+ recursos y estrategias reales del mercado.
               </p>
             </div>
 
+            {/* Pilar 3: Entrenamiento */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              <div className="w-16 h-16 bg-orange-600 dark:bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#F97316' }}>
                 <span className="text-2xl font-bold text-white">03</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">Entrenamiento - Practica Siendo</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Entrenamiento guiado en habilidades clave con feedback real. Crecer practicando de manera efectiva.
+                Practícate con entrenamientos realistas, feedback conductual y un coach IA disponible 24/7.
               </p>
             </div>
           </div>
