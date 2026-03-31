@@ -101,13 +101,17 @@ export default function A1ReportPage() {
       const testData = testDataArray[0]
       const disc_profile = testData.disc_profile as Record<string, number> || {}
 
-      // Normalize scores to 0-100 scale
+      console.log('[v0] Raw disc_profile from database:', disc_profile)
+
+      // Normalize scores to 0-100 scale that sums to 100%
       const rawScores = {
-        D: disc_profile.D || 0,
-        I: disc_profile.I || 0,
-        S: disc_profile.S || 0,
-        C: disc_profile.C || 0
+        D: Math.abs(disc_profile.D || 0),
+        I: Math.abs(disc_profile.I || 0),
+        S: Math.abs(disc_profile.S || 0),
+        C: Math.abs(disc_profile.C || 0)
       }
+
+      console.log('[v0] Absolute raw scores:', rawScores)
 
       // Calculate total to normalize
       const total = rawScores.D + rawScores.I + rawScores.S + rawScores.C || 1
@@ -117,6 +121,10 @@ export default function A1ReportPage() {
         S: (rawScores.S / total) * 100,
         C: (rawScores.C / total) * 100
       }
+
+      console.log('[v0] Total raw:', total)
+      console.log('[v0] Normalized scores (should sum to ~100):', normalizedScores)
+      console.log('[v0] Sum check:', Object.values(normalizedScores).reduce((a, b) => a + b, 0))
 
       const profile: CerebroProfile = {
         D: normalizedScores.D,
@@ -142,9 +150,7 @@ export default function A1ReportPage() {
       profile.secondary = scores[1].letter
       profile.secondaryScore = scores[1].value
 
-      console.log('[v0] Raw scores:', rawScores)
-      console.log('[v0] Normalized scores:', normalizedScores)
-      console.log('[v0] Loaded profile from a1_cerebral_assessment:', profile)
+      console.log('[v0] Final profile:', profile)
       setProfile(profile)
       setLoading(false)
     } catch (err) {
