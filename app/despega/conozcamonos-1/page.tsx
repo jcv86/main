@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
+import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 type ResponseValue = string | string[]
 
@@ -21,6 +22,12 @@ export default function Conozcamonos1Page() {
   const [validationSuggestions, setValidationSuggestions] = useState('')
   const router = useRouter()
   const supabase = createClient()
+  const { trackEvent } = useV1Analytics()
+
+  // Track C1 page entry
+  useEffect(() => {
+    trackEvent('c1_started', { questionIndex: 0 })
+  }, [trackEvent])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -104,8 +111,10 @@ export default function Conozcamonos1Page() {
   const handleNext = async () => {
     if (!isAnswered()) { 
       setError('Necesito entender mejor tu contexto. Amplía un poco más tu respuesta.')
+      trackEvent('c1_error_empty', { questionIndex: currentQuestion })
       return 
     }
+    trackEvent('c1_response_submitted', { questionIndex: currentQuestion })
 
     // Only validate text fields
     if (question.type === 'text') {
@@ -178,9 +187,11 @@ export default function Conozcamonos1Page() {
       }
       console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
       console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
+      trackEvent('c1_completed', { totalQuestions: CONOZCAMONOS_1_QUESTIONS.length })
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
+      trackEvent('c1_error_save', { errorType: err instanceof Error ? err.message : 'unknown' })
       setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
     } finally {
       setLoading(false)
