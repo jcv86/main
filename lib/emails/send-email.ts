@@ -20,24 +20,26 @@ export async function sendEmail({
   try {
     // Validate environment variables
     if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.error('[v0] Gmail credentials missing')
       throw new Error('Gmail credentials not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD.')
     }
 
-    console.log('[v0] Sending email to:', to)
+    console.log('[v0] Sending email via Gmail SMTP')
+    console.log('[v0] To:', to)
     console.log('[v0] From:', from)
 
     // Create Gmail transporter
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_USER, // juan@n3uralia.com
-        pass: process.env.GMAIL_APP_PASSWORD, // App password
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     })
 
     // Send email
     const info = await transporter.sendMail({
-      from, // juan@despegatucarrera.com (must be added as alias in Gmail settings)
+      from,
       to,
       subject,
       html,
@@ -55,7 +57,6 @@ export async function sendEmail({
   }
 }
 
-// Example usage function
 export async function sendWelcomeEmail(userEmail: string, userName: string) {
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px;">
