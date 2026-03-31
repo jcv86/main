@@ -16,6 +16,7 @@ interface ContactFormModalProps {
 export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) {
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     whatsapp: "",
     message: "",
   })
@@ -42,7 +43,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
       }
 
       setStatus("success")
-      setFormData({ name: "", whatsapp: "", message: "" })
+      setFormData({ name: "", email: "", whatsapp: "", message: "" })
 
       // Auto close after 3 seconds
       setTimeout(() => {
@@ -87,6 +88,23 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               placeholder="Tu nombre completo"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              disabled={loading}
+            />
+          </div>
+
+          {/* Email Field */}
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+              Email *
+            </Label>
+            <Input
+              id="email"
+              placeholder="tu@email.com"
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
               className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
               disabled={loading}

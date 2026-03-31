@@ -3,20 +3,30 @@ import { sendEmail } from '@/lib/emails/send-email'
 
 interface ContactRequest {
   name: string
+  email: string
   whatsapp?: string
   message: string
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, whatsapp, message } = (await req.json()) as ContactRequest
+    const { name, email, whatsapp, message } = (await req.json()) as ContactRequest
 
     console.log('[v0] Contact form submission from:', name)
 
     // Validate inputs
-    if (!name || !message) {
+    if (!name || !email || !message) {
       return NextResponse.json(
-        { message: 'Nombre y consulta son requeridos' },
+        { message: 'Nombre, email y consulta son requeridos' },
+        { status: 400 }
+      )
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { message: 'Por favor ingresa un email válido' },
         { status: 400 }
       )
     }
@@ -30,6 +40,7 @@ export async function POST(req: NextRequest) {
 
     // Sanitize inputs
     const sanitizedName = name.trim().substring(0, 100)
+    const sanitizedEmail = email.trim().toLowerCase().substring(0, 100)
     const sanitizedMessage = message.trim().substring(0, 5000)
     const sanitizedWhatsapp = whatsapp?.trim().substring(0, 20) || ''
 
@@ -218,20 +229,17 @@ export async function POST(req: NextRequest) {
     `
 
     // Send confirmation email to user
-    console.log('[v0] Sending confirmation email to user...')
+    console.log('[v0] Sending confirmation email to user at:', sanitizedEmail)
     
-    // We need to get the user's email from the form. For now, we'll use a placeholder
-    // In a real implementation, add an email field to the contact form
-    // For now, let's send it only to the admin
-    // await sendEmail({
-    //   to: userEmail,
-    //   subject: 'Hemos recibido tu consulta - Despega Tu Carrera',
-    //   html: userEmailContent,
-    //   text: `Hemos recibido tu consulta. Te responderemos dentro de 24 horas.`,
-    //   from: 'info@despegatucarrera.com',
-    // })
+    await sendEmail({
+      to: sanitizedEmail,
+      subject: 'Hemos recibido tu consulta - Despega Tu Carrera',
+      html: userEmailContent,
+      text: `Hemos recibido tu consulta. Te responderemos dentro de 24 horas.`,
+      from: 'info@despegatucarrera.com',
+    })
 
-    console.log('[v0] Contact form email sent successfully')
+    console.log('[v0] User confirmation email sent successfully')
 
     return NextResponse.json({
       success: true,
