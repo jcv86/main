@@ -722,6 +722,125 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* SECTION 9 — FAQ Estratégico */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Preguntas frecuentes
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            Resolvemos las dudas más comunes para que tomes la mejor decisión.
+          </p>
+
+          <div className="space-y-4">
+            {/* FAQ 1 */}
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es DTC un test cualquiera o algo más?</span>
+                <svg className="w-6 h-6 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm leading-relaxed space-y-2">
+                <p>
+                  No es un test cualquiera. DTC es un sistema integral que combina diagnóstico profundo, ruta personalizada, entrenamiento práctico y contexto laboral.
+                </p>
+                <p>
+                  Mientras otros tests solo dan números o descripciones, DTC interpreta esos datos, construye una ruta, te entrena en habilidades reales y te mantiene conectado al mercado laboral.
+                </p>
+                <p>
+                  Es más parecido a tener un coach personal con IA que a completar un cuestionario.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 2 */}
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
+                <svg className="w-6 h-6 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm leading-relaxed space-y-2">
+                <p>
+                  La mayoría de personas estancadas no lo están por falta de talento, sino por falta de claridad, dirección y estructura.
+                </p>
+                <p>
+                  DTC funciona precisamente para eso: te ayuda a entender qué te está frenando realmente, crea una ruta clara de 90 días con hitos medibles, y te entrena en habilidades específicas donde te bloqueas.
+                </p>
+                <p>
+                  El cambio ocurre cuando el desorden se convierte en dirección, y la comprensión en práctica.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 3 */}
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
+                <svg className="w-6 h-6 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm leading-relaxed space-y-2">
+                <p>
+                  Es para ambas cosas. DTC trabaja tanto la búsqueda de oportunidades laborales como tu desarrollo integral como persona.
+                </p>
+                <p>
+                  El diagnóstico te ayuda a entender cómo funcionas realmente. La ruta personalizada puede enfocarse en búsqueda activa o en crecimiento interno. El entrenamiento incluye tanto habilidades de mercado como liderazgo personal.
+                </p>
+                <p>
+                  Tú eliges el foco, pero el sistema está diseñado para que ambos aspectos mejoren.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 4 */}
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Cómo me diferencio realmente en el mercado?</span>
+                <svg className="w-6 h-6 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm leading-relaxed space-y-2">
+                <p>
+                  La diferenciación viene de dos cosas: entender dónde realmente eres bueno (y dónde no) y saber comunicarlo con claridad.
+                </p>
+                <p>
+                  DTC te ayuda a identificar tus tensiones internas, patrones reales de avance, y fortalezas que otros no ven. Luego, el entrenamiento en entrevistas y comunicación te da las herramientas para comunicar esa diferencia de forma natural y creíble.
+                </p>
+                <p>
+                  La diferenciación auténtica viene de autoconocimiento + práctica. Eso es DTC.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 5 */}
+            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
+                <span>¿Es útil si ya tengo experiencia o es solo para junior?</span>
+                <svg className="w-6 h-6 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </summary>
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-foreground/80 text-sm leading-relaxed space-y-2">
+                <p>
+                  Es especialmente útil para gente con experiencia. A veces después de años en el mercado, la claridad puede nublarse.
+                </p>
+                <p>
+                  Personas con experiencia se benefician de reenfocarse, entender qué quieren realmente, identificar si están en el rol correcto, y desarrollar criterio más profundo sobre su carrera. DTC es perfecto para eso.
+                </p>
+                <p>
+                  Si tienes experiencia pero sientes que hay algo desordenado o desalineado, este es tu momento.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 5 — CTA de Cierre */}
       <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-600/5 dark:to-blue-600/5 rounded-3xl my-16">
         <div className="max-w-3xl mx-auto text-center">
