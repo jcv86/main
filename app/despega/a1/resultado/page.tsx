@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, ArrowRight, Brain, Sparkles } from 'lucide-react'
+import { Loader2, ArrowRight, Brain, Sparkles, TrendingUp, Target } from 'lucide-react'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 export default function A1ResultadoPage() {
@@ -237,6 +237,125 @@ export default function A1ResultadoPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* ⭐ A1 V2: INTERNAL TENSIONS */}
+        <Card className="mb-8 border-0 shadow-lg border-2 border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
+              <Sparkles className="w-5 h-5 text-amber-600" />
+              Tus Tensiones Internas
+            </CardTitle>
+            <p className="text-sm text-amber-800 dark:text-amber-300 mt-2 font-normal">Las dinámicas internas que viven en ti constantemente</p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-3">
+              <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-slate-900 rounded">
+                <p className="font-semibold text-slate-900 dark:text-slate-100">Acción vs. Reflexión</p>
+                <p className="text-sm text-slate-700 dark:text-slate-400 mt-1">Tu tendencia es lanzarse (Energía), pero tu mente pide tiempo para procesar (Enfoque). Esto crea un ritmo interno de "acelera-pausa-acelera".</p>
+              </div>
+              <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-slate-900 rounded">
+                <p className="font-semibold text-slate-900 dark:text-slate-100">Independencia vs. Interdependencia</p>
+                <p className="text-sm text-slate-700 dark:text-slate-400 mt-1">Buscas autonomía (Plan Ejecutivo), pero necesitas relaciones sólidas para crecer (Relaciones). Tenés que aprender a no cargar todo solo.</p>
+              </div>
+              <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-slate-900 rounded">
+                <p className="font-semibold text-slate-900 dark:text-slate-100">Perfeccionismo vs. Pragmatismo</p>
+                <p className="text-sm text-slate-700 dark:text-slate-400 mt-1">Querés hacerlo bien (Enfoque), pero a veces necesitás soltar y iterar (Energía). El balance entre "listo" y "perfecto" es donde crecés.</p>
+              </div>
+            </div>
+            <p className="text-xs text-amber-700 dark:text-amber-300 mt-4 italic">💡 En A2, los 3 sprints de 30 días te ayudarán a convertir estas tensiones en superpotencias.</p>
+          </CardContent>
+        </Card>
+
+        {/* ⭐ A1 V2: ADVANCEMENT PATTERN */}
+        <Card className="mb-8 border-0 shadow-lg border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
+              Tu Patrón de Avance y Freno
+            </CardTitle>
+            <p className="text-sm text-emerald-800 dark:text-emerald-300 mt-2 font-normal">Dónde aceleras naturalmente vs. donde necesitas empujar</p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <p className="font-semibold text-emerald-900 dark:text-emerald-200">🚀 ACELERAS EN:</p>
+                <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-400">
+                  <li className="flex gap-2">
+                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span>Decisiones bajo presión</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span>Liderar cambios grandes</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span>Comunicación directa</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span>Ejecutar con ambición</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <p className="font-semibold text-orange-900 dark:text-orange-200">⚠️ TE FRENA:</p>
+                <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-400">
+                  <li className="flex gap-2">
+                    <span className="text-orange-600 font-bold">■</span>
+                    <span>Detalles y preparación excesiva</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-orange-600 font-bold">■</span>
+                    <span>Falta de cierre o follow-up</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-orange-600 font-bold">■</span>
+                    <span>Resistencia de equipo</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-orange-600 font-bold">■</span>
+                    <span>Ambigüedad o cambios de plan</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-4 italic">💡 Tu Misión 90 días usará tus fortalezas de aceleración y construirá capacidad donde frenas.</p>
+          </CardContent>
+        </Card>
+
+        {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
+        <Card className="mb-8 border-0 shadow-lg border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200">
+              <Target className="w-5 h-5 text-indigo-600" />
+              Lectura Predictiva: El Mercado Laboral y Vos
+            </CardTitle>
+            <p className="text-sm text-indigo-800 dark:text-indigo-300 mt-2 font-normal">Cómo tu perfil se posiciona en oportunidades reales</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-indigo-200 dark:border-indigo-700">
+              <p className="font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Roles Donde Brillás</p>
+              <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-400">
+                <li>• Liderazgo estratégico (startups, transformación digital)</li>
+                <li>• Project leadership en ambientes de cambio rápido</li>
+                <li>• Roles que requieren decisión rápida + visión clara</li>
+              </ul>
+            </div>
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-orange-200 dark:border-orange-700">
+              <p className="font-semibold text-orange-900 dark:text-orange-200 mb-2">Roles a Evitar o Negociar</p>
+              <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-400">
+                <li>• Trabajo operativo puro (muy repetitivo)</li>
+                <li>• Roles sin autonomía decisoria</li>
+                <li>• Ambientes con mucha burocracia o cambios de rumbo</li>
+              </ul>
+            </div>
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-red-200 dark:border-red-700">
+              <p className="font-semibold text-red-900 dark:text-red-200 mb-2">Señal de Alerta</p>
+              <p className="text-sm text-slate-700 dark:text-slate-400">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Final Bridge to A2 */}
         <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 dark:from-purple-900/20 dark:to-blue-900/20">
