@@ -2,8 +2,6 @@
 
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 interface SendEmailParams {
   to: string | string[]
   subject: string
@@ -20,7 +18,12 @@ export async function sendEmail({
   from = 'onboarding@resend.dev', // Change to your verified domain
 }: SendEmailParams) {
   try {
+    // Initialize Resend inside the function, not at module level
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
     console.log('[v0] Sending email to:', to)
+    console.log('[v0] From:', from)
+    console.log('[v0] API Key present:', !!process.env.RESEND_API_KEY)
 
     const data = await resend.emails.send({
       from,
