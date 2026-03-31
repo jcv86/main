@@ -45,10 +45,10 @@ export default function A1ResultadoPage() {
 
       setProfile(assessment)
       console.log('[v0] [CANONICAL] A1 resultado loaded for user')
-      trackEvent('a1_resultado_loaded', { hasProfile: true })
+      trackEvent('a1_resultado_viewed', {})
     } catch (err) {
       console.error('[v0] Error loading results:', err)
-      trackEvent('a1_error_load', { errorType: err instanceof Error ? err.message : 'unknown' })
+      trackEvent('error_occurred', { errorType: err instanceof Error ? err.message : 'unknown' })
       setError('Error al cargar tus resultados')
     } finally {
       setLoading(false)
@@ -380,7 +380,7 @@ export default function A1ResultadoPage() {
             </p>
             <Button 
               onClick={() => {
-                trackEvent('a1_cta_clicked', { destination: 'a2_intro' })
+                trackEvent('a1_bridge_cta_clicked', {})
                 router.push('/despega/a2/intro')
               }} 
               className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"

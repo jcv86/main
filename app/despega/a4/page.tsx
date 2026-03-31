@@ -37,7 +37,7 @@ export default function A4HubPage() {
         const nextPage = await getNextRequiredPage(user.id)
         if (!nextPage.includes('/a4')) {
           console.log('[v0] User not ready for A4, redirecting to:', nextPage)
-          trackEvent('a4_prerequisite_check_failed', { redirectTo: nextPage })
+          trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
           router.push(nextPage)
           return
         }
@@ -45,7 +45,7 @@ export default function A4HubPage() {
         setIsCheckingPrerequisites(false)
       } catch (error) {
         console.error('[v0] Error checking A4 prerequisites:', error)
-        trackEvent('a4_error_prerequisites', { errorType: error instanceof Error ? error.message : 'unknown' })
+        trackEvent('error_occurred', { errorType: error instanceof Error ? error.message : 'unknown' })
         setIsCheckingPrerequisites(false)
       }
     }

@@ -43,7 +43,7 @@ export default function A2DashboardPage() {
         const nextPage = await getNextRequiredPage(user.id)
         if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
           console.log('[v0] [CANONICAL] User not ready for A2 dashboard, redirecting to:', nextPage)
-          trackEvent('a2_prerequisite_check_failed', { redirectTo: nextPage })
+          trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
           router.push(nextPage)
           return
         }
@@ -72,7 +72,7 @@ export default function A2DashboardPage() {
 
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)
-          trackEvent('a2_mission_loaded', { hasMission: true })
+          trackEvent('a2_sprint_viewed', {})
 
           // Load mission
           const { data: missionData } = await supabase

@@ -38,7 +38,7 @@ export default function A3Page() {
       const nextPage = await getNextRequiredPage(user?.id)
       if (!nextPage.includes('/a3')) {
         console.log('[v0] User not ready for A3, redirecting to:', nextPage)
-        trackEvent('a3_prerequisite_check_failed', { redirectTo: nextPage })
+        trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
         router.push(nextPage)
         return
       }
@@ -66,7 +66,7 @@ export default function A3Page() {
         const discProfile = a1Results.profile_type || a1Results.result?.dominantProfile
         console.log('[v0] User DISC profile for A3 personalization:', discProfile)
         setUserDiscProfile(discProfile)
-        trackEvent('a3_disc_profile_loaded', { profile: discProfile })
+        trackEvent('a3_training_level_started', {})
       }
 
       // Load A3 progress if exists
