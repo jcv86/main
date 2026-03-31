@@ -54,7 +54,9 @@ export default function LandingPageOptimized() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <Brain strokeWidth={1.5} className="w-6 h-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
+                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
               </div>
               <h3 className="font-semibold text-sm mb-2">Reporte Profundo</h3>
               <p className="text-xs text-foreground/70">Diagnóstico de tu perfil con tensiones internas, patrones y lectura del mercado.</p>
