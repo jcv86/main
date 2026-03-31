@@ -52,44 +52,74 @@ export default function LandingPageOptimized() {
           <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Reporte Profundo */}
+            {/* Reporte Profundo - Mirror/Reflection with depth layers */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Concentric circles representing layers of self-discovery */}
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="6" opacity="0.6" />
+                  <circle cx="12" cy="12" r="3" opacity="0.4" />
+                  {/* Center point */}
+                  <circle cx="12" cy="12" r="1" fill="currentColor" />
+                  {/* Radiating lines showing insight */}
+                  <line x1="12" y1="1" x2="12" y2="3" strokeLinecap="round" />
+                  <line x1="21" y1="12" x2="23" y2="12" strokeLinecap="round" />
                 </svg>
               </div>
               <h3 className="font-semibold text-sm font-bold mb-2">Reporte Profundo</h3>
               <p className="text-xs text-foreground/70">Diagnóstico integral de quién eres: tu perfil, tensiones internas, patrones reales y cómo el mercado te ve.</p>
             </div>
 
-            {/* Ruta Personalizada */}
+            {/* Ruta Personalizada - Winding path with waypoints */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Winding path */}
+                  <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round" />
+                  <path d="M21 6c0 2 -1 3 -2 4c-2 1 -3 2 -3 5c0 3 1 4 3 5c1 1 2 2 2 4" strokeLinecap="round" opacity="0.4" />
+                  {/* Waypoints */}
+                  <circle cx="4" cy="6" r="1.5" fill="currentColor" />
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                  <circle cx="4" cy="18" r="1.5" fill="currentColor" />
                 </svg>
               </div>
               <h3 className="font-semibold text-sm font-bold mb-2">Ruta Personalizada</h3>
               <p className="text-xs text-foreground/70">90 días estructurados con sprints semanales, checkpoints medibles y ajustes basados en tu progreso real.</p>
             </div>
 
-            {/* Entrenamiento Práctico */}
+            {/* Entrenamiento Práctico - Hands building/creating */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                <svg className="w-6 h-6 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Two hands building/practicing */}
+                  <path d="M6 10l-2 6c0 1 1 2 2 2l2-2 1 2h4l1-2 2 2c1 0 2-1 2-2l-2-6" />
+                  <path d="M10 6l1-3h2l1 3" strokeLinecap="round" />
+                  <path d="M6 10l-1-2M18 10l1-2" strokeLinecap="round" />
+                  {/* Blocks/Building blocks */}
+                  <rect x="8" y="14" width="8" height="4" opacity="0.6" />
                 </svg>
               </div>
               <h3 className="font-semibold text-sm font-bold mb-2">Entrenamiento Práctico</h3>
               <p className="text-xs text-foreground/70">Simula entrevistas, practica comunicación, negocia en escenarios reales. Feedback inmediato, no teoría.</p>
             </div>
 
-            {/* Coach con IA */}
+            {/* Coach con IA - Neural network/connection nodes */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                <svg className="w-6 h-6 text-cyan-600 dark:text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Central node (You) */}
+                  <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+                  {/* AI nodes around */}
+                  <circle cx="6" cy="6" r="1.5" />
+                  <circle cx="18" cy="6" r="1.5" />
+                  <circle cx="6" cy="18" r="1.5" />
+                  <circle cx="18" cy="18" r="1.5" />
+                  {/* Connection lines */}
+                  <line x1="12" y1="12" x2="6" y2="6" opacity="0.5" strokeLinecap="round" />
+                  <line x1="12" y1="12" x2="18" y2="6" opacity="0.5" strokeLinecap="round" />
+                  <line x1="12" y1="12" x2="6" y2="18" opacity="0.5" strokeLinecap="round" />
+                  <line x1="12" y1="12" x2="18" y2="18" opacity="0.5" strokeLinecap="round" />
                 </svg>
               </div>
               <h3 className="font-semibold text-sm font-bold mb-2">Coach con IA</h3>
