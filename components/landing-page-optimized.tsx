@@ -145,8 +145,8 @@ export default function LandingPageOptimized() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Desorden Adentro</h3>
-                <p className="text-foreground/75">No sai bien qué onda contigo. Tienes potencial pero todo está como desordenado y sin dirección.</p>
+                <h3 className="font-bold text-lg mb-2">Desorden Interno</h3>
+                <p className="text-foreground/75">No tienes claridad sobre ti mismo. Tienes potencial pero todo se siente desordenado y sin dirección clara.</p>
               </div>
             </div>
 
@@ -159,7 +159,7 @@ export default function LandingPageOptimized() {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-2">Falta de Claridad</h3>
-                <p className="text-foreground/75">¿En qué soi realmente bueno? ¿Cuál es mi camino? Avanzas sin dirección, casi sin saber por qué.</p>
+                <p className="text-foreground/75">¿En qué eres realmente bueno? ¿Cuál es tu camino? Avanzas sin dirección clara, casi por inercia.</p>
               </div>
             </div>
 
@@ -172,7 +172,7 @@ export default function LandingPageOptimized() {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-2">Falta de Dirección</h3>
-                <p className="text-foreground/75">¿Para dónde voy? ¿Es este el camino correcto? Te has quedao estancao más de lo que creí.</p>
+                <p className="text-foreground/75">¿Para dónde voy? ¿Es este el camino correcto? Estás estancado más de lo que creías.</p>
               </div>
             </div>
 
@@ -184,8 +184,8 @@ export default function LandingPageOptimized() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Falta de Práctica</h3>
-                <p className="text-foreground/75">Sai que tení que entrenar (entrevistas, comunicación). Pero no sai cómo empezar ni por dónde.</p>
+                <h3 className="font-bold text-lg mb-2">Falta de Práctica Guiada</h3>
+                <p className="text-foreground/75">Sabes que necesitas entrenar habilidades clave (entrevistas, comunicación). Pero no sabes cómo empezar.</p>
               </div>
             </div>
 
@@ -197,8 +197,8 @@ export default function LandingPageOptimized() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">No Entiendi el Contexto</h3>
-                <p className="text-foreground/75">No ves bien cómo funciona el mercado laboral ni cómo tu perfil se traduce en oportunidades reales.</p>
+                <h3 className="font-bold text-lg mb-2">Falta de Lectura del Contexto</h3>
+                <p className="text-foreground/75">No comprendes bien cómo funciona el mercado laboral ni cómo tu perfil se traduce en oportunidades reales.</p>
               </div>
             </div>
 
@@ -211,7 +211,7 @@ export default function LandingPageOptimized() {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-2">El Resultado</h3>
-                <p className="text-foreground/75 font-medium">Tienes potencial pero no avanzas. Necesitai estructura, foco y una ruta clara. DTC es para eso.</p>
+                <p className="text-foreground/75 font-medium">Tienes potencial pero no avanzas. Necesitas estructura, foco y una ruta clara. DTC está diseñado para esto.</p>
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function LandingPageOptimized() {
                 </div>
                 <h3 className="font-bold text-xl mb-2 text-center">Te entiendes</h3>
                 <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                  Diagnóstico profundo de quién eres, qué haces bien y tus patrones. Conocerte es el primer paso.
+                  Diagnóstico profundo de quién eres, qué haces bien y tus patrones. El autoconocimiento es el primer paso.
                 </p>
               </div>
               {/* Arrow to next step */}
@@ -272,7 +272,7 @@ export default function LandingPageOptimized() {
                 </div>
                 <h3 className="font-bold text-xl mb-2 text-center">Practicas y mejoras</h3>
                 <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                  Entrenamiento guiado en habilidades clave con feedback real. Crecer practicando de verdá.
+                  Entrenamiento guiado en habilidades clave con feedback real. Crecer practicando de manera efectiva.
                 </p>
               </div>
             </div>
