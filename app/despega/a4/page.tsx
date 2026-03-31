@@ -217,11 +217,121 @@ export default function A4HubPage() {
         </Tabs>
 
         {/* Footer Navigation */}
-        <div className="mt-16 text-center space-y-4 border-t pt-8">
-          <p className="text-muted-foreground">
+        <div className="mt-16 space-y-6 border-t pt-8">
+
+          {/* ⭐ A4 V2: CRITERION & DEEP CONTEXT - NEW */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">Cómo Desarrollar Criterio Verdadero</h2>
+            <Card className="border-2 border-teal-200 dark:border-teal-800 bg-teal-50/30 dark:bg-teal-900/10">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-teal-600">
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">1. OBSERVAR</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Lee noticias, estudios, reportes. No solo titulares. Busca: ¿por qué cambió esto? ¿Quién se beneficia?</p>
+                    </div>
+                    <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-teal-600">
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">2. CONECTAR</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Vincula 3 trends diferentes. ¿Cómo se refuerzan? ¿Dónde ve oportunidad una persona con criterio?</p>
+                    </div>
+                    <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-teal-600">
+                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">3. ACTUAR</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Prueba tu hipótesis. Habla con gente en roles/industrias affected. Verifica si tu lectura es real.</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* ⭐ A4 V2: LABOR MARKET CONTEXT - NEW */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">Contexto Laboral: Tendencias Clave 2026</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="border-2 border-emerald-200 dark:border-emerald-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-emerald-600" />
+                    Sectores en Expansión
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded">
+                    <p className="font-semibold text-sm">• Tech & IA</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">Demanda de skilled engineers, prompt engineers, AI trainers</p>
+                  </div>
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded">
+                    <p className="font-semibold text-sm">• Salud Digital</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">Telemedicina, health analytics, reguladores de privacidad</p>
+                  </div>
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded">
+                    <p className="font-semibold text-sm">• Sostenibilidad</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">ESG officers, carbon tracking, renewable energy</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-red-200 dark:border-red-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-red-600" />
+                    Competencias Ahora Críticas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                    <p className="font-semibold text-sm">• AI Literacy</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">No es opcional. Todo rol pide "comfortable with AI"</p>
+                  </div>
+                  <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                    <p className="font-semibold text-sm">• Adaptabilidad</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">Empresas buscan gente que pivote, no especialistas rígidos</p>
+                  </div>
+                  <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                    <p className="font-semibold text-sm">• Comunicación Cruzada</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">Equipos distribuidas, multidisciplinarias, remote-first</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* ⭐ A4 V2: NOISE vs SIGNAL - NEW */}
+          <div>
+            <Card className="border-2 border-indigo-200 dark:border-indigo-800">
+              <CardHeader>
+                <CardTitle className="text-lg">Aprender a Filtrar: Noise vs Signal</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100 mb-3">❌ NOISE (Ignorar)</p>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                      <li>• Clickbait: "Este 1 truco cambió todo"</li>
+                      <li>• Predicciones sin data: "En 5 años todos seran..."</li>
+                      <li>• Vendidas: Consultoras diciendo que necesitas SU servicio</li>
+                      <li>• Opinión personal: Influencers sin contexto real</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100 mb-3">✓ SIGNAL (Prestar atención)</p>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                      <li>• Data: Reportes de Banco Central, INE, encuestas verificadas</li>
+                      <li>• Historias reales: Profesionales hablando su experiencia</li>
+                      <li>• Cambios estructurales: Regulaciones nuevas, fusiones, disrupciones</li>
+                      <li>• Patrón repetido: 3+ fuentes dicen lo mismo sin coordinarse</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Standard Footer */}
+          <p className="text-center text-muted-foreground">
             A4 es tu centro de aprendizaje continuo sobre el mercado, la economía y las oportunidades laborales en Chile.
           </p>
-          <p className="text-xs text-muted-foreground/70">
+          <p className="text-xs text-center text-muted-foreground/70">
             Datos actualizados en tiempo real • Análisis estructurado con 7 capas cognitivas • 100+ recursos curados
           </p>
         </div>

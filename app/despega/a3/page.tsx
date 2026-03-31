@@ -489,9 +489,124 @@ export default function A3Page() {
               </ul>
               <Link href="/despega/a3/progress" className="block">
                 <Button className="w-full bg-green-600 hover:bg-green-700">
-                  Ver Progreso <ArrowRight className="ml-2 w-4 h-4" />
+                  Ver Mi Progreso <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* ⭐ A3 V2: ACTIONABLE FEEDBACK SYSTEM - NEW */}
+        <div className="mt-12">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-1">Feedback Accionable por Sesión</h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">Cada entrenamiento genera feedback específico, no genérico</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-2 border-rose-200 dark:border-rose-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Fortaleza Detectada</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="p-2 bg-rose-50 dark:bg-rose-900/20 rounded">
+                  <p className="text-sm font-semibold text-rose-900 dark:text-rose-200">✓ Claridad de visión</p>
+                  <p className="text-xs text-rose-800 dark:text-rose-300 mt-1">Comunicás el "por qué" de forma muy clara</p>
+                </div>
+                <div className="p-2 bg-rose-50 dark:bg-rose-900/20 rounded">
+                  <p className="text-sm font-semibold text-rose-900 dark:text-rose-200">✓ Presencia natural</p>
+                  <p className="text-xs text-rose-800 dark:text-rose-300 mt-1">No te ves nervioso incluso bajo presión</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-amber-200 dark:border-amber-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Oportunidad de Mejora</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="p-2 bg-amber-50 dark:bg-amber-900/20 rounded">
+                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">⚠ Uso de pausas</p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">Tendés a hablar sin pausas. Probá: respuesta → pausa 2s → más respuesta</p>
+                </div>
+                <div className="p-2 bg-amber-50 dark:bg-amber-900/20 rounded">
+                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">⚠ Contacto visual</p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">Mirás al lado. Practícá: mirá directamente a cámara 3s mínimo</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-emerald-200 dark:border-emerald-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Acción de Próxima Sesión</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded border-l-4 border-emerald-600">
+                  <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200">Próxima sesión:</p>
+                  <p className="text-xs text-emerald-800 dark:text-emerald-300 mt-1">Practica misma pregunta con pausas estratégicas. Tu goal: 2-3 pausas naturales de 2-3 segundos.</p>
+                  <Button className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-sm">Programar Sesión 2</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* ⭐ A3 V2: VISIBLE PROGRESS TRACKER - NEW */}
+        <div className="mt-8">
+          <Card className="border-2 border-indigo-200 dark:border-indigo-800">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                📊 Tu Progreso en A3
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">Entrevista 0 - Diagnóstico</span>
+                    <span className="text-sm text-emerald-600 font-semibold">✓ Completado</span>
+                  </div>
+                  <Progress value={100} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 1: Guiada</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">2/5 sesiones</span>
+                  </div>
+                  <Progress value={40} className="h-2" />
+                  <div className="grid grid-cols-5 gap-1 mt-2">
+                    <div className="h-6 bg-emerald-500 rounded text-xs flex items-center justify-center text-white font-bold">✓</div>
+                    <div className="h-6 bg-emerald-500 rounded text-xs flex items-center justify-center text-white font-bold">✓</div>
+                    <div className="h-6 bg-slate-300 dark:bg-slate-600 rounded text-xs flex items-center justify-center">3</div>
+                    <div className="h-6 bg-slate-300 dark:bg-slate-600 rounded text-xs flex items-center justify-center">4</div>
+                    <div className="h-6 bg-slate-300 dark:bg-slate-600 rounded text-xs flex items-center justify-center">5</div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 2: Estructurada</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 3: Desafiante</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">Nivel 4: Maestría</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">0/5 sesiones</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+              </div>
+              <div className="mt-6 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded">
+                <p className="text-sm text-indigo-900 dark:text-indigo-200">Vas en buen ritmo. Completaste el nivel 1 en 40% del tiempo promedio. Próximo hito: Terminar Nivel 1 en 3 sesiones más.</p>
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -294,8 +294,126 @@ export default function A2DashboardPage() {
           </Card>
         </div>
 
-        {/* EMPTY STATE MESSAGE */}
-        {stats.actionsCompleted === 0 && (
+        {/* ⭐ A2 V2: SMART CHECKPOINTS - NEW */}
+        <div className="mt-8">
+          <div className="mb-4">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-1">Checkpoints del Sprint Actual</h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">Hitos de verificación que marcan el avance real</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="border-2 border-green-200 dark:border-green-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">1</div>
+                  Semana 1: Fundamentos
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" defaultChecked />
+                  <span className="text-sm">Identifica 3 áreas de enfoque claro</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Establece ritual de revisión diaria</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Completa primera acción de Energía</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-amber-200 dark:border-amber-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">2</div>
+                  Semana 2: Profundización
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Verifica patrón de avance/freno</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Ajusta plan si hay desalineación</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Revisa feedback de pares/coach</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-purple-200 dark:border-purple-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">3</div>
+                  Semana 3: Consolidación
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Evidencia de progreso en 3 áreas</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Rituales establecidos y funcionando</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Plan para Sprint 2 definido</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-blue-200 dark:border-blue-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">✓</div>
+                  Revisión del Sprint 1
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
+                <Button className="w-full mt-2 bg-blue-600 hover:bg-blue-700">Programar Revisión</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* ⭐ A2 V2: WEEKLY REVIEW RITUAL - NEW */}
+        <div className="mt-8">
+          <Card className="border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/30 dark:bg-indigo-900/10">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                📋 Tu Ritual Semanal de Revisión
+              </CardTitle>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-normal">Cada domingo, dedica 15 min a revisar la semana</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">1. Evalúa: ¿Qué hizo clic?</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">¿Dónde avanzaste? ¿Qué energía sintió más real?</p>
+                </div>
+                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">2. Identifica: ¿Qué frenó?</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">¿Dónde se bloqueó? ¿Qué necesita ajuste?</p>
+                </div>
+                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">3. Ajusta: ¿Qué cambia la próxima?</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Pequeño cambio para semana 2. Una cosa. Máximo.</p>
+                </div>
+              </div>
+              <Button className="w-full bg-indigo-600 hover:bg-indigo-700">Abrir Revisión Semanal</Button>
+            </CardContent>
+          </Card>
+        </div>
           <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
             <CardContent className="pt-6">
               <div className="text-center">
