@@ -208,21 +208,47 @@ export default function A1ResultadoPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-500" />
-                Tu Potencial en Equipos
+                <Sparkles className="w-5 h-5 text-purple-500" />
+                Tu Lectura en 4 Dimensiones
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-slate-700 dark:text-slate-300">
-                En equipos, eres el motor que hace que las cosas suceda. Tu energía es contagiosa y tu determinación inspira a otros. 
-                Trabajas mejor cuando confían en tu criterio y te dan autonomía. Tu reto es recordar que el éxito del equipo también depende 
-                de escuchar, integrar y celebrar contribuciones diversas.
-              </p>
+            <CardContent className="space-y-3">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-500">
+                <p className="font-semibold text-red-700 dark:text-red-300">Energía (Acción & Dinamismo)</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
+              </div>
+              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-500">
+                <p className="font-semibold text-yellow-700 dark:text-yellow-300">Plan Ejecutivo (Influencia & Visión)</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
+              </div>
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-500">
+                <p className="font-semibold text-green-700 dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
+              </div>
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+                <p className="font-semibold text-blue-700 dark:text-blue-300">Enfoque (Precisión & Profundidad)</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* CTA */}
+        {/* Final Bridge to A2 */}
+        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 dark:from-purple-900/20 dark:to-blue-900/20">
+          <CardHeader>
+            <CardTitle className="text-xl">Por Qué Esto Importa Para Tu Ruta</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-slate-700 dark:text-slate-300">
+            <p>Tu perfil Despega Cerebral no es una etiqueta, es un mapa de cómo avanzas naturalmente.</p>
+            <p>Lo que viene a continuación (tu Misión 90 días en 3 sprints) estará diseñado para:</p>
+            <ul className="space-y-1 ml-4">
+              <li>✓ Jugar a tus fortalezas sin dejarlas estancadas</li>
+              <li>✓ Trabajar las áreas que te traban, sin que se note como "corrección"</li>
+              <li>✓ Llevar tu energía, enfoque, relaciones y plan ejecutivo al siguiente nivel</li>
+              <li>✓ Prepararte para lo que viene después (A3: entrevistas reales, A4: radar estratégico)</li>
+            </ul>
+          </CardContent>
+        </Card>
         <div className="text-center">
           <Button 
             onClick={() => router.push('/despega/a2/intro')} 

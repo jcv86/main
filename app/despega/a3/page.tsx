@@ -108,11 +108,12 @@ export default function A3Page() {
         {/* WELCOME HERO - A3 VERSION */}
         <div className="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-800 dark:to-amber-800 rounded-lg p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Aterrizaje y Entrenamiento</p>
-            <h1 className="text-4xl font-bold mb-3">Entrena como profesional antes de hacerlo en vivo</h1>
+            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
+            <h1 className="text-4xl font-bold mb-3">Entrena como Profesional. Verdaderamente.</h1>
             <p className="text-lg text-orange-50 mb-4">
-              Completaste tu descubrimiento personal en A1 y tu plan en A2. Ahora es momento de practicar en entrenamientos realistas. 
-              A3 te pone en escenarios desafiantes donde practicas entrevistas, presentaciones y decisiones estratégicas con feedback en tiempo real.
+              Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
+              Luego avanzas en 4 niveles: guiada → estructurada → desafiante → maestría. 
+              Cada sesión te prepara para situaciones reales.
             </p>
             {userDiscProfile && (
               <div className="mb-4 p-3 bg-white/20 rounded-lg border border-white/30">
@@ -211,54 +212,80 @@ export default function A3Page() {
 
         {/* Main Training Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Diagnosis Card */}
-          <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition">
+          {/* Diagnosis Card - Now ENTREVISTA 0 */}
+          <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition md:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-purple-600" />
-                Diagnosis de Empleabilidad
+                Entrevista 0: Tu Punto de Partida
               </CardTitle>
               <CardDescription>
-                Evaluación inicial para calibrar tu nivel
+                Diagnóstico de preparación profesional integral
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Cuestionario rápido que evalúa tu claridad de perfil, fortalezas, gaps, y nivel de preparación para entrenamientos.
+                Antes de entrenar entrevistas, necesitamos tu baseline: ¿Cómo te ves? ¿Suenas seguro? ¿Tu fondo dice algo sobre ti? 
+                ¿Tu postura comunica presencia? Entrevista 0 calibra estos elementos.
               </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                <li>✓ 5 preguntas clave</li>
-                <li>✓ Identifica gaps de habilidades</li>
-                <li>✓ Calibra dificultad de entrenamientos</li>
-              </ul>
-              <Link href="/despega/a3/diagnosis" className="block">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-purple-900 dark:text-purple-300">Luz</p>
+                </div>
+                <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-indigo-900 dark:text-indigo-300">Fondo</p>
+                </div>
+                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-blue-900 dark:text-blue-300">Audio</p>
+                </div>
+                <div className="p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-cyan-900 dark:text-cyan-300">Postura</p>
+                </div>
+                <div className="p-2 bg-teal-50 dark:bg-teal-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-teal-900 dark:text-teal-300">Presencia</p>
+                </div>
+              </div>
+              <Link href="/despega/a3/entrevista-0" className="block">
                 <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                  Comenzar Diagnosis <ArrowRight className="ml-2 w-4 h-4" />
+                  Comenzar Entrevista 0 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
             </CardContent>
           </Card>
 
-          {/* Interview Training Card */}
-          <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition">
+          {/* Interview Training Card - Now emphasizing progression */}
+          <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition md:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Video className="w-5 h-5 text-indigo-600" />
-                Entrenamiento de Entrevista
+                Entrenamientos: 4 Niveles Progresivos
               </CardTitle>
               <CardDescription>
-                4 tipos progresivos de entrenamientos
+                De básico a maestría: guiada → estructurada → desafiante → bajo presión
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                De lo básico a lo avanzado: guiada, estructurada, desafiante, y bajo presión máxima.
+                Después de Entrevista 0, avanzas en 4 niveles de dificultad. Cada uno te prepara para situaciones más reales.
               </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                <li>✓ Feedback inmediato en video</li>
-                <li>✓ Análisis de comportamiento multimodal</li>
-                <li>✓ Preguntas adaptativas</li>
-              </ul>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                  <span className="text-lg font-bold text-green-600">▸</span>
+                  <span className="text-sm font-semibold text-green-900 dark:text-green-300">Guiada: Preguntas claras, respuestas estructuradas</span>
+                </div>
+                <div className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                  <span className="text-lg font-bold text-yellow-600">▸▸</span>
+                  <span className="text-sm font-semibold text-yellow-900 dark:text-yellow-300">Estructurada: Preguntas más complejas</span>
+                </div>
+                <div className="flex items-center gap-2 p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
+                  <span className="text-lg font-bold text-orange-600">▸▸▸</span>
+                  <span className="text-sm font-semibold text-orange-900 dark:text-orange-300">Desafiante: Preguntas inesperadas, casos</span>
+                </div>
+                <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                  <span className="text-lg font-bold text-red-600">▸▸▸▸</span>
+                  <span className="text-sm font-semibold text-red-900 dark:text-red-300">Maestría: Bajo presión, tiempo límite, jurado</span>
+                </div>
+              </div>
               <Link href="/despega/a3/simulations" className="block">
                 <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
                   Ir a Entrenamientos <ArrowRight className="ml-2 w-4 h-4" />

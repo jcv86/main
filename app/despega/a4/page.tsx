@@ -81,13 +81,16 @@ export default function A4HubPage() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge className="mb-4 px-4 py-1.5 text-sm bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200">
               <Radar className="w-3 h-3 mr-2" />
-              Centro de Inteligencia de Mercado
+              Tu Radar Estratégico Integral
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
-              Tu Radar Estratégico
+              A4: Visión del Mercado Laboral
             </h1>
-            <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-8 font-medium">
-              Análisis profundo del mercado laboral chileno con 7 capas cognitivas de interpretación. Entiende qué está pasando realmente y cómo aprovechar oportunidades.
+            <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-4 font-medium">
+              No es solo inteligencia de mercado. Es contexto país, cultura empresarial, noticias, tests, biblioteca y criterio.
+            </p>
+            <p className="text-lg text-slate-600 dark:text-slate-400 text-balance">
+              7 herramientas integradas para que entiendas el panorama laboral chileno, veas las oportunidades reales y tomes decisiones estratégicas.
             </p>
           </div>
         </div>
@@ -128,9 +131,9 @@ export default function A4HubPage() {
           {/* Radar Tab */}
           <TabsContent value="radar" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Radar Estratégico</h2>
+              <h2 className="text-2xl font-bold">1. Radar Estratégico</h2>
               <p className="text-muted-foreground">
-                Análisis profundo con 7 capas cognitivas de las tendencias del mercado laboral chileno
+                Análisis profundo del mercado laboral chileno con 7 capas cognitivas: tendencias, sectores crecientes, roles demandados, salarios, ubicación, futuro.
               </p>
             </div>
             <RadarEstrategico />
@@ -139,9 +142,9 @@ export default function A4HubPage() {
           {/* Noticias Tab */}
           <TabsContent value="noticias" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Noticias del Mercado</h2>
+              <h2 className="text-2xl font-bold">2. Noticias del Mercado</h2>
               <p className="text-muted-foreground">
-                Tendencias laborales, cambios en industrias y oportunidades emergentes
+                Tendencias laborales, cambios en industrias, innovación, oportunidades emergentes. El pulso real de qué está sucediendo ahora.
               </p>
             </div>
             <NoticiasFeed />
@@ -150,9 +153,9 @@ export default function A4HubPage() {
           {/* Personalizadas Tab */}
           <TabsContent value="personalizadas" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Noticias Personalizadas</h2>
+              <h2 className="text-2xl font-bold">3. Cultura General Profesional</h2>
               <p className="text-muted-foreground">
-                Contenido adaptado según tu perfil DISC y preferencias de desarrollo
+                Contenido adaptado según tu perfil DISC: tendencias de liderazgo, cambio organizacional, disruption, sector específico a tu interés.
               </p>
             </div>
             <PersonalizationProfile />
@@ -161,9 +164,9 @@ export default function A4HubPage() {
           {/* Tests Tab */}
           <TabsContent value="tests" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Pruebas Gamificadas</h2>
+              <h2 className="text-2xl font-bold">4. Tests Gamificados</h2>
               <p className="text-muted-foreground">
-                Completa pruebas interactivas para reforzar tu aprendizaje y ganar puntos
+                Aplica tu conocimiento del mercado en escenarios reales, juega, aprende y gana puntos mientras calibras tu comprensión laboral.
               </p>
             </div>
             <GamifiedTests />
@@ -172,9 +175,9 @@ export default function A4HubPage() {
           {/* Casos Tab */}
           <TabsContent value="casos" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Casos de Estudio</h2>
+              <h2 className="text-2xl font-bold">5. Casos Reales de Éxito</h2>
               <p className="text-muted-foreground">
-                Aprende de casos reales: desafíos, estrategias y resultados de empresas exitosas
+                Aprende de historias reales: desafíos, estrategias y resultados de profesionales y empresas que transformaron su posición en el mercado.
               </p>
             </div>
             <PruebasTab />
@@ -183,9 +186,9 @@ export default function A4HubPage() {
           {/* Biblioteca Tab */}
           <TabsContent value="biblioteca" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Biblioteca Curada</h2>
+              <h2 className="text-2xl font-bold">6. Biblioteca Curada</h2>
               <p className="text-muted-foreground">
-                100+ libros, artículos, podcasts y recursos seleccionados para tu crecimiento profesional
+                100+ libros, artículos, podcasts, reportes de investigación, papers. Todo seleccionado para deepdive en tu crecimiento profesional.
               </p>
             </div>
             <Biblioteca />
@@ -194,9 +197,9 @@ export default function A4HubPage() {
           {/* Insignias Tab */}
           <TabsContent value="badges" className="space-y-4">
             <div className="space-y-2 mb-6">
-              <h2 className="text-2xl font-bold">Insignias y Puntos</h2>
+              <h2 className="text-2xl font-bold">7. Criterio & Gamificación</h2>
               <p className="text-muted-foreground">
-                Desbloquea insignias, gana puntos y compite en el ranking global
+                Insignias, puntos, ranking. Métrica de tu comprensión acumulada y evolución como profesional consciente del mercado laboral.
               </p>
             </div>
             <PointsBadgesSystem />

@@ -123,11 +123,11 @@ export default function A2DashboardPage() {
         {/* WELCOME HERO - NEW */}
         <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 dark:from-blue-600 dark:via-cyan-600 dark:to-teal-600 rounded-lg p-8 text-white shadow-xl">
           <div className="max-w-3xl">
-            <p className="text-primary-foreground/80 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
-            <h1 className="text-4xl font-bold mb-3">Tu plan de transformación de 90 días</h1>
+            <p className="text-primary-foreground/80 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Misión 90 Días en 3 Sprints de 30</p>
+            <h1 className="text-4xl font-bold mb-3">Tu Plan de Transformación</h1>
             <p className="text-lg text-primary-foreground/90 mb-4">
-              Ya conoces tu perfil. Ahora vamos a construir un plan concreto y acciones específicas para tu cambio profesional. 
-              Este es tu espacio para planificar, aprender y ejecutar consistentemente.
+              Ya conoces tu perfil (energía, enfoque, relaciones, plan ejecutivo). Ahora lo convertimos en dirección. 
+              3 sprints de 30 días cada uno = acciones concretas + momentum sostenido + resulados visibles.
             </p>
             <div className="flex gap-3">
               <Button className="bg-white text-primary hover:bg-slate-100 font-semibold" size="lg">
@@ -214,7 +214,7 @@ export default function A2DashboardPage() {
           <div className="md:col-span-2">
             <Card className="border-0 shadow-md">
               <CardHeader>
-                <CardTitle className="text-lg">Tu Plan de 90 Días</CardTitle>
+                <CardTitle className="text-lg">Misión 90 Días: 3 Sprints de 30</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[1, 2, 3].map((sprintNum) => (
