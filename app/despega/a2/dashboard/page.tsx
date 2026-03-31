@@ -39,9 +39,24 @@ export default function A2DashboardPage() {
         // Check if user has completed all prerequisites using centralized logic
         const nextPage = await getNextRequiredPage(user.id)
         if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
-          console.log('[v0] User not ready for A2 dashboard, redirecting to:', nextPage)
+          console.log('[v0] [CANONICAL] User not ready for A2 dashboard, redirecting to:', nextPage)
           router.push(nextPage)
           return
+        }
+
+        // Mark A3 as unlocked once A2 missions have started
+        const { error: updateError } = await supabase
+          .from('despega_user_profiles')
+          .upsert({
+            user_id: user.id,
+            a3_unlocked: true,
+            a3_unlocked_at: new Date().toISOString()
+          }, { onConflict: 'user_id' })
+        
+        if (updateError) {
+          console.error('[v0] [CANONICAL] Error unlocking A3:', updateError)
+        } else {
+          console.log('[v0] [CANONICAL] A3 unlocked for user')
         }
 
         // Load user profile

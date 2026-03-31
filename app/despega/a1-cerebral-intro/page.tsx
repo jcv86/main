@@ -19,6 +19,22 @@ export default function A1CerebralIntroPage() {
         router.push('/auth/signin')
         return
       }
+      
+      // Mark A1 intro as seen (CANONICAL FLAG)
+      const { error: updateError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          a1_cerebral_intro_seen: true,
+          a1_cerebral_intro_seen_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (updateError) {
+        console.error('[v0] [CANONICAL] Error marking A1 intro seen:', updateError)
+      } else {
+        console.log('[v0] [CANONICAL] A1 intro marked as seen')
+      }
+      
       setAuthOk(true)
     }
     check()
@@ -39,10 +55,10 @@ export default function A1CerebralIntroPage() {
             </div>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
-            El Ritual - Descubre Tu Perfil
+            Descubre Tu Perfil
           </h1>
           <p className="text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto">
-            Un análisis profundo de tu estilo de comunicación, liderazgo y potencial único
+            Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único
           </p>
         </div>
 
@@ -53,7 +69,7 @@ export default function A1CerebralIntroPage() {
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
                 <Zap className="w-6 h-6 text-purple-600" />
-                ¿Qué es El Ritual de Despega?
+                ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">

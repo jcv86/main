@@ -39,6 +39,21 @@ export default function A2IntroPage() {
         return
       }
 
+      // Mark A2 intro as seen (CANONICAL FLAG)
+      const { error: updateError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          a2_intro_seen: true,
+          a2_intro_seen_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (updateError) {
+        console.error('[v0] [CANONICAL] Error marking A2 intro seen:', updateError)
+      } else {
+        console.log('[v0] [CANONICAL] A2 intro marked as seen')
+      }
+
       // Get the latest Cerebral assessment (DISC profile)
       const { data: profileData, error: profileError } = await supabase
         .from('a1_cerebral_assessment')

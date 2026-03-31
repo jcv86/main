@@ -109,15 +109,17 @@ export default function Conozcamonos2Page() {
 
       if (dbError) throw dbError
 
-      console.log('[v0] Conozcamonos 2 saved successfully')
+      console.log('[v0] [CANONICAL] Conozcámonos 2 saved successfully')
 
-      // Mark Conozcamonos-2 as completed in despega_user_profiles
+      // Mark Conozcámonos-2 as completed in despega_user_profiles with CANONICAL FLAGS
       const { error: profileError } = await supabase
         .from('despega_user_profiles')
         .upsert({
           user_id: user.id,
           onboarding_conozcamonos_2_completed: true,
-          onboarding_conozcamonos_2_completed_at: new Date().toISOString()
+          onboarding_conozcamonos_2_completed_at: new Date().toISOString(),
+          a2_route_generated: true,
+          a2_route_generated_at: new Date().toISOString()
         }, { onConflict: 'user_id' })
       
       if (profileError) {
@@ -125,7 +127,7 @@ export default function Conozcamonos2Page() {
         // Continue anyway - the assessment was saved
       }
 
-      console.log('[v0] User profile updated with C2 completion flags')
+      console.log('[v0] [CANONICAL] User profile updated with C2 and A2 route flags')
 
       // Redirect to A2 dashboard
       router.push('/despega/a2/dashboard')

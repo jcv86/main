@@ -1,286 +1,240 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase'
-import Link from 'next/link'
-import { ArrowRight, Check } from 'lucide-react'
-
-interface DiscScores {
-  D: number
-  I: number
-  S: number
-  C: number
-}
-
-const discProfiles = {
-  D: {
-    name: 'Dominante',
-    color: 'from-red-500 to-orange-500',
-    bgColor: 'bg-red-50',
-    textColor: 'text-red-700',
-    icon: '🎯',
-    description: 'Orientado a resultados. Decides rápido, lideras con visión y no temes el riesgo.',
-    strengths: ['Liderazgo', 'Decisión rápida', 'Visión estratégica', 'Orientación a objetivos'],
-    routes: ['Liderazgo Estratégico', 'Emprendimiento', 'Transformación Digital'],
-  },
-  I: {
-    name: 'Influyente',
-    color: 'from-yellow-500 to-orange-400',
-    bgColor: 'bg-yellow-50',
-    textColor: 'text-yellow-700',
-    icon: '⭐',
-    description: 'Inspirador y comunicativo. Conectas con otros y transmites entusiasmo contagioso.',
-    strengths: ['Comunicación', 'Influencia', 'Carisma', 'Trabajo en equipo'],
-    routes: ['Comunicación Efectiva', 'Liderazgo de Equipos', 'Ventas y Negociación'],
-  },
-  S: {
-    name: 'Estable',
-    color: 'from-green-500 to-teal-500',
-    bgColor: 'bg-green-50',
-    textColor: 'text-green-700',
-    icon: '🛡️',
-    description: 'Confiable y cooperativo. Eres el pilar que mantiene el equilibrio en el equipo.',
-    strengths: ['Lealtad', 'Consistencia', 'Apoyo', 'Paciencia'],
-    routes: ['Gestión de Procesos', 'Coaching y Mentoreo', 'Gestión de Proyectos'],
-  },
-  C: {
-    name: 'Cuidadoso',
-    color: 'from-blue-500 to-indigo-500',
-    bgColor: 'bg-blue-50',
-    textColor: 'text-blue-700',
-    icon: '🧠',
-    description: 'Analítico y preciso. Buscas calidad y entiendes los detalles que otros no ven.',
-    strengths: ['Análisis profundo', 'Precisión', 'Pensamiento crítico', 'Excelencia'],
-    routes: ['Análisis y Estrategia', 'Calidad y Mejora Continua', 'Compliance y Riesgos'],
-  },
-}
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Loader2, ArrowRight, Brain, Sparkles } from 'lucide-react'
 
 export default function A1ResultadoPage() {
-  const router = useRouter()
-  const [testData, setTestData] = useState<any>(null)
-  const [scores, setScores] = useState<DiscScores | null>(null)
-  const [dominantProfile, setDominantProfile] = useState<string>('')
-  const [c1Context, setC1Context] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [profile, setProfile] = useState<any>(null)
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const supabase = createClient()
 
   useEffect(() => {
-    const loadResults = async () => {
-      try {
-        const supabase = createClient()
-        if (!supabase) {
-          setLoading(false)
-          return
-        }
-
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          setLoading(false)
-          return
-        }
-
-        // Get latest test results from a1_tests_results
-        const { data: testResults } = await supabase
-          .from('a1_tests_results')
-          .select('*')
-          .eq('user_id', user.id)
-          .eq('test_name', 'Despega Cerebral')
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single()
-
-        if (testResults) {
-          console.log("[v0] Found test results:", testResults)
-          setTestData(testResults)
-          
-          // Parse scores from responses object
-          let parsedScores: DiscScores = { D: 0, I: 0, S: 0, C: 0 }
-          
-          // Try to get scores from responses.d_score, i_score, s_score, c_score
-          if (testResults.responses) {
-            parsedScores = {
-              D: testResults.responses.d_score || 0,
-              I: testResults.responses.i_score || 0,
-              S: testResults.responses.s_score || 0,
-              C: testResults.responses.c_score || 0,
-            }
-          }
-          
-          setScores(parsedScores)
-          
-          // Find dominant profile
-          const dominantProf = testResults.responses?.dominant_profile || testResults.profile_type || 'D'
-          setDominantProfile(dominantProf)
-          console.log("[v0] Set dominant profile:", dominantProf)
-
-          // Load C1 context for informe personalization
-          const { data: c1Data } = await supabase
-            .from('canon_conozcamonos_1_responses')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single()
-
-          if (c1Data) {
-            console.log("[v0] Found C1 context:", c1Data)
-            setC1Context(c1Data.responses)
-          }
-        } else {
-          console.log("[v0] No test results found")
-        }
-      } catch (error) {
-        console.error('[v0] Error loading test results:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     loadResults()
-  }, [router])
+  }, [])
+
+  const loadResults = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.id) {
+        router.push('/auth/signin')
+        return
+      }
+
+      // Get latest A1 assessment
+      const { data: assessment, error: fetchError } = await supabase
+        .from('a1_cerebral_assessment')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (fetchError || !assessment) {
+        setError('No se encontró tu evaluación. Por favor completa el test primero.')
+        return
+      }
+
+      setProfile(assessment)
+      console.log('[v0] [CANONICAL] A1 resultado loaded for user')
+    } catch (err) {
+      console.error('[v0] Error loading results:', err)
+      setError('Error al cargar tus resultados')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getDimensionName = (letter: string) => {
+    const names: Record<string, string> = {
+      'D': 'Energía',
+      'I': 'Plan Ejecutivo',
+      'S': 'Relaciones',
+      'C': 'Enfoque'
+    }
+    return names[letter] || letter
+  }
+
+  const getDimensionColor = (letter: string) => {
+    const colors: Record<string, string> = {
+      'D': 'from-red-500 to-orange-500',
+      'I': 'from-yellow-500 to-amber-500',
+      'S': 'from-green-500 to-emerald-500',
+      'C': 'from-blue-500 to-cyan-500'
+    }
+    return colors[letter] || 'from-slate-500 to-slate-600'
+  }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
-        <div className="text-white text-xl">Cargando tus resultados...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     )
   }
 
-  if (!scores || !dominantProfile) {
+  if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
-        <div className="text-white text-xl">No se encontraron resultados</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={() => router.push('/despega/a1-cerebral')}>
+            Volver al Test
+          </Button>
+        </div>
       </div>
     )
   }
-
-  const profile = discProfiles[dominantProfile as keyof typeof discProfiles]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800">
-      {/* Header Celebration */}
-      <div className="pt-20 pb-12 px-4 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 text-balance">
-          ¡Tu Perfil Está Listo!
-        </h1>
-        <p className="text-xl text-slate-300 text-balance">
-          Hemos analizado tus respuestas. Aquí está tu perfil profesional personalizado.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12">
+      <div className="container mx-auto px-4 max-w-3xl">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full">
+            <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Tu Perfil Despega Cerebral</span>
+          </div>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+            Así Funcionas
+          </h1>
+          <p className="text-lg text-slate-700 dark:text-slate-300">
+            Una visión clara de cómo te relacionas con el mundo, tus fortalezas naturales y tu potencial
+          </p>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-20 space-y-12">
-        {/* Perfil Principal */}
-        <div className={`rounded-2xl p-8 md:p-12 bg-gradient-to-br ${profile.color} shadow-2xl border border-white/10`}>
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="text-6xl md:text-7xl">{profile.icon}</div>
-            <div className="flex-1 text-white">
-              <h2 className="text-4xl md:text-5xl font-bold mb-3">{profile.name}</h2>
-              <p className="text-lg md:text-xl opacity-90 mb-6 leading-relaxed">
-                {profile.description}
+        {/* Primary Profile */}
+        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl">Tu Dimensión Dominante</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className={`p-6 bg-gradient-to-r ${getDimensionColor(profile.dominant_pattern)} rounded-lg text-white`}>
+              <p className="text-sm opacity-90 mb-1">Patrón Dominante</p>
+              <p className="text-4xl font-bold">{getDimensionName(profile.dominant_pattern)}</p>
+              <p className="text-sm opacity-90 mt-2">Tu estilo natural de energía y acción</p>
+            </div>
+            
+            {profile.secondary_pattern && (
+              <div className={`p-4 bg-gradient-to-r ${getDimensionColor(profile.secondary_pattern)} rounded-lg text-white opacity-80`}>
+                <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>
+                <p className="text-xl font-semibold">{getDimensionName(profile.secondary_pattern)}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Narrative Insights */}
+        <div className="space-y-6 mb-8">
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-yellow-500" />
+                Cómo Te Comunicás
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-slate-700 dark:text-slate-300">
+                Tu tendencia natural es la de un {getDimensionName(profile.dominant_pattern).toLowerCase()}. 
+                Esto significa que prefieres la acción clara, los resultados tangibles y la dirección definida. 
+                Trabajas mejor cuando hay objetivos claros y libertad para ejecutar.
               </p>
-              <div className="flex gap-2 flex-wrap">
-                {profile.strengths.map((strength) => (
-                  <span
-                    key={strength}
-                    className="px-4 py-2 bg-white/20 rounded-full text-sm font-semibold backdrop-blur-sm"
-                  >
-                    {strength}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-green-500" />
+                Tus Fortalezas Naturales
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+                <li className="flex gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Tomas decisiones con confianza y claridad</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Mueves proyectos hacia adelante con energía</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Comunicas directamente lo que piensas</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Lidera grupos hacia resultados concretos</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-orange-500" />
+                Áreas Para Crecer
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+                <li className="flex gap-2">
+                  <span className="text-orange-600 font-bold">→</span>
+                  <span>Desarrollar más paciencia en procesos complejos</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-orange-600 font-bold">→</span>
+                  <span>Escuchar perspectivas distintas antes de decidir</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-orange-600 font-bold">→</span>
+                  <span>Adaptar tu ritmo al de tu equipo</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-orange-600 font-bold">→</span>
+                  <span>Reflexionar antes de actuar en situaciones críticas</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-blue-500" />
+                Tu Potencial en Equipos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-slate-700 dark:text-slate-300">
+                En equipos, eres el motor que hace que las cosas suceda. Tu energía es contagiosa y tu determinación inspira a otros. 
+                Trabajas mejor cuando confían en tu criterio y te dan autonomía. Tu reto es recordar que el éxito del equipo también depende 
+                de escuchar, integrar y celebrar contribuciones diversas.
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Puntuaciones de Dimensiones */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {(['D', 'I', 'S', 'C'] as const).map((letter) => {
-            const score = scores[letter]
-            const profileData = discProfiles[letter as keyof typeof discProfiles]
-            const percentage = (score / 25) * 100
-
-            return (
-              <div key={letter} className="bg-slate-800/50 backdrop-blur rounded-xl p-6 border border-slate-700">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold text-white">{profileData.name}</h3>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-transparent">
-                    {score}
-                  </span>
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${profileData.color} rounded-full transition-all duration-700`}
-                    style={{ width: `${percentage}%` }}
-                  />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Recommended Routes */}
-        <div>
-          <h3 className="text-2xl font-bold text-white mb-6">Rutas Recomendadas Para Ti</h3>
-          <div className="grid md:grid-cols-3 gap-4">
-            {profile.routes.map((route) => (
-              <div
-                key={route}
-                className="bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 rounded-xl p-6 hover:border-slate-500 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <Check className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-white text-lg">{route}</h4>
-                    <p className="text-slate-400 text-sm mt-2">
-                      Especialmente diseñada para tu perfil {profile.name}
-                    </p>
-        </div>
-
-        {/* Contexto C1 Personalizado - WOW #1 */}
-        {c1Context && (
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 border border-slate-600 rounded-2xl p-8 md:p-12">
-            <h3 className="text-2xl font-bold text-white mb-6">Tu Contexto Personalizado</h3>
-            <div className="space-y-4">
-              {c1Context[3] && (
-                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-blue-400">
-                  <p className="text-sm text-slate-400 mb-2">Tu desafío actual:</p>
-                  <p className="text-white font-semibold">{c1Context[3]}</p>
-                </div>
-              )}
-              {c1Context[4] && (
-                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-emerald-400">
-                  <p className="text-sm text-slate-400 mb-2">Tu objetivo para 90 días:</p>
-                  <p className="text-white font-semibold">{c1Context[4]}</p>
-                </div>
-              )}
-              {c1Context[1] && (
-                <div className="bg-slate-700/50 rounded-lg p-4 border-l-4 border-purple-400">
-                  <p className="text-sm text-slate-400 mb-2">Tu situación actual:</p>
-                  <p className="text-white font-semibold">{c1Context[1]}</p>
-                </div>
-              )}
-            </div>
-            <p className="text-sm text-slate-400 mt-6 italic">
-              Este perfil ha sido personalizado según tus respuestas. No podría escribirse sin el contexto que compartiste.
-            </p>
-          </div>
-        )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA Button */}
-        <div className="flex justify-center pt-8">
-          <Link
-            href="/despega/a2"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-lg transition-all shadow-lg hover:shadow-xl"
+        {/* CTA */}
+        <div className="text-center">
+          <Button 
+            onClick={() => router.push('/despega/a2/intro')} 
+            className="gap-2 px-8 py-6 text-lg"
+            size="lg"
           >
-            Explorar Tus Rutas de Transformación
+            Continuar a A2: Tu Ruta de 90 Días
             <ArrowRight className="w-5 h-5" />
-          </Link>
+          </Button>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-4">
+            Esta información te acompañará a lo largo de tu viaje en Despega Tu Carrera
+          </p>
         </div>
       </div>
     </div>
