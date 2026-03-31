@@ -103,7 +103,7 @@ export default function Conozcamonos1Page() {
 
   const handleNext = async () => {
     if (!isAnswered()) { 
-      setError('Responde primero')
+      setError('Necesito entender mejor tu contexto. Amplía un poco más tu respuesta.')
       return 
     }
 
@@ -177,10 +177,11 @@ export default function Conozcamonos1Page() {
         // Continue anyway - the assessment was saved
       }
       console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
+      console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
-      setError('Error al guardar')
+      setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
     } finally {
       setLoading(false)
     }

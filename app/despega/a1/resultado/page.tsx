@@ -101,7 +101,7 @@ export default function A1ResultadoPage() {
             <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Tu Perfil Despega Cerebral</span>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
-            Así Funcionas
+            Tu Mapa está Listo
           </h1>
           <p className="text-lg text-slate-700 dark:text-slate-300">
             Una visión clara de cómo te relacionas con el mundo, tus fortalezas naturales y tu potencial
@@ -249,17 +249,22 @@ export default function A1ResultadoPage() {
             </ul>
           </CardContent>
         </Card>
-        <div className="text-center">
-          <Button 
-            onClick={() => router.push('/despega/a2/intro')} 
-            className="gap-2 px-8 py-6 text-lg"
-            size="lg"
-          >
-            Continuar a A2: Tu Ruta de 90 Días
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-4">
-            Esta información te acompañará a lo largo de tu viaje en Despega Tu Carrera
+        <div className="text-center space-y-4">
+          <div className="p-4 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-lg">
+            <p className="text-sm text-slate-700 dark:text-slate-300 mb-3 font-medium">
+              Ya entiendes cómo funcionas. Los próximos 90 días son la prueba real.
+            </p>
+            <Button 
+              onClick={() => router.push('/despega/a2/intro')} 
+              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              size="lg"
+            >
+              Comenzar tu Misión de 90 Días
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Fase A2: 3 sprints de 30 días cada uno → Energía, Enfoque, Relaciones, Plan Ejecutivo en acción
           </p>
         </div>
       </div>
