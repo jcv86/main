@@ -29,7 +29,7 @@ export async function sendEmail({
     console.log('[v0] Sending email to:', to)
     console.log('[v0] From:', from)
 
-    const data = await resend.emails.send({
+    const response = await resend.emails.send({
       from,
       to,
       subject,
@@ -39,12 +39,12 @@ export async function sendEmail({
     })
 
     // Check if the response has an error
-    if (data.error) {
-      throw new Error(`Resend API error: ${data.error.message}`)
+    if (response.error) {
+      throw new Error(`Resend API error: ${response.error.message}`)
     }
 
-    console.log('[v0] Email sent successfully. Message ID:', data.id)
-    return { success: true, messageId: data.id }
+    console.log('[v0] Email sent successfully. Message ID:', response.data?.id)
+    return { success: true, messageId: response.data?.id || '' }
   } catch (error) {
     console.error('[v0] Error sending email:', error)
     throw new Error(error instanceof Error ? error.message : 'Failed to send email')
