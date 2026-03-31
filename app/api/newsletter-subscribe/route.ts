@@ -1,16 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sendEmail } from '@/lib/emails/send-email'
+import { Resend } from 'resend'
 
 interface SubscribeRequest {
   email: string
 }
 
-// Email list - in production, store in database
+// Initialize Resend client
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+// Email list - in production, store in database/Supabase
 const subscribers = new Set<string>()
 
 export async function POST(req: NextRequest) {
   try {
+    // Validate API key exists
+    if (!process.env.RESEND_API_KEY) {
+      console.error('[v0] RESEND_API_KEY not configured')
+      return NextResponse.json(
+        { message: 'Error de configuración del servidor' },
+        { status: 500 }
+      )
+    }
+
     const { email } = (await req.json()) as SubscribeRequest
+
+    console.log('[v0] Newsletter subscription request for:', email)
 
     // Validate email
     if (!email || !email.includes('@')) {
@@ -30,7 +44,6 @@ export async function POST(req: NextRequest) {
 
     // Add to subscribers
     subscribers.add(email)
-
     console.log('[v0] Newsletter subscriber added:', email)
 
     // Send welcome email via Resend
@@ -72,14 +85,19 @@ export async function POST(req: NextRequest) {
             </a>
           </div>
 
-          {/* Footer */}
-          <p style="color: #94a3b8; font-size: 14px; line-height: 1.5; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
-            Si tienes preguntas, puedes responder este email o contactarnos a través de WhatsApp:
-            <br />
-            <a href="https://wa.me/56963160187" style="color: #7c3aed; text-decoration: none; font-weight: 600;">+56 9 6316 0187</a>
-          </p>
+          {/* Contact Info */}
+          <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <p style="color: #0f172a; margin: 0 0 10px 0; font-weight: 600;">¿Preguntas o Sugerencias?</p>
+            <p style="color: #475569; margin: 0 0 10px 0; font-size: 14px;">
+              📧 <a href="mailto:info@despegatucarrera.com" style="color: #7c3aed; text-decoration: none;">info@despegatucarrera.com</a>
+            </p>
+            <p style="color: #475569; margin: 0; font-size: 14px;">
+              💬 <a href="https://wa.me/56963160187" style="color: #7c3aed; text-decoration: none;">+56 9 6316 0187 (WhatsApp)</a>
+            </p>
+          </div>
 
-          <p style="color: #cbd5e1; font-size: 12px; text-align: center; margin-top: 15px;">
+          {/* Footer */}
+          <p style="color: #cbd5e1; font-size: 12px; text-align: center; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
             © 2026 Despega Tu Carrera. Todos los derechos reservados.
           </p>
         </div>
@@ -95,30 +113,43 @@ Gracias por suscribirte a nuestro newsletter. Recibirás:
 - Nuevas funciones y actualizaciones
 - Oportunidades de networking
 
-Explora nuestra plataforma en: https://despegatucarrera.com
+¿Preguntas? Contáctanos:
+📧 info@despegatucarrera.com
+💬 +56 9 6316 0187 (WhatsApp)
 
-¿Preguntas? Contáctanos por WhatsApp: +56 9 6316 0187
+Explora nuestra plataforma en: https://despegatucarrera.com
 
 © 2026 Despega Tu Carrera
     `
 
-    await sendEmail({
+    console.log('[v0] Attempting to send email via Resend to:', email)
+
+    // Send email via Resend
+    const data = await resend.emails.send({
+      from: 'info@despegatucarrera.com',
       to: email,
       subject: '¡Bienvenido a Despega Tu Carrera! 🚀',
       html: htmlContent,
       text: textContent,
-      from: 'newsletter@despegatucarrera.com', // Change to your verified Resend domain
     })
+
+    console.log('[v0] Email sent successfully:', data.id)
 
     return NextResponse.json({
       success: true,
       message: '¡Suscripción exitosa! Revisa tu email para confirmación.',
+      messageId: data.id,
     })
   } catch (error) {
     console.error('[v0] Newsletter subscription error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Error al suscribirse'
+    console.error('[v0] Error details:', errorMessage)
+    
     return NextResponse.json(
       {
-        message: error instanceof Error ? error.message : 'Error al suscribirse',
+        success: false,
+        message: 'Error al procesar tu suscripción. Por favor intenta nuevamente.',
+        error: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
       },
       { status: 500 }
     )
