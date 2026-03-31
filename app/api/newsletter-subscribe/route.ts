@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sendViaGmail } from '@/lib/emails/gmail-service'
+import { Resend } from 'resend'
 
 interface SubscribeRequest {
   email: string
@@ -10,6 +10,17 @@ const subscribers = new Set<string>()
 
 export async function POST(req: NextRequest) {
   try {
+    // Validate API key first
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      console.error('[v0] RESEND_API_KEY not set in environment variables')
+      return NextResponse.json(
+        { message: 'Error de configuración del servidor. Por favor contacta con soporte.' },
+        { status: 500 }
+      )
+    }
+
+    const resend = new Resend(apiKey)
     const { email } = (await req.json()) as SubscribeRequest
 
     console.log('[v0] Newsletter subscription request for:', email)
@@ -34,7 +45,7 @@ export async function POST(req: NextRequest) {
     subscribers.add(email)
     console.log('[v0] Newsletter subscriber added:', email)
 
-    // Send welcome email via Gmail
+    // Send welcome email via Resend
     const htmlContent = `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px 20px; min-height: 100vh;">
         <div style="background: white; border-radius: 12px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
@@ -110,10 +121,11 @@ Explora nuestra plataforma en: https://despegatucarrera.com
 © 2026 Despega Tu Carrera
     `
 
-    console.log('[v0] Attempting to send email via Gmail SMTP...')
+    console.log('[v0] Attempting to send email via Resend...')
 
-    // Send email via Gmail
-    await sendViaGmail({
+    // Send email via Resend
+    const data = await resend.emails.send({
+      from: 'juan@despegatucarrera.com',
       to: email,
       subject: '¡Bienvenido a Despega Tu Carrera! 🚀',
       html: htmlContent,
@@ -121,7 +133,7 @@ Explora nuestra plataforma en: https://despegatucarrera.com
       replyTo: 'juan@despegatucarrera.com',
     })
 
-    console.log('[v0] Email sent successfully to:', email)
+    console.log('[v0] Email sent successfully. Message ID:', data.id)
 
     return NextResponse.json({
       success: true,
@@ -142,3 +154,4 @@ Explora nuestra plataforma en: https://despegatucarrera.com
     )
   }
 }
+
