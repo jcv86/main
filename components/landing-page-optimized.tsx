@@ -90,26 +90,26 @@ export default function LandingPageOptimized() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">6</p>
-                <p className="text-sm font-medium text-foreground opacity-75">Tests Psicométricos</p>
+                <p className="text-4xl font-bold text-purple-700 dark:text-purple-400 mb-2">6</p>
+                <p className="text-sm font-medium text-foreground">Tests Psicométricos</p>
               </CardContent>
             </Card>
             <Card className="border-2 border-blue-200 dark:border-blue-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">120+</p>
-                <p className="text-sm font-medium text-foreground opacity-75">Libros Profesionales</p>
+                <p className="text-4xl font-bold text-blue-700 dark:text-blue-400 mb-2">120+</p>
+                <p className="text-sm font-medium text-foreground">Libros Profesionales</p>
               </CardContent>
             </Card>
             <Card className="border-2 border-cyan-200 dark:border-cyan-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-cyan-600 dark:text-cyan-400 mb-2">100+</p>
-                <p className="text-sm font-medium text-foreground opacity-75">Recursos Web</p>
+                <p className="text-4xl font-bold text-cyan-700 dark:text-cyan-400 mb-2">100+</p>
+                <p className="text-sm font-medium text-foreground">Recursos Web</p>
               </CardContent>
             </Card>
             <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-card">
               <CardContent className="pt-6 text-center">
-                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">24/7</p>
-                <p className="text-sm font-medium text-foreground opacity-75">Coach con IA</p>
+                <p className="text-4xl font-bold text-purple-700 dark:text-purple-400 mb-2">24/7</p>
+                <p className="text-sm font-medium text-foreground">Coach con IA</p>
               </CardContent>
             </Card>
           </div>
@@ -406,7 +406,7 @@ export default function LandingPageOptimized() {
                 <Link href="/auth">
                   <Button
                     size="lg"
-                    className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-6 w-full sm:w-auto shadow-xl"
+                    className="bg-white text-purple-800 hover:bg-gray-100 text-lg px-8 py-6 w-full sm:w-auto shadow-xl font-semibold"
                   >
                     Empieza Tu Transición
                     <ArrowRight className="ml-2 h-5 w-5" />

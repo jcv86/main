@@ -7,12 +7,22 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import type { DiscProfile } from "@/lib/disc-calculator"
+
+interface CerebroProfile {
+  energia: number
+  enfoque: number
+  relaciones: number
+  plan_ejecutivo: number
+  primary: string
+  primaryScore: number
+  secondary: string
+  secondaryScore: number
+}
 
 export default function A2IntroPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [cerebroProfile, setCerebroProfile] = useState<DiscProfile | null>(null)
+  const [cerebroProfile, setCerebroProfile] = useState<CerebroProfile | null>(null)
   const [profileName, setProfileName] = useState("")
   const router = useRouter()
   const supabase = createClient()
@@ -29,12 +39,27 @@ export default function A2IntroPage() {
         return
       }
 
-      // Get the latest Despega Cerebral profile
+      // Mark A2 intro as seen (CANONICAL FLAG)
+      const { error: updateError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          a2_intro_seen: true,
+          a2_intro_seen_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (updateError) {
+        console.error('[v0] [CANONICAL] Error marking A2 intro seen:', updateError)
+      } else {
+        console.log('[v0] [CANONICAL] A2 intro marked as seen')
+      }
+
+      // Get the latest Cerebral assessment (DISC profile)
       const { data: profileData, error: profileError } = await supabase
-        .from('user_a1_profiles')
+        .from('a1_cerebral_assessment')
         .select('disc_profile')
         .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
+        .order('completed_at', { ascending: false })
         .limit(1)
         .single()
 
@@ -43,15 +68,53 @@ export default function A2IntroPage() {
         return
       }
 
-      const profile = profileData.disc_profile as DiscProfile
+      const rawScores = profileData.disc_profile as Record<string, number> || {}
+      
+      // Map DISC to Despega Cerebral nomenclature
+      // D = Energía, I = Plan Ejecutivo, S = Relaciones, C = Enfoque
+      const despegaScores = {
+        energia: Math.abs(rawScores.D || 0),
+        plan_ejecutivo: Math.abs(rawScores.I || 0),
+        relaciones: Math.abs(rawScores.S || 0),
+        enfoque: Math.abs(rawScores.C || 0)
+      }
+
+      const total = despegaScores.energia + despegaScores.plan_ejecutivo + despegaScores.relaciones + despegaScores.enfoque || 1
+      const normalized = {
+        energia: (despegaScores.energia / total) * 100,
+        plan_ejecutivo: (despegaScores.plan_ejecutivo / total) * 100,
+        relaciones: (despegaScores.relaciones / total) * 100,
+        enfoque: (despegaScores.enfoque / total) * 100
+      }
+      
+      // Find dominant dimension
+      const scores = [
+        { name: 'energia', value: normalized.energia },
+        { name: 'plan_ejecutivo', value: normalized.plan_ejecutivo },
+        { name: 'relaciones', value: normalized.relaciones },
+        { name: 'enfoque', value: normalized.enfoque }
+      ]
+      scores.sort((a, b) => b.value - a.value)
+      
+      const profile: CerebroProfile = {
+        energia: normalized.energia,
+        plan_ejecutivo: normalized.plan_ejecutivo,
+        relaciones: normalized.relaciones,
+        enfoque: normalized.enfoque,
+        primary: scores[0].name,
+        primaryScore: scores[0].value,
+        secondary: scores[1].name,
+        secondaryScore: scores[1].value
+      }
+      
       setCerebroProfile(profile)
       
       // Set profile name based on primary dimension
       const dimensionNames: Record<string, string> = {
-        'D': 'Directo',
-        'I': 'Inspirador',
-        'S': 'Seguro',
-        'C': 'Consciente'
+        'energia': 'Energía',
+        'plan_ejecutivo': 'Plan Ejecutivo',
+        'relaciones': 'Relaciones',
+        'enfoque': 'Enfoque'
       }
       setProfileName(dimensionNames[profile.primary] || profile.primary)
       

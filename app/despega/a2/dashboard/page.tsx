@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,12 +10,12 @@ import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Activity, BookOpen, Zap, TrendingUp } from "lucide-react"
+import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
 
 export default function A2DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [mission, setMission] = useState<any>(null)
-  const [debugInfo, setDebugInfo] = useState<any>(null)
   const [stats, setStats] = useState({
     actionsCompleted: 0,
     streak: 0,
@@ -24,8 +25,10 @@ export default function A2DashboardPage() {
   })
   const router = useRouter()
   const supabase = createClient()
+  const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
+    trackEvent('a2_dashboard_viewed')
     const loadData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -35,7 +38,26 @@ export default function A2DashboardPage() {
           return
         }
 
-        // Load user profile
+        const nextPage = await getNextRequiredPage(user.id)
+        if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
+          console.log('[v0] User not ready for A2 dashboard, redirecting to:', nextPage)
+          trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
+          router.push(nextPage)
+          return
+        }
+
+        const { error: updateError } = await supabase
+          .from('despega_user_profiles')
+          .upsert({
+            user_id: user.id,
+            a3_unlocked: true,
+            a3_unlocked_at: new Date().toISOString()
+          }, { onConflict: 'user_id' })
+        
+        if (updateError) {
+          console.error('[v0] Error unlocking A3:', updateError)
+        }
+
         const { data: profileData } = await supabase
           .from("despega_user_profiles")
           .select("*")
@@ -44,8 +66,8 @@ export default function A2DashboardPage() {
 
         if (profileData?.a2_mission_id) {
           setUserProfile(profileData)
+          trackEvent('a2_sprint_viewed', {})
 
-          // Load mission
           const { data: missionData } = await supabase
             .from("a2_user_missions")
             .select("*")
@@ -53,33 +75,16 @@ export default function A2DashboardPage() {
             .single()
 
           setMission(missionData)
-
-          // Load A2 bitácora for stats
-          const { data: bitacoraData } = await supabase
-            .from("a2_user_bitacora")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("created_at", { ascending: false })
-
-          // Store debug info
-          setDebugInfo({
-            userId: user.id,
-            userEmail: user.email,
-            profileExists: !!profileData,
-            missionExists: !!missionData,
-            bitacoraEntries: bitacoraData?.length || 0,
-            timestamp: new Date().toISOString()
-          })
         }
       } catch (error) {
-        // Handle error silently
+        console.error('[v0] Error loading A2 dashboard:', error)
       } finally {
         setLoading(false)
       }
     }
 
     loadData()
-  }, [supabase, router])
+  }, [supabase, router, trackEvent])
 
   if (loading) {
     return (
@@ -93,253 +98,80 @@ export default function A2DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 overflow-y-auto">
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
-        {/* WELCOME HERO - NEW */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 dark:from-primary/90 dark:to-primary/70 rounded-lg p-8 text-white shadow-lg">
+        {/* WELCOME SECTION */}
+        <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 dark:from-blue-600 dark:via-cyan-600 dark:to-teal-600 rounded-lg p-8 text-white shadow-xl">
           <div className="max-w-3xl">
-            <p className="text-primary-foreground/80 text-sm font-semibold uppercase tracking-wider mb-2">Fase A2: Exploración y Plan de Acción</p>
-            <h1 className="text-4xl font-bold mb-3">Tu plan de transformación de 90 días</h1>
-            <p className="text-lg text-primary-foreground/90 mb-4">
-              Ya conoces tu perfil. Ahora vamos a construir un plan concreto y acciones específicas para tu cambio profesional. 
-              Este es tu espacio para planificar, aprender y ejecutar consistentemente.
-            </p>
-            <div className="flex gap-3">
-              <Button className="bg-white text-primary hover:bg-slate-100 font-semibold" size="lg">
-                Comenzar Ahora
-              </Button>
-              <Button className="bg-white/20 text-white border border-white hover:bg-white/30 font-semibold" size="lg">
-                Ver Guía
-              </Button>
-            </div>
+            <h1 className="text-4xl font-bold mb-2">Tu Misión de 90 Días</h1>
+            <p className="text-blue-100 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
           </div>
         </div>
 
-        {/* QUICK START GUIDE - NEW */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
-          <CardHeader>
-            <CardTitle className="text-xl">Primeros Pasos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Perfil Despega Cerebral</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Comprende tus fortalezas y áreas de desarrollo. Tu perfil es la base de tu plan.</p>
+        {/* MISSION OVERVIEW */}
+        {mission && (
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Misión: {mission.mission_title}</CardTitle>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{mission.mission_description}</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                  <p className="text-3xl font-bold text-blue-600">90</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Días</p>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</div>
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Comienza Sprint 1: Fundamentos (Días 1-30)</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye los pilares básicos con acciones pequeñas y consistentes.</p>
+                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                  <p className="text-3xl font-bold text-cyan-600">3</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Sprints</p>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</div>
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Trabaja con tu Coach</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu coach personalizará la ruta según tu perfil y progreso.</p>
+                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                  <p className="text-3xl font-bold text-teal-600">{stats.sprintProgress}%</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Progreso</p>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</div>
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Registra tu Progreso</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Usa la Bitácora para documentar acciones y mejorar continuamente.</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* CTA SECTION - SIMPLIFIED */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <Link href="/despega/a2/sprint-1" className="md:col-span-2">
-            <Button className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg" size="lg">
-              Comenzar Sprint 1: Fundamentos (Días 1-30) <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
-        </div>
-
-        {/* TWO COLUMN LAYOUT */}
-        <div className="grid md:grid-cols-3 gap-6">
-          
-          {/* LEFT: COACH SECTION - PROMINENT */}
-          <div className="md:col-span-1">
-            <Card className="border-2 border-purple-400 dark:border-purple-600 bg-gradient-to-b from-purple-50 to-transparent dark:from-purple-900/30 dark:to-transparent h-full">
-              <CardHeader>
-                <CardTitle className="text-lg">Tu Coach</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-slate-700 dark:text-slate-300">
-                  Tu <strong>Coach de Transformación</strong> está disponible para guiarte, responder preguntas y personalizar tu ruta según tu progreso y resultados. Aquí encontrarás apoyo personalizado en cada paso de tu jornada.
-                </p>
-                <Link href="/despega/a2/coach">
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                    Hablar con Coach
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* RIGHT: SPRINTS OVERVIEW */}
-          <div className="md:col-span-2">
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg">Tu Plan de 90 Días</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[1, 2, 3].map((sprintNum) => (
-                  <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-                    <div className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-slate-900 dark:text-slate-50">
-                            Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
-                          </h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                            Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}
-                          </p>
-                        </div>
-                        <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          sprintNum === 1
-                            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
-                            : sprintNum === 2
-                            ? "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
-                            : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
-                        }`}>
-                          {sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}
-                        </div>
-                      </div>
-                      {sprintNum === 1 && (
-                        <div className="mt-3">
-                          <div className="flex items-center justify-between text-sm mb-1">
-                            <span className="text-slate-600 dark:text-slate-400">Progreso</span>
-                            <span className="font-semibold">{stats.sprintProgress}%</span>
-                          </div>
-                          <Progress value={stats.sprintProgress} className="h-2" />
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-        </div>
-
-        {/* STATS SIMPLIFIED */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <Activity className="w-5 h-5 mx-auto mb-2 text-primary dark:text-primary/80" />
-              <div className="text-2xl font-bold">{stats.actionsCompleted}</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Acciones</p>
-            </CardContent>
-          </Card>
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <Zap className="w-5 h-5 mx-auto mb-2 text-amber-600 dark:text-amber-400" />
-              <div className="text-2xl font-bold">{stats.streak}</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Racha</p>
-            </CardContent>
-          </Card>
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="w-5 h-5 mx-auto mb-2 text-emerald-600 dark:text-emerald-400" />
-              <div className="text-2xl font-bold">{stats.successRate}%</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Éxito</p>
-            </CardContent>
-          </Card>
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <BookOpen className="w-5 h-5 mx-auto mb-2 text-primary dark:text-primary/80" />
-              <div className="text-2xl font-bold">{stats.sprintProgress}%</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Sprint</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* EMPTY STATE MESSAGE */}
-        {stats.actionsCompleted === 0 && (
-          <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50 mb-2">
-                  Comienza tu transformación
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">
-                  Aún no has iniciado acciones. Haz clic en el botón verde arriba para comenzar Sprint 1: Fundamentos.
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-500">
-                  Cada acción completada aparecerá aquí y contribuirá a tu progreso
-                </p>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {/* A3 PROGRESSION CTA - PROMINENT */}
+        {/* SPRINTS SECTION */}
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">Los 3 Sprints</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((sprintNum) => (
+              <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
+                    </CardTitle>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-blue-600">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA TO A3 */}
         <Card className="border-2 border-primary/30 dark:border-primary/40 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/20 dark:to-primary/10 shadow-lg">
-          <CardContent className="pt-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
               <div className="flex-1">
-                <Badge className="mb-3 bg-primary hover:bg-primary/90">Siguiente Fase</Badge>
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
                   ¿Listo para A3: Entrenamientos Especializados?
                 </h3>
                 <p className="text-slate-700 dark:text-slate-300 mb-4">
-                  Una vez que completes tu plan de 90 días en A2, accede a entrenamientos especializados, práctica de entrevistas y feedback de IA para llevar tus habilidades al siguiente nivel.
+                  Accede a entrenamientos especializados, práctica de entrevistas y feedback de IA.
                 </p>
-                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-                  <li className="flex gap-2">
-                    <span className="text-primary">✓</span>
-                    <span>Entrenamientos personalizados según tu perfil</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">✓</span>
-                    <span>Práctica de entrevistas con feedback de IA</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">✓</span>
-                    <span>Conexión con oportunidades laborales</span>
-                  </li>
-                </ul>
               </div>
-              <Link href="/despega/a3" className="flex-shrink-0 w-full md:w-auto">
-                <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base shadow-lg">
+              <Link href="/despega/a3" className="flex-shrink-0">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base shadow-lg">
                   Explorar A3 <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ADDITIONAL RESOURCES */}
-        <Card className="border-0 bg-amber-50 dark:bg-amber-900/20">
-          <CardHeader>
-            <CardTitle className="text-lg">Recursos Disponibles</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-3">
-              <Link href="/despega/a2/bitacora">
-                <Button variant="outline" className="w-full justify-center">
-                  Bitácora
-                </Button>
-              </Link>
-              <Link href="/despega/a4-base">
-                <Button variant="outline" className="w-full justify-center">
-                  Contexto Macro (A4)
-                </Button>
-              </Link>
-              <Link href="/despega/a3">
-                <Button variant="outline" className="w-full justify-center">
-                  Entrenamientos (A3)
                 </Button>
               </Link>
             </div>

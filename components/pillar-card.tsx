@@ -8,6 +8,7 @@ import Link from 'next/link'
 
 interface PillarCardProps {
   pillar: 'A1' | 'A2' | 'A3' | 'A4'
+  pillarName: 'El Ritual' | 'Exploración' | 'Entrenamiento' | 'La Realidad'
   title: string
   status: 'completed' | 'active' | 'pending'
   description: string
@@ -19,6 +20,7 @@ interface PillarCardProps {
 
 export function PillarCard({
   pillar,
+  pillarName,
   title,
   status,
   description,
@@ -78,6 +80,20 @@ export function PillarCard({
 
   return (
     <Card className={`${colors.bg} border-2 ${colors.border} p-6 space-y-4 hover:shadow-lg transition-shadow`}>
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-3">
+          <div className={`${colors.icon} mt-1`}>{icon}</div>
+          <div className="space-y-1">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400">{pillar}: {pillarName}</h3>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {getStatusIcon()}
+          <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{getStatusLabel()}</span>
+        </div>
+      </div>
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">

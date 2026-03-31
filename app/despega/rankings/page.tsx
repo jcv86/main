@@ -111,43 +111,43 @@ export default function RankingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+      <div className="min-h-screen bg-gradient-to-br from-purple-950 to-slate-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-slate-900">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
+          <Link href="/despega" className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 mb-4 font-medium">
             <ArrowLeft className="w-4 h-4 mr-1" />
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-yellow-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-purple-600 flex items-center justify-center text-2xl">
               🏆
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Rankings Despega</h1>
-              <p className="text-muted-foreground">Compite y mejora junto a la comunidad</p>
+              <h1 className="text-4xl font-bold text-white">Rankings Despega</h1>
+              <p className="text-slate-300 font-medium">Compite y mejora junto a la comunidad</p>
             </div>
           </div>
         </div>
 
         {/* Your Position Card */}
-        <Card className="mb-8 bg-primary/5 border-primary/20">
+        <Card className="mb-8 bg-gradient-to-r from-purple-500/10 to-slate-500/10 border-2 border-purple-500/30 dark:border-purple-400/30">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Tu posición actual</p>
-                <p className="text-3xl font-bold">#{getCurrentUserRank(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}</p>
+                <p className="text-sm text-slate-300 font-medium">Tu posición actual</p>
+                <p className="text-4xl font-bold text-white">#{getCurrentUserRank(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Puntos</p>
-                <p className="text-3xl font-bold text-primary">
+                <p className="text-sm text-slate-300 font-medium">Puntos</p>
+                <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
                   {getCurrentUserScore(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}
                 </p>
               </div>

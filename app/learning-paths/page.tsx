@@ -76,18 +76,19 @@ export default function LearningPathsPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
-            <BookOpen className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      <div className="container mx-auto py-8 px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+              <BookOpen className="h-8 w-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Rutas de Aprendizaje</h1>
+              <p className="text-slate-700 dark:text-slate-300 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-bold">Rutas de Aprendizaje</h1>
-            <p className="text-muted-foreground">Caminos estructurados para el desarrollo profesional continuo</p>
-          </div>
-        </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -261,6 +262,7 @@ export default function LearningPathsPage() {
           </div>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   )
 }

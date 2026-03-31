@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
+import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 type ResponseValue = string | string[]
 
@@ -21,6 +22,12 @@ export default function Conozcamonos1Page() {
   const [validationSuggestions, setValidationSuggestions] = useState('')
   const router = useRouter()
   const supabase = createClient()
+  const { trackEvent } = useV1Analytics()
+
+  // Track C1 page entry
+  useEffect(() => {
+    trackEvent('c1_started', { questionIndex: 0 })
+  }, [trackEvent])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -103,9 +110,11 @@ export default function Conozcamonos1Page() {
 
   const handleNext = async () => {
     if (!isAnswered()) { 
-      setError('Responde primero')
+      setError('Necesito entender mejor tu contexto. Amplía un poco más tu respuesta.')
+      trackEvent('c1_error_empty', { questionIndex: currentQuestion })
       return 
     }
+    trackEvent('c1_response_submitted', { questionIndex: currentQuestion })
 
     // Only validate text fields
     if (question.type === 'text') {
@@ -162,25 +171,48 @@ export default function Conozcamonos1Page() {
         .insert({ user_id: user.id, responses, completed_at: new Date().toISOString() })
 
       if (dbError) throw dbError
+      
+      // Mark Conozcámonos-1 as completed in despega_user_profiles (CANONICAL FLAG)
+      const { error: profileError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          onboarding_conozcamonos_1_completed: true,
+          onboarding_conozcamonos_1_completed_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (profileError) {
+        console.error('[v0] Error updating profile completion:', profileError)
+        // Continue anyway - the assessment was saved
+      }
+      console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
+      console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
+      trackEvent('c1_completed', { totalQuestions: CONOZCAMONOS_1_QUESTIONS.length })
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
-      setError('Error al guardar')
+      trackEvent('c1_error_save', { errorType: err instanceof Error ? err.message : 'unknown' })
+      setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Conozcámonos 1</h1>
-          <p className="text-sm text-muted-foreground">Pregunta {currentQuestion + 1} de {CONOZCAMONOS_1_QUESTIONS.length}</p>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">El Ritual: Paso 1 - Conocámonos</p>
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+            Antes de Empezar, Cuéntame Tu Historia
+          </h1>
+          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-6">{question.question}</h2>
+        <div className="bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">

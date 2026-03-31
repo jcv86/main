@@ -37,7 +37,14 @@ export function Leaderboard() {
     if (rank === 1) return 'bg-yellow-500'
     if (rank === 2) return 'bg-gray-400'
     if (rank === 3) return 'bg-orange-600'
-    return 'bg-gray-300'
+    return 'bg-slate-300 dark:bg-slate-600'
+  }
+
+  const getMedalEmoji = (rank: number) => {
+    if (rank === 1) return '🥇'
+    if (rank === 2) return '🥈'
+    if (rank === 3) return '🥉'
+    return rank
   }
 
   const renderLeaderboard = (sortBy: string) => (
@@ -45,11 +52,11 @@ export function Leaderboard() {
       {getSortedData(sortBy).map((user) => (
         <div key={user.rank} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted transition">
           <div className="flex items-center gap-4 flex-1">
-            <div className={`w-10 h-10 ${getMedalColor(user.rank)} rounded-full flex items-center justify-center text-white font-bold`}>
-              {user.rank}
+            <div className={`w-10 h-10 ${getMedalColor(user.rank)} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
+              {getMedalEmoji(user.rank)}
             </div>
             <div>
-              <p className="font-semibold">{user.name}</p>
+              <p className="font-semibold text-foreground">{user.name}</p>
               <p className="text-sm text-muted-foreground">{user.avatar} Nivel {Math.floor(Math.random() * 10) + 1}</p>
             </div>
           </div>

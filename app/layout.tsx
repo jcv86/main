@@ -2,13 +2,12 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { SessionWrapper } from "@/components/session-wrapper"
-import { CoachStrategicProvider } from "@/components/coach-strategic-provider"
+import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { ThemeProvider } from "@/components/theme-provider"
 import { validateEnvironment } from "@/lib/env-validation"
+import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
 
 // Validate environment on startup
 if (typeof window === "undefined") {
@@ -106,7 +105,7 @@ export const metadata: Metadata = {
   },
   category: "education",
   classification: "Professional Development Platform",
-    generator: 'v0.app'
+  generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -125,15 +124,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
-          <CoachStrategicProvider>
-            <SessionWrapper>
-              {children}
-              <Toaster />
-            </SessionWrapper>
-          </CoachStrategicProvider>
-        </ThemeProvider>
-
+        <Providers>
+          {children}
+          <LLMOOptimizedFooter />
+        </Providers>
         <Analytics />
         <SpeedInsights />
 

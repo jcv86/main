@@ -27,7 +27,7 @@ const stages = [
     ]
   },
   {
-    name: 'A1: Origen',
+    name: 'A1: El Ritual',
     icon: CheckCircle2,
     routes: [
       { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
@@ -37,7 +37,7 @@ const stages = [
     ]
   },
   {
-    name: 'A2: Ruta',
+    name: 'A2: Exploración',
     icon: MapPin,
     routes: [
       { label: 'A2 Intro', href: '/despega/a2/intro' },
@@ -47,7 +47,7 @@ const stages = [
     ]
   },
   {
-    name: 'A3: Impulso',
+    name: 'A3: Entrenamiento',
     icon: Zap,
     routes: [
       { label: 'Dashboard A3', href: '/despega/a3' },
@@ -62,7 +62,7 @@ const stages = [
     ]
   },
   {
-    name: 'A4: Radar',
+    name: 'A4: La Realidad',
     icon: Radar,
     routes: [
       { label: 'Dashboard A4', href: '/despega/a4' },

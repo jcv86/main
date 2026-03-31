@@ -1,13 +1,18 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Brain, Mail, Linkedin, Twitter, Facebook, Instagram, Youtube, MapPin, Phone, MessageCircle } from "lucide-react"
+import NewsletterSignup from "./newsletter-signup"
+import { ContactFormModal } from "./contact-form-modal"
 
 function LLMOOptimizedFooter() {
+  const [contactOpen, setContactOpen] = useState(false)
+
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
+    <>
+      <ContactFormModal open={contactOpen} onOpenChange={setContactOpen} />
+      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
       <div className="container mx-auto px-4 py-16">
         {/* Newsletter Section */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
@@ -16,16 +21,7 @@ function LLMOOptimizedFooter() {
             <p className="text-purple-100 mb-6">
               Recibe tips de desarrollo profesional, nuevos libros y recursos exclusivos cada semana
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <Input
-                type="email"
-                placeholder="tu@email.com"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white"
-              />
-              <Button className="bg-white text-purple-600 hover:bg-gray-100 font-semibold whitespace-nowrap">
-                Suscribirse
-              </Button>
-            </div>
+            <NewsletterSignup />
           </div>
         </div>
 
@@ -47,13 +43,23 @@ function LLMOOptimizedFooter() {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="h-4 w-4 text-purple-400" />
-                <a href="mailto:contacto@despegatucarrera.cl" className="hover:text-purple-400 transition-colors">
-                  contacto@despegatucarrera.cl
-                </a>
+                <button 
+                  onClick={() => setContactOpen(true)}
+                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                >
+                  info@despegatucarrera.com
+                </button>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Phone className="h-4 w-4 text-purple-400" />
-                <span>+56 9 1234 5678</span>
+                <MessageCircle className="h-4 w-4 text-green-400" />
+                <a 
+                  href="https://wa.me/56963160187?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20Despega%20Tu%20Carrera" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                >
+                  +56 9 6316 0187
+                </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <MapPin className="h-4 w-4 text-purple-400" />
@@ -191,13 +197,13 @@ function LLMOOptimizedFooter() {
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:contacto@despegatucarrera.cl" 
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                <button 
+                  onClick={() => setContactOpen(true)}
+                  className="hover:text-purple-400 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Contacto
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -242,8 +248,8 @@ function LLMOOptimizedFooter() {
               "Plataforma en Chile para desarrollo profesional con tests psicométricos, recursos de aprendizaje y coaching con IA",
             contactPoint: {
               "@type": "ContactPoint",
-              email: "contacto@despegatucarrera.cl",
-              telephone: "+56-9-1234-5678",
+              email: "info@despegatucarrera.com",
+              telephone: "+56-9-6316-0187",
               contactType: "Customer Service",
               areaServed: "CL",
               availableLanguage: ["Spanish"],
@@ -263,7 +269,8 @@ function LLMOOptimizedFooter() {
           }),
         }}
       />
-    </footer>
+      </footer>
+    </>
   )
 }
 

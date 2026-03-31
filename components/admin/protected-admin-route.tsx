@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/components/session-wrapper"
 import { ReactNode } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -15,9 +15,9 @@ interface ProtectedAdminRouteProps {
 const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",") || []
 
 export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
-  const { data: session, status } = useSession()
+  const { user, isLoading } = useSession()
 
-  if (status === "loading") {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -25,7 +25,7 @@ export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
     )
   }
 
-  if (status === "unauthenticated") {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Card className="border-0 bg-card/70 backdrop-blur-sm max-w-md w-full mx-4">
@@ -51,7 +51,7 @@ export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
     )
   }
 
-  const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email)
+  const isAdmin = user?.email && ADMIN_EMAILS.includes(user.email)
 
   if (!isAdmin) {
     return (
@@ -67,7 +67,7 @@ export function ProtectedAdminRoute({ children }: ProtectedAdminRouteProps) {
                 No tienes permisos para acceder al panel de administración.
               </p>
               <p className="text-xs text-muted-foreground text-center">
-                Usuario actual: {session?.user?.email}
+                Usuario actual: {user?.email}
               </p>
               <Button asChild variant="outline" className="w-full">
                 <Link href="/">Volver al Inicio</Link>

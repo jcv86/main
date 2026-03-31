@@ -70,8 +70,8 @@ export default function A1CerebralPage() {
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
         
-        // Call API endpoint to save DISC assessment, passing user_id
-        const response = await fetch('/api/a1-disc-save', {
+        // Call API endpoint to save Cerebral assessment, passing user_id
+        const response = await fetch('/api/a1-cerebral-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -92,7 +92,7 @@ export default function A1CerebralPage() {
           throw new Error(result.error || 'Failed to save test results')
         }
         
-        console.log('[v0] Successfully saved DISC assessment:', result)
+        console.log('[v0] Successfully saved Cerebral assessment:', result)
         router.push('/despega/a1-report')
       } catch (err) {
         console.error('[v0] Test submission error:', err)
@@ -110,7 +110,7 @@ export default function A1CerebralPage() {
       <div className="container mx-auto px-4 py-12 max-w-3xl">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">Evaluación DISC Despega</h1>
+            <h1 className="text-3xl font-bold">Evaluación Despega Cerebral</h1>
             <span className="text-muted-foreground text-sm">{idx + 1}/{DISC_TEST_QUESTIONS.length}</span>
           </div>
           <div className="w-full bg-muted rounded-full h-2"><div className="h-full bg-primary" style={{ width: `${((idx + 1) / DISC_TEST_QUESTIONS.length) * 100}%` }} /></div>

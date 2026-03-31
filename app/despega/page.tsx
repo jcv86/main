@@ -40,7 +40,7 @@ export default function DespegazoDashboard() {
       setUserName(user.email?.split('@')[0] || 'User')
 
       const { data: a1 } = await supabase
-        .from('user_a1_profiles')
+        .from('a1_cerebral_assessment')
         .select('*')
         .eq('user_id', user.id)
         .limit(1)
@@ -121,7 +121,7 @@ export default function DespegazoDashboard() {
 
   if (loading || !progress || !readiness) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 to-slate-950">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
           <p className="text-slate-300">Cargando tu dashboard...</p>
@@ -132,7 +132,7 @@ export default function DespegazoDashboard() {
 
   const stages = [
     {
-      name: 'A1: Origen',
+      name: 'A1: El Ritual',
       description: 'Descubre tu perfil DISC y potencial único',
       completed: progress.a1_completed,
       href: '/despega/a1-report',
@@ -141,7 +141,7 @@ export default function DespegazoDashboard() {
       color: 'from-purple-500 to-blue-500'
     },
     {
-      name: 'A2: Ruta',
+      name: 'A2: Exploración',
       description: 'Tu plan personalizado de 90 días',
       completed: progress.a2_completed,
       href: '/despega/a2-routes',
@@ -150,7 +150,7 @@ export default function DespegazoDashboard() {
       color: 'from-blue-500 to-cyan-500'
     },
     {
-      name: 'A3: Impulso',
+      name: 'A3: Entrenamiento',
       description: 'Prepárate para entrevistas y destaca',
       completed:
         progress.a3_progress.interview_0 &&
@@ -162,7 +162,7 @@ export default function DespegazoDashboard() {
       color: 'from-cyan-500 to-teal-500'
     },
     {
-      name: 'A4: Radar',
+      name: 'A4: La Realidad',
       description: 'Monitoreo continuo y oportunidades',
       completed: progress.a4_active,
       href: '/despega/a4-radar',
@@ -180,15 +180,15 @@ export default function DespegazoDashboard() {
       : 'text-orange-400'
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-slate-900 text-white p-4 py-12">
       <div className="max-w-6xl mx-auto">
         {/* Hero Header */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-4">
-            <Zap className="w-8 h-8 text-purple-500" />
+            <Zap className="w-8 h-8 text-purple-400" />
             <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
               Tu Transformación <br />
-              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 Despega
               </span>
             </h1>

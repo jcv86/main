@@ -34,7 +34,7 @@ const ROUTE_INFO = {
     textColor: "text-pink-900 dark:text-pink-100",
   },
   plan_ejecutivo: {
-    name: "Plan y Ejecución",
+    name: "Plan Ejecutivo",
     icon: "📋",
     color: "from-purple-500 to-indigo-500",
     bgColor: "bg-purple-50 dark:bg-purple-900/20",

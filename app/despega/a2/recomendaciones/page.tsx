@@ -136,7 +136,7 @@ export default function RecomendacionesPage() {
       },
       {
         id: "plan_ejecutivo",
-        name: "Plan y Ejecución",
+        name: "Plan Ejecutivo",
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
         color: "from-purple-500 to-indigo-500",

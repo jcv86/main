@@ -116,10 +116,18 @@ export function DashboardContent() {
     : 0
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 space-y-6 p-6">
+      {/* Header */}
+      <div className="mb-8 px-2">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+          Tu Dashboard
+        </h1>
+        <p className="text-lg text-slate-700 dark:text-slate-300">Bienvenido a tu centro de comando Despega</p>
+      </div>
+
       {/* Debug Info - Remove in production */}
       {process.env.NODE_ENV === 'development' && (
-        <Card className="bg-yellow-50 border-yellow-200">
+        <Card className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-900/50">
           <CardHeader>
             <CardTitle className="text-sm">DEBUG INFO</CardTitle>
           </CardHeader>
@@ -135,14 +143,14 @@ export function DashboardContent() {
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Tests Completados */}
-        <Card>
+        <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-white dark:bg-slate-900 shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Tests Completados</CardTitle>
+            <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-300">Tests Completados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{userData?.tests_completed || 0}</div>
+            <div className="text-3xl font-bold text-purple-900 dark:text-purple-200">{userData?.tests_completed || 0}</div>
             <Progress value={((userData?.tests_completed || 0) / 6) * 100} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">de 6 tests disponibles</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">de 6 tests disponibles</p>
           </CardContent>
         </Card>
 

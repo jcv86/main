@@ -19,6 +19,22 @@ export default function A1CerebralIntroPage() {
         router.push('/auth/signin')
         return
       }
+      
+      // Mark A1 intro as seen (CANONICAL FLAG)
+      const { error: updateError } = await supabase
+        .from('despega_user_profiles')
+        .upsert({
+          user_id: user.id,
+          a1_cerebral_intro_seen: true,
+          a1_cerebral_intro_seen_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
+      
+      if (updateError) {
+        console.error('[v0] [CANONICAL] Error marking A1 intro seen:', updateError)
+      } else {
+        console.log('[v0] [CANONICAL] A1 intro marked as seen')
+      }
+      
       setAuthOk(true)
     }
     check()
@@ -29,18 +45,20 @@ export default function A1CerebralIntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Header */}
+        {/* Header with brandbook gradient */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-8 h-8 text-blue-600" />
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-              Análisis Cerebral - A1
-            </h1>
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
+              <Brain className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <p className="text-lg text-slate-600 dark:text-slate-300">
-            Descubre tu perfil de comunicación y estilo de liderazgo
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+            Descubre Tu Perfil
+          </h1>
+          <p className="text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto">
+            Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único
           </p>
         </div>
 
@@ -50,8 +68,8 @@ export default function A1CerebralIntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-blue-600" />
-                ¿Qué es el Análisis Cerebral Despega?
+                <Zap className="w-6 h-6 text-purple-600" />
+                ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
