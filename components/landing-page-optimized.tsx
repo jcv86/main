@@ -46,7 +46,7 @@ export default function LandingPageOptimized() {
           */}
 
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
-            Tu Siguiente Versión Empieza Aquí
+            Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
           </h1>
 
           <p className="text-xl md:text-2xl text-foreground mb-12 max-w-3xl mx-auto leading-relaxed opacity-80">
@@ -54,13 +54,22 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/auth" prefetch={true}>
+            <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
               >
-                Empieza Tu Transición
+                Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link href="#how-it-works" prefetch={true}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-slate-100 dark:hover:bg-slate-900"
+              >
+                Ver cómo funciona DTC
               </Button>
             </Link>
           </div>
