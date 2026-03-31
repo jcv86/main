@@ -52,19 +52,14 @@ export default function LandingPageOptimized() {
           <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Lo que te espera en DTC</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Reporte Profundo - Mirror/Reflection with depth layers */}
+            {/* Reporte Profundo - Simplified smiley face for identity/self-discovery */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  {/* Concentric circles representing layers of self-discovery */}
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="12" cy="12" r="6" opacity="0.6" />
-                  <circle cx="12" cy="12" r="3" opacity="0.4" />
-                  {/* Center point */}
-                  <circle cx="12" cy="12" r="1" fill="currentColor" />
-                  {/* Radiating lines showing insight */}
-                  <line x1="12" y1="1" x2="12" y2="3" strokeLinecap="round" />
-                  <line x1="21" y1="12" x2="23" y2="12" strokeLinecap="round" />
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="9" cy="10" r="1.5" fill="currentColor"/>
+                  <circle cx="15" cy="10" r="1.5" fill="currentColor"/>
+                  <path d="M9 15 Q12 17 15 15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
                 </svg>
               </div>
               <h3 className="font-semibold text-sm font-bold mb-2">Reporte Profundo</h3>
