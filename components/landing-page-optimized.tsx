@@ -455,6 +455,88 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* EXAMPLE QUESTION SECTION */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Ejemplo Real de Pregunta
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
+            Así es como funcionan las preguntas en el Análisis Cerebral
+          </p>
+
+          <div className="bg-slate-900 dark:bg-slate-800 rounded-xl p-8 border border-slate-700">
+            <div className="mb-8">
+              <p className="text-lg font-semibold text-white mb-8 text-center">
+                "Cuando enfrento un desafío importante, tendiendo a ser más:"
+              </p>
+
+              {/* MÁS section */}
+              <div className="mb-8">
+                <p className="text-sm font-semibold text-blue-400 mb-4 flex items-center gap-2">
+                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
+                  Lo que MÁS te describe:
+                </p>
+                <div className="space-y-3">
+                  <button className="w-full p-4 border-2 border-blue-500 bg-blue-600/20 rounded-lg text-left hover:bg-blue-600/30 transition-all">
+                    <p className="font-medium text-white flex items-center gap-2">
+                      <span className="text-blue-400">✓</span> Decidido y directo
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1">Dimensión: Directo (D)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Optimista e inspirador</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Paciente y considerado</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Analítico y preciso</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Consciente (C)</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* MENOS section */}
+              <div className="border-t border-slate-700 pt-8">
+                <p className="text-sm font-semibold text-red-400 mb-4 flex items-center gap-2">
+                  <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">−</span>
+                  Lo que MENOS te describe:
+                </p>
+                <div className="space-y-3">
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Decidido y directo</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Directo (D)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Optimista e inspirador</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                    <p className="text-slate-300">Paciente y considerado</p>
+                    <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
+                  </button>
+                  <button className="w-full p-4 border-2 border-red-500 bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
+                    <p className="font-medium text-white flex items-center gap-2">
+                      <span className="text-red-400">✓</span> Analítico y preciso
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1">Dimensión: Consciente (C)</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+              <p className="text-sm text-slate-300">
+                <span className="font-semibold text-slate-200">¿Cómo funciona?</span> Seleccionas la opción que MÁS te describe y la que MENOS te describe. El sistema analiza tus respuestas en las 28 preguntas y genera tu perfil cerebral único con insights sobre tu comunicación, liderazgo y potencial.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ ESTRATÉGICO */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
