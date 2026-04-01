@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateText, Output } from 'ai'
 import { z } from 'zod'
 
 interface CerebroProfile {
@@ -28,14 +27,14 @@ const profileTraits: Record<string, string> = {
 }
 
 const insightsSchema = z.object({
-  fortalezasPrincipales: z.string().describe('Las 2-3 fortalezas principales derivadas del perfil'),
-  areasDesarrollo: z.string().describe('Las 2-3 áreas de desarrollo recomendadas'),
-  estiloEntrevista: z.string().describe('Cómo debería prepararse para entrevistas según su perfil'),
-  dinamicaEquipo: z.string().describe('Cómo funciona mejor en equipos'),
-  carreraAlign: z.string().describe('Carreras/roles que mejor se alinean con su perfil'),
-  comunicacionEfectiva: z.string().describe('Consejos para comunicarse efectivamente'),
-  gestionConflicto: z.string().describe('Cómo maneja mejor los conflictos y desacuerdos'),
-  proxiPaso: z.string().describe('El próximo paso recomendado en su desarrollo profesional')
+  fortalezasPrincipales: z.string(),
+  areasDesarrollo: z.string(),
+  estiloEntrevista: z.string(),
+  dinamicaEquipo: z.string(),
+  carreraAlign: z.string(),
+  comunicacionEfectiva: z.string(),
+  gestionConflicto: z.string(),
+  proxiPaso: z.string()
 })
 
 export async function POST(request: NextRequest) {
@@ -59,7 +58,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const model = process.env.AI_MODEL || 'openai/gpt-4o-mini'
+    const openaiApiKey = process.env.OPENAI_API_KEY
+    if (!openaiApiKey) {
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' },
+        { status: 500 }
+      )
+    }
 
     const primaryProfileName = profileDescriptions[profile.primary] || profile.primary
     const secondaryProfileName = profileDescriptions[profile.secondary] || profile.secondary
@@ -91,24 +96,63 @@ Tu tarea es generar 8 insights detallados y personalizados que hagan que el usua
 4. Incluir ejemplos concretos o acciones
 5. Ayudarle a entender su valor único
 
-IMPORTANTE: Las respuestas deben ser reflexivas, profundas y personales. Usa tono conversacional, profesional pero empático.`
+IMPORTANTE: Responde con JSON válido en este exacto formato (sin markdown, sin comillas escapadas innecesarias):
+{
+  "fortalezasPrincipales": "Aquí van las 2-3 fortalezas principales basadas en su perfil",
+  "areasDesarrollo": "Aquí van las 2-3 áreas de desarrollo recomendadas",
+  "estiloEntrevista": "Cómo debería prepararse para entrevistas según su perfil",
+  "dinamicaEquipo": "Cómo funciona mejor en equipos",
+  "carreraAlign": "Carreras/roles que mejor se alinean con su perfil",
+  "comunicacionEfectiva": "Consejos para comunicarse efectivamente",
+  "gestionConflicto": "Cómo maneja mejor los conflictos y desacuerdos",
+  "proxiPaso": "El próximo paso recomendado en su desarrollo profesional"
+}`
 
-    const result = await generateText({
-      model,
-      system: 'Eres un experto coach profesional especializado en perfiles DISC y desarrollo de carrera.',
-      prompt,
-      output: Output.object({
-        schema: insightsSchema,
-      }),
-      temperature: 0.8,
-      maxTokens: 2000,
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openaiApiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un experto coach profesional especializado en perfiles DISC y desarrollo de carrera. Siempre respondes con JSON válido.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.8,
+        max_tokens: 2000,
+        response_format: { type: 'json_object' }
+      })
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('[v0] OpenAI API error:', error)
+      return NextResponse.json(
+        { error: 'Failed to generate insights from OpenAI' },
+        { status: 500 }
+      )
+    }
+
+    const data = await response.json() as {
+      choices: Array<{ message: { content: string } }>
+    }
+
+    const contentStr = data.choices[0]?.message?.content || '{}'
+    const insights = JSON.parse(contentStr)
 
     console.log('[v0] Enhanced A1 insights generated successfully')
 
     return NextResponse.json({
       success: true,
-      insights: result.object,
+      insights,
     })
   } catch (error) {
     console.error('[v0] Error generating enhanced insights:', error)
