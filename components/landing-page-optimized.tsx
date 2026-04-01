@@ -3,12 +3,16 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, ChevronRight } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function LandingPageOptimized() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO SECTION */}
       <section className="container mx-auto px-4 py-20 md:py-28">
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
             Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
