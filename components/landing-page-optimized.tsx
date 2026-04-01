@@ -2,10 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import {
-  ArrowRight,
-  ChevronRight,
-} from "lucide-react"
+import { ArrowRight, ChevronRight } from "lucide-react"
 
 export default function LandingPageOptimized() {
   return (
