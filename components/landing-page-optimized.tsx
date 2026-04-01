@@ -48,9 +48,10 @@ export default function LandingPageOptimized() {
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round"/>
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+                  <path d="M12 11v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">El Ritual - Quién Eres Ahora</h3>
@@ -76,7 +77,7 @@ export default function LandingPageOptimized() {
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-orange-600 dark:bg-orange-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M10 9h4V5h4l-7-7-7 7h4v4zm-1 2H3v8h16v-8h-6v4h-4v-4zm7-2h4v8h-4v-4z"/>
+                  <path d="M12 2L15 8H21L16.5 12L18 18L12 14.5L6 18L7.5 12L3 8H9L12 2Z" fill="currentColor"/>
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">Entrenamiento - Practica Siendo</h3>
