@@ -46,12 +46,10 @@ export default function LandingPageOptimized() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-purple-200 dark:border-purple-900/30 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-2 border-purple-500 dark:border-purple-600 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                  <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-                  <path d="M12 11v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">El Ritual - Quién Eres Ahora</h3>
@@ -74,10 +72,10 @@ export default function LandingPageOptimized() {
             </div>
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-2 border-orange-500 dark:border-orange-600 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-orange-600 dark:bg-orange-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L15 8H21L16.5 12L18 18L12 14.5L6 18L7.5 12L3 8H9L12 2Z" fill="currentColor"/>
+                <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
+                  <path d="M6 2a1 1 0 0 0-1 1v3H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h4a1 1 0 0 0 1-1v-4h3a1 1 0 0 0 0-2h-3v-4h3a1 1 0 0 0 0-2h-3V5a1 1 0 0 0-1-1h-4V1a1 1 0 0 0-1-1H6v2zm2 4v12h4V6H8z"/>
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">Entrenamiento - Practica Siendo</h3>
