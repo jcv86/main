@@ -55,13 +55,6 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        /* BRANDBOOK 4 Pilares */
-        pilar: {
-          ritual: "hsl(var(--pilar-ritual))",
-          exploracion: "hsl(var(--pilar-exploracion))",
-          entrenamiento: "hsl(var(--pilar-entrenamiento))",
-          realidad: "hsl(var(--pilar-realidad))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
