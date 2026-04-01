@@ -133,64 +133,66 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Example Question */}
-          <Card className="border-0 shadow-lg bg-slate-50 dark:bg-slate-800">
+          <Card className="border-0 shadow-lg bg-slate-900 dark:bg-slate-800">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl">Ejemplo Real de Pregunta</CardTitle>
-              <CardDescription>Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
+              <CardTitle className="text-2xl text-white">Ejemplo Real de Pregunta</CardTitle>
+              <CardDescription className="text-slate-400">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-white dark:bg-slate-700 p-6 rounded-lg">
-                <p className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+              <div className="bg-slate-800 dark:bg-slate-700 p-8 rounded-lg border border-slate-700">
+                <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
                 
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* MÁS column */}
                   <div>
-                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
-                      <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">+</span>
-                      Selecciona lo que MÁS te describe:
+                    <p className="text-sm font-semibold text-green-400 mb-4 flex items-center gap-2">
+                      <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
+                      MÁS como yo
                     </p>
-                    <div className="space-y-2">
-                      <button className="w-full p-4 border-2 border-blue-600 bg-blue-50 dark:bg-blue-950 rounded-lg text-left hover:shadow-md transition-all">
-                        <p className="font-medium text-slate-900 dark:text-white">✓ Decidido y directo</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Directo (D)</p>
+                    <div className="space-y-3">
+                      <button className="w-full p-4 border-2 border-green-600 bg-green-600/20 rounded-lg text-left hover:bg-green-600/30 transition-all">
+                        <p className="font-medium text-white">Decidido y directo</p>
+                        <p className="text-xs text-slate-400 mt-1">Dimensión: Directo (D)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Inspirador (I)</p>
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Optimista e inspirador</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Seguro (S)</p>
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Paciente y considerado</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Analítico y preciso</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Consciente (C)</p>
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Analítico y preciso</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Consciente (C)</p>
                       </button>
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-300 dark:border-slate-600 pt-6">
-                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
-                      <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">−</span>
-                      Selecciona lo que MENOS te describe:
+                  {/* MENOS column */}
+                  <div>
+                    <p className="text-sm font-semibold text-red-400 mb-4 flex items-center gap-2">
+                      <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">−</span>
+                      MENOS como yo
                     </p>
-                    <div className="space-y-2">
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Decidido y directo</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Directo (D)</p>
+                    <div className="space-y-3">
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Decidido y directo</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Directo (D)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Inspirador (I)</p>
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Optimista e inspirador</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                        <p className="text-slate-700 dark:text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Seguro (S)</p>
+                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                        <p className="text-slate-300">Paciente y considerado</p>
+                        <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red-600 bg-red-50 dark:bg-red-950 rounded-lg text-left hover:shadow-md transition-all">
-                        <p className="font-medium text-slate-900 dark:text-white">✓ Analítico y preciso</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Dimensión: Consciente (C)</p>
+                      <button className="w-full p-4 border-2 border-red-600 bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
+                        <p className="font-medium text-white">Analítico y preciso</p>
+                        <p className="text-xs text-slate-400 mt-1">Dimensión: Consciente (C)</p>
                       </button>
                     </div>
                   </div>
