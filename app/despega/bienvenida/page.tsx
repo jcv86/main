@@ -52,64 +52,55 @@ export default function BienvenidaPage() {
 
         {/* Pilares Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {/* Step 1 */}
-            <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 mb-4">
-                    <span className="text-xl font-bold text-blue-600 dark:text-blue-300">1</span>
-                  </div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
-                    Conozcámonos
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Responde preguntas para entender tu perfil, objetivos y contexto laboral
-                  </p>
+          {/* Step 1 */}
+          <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 mb-4">
+                  <span className="text-xl font-bold text-blue-600 dark:text-blue-300">1</span>
                 </div>
-              </CardContent>
-            </Card>
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Conozcámonos</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Responde preguntas para entender tu perfil, objetivos y contexto laboral
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Step 2 */}
-            <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 mb-4">
-                    <span className="text-xl font-bold text-purple-600 dark:text-purple-300">2</span>
-                  </div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
-                    Tu Plan A2
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Recibe un plan personalizado de 90 días adaptado a tu perfil
-                  </p>
+          {/* Step 2 */}
+          <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 mb-4">
+                  <span className="text-xl font-bold text-purple-600 dark:text-purple-300">2</span>
                 </div>
-              </CardContent>
-            </Card>
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Tu Plan A2</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Recibe un plan personalizado de 90 días adaptado a tu perfil
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Step 3 */}
-            <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900 mb-4">
-                    <span className="text-xl font-bold text-cyan-600 dark:text-cyan-300">3</span>
-                  </div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
-                    Entrena y Analiza
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Practica entrenamientos y obtén análisis multimodal avanzado
-                  </p>
+          {/* Step 3 */}
+          <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900 mb-4">
+                  <span className="text-xl font-bold text-cyan-600 dark:text-cyan-300">3</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Entrena y Analiza</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Practica entrenamientos y obtén análisis multimodal avanzado
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Key Features */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-8 mb-8 border border-slate-200 dark:border-slate-700">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            Lo que conseguirás
-          </h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Lo que conseguirás</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
@@ -148,9 +139,7 @@ export default function BienvenidaPage() {
             <Target className="w-5 h-5 text-blue-600" />
             Tiempo Estimado
           </h3>
-          <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
-            Tu viaje será gradual y personalizado:
-          </p>
+          <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">Tu viaje será gradual y personalizado:</p>
           <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
             <li>• <strong>Hoy:</strong> Responderas preguntas de conocimiento (30 min)</li>
             <li>• <strong>Días 1-3:</strong> Recibirás tu plan personalizado A2 (lectura: 1 hora)</li>
