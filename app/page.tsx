@@ -5,8 +5,13 @@ const LandingPageOptimized = dynamic(() => import("@/components/landing-page"), 
   ssr: true,
   loading: () => <div className="min-h-screen" />
 })
+// Removed: FAQSection component - moved to dedicated /faq page
+// const FAQSection = dynamic(() => import("@/components/seo-optimized-content"), { 
+//   ssr: true,
+//   loading: () => <div className="min-h-screen" />
+// })
 
-// Force rebuild: 2026-03-31T17:35:00Z - Add version selector Google-style
+// Force rebuild: 2026-02-06T17:10:00Z - Clear stale BookOpen cache
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
   description:
