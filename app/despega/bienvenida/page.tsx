@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { Lightbulb, Zap, Target, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Lightbulb, Zap, Target, ArrowRight, CheckCircle2, Brain, BookOpen, Users, Compass } from 'lucide-react'
+import { StepHeader } from '@/components/step-header'
+import { PillarStatusCard } from '@/components/pillar-status-card'
 
 export default function BienvenidaPage() {
   const router = useRouter()
@@ -37,33 +39,19 @@ export default function BienvenidaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800">
-      <div className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 mb-6">
-            <Zap className="w-5 h-5 text-blue-600" />
-            <span className="font-semibold text-slate-900 dark:text-white">Despega</span>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <StepHeader
+          stepNumber={0}
+          pillarName="Despega Tu Carrera"
+          title="Bienvenido al Viaje de Transformación"
+          description="Tu camino hacia la excelencia en entrevistas y desarrollo profesional está dividido en 4 pilares fundamentales. Completa cada uno en orden para desbloquear el siguiente."
+          estimatedTime="90 días"
+          pillarColor="blue"
+        />
 
-        {/* Main Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4 leading-tight">
-            ¡Bienvenido, <span className="text-blue-600">{userName}</span>!
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-300">
-            Tu viaje hacia la excelencia en entrevistas comienza aquí
-          </p>
-        </div>
-
-        {/* How it Works */}
-        <div className="space-y-4 mb-12">
-          <h2 className="text-center text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            Cómo funciona Despega
-          </h2>
-
-          <div className="grid gap-4 sm:grid-cols-3">
+        {/* Pilares Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             {/* Step 1 */}
             <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
               <CardContent className="pt-6">

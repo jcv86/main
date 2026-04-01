@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
+import { StepHeader } from '@/components/step-header'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -47,20 +48,14 @@ export default function A1CerebralIntroPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Header with brandbook gradient */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
-              <Brain className="w-8 h-8 text-white" />
-            </div>
-          </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
-            Descubre Tu Perfil
-          </h1>
-          <p className="text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto">
-            Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único
-          </p>
-        </div>
+        <StepHeader
+          stepNumber={1}
+          pillarName="El Ritual"
+          title="Descubre Tu Perfil Cerebral"
+          description="Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único. Responde 28 preguntas simples y obtén insights personalizados sobre tu perfil."
+          estimatedTime="~10 min"
+          pillarColor="purple"
+        />
 
         {/* Main Content */}
         <div className="space-y-8">

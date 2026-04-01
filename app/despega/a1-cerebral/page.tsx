@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
+import { QuestionProgress } from '@/components/question-progress'
 
 export default function A1CerebralPage() {
   const [idx, setIdx] = useState(0)
@@ -29,6 +30,7 @@ export default function A1CerebralPage() {
   const q = DISC_TEST_QUESTIONS[idx]
   const bothAnswered = !!more[q.id] && !!less[q.id]
   const isLast = idx === DISC_TEST_QUESTIONS.length - 1
+  const questionCode = `A1-CERT-${String(q.id).padStart(3, '0')}`
 
   const calculateScores = () => {
     const scores = { D: 0, I: 0, S: 0, C: 0 }
@@ -108,13 +110,13 @@ export default function A1CerebralPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">Evaluación Despega Cerebral</h1>
-            <span className="text-muted-foreground text-sm">{idx + 1}/{DISC_TEST_QUESTIONS.length}</span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2"><div className="h-full bg-primary" style={{ width: `${((idx + 1) / DISC_TEST_QUESTIONS.length) * 100}%` }} /></div>
-        </div>
+        <QuestionProgress
+          currentQuestion={idx + 1}
+          totalQuestions={DISC_TEST_QUESTIONS.length}
+          questionCode={questionCode}
+          estimatedTimePerQuestion={20}
+          showTimeRemaining={true}
+        />
         <div className="bg-card border border-border rounded-2xl p-8 mb-8">
           <h2 className="text-2xl font-bold mb-8 text-center">{q.pregunta}</h2>
           <div className="grid md:grid-cols-2 gap-8">

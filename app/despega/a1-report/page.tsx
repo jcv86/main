@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
+import { StepHeader } from '@/components/step-header'
 
 interface CerebroProfile {
   D: number
