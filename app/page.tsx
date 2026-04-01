@@ -3,10 +3,10 @@ import dynamic from "next/dynamic"
 
 const LandingPage = dynamic(() => import("@/components/landing-page"), { 
   ssr: true,
-  loading: () => <div className="min-h-screen bg-background" />
+  loading: () => <div className="min-h-screen" />
 })
 
-// Force rebuild: 2026-03-31T17:30:00Z - Fix stale import issue
+// Force rebuild: 2026-03-31T17:00:00Z - Apply BRANDBOOK systematic audit
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
   description:
