@@ -8,6 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
 import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
+import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
+import { StepHeader } from '@/components/step-header'
 
 interface CerebroProfile {
   D: number
