@@ -302,6 +302,7 @@ export default function MiCoachPage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                      className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     />
                     <Button onClick={handleSearch} disabled={searchLoading} className="bg-blue-600 hover:bg-blue-700">
                       {searchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
@@ -372,7 +373,7 @@ export default function MiCoachPage() {
                 Coaching 24/7
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-foreground/70">
+            <CardContent className="text-sm text-slate-700 dark:text-slate-200">
               Conversaciones ilimitadas sobre tu carrera, estrategia personal y mentoría.
             </CardContent>
           </Card>
@@ -384,7 +385,7 @@ export default function MiCoachPage() {
                 Cerebro Inteligente
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-foreground/70">
+            <CardContent className="text-sm text-slate-700 dark:text-slate-200">
               Busca de forma inteligente a través de contenido personalizado.
             </CardContent>
           </Card>
@@ -396,7 +397,7 @@ export default function MiCoachPage() {
                 Sugerencias
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-foreground/70">
+            <CardContent className="text-sm text-slate-700 dark:text-slate-200">
               Ideas y recomendaciones personalizadas basadas en tu perfil.
             </CardContent>
           </Card>
