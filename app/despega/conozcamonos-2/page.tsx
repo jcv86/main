@@ -24,6 +24,15 @@ export default function Conozcamonos2Page() {
   const totalQuestions = CONOZCAMONOS_2_QUESTIONS.length
   const completedCount = Object.keys(responses).length
   const progress = (completedCount / totalQuestions) * 100
+  
+  // Debug: Check which questions in current step are missing
+  const missingQuestions = stepQuestions.filter(q => !responses[q.id])
+  const allStepAnswered = stepQuestions.every(q => responses[q.id])
+  
+  // Log for debugging
+  if (missingQuestions.length > 0 && currentStep === 'paso1') {
+    console.log('[v0] Missing answers in paso1:', missingQuestions.map(q => q.id))
+  }
 
   const handleAnswer = (questionId: number, value: string | string[]) => {
     setResponses(prev => ({
@@ -163,11 +172,23 @@ export default function Conozcamonos2Page() {
 
         {/* Questions */}
         <div className="space-y-6 mb-8">
-          {stepQuestions.map((question) => (
-            <Card key={question.id} className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-                {question.question}
-              </h3>
+          {stepQuestions.map((question) => {
+            const isAnswered = !!responses[question.id]
+            return (
+            <Card 
+              key={question.id} 
+              className={`p-6 transition-all ${
+                isAnswered 
+                  ? 'border-green-200 dark:border-green-800/50' 
+                  : 'border-slate-200 dark:border-slate-700'
+              }`}
+            >
+              <div className="flex items-start gap-3 mb-4">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex-1">
+                  {question.question}
+                </h3>
+                {isAnswered && <span className="text-green-600 dark:text-green-400">✓</span>}
+              </div>
 
               {question.type === 'select' && (
                 <select
@@ -237,7 +258,8 @@ export default function Conozcamonos2Page() {
                 </div>
               )}
             </Card>
-          ))}
+            )
+          })}
         </div>
 
         {error && (
@@ -247,26 +269,38 @@ export default function Conozcamonos2Page() {
         )}
 
         {/* Navigation */}
-        <div className="flex gap-4 justify-between">
-          <Button
-            onClick={handleBack}
-            variant="outline"
-            disabled={currentStep === 'paso1' || loading}
-          >
-            Atrás
-          </Button>
+        <div className="flex gap-4 justify-between items-center mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+          {!allStepAnswered && (
+            <div className="flex-1 text-sm text-slate-600 dark:text-slate-400">
+              <p>Responde todas las preguntas para continuar</p>
+            </div>
+          )}
+          
+          {allStepAnswered && (
+            <div className="flex-1" />
+          )}
 
-          <Button
-            onClick={handleNext}
-            disabled={!allStepAnswered || loading}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            {loading
-              ? 'Procesando...'
-              : currentStep === 'paso1'
-              ? 'Siguiente'
-              : 'Generar Mi Ruta'}
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={handleBack}
+              variant="outline"
+              disabled={currentStep === 'paso1' || loading}
+            >
+              Atrás
+            </Button>
+
+            <Button
+              onClick={handleNext}
+              disabled={!allStepAnswered || loading}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3"
+            >
+              {loading
+                ? 'Procesando...'
+                : currentStep === 'paso1'
+                ? 'Siguiente →'
+                : 'Generar Mi Ruta →'}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
