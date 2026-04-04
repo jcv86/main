@@ -12,9 +12,9 @@ export default function Footer() {
   }, [])
 
   // Contact information
-  const contactEmail = 'hola@despegaturcarrera.com'
-  const contactPhone = '+56912345678' // Replace with actual WhatsApp number
-  const whatsappUrl = `https://wa.me/${contactPhone.replace(/\D/g, '')}`
+  const contactEmail = 'info@despegatucarrera.com'
+  const contactPhone = '56963160187'
+  const whatsappUrl = `https://wa.me/${contactPhone}?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20Despega%20Tu%20Carrera`
 
   return (
     <footer className="w-full border-t border-slate-200 dark:border-slate-800 mt-20 py-12">
@@ -58,7 +58,7 @@ export default function Footer() {
                   className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
                 >
                   <Mail className="w-4 h-4" />
-                  Email
+                  {contactEmail}
                 </a>
               </li>
               {/* WhatsApp */}
@@ -70,7 +70,7 @@ export default function Footer() {
                   className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  WhatsApp
+                  +56 9 6316 0187
                 </a>
               </li>
               {/* LinkedIn */}
