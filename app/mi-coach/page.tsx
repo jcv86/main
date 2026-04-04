@@ -244,7 +244,7 @@ export default function MiCoachPage() {
                   {/* Quick Suggestions - Mostrar solo si no hay mensajes */}
                   {messages.length === 0 && (
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
                         Preguntas para empezar
                       </div>
@@ -253,14 +253,14 @@ export default function MiCoachPage() {
                           <button
                             key={idx}
                             onClick={() => handleSuggestionClick(suggestion.prompt)}
-                            className="text-left p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition group"
+                            className="text-left p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-400 dark:hover:border-purple-500 transition group"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <p className="font-medium text-xs text-slate-900 dark:text-white group-hover:text-purple-600">{suggestion.title}</p>
-                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
+                                <p className="font-medium text-xs text-slate-900 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-300">{suggestion.title}</p>
+                                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
-                              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-purple-600 flex-shrink-0 mt-0.5" />
+                              <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 flex-shrink-0 mt-0.5" />
                             </div>
                           </button>
                         ))}
@@ -311,16 +311,16 @@ export default function MiCoachPage() {
                   {/* Results */}
                   <div className="space-y-3 max-h-96 overflow-y-auto">
                     {searchResults.length === 0 ? (
-                      <p className="text-slate-500 text-center py-8">
+                      <p className="text-slate-500 dark:text-slate-400 text-center py-8">
                         {searchQuery ? 'No se encontraron resultados' : 'Realiza una búsqueda'}
                       </p>
                     ) : (
                       searchResults.map((book) => (
                         <div key={book.id} className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                          <h3 className="font-bold text-sm">{book.title}</h3>
-                          <p className="text-xs text-slate-600">{book.author}</p>
+                          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{book.title}</h3>
+                          <p className="text-xs text-slate-600 dark:text-slate-400">{book.author}</p>
                           {book.description && (
-                            <p className="text-xs mt-2 text-slate-700">{book.description.slice(0, 80)}...</p>
+                            <p className="text-xs mt-2 text-slate-700 dark:text-slate-300">{book.description.slice(0, 80)}...</p>
                           )}
                         </div>
                       ))
@@ -346,13 +346,13 @@ export default function MiCoachPage() {
                 ) : (
                   <div className="space-y-4 max-h-96 overflow-y-auto">
                     {recommendations.length === 0 ? (
-                      <p className="text-slate-500 text-center py-8">No hay recomendaciones disponibles</p>
+                      <p className="text-slate-500 dark:text-slate-400 text-center py-8">No hay recomendaciones disponibles</p>
                     ) : (
                       recommendations.map((rec) => (
                         <div key={rec.id} className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                          <h3 className="font-bold text-sm">{rec.title}</h3>
-                          <p className="text-xs text-slate-600">{rec.author}</p>
-                          <p className="text-xs text-purple-600 mt-2 font-medium">{rec.reason}</p>
+                          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{rec.title}</h3>
+                          <p className="text-xs text-slate-600 dark:text-slate-400">{rec.author}</p>
+                          <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">{rec.reason}</p>
                         </div>
                       ))
                     )}
