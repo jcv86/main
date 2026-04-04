@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Brain, MessageCircle, Zap, Search, Loader2 } from 'lucide-react'
+import { Brain, MessageCircle, Zap, Search, Loader2, Lightbulb, ArrowRight } from 'lucide-react'
 
 interface Book {
   id: string
@@ -50,6 +50,36 @@ export default function MiCoachPage() {
     goals: 'Mejorar liderazgo',
   }
 
+  // Sugerencias de preguntas para mejorar según perfil DISC
+  const coachPrompts = {
+    D: [
+      { title: 'Estrategia Rápida', prompt: '¿Cuál es el siguiente paso que debo dar hoy para acelerar mi carrera?' },
+      { title: 'Gestión de Equipos', prompt: '¿Cómo puedo ser un mejor líder siendo decisivo pero escuchando a mi equipo?' },
+      { title: 'Metas 30 Días', prompt: '¿Cuáles son 3 metas específicas que puedo lograr en 30 días?' },
+      { title: 'Resolver Conflictos', prompt: '¿Cómo puedo resolver un conflicto con autoridad pero sin perder relaciones?' },
+    ],
+    I: [
+      { title: 'Influencia Personal', prompt: '¿Cómo puedo desarrollar más influencia en mi organización?' },
+      { title: 'Comunicación Efectiva', prompt: '¿Cuáles son las técnicas clave para persuadir y motivar a otros?' },
+      { title: 'Red de Contactos', prompt: '¿Cómo puedo construir una red de contactos estratégica?' },
+      { title: 'Presentaciones Impactantes', prompt: '¿Cómo hago presentaciones más impactantes y memorables?' },
+    ],
+    S: [
+      { title: 'Trabajo en Equipo', prompt: '¿Cómo puedo contribuir mejor a mis equipos siendo empático?' },
+      { title: 'Estabilidad Laboral', prompt: '¿Cómo logro crecimiento sin sacrificar relaciones sólidas?' },
+      { title: 'Apoyo a Otros', prompt: '¿Cómo puedo ser un mejor mentor o soporte para mi equipo?' },
+      { title: 'Balance Vida-Trabajo', prompt: '¿Cómo mantengo relaciones fuertes mientras avanzo en mi carrera?' },
+    ],
+    C: [
+      { title: 'Excelencia', prompt: '¿Cómo garantizo la máxima calidad en mis entregas?' },
+      { title: 'Análisis Estratégico', prompt: '¿Cuáles son los datos clave que debo analizar para tomar mejores decisiones?' },
+      { title: 'Mejora Continua', prompt: '¿Cuál es mi plan de mejora personal para los próximos 3 meses?' },
+      { title: 'Planificación Detallada', prompt: '¿Cuál es la mejor estrategia para alcanzar mis objetivos a largo plazo?' },
+    ],
+  }
+
+  const currentPrompts = coachPrompts[userProfile.discType as keyof typeof coachPrompts] || coachPrompts.D
+
   useEffect(() => {
     setMounted(true)
     // Load recommendations on mount
@@ -69,6 +99,10 @@ export default function MiCoachPage() {
     } finally {
       setRecsLoading(false)
     }
+  }
+
+  const handleSuggestionClick = (prompt: string) => {
+    setChatInput(prompt)
   }
 
   const handleChatSubmit = async () => {
@@ -207,8 +241,35 @@ export default function MiCoachPage() {
                     )}
                   </div>
 
+                  {/* Quick Suggestions - Mostrar solo si no hay mensajes */}
+                  {messages.length === 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                        <Lightbulb className="w-4 h-4 text-amber-500" />
+                        Preguntas para empezar
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {currentPrompts.map((suggestion, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleSuggestionClick(suggestion.prompt)}
+                            className="text-left p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition group"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <p className="font-medium text-xs text-slate-900 dark:text-white group-hover:text-purple-600">{suggestion.title}</p>
+                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
+                              </div>
+                              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-purple-600 flex-shrink-0 mt-0.5" />
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Input */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 pt-2">
                     <Input
                       placeholder="Pregunta a tu coach..."
                       value={chatInput}
