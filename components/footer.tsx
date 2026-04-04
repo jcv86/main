@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { Mail, MessageCircle, Linkedin, Twitter } from 'lucide-react'
 
 export default function Footer() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
@@ -9,6 +10,11 @@ export default function Footer() {
   useEffect(() => {
     setCurrentYear(new Date().getFullYear())
   }, [])
+
+  // Contact information
+  const contactEmail = 'hola@despegaturcarrera.com'
+  const contactPhone = '+56912345678' // Replace with actual WhatsApp number
+  const whatsappUrl = `https://wa.me/${contactPhone.replace(/\D/g, '')}`
 
   return (
     <footer className="w-full border-t border-slate-200 dark:border-slate-800 mt-20 py-12">
@@ -41,13 +47,56 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Contact & Community */}
           <div>
-            <h4 className="font-semibold mb-4 text-sm">Comunidad</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-foreground/60 hover:text-foreground transition">LinkedIn</a></li>
-              <li><a href="#" className="text-foreground/60 hover:text-foreground transition">Twitter</a></li>
-              <li><a href="#" className="text-foreground/60 hover:text-foreground transition">Discord</a></li>
+            <h4 className="font-semibold mb-4 text-sm">Contacto & Comunidad</h4>
+            <ul className="space-y-3 text-sm">
+              {/* Email */}
+              <li>
+                <a 
+                  href={`mailto:${contactEmail}`}
+                  className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  Email
+                </a>
+              </li>
+              {/* WhatsApp */}
+              <li>
+                <a 
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
+                </a>
+              </li>
+              {/* LinkedIn */}
+              <li>
+                <a 
+                  href="https://linkedin.com/company/despega-tu-carrera"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  LinkedIn
+                </a>
+              </li>
+              {/* Twitter */}
+              <li>
+                <a 
+                  href="https://twitter.com/despegaturcarrera"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/60 hover:text-foreground transition flex items-center gap-2"
+                >
+                  <Twitter className="w-4 h-4" />
+                  Twitter
+                </a>
+              </li>
             </ul>
           </div>
         </div>
