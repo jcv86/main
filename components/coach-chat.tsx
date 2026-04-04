@@ -1,142 +1,217 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { useChat } from 'ai/react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { X, MessageCircle, Loader2, Send } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Plus, Loader2 } from 'lucide-react'
 
-interface CoachChatProps {
-  currentStage?: 'a1' | 'a2' | 'a3' | 'a4'
-  discProfile?: string
+interface Message {
+  id: string
+  type: 'user' | 'assistant'
+  content: string
+  timestamp: Date
 }
 
-export function CoachChat({ currentStage = 'a1', discProfile }: CoachChatProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
+interface ChatProps {
+  coachType: 'tecnico' | 'liderazgo' | 'cerebro'
+  userProfile?: any
+}
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/coach-ia',
-    body: {
-      stage: currentStage,
-      disc_profile: discProfile
-    }
-  })
+export function CoachChat({ coachType, userProfile }: ChatProps) {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  if (!mounted) return null
+  const handleSendMessage = async () => {
+    if (!input.trim()) return
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: input,
+      timestamp: new Date(),
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/coach/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: messages.map(m => ({
+            role: m.type === 'user' ? 'user' : 'assistant',
+            content: m.content,
+          })),
+          coachType,
+          userProfile,
+        }),
+      })
+
+      if (!response.ok) throw new Error('API error')
+
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No reader')
+
+      const decoder = new TextDecoder()
+      let fullContent = ''
+      const assistantId = (Date.now() + 1).toString()
+
+      // Add empty assistant message to update as stream comes in
+      setMessages(prev => [...prev, {
+        id: assistantId,
+        type: 'assistant',
+        content: '',
+        timestamp: new Date(),
+      }])
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value, { stream: true })
+        fullContent += chunk
+
+        // Update assistant message with streamed content
+        setMessages(prev =>
+          prev.map(m => m.id === assistantId ? { ...m, content: fullContent } : m)
+        )
+      }
+    } catch (error) {
+      console.error('[v0] Chat error:', error)
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 2).toString(),
+        type: 'assistant',
+        content: 'Lo siento, ocurrió un error. Por favor, intenta de nuevo.',
+        timestamp: new Date(),
+      }])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const quickActions = {
+    tecnico: [
+      'Consejos de Entrevista',
+      'Plan de Desarrollo',
+      'Estrategia Laboral',
+      'Equilibrio Trabajo/Vida',
+    ],
+    liderazgo: [
+      'Gestión de Equipos',
+      'Comunicación Efectiva',
+      'Estrategia Profesional',
+      'Inteligencia Emocional',
+    ],
+    cerebro: [
+      'Recursos Técnicos',
+      'Libros Recomendados',
+      'Estrategias de Aprendizaje',
+      'Herramientas Útiles',
+    ],
+  }
 
   return (
-    <>
-      {/* Chat Window */}
-      {isOpen && (
-        <Card className="fixed bottom-24 right-4 w-96 h-[600px] flex flex-col shadow-xl z-50 bg-white dark:bg-slate-950">
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-600 to-blue-600">
-            <div>
-              <h3 className="font-bold text-white">Coach IA Despega</h3>
-              <p className="text-xs text-purple-100">Aquí en {currentStage.toUpperCase()}</p>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20 rounded p-1"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-4 space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {coachType === 'tecnico' && 'Coach Técnico'}
+          {coachType === 'liderazgo' && 'Coach de Liderazgo'}
+          {coachType === 'cerebro' && 'Cerebro Inteligente'}
+        </CardTitle>
+        <CardDescription>
+          {coachType === 'tecnico' && 'Desarrollo técnico, carrera y productividad'}
+          {coachType === 'liderazgo' && 'Liderazgo, equipos y comunicación'}
+          {coachType === 'cerebro' && 'Búsqueda semántica de recursos'}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6">
+          {/* Chat Messages */}
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 h-96 overflow-y-auto space-y-4">
             {messages.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center">
-                <MessageCircle className="w-12 h-12 text-purple-300 mb-2" />
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  ¡Hola! Soy tu Coach IA. Pregúntame lo que necesites sobre tu transformación.
-                </p>
+              <div className="flex items-center justify-center h-full text-center">
+                <div>
+                  <p className="text-slate-500 mb-2">
+                    {coachType === 'tecnico' && '¡Hola! Soy tu Coach Técnico'}
+                    {coachType === 'liderazgo' && '¡Hola! Soy tu Coach de Liderazgo'}
+                    {coachType === 'cerebro' && '¡Hola! Soy el Cerebro Inteligente'}
+                  </p>
+                  <p className="text-sm text-slate-400">Comienza a hacer una pregunta...</p>
+                </div>
               </div>
             ) : (
-              <div className="space-y-3">
-                {messages.map((msg, i) => (
-                  <div
-                    key={i}
-                    className={cn(
-                      'max-w-xs rounded-lg p-3 text-sm',
-                      msg.role === 'user'
-                        ? 'bg-purple-600 text-white ml-auto'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
-                    )}
-                  >
-                    {msg.content}
+              <>
+                {messages.map(msg => (
+                  <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${
+                      msg.type === 'user'
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
+                    }`}>
+                      {msg.content}
+                    </div>
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex gap-2 items-center text-slate-600 dark:text-slate-400">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Coach está pensando...</span>
+                  <div className="flex justify-start">
+                    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    </div>
                   </div>
                 )}
-                <div ref={scrollRef} />
-              </div>
+                <div ref={messagesEndRef} />
+              </>
             )}
-          </ScrollArea>
+          </div>
 
-          {/* Input */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              handleSubmit(e)
-            }}
-            className="p-4 border-t flex gap-2"
-          >
+          {/* Input Area */}
+          <div className="flex gap-2">
             <Input
+              placeholder="Pregunta a tu coach..."
               value={input}
-              onChange={handleInputChange}
-              placeholder="Pregunta algo..."
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
               disabled={isLoading}
-              className="flex-1 text-sm"
+              className="flex-1"
             />
             <Button
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              size="sm"
+              onClick={handleSendMessage}
+              disabled={isLoading}
               className="bg-purple-600 hover:bg-purple-700"
             >
-              <Send className="w-4 h-4" />
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar'}
             </Button>
-          </form>
-        </Card>
-      )}
+          </div>
 
-      {/* Floating Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          'fixed bottom-4 right-4 z-40 rounded-full p-4 shadow-lg hover:scale-110 transition-transform',
-          isOpen
-            ? 'bg-slate-200 dark:bg-slate-800'
-            : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-        )}
-      >
-        {isOpen ? (
-          <X className="w-6 h-6" />
-        ) : (
-          <MessageCircle className="w-6 h-6" />
-        )}
-      </button>
-    </>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {quickActions[coachType].map((action) => (
+              <Button
+                key={action}
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setInput(action)
+                }}
+                disabled={isLoading}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                {action}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
