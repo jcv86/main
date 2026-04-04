@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { generateText, Output } from 'ai'
-import { z } from 'zod'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,30 +21,50 @@ export async function GET(req: NextRequest) {
     // Use AI to expand query with related concepts
     let expandedQueries = [query.toLowerCase()]
     try {
-      const { text } = await generateText({
-        model: 'openai/gpt-4o-mini',
-        prompt: `Eres un experto en educación y desarrollo profesional. 
-        
-El usuario está buscando: "${query}"
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'user',
+              content: `Eres un experto en educación y desarrollo profesional. El usuario está buscando: "${query}"
 
 Genera 2-3 conceptos relacionados o sinónimos relevantes para mejorar la búsqueda.
-Responde SOLO en español con una lista de conceptos separados por comas, sin numeración ni puntuación adicional.`,
-        output: Output.object({
-          schema: z.object({
-            relatedConcepts: z.array(z.string()).describe('Conceptos relacionados o sinónimos'),
-          }),
+Responde SOLO en español con conceptos separados por comas, sin numeración.
+
+Responde en JSON con formato: {"concepts": ["concepto1", "concepto2", "concepto3"]}`,
+            },
+          ],
+          temperature: 0.7,
+          max_tokens: 150,
         }),
       })
-      
-      if (text && typeof text === 'object' && 'relatedConcepts' in text) {
-        expandedQueries = [
-          query.toLowerCase(),
-          ...(text as any).relatedConcepts.map((c: string) => c.toLowerCase())
-        ]
+
+      if (response.ok) {
+        const data = await response.json()
+        const content = data.choices?.[0]?.message?.content
+        if (content) {
+          try {
+            const parsed = JSON.parse(content)
+            if (parsed.concepts && Array.isArray(parsed.concepts)) {
+              expandedQueries = [
+                query.toLowerCase(),
+                ...parsed.concepts.map((c: string) => c.toLowerCase())
+              ]
+              console.log('[v0] Expanded queries:', expandedQueries)
+            }
+          } catch (e) {
+            console.log('[v0] Failed to parse AI response:', e)
+          }
+        }
       }
-      console.log('[v0] Expanded queries:', expandedQueries)
     } catch (aiError) {
-      console.log('[v0] AI expansion skipped, using basic search:', aiError)
+      console.log('[v0] AI expansion skipped, using basic search')
       // Continue with basic search if AI fails
     }
 
