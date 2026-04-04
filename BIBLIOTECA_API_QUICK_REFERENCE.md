@@ -32,10 +32,10 @@ fetch('/api/books/book-id-here')
 ### 3. Get Personalized Recommendations
 ```typescript
 // Get DISC profile-based recommendations
-fetch('/api/books/recommendations?profile=D&limit=6')  // Dominance profile
-fetch('/api/books/recommendations?profile=I&limit=6')  // Influence profile
-fetch('/api/books/recommendations?profile=S&limit=6')  // Steadiness profile
-fetch('/api/books/recommendations?profile=C&limit=6')  // Conscientiousness profile
+fetch('/api/book-recommendations?profile=D&limit=6')  // Dominance profile
+fetch('/api/book-recommendations?profile=I&limit=6')  // Influence profile
+fetch('/api/book-recommendations?profile=S&limit=6')  // Steadiness profile
+fetch('/api/book-recommendations?profile=C&limit=6')  // Conscientiousness profile
 ```
 
 ### 4. Use Advanced Search Component
@@ -136,7 +136,7 @@ export function RecommendedBooks({ userProfile }) {
   const [books, setBooks] = useState([])
 
   useEffect(() => {
-    fetch(`/api/books/recommendations?profile=${userProfile}&limit=6`)
+    fetch(`/api/book-recommendations?profile=${userProfile}&limit=6`)
       .then(res => res.json())
       .then(data => setBooks(data))
   }, [userProfile])
@@ -166,7 +166,7 @@ curl http://localhost:3000/api/books
 curl "http://localhost:3000/api/books?category=Productividad&limit=5"
 
 # Get recommendations for D profile
-curl "http://localhost:3000/api/books/recommendations?profile=D&limit=6"
+curl "http://localhost:3000/api/book-recommendations?profile=D&limit=6"
 
 # Get single book
 curl "http://localhost:3000/api/books/1"
