@@ -136,8 +136,8 @@ export default function Conozcamonos2Page() {
 
       console.log('[v0] [CANONICAL] User profile updated with C2 and A2 route flags')
 
-      // Redirect to A2 dashboard
-      router.push('/despega/a2/dashboard')
+      // Redirect to A2 routes page to generate 90-day personalized route
+      router.push('/despega/a2-routes')
     } catch (err) {
       console.error('[v0] Error saving Conozcamonos 2:', err)
       setError('Error al guardar tus respuestas. Intenta de nuevo.')
