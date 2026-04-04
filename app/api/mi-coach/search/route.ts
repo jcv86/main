@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { generateObject } from 'ai'
+import { openai } from '@ai-sdk/openai'
+import { z } from 'zod'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,10 +21,36 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ books: [], message: 'Ingresa una búsqueda' })
     }
 
+    // Use AI to expand query with related concepts
+    let expandedQueries = [query.toLowerCase()]
+    try {
+      const { object } = await generateObject({
+        model: 'gpt-4o-mini',
+        prompt: `Eres un experto en educación y desarrollo profesional. 
+        
+El usuario está buscando: "${query}"
+
+Genera 2-3 conceptos relacionados o sinónimos relevantes para mejorar la búsqueda.
+Responde en español.`,
+        schema: z.object({
+          relatedConcepts: z.array(z.string()).describe('Conceptos relacionados o sinónimos'),
+        }),
+      })
+      
+      expandedQueries = [
+        query.toLowerCase(),
+        ...object.relatedConcepts.map(c => c.toLowerCase())
+      ]
+      console.log('[v0] Expanded queries:', expandedQueries)
+    } catch (aiError) {
+      console.log('[v0] AI expansion skipped, using basic search')
+      // Continue with basic search if AI fails
+    }
+
     // Search in books table - get more results, then filter client-side
     const { data: booksData, error: booksError } = await supabase
       .from('books')
-      .select('id, title, author, description, rating, difficulty, key_topics, tags')
+      .select('id, title, author, description, rating, difficulty, key_topics, tags, url, cover_url, published_year')
       .limit(50)
 
     if (booksError) {
@@ -31,20 +60,19 @@ export async function GET(req: NextRequest) {
 
     console.log('[v0] Raw books found:', (booksData || []).length)
 
-    // Filter client-side: search in title, description, tags, and key_topics
-    const queryLower = query.toLowerCase()
+    // Filter client-side: search in title, description, tags, and key_topics using expanded queries
     let filteredBooks = (booksData || []).filter(book => {
       const title = (book.title || '').toLowerCase()
       const description = (book.description || '').toLowerCase()
       const tags = JSON.stringify((book.tags || [])).toLowerCase()
       const topics = JSON.stringify((book.key_topics || [])).toLowerCase()
       
-      // Check if query matches any field
-      return (
-        title.includes(queryLower) ||
-        description.includes(queryLower) ||
-        tags.includes(queryLower) ||
-        topics.includes(queryLower)
+      // Check if any expanded query matches any field
+      return expandedQueries.some(q => 
+        title.includes(q) ||
+        description.includes(q) ||
+        tags.includes(q) ||
+        topics.includes(q)
       )
     })
 
@@ -62,16 +90,57 @@ export async function GET(req: NextRequest) {
 
     console.log('[v0] Filtered books found:', filteredBooks.length)
 
+    // Add reference links to books
+    const booksWithLinks = filteredBooks.map(book => {
+      const referenceLinks = []
+      
+      // Add internal URL if exists
+      if (book.url) {
+        referenceLinks.push({
+          title: 'Nuestro enlace',
+          url: book.url,
+          type: 'internal'
+        })
+      }
+      
+      // Generate external reference links (Amazon, Goodreads, etc.)
+      if (book.title && book.author) {
+        referenceLinks.push({
+          title: 'Amazon',
+          url: `https://www.amazon.com/s?k=${encodeURIComponent(book.title)}+${encodeURIComponent(book.author)}`,
+          type: 'amazon'
+        })
+        
+        referenceLinks.push({
+          title: 'Goodreads',
+          url: `https://www.goodreads.com/search?q=${encodeURIComponent(book.title)}+${encodeURIComponent(book.author)}`,
+          type: 'goodreads'
+        })
+      }
+      
+      return {
+        ...book,
+        referenceLinks
+      }
+    })
+
     // Also search knowledge_base for broader coverage
     const { data: kbData, error: kbError } = await supabase
       .from('knowledge_base')
       .select('id, title, description, read_count')
-      .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
       .limit(4)
 
+    const kbFiltered = (kbData || []).filter(kb => {
+      const title = (kb.title || '').toLowerCase()
+      const description = (kb.description || '').toLowerCase()
+      return expandedQueries.some(q => 
+        title.includes(q) || description.includes(q)
+      )
+    })
+
     const allResults = [
-      ...(filteredBooks).map(b => ({ ...b, source: 'books' })),
-      ...(kbData || []).map(k => ({ ...k, source: 'knowledge_base' })),
+      ...(booksWithLinks).map(b => ({ ...b, source: 'books' })),
+      ...(kbFiltered).map(k => ({ ...k, source: 'knowledge_base' })),
     ]
 
     console.log('[v0] Total results:', allResults.length)
@@ -80,6 +149,7 @@ export async function GET(req: NextRequest) {
       books: allResults.slice(0, 8),
       count: allResults.length,
       query,
+      expandedQueries,
     })
   } catch (error) {
     console.error('[v0] Search error:', error)

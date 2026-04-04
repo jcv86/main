@@ -15,6 +15,11 @@ interface Book {
   rating?: number
   difficulty?: string
   source?: string
+  referenceLinks?: Array<{
+    title: string
+    url: string
+    type: string
+  }>
 }
 
 interface Recommendation {
@@ -327,6 +332,24 @@ export default function MiCoachPage() {
                           <p className="text-xs text-slate-600 dark:text-slate-400">{book.author}</p>
                           {book.description && (
                             <p className="text-xs mt-2 text-slate-700 dark:text-slate-300">{book.description.slice(0, 80)}...</p>
+                          )}
+                          
+                          {/* Reference Links */}
+                          {book.referenceLinks && book.referenceLinks.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                              {book.referenceLinks.map((link, idx) => (
+                                <a
+                                  key={idx}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50 transition"
+                                >
+                                  {link.type === 'internal' ? '📚' : link.type === 'amazon' ? '🛍️' : link.type === 'goodreads' ? '⭐' : '🔗'}
+                                  {link.title}
+                                </a>
+                              ))}
+                            </div>
                           )}
                         </div>
                       ))
