@@ -174,7 +174,10 @@ export default function MiCoachPage() {
       const response = await fetch(`/api/mi-coach/search?query=${encodeURIComponent(searchQuery)}&discProfile=${userProfile.discType}`)
       if (response.ok) {
         const data = await response.json()
+        console.log('[v0] Search results received:', { count: data.books?.length, firstBook: data.books?.[0] })
         setSearchResults(data.books || [])
+      } else {
+        console.error('[v0] Search failed:', response.status)
       }
     } catch (error) {
       console.error('[v0] Search error:', error)
@@ -311,11 +314,26 @@ export default function MiCoachPage() {
                       placeholder="Busca libros, conceptos, estrategias..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                      onKeyPress={(e) => e.key === 'Enter' && !searchLoading && handleSearch()}
+                      disabled={searchLoading}
                       className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     />
-                    <Button onClick={handleSearch} disabled={searchLoading} className="bg-blue-600 hover:bg-blue-700">
-                      {searchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                    <Button 
+                      onClick={handleSearch} 
+                      disabled={searchLoading || !searchQuery.trim()}
+                      className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-semibold px-6 flex-shrink-0 shadow-lg"
+                    >
+                      {searchLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                          Buscando...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="w-4 h-4 mr-1" />
+                          Buscar
+                        </>
+                      )}
                     </Button>
                   </div>
 
