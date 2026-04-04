@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { generatePersonalizedRoute, type PersonalizedRoute } from '@/lib/route-generator'
+import { type DespegarProfile } from '@/lib/disc-calculator'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -48,7 +49,16 @@ export default function A2RoutesPage() {
     try {
       console.log('[v0] Starting A2 route generation for user:', user?.id)
       
-      let discProfile = 'D' // Default profile
+      let discProfile: DespegarProfile = {
+        energia: 50,
+        enfoque: 50,
+        relaciones: 50,
+        plan_ejecutivo: 50,
+        primary: 'energia',
+        primaryScore: 50,
+        secondary: 'enfoque',
+        secondaryScore: 50,
+      }
       let objective = 'Desarrollo profesional'
       let skills = ['Liderazgo', 'Comunicación', 'Estrategia']
       let timePerWeek = 5
@@ -65,7 +75,25 @@ export default function A2RoutesPage() {
       console.log('[v0] DISC profile fetch result:', { discError, hasProfile: !!discData?.disc_profile })
 
       if (!discError && discData?.disc_profile) {
-        discProfile = discData.disc_profile
+        // Map single character to DespegarProfile
+        const profileMap = {
+          'D': { primary: 'energia', secondary: 'plan_ejecutivo', energiaScore: 75 },
+          'I': { primary: 'relaciones', secondary: 'energia', relacionesScore: 75 },
+          'S': { primary: 'relaciones', secondary: 'enfoque', relacionesScore: 75 },
+          'C': { primary: 'enfoque', secondary: 'plan_ejecutivo', enfoqueScore: 75 },
+        } as const
+        
+        const mapped = profileMap[discData.disc_profile as keyof typeof profileMap] || profileMap['D']
+        discProfile = {
+          energia: mapped.primary === 'energia' ? 75 : 50,
+          enfoque: mapped.primary === 'enfoque' ? 75 : 50,
+          relaciones: mapped.primary === 'relaciones' ? 75 : 50,
+          plan_ejecutivo: mapped.primary === 'plan_ejecutivo' ? 75 : 50,
+          primary: mapped.primary as any,
+          primaryScore: 75,
+          secondary: mapped.secondary as any,
+          secondaryScore: 60,
+        }
       }
 
       // Get Conozcamonos 2 responses - FIXED TABLE NAME
