@@ -1,45 +1,150 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Brain, MessageCircle, Zap, Search, Plus } from 'lucide-react'
+import { Brain, MessageCircle, Zap, Search, Loader2 } from 'lucide-react'
+
+interface Book {
+  id: string
+  title: string
+  author: string
+  description: string
+  rating?: number
+  difficulty?: string
+  source?: string
+}
+
+interface Recommendation {
+  id: string
+  title: string
+  author: string
+  reason: string
+  rating?: number
+}
 
 export default function MiCoachPage() {
   const [activeTab, setActiveTab] = useState('coaching')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [chatMessages, setChatMessages] = useState([
-    {
-      id: 1,
-      type: 'assistant',
-      content: '¡Hola! Soy tu Coach IA Personalizado. Puedo ayudarte en 3 áreas principales: coaching de carrera, búsqueda inteligente de contenido y sugerencias personalizadas basadas en tu perfil de El Ritual.',
-      timestamp: new Date(Date.now() - 60000)
-    },
-  ])
-  const [newMessage, setNewMessage] = useState('')
+  const [mounted, setMounted] = useState(false)
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      setChatMessages([...chatMessages, {
-        id: chatMessages.length + 1,
-        type: 'user',
-        content: newMessage,
-        timestamp: new Date()
-      }])
-      setNewMessage('')
-      
-      setTimeout(() => {
-        setChatMessages(prev => [...prev, {
-          id: prev.length + 1,
-          type: 'assistant',
-          content: 'Excelente pregunta. Este es exactamente el tipo de coaching que necesitas. Basándome en tu contexto, te recomendaria...',
-          timestamp: new Date()
-        }])
-      }, 1000)
+  // Coaching tab state
+  const [messages, setMessages] = useState<Array<{ type: 'user' | 'assistant'; content: string }>>([])
+  const [chatInput, setChatInput] = useState('')
+  const [chatLoading, setChatLoading] = useState(false)
+
+  // Search tab state
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Book[]>([])
+  const [searchLoading, setSearchLoading] = useState(false)
+
+  // Recommendations tab state
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+  const [recsLoading, setRecsLoading] = useState(true)
+
+  // Mock user profile
+  const userProfile = {
+    discType: 'D',
+    careerStage: 'A2',
+    goals: 'Mejorar liderazgo',
+  }
+
+  useEffect(() => {
+    setMounted(true)
+    // Load recommendations on mount
+    loadRecommendations()
+  }, [])
+
+  const loadRecommendations = async () => {
+    try {
+      setRecsLoading(true)
+      const response = await fetch(`/api/mi-coach/recommendations?profile=${userProfile.discType}&limit=6`)
+      if (response.ok) {
+        const data = await response.json()
+        setRecommendations(data.recommendations || [])
+      }
+    } catch (error) {
+      console.error('[v0] Error loading recommendations:', error)
+    } finally {
+      setRecsLoading(false)
     }
   }
+
+  const handleChatSubmit = async () => {
+    if (!chatInput.trim()) return
+
+    const userMessage = chatInput
+    setChatInput('')
+    setMessages(prev => [...prev, { type: 'user', content: userMessage }])
+    setChatLoading(true)
+
+    try {
+      const response = await fetch('/api/mi-coach/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, { role: 'user', content: userMessage }],
+          userProfile,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Chat error')
+
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No reader')
+
+      let fullContent = ''
+      const decoder = new TextDecoder()
+      let hasAssistantMessage = false
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value, { stream: true })
+        fullContent += chunk
+
+        if (!hasAssistantMessage) {
+          hasAssistantMessage = true
+          setMessages(prev => [...prev, { type: 'assistant', content: fullContent }])
+        } else {
+          setMessages(prev => {
+            const updated = [...prev]
+            updated[updated.length - 1] = { type: 'assistant', content: fullContent }
+            return updated
+          })
+        }
+      }
+    } catch (error) {
+      console.error('[v0] Chat error:', error)
+      setMessages(prev => [...prev, {
+        type: 'assistant',
+        content: 'Lo siento, ocurrió un error. Por favor intenta de nuevo.'
+      }])
+    } finally {
+      setChatLoading(false)
+    }
+  }
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return
+
+    try {
+      setSearchLoading(true)
+      const response = await fetch(`/api/mi-coach/search?query=${encodeURIComponent(searchQuery)}&discProfile=${userProfile.discType}`)
+      if (response.ok) {
+        const data = await response.json()
+        setSearchResults(data.books || [])
+      }
+    } catch (error) {
+      console.error('[v0] Search error:', error)
+    } finally {
+      setSearchLoading(false)
+    }
+  }
+
+  if (!mounted) return null
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -47,10 +152,12 @@ export default function MiCoachPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Tu Coach IA</h1>
-          <p className="text-lg text-foreground/60">Tu coach personal, siempre disponible para ti. Consigue respuestas, estrategias y sugerencias basadas en tu perfil único.</p>
+          <p className="text-lg text-foreground/60">
+            Tu coach personal, siempre disponible. Consigue respuestas, estrategias y sugerencias personalizadas.
+          </p>
         </div>
 
-        {/* Main Content */}
+        {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="coaching" className="flex items-center gap-2">
@@ -70,61 +177,47 @@ export default function MiCoachPage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* TAB 1: COACHING 24/7 */}
+          {/* TAB 1: COACHING */}
           <TabsContent value="coaching">
             <Card>
               <CardHeader>
-                <CardTitle>Tu Coach Personal IA</CardTitle>
-                <CardDescription>Conversación directa para coaching, estrategia y mentoría personalizada</CardDescription>
+                <CardTitle>Coaching 24/7</CardTitle>
+                <CardDescription>Conversación con tu coach personal de IA</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {/* Chat Messages */}
+                <div className="space-y-4">
+                  {/* Messages */}
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 h-96 overflow-y-auto space-y-4">
-                    {chatMessages.map(msg => (
-                      <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-sm px-4 py-2 rounded-lg ${
-                          msg.type === 'user' 
-                            ? 'bg-purple-600 text-white' 
-                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
-                        }`}>
-                          {msg.content}
-                        </div>
+                    {messages.length === 0 ? (
+                      <div className="flex items-center justify-center h-full text-center">
+                        <p className="text-slate-500">Inicia una conversación con tu coach...</p>
                       </div>
-                    ))}
+                    ) : (
+                      messages.map((msg, idx) => (
+                        <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${
+                            msg.type === 'user'
+                              ? 'bg-purple-600 text-white'
+                              : 'bg-white dark:bg-slate-800 border border-slate-200'
+                          }`}>
+                            {msg.content}
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
 
-                  {/* Input Area */}
+                  {/* Input */}
                   <div className="flex gap-2">
                     <Input
                       placeholder="Pregunta a tu coach..."
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      className="flex-1"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && !chatLoading && handleChatSubmit()}
+                      disabled={chatLoading}
                     />
-                    <Button onClick={handleSendMessage} className="bg-purple-600 hover:bg-purple-700">
-                      Enviar
-                    </Button>
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    <Button variant="outline" size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Consejos
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Plan
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Estrategia
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Equilibrio
+                    <Button onClick={handleChatSubmit} disabled={chatLoading} className="bg-purple-600 hover:bg-purple-700">
+                      {chatLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar'}
                     </Button>
                   </div>
                 </div>
@@ -137,72 +230,73 @@ export default function MiCoachPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Cerebro Inteligente</CardTitle>
-                <CardDescription>Búsqueda semántica sobre contenido personalizado</CardDescription>
+                <CardDescription>Búsqueda semántica de recursos</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {/* Search Bar */}
+                  {/* Search */}
                   <div className="flex gap-2">
-                    <div className="flex-1 relative">
-                      <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-                      <Input
-                        placeholder="Busca estrategias, libros, conceptos..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    <Button className="bg-blue-600 hover:bg-blue-700">Buscar</Button>
+                    <Input
+                      placeholder="Busca libros, conceptos, estrategias..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <Button onClick={handleSearch} disabled={searchLoading} className="bg-blue-600 hover:bg-blue-700">
+                      {searchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                    </Button>
                   </div>
 
-                  {/* Search Results Placeholder */}
-                  <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-8 text-center">
-                    <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-                    <p className="text-slate-500 mb-4">
-                      {searchQuery ? `Buscando: "${searchQuery}"` : 'Empieza a buscar contenido personalizado'}
-                    </p>
-                    <p className="text-sm text-slate-400">
-                      El Cerebro Inteligente busca a través de libros, artículos y estrategias
-                    </p>
+                  {/* Results */}
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {searchResults.length === 0 ? (
+                      <p className="text-slate-500 text-center py-8">
+                        {searchQuery ? 'No se encontraron resultados' : 'Realiza una búsqueda'}
+                      </p>
+                    ) : (
+                      searchResults.map((book) => (
+                        <div key={book.id} className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                          <h3 className="font-bold text-sm">{book.title}</h3>
+                          <p className="text-xs text-slate-600">{book.author}</p>
+                          {book.description && (
+                            <p className="text-xs mt-2 text-slate-700">{book.description.slice(0, 80)}...</p>
+                          )}
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* TAB 3: SUGERENCIAS PERSONALIZADAS */}
+          {/* TAB 3: SUGERENCIAS */}
           <TabsContent value="insights">
             <Card>
               <CardHeader>
                 <CardTitle>Sugerencias Personalizadas</CardTitle>
-                <CardDescription>Ideas y recomendaciones basadas en tu perfil</CardDescription>
+                <CardDescription>Basadas en tu perfil</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-900/50 rounded-lg p-6">
-                    <h3 className="font-bold mb-2 flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-purple-600" />
-                      Esta Semana
-                    </h3>
-                    <p className="text-foreground/80">Basado en tu perfil, te recomendamos practicar escucha activa. Dedica 30 minutos a la estrategia de comunicación.</p>
+                {recsLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin" />
                   </div>
-
-                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-6">
-                    <h3 className="font-bold mb-2 flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-blue-600" />
-                      Recurso Recomendado
-                    </h3>
-                    <p className="text-foreground/80">El libro "Hábitos Atómicos" es perfectamente alineado con tu objetivo de desarrollo.</p>
+                ) : (
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {recommendations.length === 0 ? (
+                      <p className="text-slate-500 text-center py-8">No hay recomendaciones disponibles</p>
+                    ) : (
+                      recommendations.map((rec) => (
+                        <div key={rec.id} className="border rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                          <h3 className="font-bold text-sm">{rec.title}</h3>
+                          <p className="text-xs text-slate-600">{rec.author}</p>
+                          <p className="text-xs text-purple-600 mt-2 font-medium">{rec.reason}</p>
+                        </div>
+                      ))
+                    )}
                   </div>
-
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-200 dark:border-orange-900/50 rounded-lg p-6">
-                    <h3 className="font-bold mb-2 flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-orange-600" />
-                      Área de Desarrollo
-                    </h3>
-                    <p className="text-foreground/80">Tu perfil muestra fortaleza en decisión rápida. Ahora enfócate en desarrollar paciencia analítica.</p>
-                  </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -250,3 +344,4 @@ export default function MiCoachPage() {
     </div>
   )
 }
+
