@@ -1,54 +1,53 @@
--- Create a1_profile_insights table to cache and store AI-generated insights
--- This table stores the enhanced insights generated for users after completing the Despega Cerebral test
+-- Crear tabla a1_profile_insights para almacenar los insights de El Ritual (Despega Cerebral)
+-- Esta tabla cachea los 8 insights personalizados generados por IA después de completar el test
 
 CREATE TABLE IF NOT EXISTS a1_profile_insights (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
   
-  -- Profile data
-  disc_profile JSONB NOT NULL, -- { D, I, S, C, primary, primaryScore, secondary, secondaryScore }
-  dominant_pattern VARCHAR(1) NOT NULL,
-  secondary_pattern VARCHAR(1) NOT NULL,
+  -- Datos del perfil de El Ritual
+  ritual_profile JSONB NOT NULL, -- { dominante, dominanteScore, secundario, secundarioScore, dimD, dimI, dimS, dimC }
+  patron_dominante VARCHAR(1) NOT NULL, -- 'D', 'I', 'S' o 'C'
+  patron_secundario VARCHAR(1) NOT NULL,
   
-  -- 8 Enhanced insights
-  fortalezas_principales TEXT NOT NULL,
-  areas_desarrollo TEXT NOT NULL,
-  estilo_entrevista TEXT NOT NULL,
-  dinamica_equipo TEXT NOT NULL,
-  carrera_align TEXT NOT NULL,
-  comunicacion_efectiva TEXT NOT NULL,
-  gestion_conflicto TEXT NOT NULL,
-  proxi_paso TEXT NOT NULL,
+  -- Los 8 Insights Personalizados generados con IA
+  fortalezas_principales TEXT NOT NULL,      -- Tus Fortalezas Principales
+  areas_desarrollo TEXT NOT NULL,              -- Áreas de Desarrollo
+  estilo_entrevista TEXT NOT NULL,            -- Tu Estilo en Entrevistas
+  dinamica_equipo TEXT NOT NULL,              -- Dinámica de Equipo
+  carrera_align TEXT NOT NULL,                 -- Carreras Alineadas
+  comunicacion_efectiva TEXT NOT NULL,        -- Comunicación Efectiva
+  gestion_conflicto TEXT NOT NULL,            -- Gestión de Conflictos
+  proxi_paso TEXT NOT NULL,                   -- Tu Próximo Paso
   
-  -- Metadata
+  -- Metadatos
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
   
-  -- RLS for users to see only their own insights
   CONSTRAINT check_user_id CHECK (user_id IS NOT NULL)
 );
 
--- Enable RLS
+-- Habilitar RLS
 ALTER TABLE a1_profile_insights ENABLE ROW LEVEL SECURITY;
 
--- RLS Policy: Users can only view their own insights
-CREATE POLICY "Users can view own a1 insights"
+-- Política RLS: Los usuarios solo pueden ver sus propios insights
+CREATE POLICY "Usuarios ven solo sus insights de El Ritual"
   ON a1_profile_insights
   FOR SELECT
   USING (auth.uid() = user_id);
 
--- RLS Policy: Only service role can insert/update insights (API endpoint)
-CREATE POLICY "Service role can manage a1 insights"
+-- Política RLS: Solo el service role puede insertar/actualizar insights (desde API)
+CREATE POLICY "Service role puede gestionar insights de El Ritual"
   ON a1_profile_insights
   FOR ALL
   USING (true)
   WITH CHECK (true);
 
--- Create index for faster lookups
+-- Crear índices para búsquedas rápidas
 CREATE INDEX idx_a1_profile_insights_user_id ON a1_profile_insights(user_id);
 CREATE INDEX idx_a1_profile_insights_created_at ON a1_profile_insights(created_at DESC);
 
--- Add updated_at trigger
+-- Trigger para actualizar updated_at automáticamente
 CREATE OR REPLACE FUNCTION update_a1_profile_insights_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
