@@ -48,31 +48,65 @@ Responde en español, de manera conversacional y práctica. Usa ejemplos concret
       async start(controller) {
         try {
           const decoder = new TextDecoder()
+          let buffer = ''
+
           while (true) {
             const { done, value } = await reader.read()
             if (done) break
 
-            const chunk = decoder.decode(value)
-            const lines = chunk.split('\n')
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6)
-                if (data === '[DONE]') continue
-                if (data.trim()) {
-                  try {
-                    const json = JSON.parse(data)
-                    const content = json.choices?.[0]?.delta?.content
-                    if (content) {
-                      controller.enqueue(new TextEncoder().encode(content))
-                    }
-                  } catch (e) {
-                    console.error('[v0] Parse error:', e)
-                  }
+            // Keep the last incomplete line in the buffer
+            buffer = lines[lines.length - 1]
+
+            for (let i = 0; i < lines.length - 1; i++) {
+              const line = lines[i].trim()
+
+              if (line === '' || !line.startsWith('data: ')) {
+                continue
+              }
+
+              const data = line.slice(6).trim()
+
+              if (data === '[DONE]') {
+                continue
+              }
+
+              if (data.length === 0) {
+                continue
+              }
+
+              try {
+                const json = JSON.parse(data)
+                const content = json.choices?.[0]?.delta?.content
+
+                if (content) {
+                  controller.enqueue(new TextEncoder().encode(content))
                 }
+              } catch (e) {
+                // Silently skip malformed JSON chunks
+                // console.error('[v0] Parse error:', e, 'Data:', data)
               }
             }
           }
+
+          // Process any remaining buffer
+          if (buffer.trim() && buffer.trim() !== '' && buffer.trim().startsWith('data: ')) {
+            const data = buffer.slice(6).trim()
+            if (data !== '[DONE]' && data.length > 0) {
+              try {
+                const json = JSON.parse(data)
+                const content = json.choices?.[0]?.delta?.content
+                if (content) {
+                  controller.enqueue(new TextEncoder().encode(content))
+                }
+              } catch (e) {
+                // Silently skip
+              }
+            }
+          }
+
           controller.close()
         } catch (error) {
           console.error('[v0] Stream error:', error)
