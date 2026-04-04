@@ -48,6 +48,11 @@ export default function A2RoutesPage() {
     try {
       console.log('[v0] Starting A2 route generation for user:', user?.id)
       
+      let discProfile = 'D' // Default profile
+      let objective = 'Desarrollo profesional'
+      let skills = ['Liderazgo', 'Comunicación', 'Estrategia']
+      let timePerWeek = 5
+
       // Get DISC profile from a1_cerebral_assessment
       const { data: discData, error: discError } = await supabase
         .from('a1_cerebral_assessment')
@@ -59,9 +64,8 @@ export default function A2RoutesPage() {
 
       console.log('[v0] DISC profile fetch result:', { discError, hasProfile: !!discData?.disc_profile })
 
-      if (discError || !discData?.disc_profile) {
-        setError('No se encontró perfil de El Ritual. Por favor completa A1: Despega Cerebral primero.')
-        return
+      if (!discError && discData?.disc_profile) {
+        discProfile = discData.disc_profile
       }
 
       // Get Conozcamonos 2 responses - FIXED TABLE NAME
@@ -76,23 +80,18 @@ export default function A2RoutesPage() {
 
       console.log('[v0] C2 responses fetch result:', { c2Error, hasResponses: !!c2Data?.responses })
 
-      if (c2Error || !c2Data?.responses) {
-        setError('No se encontraron respuestas de Conozcámonos 2. Por favor complétalo primero.')
-        return
+      if (!c2Error && c2Data?.responses) {
+        const responses = c2Data.responses
+        console.log('[v0] C2 responses loaded:', Object.keys(responses))
+        objective = (responses[1] as string) || objective
+        skills = ((responses[4] as string[] || []).slice(0, 3)) || skills
+        timePerWeek = parseInt((responses[5] as string)?.split('-')[0]) || timePerWeek
       }
 
-      const responses = c2Data.responses
-      console.log('[v0] C2 responses loaded:', Object.keys(responses))
-
-      // Generate personalized route
-      const objective = responses[1] as string || 'Desarrollo profesional'
-      const skills = (responses[4] as string[] || []).slice(0, 3)
-      const timePerWeek = parseInt((responses[5] as string)?.split('-')[0]) || 5
-
-      console.log('[v0] Route parameters:', { objective, skills, timePerWeek })
+      console.log('[v0] Route parameters:', { objective, skills, timePerWeek, discProfile })
 
       const generatedRoute = generatePersonalizedRoute(
-        discData.disc_profile,
+        discProfile,
         objective,
         skills,
         timePerWeek

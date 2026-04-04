@@ -43,7 +43,7 @@ export default function SignInPage() {
           redirectTo: `${redirectTo}?next=${encodeURIComponent(next)}`,
           queryParams: {
             access_type: 'offline',
-            prompt: 'consent',
+            prompt: 'login',
           },
         },
       })
