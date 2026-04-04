@@ -75,24 +75,18 @@ export default function A2RoutesPage() {
       console.log('[v0] DISC profile fetch result:', { discError, hasProfile: !!discData?.disc_profile })
 
       if (!discError && discData?.disc_profile) {
-        // Map single character to DespegarProfile
-        const profileMap = {
-          'D': { primary: 'energia', secondary: 'plan_ejecutivo', energiaScore: 75 },
-          'I': { primary: 'relaciones', secondary: 'energia', relacionesScore: 75 },
-          'S': { primary: 'relaciones', secondary: 'enfoque', relacionesScore: 75 },
-          'C': { primary: 'enfoque', secondary: 'plan_ejecutivo', enfoqueScore: 75 },
-        } as const
+        // Map single character to DespegarProfile dimensions
+        const discChar = discData.disc_profile as string
         
-        const mapped = profileMap[discData.disc_profile as keyof typeof profileMap] || profileMap['D']
-        discProfile = {
-          energia: mapped.primary === 'energia' ? 75 : 50,
-          enfoque: mapped.primary === 'enfoque' ? 75 : 50,
-          relaciones: mapped.primary === 'relaciones' ? 75 : 50,
-          plan_ejecutivo: mapped.primary === 'plan_ejecutivo' ? 75 : 50,
-          primary: mapped.primary as any,
-          primaryScore: 75,
-          secondary: mapped.secondary as any,
-          secondaryScore: 60,
+        // Create profile with proper typing
+        if (discChar === 'D') {
+          discProfile = { energia: 75, enfoque: 50, relaciones: 50, plan_ejecutivo: 60, primary: 'energia', primaryScore: 75, secondary: 'plan_ejecutivo', secondaryScore: 60 }
+        } else if (discChar === 'I') {
+          discProfile = { energia: 75, enfoque: 50, relaciones: 75, plan_ejecutivo: 50, primary: 'relaciones', primaryScore: 75, secondary: 'energia', secondaryScore: 75 }
+        } else if (discChar === 'S') {
+          discProfile = { energia: 50, enfoque: 60, relaciones: 80, plan_ejecutivo: 50, primary: 'relaciones', primaryScore: 80, secondary: 'enfoque', secondaryScore: 60 }
+        } else if (discChar === 'C') {
+          discProfile = { energia: 50, enfoque: 80, relaciones: 50, plan_ejecutivo: 75, primary: 'enfoque', primaryScore: 80, secondary: 'plan_ejecutivo', secondaryScore: 75 }
         }
       }
 
