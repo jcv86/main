@@ -72,7 +72,7 @@ export default function LandingPageOptimized() {
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">Exploración - Aprende Nuevas Formas</h3>
-              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días con 120+ recursos, libros y estrategias reales.</p>
+              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días con estrategias y contenido especializado.</p>
             </div>
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
@@ -198,10 +198,10 @@ export default function LandingPageOptimized() {
       <section className="container mx-auto px-4 py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900/50 dark:to-slate-900/20 rounded-3xl my-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
-            Tu Transformación en 3 Momentos
+            Tu Transformación en 4 Fases
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {/* Pilar 1: El Ritual */}
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-600 dark:bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#A855F7' }}>
@@ -220,7 +220,7 @@ export default function LandingPageOptimized() {
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Exploración - Aprende Nuevas Formas</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Construye tu ruta personalizada de 30/60/90 días con 120+ recursos y estrategias reales del mercado.
+                Construye tu ruta personalizada de 30/60/90 días con estrategias y contenido especializado.
               </p>
             </div>
 
@@ -232,6 +232,17 @@ export default function LandingPageOptimized() {
               <h3 className="font-bold text-xl mb-2 text-center">Entrenamiento - Practica Siendo</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
                 Practícate con entrenamientos realistas, feedback conductual y un coach IA disponible 24/7.
+              </p>
+            </div>
+
+            {/* Pilar 4: La Realidad */}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#06B6D4' }}>
+                <span className="text-2xl font-bold text-white">04</span>
+              </div>
+              <h3 className="font-bold text-xl mb-2 text-center">La Realidad - Vive Tu Transformación</h3>
+              <p className="text-foreground/75 text-center text-sm leading-relaxed">
+                Coaching IA 24/7, inteligencia de mercado y plan de acción para materializar tu transformación en oportunidades reales.
               </p>
             </div>
           </div>

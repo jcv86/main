@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { validateEnvironment } from "@/lib/env-validation"
-import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
+import LLMOOptimizedFooter from "@/components/footer"
 
 // Validate environment on startup
 if (typeof window === "undefined") {
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Plataforma líder en Chile para desarrollo profesional. Descubre tu potencial con evaluaciones psicométricas, accede a 120+ libros profesionales y recibe coaching personalizado con IA. Aprende de expertos en liderazgo, productividad e inteligencia emocional.",
+    "Plataforma líder en desarrollo profesional. Descubre tu potencial con evaluaciones científicas, accede a contenido especializado y recibe coaching personalizado con IA.",
   keywords: [
     "desarrollo profesional Chile",
     "evaluaciones psicométricas",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
     description:
-      "Transforma tu carrera con evaluaciones psicométricas científicas, 120+ libros profesionales y coaching personalizado con inteligencia artificial. La plataforma #1 en Chile para desarrollo profesional.",
+      "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
     images: [
       {
         url: "/og-image.png",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA",
-    description: "Tests psicométricos, 120+ libros profesionales y coaching con IA. Impulsa tu carrera hoy.",
+    description: "Tests psicométricos, contenido especializado y coaching con IA. Impulsa tu carrera hoy.",
     images: ["/twitter-image.png"],
     creator: "@despegatucarrera",
   },
