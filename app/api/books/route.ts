@@ -1,326 +1,96 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    console.log("[v0] Fetching books from both knowledge_base and biblioteca...")
+    // Extract query parameters for advanced filtering
+    const searchParams = request.nextUrl.searchParams
+    const category = searchParams.get('category')
+    const difficulty = searchParams.get('difficulty')
+    const search = searchParams.get('search')
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const rating = searchParams.get('rating')
+    const tags = searchParams.get('tags')?.split(',')
+    
+    console.log("[v0] Fetching books with filters:", { category, difficulty, search, limit, rating, tags })
 
-    const { data: originalBooks, error: kbError } = await supabase
-      .from("knowledge_base")
+    // Start with books from new books table
+    let query = supabase
+      .from("books")
       .select("*")
-      .order("read_count", { ascending: false })
 
-    const { data: chileanResources, error: bibError } = await supabase
-      .from("biblioteca")
-      .select("*")
-      .order("relevance_score", { ascending: false })
-
-    if (kbError && bibError) {
-      console.error("[v0] Error fetching from both tables:", kbError, bibError)
-      return NextResponse.json([], { status: 500 })
+    // Apply filters
+    if (category && category !== 'all') {
+      query = query.eq('category', category)
     }
 
-    const booksWithSource = (originalBooks || []).map((book: any) => ({
-      ...book,
-      source_type: "libro_original",
-    }))
+    if (difficulty && difficulty !== 'all') {
+      query = query.eq('difficulty', difficulty)
+    }
 
-    const resourcesWithSource = (chileanResources || []).map((resource: any) => ({
-      ...resource,
-      source_type: "recurso_chileno",
-    }))
+    if (rating) {
+      query = query.gte('rating', parseFloat(rating))
+    }
 
-    const allItems = [...booksWithSource, ...resourcesWithSource]
-    const deduplicatedItems = Array.from(
-      new Map(
-        allItems.map((item: any) => {
-          const key = item.title.toLowerCase().trim()
-          return [key, item]
-        }),
-      ).values(),
-    )
+    // Execute query
+    const { data: books, error: booksError } = await query
+      .order("rating", { ascending: false })
+      .limit(limit)
 
-    const sorted = deduplicatedItems.sort((a: any, b: any) => {
-      const aContentLength = (a.content || "").length + (a.description || "").length
-      const bContentLength = (b.content || "").length + (b.description || "").length
-      return bContentLength - aContentLength
-    })
+    if (booksError) {
+      console.error("[v0] Error fetching books:", booksError)
+      // Return empty array instead of error
+      return NextResponse.json([])
+    }
 
-    console.log(
-      `[v0] Successfully fetched ${booksWithSource.length} original books and ${resourcesWithSource.length} Chilean resources. After deduplication: ${sorted.length}`,
-    )
-    return NextResponse.json(sorted)
+    // Client-side filtering for search and tags
+    let results = books || []
+
+    if (search) {
+      results = results.filter((book: any) =>
+        book.title.toLowerCase().includes(search.toLowerCase()) ||
+        book.author.toLowerCase().includes(search.toLowerCase()) ||
+        book.description?.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+
+    if (tags && tags.length > 0) {
+      results = results.filter((book: any) =>
+        book.tags?.some((tag: string) => tags.includes(tag))
+      )
+    }
+
+    console.log(`[v0] Returned ${results.length} books matching filters`)
+    return NextResponse.json(results)
   } catch (error) {
     console.error("[v0] API Error:", error)
-
-    // Si hay error de base de datos, usar datos de respaldo más completos
-    const fallbackBooks = [
-      {
-        id: 1,
-        title: "Organízate con Eficacia",
-        author: "David Allen",
-        category: "Productividad",
-        content: `Organízate con Eficacia (Getting Things Done) es un sistema revolucionario de gestión del tiempo y la productividad que ha transformado la vida de millones de personas.
-
-**El Problema Fundamental:**
-Nuestra mente no está diseñada para recordar tareas. Cuando intentamos mantener todo en nuestra cabeza, experimentamos estrés constante.
-
-**Los Cinco Pasos del Método GTD:**
-
-**1. Capturar** - Recopila todo lo que llame tu atención
-**2. Aclarar** - Procesa cada elemento: ¿Es accionable?
-**3. Organizar** - Coloca elementos en listas apropiadas
-**4. Reflexionar** - Revisa semanalmente todo tu sistema
-**5. Comprometerse** - Usa tu sistema para decidir qué hacer
-
-**Regla de los 2 Minutos:** Si toma menos de 2 minutos, hazlo inmediatamente.
-
-**Beneficios:** Mente clara, mayor productividad, mejor toma de decisiones, más tiempo para lo importante.`,
-        tags: ["productividad", "organización", "gestión del tiempo"],
-        slug: "organizate-con-eficacia",
-        read_count: 2847,
-      },
-      {
-        id: 2,
-        title: "Comunicación Efectiva",
-        author: "Harvard Business Review",
-        category: "Habilidades Blandas",
-        content: `Técnicas para mejorar la comunicación profesional y construir relaciones laborales más sólidas. Cubre comunicación verbal y no verbal, escucha activa, resolución de conflictos y habilidades de presentación.
-
-**Principios de Comunicación Clara:**
-- Sé específico y concreto en tus mensajes
-- Adapta tu comunicación a la audiencia
-- Escucha activamente antes de responder
-- Usa ejemplos y analogías para clarificar ideas
-
-**Escucha Activa:**
-- Mantén contacto visual apropiado
-- Parafrasea para confirmar comprensión
-- Haz preguntas abiertas
-- Evita interrumpir
-
-**Comunicación No Verbal:**
-- El 55% de la comunicación es lenguaje corporal
-- El 38% es tono de voz
-- Solo el 7% son las palabras
-
-**Resolución de Conflictos:**
-- Enfócate en el problema, no en la persona
-- Busca soluciones ganar-ganar
-- Mantén la calma y profesionalismo
-- Practica la empatía`,
-        tags: ["comunicación", "habilidades-blandas", "relaciones"],
-        slug: "comunicacion-efectiva",
-        read_count: 1523,
-      },
-      {
-        id: 3,
-        title: "Liderazgo con Propósito",
-        author: "Simon Sinek",
-        category: "Liderazgo",
-        content: `Descubre cómo los grandes líderes inspiran acción comenzando con el "por qué". Este libro transforma tu enfoque de liderazgo desde el comando y control hacia la inspiración y el propósito.
-
-**El Círculo Dorado:**
-- **Por Qué** - Tu propósito, causa o creencia
-- **Cómo** - Tus valores y principios guía
-- **Qué** - Los productos o servicios que ofreces
-
-**La Gente No Compra Lo Que Haces, Compra Por Qué Lo Haces**
-Los líderes inspiradores empiezan con el propósito, no con las características o beneficios.
-
-**Construir Confianza:**
-- La confianza comienza con autenticidad
-- Sé consistente entre lo que dices y haces
-- Admite errores y vulnerabilidad
-- Cumple siempre tus promesas
-
-**Liderar con el Ejemplo:**
-- Tus acciones hablan más que tus palabras
-- Establece estándares altos para ti mismo
-- Muestra el camino, no solo señálalo
-- Celebra los éxitos del equipo
-
-**Desarrollar a Otros:**
-- Delega con confianza
-- Proporciona feedback constructivo
-- Crea oportunidades de crecimiento
-- Reconoce y potencia fortalezas`,
-        tags: ["liderazgo", "propósito", "inspiración", "equipos"],
-        slug: "liderazgo-con-proposito",
-        read_count: 2156,
-      },
-      {
-        id: 4,
-        title: "Inteligencia Emocional en el Trabajo",
-        author: "Daniel Goleman",
-        category: "Inteligencia Emocional",
-        content: `La inteligencia emocional es el factor más importante para el éxito profesional. Aprende a reconocer, entender y manejar las emociones propias y ajenas en el contexto laboral.
-
-**Los 5 Componentes de la IE:**
-
-**1. Autoconciencia:**
-- Reconoce tus emociones en el momento
-- Entiende cómo afectan tu desempeño
-- Conoce tus fortalezas y limitaciones
-
-**2. Autorregulación:**
-- Maneja impulsos y emociones disruptivas
-- Mantén la compostura bajo presión
-- Piensa antes de actuar
-
-**3. Motivación:**
-- Impulsado por logros internos
-- Optimista ante adversidades
-- Comprometido con objetivos
-
-**4. Empatía:**
-- Entiende perspectivas ajenas
-- Lee señales emocionales no verbales
-- Anticipa necesidades de otros
-
-**5. Habilidades Sociales:**
-- Construye y lidera equipos
-- Maneja conflictos efectivamente
-- Inspira y persuade
-
-**Aplicación Práctica:**
-- En reuniones: lee el ambiente emocional
-- En conflictos: mantén la calma y busca entender
-- En feedback: sé específico y empático
-- En liderazgo: inspira y motiva auténticamente`,
-        tags: ["inteligencia-emocional", "trabajo", "relaciones-laborales"],
-        slug: "inteligencia-emocional-trabajo",
-        read_count: 3421,
-      },
-      {
-        id: 5,
-        title: "Mindfulness para Profesionales",
-        author: "Jon Kabat-Zinn",
-        category: "Bienestar",
-        content: `La práctica de mindfulness reduce el estrés, mejora el enfoque y aumenta la efectividad profesional. Aprende técnicas respaldadas por ciencia para integrar la atención plena en tu día a día.
-
-**¿Qué es Mindfulness?**
-Atención plena al momento presente, sin juicio. Es entrenar tu mente para estar donde estás, completamente presente.
-
-**Beneficios Comprobados:**
-- Reduce estrés y ansiedad en 40%
-- Mejora concentración y memoria
-- Aumenta creatividad y toma de decisiones
-- Mejora relaciones interpersonales
-- Fortalece el sistema inmunológico
-
-**Prácticas Básicas:**
-
-**Meditación de Respiración (5 minutos):**
-1. Siéntate cómodamente
-2. Cierra los ojos
-3. Enfoca atención en la respiración
-4. Cuando la mente divague, regresa suavemente
-
-**Escaneo Corporal (10 minutos):**
-1. Acuéstate o siéntate cómodamente
-2. Atiende cada parte del cuerpo sistemáticamente
-3. Nota sensaciones sin juzgar
-4. Respira hacia áreas de tensión
-
-**Mindfulness en Acción:**
-- Come conscientemente una comida al día
-- Camina con atención plena 5 minutos
-- Escucha activamente sin planear respuesta
-- Toma pausas conscientes entre tareas
-
-**Integración Laboral:**
-- Comienza reuniones con 1 minuto de silencio
-- Responde emails con atención completa
-- Toma micro-pausas de 30 segundos cada hora
-- Practica la mono-tarea en lugar de multi-tarea`,
-        tags: ["mindfulness", "bienestar", "estrés", "productividad"],
-        slug: "mindfulness-profesionales",
-        read_count: 1876,
-      },
-      {
-        id: 6,
-        title: "Networking Estratégico",
-        author: "Keith Ferrazzi",
-        category: "Desarrollo Profesional",
-        content: `El networking auténtico no es sobre coleccionar contactos, sino sobre cultivar relaciones significativas que generen valor mutuo. Aprende a construir una red profesional poderosa.
-
-**Principios del Networking Auténtico:**
-
-**1. Da Antes de Pedir:**
-- Ofrece ayuda sin esperar nada a cambio
-- Comparte conocimiento y contactos generosamente
-- Conéctate desde el servicio, no desde la necesidad
-
-**2. Sé Auténtico:**
-- Muestra tu verdadera personalidad
-- No finjas interés que no sientes
-- Comparte vulnerabilidades apropiadamente
-
-**3. Haz Seguimiento:**
-- Contacta dentro de las 24 horas después de conocer a alguien
-- Envía artículos o recursos relevantes
-- Recuerda detalles personales
-
-**4. Cultiva Relaciones a Largo Plazo:**
-- No solo contactes cuando necesites algo
-- Celebra los éxitos de tu red
-- Mantén contacto regular
-
-**Estrategias Prácticas:**
-
-**En Eventos:**
-- Establece objetivo claro antes de ir
-- Prepara tu presentación de 30 segundos
-- Haz preguntas abiertas e interesantes
-- Conecta personas que se beneficiarían de conocerse
-
-**Online (LinkedIn):**
-- Personaliza cada solicitud de conexión
-- Comenta y comparte contenido valioso
-- Participa en grupos de tu industria
-- Escribe artículos compartiendo tu experticia
-
-**Mantenimiento de Red:**
-- Crea sistema para seguimiento regular
-- Usa calendario para recordar contactos
-- Organiza almuerzos o cafés informativos
-- Envía notas de agradecimiento
-
-**Networking Estratégico:**
-- Identifica personas clave en tu industria
-- Busca mentores y ofrece ser mentor
-- Construye relaciones con diversos perfiles
-- Participa en asociaciones profesionales`,
-        tags: ["networking", "relaciones-profesionales", "carrera"],
-        slug: "networking-estrategico",
-        read_count: 1234,
-      },
-    ]
-
-    console.log("Using fallback data with", fallbackBooks.length, "books")
-    return NextResponse.json(fallbackBooks)
+    return NextResponse.json([])
   }
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, category, content, author, tags, slug } = body
+    const { title, category, description, author, tags, rating, pages, published_year, difficulty, reading_time, key_topics, is_recommended } = body
 
     const { data, error } = await supabase
-      .from("knowledge_base")
+      .from("books")
       .insert([
         {
           title,
           category,
-          content,
+          description,
           author,
           tags,
-          slug,
-          read_count: 0,
+          rating,
+          pages,
+          published_year,
+          difficulty,
+          reading_time,
+          key_topics,
+          is_recommended,
         },
       ])
       .select()
