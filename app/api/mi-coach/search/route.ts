@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { generateObject } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { generateText, Output } from 'ai'
 import { z } from 'zod'
 
 const supabase = createClient(
@@ -24,26 +23,30 @@ export async function GET(req: NextRequest) {
     // Use AI to expand query with related concepts
     let expandedQueries = [query.toLowerCase()]
     try {
-      const { object } = await generateObject({
-        model: 'gpt-4o-mini',
+      const { text } = await generateText({
+        model: 'openai/gpt-4o-mini',
         prompt: `Eres un experto en educación y desarrollo profesional. 
         
 El usuario está buscando: "${query}"
 
 Genera 2-3 conceptos relacionados o sinónimos relevantes para mejorar la búsqueda.
-Responde en español.`,
-        schema: z.object({
-          relatedConcepts: z.array(z.string()).describe('Conceptos relacionados o sinónimos'),
+Responde SOLO en español con una lista de conceptos separados por comas, sin numeración ni puntuación adicional.`,
+        output: Output.object({
+          schema: z.object({
+            relatedConcepts: z.array(z.string()).describe('Conceptos relacionados o sinónimos'),
+          }),
         }),
       })
       
-      expandedQueries = [
-        query.toLowerCase(),
-        ...object.relatedConcepts.map(c => c.toLowerCase())
-      ]
+      if (text && typeof text === 'object' && 'relatedConcepts' in text) {
+        expandedQueries = [
+          query.toLowerCase(),
+          ...(text as any).relatedConcepts.map((c: string) => c.toLowerCase())
+        ]
+      }
       console.log('[v0] Expanded queries:', expandedQueries)
     } catch (aiError) {
-      console.log('[v0] AI expansion skipped, using basic search')
+      console.log('[v0] AI expansion skipped, using basic search:', aiError)
       // Continue with basic search if AI fails
     }
 
