@@ -77,8 +77,6 @@ export default function Conozcamonos2Page() {
     }
   }
 
-  const allStepAnswered = stepQuestions.every(q => responses[q.id])
-
   const handleNext = () => {
     if (!allStepAnswered) {
       setError('Por favor responde todas las preguntas de este paso')
