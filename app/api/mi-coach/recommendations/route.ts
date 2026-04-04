@@ -36,26 +36,43 @@ export async function GET(req: NextRequest) {
 
     const profile = profileMap[discProfile] || profileMap['D']
 
-    // Get recommended books based on profile
-    const { data: books, error } = await supabase
+    // Use RPC call or manual filtering - Get all books first, then filter
+    const { data: allBooks, error: booksError } = await supabase
       .from('books')
       .select('id, title, author, description, rating, difficulty, key_topics, tags')
-      .or(
-        `key_topics.cs.${JSON.stringify(profile.keywords)},tags.cs.${JSON.stringify(profile.keywords)}`
-      )
       .order('rating', { ascending: false })
-      .limit(limit)
+      .limit(limit * 2)
 
-    if (error) {
-      console.error('[v0] Recommendations error:', error)
+    if (booksError) {
+      console.error('[v0] Error fetching books:', booksError)
       return NextResponse.json({ error: 'Error fetching recommendations' }, { status: 500 })
     }
 
+    // Filter books by matching keywords in key_topics or tags
+    const filteredBooks = (allBooks || [])
+      .filter(book => {
+        const topicsStr = JSON.stringify(book.key_topics || []).toLowerCase()
+        const tagsStr = JSON.stringify(book.tags || []).toLowerCase()
+        const combinedText = `${topicsStr} ${tagsStr}`
+        
+        // Check if any profile keyword matches
+        return profile.keywords.some(keyword => 
+          combinedText.includes(keyword.toLowerCase())
+        )
+      })
+      .slice(0, limit)
+
     // Add reasoning for each recommendation
-    const recommendations = (books || []).map((book, idx) => ({
-      ...book,
+    const recommendations = (filteredBooks || []).map((book, idx) => ({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      description: book.description,
+      rating: book.rating,
       reason: `${idx === 0 ? 'Top recomendación' : 'Altamente recomendado'} para tu perfil ${discProfile}`,
     }))
+
+    console.log('[v0] Recommendations found:', recommendations.length)
 
     return NextResponse.json({
       recommendations,
