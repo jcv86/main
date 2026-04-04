@@ -92,7 +92,7 @@ export default function DemoPage() {
   }
 
   const allAnswered = Object.values(demoAnswers).every(v => v !== null)
-  const { scores, primary, secondary } = allAnswered ? calculateProfile() : {}
+  const { scores = {}, primary = null, secondary = null } = allAnswered ? calculateProfile() : {}
 
   const profileNames = {
     D: 'Impulsor',
