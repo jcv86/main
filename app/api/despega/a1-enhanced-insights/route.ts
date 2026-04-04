@@ -78,34 +78,43 @@ export async function POST(request: NextRequest) {
 - Objetivos a 90 días: ${c1Context.goals || 'N/A'}`
       : ''
 
-    const prompt = `Eres un coach profesional experto en perfiles conductuales DISC y desarrollo de carrera. Has revisado el Análisis Despega Cerebral de un usuario y necesitas generar insights profundos y personalizados.
+    const prompt = `Eres un coach profesional experto en perfiles conductuales DISC y desarrollo de carrera. Has revisado el Análisis Despega Cerebral de un usuario y necesitas generar insights profundos y personalizados que causen un "WOW EFFECT" - que el usuario diga "¡ESE SOY YO exactamente!".
 
 PERFIL CEREBRAL DEL USUARIO:
 - Nombre: ${userName || 'Usuario'}
 - Perfil Primario: ${primaryProfileName} (${Math.round(profile.primaryScore)}%)
-  Características: ${primaryTraits}
+  Características clave: ${primaryTraits}
 - Perfil Secundario: ${secondaryProfileName} (${Math.round(profile.secondaryScore)}%)
-  Características: ${secondaryTraits}
+  Características clave: ${secondaryTraits}
 
 ${contextSection}
 
-Tu tarea es generar 8 insights detallados y personalizados que hagan que el usuario diga "¡ESE SOY YO!" Cada insight debe:
-1. Ser específico y relevante a su perfil DISC
-2. Si hay contexto de C1, conectar directamente con sus desafíos/objetivos
-3. Ser motivador pero honesto
-4. Incluir ejemplos concretos o acciones
-5. Ayudarle a entender su valor único
+Tu tarea es generar 8 insights ESPECÍFICOS, PERSONALIZADOS y PROFUNDOS que:
+1. Reflejen EXACTAMENTE cómo es esta persona según su perfil
+2. ${c1Context ? 'Conecten DIRECTAMENTE con sus desafíos y objetivos específicos mencionados' : 'Sean relevantes a su perfil DISC'}
+3. Usen ejemplos concretos y situaciones reales (no genéricos)
+4. Incluyan consejos accionables que la persona pueda usar inmediatamente
+5. Generen el "WOW EFFECT" - reconocimiento profundo: "eso soy YO"
+6. Sean motivadores pero honestos (incluir áreas de crecimiento)
+7. Reconozcan su potencial único y valor
 
-IMPORTANTE: Responde con JSON válido en este exacto formato (sin markdown, sin comillas escapadas innecesarias):
+IMPORTANTE: 
+- Sé ESPECÍFICO. No uses frases genéricas. Personaliza cada insight.
+- Si hay contexto de Conozcámonos 1, cítalo directamente en los insights.
+- Usa lenguaje directo y conversacional, no académico.
+- Incluye 1-2 ejemplos concretos por insight.
+- Mantén cada insight entre 100-150 palabras.
+
+Responde EXACTAMENTE con este JSON (sin markdown, sin escapes innecesarios):
 {
-  "fortalezasPrincipales": "Aquí van las 2-3 fortalezas principales basadas en su perfil",
-  "areasDesarrollo": "Aquí van las 2-3 áreas de desarrollo recomendadas",
-  "estiloEntrevista": "Cómo debería prepararse para entrevistas según su perfil",
-  "dinamicaEquipo": "Cómo funciona mejor en equipos",
-  "carreraAlign": "Carreras/roles que mejor se alinean con su perfil",
-  "comunicacionEfectiva": "Consejos para comunicarse efectivamente",
-  "gestionConflicto": "Cómo maneja mejor los conflictos y desacuerdos",
-  "proxiPaso": "El próximo paso recomendado en su desarrollo profesional"
+  "fortalezasPrincipales": "2-3 fortalezas basadas en su perfil. Específicas y personalizadas. Incluye ejemplos.",
+  "areasDesarrollo": "2-3 áreas donde puede crecer. Honesto pero motivador. Da contexto de por qué.",
+  "estiloEntrevista": "Cómo aprovechar su perfil en entrevistas. Tácticas específicas. Qué evitar.",
+  "dinamicaEquipo": "Cómo funciona mejor en equipos. Rol natural. Cómo sacar lo mejor de otros.",
+  "carreraAlign": "Carreras/roles específicos que encajan PERFECTAMENTE. No genéricos.",
+  "comunicacionEfectiva": "Cómo comunicarse de forma que otros la escuchen. Técnicas concretas.",
+  "gestionConflicto": "Estrategia para manejar desacuerdos. Aprovecha sus fortalezas.",
+  "proxiPaso": "El PRÓXIMO paso específico en su desarrollo. Acción concreta a tomar."
 }`
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {

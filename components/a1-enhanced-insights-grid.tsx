@@ -20,6 +20,7 @@ interface InsightCardProps {
   icon: React.ReactNode
   index: number
   color: string // 'purple', 'blue', 'orange', 'cyan', 'pink', 'green', 'indigo', 'amber'
+  emoji?: string
 }
 
 const colorMap: Record<string, { bg: string; border: string; icon: string }> = {
@@ -33,7 +34,7 @@ const colorMap: Record<string, { bg: string; border: string; icon: string }> = {
   amber: { bg: 'bg-amber-50 dark:bg-amber-950', border: 'border-amber-200 dark:border-amber-800', icon: 'text-amber-600 dark:text-amber-400' },
 }
 
-export function InsightCard({ title, content, icon, index, color }: InsightCardProps) {
+export function InsightCard({ title, content, icon, index, color, emoji }: InsightCardProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -51,12 +52,15 @@ export function InsightCard({ title, content, icon, index, color }: InsightCardP
       }`}
       style={{ transitionDelay: `${animationDelay}ms` }}
     >
-      <Card className={`border-2 ${colorClasses.border} ${colorClasses.bg} hover:shadow-lg transition-shadow h-full`}>
+      <Card className={`border-2 ${colorClasses.border} ${colorClasses.bg} hover:shadow-xl hover:scale-105 transition-all h-full duration-300`}>
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
-            <div className={`p-3 rounded-lg bg-white dark:bg-slate-800 flex-shrink-0`}>
-              <div className={`w-6 h-6 ${colorClasses.icon}`}>
-                {icon}
+            <div className="flex flex-col items-center gap-2">
+              {emoji && <span className="text-2xl">{emoji}</span>}
+              <div className={`p-2 rounded-lg bg-white dark:bg-slate-800 flex-shrink-0`}>
+                <div className={`w-5 h-5 ${colorClasses.icon}`}>
+                  {icon}
+                </div>
               </div>
             </div>
             <div className="flex-1 min-w-0">
@@ -93,64 +97,82 @@ export function EnhancedInsightsGrid({ insights }: EnhancedInsightsGridProps) {
       title: 'Tus Fortalezas Principales',
       content: insights.fortalezasPrincipales,
       icon: <Sparkles className="w-full h-full" />,
-      color: 'purple'
+      color: 'purple',
+      emoji: '⭐'
     },
     {
       title: 'Áreas de Desarrollo',
       content: insights.areasDesarrollo,
       icon: <Target className="w-full h-full" />,
-      color: 'blue'
+      color: 'blue',
+      emoji: '🎯'
     },
     {
       title: 'Tu Estilo en Entrevistas',
       content: insights.estiloEntrevista,
       icon: <Brain className="w-full h-full" />,
-      color: 'orange'
+      color: 'orange',
+      emoji: '🧠'
     },
     {
       title: 'Dinámica de Equipo',
       content: insights.dinamicaEquipo,
       icon: <Users className="w-full h-full" />,
-      color: 'cyan'
+      color: 'cyan',
+      emoji: '👥'
     },
     {
       title: 'Carreras Alineadas',
       content: insights.carreraAlign,
       icon: <Briefcase className="w-full h-full" />,
-      color: 'pink'
+      color: 'pink',
+      emoji: '💼'
     },
     {
       title: 'Comunicación Efectiva',
       content: insights.comunicacionEfectiva,
       icon: <MessageSquare className="w-full h-full" />,
-      color: 'green'
+      color: 'green',
+      emoji: '💬'
     },
     {
       title: 'Gestión de Conflictos',
       content: insights.gestionConflicto,
       icon: <Shield className="w-full h-full" />,
-      color: 'indigo'
+      color: 'indigo',
+      emoji: '🛡️'
     },
     {
       title: 'Tu Próximo Paso',
       content: insights.proxiPaso,
       icon: <ArrowRight className="w-full h-full" />,
-      color: 'amber'
+      color: 'amber',
+      emoji: '➡️'
     },
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {insightsList.map((insight, index) => (
-        <InsightCard
-          key={index}
-          title={insight.title}
-          content={insight.content}
-          icon={insight.icon}
-          index={index}
-          color={insight.color}
-        />
-      ))}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {insightsList.map((insight, index) => (
+          <InsightCard
+            key={index}
+            title={insight.title}
+            content={insight.content}
+            icon={insight.icon}
+            index={index}
+            color={insight.color}
+            emoji={insight.emoji}
+          />
+        ))}
+      </div>
+      
+      {/* Divider */}
+      <div className="flex items-center gap-4 my-8">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+        <div className="text-2xl">✨</div>
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+      </div>
     </div>
   )
 }

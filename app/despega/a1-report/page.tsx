@@ -328,6 +328,64 @@ export default function A1ReportPage() {
         </div>
       </ASectionPart>
 
+      {/* AI-Generated Insights Section - EL CORAZÓN DEL WOW EFFECT */}
+      <ASectionPart title="✨ Tu Análisis Personalizado - ESE ERES TÚ" icon={<Sparkles />}>
+        {insightsLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-purple-600 mb-4" />
+            <p className="text-slate-300 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
+            <p className="text-slate-500 text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
+          </div>
+        ) : insights ? (
+          <div className="space-y-8">
+            {/* Resumen Ejecutivo */}
+            <div className="bg-gradient-to-r from-purple-900/40 via-blue-900/40 to-purple-900/40 border-2 border-purple-500/50 rounded-xl p-8 shadow-xl">
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">🎯</div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-white mb-3">Tu Perfil: {primaryLabel} + {secondaryLabel}</h3>
+                  <p className="text-slate-200 leading-relaxed text-base">
+                    Eres una persona con características únicas. Tu combinación {profile.primary}/{profile.secondary} 
+                    te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
+                    Los siguientes 8 insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Introducción */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-center">
+              <p className="text-slate-300 text-lg">
+                Basado en tu Perfil de El Ritual y tu contexto personal, aquí está tu análisis completo:
+              </p>
+            </div>
+
+            {/* Los 8 Insights con Grid */}
+            <EnhancedInsightsGrid insights={insights} />
+
+            {/* CTA Final */}
+            <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border-2 border-cyan-500/50 rounded-xl p-8 text-center">
+              <h3 className="text-xl font-bold text-white mb-3">Próximo Paso en tu Transformación</h3>
+              <p className="text-slate-300 mb-6">
+                Ahora que entiendes tu perfil, es hora de diseñar tu plan de 90 días personalizado.
+              </p>
+              <Button 
+                onClick={() => router.push('/despega/conozcamonos-2')}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold px-8 py-3 text-lg"
+              >
+                Ir a Conozcámonos 2: Planificación
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-red-900/20 border-2 border-red-600/50 rounded-xl p-8 text-center">
+            <p className="text-red-300 text-lg font-semibold">Los insights no pudieron ser generados</p>
+            <p className="text-red-400 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+          </div>
+        )}
+      </ASectionPart>
+
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-slate-800/40 border-slate-700">
