@@ -105,6 +105,20 @@ export default function Conozcamonos2Page() {
         return
       }
 
+      // VALIDATE: A1 must be completed before C2
+      const { data: a1Data, error: a1Error } = await supabase
+        .from('a1_cerebral_assessment')
+        .select('disc_profile')
+        .eq('user_id', user.id)
+        .limit(1)
+        .single()
+
+      if (!a1Data?.disc_profile) {
+        setError('Debes completar A1: Despega Cerebral antes de continuar.')
+        setLoading(false)
+        return
+      }
+
       // Save responses
       const { error: dbError } = await supabase
         .from('canon_conozcamonos_2_responses')

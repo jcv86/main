@@ -46,15 +46,17 @@ export default function A2RoutesPage() {
 
   const loadAndGenerateRoute = async () => {
     try {
-      // Get DISC profile
-      const { data: discData } = await supabase
-        .from('user_a1_profiles')
-        .select('disc_profile')
+      // Get DISC profile from a1_cerebral_assessment
+      const { data: discData, error: discError } = await supabase
+        .from('a1_cerebral_assessment')
+        .select('disc_profile, dominant_pattern, secondary_pattern')
         .eq('user_id', user?.id)
+        .order('completed_at', { ascending: false })
+        .limit(1)
         .single()
 
-      if (!discData?.disc_profile) {
-        setError('No se encontró perfil DISC. Por favor completa A1.')
+      if (discError || !discData?.disc_profile) {
+        setError('No se encontró perfil de El Ritual. Por favor completa A1: Despega Cerebral primero.')
         return
       }
 
