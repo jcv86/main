@@ -46,6 +46,8 @@ export default function A2RoutesPage() {
 
   const loadAndGenerateRoute = async () => {
     try {
+      console.log('[v0] Starting A2 route generation for user:', user?.id)
+      
       // Get DISC profile from a1_cerebral_assessment
       const { data: discData, error: discError } = await supabase
         .from('a1_cerebral_assessment')
@@ -55,31 +57,39 @@ export default function A2RoutesPage() {
         .limit(1)
         .single()
 
+      console.log('[v0] DISC profile fetch result:', { discError, hasProfile: !!discData?.disc_profile })
+
       if (discError || !discData?.disc_profile) {
         setError('No se encontró perfil de El Ritual. Por favor completa A1: Despega Cerebral primero.')
         return
       }
 
-      // Get Conozcamonos 2 responses
-      const { data: c2Data } = await supabase
-        .from('canon_conozcamonos_2_responses')
+      // Get Conozcamonos 2 responses - FIXED TABLE NAME
+      console.log('[v0] Fetching C2 responses...')
+      const { data: c2Data, error: c2Error } = await supabase
+        .from('conozcamonos_2_responses')
         .select('responses')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      if (!c2Data?.responses) {
-        setError('No se encontraron respuestas de Conozcamonos 2.')
+      console.log('[v0] C2 responses fetch result:', { c2Error, hasResponses: !!c2Data?.responses })
+
+      if (c2Error || !c2Data?.responses) {
+        setError('No se encontraron respuestas de Conozcámonos 2. Por favor complétalo primero.')
         return
       }
 
       const responses = c2Data.responses
+      console.log('[v0] C2 responses loaded:', Object.keys(responses))
 
       // Generate personalized route
       const objective = responses[1] as string || 'Desarrollo profesional'
       const skills = (responses[4] as string[] || []).slice(0, 3)
       const timePerWeek = parseInt((responses[5] as string)?.split('-')[0]) || 5
+
+      console.log('[v0] Route parameters:', { objective, skills, timePerWeek })
 
       const generatedRoute = generatePersonalizedRoute(
         discData.disc_profile,
@@ -88,8 +98,10 @@ export default function A2RoutesPage() {
         timePerWeek
       )
 
+      console.log('[v0] Route generated, saving to BD...')
+
       // Save route
-      await supabase.from('user_a2_routes').upsert({
+      const { error: saveError } = await supabase.from('user_a2_routes').upsert({
         user_id: user?.id,
         route_data: generatedRoute,
         objective,
@@ -97,11 +109,17 @@ export default function A2RoutesPage() {
         updated_at: new Date().toISOString()
       })
 
+      if (saveError) {
+        console.error('[v0] Error saving route:', saveError)
+        setError('Error al guardar tu ruta. Por favor intenta de nuevo.')
+        return
+      }
+
       setRoute(generatedRoute)
-      console.log('[v0] A2 Route generated successfully')
+      console.log('[v0] A2 Route generated and saved successfully')
     } catch (err) {
       console.error('[v0] Error loading A2 routes:', err)
-      setError('Error al generar tus rutas. Intenta de nuevo.')
+      setError(`Error al generar tus rutas: ${err instanceof Error ? err.message : 'Error desconocido'}`)
     } finally {
       setLoading(false)
     }
