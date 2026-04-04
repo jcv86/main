@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { CoachChat } from '@/components/coach-chat'
 
 interface DespegaLayoutProps {
   children: ReactNode
@@ -12,7 +11,6 @@ export function DespegaWithCoachLayout({ children, stage = 'a1' }: DespegaLayout
   return (
     <>
       {children}
-      <CoachChat currentStage={stage} />
     </>
   )
 }
