@@ -258,7 +258,7 @@ export default function MiCoachPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div>
                                 <p className="font-medium text-xs text-slate-900 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-300">{suggestion.title}</p>
-                                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
+                                <p className="text-xs text-slate-600 dark:text-slate-200 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
                               <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 flex-shrink-0 mt-0.5" />
                             </div>
@@ -276,6 +276,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !chatLoading && handleChatSubmit()}
                       disabled={chatLoading}
+                      className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     />
                     <Button onClick={handleChatSubmit} disabled={chatLoading} className="bg-purple-600 hover:bg-purple-700">
                       {chatLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar'}
