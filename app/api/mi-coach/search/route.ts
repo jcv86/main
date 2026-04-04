@@ -22,8 +22,7 @@ export async function GET(req: NextRequest) {
     const { data: booksData, error: booksError } = await supabase
       .from('books')
       .select('id, title, author, description, rating, difficulty, key_topics, tags')
-      .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
-      .limit(20)
+      .limit(50)
 
     if (booksError) {
       console.error('[v0] Books search error:', booksError)
@@ -32,8 +31,26 @@ export async function GET(req: NextRequest) {
 
     console.log('[v0] Raw books found:', (booksData || []).length)
 
-    // Filter by DISC profile client-side if provided
-    let filteredBooks = booksData || []
+    // Filter client-side: search in title, description, tags, and key_topics
+    const queryLower = query.toLowerCase()
+    let filteredBooks = (booksData || []).filter(book => {
+      const title = (book.title || '').toLowerCase()
+      const description = (book.description || '').toLowerCase()
+      const tags = JSON.stringify((book.tags || [])).toLowerCase()
+      const topics = JSON.stringify((book.key_topics || [])).toLowerCase()
+      
+      // Check if query matches any field
+      return (
+        title.includes(queryLower) ||
+        description.includes(queryLower) ||
+        tags.includes(queryLower) ||
+        topics.includes(queryLower)
+      )
+    })
+
+    console.log('[v0] Filtered by query:', filteredBooks.length)
+
+    // Further filter by DISC profile if provided
     if (discProfile) {
       const profileLower = discProfile.toLowerCase()
       filteredBooks = filteredBooks.filter(book => {
