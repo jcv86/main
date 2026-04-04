@@ -50,7 +50,7 @@ Responde en español.`,
     // Search in books table - get more results, then filter client-side
     const { data: booksData, error: booksError } = await supabase
       .from('books')
-      .select('id, title, author, description, rating, difficulty, key_topics, tags, url, cover_url, published_year')
+      .select('id, title, author, description, rating, difficulty, key_topics, tags, cover_url, published_year')
       .limit(50)
 
     if (booksError) {
@@ -93,15 +93,6 @@ Responde en español.`,
     // Add reference links to books
     const booksWithLinks = filteredBooks.map(book => {
       const referenceLinks = []
-      
-      // Add internal URL if exists
-      if (book.url) {
-        referenceLinks.push({
-          title: 'Nuestro enlace',
-          url: book.url,
-          type: 'internal'
-        })
-      }
       
       // Generate external reference links (Amazon, Goodreads, etc.)
       if (book.title && book.author) {
