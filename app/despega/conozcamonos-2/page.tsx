@@ -281,16 +281,16 @@ export default function Conozcamonos2Page() {
           <div className="flex gap-3">
             <Button
               onClick={handleBack}
-              variant="outline"
               disabled={currentStep === 'paso1' || loading}
+              className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 transition-colors"
             >
-              Atrás
+              ← Atrás
             </Button>
 
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading
                 ? 'Procesando...'
