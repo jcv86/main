@@ -70,7 +70,7 @@ export default function A2RoutesPage() {
         .eq('user_id', user?.id)
         .order('completed_at', { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
 
       console.log('[v0] DISC profile fetch result:', { discError, hasProfile: !!discData?.disc_profile })
 
@@ -90,15 +90,15 @@ export default function A2RoutesPage() {
         }
       }
 
-      // Get Conozcamonos 2 responses - FIXED TABLE NAME
+      // Get Conozcamonos 2 responses - Try canonical table first, then fallback
       console.log('[v0] Fetching C2 responses...')
       const { data: c2Data, error: c2Error } = await supabase
-        .from('conozcamonos_2_responses')
+        .from('canon_conozcamonos_2_responses')
         .select('responses')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
 
       console.log('[v0] C2 responses fetch result:', { c2Error, hasResponses: !!c2Data?.responses })
 
@@ -108,6 +108,9 @@ export default function A2RoutesPage() {
         objective = (responses[1] as string) || objective
         skills = ((responses[4] as string[] || []).slice(0, 3)) || skills
         timePerWeek = parseInt((responses[5] as string)?.split('-')[0]) || timePerWeek
+      } else if (c2Error) {
+        console.log('[v0] No C2 responses found, using defaults:', c2Error)
+        // Use defaults - this happens when A2 routes page loads before C2 saves
       }
 
       console.log('[v0] Route parameters:', { objective, skills, timePerWeek, discProfile })
@@ -137,10 +140,12 @@ export default function A2RoutesPage() {
       }
 
       setRoute(generatedRoute)
-      console.log('[v0] A2 Route generated and saved successfully')
+      console.log('[v0] A2 Route generated and saved successfully', { route: generatedRoute })
     } catch (err) {
       console.error('[v0] Error loading A2 routes:', err)
-      setError(`Error al generar tus rutas: ${err instanceof Error ? err.message : 'Error desconocido'}`)
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido'
+      console.error('[v0] Full error details:', { error: err })
+      setError(`Error al generar tus rutas: ${errorMsg}`)
     } finally {
       setLoading(false)
     }
