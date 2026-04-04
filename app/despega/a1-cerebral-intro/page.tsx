@@ -73,19 +73,19 @@ export default function A1CerebralIntroPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Directo</p>
+                  <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Impulsor</p>
                   <p className="text-sm text-red-800 dark:text-red-200">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
                 <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Inspirador</p>
+                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Catalizador</p>
                   <p className="text-sm text-yellow-800 dark:text-yellow-200">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
                 <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Seguro</p>
+                  <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
                   <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
                 <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Consciente</p>
+                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Arquitecto</p>
                   <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
@@ -149,19 +149,19 @@ export default function A1CerebralIntroPage() {
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-green-600 bg-green-600/20 rounded-lg text-left hover:bg-green-600/30 transition-all">
                         <p className="font-medium text-white">Decidido y directo</p>
-                        <p className="text-xs text-slate-400 mt-1">Dimensión: Directo (D)</p>
+                        <p className="text-xs text-slate-400 mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
+                        <p className="text-xs text-slate-500 mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
+                        <p className="text-xs text-slate-500 mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Analítico y preciso</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Consciente (C)</p>
+                        <p className="text-xs text-slate-500 mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
@@ -175,19 +175,19 @@ export default function A1CerebralIntroPage() {
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Decidido y directo</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Directo (D)</p>
+                        <p className="text-xs text-slate-500 mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Inspirador (I)</p>
+                        <p className="text-xs text-slate-500 mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
                         <p className="text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-500 mt-1">Dimensión: Seguro (S)</p>
+                        <p className="text-xs text-slate-500 mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-red-600 bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
-                        <p className="text-xs text-slate-400 mt-1">Dimensión: Consciente (C)</p>
+                        <p className="text-xs text-slate-400 mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
