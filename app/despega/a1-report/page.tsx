@@ -256,7 +256,7 @@ export default function A1ReportPage() {
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border-2 border-purple-500/50 rounded-xl p-6">
               <p className="text-slate-300 text-center text-lg">
-                Basado en tu perfil DISC y contexto personal, aquí está tu análisis completo:
+                Basado en tu perfil de El Ritual y contexto personal, aquí está tu análisis completo:
               </p>
             </div>
             <EnhancedInsightsGrid insights={insights} />
