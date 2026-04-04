@@ -278,7 +278,11 @@ export default function MiCoachPage() {
                       disabled={chatLoading}
                       className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     />
-                    <Button onClick={handleChatSubmit} disabled={chatLoading} className="bg-purple-600 hover:bg-purple-700">
+                    <Button 
+                      onClick={handleChatSubmit} 
+                      disabled={chatLoading}
+                      className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-semibold px-8 flex-shrink-0 shadow-lg"
+                    >
                       {chatLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar'}
                     </Button>
                   </div>
