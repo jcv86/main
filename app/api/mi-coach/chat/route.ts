@@ -93,8 +93,7 @@ Instrucciones:
                   controller.enqueue(new TextEncoder().encode(content))
                 }
               } catch (e) {
-                // Silently skip malformed JSON chunks
-                // console.error('[v0] Parse error:', e, 'Data:', data)
+                // Silently skip malformed JSON chunks - this is normal with SSE streaming
               }
             }
           }
