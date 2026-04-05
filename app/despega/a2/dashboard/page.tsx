@@ -6,7 +6,7 @@ import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+import { PhaseTransitionHandler } from "@/components/phase-transition-handler"
 import { useRouter } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
@@ -272,26 +272,13 @@ export default function A2DashboardPage() {
           </Card>
         </div>
 
-        {/* CTA TO A3 */}
-        <Card className="border-2 border-primary/30 dark:border-primary/40 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/20 dark:to-primary/10 shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-                  Listo para A3: Entrenamientos Especializados?
-                </h3>
-                <p className="text-slate-700 dark:text-slate-300 mb-4">
-                  Accede a entrenamientos especializados, práctica de entrevistas y feedback de IA.
-                </p>
-              </div>
-              <Link href="/despega/a3" className="flex-shrink-0">
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base shadow-lg">
-                  Explorar A3 <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Phase Transition to A3 */}
+        <PhaseTransitionHandler
+          currentPhase="a2"
+          isComplete={true}
+          nextPhaseLabel="Entrenamiento: Simulación Intensiva"
+          nextPhaseUrl="/despega/a3-dashboard"
+        />
 
       </div>
     </div>

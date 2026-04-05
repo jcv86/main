@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
-import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
+import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
 import { StepHeader } from '@/components/step-header'
@@ -363,20 +363,13 @@ export default function A1ReportPage() {
             {/* Los 8 Insights con Grid */}
             <EnhancedInsightsGrid insights={insights} />
 
-            {/* CTA Final */}
-            <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border-2 border-cyan-500/50 rounded-xl p-8 text-center">
-              <h3 className="text-xl font-bold text-white mb-3">Próximo Paso en tu Transformación</h3>
-              <p className="text-slate-300 mb-6">
-                Ahora que entiendes tu perfil, es hora de diseñar tu plan de 90 días personalizado.
-              </p>
-              <Button 
-                onClick={() => router.push('/despega/conozcamonos-2')}
-                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold px-8 py-3 text-lg"
-              >
-                Ir a Conozcámonos 2: Planificación
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
+            {/* Phase Transition Handler */}
+            <PhaseTransitionHandler
+              currentPhase="a1"
+              isComplete={true}
+              nextPhaseLabel="Exploración: Diseña Tu Ruta"
+              nextPhaseUrl="/despega/conozcamonos-2"
+            />
           </div>
         ) : (
           <div className="bg-red-900/20 border-2 border-red-600/50 rounded-xl p-8 text-center">

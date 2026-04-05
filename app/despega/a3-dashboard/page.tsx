@@ -8,7 +8,7 @@ import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock, Zap, Target, ArrowRight } from 'lucide-react'
+import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 
 interface A3Progress {
   interview_0: boolean
@@ -346,16 +346,12 @@ export default function A3DashboardPage() {
           )}
 
           {completionPercentage === 100 && (
-            <div className="p-6 bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border border-emerald-500/30 rounded-lg">
-              <h4 className="text-white font-semibold mb-2">Estás Listo para La Realidad</h4>
-              <p className="text-slate-300 text-sm mb-4">
-                Felicidades! Has completado A3: Entrenamiento Intensivo. Dominas las entrevistas. Ahora vamos a La Realidad - contexto de mercado, noticias, decisiones estratégicas.
-              </p>
-              <Button onClick={() => router.push('/despega/a4-intro')} className="bg-emerald-600 hover:bg-emerald-700">
-                Ir a La Realidad
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            <PhaseTransitionHandler
+              currentPhase="a3"
+              isComplete={true}
+              nextPhaseLabel="La Realidad: Ejecución y Contexto"
+              nextPhaseUrl="/despega/a4"
+            />
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
