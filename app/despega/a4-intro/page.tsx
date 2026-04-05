@@ -51,7 +51,7 @@ export default function A4IntroPage() {
           title="Ejecución + Contexto de Mercado"
           description="Tu coach IA 24/7 que monitorea el mercado laboral, te proporciona inteligencia competitiva y te guía en decisiones estratégicas reales."
           estimatedTime="Acceso continuo"
-          pillarColor="teal"
+          pillarColor="cyan"
         />
 
         <div className="space-y-8">
