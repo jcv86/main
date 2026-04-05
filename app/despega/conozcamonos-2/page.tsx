@@ -44,9 +44,11 @@ export default function Conozcamonos2Page() {
 
   const validateTextResponse = async (questionId: number, question: string, response: string) => {
     const trimmed = response.trim()
+    console.log('[v0] Validation triggered:', { questionId, response: trimmed.substring(0, 50), length: trimmed.length })
     
     // Client-side validation first
     if (!trimmed) {
+      console.log('[v0] Empty response')
       setError('Por favor, responde esta pregunta')
       return
     }
@@ -61,7 +63,9 @@ export default function Conozcamonos2Page() {
     ]
     
     const isSpam = spamPatterns.some(pattern => pattern.test(trimmed))
+    console.log('[v0] Spam check:', { isSpam, patterns: spamPatterns.length })
     if (isSpam) {
+      console.log('[v0] SPAM DETECTED')
       setError('⚠️ Texto aleatorio detectado. Por favor, proporciona una respuesta genuina.')
       return
     }
@@ -69,8 +73,10 @@ export default function Conozcamonos2Page() {
     // Check minimum length
     const wordCount = trimmed.split(/\s+/).length
     const charCount = trimmed.length
+    console.log('[v0] Length check:', { charCount, wordCount })
     
     if (charCount < 10 || wordCount < 2) {
+      console.log('[v0] Too short')
       setError(`Muy corto. ${charCount} caracteres (mín. 10), ${wordCount} palabras (mín. 2)`)
       return
     }
@@ -264,7 +270,7 @@ export default function Conozcamonos2Page() {
                     <textarea
                       value={responses[question.id] as string || ''}
                       onChange={(e) => handleAnswer(question.id, e.target.value)}
-                      onBlur={() => validateTextResponse(question.id, question.question, responses[question.id] as string || '')}
+                      onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
                       className={`flex-1 p-3 border rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50 transition-colors ${
