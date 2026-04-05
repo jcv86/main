@@ -94,7 +94,7 @@ export default function A4HubPage() {
               Ejecución + Contexto de Mercado
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
-              A4: La Realidad - Ejecución y Contexto
+              La Realidad - Ejecución y Contexto
             </h1>
             <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-4 font-medium">
               Coach IA 24/7: Contexto de mercado, decisiones estratégicas, y soporte continuo

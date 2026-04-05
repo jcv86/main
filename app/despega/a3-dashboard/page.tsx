@@ -134,15 +134,15 @@ export default function A3DashboardPage() {
 
   return (
     <ASection
-      title="A3: Entrenamiento"
+      title="Entrenamiento Intensivo"
       subtitle="Simulación y Feedback Realista para Entrevistas"
       icon="🎯"
       colorClass="from-cyan-500 to-teal-500"
     >
       {/* EXPLICACIÓN */}
-      <ASectionPart title="¿Qué es A3: Entrenamiento?" icon={<Zap />}>
+      <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
         <p className="text-slate-300 mb-4">
-          A3 es tu fase de práctica intensiva. Aquí realizas simulaciones realistas de entrevistas, recibes feedback inmediato, 
+          Esta es tu fase de práctica intensiva. Aquí realizas simulaciones realistas de entrevistas, recibes feedback inmediato, 
           y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
           en entrenamientos prácticos que te preparan para situaciones reales.
         </p>
@@ -152,7 +152,7 @@ export default function A3DashboardPage() {
       </ASectionPart>
 
       {/* FLUJO / PROCESO */}
-      <ASectionPart title="Tu Progreso en A3" icon={<Target />}>
+      <ASectionPart title="Tu Progreso en Entrenamiento" icon={<Target />}>
         <div className="space-y-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <p className="font-semibold text-white">Completado</p>

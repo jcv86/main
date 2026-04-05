@@ -200,7 +200,7 @@ export default function Conozcamonos2Page() {
             <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Conozcámonos 2: Tu Ruta</p>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-2">
-            A2: Exploración - Diseña Tu Ruta
+            Explora y Diseña Tu Ruta
           </h1>
           <p className="text-slate-700 dark:text-slate-300 mb-4">
             {currentStep === 'paso1'
