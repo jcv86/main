@@ -38,7 +38,7 @@ async function simulateA2Completion() {
   try {
     console.log('[v0] Llamando a generatePersonalizedRoute...')
     
-    const { generatePersonalizedRoute } = await import('/vercel/share/v0-project/lib/route-generator')
+    const { generatePersonalizedRoute } = await import('../lib/route-generator')
     
     const route = await generatePersonalizedRoute(
       mockDISCProfile,
