@@ -46,7 +46,7 @@ export default function LandingPageOptimized() {
       {/* SOCIAL PROOF BAND - THE 4 PILLARS */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Los 4 Pilares de Tu Transformación</p>
+          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Las 4 Fases de Tu Transformación</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
@@ -71,8 +71,8 @@ export default function LandingPageOptimized() {
                   <circle cx="4" cy="18" r="1.5" fill="currentColor"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-lg mb-2">Exploración - Aprende Nuevas Formas</h3>
-              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días con estrategias y contenido especializado.</p>
+              <h3 className="font-bold text-lg mb-2">Exploración - Diseña Tu Ruta</h3>
+              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días diseñada según tu perfil DISC, objetivos y disponibilidad semanal.</p>
             </div>
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
@@ -82,8 +82,8 @@ export default function LandingPageOptimized() {
                   <path d="M6 2a1 1 0 0 0-1 1v3H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h4a1 1 0 0 0 1-1v-4h3a1 1 0 0 0 0-2h-3v-4h3a1 1 0 0 0 0-2h-3V5a1 1 0 0 0-1-1h-4V1a1 1 0 0 0-1-1H6v2zm2 4v12h4V6H8z"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-lg mb-2">Entrenamiento - Practica Siendo</h3>
-              <p className="text-sm text-foreground/70">Entrenamientos de entrevistas con escenarios realistas y feedback personalizado en tiempo real.</p>
+              <h3 className="font-bold text-lg mb-2">Entrenamiento - Simulación Intensiva</h3>
+              <p className="text-sm text-foreground/70">Entrenamientos realistas con video, análisis de postura y tono, feedback IA inmediato y ajuste por vacante específica.</p>
             </div>
 
             {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Turquoise) */}
@@ -101,8 +101,8 @@ export default function LandingPageOptimized() {
                   <line x1="12" y1="10" x2="18" y2="7" stroke="white" strokeWidth="2"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-lg mb-2">La Realidad - Vive Tu Nueva Identidad</h3>
-              <p className="text-sm text-foreground/70">Coaching IA 24/7, noticias del mercado y plan de acción para materializar tu transformación.</p>
+              <h3 className="font-bold text-lg mb-2">La Realidad - Ejecución y Contexto</h3>
+              <p className="text-sm text-foreground/70">Coach IA 24/7, inteligencia de mercado, noticias relevantes a tu industria y toma de decisiones estratégicas en tiempo real.</p>
             </div>
           </div>
         </div>

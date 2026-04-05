@@ -19,11 +19,11 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   metadataBase: new URL("https://despegatucarrera.cl"),
   title: {
-    default: "Despega Tu Carrera - Plataforma de Desarrollo Profesional con IA | Tests Psicométricos y Coaching",
+    default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Plataforma líder en desarrollo profesional. Descubre tu potencial con evaluaciones científicas, accede a contenido especializado y recibe coaching personalizado con IA.",
+    "Las 4 fases de tu transformación profesional: El Ritual (autoconocimiento), Exploración (diseña tu ruta 90 días), Entrenamiento (simulación intensiva con video), y La Realidad (ejecución con coach IA 24/7). Acceso a tests DISC, entrenamientos con feedback en tiempo real, y contexto laboral estratégico.",
   keywords: [
     "desarrollo profesional Chile",
     "evaluaciones psicométricas",
