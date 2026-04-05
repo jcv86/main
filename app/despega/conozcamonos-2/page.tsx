@@ -223,12 +223,17 @@ export default function Conozcamonos2Page() {
                     <textarea
                       value={responses[question.id] as string || ''}
                       onChange={(e) => handleAnswer(question.id, e.target.value)}
+                      onBlur={() => validateTextResponse(question.id, question.question, responses[question.id] as string || '')}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600"
+                      className="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50"
                       rows={3}
+                      disabled={validatingIds.has(question.id)}
                     />
                   </div>
+                  {validatingIds.has(question.id) && (
+                    <p className="text-xs text-blue-500">Validando respuesta...</p>
+                  )}
                   <div className="flex gap-2 items-center">
                     <VoiceInput
                       onTranscript={(text) => {
@@ -303,8 +308,9 @@ export default function Conozcamonos2Page() {
 
             <Button
               onClick={handleNext}
-              disabled={!allStepAnswered || loading}
+              disabled={!allStepAnswered || loading || !!error}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              title={error ? 'Corrige los errores de validación antes de continuar' : ''}
             >
               {loading
                 ? 'Procesando...'
