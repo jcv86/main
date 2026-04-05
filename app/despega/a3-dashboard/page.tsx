@@ -98,38 +98,93 @@ export default function A3DashboardPage() {
   const completionPercentage = (completedItems / 4) * 100
 
   const activityCards = [
+    // FUNDACIÓN
     {
+      category: 'FUNDACIÓN',
       icon: Video,
       title: 'Interview 0: Tu Pitch Personal',
-      description: 'Practica tus respuestas a las 5 preguntas clave para cualquier entrevista',
+      description: 'Practica tus respuestas personales a 5 preguntas clave que aparecen en CUALQUIER entrevista. Base sólida.',
       status: progress.interview_0 ? 'completed' : 'pending',
       action: progress.interview_0 ? 'Ver respuestas' : 'Comenzar',
-      href: '/despega/interview-0'
+      href: '/despega/interview-0',
+      badge: '5 preguntas'
     },
     {
+      category: 'FUNDACIÓN',
       icon: FileText,
-      title: 'CV Builder',
-      description: 'Crea o actualiza tu CV con ATS optimization para el rol objetivo',
+      title: 'CV ATS Optimizer',
+      description: 'Optimiza tu CV para pasar filtros automáticos. Formatos ATS y creativo lado a lado.',
       status: progress.cv_prepared ? 'completed' : 'pending',
-      action: progress.cv_prepared ? 'Editar CV' : 'Crear CV',
-      href: '/despega/cv-builder'
+      action: progress.cv_prepared ? 'Ver CV' : 'Generar CV',
+      href: '/despega/a3/cv-ats',
+      badge: 'ATS Ready'
     },
+    
+    // ENTRENAMIENTO GUIADO
     {
-      icon: TrendingUp,
-      title: 'Market Intelligence',
-      description: 'Analiza el mercado: salarios, tendencias, empresas que contratan',
-      status: progress.market_insights ? 'completed' : 'pending',
-      action: progress.market_insights ? 'Ver análisis' : 'Generar análisis',
-      href: '/despega/market-insights'
-    },
-    {
+      category: 'ENTRENAMIENTO GUIADO',
       icon: Briefcase,
-      title: 'Entrenamiento de Entrevista',
-      description: 'Practica con entrenamientos realistas de entrevistas técnicas y conductuales',
-      status: progress.simulations_done >= 2 ? 'completed' : 'pending',
-      action: `${progress.simulations_done > 0 ? `${progress.simulations_done} completadas` : 'Comenzar'}`,
-      href: '/despega/a3/simulations'
-    }
+      title: 'Simulaciones Guiadas',
+      description: '6 preguntas con guía paso a paso. Usa STAR method. Input voz y texto. Feedback IA en tiempo real.',
+      status: 'pending',
+      action: 'Comenzar',
+      href: '/despega/a3/simulaciones-guiado',
+      badge: '6 preguntas'
+    },
+    {
+      category: 'ENTRENAMIENTO GUIADO',
+      icon: Briefcase,
+      title: 'Análisis Multimodal con Video',
+      description: 'Grabate respondiendo. IA analiza: postura, tono, gestos, coherencia emocional. Feedback profundo.',
+      status: 'pending',
+      action: 'Grabar Video',
+      href: '/despega/a3/analisis-multimodal',
+      badge: 'Con IA Vision'
+    },
+    
+    // ENTRENAMIENTO ESTRUCTURADO
+    {
+      category: 'ENTRENAMIENTO ESTRUCTURADO',
+      icon: Target,
+      title: 'Simulaciones Estructuradas',
+      description: 'Entrenamientos conductuales y técnicos con presión moderada. Construye confianza sistemáticamente.',
+      status: 'pending',
+      action: 'Practicar',
+      href: '/despega/a3/simulaciones-estructurada',
+      badge: 'Intermedio'
+    },
+    {
+      category: 'ENTRENAMIENTO ESTRUCTURADO',
+      icon: TrendingUp,
+      title: 'Ajuste por Vacante',
+      description: 'Pega un job posting. IA analiza skills match y genera respuestas personalizadas para ESA vacante.',
+      status: 'pending',
+      action: 'Ajustar',
+      href: '/despega/a3/ajuste-por-vacante',
+      badge: 'Personalizado'
+    },
+    
+    // DESAFÍO MÁXIMO
+    {
+      category: 'DESAFÍO MÁXIMO',
+      icon: Zap,
+      title: 'Simulaciones Desafiantes',
+      description: 'Entrenamientos intensos. Preguntas difíciles sin guía. Simula presión real de entrevista ejecutiva.',
+      status: 'pending',
+      action: 'Desafiarse',
+      href: '/despega/a3/simulaciones-desafiante',
+      badge: 'Avanzado'
+    },
+    {
+      category: 'DESAFÍO MÁXIMO',
+      icon: Briefcase,
+      title: 'Market Intelligence',
+      description: 'Analiza tendencias, salarios, empresas que contratan en tu sector. Contexto laboral estratégico.',
+      status: progress.market_insights ? 'completed' : 'pending',
+      action: progress.market_insights ? 'Ver análisis' : 'Generar',
+      href: '/despega/market-insights',
+      badge: 'Mercado Real'
+    },
   ]
 
   return (
@@ -184,86 +239,153 @@ export default function A3DashboardPage() {
       </ASectionPart>
 
       {/* RESULTADOS */}
-      <ASectionPart title="Componentes de Entrenamiento" icon={<CheckCircle2 />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {activityCards.map((card, i) => {
-            const Icon = card.icon
-            const isCompleted = card.status === 'completed'
-
+      <ASectionPart title="Todas Tus Herramientas de Entrenamiento" icon={<CheckCircle2 />}>
+        <div className="space-y-8">
+          {['FUNDACIÓN', 'ENTRENAMIENTO GUIADO', 'ENTRENAMIENTO ESTRUCTURADO', 'DESAFÍO MÁXIMO'].map((category) => {
+            const categoryCards = activityCards.filter(card => card.category === category)
             return (
-              <Card key={i} className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Icon className="w-5 h-5 text-cyan-400" />
-                    {card.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-slate-400">{card.description}</p>
-                  {isCompleted && <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
-                  <Button 
-                    onClick={() => router.push(card.href)}
-                    className={`w-full ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-cyan-600 hover:bg-cyan-700'}`}
-                  >
-                    {card.action}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
+              <div key={category}>
+                <h3 className="text-sm font-bold text-cyan-400 mb-4 uppercase tracking-wider">{category}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {categoryCards.map((card, i) => {
+                    const Icon = card.icon
+                    const isCompleted = card.status === 'completed'
+
+                    return (
+                      <Card key={i} className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors group">
+                        <CardHeader>
+                          <div className="flex items-start justify-between mb-2">
+                            <CardTitle className="text-lg flex items-center gap-2">
+                              <Icon className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
+                              {card.title}
+                            </CardTitle>
+                            {card.badge && <Badge className="text-xs bg-cyan-500/20 text-cyan-300 border-cyan-500/50">{card.badge}</Badge>}
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <p className="text-sm text-slate-400">{card.description}</p>
+                          {isCompleted && <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
+                          <Button 
+                            onClick={() => router.push(card.href)}
+                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-cyan-600 hover:bg-cyan-700'}`}
+                          >
+                            {card.action}
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
+                </div>
+              </div>
             )
           })}
         </div>
+
+        {/* PROGRESO RESUMEN */}
+        <div className="mt-8 p-6 bg-gradient-to-r from-cyan-900/20 to-teal-900/20 border border-cyan-500/30 rounded-lg">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
+              <p className="text-sm text-slate-400">Completadas: Interview 0 + CV base + Market Insights</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
+            </div>
+          </div>
+          <div className="h-2 bg-slate-700 rounded-full overflow-hidden mb-4">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all"
+              style={{ width: `${completionPercentage}%` }}
+            />
+          </div>
+          <p className="text-xs text-slate-400">{completedItems} de 4 componentes base completados</p>
+        </div>
       </ASectionPart>
 
-      {/* DASHBOARD / ACCIONES */}
-      <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
+      {/* RECOMENDACIONES */}
+      <ASectionPart title="Tu Camino de Entrenamiento Recomendado" icon={<Target />}>
         <div className="space-y-6">
+          {completionPercentage === 0 && (
+            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+              <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
+              <p className="text-slate-300 text-sm mb-4">
+                La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
+              </p>
+              <Button onClick={() => router.push('/despega/interview-0')} className="bg-cyan-600 hover:bg-cyan-700">
+                Comenzar Interview 0
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
+
+          {completionPercentage > 0 && completionPercentage < 50 && (
+            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+              <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
+              <p className="text-slate-300 text-sm mb-4">
+                Ya tienes tu base. Ahora practica con guía. Las Simulaciones Guiadas te enseñan la metodología STAR y te dan feedback IA en tiempo real.
+              </p>
+              <Button onClick={() => router.push('/despega/a3/simulaciones-guiado')} className="bg-cyan-600 hover:bg-cyan-700">
+                Ir a Simulaciones Guiadas
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
+
+          {completionPercentage >= 50 && completionPercentage < 100 && (
+            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+              <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
+              <p className="text-slate-300 text-sm mb-4">
+                Estás en buena forma. Es momento de desafiarte. Las Simulaciones Desafiantes te preparan para presión real de entrevista ejecutiva.
+              </p>
+              <Button onClick={() => router.push('/despega/a3/simulaciones-desafiante')} className="bg-teal-600 hover:bg-teal-700">
+                Ir a Simulaciones Desafiantes
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
+
+          {completionPercentage === 100 && (
+            <div className="p-6 bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border border-emerald-500/30 rounded-lg">
+              <h4 className="text-white font-semibold mb-2">Estás Listo para La Realidad</h4>
+              <p className="text-slate-300 text-sm mb-4">
+                Felicidades! Has completado A3: Entrenamiento Intensivo. Dominas las entrevistas. Ahora vamos a La Realidad - contexto de mercado, noticias, decisiones estratégicas.
+              </p>
+              <Button onClick={() => router.push('/despega/a4-intro')} className="bg-emerald-600 hover:bg-emerald-700">
+                Ir a La Realidad
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
+            <Card className="bg-slate-800/40 border-slate-700">
               <CardHeader>
-                <CardTitle className="text-lg">Estrategia de A3: Entrenamiento</CardTitle>
+                <CardTitle className="text-lg">4 Principios de A3</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="space-y-2 text-sm text-slate-300">
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Interview 0 - Base sólida</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Simulaciones realistas</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Feedback detallado</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Iteración y mejora</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Personalización: Ajusta respuestas por vacante</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
+            <Card className="bg-slate-800/40 border-slate-700">
               <CardHeader>
-                <CardTitle className="text-lg">Recomendación</CardTitle>
+                <CardTitle className="text-lg">Tips de Experto</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-slate-300">
-                  {completionPercentage < 25 && 'Comienza con Interview 0. Es fundamental para todas las entrevistas.'}
-                  {completionPercentage >= 25 && completionPercentage < 50 && 'Continúa con tu CV. Un CV fuerte te abre puertas.'}
-                  {completionPercentage >= 50 && completionPercentage < 100 && 'Realiza entrenamientos de entrevista. La práctica construye confianza.'}
-                  {completionPercentage === 100 && '¡Excelente! A3 completo. Estás listo para La Realidad.'}
-                </p>
-                <Button 
-                  onClick={() => router.push(completionPercentage >= 50 ? '/despega/a4-intro' : activityCards.find(c => !c.status)?.href || '/')}
-                  className="w-full bg-teal-600 hover:bg-teal-700"
-                  size="sm"
-                >
-                  {completionPercentage >= 50 ? 'Ir a La Realidad' : 'Continuar'}
-                  <ArrowRight className="w-3 h-3 ml-1" />
-                </Button>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• Practiquen 2-3 simulaciones por semana para máximo progreso</li>
+                  <li>• Mira el video de ti mismo - es incómodo pero transformador</li>
+                  <li>• Ajusta tus respuestas según feedback IA</li>
+                  <li>• Usa CV ATS optimizado para cada candidatura</li>
+                </ul>
               </CardContent>
             </Card>
-          </div>
-
-          <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
-            <p className="text-slate-300 mb-4">
-              <strong>¿Necesitas ayuda?</strong> Nuestro coach está disponible para revisar tu CV, practicar entrenamientos, 
-              o responder preguntas sobre cualquier módulo de A3.
-            </p>
-            <Button variant="outline" className="border-cyan-500 hover:border-cyan-400 hover:text-cyan-400">
-              Hablar con el Coach
-            </Button>
           </div>
         </div>
       </ASectionPart>
