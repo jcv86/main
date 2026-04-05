@@ -31,8 +31,8 @@ const stages = [
     routes: [
       { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
       { label: 'Intro - Descubre Tu Perfil', href: '/despega/a1-cerebral-intro' },
-      { label: 'Test DISC (28 preguntas)', href: '/despega/a1-cerebral' },
-      { label: 'Tu Perfil DISC', href: '/despega/a1-report' },
+      { label: 'Test de Perfil (28 preguntas)', href: '/despega/a1-cerebral' },
+      { label: 'Tu Perfil Cerebral', href: '/despega/a1-report' },
     ]
   },
   {

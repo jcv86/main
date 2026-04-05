@@ -72,7 +72,7 @@ export default function LandingPageOptimized() {
                 </svg>
               </div>
               <h3 className="font-bold text-lg mb-2">Exploración - Diseña Tu Ruta</h3>
-              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días diseñada según tu perfil DISC, objetivos y disponibilidad semanal.</p>
+              <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días diseñada según tu perfil cerebral, objetivos y disponibilidad semanal.</p>
             </div>
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}

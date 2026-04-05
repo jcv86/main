@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Las 4 fases de tu transformación profesional: El Ritual (autoconocimiento), Exploración (diseña tu ruta 90 días), Entrenamiento (simulación intensiva con video), y La Realidad (ejecución con coach IA 24/7). Acceso a tests DISC, entrenamientos con feedback en tiempo real, y contexto laboral estratégico.",
+    "Las 4 fases de tu transformación profesional: El Ritual (autoconocimiento), Exploración (diseña tu ruta 90 días), Entrenamiento (simulación intensiva con video), y La Realidad (ejecución con coach IA 24/7). Entrenamientos con feedback en tiempo real, análisis multimodal con video y contexto laboral estratégico.",
   keywords: [
     "desarrollo profesional Chile",
     "evaluaciones psicométricas",
