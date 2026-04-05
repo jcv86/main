@@ -23,9 +23,9 @@ export default function A2RoutesPage() {
   // Milestone data helper
   const getMilestoneData = (days: 30 | 60 | 90) => {
     const milestonesMap = {
-      30: { label: 'Mes 1', milestone: 'Fundamentos', actions: [] },
-      60: { label: 'Mes 2', milestone: 'Aceleración', actions: [] },
-      90: { label: 'Mes 3', milestone: 'Dominio', actions: [] }
+      30: { label: 'Mes 1', milestone: 'Fundamentos', tasks: route?.route_30days || [] },
+      60: { label: 'Mes 2', milestone: 'Aceleración', tasks: route?.route_60days || [] },
+      90: { label: 'Mes 3', milestone: 'Dominio', tasks: route?.route_90days || [] }
     }
     return milestonesMap[days]
   }
@@ -284,7 +284,43 @@ export default function A2RoutesPage() {
 
                   {isExpanded && (
                     <div className="p-6 space-y-4 bg-slate-800/20">
-                      <p className="text-slate-300">Contenido personalizado para la fase de {days} días</p>
+                      {data.tasks && data.tasks.length > 0 ? (
+                        <div className="space-y-3">
+                          {data.tasks.map((task, idx) => (
+                            <div key={idx} className="bg-slate-700/30 border border-slate-600/30 rounded-lg p-4 hover:border-slate-500/50 transition">
+                              <div className="flex items-start gap-3">
+                                <div className="flex-shrink-0">
+                                  {task.type === 'learning' && <span className="text-2xl">📚</span>}
+                                  {task.type === 'practice' && <span className="text-2xl">🛠️</span>}
+                                  {task.type === 'networking' && <span className="text-2xl">🤝</span>}
+                                  {task.type === 'planning' && <span className="text-2xl">📋</span>}
+                                  {task.type === 'milestone' && <span className="text-2xl">🏆</span>}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
+                                    <span className="text-xs bg-slate-600/50 text-slate-300 px-2 py-1 rounded whitespace-nowrap">
+                                      {Math.round(task.timeEstimate / 60)}h
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-slate-400 mt-2">{task.description}</p>
+                                  {task.resources && task.resources.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                      {task.resources.map((resource, ridx) => (
+                                        <span key={ridx} className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded">
+                                          📌 {resource}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-slate-400">Contenido personalizado para la fase de {days} días</p>
+                      )}
                     </div>
                   )}
                 </div>
