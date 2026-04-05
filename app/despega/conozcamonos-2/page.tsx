@@ -347,8 +347,15 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-            <p className="text-red-700 dark:text-red-200">{error}</p>
+          <div className="bg-red-50 dark:bg-red-950 border-2 border-red-500 dark:border-red-600 rounded-lg p-6 mb-6 shadow-lg">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl flex-shrink-0">⚠️</span>
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-900 dark:text-red-100 mb-1">Validación requerida</h3>
+                <p className="text-red-800 dark:text-red-200 text-sm">{error}</p>
+                <p className="text-red-700 dark:text-red-300 text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -377,7 +384,13 @@ export default function Conozcamonos2Page() {
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-              title={error ? 'Corrige los errores de validación antes de continuar' : ''}
+              title={
+                error 
+                  ? 'Error de validación: ' + error
+                  : !allStepAnswered 
+                  ? 'Por favor responde todas las preguntas'
+                  : ''
+              }
             >
               {loading
                 ? 'Procesando...'
