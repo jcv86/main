@@ -240,12 +240,12 @@ export default function A2RoutesPage() {
             </div>
             
             <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-lg">
-              <p className="text-slate-300 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">A3: Impulso</span> para prepararte para entrevistas</p>
+              <p className="text-slate-300 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
               <Button 
-                onClick={() => router.push('/despega/a3-dashboard')}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                onClick={() => router.push('/despega/a3-intro')}
+                className="w-full bg-cyan-600 hover:bg-cyan-700"
               >
-                Ir a A3: Impulso
+                Ir a Entrenamiento Intensivo
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

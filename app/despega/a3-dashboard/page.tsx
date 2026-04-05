@@ -242,14 +242,14 @@ export default function A3DashboardPage() {
                   {completionPercentage < 25 && 'Comienza con Interview 0. Es fundamental para todas las entrevistas.'}
                   {completionPercentage >= 25 && completionPercentage < 50 && 'Continúa con tu CV. Un CV fuerte te abre puertas.'}
                   {completionPercentage >= 50 && completionPercentage < 100 && 'Realiza entrenamientos de entrevista. La práctica construye confianza.'}
-                  {completionPercentage === 100 && '¡Excelente! A3 completo. Estás listo para A4: Radar.'}
+                  {completionPercentage === 100 && '¡Excelente! A3 completo. Estás listo para La Realidad.'}
                 </p>
                 <Button 
-                  onClick={() => router.push(completionPercentage >= 50 ? '/despega/a4-radar' : activityCards.find(c => !c.status)?.href || '/')}
-                  className="w-full bg-cyan-600 hover:bg-cyan-700"
+                  onClick={() => router.push(completionPercentage >= 50 ? '/despega/a4-intro' : activityCards.find(c => !c.status)?.href || '/')}
+                  className="w-full bg-teal-600 hover:bg-teal-700"
                   size="sm"
                 >
-                  {completionPercentage >= 50 ? 'Ir a A4: Radar' : 'Continuar'}
+                  {completionPercentage >= 50 ? 'Ir a La Realidad' : 'Continuar'}
                   <ArrowRight className="w-3 h-3 ml-1" />
                 </Button>
               </CardContent>
