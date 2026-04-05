@@ -8,7 +8,20 @@ import { CheckCircle2, Zap, Trophy, Target, Gift, TrendingUp, Award, Flame } fro
 export default function HowToEarnXPPage() {
   const [expandedPhase, setExpandedPhase] = useState<string>('all')
 
-  const xpRules = [
+  type XPItem = {
+    action: string
+    xp: number
+    icon: typeof Flame
+    streak?: string
+  }
+
+  type XPRule = {
+    phase: string
+    category: string
+    items: XPItem[]
+  }
+
+  const xpRules: XPRule[] = [
     {
       phase: 'Todas',
       category: 'Diarias',
@@ -22,57 +35,57 @@ export default function HowToEarnXPPage() {
       phase: 'A1: El Ritual',
       category: 'Fase 1',
       items: [
-        { action: 'Completar "Inicia Tu Jornada"', xp: 50, icon: CheckCircle2 },
-        { action: 'Completar "Descubre Tu Potencial"', xp: 75, icon: CheckCircle2 },
-        { action: 'Completar "Identifica Tu Estilo" (test)', xp: 100, icon: Award },
-        { action: 'Ver "Tu Análisis Personal"', xp: 50, icon: CheckCircle2 },
-        { action: 'Fase A1 completa (bonus)', xp: 200, icon: Trophy },
+        { action: 'Completar "Inicia Tu Jornada"', xp: 50, icon: CheckCircle2, streak: undefined },
+        { action: 'Completar "Descubre Tu Potencial"', xp: 75, icon: CheckCircle2, streak: undefined },
+        { action: 'Completar "Identifica Tu Estilo" (test)', xp: 100, icon: Award, streak: undefined },
+        { action: 'Ver "Tu Análisis Personal"', xp: 50, icon: CheckCircle2, streak: undefined },
+        { action: 'Fase A1 completa (bonus)', xp: 200, icon: Trophy, streak: undefined },
       ]
     },
     {
       phase: 'A2: Exploración',
       category: 'Fase 2',
       items: [
-        { action: 'Completar "Define Tus Objetivos"', xp: 75, icon: CheckCircle2 },
-        { action: 'Generar "Tu Ruta Personalizada"', xp: 100, icon: CheckCircle2 },
-        { action: 'Revisar ruta completa', xp: 50, icon: CheckCircle2 },
-        { action: 'Fase A2 completa (bonus)', xp: 250, icon: Trophy },
+        { action: 'Completar "Define Tus Objetivos"', xp: 75, icon: CheckCircle2, streak: undefined },
+        { action: 'Generar "Tu Ruta Personalizada"', xp: 100, icon: CheckCircle2, streak: undefined },
+        { action: 'Revisar ruta completa', xp: 50, icon: CheckCircle2, streak: undefined },
+        { action: 'Fase A2 completa (bonus)', xp: 250, icon: Trophy, streak: undefined },
       ]
     },
     {
       phase: 'A3: Entrenamiento',
       category: 'Fase 3',
       items: [
-        { action: 'Completar "Interview 0" (5 preguntas)', xp: 75, icon: CheckCircle2 },
-        { action: 'Completar "Identifica Tu Estilo"', xp: 100, icon: CheckCircle2 },
-        { action: 'Realizar 1 Simulación Guiada', xp: 150, icon: Zap },
-        { action: 'Realizar Análisis Multimodal con Video', xp: 200, icon: Award },
-        { action: 'Completar CV ATS Optimizer', xp: 75, icon: CheckCircle2 },
-        { action: 'Usar "Ajuste por Vacante"', xp: 100, icon: Target },
-        { action: 'Realizar 1 Simulación Estructurada', xp: 150, icon: Zap },
-        { action: 'Realizar 1 Simulación Desafiante', xp: 200, icon: Trophy },
-        { action: 'Fase A3 completa (bonus)', xp: 500, icon: Trophy },
+        { action: 'Completar "Interview 0" (5 preguntas)', xp: 75, icon: CheckCircle2, streak: undefined },
+        { action: 'Completar "Identifica Tu Estilo"', xp: 100, icon: CheckCircle2, streak: undefined },
+        { action: 'Realizar 1 Simulación Guiada', xp: 150, icon: Zap, streak: undefined },
+        { action: 'Realizar Análisis Multimodal con Video', xp: 200, icon: Award, streak: undefined },
+        { action: 'Completar CV ATS Optimizer', xp: 75, icon: CheckCircle2, streak: undefined },
+        { action: 'Usar "Ajuste por Vacante"', xp: 100, icon: Target, streak: undefined },
+        { action: 'Realizar 1 Simulación Estructurada', xp: 150, icon: Zap, streak: undefined },
+        { action: 'Realizar 1 Simulación Desafiante', xp: 200, icon: Trophy, streak: undefined },
+        { action: 'Fase A3 completa (bonus)', xp: 500, icon: Trophy, streak: undefined },
       ]
     },
     {
       phase: 'A4: La Realidad',
       category: 'Fase 4',
       items: [
-        { action: 'Ver "Contexto del Mercado"', xp: 75, icon: CheckCircle2 },
-        { action: 'Acceder "Tu Dashboard Ejecutivo"', xp: 100, icon: CheckCircle2 },
-        { action: 'Usar 3+ herramientas de A4', xp: 150, icon: Zap },
-        { action: 'Tomar decisión estratégica (logging)', xp: 100, icon: Target },
-        { action: 'Fase A4 completa (bonus)', xp: 500, icon: Trophy },
+        { action: 'Ver "Contexto del Mercado"', xp: 75, icon: CheckCircle2, streak: undefined },
+        { action: 'Acceder "Tu Dashboard Ejecutivo"', xp: 100, icon: CheckCircle2, streak: undefined },
+        { action: 'Usar 3+ herramientas de A4', xp: 150, icon: Zap, streak: undefined },
+        { action: 'Tomar decisión estratégica (logging)', xp: 100, icon: Target, streak: undefined },
+        { action: 'Fase A4 completa (bonus)', xp: 500, icon: Trophy, streak: undefined },
       ]
     },
     {
       phase: 'Todas',
       category: 'Bonificaciones Especiales',
       items: [
-        { action: 'Alcanzar racha de 7 días', xp: 300, icon: Flame },
-        { action: 'Alcanzar racha de 30 días', xp: 1000, icon: Trophy },
-        { action: 'Completar ciclo entero C1→A4', xp: 2000, icon: Award },
-        { action: 'Referir a un amigo', xp: 500, icon: Gift },
+        { action: 'Alcanzar racha de 7 días', xp: 300, icon: Flame, streak: 'x1.5 multiplicador' },
+        { action: 'Alcanzar racha de 30 días', xp: 1000, icon: Trophy, streak: 'x2.0 multiplicador' },
+        { action: 'Completar ciclo entero C1→A4', xp: 2000, icon: Award, streak: 'Bonus masivo' },
+        { action: 'Referir a un amigo', xp: 500, icon: Gift, streak: undefined },
       ]
     }
   ]
