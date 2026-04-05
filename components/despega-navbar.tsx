@@ -26,37 +26,37 @@ const stages = [
     ]
   },
   {
-    name: 'A1: El Ritual',
+    name: 'El Ritual',
     icon: CheckCircle2,
     routes: [
-      { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
-      { label: 'Intro - Descubre Tu Perfil', href: '/despega/a1-cerebral-intro' },
-      { label: 'Test de Perfil (28 preguntas)', href: '/despega/a1-cerebral' },
-      { label: 'Tu Perfil Cerebral', href: '/despega/a1-report' },
+      { label: 'Inicia Tu Jornada', href: '/despega/conozcamonos-1' },
+      { label: 'Descubre Tu Potencial', href: '/despega/a1-cerebral-intro' },
+      { label: 'Identifica Tu Estilo', href: '/despega/a1-cerebral' },
+      { label: 'Tu Análisis Personal', href: '/despega/a1-report' },
     ]
   },
   {
-    name: 'A2: Exploración',
+    name: 'Exploración',
     icon: MapPin,
     routes: [
-      { label: 'Explora y Diseña Tu Ruta', href: '/despega/conozcamonos-2' },
+      { label: 'Define Tus Objetivos', href: '/despega/conozcamonos-2' },
       { label: 'Tu Ruta Personalizada', href: '/despega/a2-routes' },
     ]
   },
   {
-    name: 'A3: Entrenamiento',
+    name: 'Entrenamiento',
     icon: Zap,
     routes: [
-      { label: 'Intro - Entrenamiento Intensivo', href: '/despega/a3-intro' },
-      { label: 'Dashboard de Entrenamiento', href: '/despega/a3-dashboard' },
+      { label: 'Prepárate para Entrevistas', href: '/despega/a3-intro' },
+      { label: 'Simulaciones y Feedback', href: '/despega/a3-dashboard' },
     ]
   },
   {
-    name: 'A4: La Realidad',
+    name: 'La Realidad',
     icon: Radar,
     routes: [
-      { label: 'Intro - Ejecución y Contexto', href: '/despega/a4-intro' },
-      { label: 'Dashboard - La Realidad', href: '/despega/a4' },
+      { label: 'Contexto del Mercado', href: '/despega/a4-intro' },
+      { label: 'Tu Dashboard Ejecutivo', href: '/despega/a4' },
     ]
   },
 ]
