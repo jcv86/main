@@ -200,12 +200,12 @@ export default function Conozcamonos2Page() {
             <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Conozcámonos 2: Tu Ruta</p>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-2">
-            Diseña Tu Ruta de 90 Días
+            A2: Exploración - Diseña Tu Ruta
           </h1>
           <p className="text-slate-700 dark:text-slate-300 mb-4">
             {currentStep === 'paso1'
-              ? 'Paso 1: Define tu objetivo específico y estrategia'
-              : 'Paso 2: Personaliza tu plan de acci��n'}
+              ? 'Paso 1: Define tu objetivo y contexto profesional'
+              : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
           <Progress value={progress} className="h-2 bg-slate-200 dark:bg-slate-700" />
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 font-medium">

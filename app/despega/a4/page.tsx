@@ -91,16 +91,16 @@ export default function A4HubPage() {
           <div className="text-center max-w-3xl mx-auto">
             <Badge className="mb-4 px-4 py-1.5 text-sm bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200">
               <Radar className="w-3 h-3 mr-2" />
-              Tu Radar Estratégico Integral
+              Ejecución + Contexto de Mercado
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
-              A4: Radar Estratégico
+              A4: La Realidad - Ejecución y Contexto
             </h1>
             <p className="text-xl text-slate-700 dark:text-slate-300 text-balance mb-4 font-medium">
-              No es solo mercado laboral. Es contexto país, cultura empresarial, noticias, tests, biblioteca y criterio.
+              Coach IA 24/7: Contexto de mercado, decisiones estratégicas, y soporte continuo
             </p>
             <p className="text-lg text-slate-600 dark:text-slate-400 text-balance">
-              7 herramientas integradas para que entiendas el panorama laboral chileno, veas las oportunidades reales y tomes decisiones estratégicas.
+              7 herramientas para ejecutar con inteligencia: radar laboral, noticias, tendencias, tests, casos reales, recursos, y tu progreso.
             </p>
           </div>
         </div>

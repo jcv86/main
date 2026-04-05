@@ -207,17 +207,17 @@ export default function A2RoutesPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Zap className="w-5 h-5 text-yellow-500" />
-              ¿Qué es A2: Ruta?
+              Tu Ruta de 90 Días (Fase de Visualización)
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-slate-300">
-              En A2 creamos tu plan de acción personalizado para los próximos 90 días. Este plan se basa en tu perfil DISC, 
-              tus objetivos profesionales y el tiempo que puedes dedicar cada semana. Es tu hoja de ruta para llevar 
-              tu desarrollo al siguiente nivel.
+              Basado en tu perfil DISC y objetivos, hemos generado tu plan personalizado de 90 días. 
+              Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
+              organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
             </p>
             <p className="text-slate-400 text-sm">
-              ⏱️ Duración: 90 días estructurados en 3 fases de 30 días cada una con hitos específicos.
+              📋 Estructura: 3 fases de 30 días cada una con tareas específicas, recursos y hitos de progreso.
             </p>
           </CardContent>
         </Card>

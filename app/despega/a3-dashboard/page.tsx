@@ -134,20 +134,20 @@ export default function A3DashboardPage() {
 
   return (
     <ASection
-      title="A3: Impulso"
-      subtitle="Prepárate para entrevistas y destaca"
-      icon="⚡"
+      title="A3: Entrenamiento"
+      subtitle="Simulación y Feedback Realista para Entrevistas"
+      icon="🎯"
       colorClass="from-cyan-500 to-teal-500"
     >
       {/* EXPLICACIÓN */}
-      <ASectionPart title="¿Qué es A3: Impulso?" icon={<Zap />}>
+      <ASectionPart title="¿Qué es A3: Entrenamiento?" icon={<Zap />}>
         <p className="text-slate-300 mb-4">
-          En A3: Impulso, tienes todo lo que necesitas para ser un candidato excepcional. Desde tu Interview 0 (respuestas personales), 
-          un CV optimizado para ATS, inteligencia del mercado, hasta entrenamientos realistas de entrevista. 
-          Esta es la etapa donde conviertes tu perfil en resultados.
+          A3 es tu fase de práctica intensiva. Aquí realizas simulaciones realistas de entrevistas, recibes feedback inmediato, 
+          y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
+          en entrenamientos prácticos que te preparan para situaciones reales.
         </p>
         <p className="text-slate-400 text-sm">
-          ⏱️ Duración: 30-60 días. Trabaja en estos módulos según tu cronograma.
+          🎯 Enfoque: Simulación realista, feedback de IA, iteración y mejora continua durante 30-60 días.
         </p>
       </ASectionPart>
 
@@ -184,7 +184,7 @@ export default function A3DashboardPage() {
       </ASectionPart>
 
       {/* RESULTADOS */}
-      <ASectionPart title="Tus Módulos de A3" icon={<CheckCircle2 />}>
+      <ASectionPart title="Componentes de Entrenamiento" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {activityCards.map((card, i) => {
             const Icon = card.icon
@@ -221,14 +221,14 @@ export default function A3DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors">
               <CardHeader>
-                <CardTitle className="text-lg">Estrategia de A3</CardTitle>
+                <CardTitle className="text-lg">Estrategia de A3: Entrenamiento</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="space-y-2 text-sm text-slate-300">
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Interview 0 - Respuestas consistentes</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> CV optimizado para ATS</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Inteligencia del mercado</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Confianza en entrevistas</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Interview 0 - Base sólida</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Simulaciones realistas</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Feedback detallado</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Iteración y mejora</p>
                 </div>
               </CardContent>
             </Card>
