@@ -43,31 +43,65 @@ export default function Conozcamonos2Page() {
   }
 
   const validateTextResponse = async (questionId: number, question: string, response: string) => {
-    if (!response.trim()) return
+    const trimmed = response.trim()
+    
+    // Client-side validation first
+    if (!trimmed) {
+      setError('Por favor, responde esta pregunta')
+      return
+    }
+
+    // Check for spam patterns BEFORE calling server
+    const spamPatterns = [
+      /^([a-z])\1{4,}$/i,                    // aaaaa
+      /^([a-z]{2,})\1{2,}$/i,                // asasas
+      /^([a-z]{3,})\1{1,}$/i,                // abcabc
+      /^(\d)\1{4,}$/,                        // 11111
+      /^(\d{2,})\1{1,}$/,                    // 1212
+    ]
+    
+    const isSpam = spamPatterns.some(pattern => pattern.test(trimmed))
+    if (isSpam) {
+      setError('⚠️ Texto aleatorio detectado. Por favor, proporciona una respuesta genuina.')
+      return
+    }
+
+    // Check minimum length
+    const wordCount = trimmed.split(/\s+/).length
+    const charCount = trimmed.length
+    
+    if (charCount < 10 || wordCount < 2) {
+      setError(`Muy corto. ${charCount} caracteres (mín. 10), ${wordCount} palabras (mín. 2)`)
+      return
+    }
 
     setValidatingIds(prev => new Set(prev).add(questionId))
     
     try {
+      console.log('[v0] Calling validation API for question:', questionId)
       const validationResponse = await fetch('/api/conozcamonos/validate-response', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           questionId,
           question,
-          response,
+          response: trimmed,
           questionType: 'text'
         })
       })
 
       const validation = await validationResponse.json()
+      console.log('[v0] Validation response:', validation)
       
       if (!validation.valid) {
-        setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+        setError('❌ ' + (validation.suggestions || 'Respuesta rechazada. Por favor, intenta nuevamente.'))
       } else {
         setError('')
+        console.log('[v0] Validation passed!')
       }
     } catch (err) {
       console.error('[v0] Validation error:', err)
+      setError('Error validando respuesta')
     } finally {
       setValidatingIds(prev => {
         const updated = new Set(prev)
@@ -83,8 +117,15 @@ export default function Conozcamonos2Page() {
       return
     }
 
+    // Prevent next if there's an active error
+    if (error) {
+      setError('⚠️ Corrige los errores de validación antes de continuar')
+      return
+    }
+
     if (currentStep === 'paso1') {
       setCurrentStep('paso2')
+      setError('') // Clear error when moving to next step
     } else {
       submitResponses()
     }
@@ -174,7 +215,7 @@ export default function Conozcamonos2Page() {
           <p className="text-slate-700 dark:text-slate-300 mb-4">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo específico y estrategia'
-              : 'Paso 2: Personaliza tu plan de acción'}
+              : 'Paso 2: Personaliza tu plan de acci��n'}
           </p>
           <Progress value={progress} className="h-2 bg-slate-200 dark:bg-slate-700" />
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 font-medium">
@@ -217,7 +258,7 @@ export default function Conozcamonos2Page() {
                 </select>
               )}
 
-              {question.type === 'text' && (
+                  {question.type === 'text' && (
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <textarea
@@ -226,14 +267,34 @@ export default function Conozcamonos2Page() {
                       onBlur={() => validateTextResponse(question.id, question.question, responses[question.id] as string || '')}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50"
+                      className={`flex-1 p-3 border rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50 transition-colors ${
+                        error && !validatingIds.has(question.id) 
+                          ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-950/20' 
+                          : 'border-slate-300 dark:border-slate-600'
+                      }`}
                       rows={3}
                       disabled={validatingIds.has(question.id)}
                     />
                   </div>
+                  
+                  {/* Validation status */}
                   {validatingIds.has(question.id) && (
-                    <p className="text-xs text-blue-500">Validando respuesta...</p>
+                    <p className="text-xs text-blue-500 flex items-center gap-1">
+                      <span className="animate-spin">⏳</span> Validando...
+                    </p>
                   )}
+                  
+                  {error && !validatingIds.has(question.id) && (
+                    <div className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 p-2 rounded border border-red-200 dark:border-red-800">
+                      {error}
+                    </div>
+                  )}
+                  
+                  {/* Character count */}
+                  <div className="text-xs text-slate-500 dark:text-slate-400">
+                    {(responses[question.id] as string || '').length} / {question.maxLength} caracteres
+                  </div>
+                  
                   <div className="flex gap-2 items-center">
                     <VoiceInput
                       onTranscript={(text) => {
