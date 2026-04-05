@@ -9,6 +9,7 @@ import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
+import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock, Zap, Target, ArrowRight } from 'lucide-react'
 
 interface A3Progress {
   interview_0: boolean
