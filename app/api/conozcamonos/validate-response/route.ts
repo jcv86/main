@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
     // Check minimum length (at least 10 characters, 2+ words)
     const wordCount = trimmedResponse.split(/\s+/).length
     const charCount = trimmedResponse.length
+    console.log(`[v0] Length check: chars=${charCount}, words=${wordCount}`)
     
     if (charCount < 10 || wordCount < 2) {
       console.log(`[v0] Too short - chars: ${charCount}, words: ${wordCount}`)
@@ -71,45 +72,96 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    let validationResult
+    // NOW use OpenAI to validate if the text makes sense
+    console.log(`[v0] Using OpenAI to validate response quality...`)
+    try {
+      const aiValidationResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a strict validator. Determine if the user's response is genuine, thoughtful, and makes sense.
+              
+REJECT if:
+- Random letters/gibberish (like "xsadasfasfasfa afa sfas" or "asdasdasd")
+- Keyboard mashing or random character sequences
+- Text that shows no genuine effort or coherence
+- Responses that are clearly not attempting to answer the question
 
-    if (questionType === 'text' || !questionType) {
-      // Validación abierta con IA
-      validationResult = await validateOpenEndedResponse(
-        response,
-        question,
-        {
-          minLength: 10,
-          maxLength: 500,
-          useAI: true // Usar IA para detectar spam
+ACCEPT if:
+- Text shows genuine thought or effort
+- It answers the question meaningfully
+- Even if short or imperfect, it shows intent to answer
+
+Respond ONLY with valid JSON: {"isValid": true or false, "reason": "brief explanation"}`,
+            },
+            {
+              role: 'user',
+              content: `Pregunta: "${question}"
+
+Respuesta del usuario: "${trimmedResponse}"
+
+¿Es esta una respuesta genuina y reflexionada?`,
+            },
+          ],
+          temperature: 0.3,
+          max_tokens: 100,
+        }),
+      })
+
+      if (!aiValidationResponse.ok) {
+        console.log(`[v0] OpenAI API error, accepting response to not block user`)
+        return NextResponse.json({
+          valid: true,
+          message: 'Respuesta aceptada',
+          feedback: null
+        })
+      }
+
+      const aiData = await aiValidationResponse.json()
+      const aiContent = aiData.choices?.[0]?.message?.content
+      console.log(`[v0] OpenAI validation response:`, aiContent)
+
+      try {
+        const aiValidation = JSON.parse(aiContent)
+        
+        if (!aiValidation.isValid) {
+          console.log(`[v0] OpenAI rejected response:`, aiValidation.reason)
+          return NextResponse.json({
+            valid: false,
+            message: 'Respuesta rechazada',
+            suggestions: `${aiValidation.reason} Por favor, proporciona una respuesta genuina y reflexionada.`
+          }, { status: 400 })
         }
-      )
-    } else {
-      // Validación básica para otros tipos
-      validationResult = validateBasicInput(response, {
-        minLength: 3,
-        maxLength: 500
-      })
-    }
 
-    // Retornar resultado
-    if (!validationResult.isValid) {
-      console.log(`[v0] Validation failed:`, validationResult.errors)
+        console.log(`[v0] OpenAI approved response`)
+        return NextResponse.json({
+          valid: true,
+          message: 'Respuesta aceptada',
+          feedback: null
+        })
+      } catch (parseErr) {
+        console.log(`[v0] Error parsing AI response, accepting to not block user`)
+        return NextResponse.json({
+          valid: true,
+          message: 'Respuesta aceptada',
+          feedback: null
+        })
+      }
+    } catch (aiErr) {
+      console.log(`[v0] OpenAI validation failed:`, aiErr)
       return NextResponse.json({
-        valid: false,
-        message: 'Respuesta rechazada',
-        suggestions: validationResult.errors[0] || 'Por favor, proporciona una respuesta válida',
-        errors: validationResult.errors
+        valid: true,
+        message: 'Respuesta aceptada',
+        feedback: null
       })
     }
-
-    console.log(`[v0] Response accepted - confidence: ${validationResult.confidence || 'n/a'}`)
-    return NextResponse.json({
-      valid: true,
-      message: 'Respuesta aceptada',
-      feedback: null,
-      confidence: validationResult.confidence
-    })
   } catch (error) {
     console.error('[v0] Validation endpoint error:', error)
     // Si hay error, aceptar para no bloquear usuario

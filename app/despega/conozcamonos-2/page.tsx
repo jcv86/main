@@ -53,24 +53,7 @@ export default function Conozcamonos2Page() {
       return
     }
 
-    // Check for spam patterns BEFORE calling server
-    const spamPatterns = [
-      /^([a-z])\1{4,}$/i,                    // aaaaa
-      /^([a-z]{2,})\1{2,}$/i,                // asasas
-      /^([a-z]{3,})\1{1,}$/i,                // abcabc
-      /^(\d)\1{4,}$/,                        // 11111
-      /^(\d{2,})\1{1,}$/,                    // 1212
-    ]
-    
-    const isSpam = spamPatterns.some(pattern => pattern.test(trimmed))
-    console.log('[v0] Spam check:', { isSpam, patterns: spamPatterns.length })
-    if (isSpam) {
-      console.log('[v0] SPAM DETECTED')
-      setError('⚠️ Texto aleatorio detectado. Por favor, proporciona una respuesta genuina.')
-      return
-    }
-
-    // Check minimum length
+    // Check minimum length (at least 10 characters, 2+ words)
     const wordCount = trimmed.split(/\s+/).length
     const charCount = trimmed.length
     console.log('[v0] Length check:', { charCount, wordCount })
@@ -81,6 +64,7 @@ export default function Conozcamonos2Page() {
       return
     }
 
+    // ALWAYS call server for IA validation - no early exit
     setValidatingIds(prev => new Set(prev).add(questionId))
     
     try {
