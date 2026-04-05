@@ -218,9 +218,9 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-blue-600 dark:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#3B82F6' }}>
                 <span className="text-2xl font-bold text-white">02</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">Exploración - Aprende Nuevas Formas</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">Exploración - Diseña Tu Ruta</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Construye tu ruta personalizada de 30/60/90 días con estrategias y contenido especializado.
+                Tu ruta personalizada de 30/60/90 días diseñada según tu perfil cerebral, objetivos y disponibilidad semanal.
               </p>
             </div>
 
@@ -229,9 +229,9 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-orange-600 dark:bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#F97316' }}>
                 <span className="text-2xl font-bold text-white">03</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">Entrenamiento - Practica Siendo</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">Entrenamiento - Simulación Intensiva</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Practícate con entrenamientos realistas, feedback conductual y un coach IA disponible 24/7.
+                Entrenamientos realistas con video, análisis de postura y tono, feedback IA inmediato y ajuste por vacante específica.
               </p>
             </div>
 
@@ -240,9 +240,9 @@ export default function LandingPageOptimized() {
               <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#06B6D4' }}>
                 <span className="text-2xl font-bold text-white">04</span>
               </div>
-              <h3 className="font-bold text-xl mb-2 text-center">La Realidad - Vive Tu Transformación</h3>
+              <h3 className="font-bold text-xl mb-2 text-center">La Realidad - Ejecución y Contexto</h3>
               <p className="text-foreground/75 text-center text-sm leading-relaxed">
-                Coaching IA 24/7, inteligencia de mercado y plan de acción para materializar tu transformación en oportunidades reales.
+                Coach IA 24/7, inteligencia de mercado, noticias relevantes a tu industria y toma de decisiones estratégicas en tiempo real.
               </p>
             </div>
           </div>
