@@ -13,7 +13,6 @@ import {
   MapPin,
   Zap,
   Radar,
-  BarChart3,
   LogOut
 } from 'lucide-react'
 
@@ -31,47 +30,33 @@ const stages = [
     icon: CheckCircle2,
     routes: [
       { label: 'Conozcámonos 1', href: '/despega/conozcamonos-1' },
-      { label: 'A1 Cerebral Intro', href: '/despega/a1-cerebral-intro' },
-      { label: 'A1 Cerebral Assessment', href: '/despega/a1-cerebral' },
-      { label: 'A1 Report', href: '/despega/a1-report' },
+      { label: 'Intro - Descubre Tu Perfil', href: '/despega/a1-cerebral-intro' },
+      { label: 'Test DISC (28 preguntas)', href: '/despega/a1-cerebral' },
+      { label: 'Tu Perfil DISC', href: '/despega/a1-report' },
     ]
   },
   {
     name: 'A2: Exploración',
     icon: MapPin,
     routes: [
-      { label: 'A2 Intro', href: '/despega/a2/intro' },
-      { label: 'Conozcámonos 2', href: '/despega/conozcamonos-2' },
-      { label: 'Dashboard A2', href: '/despega/a2/dashboard' },
-      { label: 'Rutas 30/60/90', href: '/despega/a2/rutas' },
+      { label: 'Explora y Diseña Tu Ruta', href: '/despega/conozcamonos-2' },
+      { label: 'Tu Ruta Personalizada', href: '/despega/a2-routes' },
     ]
   },
   {
     name: 'A3: Entrenamiento',
     icon: Zap,
     routes: [
-      { label: 'Dashboard A3', href: '/despega/a3' },
-      { label: 'Diagnosis', href: '/despega/a3/diagnosis' },
-      { label: 'Interview 0', href: '/despega/interview-0' },
-      { label: 'Análisis Multimodal', href: '/despega/a3/analisis-multimodal' },
-      { label: 'Entrenamiento Guiado', href: '/despega/a3/entrenamiento-guiado' },
-      { label: 'Entrenamientos', href: '/despega/a3/simulations' },
-      { label: 'CV ATS', href: '/despega/a3/cv-ats' },
-      { label: 'Ajuste por Vacante', href: '/despega/a3/ajuste-por-vacante' },
-      { label: 'Progreso', href: '/despega/a3/progress' },
+      { label: 'Intro - Entrenamiento Intensivo', href: '/despega/a3-intro' },
+      { label: 'Dashboard de Entrenamiento', href: '/despega/a3-dashboard' },
     ]
   },
   {
     name: 'A4: La Realidad',
     icon: Radar,
     routes: [
-      { label: 'Dashboard A4', href: '/despega/a4' },
-      { label: 'Radar Estratégico', href: '/despega/a4/radar' },
-      { label: 'Noticias Mercado', href: '/despega/a4/noticias' },
-      { label: 'Noticias Personalizadas', href: '/despega/a4/noticias-personalizadas' },
-      { label: 'Cultura General', href: '/despega/a4/aprender' },
-      { label: 'Pruebas & Contexto', href: '/despega/a4/pruebas-contexto' },
-      { label: 'Biblioteca', href: '/despega/a4/biblioteca' },
+      { label: 'Intro - Ejecución y Contexto', href: '/despega/a4-intro' },
+      { label: 'Dashboard - La Realidad', href: '/despega/a4' },
     ]
   },
 ]
@@ -132,13 +117,6 @@ export function DespeganNavbar() {
                 </div>
               </div>
             ))}
-
-            <Link href="/admin/dashboard">
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                <BarChart3 className="w-4 h-4" />
-                Admin
-              </Button>
-            </Link>
           </div>
 
           {/* Desktop Logout */}
@@ -200,13 +178,6 @@ export function DespeganNavbar() {
                 )}
               </div>
             ))}
-
-            <Link href="/admin/dashboard">
-              <Button variant="ghost" className="w-full justify-start flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
-                Admin
-              </Button>
-            </Link>
 
             <Button 
               onClick={handleLogout}
