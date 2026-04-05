@@ -1,7 +1,6 @@
 import OpenAI from 'openai'
 import * as fs from 'fs'
 import * as path from 'path'
-import fetch from 'node-fetch'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
