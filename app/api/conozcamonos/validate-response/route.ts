@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { validateOpenEndedResponse, validateBasicInput } from '@/lib/input-validator'
 
 /**
  * POST /api/conozcamonos/validate-response
- * Simple validation - just check minimum length
+ * Validación mejorada con IA para detectar texto basura
  */
 export async function POST(request: NextRequest) {
   try {
@@ -26,27 +27,48 @@ export async function POST(request: NextRequest) {
 
     console.log(`[v0] Validating response for question: ${questionId}`)
 
-    // For any question type, just check minimum length (5+ words)
-    const wordCount = response.trim().split(/\s+/).length
-    
-    if (wordCount < 5) {
-      return NextResponse.json({
-        valid: false,
-        message: 'Respuesta muy corta',
-        suggestions: `Necesitamos al menos 5 palabras. Actualmente tienes ${wordCount}. Por favor, desarrolla más tu respuesta.`
+    let validationResult
+
+    if (questionType === 'text' || !questionType) {
+      // Validación abierta con IA
+      validationResult = await validateOpenEndedResponse(
+        response,
+        question,
+        {
+          minLength: 10,
+          maxLength: 500,
+          useAI: true // Usar IA para detectar spam
+        }
+      )
+    } else {
+      // Validación básica para otros tipos
+      validationResult = validateBasicInput(response, {
+        minLength: 3,
+        maxLength: 500
       })
     }
 
-    // All other responses are accepted
-    console.log(`[v0] Response accepted (${wordCount} words)`)
+    // Retornar resultado
+    if (!validationResult.isValid) {
+      console.log(`[v0] Validation failed:`, validationResult.errors)
+      return NextResponse.json({
+        valid: false,
+        message: 'Respuesta rechazada',
+        suggestions: validationResult.errors[0] || 'Por favor, proporciona una respuesta válida',
+        errors: validationResult.errors
+      })
+    }
+
+    console.log(`[v0] Response accepted - confidence: ${validationResult.confidence || 'n/a'}`)
     return NextResponse.json({
       valid: true,
       message: 'Respuesta aceptada',
-      feedback: null
+      feedback: null,
+      confidence: validationResult.confidence
     })
   } catch (error) {
     console.error('[v0] Validation endpoint error:', error)
-    // If error, accept to not block user
+    // Si hay error, aceptar para no bloquear usuario
     return NextResponse.json({
       valid: true,
       message: 'Respuesta aceptada',
@@ -54,4 +76,5 @@ export async function POST(request: NextRequest) {
     })
   }
 }
+
 

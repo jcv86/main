@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { validateSearchQuery } from '@/lib/input-validator'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,8 +15,13 @@ export async function GET(req: NextRequest) {
 
     console.log('[v0] Book search:', { query, discProfile })
 
-    if (!query.trim()) {
-      return NextResponse.json({ books: [], message: 'Ingresa una búsqueda' })
+    // VALIDATE: Validar query antes de buscar
+    const queryValidation = await validateSearchQuery(query)
+    if (!queryValidation.isValid) {
+      return NextResponse.json({
+        books: [],
+        message: queryValidation.errors[0] || 'Búsqueda inválida'
+      }, { status: 400 })
     }
 
     // Use AI to expand query with related concepts
