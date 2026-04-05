@@ -3,27 +3,19 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
   try {
-    const userEmail = request.nextUrl.searchParams.get('userEmail')
-    if (!userEmail) {
-      return NextResponse.json({ error: 'Missing userEmail' }, { status: 400 })
-    }
-
     const supabase = await createClient()
     
-    // Get user
-    const { data: { users }, error: userError } = await supabase.auth.admin.listUsers()
-    if (userError) throw userError
-
-    const userData = users.find(u => u.email === userEmail)
-    if (!userData) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    // Get current user from session
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Get gamification data
     const { data: gamifData, error: gamifError } = await supabase
       .from('user_gamification')
       .select('*')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .single()
 
     if (gamifError && gamifError.code !== 'PGRST116') throw gamifError
@@ -32,14 +24,14 @@ export async function GET(request: NextRequest) {
     const { data: progressData } = await supabase
       .from('user_journey_progress')
       .select('*')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .single()
 
     // Get achievements
     const { data: achievements } = await supabase
       .from('user_achievements')
       .select('*')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
 
     // Calculate current level from total XP
     const totalXp = gamifData?.total_xp || 0
@@ -49,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // Get user rank
     const { data: rankData } = await supabase
-      .rpc('get_user_weekly_rank', { user_email: userEmail })
+      .rpc('get_user_weekly_rank', { user_id: user.id })
 
     // Calculate phase levels based on progress
     const phaseLevel: Record<string, number> = {
@@ -57,10 +49,10 @@ export async function GET(request: NextRequest) {
       'a2': Math.floor((progressData?.a2_progress || 0) / 25) + 1,
       'a3': Math.floor((progressData?.a3_progress || 0) / 25) + 1,
       'a4': Math.floor((progressData?.a4_progress || 0) / 25) + 1,
-      'current': Math.floor((progressData?.a3_progress || 0) / 25) + 1, // A3 is current training
+      'current': Math.floor((progressData?.a3_progress || 0) / 25) + 1,
     }
 
-    // Calculate phase XP (incremental based on progress)
+    // Calculate phase XP
     const phaseXp: Record<string, number> = {
       'a1': (progressData?.a1_progress || 0) * 5,
       'a2': (progressData?.a2_progress || 0) * 5,
@@ -74,7 +66,7 @@ export async function GET(request: NextRequest) {
     const { data: dailyChallenges } = await supabase
       .from('user_daily_challenges')
       .select('*')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .eq('date', today)
 
     const dailyChallengesCompleted = dailyChallenges?.filter(c => c.completed).length || 0
@@ -83,7 +75,7 @@ export async function GET(request: NextRequest) {
     const { data: lastActivity } = await supabase
       .from('user_activity_log')
       .select('created_at')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1)
       .single()
