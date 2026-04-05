@@ -89,10 +89,10 @@ export async function POST(request: NextRequest) {
               content: `You are a strict validator. Determine if the user's response is genuine, thoughtful, and makes sense.
               
 REJECT if:
-- Random letters/gibberish (like "xsadasfasfasfa afa sfas" or "asdasdasd")
-- Keyboard mashing or random character sequences
-- Text that shows no genuine effort or coherence
-- Responses that are clearly not attempting to answer the question
+- Texto aleatorio o sinsentido (como "xsadasfasfasfa afa sfas" o "asdasdasd")
+- Escritura aleatoria de teclas sin coherencia
+- Texto que no muestra esfuerzo genuino o coherencia
+- Respuestas que claramente no intentan responder la pregunta
 
 ACCEPT if:
 - Text shows genuine thought or effort
