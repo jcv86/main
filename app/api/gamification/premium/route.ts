@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Missing userEmail' }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     
     // Get user
     const { data: { users }, error: userError } = await supabase.auth.admin.listUsers()
