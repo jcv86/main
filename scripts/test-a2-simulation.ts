@@ -19,9 +19,9 @@ async function simulateA2Completion() {
     enfoque: 50,
     relaciones: 50,
     plan_ejecutivo: 60,
-    primary: 'energia',
+    primary: 'energia' as const,
     primaryScore: 75,
-    secondary: 'plan_ejecutivo',
+    secondary: 'plan_ejecutivo' as const,
     secondaryScore: 60,
   }
   
