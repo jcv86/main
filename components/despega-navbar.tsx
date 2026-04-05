@@ -15,6 +15,7 @@ import {
   Radar,
   LogOut
 } from 'lucide-react'
+import { XPNavbarBadge } from './xp-navbar-badge'
 
 const stages = [
   {
@@ -119,8 +120,9 @@ export function DespeganNavbar() {
             ))}
           </div>
 
-          {/* Desktop Logout */}
-          <div className="hidden md:flex items-center gap-2">
+          {/* Desktop XP Badge + Logout */}
+          <div className="hidden md:flex items-center gap-3">
+            <XPNavbarBadge />
             <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2">
               <LogOut className="w-4 h-4" />
               Salir
