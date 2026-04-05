@@ -1,6 +1,7 @@
-// Route Generator - Genera rutas personalizadas de 30/60/90 días
+// Route Generator - Genera rutas personalizadas de 30/60/90 días con IA
 
 import { DiscProfile } from './disc-calculator'
+import { callOpenAI } from './openai-helper'
 
 export interface RouteActionItem {
   day: number
@@ -23,17 +24,49 @@ export interface PersonalizedRoute {
   successMetrics: string[]
 }
 
-export function generatePersonalizedRoute(
+export async function generatePersonalizedRoute(
   discProfile: DiscProfile,
   objective: string,
   skills: string[],
   timePerWeek: number
-): PersonalizedRoute {
+): Promise<PersonalizedRoute> {
   // Adapt route based on Despega profile
   const isEnergia = discProfile.primary === 'energia'
   const isEnfoque = discProfile.primary === 'enfoque'
   const isRelaciones = discProfile.primary === 'relaciones'
   const isPlanEjecutivo = discProfile.primary === 'plan_ejecutivo'
+
+  // Get AI-generated content for each phase
+  let aiContent = { phase30: '', phase60: '', phase90: '' }
+  try {
+    const prompt = `Eres un experto en desarrollo profesional. Crea un plan de 90 días personalizado para:
+- Objetivo: ${objective}
+- Habilidades a desarrollar: ${skills.join(', ')}
+- Horas por semana disponibles: ${timePerWeek}
+- Perfil DISC: ${discProfile.primary}
+- Disponibilidad: ${timePerWeek} horas por semana
+
+Responde en JSON con el siguiente formato:
+{
+  "phase30": "Descripción de objetivos para el primer mes",
+  "phase60": "Descripción de objetivos para el segundo mes",
+  "phase90": "Descripción de objetivos para el tercer mes"
+}`
+
+    aiContent = await callOpenAI(
+      [{ role: 'user', content: prompt }],
+      'gpt-4o-mini',
+      { temperature: 0.8, max_tokens: 1500 }
+    ).then(content => {
+      try {
+        return JSON.parse(content)
+      } catch {
+        return { phase30: '', phase60: '', phase90: '' }
+      }
+    })
+  } catch (err) {
+    console.log('[v0] AI content generation skipped, using template')
+  }
 
   const route_30days: RouteActionItem[] = [
     // Week 1: Foundation

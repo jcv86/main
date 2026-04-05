@@ -115,7 +115,8 @@ export default function A2RoutesPage() {
 
       console.log('[v0] Route parameters:', { objective, skills, timePerWeek, discProfile })
 
-      const generatedRoute = generatePersonalizedRoute(
+      console.log('[v0] Generating route with AI...')
+      const generatedRoute = await generatePersonalizedRoute(
         discProfile,
         objective,
         skills,
