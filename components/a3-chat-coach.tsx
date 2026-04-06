@@ -137,7 +137,6 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
     setMessages([
       ...newMessages,
       {
-        id: `micro-${Date.now()}`,
         role: "assistant",
         content: `Excelente. Ahora vamos a probar una variación pequeña. 
 
@@ -154,7 +153,6 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
     setMessages([
       ...messages,
       {
-        id: `close-${Date.now()}`,
         role: "assistant",
         content: `Excelente trabajo. Veamos qué aprendimos:
 
