@@ -41,10 +41,35 @@ export function NoticiasFeed() {
         if (!response.ok) throw new Error(`API error: ${response.status}`)
         
         const result = await response.json()
-        console.log('[v0] Noticias fetched:', result.data?.length || 0, 'items')
+        console.log('[v0] Noticias fetched from DB:', result.data?.length || 0, 'items')
         console.log('[v0] Source:', result.source)
         
-        setNoticias(result.data || [])
+        let noticiasData = result.data || []
+        
+        // If we don't have enough noticias from DB, supplement with RSS
+        if (noticiasData.length < 5) {
+          console.log('[v0] Not enough noticias from DB, fetching RSS feeds...')
+          try {
+            const rssResponse = await fetch('/api/noticias/rss?limit=10')
+            if (rssResponse.ok) {
+              const rssResult = await rssResponse.json()
+              console.log('[v0] RSS feed items fetched:', rssResult.data?.length || 0)
+              noticiasData = [...noticiasData, ...(rssResult.data || [])]
+            }
+          } catch (rssError) {
+            console.warn('[v0] RSS feed fetch failed, using DB results only:', rssError)
+          }
+        }
+        
+        // Remove duplicates by title
+        const seenTitles = new Set()
+        noticiasData = noticiasData.filter(n => {
+          if (seenTitles.has(n.title)) return false
+          seenTitles.add(n.title)
+          return true
+        }).slice(0, 10)
+        
+        setNoticias(noticiasData)
       } catch (err) {
         console.error('[v0] Error fetching noticias:', err)
         setError('No se pudieron cargar las noticias')
