@@ -54,9 +54,12 @@ export async function POST(req: NextRequest) {
     })
   } catch (error) {
     console.error('[v0] Interview API error:', error)
-    return Response.json(
-      { error: 'Failed to process interview' },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({ error: 'Failed to process interview' }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
     )
   }
 }
