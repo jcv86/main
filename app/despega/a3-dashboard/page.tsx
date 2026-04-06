@@ -336,10 +336,10 @@ export default function TrainingDashboardPage() {
             <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
               <p className="text-slate-300 text-sm mb-4">
-                Ya tienes tu base. Ahora practica con guía. Las Simulaciones Guiadas te enseñan la metodología STAR y te dan feedback IA en tiempo real.
+                Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
               </p>
-              <Button onClick={() => router.push('/despega/a3/simulaciones-guiado')} className="bg-cyan-600 hover:bg-cyan-700">
-                Ir a Simulaciones Guiadas
+              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-cyan-600 hover:bg-cyan-700">
+                Ir a Entrenamientos Guiados
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -349,10 +349,10 @@ export default function TrainingDashboardPage() {
             <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
               <p className="text-slate-300 text-sm mb-4">
-                Estás en buena forma. Es momento de desafiarte. Las Simulaciones Desafiantes te preparan para presión real de entrevista ejecutiva.
+                Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.
               </p>
-              <Button onClick={() => router.push('/despega/a3/simulaciones-desafiante')} className="bg-teal-600 hover:bg-teal-700">
-                Ir a Simulaciones Desafiantes
+              <Button onClick={() => router.push('/despega/a3/entrenamiento-desafiante')} className="bg-teal-600 hover:bg-teal-700">
+                Ir a Entrenamientos Desafiantes
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -370,7 +370,7 @@ export default function TrainingDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-slate-800/40 border-slate-700">
               <CardHeader>
-                <CardTitle className="text-lg">4 Principios de A3</CardTitle>
+                <CardTitle className="text-lg">4 Principios del Módulo de Entrenamiento</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="space-y-2 text-sm text-slate-300">
@@ -388,7 +388,7 @@ export default function TrainingDashboardPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <ul className="space-y-2 text-sm text-slate-300">
-                  <li>• Practiquen 2-3 simulaciones por semana para máximo progreso</li>
+                  <li>• Practiquen 2-3 entrenamientos por semana para máximo progreso</li>
                   <li>• Mira el video de ti mismo - es incómodo pero transformador</li>
                   <li>• Ajusta tus respuestas según feedback IA</li>
                   <li>• Usa CV ATS optimizado para cada candidatura</li>
