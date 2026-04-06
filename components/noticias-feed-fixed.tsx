@@ -32,11 +32,18 @@ export function NoticiasFeed() {
         setLoading(true)
         setError(null)
         const categoryParam = selectedCategory !== 'Todas' ? `&category=${selectedCategory}` : ''
-        const response = await fetch(`/api/noticias/feed?limit=10${categoryParam}&minRelevance=80`)
+        const url = `/api/noticias/feed?limit=10${categoryParam}&minRelevance=80`
+        console.log('[v0] Fetching noticias from:', url)
         
-        if (!response.ok) throw new Error('Failed to fetch noticias')
+        const response = await fetch(url)
+        console.log('[v0] Response status:', response.status)
+        
+        if (!response.ok) throw new Error(`API error: ${response.status}`)
         
         const result = await response.json()
+        console.log('[v0] Noticias fetched:', result.data?.length || 0, 'items')
+        console.log('[v0] Source:', result.source)
+        
         setNoticias(result.data || [])
       } catch (err) {
         console.error('[v0] Error fetching noticias:', err)
