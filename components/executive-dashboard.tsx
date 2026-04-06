@@ -71,7 +71,7 @@ const upcomingActions = [
     stage: 'A3 - Entrenamiento',
     priority: 'Alta',
     daysLeft: 2,
-    route: '/despega/a3-entrenamiento'
+    route: '/despega/a3/simulations'
   },
   {
     id: 'job-analysis',
@@ -79,7 +79,7 @@ const upcomingActions = [
     stage: 'A3 - Ajuste por Vacante',
     priority: 'Media',
     daysLeft: 5,
-    route: '/despega/a3-ajuste-vacante'
+    route: '/despega/a3/ajuste-por-vacante'
   },
   {
     id: 'cv-review',
@@ -87,7 +87,7 @@ const upcomingActions = [
     stage: 'A3 - CV ATS',
     priority: 'Alta',
     daysLeft: 3,
-    route: '/despega/a3-cv-ats'
+    route: '/despega/a3/cv-ats'
   }
 ]
 
