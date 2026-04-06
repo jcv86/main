@@ -291,7 +291,7 @@ export function RadarEstrategico() {
             day: 'numeric'
           }),
           hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
-          edicion: new Date().getHours() < 14 ? 'AM' : 'PM'
+          edicion: (new Date().getHours() < 14 ? 'AM' : 'PM') as const
         }
         
         setRadarData(updatedRadar)
