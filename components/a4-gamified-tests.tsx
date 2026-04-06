@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,16 +30,38 @@ interface GamifiedTest {
 }
 
 interface A4GamifiedTestsProps {
-  tests: GamifiedTest[]
+  tests?: GamifiedTest[]
   onCompleteTest?: (testId: string, score: number) => void
 }
 
-export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps) {
+export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4GamifiedTestsProps) {
+  const [tests, setTests] = useState<GamifiedTest[]>(initialTests || [])
+  const [loading, setLoading] = useState(!initialTests)
   const [selectedTest, setSelectedTest] = useState<GamifiedTest | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>([])
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    if (!initialTests) {
+      fetchTests()
+    }
+  }, [initialTests])
+
+  const fetchTests = async () => {
+    try {
+      const response = await fetch('/api/despega/a4-tests')
+      if (!response.ok) throw new Error('Failed to fetch tests')
+      const data = await response.json()
+      setTests(data.data || [])
+    } catch (error) {
+      console.error('[v0] Error fetching tests:', error)
+      setTests([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const startTest = (test: GamifiedTest) => {
     setSelectedTest(test)
@@ -96,6 +118,26 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
   }
 
   if (!selectedTest) {
+    if (loading) {
+      return (
+        <div className="w-full space-y-6">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Cargando tests...</p>
+          </div>
+        </div>
+      )
+    }
+
+    if (tests.length === 0) {
+      return (
+        <div className="w-full space-y-6">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No hay tests disponibles</p>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="w-full space-y-6">
         <div className="flex items-center gap-3 mb-6">
