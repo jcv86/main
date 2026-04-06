@@ -1,0 +1,152 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
+import { ConversationalInterview } from '@/components/conversational-interview'
+
+export default function ConversationalInterviewPage() {
+  const { user, loading } = useAuthRedirect()
+  const [selectedRole, setSelectedRole] = useState<string | null>(null)
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null)
+  const [selectedLevel, setSelectedLevel] = useState<'basico' | 'intermedio' | 'avanzado' | null>(null)
+
+  const roles = ['Software Engineer', 'Product Manager', 'Data Scientist', 'Operations Manager', 'Marketing Lead']
+  const industries = ['Tech', 'Finance', 'Healthcare', 'E-commerce', 'Consulting']
+  const levels = [
+    { id: 'basico', label: 'Básico - 3 preguntas', desc: 'Preguntas fundacionales' },
+    { id: 'intermedio', label: 'Intermedio - 3 preguntas', desc: 'Preguntas situacionales' },
+    { id: 'avanzado', label: 'Avanzado - 3 preguntas', desc: 'Preguntas estratégicas' }
+  ]
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+      </div>
+    )
+  }
+
+  if (!user) return null
+
+  // Si está listo para la entrevista
+  if (selectedRole && selectedIndustry && selectedLevel) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+        <div className="max-w-6xl mx-auto">
+          <Link href="/despega/a3-dashboard">
+            <Button variant="ghost" className="mb-6">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver al Dashboard
+            </Button>
+          </Link>
+          <ConversationalInterview
+            role={selectedRole}
+            industry={selectedIndustry}
+            level={selectedLevel as any}
+            onComplete={() => {
+              // Redirect to dashboard with completion
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // Seleccionar configuración
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+      <div className="max-w-4xl mx-auto">
+        <Link href="/despega/a3-dashboard">
+          <Button variant="ghost" className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver al Dashboard
+          </Button>
+        </Link>
+
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Simulación de Entrevista Conversacional</h1>
+            <p className="text-slate-600 dark:text-slate-400">
+              Personaliza tu entrevista y practica con IA como entrevistador
+            </p>
+          </div>
+
+          {/* Rol */}
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <h2 className="text-lg font-semibold mb-4">1. Selecciona el Puesto</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {roles.map(role => (
+                <button
+                  key={role}
+                  onClick={() => setSelectedRole(role)}
+                  className={`p-3 rounded-lg border-2 transition ${
+                    selectedRole === role
+                      ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                  }`}
+                >
+                  {role}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Industria */}
+          {selectedRole && (
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+              <h2 className="text-lg font-semibold mb-4">2. Selecciona la Industria</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {industries.map(industry => (
+                  <button
+                    key={industry}
+                    onClick={() => setSelectedIndustry(industry)}
+                    className={`p-3 rounded-lg border-2 transition ${
+                      selectedIndustry === industry
+                        ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                    }`}
+                  >
+                    {industry}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Nivel */}
+          {selectedRole && selectedIndustry && (
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+              <h2 className="text-lg font-semibold mb-4">3. Selecciona el Nivel de Dificultad</h2>
+              <div className="space-y-3">
+                {levels.map(level => (
+                  <button
+                    key={level.id}
+                    onClick={() => setSelectedLevel(level.id as any)}
+                    className={`w-full p-4 rounded-lg border-2 transition text-left ${
+                      selectedLevel === level.id
+                        ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                    }`}
+                  >
+                    <div className="font-semibold">{level.label}</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">{level.desc}</div>
+                  </button>
+                ))}
+              </div>
+
+              <Button
+                className="w-full mt-6 py-6 bg-cyan-600 hover:bg-cyan-700 text-white text-lg"
+                onClick={() => {}}
+              >
+                Comenzar Entrevista
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.66",
+    "@ai-sdk/react": "^3.0.148",
     "@auth/core": "latest",
     "@auth/supabase-adapter": "^1.11.1",
     "@radix-ui/react-accordion": "^1.2.1",

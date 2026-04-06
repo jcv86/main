@@ -99,6 +99,18 @@ export default function A3DashboardPage() {
   const completionPercentage = (completedItems / 4) * 100
 
   const activityCards = [
+    // ENTRENAMIENTO CONVERSACIONAL (NUEVO - DESTACADO)
+    {
+      category: 'ENTRENAMIENTO CONVERSACIONAL',
+      icon: Video,
+      title: 'Entrevista Conversacional con IA',
+      description: 'Entrevista real con IA como entrevistador. Cámara activa. Análisis multimodal: postura, tono, gestos, contenido. Feedback inmediato.',
+      status: 'pending',
+      action: 'Comenzar',
+      href: '/despega/a3/conversational-interview',
+      badge: '🎥 Video Real'
+    },
+    
     // FUNDACIÓN
     {
       category: 'FUNDACIÓN',
